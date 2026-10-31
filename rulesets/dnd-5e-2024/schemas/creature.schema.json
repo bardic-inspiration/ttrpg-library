@@ -1,0 +1,545 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/creature.schema.json",
+  "title": "dnd-5e-2024 creature stats (SPEC.md §6.5)",
+  "description": "Stored inputs only. Derived values come from derive.ts (SPEC.md §6.1).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["size", "creatureType", "alignment", "ac", "hitDice", "speed", "abilities", "languages", "cr", "actions"],
+  "properties": {
+    "size": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "enum": ["tiny", "small", "medium", "large", "huge", "gargantuan"]
+      }
+    },
+    "creatureType": {
+      "enum": ["aberration", "beast", "celestial", "construct", "dragon", "elemental", "fey", "fiend", "giant", "humanoid", "monstrosity", "ooze", "plant", "undead"]
+    },
+    "descriptors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "alignment": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ac": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value"],
+      "properties": {
+        "value": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "initiative": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "proficiency": {
+          "$ref": "common.schema.json#/$defs/Proficiency"
+        },
+        "adjust": {
+          "$ref": "common.schema.json#/$defs/Adjust"
+        }
+      }
+    },
+    "hitDice": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99
+    },
+    "speed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["walk"],
+      "properties": {
+        "walk": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "fly": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "swim": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "climb": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "burrow": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hover": {
+          "type": "boolean"
+        }
+      }
+    },
+    "abilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["str", "dex", "con", "int", "wis", "cha"],
+      "properties": {
+        "str": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "dex": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "con": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "int": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "wis": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "cha": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        }
+      }
+    },
+    "saveProficiencies": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.schema.json#/$defs/Ability"
+      }
+    },
+    "skills": {
+      "type": "object",
+      "propertyNames": {
+        "enum": ["acrobatics", "animal-handling", "arcana", "athletics", "deception", "history", "insight", "intimidation", "investigation", "medicine", "nature", "perception", "performance", "persuasion", "religion", "sleight-of-hand", "stealth", "survival"]
+      },
+      "additionalProperties": {
+        "$ref": "common.schema.json#/$defs/Proficiency"
+      }
+    },
+    "vulnerabilities": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "common.schema.json#/$defs/DamageType"
+          },
+          {
+            "type": "string",
+            "minLength": 1
+          }
+        ]
+      }
+    },
+    "resistances": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "common.schema.json#/$defs/DamageType"
+          },
+          {
+            "type": "string",
+            "minLength": 1
+          }
+        ]
+      }
+    },
+    "immunities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "damage": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "common.schema.json#/$defs/DamageType"
+              },
+              {
+                "type": "string",
+                "minLength": 1
+              }
+            ]
+          }
+        },
+        "conditions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.schema.json#/$defs/Condition"
+          }
+        }
+      }
+    },
+    "gear": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/RefOrText"
+      }
+    },
+    "senses": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "darkvision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blindsight": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tremorsense": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "truesight": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "languages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["list"],
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "telepathy": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "cr": {
+      "enum": [0, 0.125, 0.25, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+    },
+    "lair": {
+      "type": "boolean"
+    },
+    "traits": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Action"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Action"
+      }
+    },
+    "bonusActions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Action"
+      }
+    },
+    "reactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Action"
+      }
+    },
+    "legendaryActions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["uses", "items"],
+      "properties": {
+        "uses": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "usesInLair": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "intro": {
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Action"
+          }
+        }
+      }
+    },
+    "spellcasting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ability"],
+      "properties": {
+        "ability": {
+          "$ref": "common.schema.json#/$defs/Ability"
+        },
+        "adjust": {
+          "$ref": "common.schema.json#/$defs/Adjust"
+        },
+        "includeAttack": {
+          "type": "boolean"
+        },
+        "atWill": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common.schema.json#/$defs/RefOrText"
+          }
+        },
+        "perDay": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "1": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "common.schema.json#/$defs/RefOrText"
+              }
+            },
+            "2": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "common.schema.json#/$defs/RefOrText"
+              }
+            },
+            "3": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "common.schema.json#/$defs/RefOrText"
+              }
+            }
+          }
+        },
+        "note": {
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": ["melee-attack", "ranged-attack", "melee-or-ranged-attack", "save", "other"]
+        },
+        "ability": {
+          "$ref": "common.schema.json#/$defs/Ability"
+        },
+        "adjust": {
+          "$ref": "common.schema.json#/$defs/Adjust"
+        },
+        "reach": {
+          "type": "integer",
+          "minimum": 5
+        },
+        "range": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["normal"],
+          "properties": {
+            "normal": {
+              "type": "integer",
+              "minimum": 5
+            },
+            "long": {
+              "type": "integer",
+              "minimum": 5
+            }
+          }
+        },
+        "save": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ability", "targets"],
+          "properties": {
+            "ability": {
+              "$ref": "common.schema.json#/$defs/Ability"
+            },
+            "targets": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "damage": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common.schema.json#/$defs/Damage"
+          }
+        },
+        "onHit": {
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "onFailure": {
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "onSuccess": {
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "recharge": {
+          "enum": ["5-6", "6", "short-or-long-rest", "long-rest"]
+        },
+        "uses": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "melee-attack"
+              }
+            }
+          },
+          "then": {
+            "required": ["ability", "reach"],
+            "properties": {
+              "range": false,
+              "save": false,
+              "text": false,
+              "onFailure": false,
+              "onSuccess": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "ranged-attack"
+              }
+            }
+          },
+          "then": {
+            "required": ["ability", "range"],
+            "properties": {
+              "reach": false,
+              "save": false,
+              "text": false,
+              "onFailure": false,
+              "onSuccess": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "melee-or-ranged-attack"
+              }
+            }
+          },
+          "then": {
+            "required": ["ability", "reach", "range"],
+            "properties": {
+              "save": false,
+              "text": false,
+              "onFailure": false,
+              "onSuccess": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "save"
+              }
+            }
+          },
+          "then": {
+            "required": ["ability", "save"],
+            "properties": {
+              "reach": false,
+              "range": false,
+              "text": false,
+              "onHit": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "other"
+              }
+            }
+          },
+          "then": {
+            "required": ["text"],
+            "properties": {
+              "ability": false,
+              "adjust": false,
+              "reach": false,
+              "range": false,
+              "save": false,
+              "damage": false,
+              "onHit": false,
+              "onFailure": false,
+              "onSuccess": false
+            }
+          }
+        }
+      ]
+    }
+  }
+}

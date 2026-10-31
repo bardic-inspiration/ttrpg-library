@@ -1,0 +1,7 @@
+{
+  "id": "dnd-5e-2024",
+  "label": "D&D 5e (SRD 5.2)",
+  "srdVersion": "5.2",
+  "attribution": "srd-5.2",
+  "types": ["creature"]
+}
