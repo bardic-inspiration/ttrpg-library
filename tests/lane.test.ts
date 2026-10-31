@@ -12,22 +12,39 @@ describe('laneOf', () => {
     expect(laneOf(branch)).toBe(lane);
   });
 
-  it.each(['claude/magical-cori', 'spike/question', 'main', 'gen', 'Dev/x'])(
-    'has no lane for %s',
+  it.each(['bardic-inspiration-patch-1', 'claude/magical-cori', 'main', 'gen', 'Dev/x'])(
+    'puts the unprefixed %s in the dev lane',
     (branch) => {
-      expect(laneOf(branch)).toBeUndefined();
+      expect(laneOf(branch)).toBe('dev');
     },
   );
+
+  it('gives a spike branch no lane', () => {
+    expect(laneOf('spike/question')).toBeUndefined();
+  });
 });
 
 describe('checkLane', () => {
-  it('fails an unknown prefix and lists the valid ones', () => {
-    const result = checkLane({ branch: 'claude/x', paths: ['README.md'], labels: [] });
+  it('fails a spike branch', () => {
+    const result = checkLane({ branch: 'spike/x', paths: ['README.md'], labels: [] });
     expect(result.lane).toBeUndefined();
     expect(result.errors).toHaveLength(1);
-    for (const prefix of ['gen/', 'revise/', 'manual/', 'dev/', 'dependabot/']) {
-      expect(result.errors[0]).toContain(prefix);
-    }
+    expect(result.errors[0]).toContain('spike/');
+  });
+
+  it('passes an unprefixed branch that touches no content', () => {
+    const result = checkLane({ branch: 'user-patch-1', paths: ['README.md'], labels: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: false, errors: [] });
+  });
+
+  it('fails an unprefixed branch that touches content without the migration label', () => {
+    const result = checkLane({
+      branch: 'user-patch-1',
+      paths: ['content/dnd-5e-2024/creature/a.json'],
+      labels: [],
+    });
+    expect(result.lane).toBe('dev');
+    expect(result.errors[0]).toContain('migration');
   });
 
   it('passes a content PR that touches only content paths', () => {

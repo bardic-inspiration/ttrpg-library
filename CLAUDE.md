@@ -10,7 +10,7 @@ What follows is specific to Claude Code.
 ## Branch names in cloud sessions
 
 A cloud session is assigned a branch name (`claude/...`) that isn't a lane
-prefix, so the lane check would fail its PR. Don't use it. Branch from `main`
+prefix. It would land in the dev lane, but don't use it. Branch from `main`
 with the lane's name instead: `dev/<short-description>` for development, or
 the `gen/` or `revise/` name [`SPEC.md`](SPEC.md) §8.4 and §8.5 give a
 routine. Push and open the PR from that branch. This instruction is the

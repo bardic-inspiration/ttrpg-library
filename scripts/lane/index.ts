@@ -22,11 +22,21 @@ export interface LaneResult {
   errors: string[];
 }
 
+/** Prefixes that never get a lane, so a branch under them can't merge. */
+export const REJECTED_PREFIXES: readonly string[] = ['spike/'];
+
+/**
+ * A branch with a lane prefix is in that lane. Any other branch (a GitHub
+ * web-editor `<user>-patch-1`, a `claude/...` cloud-session name) is in the dev
+ * lane, whose rules still block content changes without the `migration` label.
+ * Only a rejected prefix has no lane.
+ */
 export function laneOf(branch: string): Lane | undefined {
   for (const lane of Object.keys(LANE_PREFIXES) as Lane[]) {
     if (LANE_PREFIXES[lane].some((prefix) => branch.startsWith(prefix))) return lane;
   }
-  return undefined;
+  if (REJECTED_PREFIXES.some((prefix) => branch.startsWith(prefix))) return undefined;
+  return 'dev';
 }
 
 export function isContentPath(path: string): boolean {
@@ -41,8 +51,9 @@ export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
   const list = (items: string[]) => items.map((item) => `  ${item}`).join('\n');
 
   if (lane === undefined) {
-    const valid = Object.values(LANE_PREFIXES).flat();
-    errors.push(`Branch "${branch}" has no lane. Valid prefixes: ${valid.join(', ')}.`);
+    errors.push(
+      `Branch "${branch}" is under a prefix that can't merge (${REJECTED_PREFIXES.join(', ')}). Open the PR from a new branch.`,
+    );
   } else if (lane === 'content') {
     const outside = paths.filter((path) => !isContentPath(path));
     if (outside.length > 0) {
