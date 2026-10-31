@@ -1,0 +1,45 @@
+---
+// Detail page for one entry (SPEC.md §9.2). The full detail layout arrives in
+// milestone 3 (#12); this shows the entry so a content merge visibly changes
+// the live site.
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import CreatureStatBlock from '../../../components/templates/CreatureStatBlock.astro';
+import { loadEntries, type LoadedEntry } from '../../../lib/library';
+import type { CreatureStats, DerivedCreature } from '../../../../../rulesets/dnd-5e-2024/types.ts';
+
+export const getStaticPaths = (() => {
+  const all = loadEntries();
+  const names = new Map(all.map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name]));
+  return all.map((loaded) => ({
+    params: { ruleset: loaded.entry.ruleset, type: loaded.entry.type, id: loaded.entry.id },
+    props: { loaded, names },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  loaded: LoadedEntry;
+  names: Map<string, string>;
+}
+
+const { loaded, names } = Astro.props;
+const { entry, derived } = loaded;
+---
+<Base title={`${entry.name} · TTRPG Content Library`}>
+  <article>
+    <h1>{entry.name}</h1>
+    <p>{entry.summary}</p>
+    {entry.description && <p>{entry.description}</p>}
+    {entry.ruleset === 'dnd-5e-2024' && entry.type === 'creature' && (
+      <CreatureStatBlock
+        name={entry.name}
+        stats={entry.stats as CreatureStats}
+        derived={derived as unknown as DerivedCreature}
+        names={names}
+      />
+    )}
+    <p>
+      <small>Added {entry.meta.createdAt}{entry.meta.updatedAt && `, revised ${entry.meta.updatedAt}`}.</small>
+    </p>
+  </article>
+</Base>
