@@ -1,6 +1,7 @@
 ---
 // The dnd-5e-2024 creature stat block (registry template `creature-stat-block`,
-// SPEC.md §6.5, §7). Content only; styling arrives in milestone 3.
+// SPEC.md §6.5, §7). Content only; styling arrives in milestone 3. Optional
+// fields display only when present (SPEC.md §5.8), through lib/display.
 import type { CreatureStats, DerivedCreature } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import {
   abilityRows,
@@ -18,6 +19,7 @@ import {
   spellcastingBlock,
   type ActionBlock,
 } from '../../lib/creature';
+import { present, whenPresent } from '../../lib/display';
 import { renderTokens } from '../../../../rulesets/dnd-5e-2024/tokens.ts';
 import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import Segments from './Segments.astro';
@@ -30,18 +32,20 @@ interface Props {
 }
 
 const { name, stats: s, derived: d, names } = Astro.props;
-const blocks = (list: 'traits' | 'actions' | 'bonusActions' | 'reactions'): ActionBlock[] =>
-  (s[list] ?? []).map((action, i) => actionBlock(action, d[list][i], d));
+const blocks = (list: 'traits' | 'actions' | 'bonusActions' | 'reactions'): ActionBlock[] | undefined =>
+  whenPresent(s[list], (actions) => actions.map((action, i) => actionBlock(action, d[list][i], d)));
 const spellcasting = spellcastingBlock(s, d, names);
+// `actions` is required, so its section always displays; the others only when present.
 const sections = [
   { title: 'Traits', items: blocks('traits') },
-  { title: 'Actions', items: [...blocks('actions'), ...(spellcasting ? [spellcasting] : [])] },
+  { title: 'Actions', items: [...(blocks('actions') ?? []), ...(present(spellcasting) ? [spellcasting] : [])] },
   { title: 'Bonus Actions', items: blocks('bonusActions') },
   { title: 'Reactions', items: blocks('reactions') },
-].filter((section) => section.items.length > 0);
+].filter((section): section is { title: string; items: ActionBlock[] } => present(section.items));
 const legendary = s.legendaryActions;
 const legendaryItems = (legendary?.items ?? []).map((action, i) => actionBlock(action, d.legendaryActions.items[i], d));
-const skills = skillsLine(d);
+const skills = skillsLine(s, d);
+const gear = whenPresent(s.gear, (list) => list.map((g) => (typeof g === 'string' ? g : (names.get(g.ref) ?? g.ref))).join(', '));
 ---
 <section class="stat-block" aria-label={`${name} stat block`}>
   <p>{sizeTypeLine(s)}</p>
@@ -60,9 +64,9 @@ const skills = skillsLine(d);
     </tbody>
   </table>
   <dl>
-    {skills && <><dt>Skills</dt><dd>{skills}</dd></>}
+    {present(skills) && <><dt>Skills</dt><dd>{skills}</dd></>}
     {defenseLines(s).map((line) => <><dt>{line.label}</dt><dd>{line.value}</dd></>)}
-    {s.gear?.length ? <><dt>Gear</dt><dd>{s.gear.map((g) => (typeof g === 'string' ? g : (names.get(g.ref) ?? g.ref))).join(', ')}</dd></> : null}
+    {present(gear) && <><dt>Gear</dt><dd>{gear}</dd></>}
     <dt>Senses</dt><dd>{sensesLine(s, d)}</dd>
     <dt>Languages</dt><dd>{languagesLine(s)}</dd>
     <dt>CR</dt><dd>{crLine(s, d)}</dd>
@@ -78,8 +82,8 @@ const skills = skillsLine(d);
   {legendary && (
     <section>
       <h2>Legendary Actions</h2>
-      {legendary.intro && <p>{renderTokens(legendary.intro, d, tables)}</p>}
-      <p>Legendary Action Uses: {legendary.uses}{legendary.usesInLair ? ` (${legendary.usesInLair} in Lair)` : ''}.</p>
+      {present(legendary.intro) && <p>{renderTokens(legendary.intro, d, tables)}</p>}
+      <p>Legendary Action Uses: {legendary.uses}{whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? ''}.</p>
       {legendaryItems.map((item) => (
         <p><strong>{item.name}.</strong> <Segments segments={item.body} /></p>
       ))}

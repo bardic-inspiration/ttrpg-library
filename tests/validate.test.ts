@@ -172,6 +172,82 @@ describe('invalid fixtures', () => {
   });
 });
 
+/**
+ * Omission is the only way to say an optional field doesn't apply (SPEC.md
+ * §5.8): each case sets one optional field to a "none" value on a §6.9
+ * example, which the schema must reject.
+ */
+type Example = 'creature' | 'spell' | 'magic-item';
+const NONE_VALUES: [Example, string, unknown, RegExp][] = [
+  ['creature', 'descriptors', [], /^stats\.descriptors: must NOT have fewer than 1 items/],
+  ['creature', 'initiative', {}, /^stats\.initiative: must NOT have fewer than 1 properties/],
+  ['creature', 'speed.fly', 0, /^stats\.speed\.fly: must be >= 5/],
+  ['creature', 'speed.swim', 0, /^stats\.speed\.swim: must be >= 5/],
+  ['creature', 'speed.climb', 0, /^stats\.speed\.climb: must be >= 5/],
+  ['creature', 'speed.burrow', 0, /^stats\.speed\.burrow: must be >= 5/],
+  ['creature', 'speed.hover', false, /^stats\.speed\.hover: must be equal to constant/],
+  ['creature', 'saveProficiencies', [], /^stats\.saveProficiencies: must NOT have fewer than 1 items/],
+  ['creature', 'skills', {}, /^stats\.skills: must NOT have fewer than 1 properties/],
+  ['creature', 'vulnerabilities', [], /^stats\.vulnerabilities: must NOT have fewer than 1 items/],
+  ['creature', 'resistances', [], /^stats\.resistances: must NOT have fewer than 1 items/],
+  ['creature', 'immunities', {}, /^stats\.immunities: must NOT have fewer than 1 properties/],
+  ['creature', 'immunities.damage', [], /^stats\.immunities\.damage: must NOT have fewer than 1 items/],
+  ['creature', 'immunities.conditions', [], /^stats\.immunities\.conditions: must NOT have fewer than 1 items/],
+  ['creature', 'gear', [], /^stats\.gear: must NOT have fewer than 1 items/],
+  ['creature', 'senses', {}, /^stats\.senses: must NOT have fewer than 1 properties/],
+  ['creature', 'senses.darkvision', 0, /^stats\.senses\.darkvision: must be >= 1/],
+  ['creature', 'languages.telepathy', 0, /^stats\.languages\.telepathy: must be >= 1/],
+  ['creature', 'languages.note', '', /^stats\.languages\.note: must NOT have fewer than 1 characters/],
+  ['creature', 'ac.note', '', /^stats\.ac\.note: must NOT have fewer than 1 characters/],
+  ['creature', 'lair', false, /^stats\.lair: must be equal to constant/],
+  ['creature', 'traits', [], /^stats\.traits: must NOT have fewer than 1 items/],
+  ['creature', 'bonusActions', [], /^stats\.bonusActions: must NOT have fewer than 1 items/],
+  ['creature', 'reactions', [], /^stats\.reactions: must NOT have fewer than 1 items/],
+  ['creature', 'actions.0.damage.0.bonus', 0, /^stats\.actions\[0\]\.damage\[0\]\.bonus: must NOT be valid/],
+  ['creature', 'spellcasting', { ability: 'wis', includeAttack: false }, /^stats\.spellcasting\.includeAttack: must be equal to constant/],
+  ['spell', 'components.m.consumed', false, /^stats\.components\.m\.consumed: must be equal to constant/],
+  ['spell', 'components.m.costGp', 0, /^stats\.components\.m\.costGp: must be > 0/],
+  ['magic-item', 'cursed', false, /^stats\.cursed: must be equal to constant/],
+  ['magic-item', 'spells.0.chargeCost', 0, /^stats\.spells\[0\]\.chargeCost: must be >= 1/],
+];
+
+const EXAMPLES = { creature: cinderHound, spell: frostLance, 'magic-item': wandOfFrostLances };
+
+/** Sets `stats.<path>` (dot-separated, numeric segments index arrays). */
+function setStat(stats: Record<string, any>, path: string, value: unknown) {
+  const keys = path.split('.');
+  const last = keys.pop()!;
+  const parent = keys.reduce((node, key) => (node[key] ??= {}), stats);
+  parent[last] = value;
+}
+
+describe('situational fields (SPEC.md §5.8)', () => {
+  it.each(NONE_VALUES)('rejects a "none" value on %s stats.%s', async (type, path, value, pattern) => {
+    const entry = await EXAMPLES[type]();
+    setStat(entry.stats, path, value);
+    const { content } = await temp([entry]);
+    const { errors } = await validateLibrary(content);
+    expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(pattern));
+  });
+
+  it('keeps a magic item spell\'s attackBonus of 0 valid', async () => {
+    const wand = await wandOfFrostLances();
+    wand.stats.spells[0].attackBonus = 0;
+    const { content } = await temp([wand, await frostLance()]);
+    expect((await validateLibrary(content)).errors).toEqual([]);
+  });
+
+  it('keeps required fields valid at 0, false, and empty', async () => {
+    const hound = await cinderHound();
+    Object.assign(hound.stats, { speed: { walk: 0 }, languages: { list: [] } });
+    const spell = await frostLance();
+    Object.assign(spell.stats, { ritual: false });
+    spell.stats.duration.concentration = false;
+    const { content } = await temp([hound, spell, await wandOfFrostLances()]);
+    expect((await validateLibrary(content)).errors).toEqual([]);
+  });
+});
+
 describe('library checks (SPEC.md §6.8, all types)', () => {
   it('fails when the file path does not match ruleset, type, and id', async () => {
     const { content } = await temp([{ path: 'dnd-5e-2024/creature/hound.json', entry: await cinderHound() }]);

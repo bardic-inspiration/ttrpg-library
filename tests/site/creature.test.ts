@@ -28,7 +28,7 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(initiativeLine(d)).toBe('+2 (12)');
     expect(hpLine(d)).toBe('32 (5d8 + 10)');
     expect(speedLine(s)).toBe('40 ft.');
-    expect(skillsLine(d)).toBe('Perception +3, Stealth +4');
+    expect(skillsLine(s, d)).toBe('Perception +3, Stealth +4');
     expect(sensesLine(s, d)).toBe('Darkvision 60 ft., Passive Perception 13');
     expect(languagesLine(s)).toBe('None');
     expect(crLine(s, d)).toBe('2 (XP 450; PB +2)');

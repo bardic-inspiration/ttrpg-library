@@ -13,7 +13,7 @@
       "properties": {
         "dice": { "$ref": "#/$defs/Dice" },
         "ability": { "$ref": "#/$defs/Ability" },
-        "bonus": { "type": "integer" },
+        "bonus": { "type": "integer", "not": { "const": 0 } },
         "type": { "$ref": "#/$defs/DamageType" }
       }
     },

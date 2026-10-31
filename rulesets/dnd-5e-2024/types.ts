@@ -45,7 +45,7 @@ export interface CreatureStats {
   ac: { value: number; note?: string };
   initiative?: { proficiency?: Proficiency; adjust?: number };
   hitDice: number;
-  speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: boolean };
+  speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: true };
   abilities: Record<Ability, number>;
   saveProficiencies?: Ability[];
   skills?: Record<string, Proficiency>;
@@ -56,7 +56,7 @@ export interface CreatureStats {
   senses?: { darkvision?: number; blindsight?: number; tremorsense?: number; truesight?: number };
   languages: { list: string[]; telepathy?: number; note?: string };
   cr: number;
-  lair?: boolean;
+  lair?: true;
   traits?: Action[];
   actions: Action[];
   bonusActions?: Action[];
@@ -65,7 +65,7 @@ export interface CreatureStats {
   spellcasting?: {
     ability: Ability;
     adjust?: number;
-    includeAttack?: boolean;
+    includeAttack?: true;
     atWill?: RefOrText[];
     perDay?: Partial<Record<'1' | '2' | '3', RefOrText[]>>;
     note?: string;
@@ -86,7 +86,7 @@ export interface SpellStats {
     feet?: number;
     area?: { shape: string; size: number };
   };
-  components: { v: boolean; s: boolean; m?: { text: string; costGp?: number; consumed?: boolean } };
+  components: { v: boolean; s: boolean; m?: { text: string; costGp?: number; consumed?: true } };
   duration: {
     kind: 'instantaneous' | 'timed' | 'until-dispelled' | 'special';
     amount?: number;
@@ -112,7 +112,7 @@ export interface MagicItemStats {
   attunement: { required: boolean; requirement?: string };
   charges?: { max: number; recharge: string; depletion?: string };
   spells?: MagicItemSpell[];
-  cursed?: boolean;
+  cursed?: true;
   effect: string;
 }
 

@@ -1,10 +1,12 @@
 // Text for the dnd-5e-2024 creature stat block in SRD 5.2 form (SPEC.md §6.5),
 // built from stored inputs and derived values. Styling arrives with the
-// templates in milestone 3; this is the content.
+// templates in milestone 3; this is the content. Optional fields display by
+// presence alone (SPEC.md §5.8), through ./display.ts.
 
 import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { renderTokens } from '../../../rulesets/dnd-5e-2024/tokens.ts';
+import { present, whenPresent } from './display.ts';
 import type {
   Action,
   CreatureStats,
@@ -31,11 +33,11 @@ const FRACTIONS: Record<number, string> = { 0.125: '1/8', 0.25: '1/4', 0.5: '1/2
 export const formatCr = (cr: number): string => FRACTIONS[cr] ?? String(cr);
 
 export const sizeTypeLine = (s: CreatureStats): string => {
-  const descriptors = s.descriptors?.length ? ` (${s.descriptors.join(', ')})` : '';
+  const descriptors = whenPresent(s.descriptors, (list) => ` (${list.join(', ')})`) ?? '';
   return `${s.size.map(capitalize).join(' or ')} ${capitalize(s.creatureType)}${descriptors}, ${titleCase(s.alignment)}`;
 };
 
-export const acLine = (s: CreatureStats): string => (s.ac.note ? `${s.ac.value} (${s.ac.note})` : String(s.ac.value));
+export const acLine = (s: CreatureStats): string => whenPresent(s.ac.note, (note) => `${s.ac.value} (${note})`) ?? String(s.ac.value);
 
 export const initiativeLine = (d: DerivedCreature): string => `${signed(d.initiative.bonus)} (${d.initiative.score})`;
 
@@ -45,7 +47,7 @@ export function speedLine(s: CreatureStats): string {
   const { walk, hover, ...others } = s.speed;
   const parts = [`${walk} ft.`];
   for (const [mode, feet] of Object.entries(others)) {
-    parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && hover ? ' (hover)' : ''}`);
+    parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
   }
   return parts.join(', ');
 }
@@ -59,23 +61,33 @@ export function abilityRows(s: CreatureStats, d: DerivedCreature) {
   }));
 }
 
-export const skillsLine = (d: DerivedCreature): string =>
-  Object.entries(d.skills)
-    .map(([skill, bonus]) => `${titleCase(skill)} ${signed(bonus)}`)
-    .join(', ');
+/** The Skills line, or `undefined` when the creature has no `skills` (SPEC.md §5.8). */
+export const skillsLine = (s: CreatureStats, d: DerivedCreature): string | undefined =>
+  whenPresent(s.skills, () =>
+    Object.entries(d.skills)
+      .map(([skill, bonus]) => `${titleCase(skill)} ${signed(bonus)}`)
+      .join(', '),
+  );
 
-const damageList = (list: string[] | undefined): string => (list ?? []).map(capitalize).join(', ');
+const damageList = (list: string[]): string => list.map(capitalize).join(', ');
 
-export function defenseLines(s: CreatureStats): { label: string; value: string }[] {
+/** A labeled stat-block line. */
+export interface PropertyLine {
+  label: string;
+  value: string;
+}
+
+/** Vulnerabilities, Resistances, and Immunities, each only when present (SPEC.md §5.8). */
+export function defenseLines(s: CreatureStats): PropertyLine[] {
+  const immunities = whenPresent(s.immunities, (i) =>
+    [whenPresent(i.damage, damageList), whenPresent(i.conditions, damageList)].filter(present).join('; '),
+  );
   const lines = [
-    { label: 'Vulnerabilities', value: damageList(s.vulnerabilities) },
-    { label: 'Resistances', value: damageList(s.resistances) },
-    {
-      label: 'Immunities',
-      value: [damageList(s.immunities?.damage), damageList(s.immunities?.conditions)].filter(Boolean).join('; '),
-    },
+    { label: 'Vulnerabilities', value: whenPresent(s.vulnerabilities, damageList) },
+    { label: 'Resistances', value: whenPresent(s.resistances, damageList) },
+    { label: 'Immunities', value: immunities },
   ];
-  return lines.filter((line) => line.value);
+  return lines.filter((line): line is PropertyLine => present(line.value));
 }
 
 export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
@@ -84,10 +96,12 @@ export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
 }
 
 export function languagesLine(s: CreatureStats): string {
+  // `list` is required and may be empty; an empty list reads "None" (SPEC.md §6.5).
   const parts = s.languages.list.length ? [s.languages.list.join(', ')] : [];
-  if (s.languages.telepathy) parts.push(`telepathy ${s.languages.telepathy} ft.`);
+  const telepathy = whenPresent(s.languages.telepathy, (feet) => `telepathy ${feet} ft.`);
+  if (present(telepathy)) parts.push(telepathy);
   const line = parts.join('; ') || 'None';
-  return s.languages.note ? `${line} (${s.languages.note})` : line;
+  return whenPresent(s.languages.note, (note) => `${line} (${note})`) ?? line;
 }
 
 export function crLine(s: CreatureStats, d: DerivedCreature): string {
@@ -103,14 +117,14 @@ const RECHARGE: Record<string, string> = {
 };
 
 function actionName(action: Action): string {
-  const notes = [action.recharge ? RECHARGE[action.recharge] : undefined, action.uses ? titleCase(action.uses) : undefined].filter(Boolean);
+  const notes = [whenPresent(action.recharge, (r) => RECHARGE[r]), whenPresent(action.uses, titleCase)].filter(present);
   return notes.length ? `${action.name} (${notes.join('; ')})` : action.name;
 }
 
-function damageText(action: Action, derived: DerivedAction | undefined): string {
-  return (action.damage ?? [])
-    .map((damage, i) => `${derived?.damage[i]?.display ?? damage.dice} ${capitalize(damage.type)} damage`)
-    .join(' plus ');
+function damageText(action: Action, derived: DerivedAction | undefined): string | undefined {
+  return whenPresent(action.damage, (list) =>
+    list.map((damage, i) => `${derived?.damage[i]?.display ?? damage.dice} ${capitalize(damage.type)} damage`).join(' plus '),
+  );
 }
 
 const ATTACK_LABEL: Record<string, string> = {
@@ -120,7 +134,7 @@ const ATTACK_LABEL: Record<string, string> = {
 };
 
 const rangeText = (range: { normal: number; long?: number }): string =>
-  `range ${range.normal}${range.long ? `/${range.long}` : ''} ft.`;
+  `range ${range.normal}${whenPresent(range.long, (long) => `/${long}`) ?? ''} ft.`;
 
 /** One action, trait, or reaction as SRD 5.2 prose. */
 export function actionBlock(action: Action, derived: DerivedAction | undefined, d: DerivedCreature): ActionBlock {
@@ -133,16 +147,16 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
     body.push({ text: `${tables.abilityNames[action.save.ability]} Saving Throw:`, em: true });
     body.push({ text: ` DC ${derived?.saveDc}, ${action.save.targets}. ` });
     const damage = damageText(action, derived);
-    const failure = [damage ? `${damage}.` : '', action.onFailure ? prose(action.onFailure) : ''].filter(Boolean).join(' ');
+    const failure = [whenPresent(damage, (text) => `${text}.`), whenPresent(action.onFailure, prose)].filter(present).join(' ');
     if (failure) body.push({ text: 'Failure:', em: true }, { text: ` ${failure}` });
-    if (action.onSuccess) body.push({ text: ' ' }, { text: 'Success:', em: true }, { text: ` ${prose(action.onSuccess)}` });
+    if (present(action.onSuccess)) body.push({ text: ' ' }, { text: 'Success:', em: true }, { text: ` ${prose(action.onSuccess)}` });
   } else {
-    const reach = action.reach ? `reach ${action.reach} ft.` : '';
-    const range = action.range ? rangeText(action.range) : '';
+    const reach = whenPresent(action.reach, (feet) => `reach ${feet} ft.`);
+    const range = whenPresent(action.range, rangeText);
     body.push({ text: ATTACK_LABEL[action.kind] ?? '', em: true });
-    body.push({ text: ` ${signed(derived?.attackBonus ?? 0)}, ${[reach, range].filter(Boolean).join(' or ')} ` });
+    body.push({ text: ` ${signed(derived?.attackBonus ?? 0)}, ${[reach, range].filter(present).join(' or ')} ` });
     const damage = damageText(action, derived);
-    const hit = [damage ? sentence(damage) : '', action.onHit ? prose(action.onHit) : ''].filter(Boolean).join(' ');
+    const hit = [whenPresent(damage, sentence), whenPresent(action.onHit, prose)].filter(present).join(' ');
     body.push({ text: 'Hit:', em: true }, { text: ` ${hit}` });
   }
   return { name: actionName(action), body };
@@ -155,16 +169,16 @@ const refOrText = (value: RefOrText, names: Map<string, string>): string =>
 export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>): ActionBlock | undefined {
   const sc = s.spellcasting;
   if (!sc || !d.spellcasting) return undefined;
-  const attack = sc.includeAttack ? `, ${signed(d.spellcasting.attackBonus)} to hit with spell attacks` : '';
+  const attack = present(sc.includeAttack) ? `, ${signed(d.spellcasting.attackBonus)} to hit with spell attacks` : '';
   const body: Segment[] = [
     { text: `The creature casts one of the following spells, using ${tables.abilityNames[sc.ability]} as the spellcasting ability (spell save DC ${d.spellcasting.dc}${attack}):` },
   ];
   const list = (label: string, spells: RefOrText[] | undefined) => {
-    if (!spells?.length) return;
+    if (!present(spells)) return;
     body.push({ text: ' ' }, { text: `${label}:`, em: true }, { text: ` ${spells.map((spell) => refOrText(spell, names)).join(', ')}` });
   };
   list('At Will', sc.atWill);
   for (const n of ['3', '2', '1'] as const) list(`${n}/Day Each`, sc.perDay?.[n]);
-  if (sc.note) body.push({ text: ` ${renderTokens(sc.note, d, tables)}` });
+  if (present(sc.note)) body.push({ text: ` ${renderTokens(sc.note, d, tables)}` });
   return { name: 'Spellcasting', body };
 }
