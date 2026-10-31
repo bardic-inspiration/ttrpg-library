@@ -132,6 +132,19 @@ const INVALID: Record<string, RegExp> = {
   'magic-item-charge-cost-without-charges': /^stats\.spells\[0\]\.chargeCost: a chargeCost is allowed only when the item has charges/,
   'magic-item-ref-missing-target': /^stats\.spells\[0\]\.spell: ref "spell\/frost-lances-of-doom" does not resolve: no entry has id "frost-lances-of-doom"$/,
   'magic-item-ref-type-mismatch': /^stats\.spells\[0\]\.spell: ref "creature\/frost-lance" does not resolve: "frost-lance" is a spell, not a creature$/,
+  'blocklist-in-name': /^name: "Beholder" is on the blocklist \(config\/blocklist\.json\); use an SRD or original name$/,
+  'blocklist-in-summary': /^summary: "mind flayer" is on the blocklist/,
+  'blocklist-in-description': /^description: "Faerûn" is on the blocklist/,
+  'blocklist-in-descriptors': /^stats\.descriptors\[0\]: "Githyanki" is on the blocklist/,
+  'blocklist-in-stats-text': /^stats\.traits\[0\]\.text: "beholders" is on the blocklist/,
+  'magic-item-blocklist-in-spell': /^stats\.spells\[0\]\.spell: "Bigby's" is on the blocklist/,
+  'spell-blocklist-in-effect': /^stats\.effect: "Tasha's" is on the blocklist/,
+  'markdown-heading': /^description: a heading is not allowed; text fields use only paragraphs, \*\*bold\*\*, \*italic\*, lists, and line breaks$/,
+  'markdown-image': /^description: an image is not allowed/,
+  'markdown-link': /^stats\.traits\[0\]\.text: a link is not allowed/,
+  'markdown-html': /^stats\.actions\[1\]\.onSuccess: HTML is not allowed/,
+  'spell-markdown-table': /^stats\.higherLevels: a table is not allowed/,
+  'magic-item-markdown-autolink': /^stats\.effect: a link is not allowed/,
 };
 
 /** Where each invalid fixture is placed: its base example's path, so only the broken thing fails. */

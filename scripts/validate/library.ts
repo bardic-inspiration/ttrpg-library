@@ -2,6 +2,7 @@
 
 import { stat } from 'node:fs/promises';
 import { join } from 'node:path';
+import { foldDiacritics } from '../../lib/text.ts';
 
 export interface EntryHead {
   file: string;
@@ -29,7 +30,7 @@ export function checkPath(entry: EntryHead): string | undefined {
 
 /** Lowercased, ASCII-folded, with everything but letters and digits removed. */
 export function normalizeName(name: string): string {
-  return name.normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  return foldDiacritics(name).toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
 export function editDistance(a: string, b: string): number {
