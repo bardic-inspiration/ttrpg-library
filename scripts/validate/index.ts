@@ -3,7 +3,8 @@ import { dirname, join, resolve } from 'node:path';
 import { checkImage, checkPath, checkUniqueness, type EntryHead, type FileIssue } from './library.ts';
 import { entryKey, linkEntries, type Link, type RefEntry } from './refs.ts';
 import { PROJECT_ROOT, formatErrors, loadEnvelopeValidator, loadRegistry, loadRuleset, validateWithText, type LoadedRuleset } from './schema.ts';
-import { blocklistMatcher, checkBlocklist, checkMarkdown, loadBlocklist } from './text.ts';
+import { termMatcher } from '../../lib/text.ts';
+import { checkBlocklist, checkMarkdown, loadBlocklist } from './text.ts';
 import { listEntryFiles } from './walk.ts';
 
 export interface ValidationError {
@@ -46,7 +47,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const error = (file: string, message: string) => issues.push({ level: 'error', file, message });
   const envelope = await loadEnvelopeValidator();
   const registry = await loadRegistry();
-  const blocklist = blocklistMatcher(await loadBlocklist(PROJECT_ROOT));
+  const blocklist = termMatcher(await loadBlocklist(PROJECT_ROOT));
   const rulesets = new Map<string, LoadedRuleset | undefined>();
   const heads: EntryHead[] = [];
   const entries: Omit<ValidEntry, 'refs' | 'refBy'>[] = [];

@@ -116,6 +116,7 @@ ttrpg-library/
 ├── assets/images/<ruleset>/<type>/<id>.*   optional art (none in v1)
 ├── schemas/envelope.schema.json            fixed keys, tags, meta, image (all rulesets)
 ├── rulesets/module.ts                       the contract every ruleset module meets (§6.2)
+├── lib/                                    ruleset-independent helpers shared by scripts and the site (text matching)
 ├── rulesets/<ruleset>/                     everything ruleset-specific (§6.2)
 │   ├── index.ts                            the ruleset module: derive and check by type
 │   ├── ruleset.json                        id, label, SRD version, types
@@ -971,7 +972,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
   > This work includes material from the System Reference Document 5.2 ("SRD 5.2") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
 
 - PNG exports carry a one-line short form ("Includes SRD 5.2 material, CC-BY-4.0") in the capture footer.
-- **Blocklist** (`config/blocklist.json`): a list of non-SRD proper nouns (product-identity monsters, named characters, settings, and named spell prefixes, for example "Beholder," "Mind Flayer," "Illithid," "Displacer Beast," "Githyanki," "Forgotten Realms," "Faerûn," "Greyhawk," "Eberron," "Waterdeep," "Mordenkainen," "Bigby," "Tasha"). The file is a JSON array of strings. Matching is case-insensitive on word boundaries across `name`, `summary`, `description`, `descriptors`, and all `stats` text. A word boundary is any character that isn't a letter, digit, or underscore, so "Faerûn" matches in "the roads of Faerûn", but "Beholder" doesn't match "Beholders". A space in a term matches any run of whitespace. A match is an error. For a borderline false positive, the fix is a PR that edits the blocklist, so the decision is visible in history.
+- **Blocklist** (`config/blocklist.json`): a list of non-SRD proper nouns (product-identity monsters, named characters, settings, and named spell prefixes, for example "Beholder," "Mind Flayer," "Illithid," "Displacer Beast," "Githyanki," "Forgotten Realms," "Faerûn," "Greyhawk," "Eberron," "Waterdeep," "Mordenkainen," "Bigby," "Tasha"). The file is a JSON array of strings. Matching runs across `name`, `summary`, `description`, `descriptors`, and all `stats` text, on word boundaries (any character that isn't a letter, digit, or underscore). It ignores case and diacritics ("Faerun" matches "Faerûn"), and catches cheap variants so the list holds only base forms: plurals in -s, -es, and -y → -ies; possessives with `'` or `’` ("Tasha's", "beholders'"); and the words of a multi-word term joined by whitespace, a hyphen, or nothing ("mind-flayer", "mindflayer"). Irregular plurals are listed as their own terms. The matcher is `termMatcher` in `lib/text.ts`. A match is an error. For a borderline false positive, the fix is a PR that edits the blocklist, so the decision is visible in history.
 - Other rulesets require their own licensing review and attribution entry before they are added. `config/types.json` `attribution` points each ruleset to its statement.
 
 ## 12. CI/CD and repository settings

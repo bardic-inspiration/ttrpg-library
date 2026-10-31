@@ -4,6 +4,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Lexer, type Token } from 'marked';
+import type { TermMatcher } from '../../lib/text.ts';
 
 /**
  * Constructs outside the §5.5 subset, by `marked` token type. The site renders
@@ -57,25 +58,6 @@ export async function loadBlocklist(root: string): Promise<string[]> {
   return terms as string[];
 }
 
-/** A term matched case-insensitively on word boundaries; spaces in the term match any run of whitespace. */
-function termPattern(term: string): RegExp {
-  const body = term
-    .trim()
-    .split(/\s+/)
-    .map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-    .join('\\s+');
-  // `\b` is ASCII-only, so "Faerûn" needs Unicode-aware boundaries.
-  return new RegExp(`(?<![\\p{L}\\p{N}_])${body}(?![\\p{L}\\p{N}_])`, 'iu');
-}
-
-export type BlocklistMatcher = (text: string) => string[];
-
-/** A function that returns the text each blocklisted term matched, in blocklist order. */
-export function blocklistMatcher(terms: string[]): BlocklistMatcher {
-  const patterns = terms.map(termPattern);
-  return (text) => patterns.flatMap((pattern) => pattern.exec(text)?.[0] ?? []);
-}
-
 /** Every string under `value` with its path, such as `stats.actions[0].text`. */
 export function stringsIn(value: unknown, path: string): { path: string; text: string }[] {
   if (typeof value === 'string') return [{ path, text: value }];
@@ -88,11 +70,12 @@ export function stringsIn(value: unknown, path: string): { path: string; text: s
 
 /**
  * The §11 blocklist over `name`, `summary`, `description`, and every string in
- * `stats` (which holds `descriptors`). One message per match.
+ * `stats` (which holds `descriptors`). `matches` is a `termMatcher` over the
+ * blocklist. One message per match.
  */
 export function checkBlocklist(
   entry: { name: string; summary: string; description?: string; stats: unknown },
-  matches: BlocklistMatcher,
+  matches: TermMatcher,
 ): string[] {
   const fields = [
     { path: 'name', text: entry.name },

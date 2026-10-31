@@ -2,7 +2,8 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { PROJECT_ROOT } from '../scripts/validate/schema.ts';
-import { blocklistMatcher, checkBlocklist, loadBlocklist, markdownViolations, stringsIn } from '../scripts/validate/text.ts';
+import { termMatcher } from '../lib/text.ts';
+import { checkBlocklist, loadBlocklist, markdownViolations, stringsIn } from '../scripts/validate/text.ts';
 
 describe('markdown subset (SPEC.md §5.5)', () => {
   it('allows paragraphs, bold, italic, lists, line breaks, and tokens', () => {
@@ -43,31 +44,14 @@ describe('markdown subset (SPEC.md §5.5)', () => {
 });
 
 describe('blocklist (SPEC.md §11)', () => {
-  const matches = blocklistMatcher(['Beholder', 'Mind Flayer', 'Faerûn', 'Tasha']);
-
-  it('matches case-insensitively on word boundaries', () => {
-    expect(matches('A BEHOLDER floats here.')).toEqual(['BEHOLDER']);
-    expect(matches("Tasha's spell")).toEqual(['Tasha']);
-    expect(matches('the beholder-kin')).toEqual(['beholder']);
-    expect(matches('Tashan rugs and beholders')).toEqual([]);
-  });
-
-  it('matches a multi-word term across any whitespace', () => {
-    expect(matches('a mind\nflayer')).toEqual(['mind\nflayer']);
-    expect(matches('a mindflayer')).toEqual([]);
-  });
-
-  it('uses Unicode word boundaries', () => {
-    expect(matches('the roads of faerûn')).toEqual(['faerûn']);
-    expect(matches('Faerûnian roads')).toEqual([]);
-  });
+  const matches = termMatcher(['Beholder', 'Mind Flayer', 'Faerûn', 'Tasha']);
 
   it('checks name, summary, description, and every string in stats', () => {
     const entry = {
       name: 'Beholder Hound',
       summary: 'Hunts the mind flayer.',
       description: 'From Faerûn.',
-      stats: { descriptors: ['Tasha'], gear: [{ ref: 'magic-item/x' }], actions: [{ text: 'A beholder gaze.' }] },
+      stats: { descriptors: ['Tasha'], gear: [{ ref: 'magic-item/x' }], actions: [{ text: 'Two beholders gaze.' }] },
     };
     expect(checkBlocklist(entry, matches).map((m) => m.split(':')[0])).toEqual([
       'name',
