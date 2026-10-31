@@ -1,0 +1,9 @@
+# Blank issues are off, so every issue starts in a lane (SPEC.md §8.1).
+blank_issues_enabled: false
+contact_links:
+  - name: Working guide (AGENTS.md)
+    url: https://github.com/bardic-inspiration/ttrpg-library/blob/main/AGENTS.md
+    about: How work is scoped, laned, and reviewed in this repo. Read it before filing.
+  - name: Workflow — issues
+    url: https://github.com/bardic-inspiration/ttrpg-library/blob/main/docs/workflow.md#issues
+    about: How to scope, label, and link a dev-lane issue before filing it.

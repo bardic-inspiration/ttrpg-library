@@ -141,9 +141,12 @@ ttrpg-library/
 │       ├── icons/                          inlined Lucide SVGs
 │       └── styles/                         tokens/ and global layers (§9.6)
 ├── tests/                                  Vitest suites and fixture entries
-├── .claude/skills/
-│   ├── generate/SKILL.md                   generation (issues and gap-fill)
-│   └── revise/SKILL.md                     revisions from PR comments or a revise request
+├── .claude/
+│   ├── settings.json, hooks/               session permissions; dependency install in cloud sessions
+│   └── skills/
+│       ├── generate/SKILL.md               generation (issues and gap-fill)
+│       ├── revise/SKILL.md                 revisions from PR comments or a revise request
+│       └── ask-me/, grill-me/              dev-session interviews: form intent, stress-test a plan
 ├── .github/
 │   ├── workflows/validate.yml, deploy.yml, labeler.yml
 │   ├── ISSUE_TEMPLATE/                     content: content-request, revise-request
@@ -151,8 +154,11 @@ ttrpg-library/
 │   ├── PULL_REQUEST_TEMPLATE/content.md, dev.md
 │   ├── labeler.yml                         lane and area label rules (§12.4)
 │   └── dependabot.yml
-├── docs/routines.md                        canonical routine prompts and schedule
-├── SPEC.md  CLAUDE.md  README.md
+├── docs/
+│   ├── routines.md                         canonical routine prompts and schedule
+│   └── workflow.md, spec-driven-development.md, testing.md, ci.md, documentation.md
+│                                           how work is done (routed from AGENTS.md)
+├── SPEC.md  AGENTS.md  CLAUDE.md  README.md  CONTRIBUTING.md
 └── LICENSE  LICENSE-CONTENT  ATTRIBUTION.md
 ```
 
@@ -1047,7 +1053,7 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 
 ## 14. CLAUDE.md contents
 
-The repo's `CLAUDE.md` instructs any Claude session working in the repo:
+The repo's `CLAUDE.md` imports `AGENTS.md`, the canonical working guide for any agent, which instructs every session working in the repo:
 
 - Content is generated and revised through the `generate` and `revise` skills; follow them exactly.
 - Never push to `main`. Work in exactly one lane per PR (§12.4): content tasks on `gen/`, `revise/`, or `manual/` branches touching only `content/` and `assets/images/`; development tasks on `dev/` branches, touching content only in a deliberate migration (ask for the `migration` label).
