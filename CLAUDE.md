@@ -27,8 +27,10 @@ handled ([`SPEC.md`](SPEC.md) §8.5).
 
 ## Sub-issues
 
-Attach a task issue to its milestone issue with `sub_issue_write`, and read
-progress with `issue_read` (`get_sub_issues`).
+Attach a task issue to its milestone issue with `sub_issue_write` (`add`),
+then move it into place with `reprioritize` ([`AGENTS.md`](AGENTS.md) "The
+dev queue"). Read progress and order with `issue_read` (`get_sub_issues`), and
+find a task's parent with `get_parent`.
 
 ## Configuration and skills
 

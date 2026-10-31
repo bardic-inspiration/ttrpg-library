@@ -80,6 +80,46 @@ Content issues follow [`SPEC.md`](SPEC.md) §8.1.
 A dev issue states what to do, the spec section it implements, and how to
 tell it's done.
 
+### The dev queue
+
+The milestone issues, in [`SPEC.md`](SPEC.md) §16 order, and their
+sub-issues, in the order GitHub lists them, form one queue. Every open dev
+issue has a place in it. Nothing lives outside the tree except post-v1 work,
+which sits under a "Later (post-v1)" issue (§16.1), opened the first time
+it's needed.
+
+**Placing a new issue.** Whoever opens a dev issue attaches it as a
+sub-issue where it has to land (`sub_issue_write`, `add`), then moves it into
+position (`reprioritize`). Don't just add it to the end. Put it:
+
+- before the first issue that depends on it, in the same milestone or an
+  earlier one;
+- at the front of the current milestone if it fixes or follows up merged
+  work;
+- under "Later (post-v1)" if v1 doesn't need it.
+
+Then comment on the issue to say where it went and why. If the right place
+is a judgment call, leave it unattached and ask the user.
+
+**Picking the next issue.** A dev session, scheduled or interactive:
+
+1. **Triages.** It lists open dev issues with no parent, and places each one
+   whose place is clear, as above. It reports the rest to the user, every
+   run, until they're placed.
+2. **Picks.** It walks the queue depth-first and takes the first open issue
+   that:
+   - is a task rather than a parent with open sub-issues;
+   - has no open PR;
+   - has every dependency it names already merged.
+
+   A milestone whose tasks are all closed doesn't block later ones, even if
+   items in its "Done when" are still open because they wait on a human
+   (repository settings, a manual check). Say what's waiting instead.
+3. **Checks open PRs first.** If the picked issue already has an open PR,
+   handle the PR's CI and review comments instead of starting new work. If
+   the PR is only waiting on human review, that is the bottleneck: stop and
+   say so.
+
 ## Commands
 
 The npm scripts are defined in [`SPEC.md`](SPEC.md) §4.
