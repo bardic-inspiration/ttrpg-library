@@ -61,7 +61,9 @@ describe('validateLibrary', () => {
 /**
  * One fixture per error in tests/fixtures/invalid/: a §6.9 example with one
  * thing broken (the cinder hound, or Frost Lance for `spell-*` and the wand
- * for `magic-item-*`). Each must fail with a message matching its pattern.
+ * for `magic-item-*`). It replaces that example in a copy of the valid
+ * library, so refs to the other examples resolve. Each must fail with a
+ * message matching its pattern.
  */
 const INVALID: Record<string, RegExp> = {
   'unknown-top-level-key': /^hp: unknown key$/,
@@ -128,6 +130,8 @@ const INVALID: Record<string, RegExp> = {
   'magic-item-weapon-without-base': /^stats\.baseItem: a weapon needs a baseItem/,
   'magic-item-requirement-without-attunement': /^stats\.attunement\.requirement: a requirement is allowed only when attunement\.required is true/,
   'magic-item-charge-cost-without-charges': /^stats\.spells\[0\]\.chargeCost: a chargeCost is allowed only when the item has charges/,
+  'magic-item-ref-missing-target': /^stats\.spells\[0\]\.spell: ref "spell\/frost-lances-of-doom" does not resolve: no entry has id "frost-lances-of-doom"$/,
+  'magic-item-ref-type-mismatch': /^stats\.spells\[0\]\.spell: ref "creature\/frost-lance" does not resolve: "frost-lance" is a spell, not a creature$/,
 };
 
 /** Where each invalid fixture is placed: its base example's path, so only the broken thing fails. */
@@ -146,7 +150,10 @@ describe('invalid fixtures', () => {
 
   it.each(Object.entries(INVALID))('%s fails', async (name, pattern) => {
     const entry = JSON.parse(await readFile(join(FIXTURES, 'invalid', `${name}.json`), 'utf8'));
-    const { content } = await temp([{ path: fixturePath(name), entry }]);
+    const others = (await Promise.all([cinderHound(), frostLance(), wandOfFrostLances()])).filter(
+      (e) => `${e.ruleset}/${e.type}/${e.id}.json` !== fixturePath(name),
+    );
+    const { content } = await temp([...others, { path: fixturePath(name), entry }]);
     const { errors } = await validateLibrary(content);
     expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(pattern));
   });
@@ -222,6 +229,71 @@ describe('library checks (SPEC.md §6.8, all types)', () => {
       const huge = await withImage('assets/images/dnd-5e-2024/creature/cinder-hound.jpg', 3 * 1024 * 1024);
       expect(huge.errors[0]?.message).toMatch(/above the 2 MB limit/);
     });
+  });
+});
+
+describe('references (SPEC.md §5.7)', () => {
+  it('resolves the §6.9 examples together and computes back-references', async () => {
+    const result = await validateLibrary(join(library, 'valid'));
+    expect(result.errors).toEqual([]);
+    const byId = Object.fromEntries(result.entries.map((e) => [e.entry.id, e]));
+    expect(byId['wand-of-frost-lances']).toMatchObject({
+      refs: [{ path: 'stats.spells[0].spell', key: 'spell/frost-lance' }],
+      refBy: [],
+    });
+    expect(byId['frost-lance']).toMatchObject({
+      refs: [],
+      refBy: [{ path: 'stats.spells[0].spell', key: 'magic-item/wand-of-frost-lances' }],
+    });
+    expect(byId['cinder-hound']).toMatchObject({ refs: [], refBy: [] });
+  });
+
+  it('collects refs from creature spellcasting and gear, in document order', async () => {
+    const hound = await cinderHound();
+    hound.stats.gear = ['Collar', { ref: 'magic-item/wand-of-frost-lances' }];
+    hound.stats.spellcasting = { ability: 'wis', atWill: [{ ref: 'spell/frost-lance' }], perDay: { '1': ['Fog Cloud', { ref: 'spell/frost-lance' }] } };
+    const { content } = await temp([hound, await frostLance(), await wandOfFrostLances()]);
+    const result = await validateLibrary(content);
+    expect(result.errors).toEqual([]);
+    const byId = Object.fromEntries(result.entries.map((e) => [e.entry.id, e]));
+    expect(byId['cinder-hound']?.refs).toEqual([
+      { path: 'stats.gear[1]', key: 'magic-item/wand-of-frost-lances' },
+      { path: 'stats.spellcasting.atWill[0]', key: 'spell/frost-lance' },
+      { path: 'stats.spellcasting.perDay.1[1]', key: 'spell/frost-lance' },
+    ]);
+    expect(byId['frost-lance']?.refBy.map((l) => l.key)).toEqual([
+      'creature/cinder-hound',
+      'creature/cinder-hound',
+      'magic-item/wand-of-frost-lances',
+    ]);
+  });
+
+  it('fails a ref whose target was deleted', async () => {
+    const { content } = await temp([await wandOfFrostLances()]);
+    const { errors } = await validateLibrary(content);
+    expect(errors).toEqual([
+      {
+        file: 'dnd-5e-2024/magic-item/wand-of-frost-lances.json',
+        message: 'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: no entry has id "frost-lance"',
+      },
+    ]);
+  });
+
+  it('resolves a ref to an entry that fails its own stats schema, without a second error', async () => {
+    const spell = await frostLance();
+    spell.stats.level = 12;
+    const { content } = await temp([spell, await wandOfFrostLances()]);
+    const { errors } = await validateLibrary(content);
+    expect(errors).toEqual([{ file: 'dnd-5e-2024/spell/frost-lance.json', message: expect.stringMatching(/^stats\.level:/) }]);
+  });
+
+  it('fails a ref into another ruleset', async () => {
+    const spell = { ...(await frostLance()), ruleset: 'other-ruleset' };
+    const { content } = await temp([spell, await wandOfFrostLances()]);
+    const messages = (await validateLibrary(content)).errors.map((e) => e.message);
+    expect(messages).toContainEqual(
+      'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: "frost-lance" is in other-ruleset; refs can\'t cross rulesets in v1',
+    );
   });
 });
 

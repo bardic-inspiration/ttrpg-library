@@ -123,6 +123,7 @@ ttrpg-library/
 │   ├── derive.ts                           derived values per type
 │   ├── tokens.ts                           text tokens for derived values in prose
 │   ├── checks.ts                           consistency checks
+│   ├── refs.ts                             ref labels for detail pages (§5.7)
 │   ├── types.ts                            TypeScript shapes of stats and derived values
 │   ├── schemas/common.schema.json, <type>.schema.json
 │   └── guidelines/<type>.md                generation rules per type
@@ -132,7 +133,7 @@ ttrpg-library/
 │   ├── export.json                         page sizes, PNG settings, exporters (§10.5)
 │   └── blocklist.json                      non-SRD proper nouns (§11)
 ├── scripts/
-│   ├── validate/                           CLI, schema stage, ruleset-independent checks
+│   ├── validate/                           CLI, schema stage, ruleset-independent checks, refs
 │   ├── lane/                               lane rules for the `lane` CI job (§12.4)
 │   ├── build-index.ts                      content → library.json
 │   └── pr-summary/                         job summary for changed entries
@@ -232,9 +233,10 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 
 - A reference is an object `{ "ref": "<type>/<id>" }`, valid only inside `stats` at fields the schema declares as `RefOrText`.
 - `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`).
-- The validator fails if a ref's target does not exist, or if its type does not match the ref's type prefix. Cross-ruleset refs are not allowed in v1.
+- The validator fails if a ref's target does not exist, or if its type does not match the ref's type prefix. Cross-ruleset refs are not allowed in v1. An entry that fails its own `stats` schema can still be a ref target, but its refs are not checked until its schema passes.
 - Deleting an entry that other entries reference fails CI until those refs are removed or replaced.
-- The build computes back-references. Detail pages show forward links ("Casts: Frost Lance") and back-links ("Cast by: Cinder Witch").
+- The validator and the build compute back-references (`scripts/validate/refs.ts`). Each entry's `refs` (forward) and `refBy` (back) are lists of `{ path, key }`: `path` is where the ref sits in the referring entry (for example `stats.spells[0].spell`), and `key` is the other end as `<type>/<id>`. Only resolved refs are listed, in document order.
+- Detail pages show forward links ("Casts: Frost Lance") and back-links ("Cast by: Cinder Witch"), each target once per label. The ruleset's `refLabels(type, path)` names the relation from each end, from the field the ref sits in. dnd-5e-2024: `spellcasting` lists and a magic item's `spells[].spell` are "Casts" / "Cast by", creature `gear` is "Gear" / "Carried by", and any other field is "References" / "Referenced by".
 - A batch may add its own dependencies (a creature plus the new spell it casts).
 
 ## 6. Rulesets and the dnd-5e-2024 schemas
@@ -264,7 +266,8 @@ Everything specific to a ruleset lives in one folder, so adding a ruleset is add
 | `derive.ts` | Pure functions, one per type: `derive(stats, tables) → derived` |
 | `tokens.ts` | Text tokens that render derived values inside prose (§6.4) |
 | `checks.ts` | Consistency checks a JSON schema cannot express (§6.8) |
-| `index.ts` | Exports `ruleset`, meeting the `RulesetModule` contract in `rulesets/module.ts`: the `ruleset.json` definition, `derive(type, stats)`, and `check(type, stats)` |
+| `refs.ts` | `refLabels(type, path)`: how detail pages label a ref from each end (§5.7) |
+| `index.ts` | Exports `ruleset`, meeting the `RulesetModule` contract in `rulesets/module.ts`: the `ruleset.json` definition, `derive(type, stats)`, `check(type, stats)`, and `refLabels(type, path)` (§5.7) |
 | `types.ts` | TypeScript shapes of the `stats` and derived values, mirroring the schemas |
 | `schemas/common.schema.json`, `schemas/<type>.schema.json` | `stats` schemas |
 | `guidelines/<type>.md` | Generation guidance (§8.6) |

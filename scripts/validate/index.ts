@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { checkImage, checkPath, checkUniqueness, type EntryHead, type FileIssue } from './library.ts';
+import { entryKey, linkEntries, type Link, type RefEntry } from './refs.ts';
 import { formatErrors, loadEnvelopeValidator, loadRegistry, loadRuleset, type LoadedRuleset } from './schema.ts';
 import { listEntryFiles } from './walk.ts';
 
@@ -14,6 +15,10 @@ export interface ValidEntry {
   file: string;
   entry: EntryHead & { summary: string; stats: unknown; [key: string]: unknown };
   derived: Record<string, unknown>;
+  /** Resolved refs out of this entry, in document order (SPEC.md §5.7). */
+  refs: Link[];
+  /** Resolved refs into this entry from other entries. */
+  refBy: Link[];
 }
 
 export interface ValidationResult {
@@ -42,7 +47,8 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const registry = await loadRegistry();
   const rulesets = new Map<string, LoadedRuleset | undefined>();
   const heads: EntryHead[] = [];
-  const entries: ValidEntry[] = [];
+  const entries: Omit<ValidEntry, 'refs' | 'refBy'>[] = [];
+  const linkable: RefEntry[] = [];
 
   for (const file of files) {
     let data: unknown;
@@ -58,6 +64,8 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     }
     const entry = data as ValidEntry['entry'];
     heads.push({ file, ruleset: entry.ruleset, type: entry.type, id: entry.id, name: entry.name, ...(entry.image ? { image: entry.image } : {}) });
+    const linked: RefEntry = { file, ruleset: entry.ruleset, type: entry.type, id: entry.id };
+    linkable.push(linked);
     const pathError = checkPath({ ...entry, file });
     if (pathError) error(file, pathError);
     issues.push(...(await checkImage({ ...entry, file }, assetsRoot)));
@@ -82,11 +90,18 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     for (const issue of ruleset.module.check(entry.type, entry.stats)) {
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
     }
+    linked.stats = entry.stats;
     entries.push({ file, entry, derived: ruleset.module.derive(entry.type, entry.stats) });
   }
 
   issues.push(...checkUniqueness(heads));
+  const { links, issues: refIssues } = linkEntries(linkable);
+  for (const { file, message } of refIssues) error(file, message);
   const pick = (level: FileIssue['level']) =>
     issues.filter((i) => i.level === level).map(({ file, message }) => ({ file, message }));
-  return { files, errors: pick('error'), warnings: pick('warning'), entries };
+  const withLinks = entries.map((e) => {
+    const { refs, refBy } = links.get(entryKey(e.entry)) ?? { refs: [], refBy: [] };
+    return { ...e, refs, refBy };
+  });
+  return { files, errors: pick('error'), warnings: pick('warning'), entries: withLinks };
 }

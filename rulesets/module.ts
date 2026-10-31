@@ -17,10 +17,18 @@ export interface RulesetDefinition {
   types: string[];
 }
 
+/** How a detail page labels a reference, from each end: "Casts: Frost Lance", "Cast by: Wand of Frost Lances". */
+export interface RefLabels {
+  forward: string;
+  back: string;
+}
+
 export interface RulesetModule {
   definition: RulesetDefinition;
   /** Derived values for one entry's schema-valid `stats`; `{}` for a type with no formulas. */
   derive(type: string, stats: unknown): Record<string, unknown>;
   /** Consistency checks for one entry's schema-valid `stats` (§6.8). */
   check(type: string, stats: unknown): Issue[];
+  /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (§5.7). */
+  refLabels(type: string, path: string): RefLabels;
 }

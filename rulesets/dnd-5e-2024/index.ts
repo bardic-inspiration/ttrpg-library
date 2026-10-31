@@ -3,6 +3,7 @@
 import type { RulesetModule } from '../module.ts';
 import { checkCreature, checkMagicItem, checkSpell } from './checks.ts';
 import { deriveCreature } from './derive.ts';
+import { refLabels } from './refs.ts';
 import definition from './ruleset.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
 import type { CreatureStats, MagicItemStats, SpellStats, Tables } from './types.ts';
@@ -21,4 +22,5 @@ export const ruleset: RulesetModule = {
     if (type === 'spell') return checkSpell(stats as SpellStats);
     return [];
   },
+  refLabels,
 };
