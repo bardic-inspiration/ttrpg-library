@@ -32,6 +32,6 @@
       "properties": { "ref": { "type": "string", "pattern": "^(creature|magic-item|spell)/[a-z0-9-]+$" } }
     },
     "RefOrText": { "anyOf": [{ "$ref": "#/$defs/Ref" }, { "type": "string", "minLength": 1 }] },
-    "Text": { "type": "string", "minLength": 1 }
+    "Text": { "type": "string", "minLength": 1, "markdownSubset": true }
   }
 }

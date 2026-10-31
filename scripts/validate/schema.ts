@@ -14,10 +14,42 @@ export const PROJECT_ROOT = join(import.meta.dirname, '../..');
 
 const readJson = async (path: string): Promise<unknown> => JSON.parse(await readFile(path, 'utf8'));
 
+/** Markdown-subset strings seen by the validation in progress, by JSON pointer. */
+let markdownTexts: Map<string, string> | undefined;
+
 function newAjv(): Ajv2020 {
   const ajv = new Ajv2020({ allErrors: true, strict: true, strictRequired: false, allowUnionTypes: true });
   addFormats(ajv, ['date']);
+  // `"markdownSubset": true` marks a string as markdown-subset text (§5.5). It
+  // never fails; it records where those strings are so the text check can run
+  // after the schema stage passes (§6.8).
+  ajv.addKeyword({
+    keyword: 'markdownSubset',
+    schemaType: 'boolean',
+    validate: (on: boolean, data: unknown, _parent?: unknown, cxt?: { instancePath: string }) => {
+      if (on && typeof data === 'string' && cxt) markdownTexts?.set(cxt.instancePath, data);
+      return true;
+    },
+  });
   return ajv;
+}
+
+/**
+ * Runs `validate` on `data` and returns whether it passed, with every string
+ * the schema marks `markdownSubset`, as paths rooted at `prefix`.
+ */
+export function validateWithText(
+  validate: ValidateFunction,
+  data: unknown,
+  prefix = '',
+): { valid: boolean; texts: { path: string; text: string }[] } {
+  markdownTexts = new Map();
+  try {
+    const valid = validate(data) as boolean;
+    return { valid, texts: [...markdownTexts].map(([pointer, text]) => ({ path: toPath(prefix, pointer), text })) };
+  } finally {
+    markdownTexts = undefined;
+  }
 }
 
 /** `/stats/actions/0/range` → `stats.actions[0].range`. */

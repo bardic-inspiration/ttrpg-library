@@ -133,7 +133,7 @@ ttrpg-library/
 │   ├── export.json                         page sizes, PNG settings, exporters (§10.5)
 │   └── blocklist.json                      non-SRD proper nouns (§11)
 ├── scripts/
-│   ├── validate/                           CLI, schema stage, ruleset-independent checks, refs
+│   ├── validate/                           CLI, schema stage, ruleset-independent checks, text checks, refs
 │   ├── lane/                               lane rules for the `lane` CI job (§12.4)
 │   ├── build-index.ts                      content → library.json
 │   └── pr-summary/                         job summary for changed entries
@@ -219,7 +219,7 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 
 ### 5.5 Text fields
 
-`description`, and the rules-text fields inside `stats` (`text`, `effect`, `higherLevels`, etc.), accept a markdown subset: paragraphs, `**bold**`, `*italic*`, bulleted and numbered lists, and line breaks. No headings, links, HTML, images, or tables. The validator rejects disallowed constructs. Rendering is sanitized. A ruleset may also define tokens that render derived values inside text (§6.4).
+`description`, and the rules-text fields inside `stats` (`text`, `effect`, `higherLevels`, etc.), accept a markdown subset: paragraphs, `**bold**`, `*italic*`, bulleted and numbered lists, and line breaks. No headings, links (including bare URLs, which render as links), HTML, images, or tables. The validator rejects disallowed constructs, parsing the text with the same `marked` lexer the site renders with (`scripts/validate/text.ts`). A schema marks these fields with the `markdownSubset: true` keyword: the envelope's `description`, and the ruleset's `Text` def. Rendering is sanitized. A ruleset may also define tokens that render derived values inside text (§6.4).
 
 ### 5.6 Image
 
@@ -312,7 +312,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 | `Condition` | `blinded`, `charmed`, `deafened`, `exhaustion`, `frightened`, `grappled`, `incapacitated`, `invisible`, `paralyzed`, `petrified`, `poisoned`, `prone`, `restrained`, `stunned`, `unconscious` |
 | `Ref` | `{ ref: string }` matching `^(creature|magic-item|spell)/[a-z0-9-]+$` |
 | `RefOrText` | `Ref` or non-empty string |
-| `Text` | Markdown-subset string (§5.5), which may contain tokens where the ruleset allows them (§6.4) |
+| `Text` | Markdown-subset string (§5.5, marked `markdownSubset: true`), which may contain tokens where the ruleset allows them (§6.4) |
 
 ### 6.4 Text tokens
 
@@ -971,7 +971,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
   > This work includes material from the System Reference Document 5.2 ("SRD 5.2") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
 
 - PNG exports carry a one-line short form ("Includes SRD 5.2 material, CC-BY-4.0") in the capture footer.
-- **Blocklist** (`config/blocklist.json`): a list of non-SRD proper nouns (product-identity monsters, named characters, settings, and named spell prefixes, for example "Beholder," "Mind Flayer," "Illithid," "Displacer Beast," "Githyanki," "Forgotten Realms," "Faerûn," "Greyhawk," "Eberron," "Waterdeep," "Mordenkainen," "Bigby," "Tasha"). Matching is case-insensitive on word boundaries across `name`, `summary`, `description`, `descriptors`, and all `stats` text. A match is an error. For a borderline false positive, the fix is a PR that edits the blocklist, so the decision is visible in history.
+- **Blocklist** (`config/blocklist.json`): a list of non-SRD proper nouns (product-identity monsters, named characters, settings, and named spell prefixes, for example "Beholder," "Mind Flayer," "Illithid," "Displacer Beast," "Githyanki," "Forgotten Realms," "Faerûn," "Greyhawk," "Eberron," "Waterdeep," "Mordenkainen," "Bigby," "Tasha"). The file is a JSON array of strings. Matching is case-insensitive on word boundaries across `name`, `summary`, `description`, `descriptors`, and all `stats` text. A word boundary is any character that isn't a letter, digit, or underscore, so "Faerûn" matches in "the roads of Faerûn", but "Beholder" doesn't match "Beholders". A space in a term matches any run of whitespace. A match is an error. For a borderline false positive, the fix is a PR that edits the blocklist, so the decision is visible in history.
 - Other rulesets require their own licensing review and attribution entry before they are added. `config/types.json` `attribution` points each ruleset to its statement.
 
 ## 12. CI/CD and repository settings
