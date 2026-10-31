@@ -10,9 +10,20 @@
         "guideline": "rulesets/dnd-5e-2024/guidelines/creature.md",
         "facets": [
           { "path": "stats.cr", "label": "CR", "kind": "range", "format": "cr" },
-          { "path": "stats.size", "label": "Size", "kind": "enum" },
+          {
+            "path": "stats.size",
+            "label": "Size",
+            "kind": "enum",
+            "order": ["tiny", "small", "medium", "large", "huge", "gargantuan"]
+          },
           { "path": "stats.creatureType", "label": "Creature type", "kind": "enum" },
           { "path": "stats.abilities.str", "label": "STR", "kind": "range" },
+          { "path": "stats.abilities.dex", "label": "DEX", "kind": "range" },
+          { "path": "stats.abilities.con", "label": "CON", "kind": "range" },
+          { "path": "stats.abilities.int", "label": "INT", "kind": "range" },
+          { "path": "stats.abilities.wis", "label": "WIS", "kind": "range" },
+          { "path": "stats.abilities.cha", "label": "CHA", "kind": "range" },
+          { "path": "stats.ac.value", "label": "AC", "kind": "range" },
           { "path": "derived.hp.average", "label": "HP", "kind": "range" },
           { "path": "derived.xp", "label": "XP", "kind": "range" }
         ],

@@ -21,6 +21,8 @@ export interface ValidEntry {
   refs: Link[];
   /** Resolved refs into this entry from other entries. */
   refBy: Link[];
+  /** Every markdown-subset string in the entry (§5.5), `description` first, then `stats` in document order. */
+  texts: { path: string; text: string }[];
 }
 
 export interface ValidationResult {
@@ -99,7 +101,12 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
     }
     linked.stats = entry.stats;
-    entries.push({ file, entry, derived: ruleset.module.derive(entry.type, entry.stats) });
+    entries.push({
+      file,
+      entry,
+      derived: ruleset.module.derive(entry.type, entry.stats),
+      texts: [...envelopeResult.texts, ...statsResult.texts],
+    });
   }
 
   issues.push(...checkUniqueness(heads));

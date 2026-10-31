@@ -136,7 +136,7 @@ ttrpg-library/
 ├── scripts/
 │   ├── validate/                           CLI, schema stage, ruleset-independent checks, text checks, refs
 │   ├── lane/                               lane rules for the `lane` CI job (§12.4)
-│   ├── build-index.ts                      content → library.json
+│   ├── build-index/                        content → library.json and data/ copies (CLI, builder, schema walk)
 │   └── pr-summary/                         job summary for changed entries
 ├── site/                                   Astro project
 │   └── src/
@@ -751,7 +751,7 @@ Recorded in `docs/routines.md` along with the canonical routine prompts:
 
 ### 9.1 Build
 
-1. `scripts/build-index.ts` reads every file under `content/`, runs the validator (the build fails if validation fails), computes each entry's `derived` values with its ruleset module, resolves refs, and computes back-references.
+1. `scripts/build-index/` reads every file under `content/`, runs the validator (the build fails if validation fails), computes each entry's `derived` values with its ruleset module, resolves refs, and computes back-references.
 2. It writes `site/public/library.json` (the index) and copies each entry's raw JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export.
 3. Astro builds static pages, reading the full entries and their derived values at build time.
 
@@ -775,7 +775,14 @@ Recorded in `docs/routines.md` along with the canonical routine prompts:
 }
 ```
 
-`search` holds action, trait, and spell names plus `description` and rules text with markup stripped. The index stays lean; full entries are fetched only for export.
+Records are sorted by ruleset, type, then `id`, and the file is written without timestamps, so two builds of the same content are byte-identical.
+
+- `url` is the detail page under the site base (§3.1). `image` is the stored repo-relative path, or `null` when the entry has none.
+- `facets` holds the registry's facet paths (§7) in registry order, read from `stats` and from the ruleset module's `derived` values; the builder never computes a rules value itself. A facet whose optional value is omitted is left out, except an optional flag (§5.8), which reads as `false`.
+- `tags` is the entry's `tags`, or `{}`. `refs` and `refBy` are the §5.7 link lists.
+- `search` holds action, trait, and spell names plus `description` and rules text with markup stripped. Names are every `name` in `stats` and every value at a `RefOrText` field (§5.7), a ref read as its target's name. Rules text is every markdown-subset field (§5.5), with markdown and ruleset text tokens (§6.4) removed.
+
+The index stays lean; full entries are fetched only for export.
 
 ### 9.2 Pages and navigation
 
@@ -1061,7 +1068,7 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 
 **Tracking.** Each milestone in the delivery plan (§16) is one dev-lane issue; a milestone that needs more than one PR has its tasks as sub-issues. Content issues stand alone.
 
-**Escape hatch.** Content lives only under `content/` and `assets/images/`, and `scripts/build-index.ts` is the single place the site reads it. If the lanes ever need separate repositories (outside contributors, a second consumer of the content), `git filter-repo` can extract those two folders with history. The ruleset module would then become a versioned package that both repos depend on.
+**Escape hatch.** Content lives only under `content/` and `assets/images/`, and `scripts/build-index/` is the single place the site reads it. If the lanes ever need separate repositories (outside contributors, a second consumer of the content), `git filter-repo` can extract those two folders with history. The ruleset module would then become a versioned package that both repos depend on.
 
 ## 13. Review and quality
 
@@ -1109,7 +1116,7 @@ The repo's `CLAUDE.md` imports `AGENTS.md`, the canonical working guide for any 
 | A theme | One token block in `site/src/styles/tokens/semantic.css` and an option in the theme toggle |
 | Any visual detail | See the table in §9.8 |
 | Art for an entry | Commit the file under `assets/images/` and set `image` |
-| Data storage outside the repo | `scripts/build-index.ts`; the site keeps reading the same `library.json` shape |
+| Data storage outside the repo | `scripts/build-index/`; the site keeps reading the same `library.json` shape |
 
 ## 16. Delivery plan
 

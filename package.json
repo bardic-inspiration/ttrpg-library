@@ -9,7 +9,7 @@
   },
   "scripts": {
     "validate": "tsx scripts/validate/cli.ts",
-    "build:index": "tsx scripts/build-index.ts",
+    "build:index": "tsx scripts/build-index/cli.ts",
     "build": "npm run build:index && astro build --root site",
     "dev": "astro dev --root site",
     "check": "tsc --noEmit && astro check --root site",
