@@ -80,6 +80,20 @@ Content issues follow [`SPEC.md`](SPEC.md) §8.1.
 A dev issue states what to do, the spec section it implements, and how to
 tell it's done.
 
+### Dev Queue
+
+Milestone issues (§16 order) and their sub-issues (GitHub's order) are one
+queue. Post-v1 work goes under a "Later (post-v1)" issue.
+
+- **Place** every new dev issue with `sub_issue_write`. Put it before the
+  first issue that depends on it, and say why in a comment. If unsure, leave
+  it unattached and ask the user.
+- **Pick:** place any unparented issues first, then take the first open
+  task, depth-first, with no unmerged dependency. If it has an open PR, work
+  that PR's CI and comments instead. If that PR is only waiting on human
+  review, stop and say so. A milestone waiting only on a human check doesn't
+  block the next one.
+
 ## Commands
 
 The npm scripts are defined in [`SPEC.md`](SPEC.md) §4.
