@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/magic-item.schema.json",
+  "title": "dnd-5e-2024 magic item stats (SPEC.md §6.6)",
+  "description": "Stored inputs only; magic items derive nothing in v1 (SPEC.md §6.2). saveDc and attackBonus are authored. Cross-field rules are checks in checks.ts (SPEC.md §6.8).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["category", "rarity", "attunement", "effect"],
+  "properties": {
+    "category": {
+      "enum": ["armor", "potion", "ring", "rod", "scroll", "staff", "wand", "weapon", "wondrous-item"]
+    },
+    "baseItem": { "type": "string", "minLength": 1 },
+    "rarity": {
+      "enum": ["common", "uncommon", "rare", "very-rare", "legendary", "artifact", "varies"]
+    },
+    "attunement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "requirement": { "type": "string", "minLength": 1 }
+      }
+    },
+    "charges": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max", "recharge"],
+      "properties": {
+        "max": { "type": "integer", "minimum": 1 },
+        "recharge": { "type": "string", "minLength": 1 },
+        "depletion": { "$ref": "common.schema.json#/$defs/Text" }
+      }
+    },
+    "spells": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["spell"],
+        "properties": {
+          "spell": { "$ref": "common.schema.json#/$defs/RefOrText" },
+          "chargeCost": { "type": "integer", "minimum": 1 },
+          "saveDc": { "type": "integer", "minimum": 1 },
+          "attackBonus": { "type": "integer" }
+        }
+      }
+    },
+    "cursed": { "type": "boolean" },
+    "effect": { "$ref": "common.schema.json#/$defs/Text" }
+  }
+}

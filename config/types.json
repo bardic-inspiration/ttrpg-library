@@ -21,6 +21,46 @@
         "defaultFilters": ["stats.cr", "stats.creatureType", "tags.theme"],
         "summaryField": "stats.cr",
         "gapBuckets": { "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }
+      },
+      "magic-item": {
+        "label": "Magic item",
+        "plural": "Magic items",
+        "template": "magic-item-card",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/magic-item.md",
+        "facets": [
+          {
+            "path": "stats.rarity",
+            "label": "Rarity",
+            "kind": "enum",
+            "format": "rarity",
+            "order": ["common", "uncommon", "rare", "very-rare", "legendary", "artifact", "varies"]
+          },
+          { "path": "stats.category", "label": "Category", "kind": "enum" },
+          { "path": "stats.attunement.required", "label": "Attunement", "kind": "enum" },
+          { "path": "stats.cursed", "label": "Cursed", "kind": "enum" }
+        ],
+        "cardFields": ["stats.rarity", "stats.category", "stats.attunement.required"],
+        "defaultSort": "stats.rarity:asc",
+        "defaultFilters": ["stats.rarity", "stats.category", "tags.theme"],
+        "summaryField": "stats.rarity"
+      },
+      "spell": {
+        "label": "Spell",
+        "plural": "Spells",
+        "template": "spell-card",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/spell.md",
+        "facets": [
+          { "path": "stats.level", "label": "Level", "kind": "range", "format": "spell-level" },
+          { "path": "stats.school", "label": "School", "kind": "enum" },
+          { "path": "stats.classes", "label": "Classes", "kind": "enum" },
+          { "path": "stats.duration.concentration", "label": "Concentration", "kind": "enum" },
+          { "path": "stats.ritual", "label": "Ritual", "kind": "enum" },
+          { "path": "stats.castingTime.unit", "label": "Casting time", "kind": "enum" }
+        ],
+        "cardFields": ["stats.level", "stats.school", "stats.duration.concentration", "stats.ritual"],
+        "defaultSort": "stats.level:asc",
+        "defaultFilters": ["stats.level", "stats.school", "tags.theme"],
+        "summaryField": "stats.level"
       }
     }
   }

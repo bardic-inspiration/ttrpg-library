@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { validateLibrary } from '../scripts/validate/index.ts';
 import { editDistance, normalizeName } from '../scripts/validate/library.ts';
 import { listEntryFiles } from '../scripts/validate/walk.ts';
-import { FIXTURES, cinderHound, tempLibrary } from './helpers.ts';
+import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
 
 const library = join(FIXTURES, 'library');
 const temps: string[] = [];
@@ -20,7 +20,11 @@ const temp = async (...args: Parameters<typeof tempLibrary>) => {
 
 describe('listEntryFiles', () => {
   it('lists entry files relative to the root', async () => {
-    expect(await listEntryFiles(join(library, 'valid'))).toEqual(['dnd-5e-2024/creature/cinder-hound.json']);
+    expect(await listEntryFiles(join(library, 'valid'))).toEqual([
+      'dnd-5e-2024/creature/cinder-hound.json',
+      'dnd-5e-2024/magic-item/wand-of-frost-lances.json',
+      'dnd-5e-2024/spell/frost-lance.json',
+    ]);
   });
 
   it('treats a missing root as an empty library', async () => {
@@ -35,12 +39,15 @@ describe('validateLibrary', () => {
     expect(await validateLibrary(empty)).toEqual({ files: [], errors: [], warnings: [], entries: [] });
   });
 
-  it('passes the cinder hound with no warnings, and returns its derived values', async () => {
+  it('passes the §6.9 examples with no warnings, and returns their derived values', async () => {
     const result = await validateLibrary(join(library, 'valid'));
     expect(result.errors).toEqual([]);
     expect(result.warnings).toEqual([]);
-    expect(result.entries).toHaveLength(1);
-    expect(result.entries[0]?.derived).toMatchObject({ xp: 450, hp: { average: 32 } });
+    const derived = Object.fromEntries(result.entries.map((e) => [e.entry.id, e.derived]));
+    expect(derived['cinder-hound']).toMatchObject({ xp: 450, hp: { average: 32 } });
+    // Magic items and spells derive nothing in v1 (SPEC.md §6.2).
+    expect(derived['frost-lance']).toEqual({});
+    expect(derived['wand-of-frost-lances']).toEqual({});
   });
 
   it('reports a file that is not valid JSON', async () => {
@@ -52,8 +59,9 @@ describe('validateLibrary', () => {
 });
 
 /**
- * One fixture per error in tests/fixtures/invalid/: the cinder hound with one
- * thing broken. Each must fail with a message matching its pattern.
+ * One fixture per error in tests/fixtures/invalid/: a §6.9 example with one
+ * thing broken (the cinder hound, or Frost Lance for `spell-*` and the wand
+ * for `magic-item-*`). Each must fail with a message matching its pattern.
  */
 const INVALID: Record<string, RegExp> = {
   'unknown-top-level-key': /^hp: unknown key$/,
@@ -98,7 +106,37 @@ const INVALID: Record<string, RegExp> = {
   'literal-damage-with-modifier': /^stats\.actions\[1\]\.onSuccess: "5 \(1d6 \+ 2\)" writes a derived number/,
   'literal-in-legendary-intro': /^stats\.legendaryActions\.intro: "DC 15" writes a derived number/,
   'literal-in-spellcasting-note': /^stats\.spellcasting\.note: "DC 11" writes a derived number/,
+  'spell-bad-level': /^stats\.level: must be <= 9/,
+  'spell-unknown-school': /^stats\.school: must be one of/,
+  'spell-no-classes': /^stats\.classes: must NOT have fewer than 1 items/,
+  'spell-unknown-class': /^stats\.classes\[0\]: must be one of/,
+  'spell-bad-area-shape': /^stats\.range\.area\.shape: must be one of/,
+  'spell-missing-effect': /^stats: missing required key "effect"/,
+  'spell-concentration-not-timed': /^stats\.duration\.concentration: concentration needs a timed duration, not "instantaneous"/,
+  'spell-timed-without-amount': /^stats\.duration: a timed duration needs an amount/,
+  'spell-timed-without-unit': /^stats\.duration: a timed duration needs a unit/,
+  'spell-distance-without-feet': /^stats\.range: a distance range needs feet/,
+  'spell-consumed-without-cost': /^stats\.components\.m: a consumed material component needs a costGp/,
+  'spell-cantrip-higher-levels': /^stats\.higherLevels: higherLevels is for leveled spells/,
+  'spell-leveled-cantrip-upgrade': /^stats\.cantripUpgrade: cantripUpgrade is for cantrips/,
+  'spell-reaction-without-trigger': /^stats\.castingTime: a reaction casting time needs a trigger/,
+  'spell-trigger-without-reaction': /^stats\.castingTime\.trigger: a trigger is allowed only on a reaction/,
+  'magic-item-unknown-category': /^stats\.category: must be one of/,
+  'magic-item-unknown-rarity': /^stats\.rarity: must be one of/,
+  'magic-item-missing-attunement': /^stats: missing required key "attunement"/,
+  'magic-item-zero-charge-cost': /^stats\.spells\[0\]\.chargeCost: must be >= 1/,
+  'magic-item-weapon-without-base': /^stats\.baseItem: a weapon needs a baseItem/,
+  'magic-item-requirement-without-attunement': /^stats\.attunement\.requirement: a requirement is allowed only when attunement\.required is true/,
+  'magic-item-charge-cost-without-charges': /^stats\.spells\[0\]\.chargeCost: a chargeCost is allowed only when the item has charges/,
 };
+
+/** Where each invalid fixture is placed: its base example's path, so only the broken thing fails. */
+const fixturePath = (name: string) =>
+  name.startsWith('spell-')
+    ? 'dnd-5e-2024/spell/frost-lance.json'
+    : name.startsWith('magic-item-')
+      ? 'dnd-5e-2024/magic-item/wand-of-frost-lances.json'
+      : 'dnd-5e-2024/creature/cinder-hound.json';
 
 describe('invalid fixtures', () => {
   it('has a pattern for every fixture file', async () => {
@@ -108,8 +146,7 @@ describe('invalid fixtures', () => {
 
   it.each(Object.entries(INVALID))('%s fails', async (name, pattern) => {
     const entry = JSON.parse(await readFile(join(FIXTURES, 'invalid', `${name}.json`), 'utf8'));
-    // Keep the file at the cinder hound's path, so only the broken thing fails.
-    const { content } = await temp([{ path: 'dnd-5e-2024/creature/cinder-hound.json', entry }]);
+    const { content } = await temp([{ path: fixturePath(name), entry }]);
     const { errors } = await validateLibrary(content);
     expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(pattern));
   });
@@ -211,5 +248,57 @@ describe('creature warnings (SPEC.md §6.8)', () => {
       expect.stringMatching(/^stats\.actions\[2\]\.adjust: Glare adjusted by 30/),
       expect.stringMatching(/^stats\.actions\[2\]: Glare save DC 38 is above DC 30/),
     ]);
+  });
+});
+
+describe('magic-item warnings (SPEC.md §6.8)', () => {
+  it('warns when the effect restates an authored save DC or attack bonus', async () => {
+    const wand = await wandOfFrostLances();
+    wand.stats.spells = [
+      { spell: 'Ray of Frost', attackBonus: 5 },
+      { spell: 'Ice Storm', chargeCost: 3, saveDc: 15 },
+      { spell: 'Chill Touch', attackBonus: -1 },
+    ];
+    wand.stats.effect = 'Cast *Ray of Frost* (+5 to hit) or *Ice Storm* (save DC 15). *Chill Touch* attacks at -1.';
+    const { content } = await temp([wand]);
+    const { errors, warnings } = await validateLibrary(content);
+    expect(errors).toEqual([]);
+    expect(warnings.map((w) => w.message)).toEqual([
+      'stats.effect: "+5" restates stats.spells[0].attackBonus; the template renders it',
+      'stats.effect: "DC 15" restates stats.spells[1].saveDc; the template renders it',
+      'stats.effect: "-1" restates stats.spells[2].attackBonus; the template renders it',
+    ]);
+  });
+
+  it('does not warn on other numbers in the effect', async () => {
+    const wand = await wandOfFrostLances();
+    wand.stats.spells[0].saveDc = 15;
+    wand.stats.effect = 'It has 7 charges and regains +15 feet of range, or DC 150 on a crit.';
+    const { content } = await temp([wand]);
+    expect((await validateLibrary(content)).warnings).toEqual([]);
+  });
+});
+
+describe('spell warnings (SPEC.md §6.8)', () => {
+  it('warns on a cantrip marked ritual', async () => {
+    const spell = await frostLance();
+    spell.stats.level = 0;
+    delete spell.stats.higherLevels;
+    spell.stats.ritual = true;
+    const { content } = await temp([spell]);
+    const { errors, warnings } = await validateLibrary(content);
+    expect(errors).toEqual([]);
+    expect(warnings).toEqual([{ file: 'dnd-5e-2024/spell/frost-lance.json', message: 'stats.ritual: a cantrip is marked ritual; confirm it' }]);
+  });
+
+  it('allows concentration on a timed duration and a trigger on a reaction', async () => {
+    const spell = await frostLance();
+    spell.stats.duration = { kind: 'timed', amount: 1, unit: 'minute', concentration: true };
+    spell.stats.castingTime = { amount: 1, unit: 'reaction', trigger: 'which you take when a creature you can see moves' };
+    spell.stats.components.m = { text: 'a diamond', costGp: 50, consumed: true };
+    const { content } = await temp([spell]);
+    const result = await validateLibrary(content);
+    expect(result.errors).toEqual([]);
+    expect(result.warnings).toEqual([]);
   });
 });
