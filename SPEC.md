@@ -141,9 +141,12 @@ ttrpg-library/
 │       ├── icons/                          inlined Lucide SVGs
 │       └── styles/                         tokens/ and global layers (§9.6)
 ├── tests/                                  Vitest suites and fixture entries
-├── .claude/skills/
-│   ├── generate/SKILL.md                   generation (issues and gap-fill)
-│   └── revise/SKILL.md                     revisions from PR comments or a revise request
+├── .claude/
+│   ├── settings.json, hooks/               session permissions; dependency install in cloud sessions
+│   └── skills/
+│       ├── generate/SKILL.md               generation (issues and gap-fill)
+│       ├── revise/SKILL.md                 revisions from PR comments or a revise request
+│       └── ask-me/, grill-me/              dev-session interviews: form intent, stress-test a plan
 ├── .github/
 │   ├── workflows/validate.yml, deploy.yml, labeler.yml
 │   ├── ISSUE_TEMPLATE/                     content: content-request, revise-request
@@ -152,7 +155,7 @@ ttrpg-library/
 │   ├── labeler.yml                         lane and area label rules (§12.4)
 │   └── dependabot.yml
 ├── docs/routines.md                        canonical routine prompts and schedule
-├── SPEC.md  CLAUDE.md  README.md
+├── SPEC.md  AGENTS.md  CLAUDE.md  README.md
 └── LICENSE  LICENSE-CONTENT  ATTRIBUTION.md
 ```
 
@@ -1025,7 +1028,7 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 
 **Dependencies.** Dependabot opens grouped, monthly npm and GitHub Actions updates on `dependabot/` branches. They go through the dev lane and get the full checks.
 
-**Tracking.** GitHub milestones mirror the delivery plan (§16), and dev-lane issues and PRs are assigned to them. Content issues carry no milestone.
+**Tracking.** Each milestone in the delivery plan (§16) is one dev-lane issue; a milestone that needs more than one PR has its tasks as sub-issues. Content issues stand alone.
 
 **Escape hatch.** Content lives only under `content/` and `assets/images/`, and `scripts/build-index.ts` is the single place the site reads it. If the lanes ever need separate repositories (outside contributors, a second consumer of the content), `git filter-repo` can extract those two folders with history. The ruleset module would then become a versioned package that both repos depend on.
 
@@ -1047,7 +1050,7 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 
 ## 14. CLAUDE.md contents
 
-The repo's `CLAUDE.md` instructs any Claude session working in the repo:
+The repo's `CLAUDE.md` imports `AGENTS.md`, the canonical working guide for any agent, which instructs every session working in the repo:
 
 - Content is generated and revised through the `generate` and `revise` skills; follow them exactly.
 - Never push to `main`. Work in exactly one lane per PR (§12.4): content tasks on `gen/`, `revise/`, or `manual/` branches touching only `content/` and `assets/images/`; development tasks on `dev/` branches, touching content only in a deliberate migration (ask for the `migration` label).
