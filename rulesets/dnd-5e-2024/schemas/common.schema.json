@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/common.schema.json",
+  "title": "dnd-5e-2024 shared definitions (SPEC.md §6.3)",
+  "description": "Enums here mirror tables.json; tests/rulesets/dnd-5e-2024/schemas.test.ts keeps them in step.",
+  "$defs": {
+    "Ability": { "enum": ["str", "dex", "con", "int", "wis", "cha"] },
+    "Dice": { "type": "string", "pattern": "^[1-9]\\d*d(4|6|8|10|12|20|100)$" },
+    "Damage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dice", "type"],
+      "properties": {
+        "dice": { "$ref": "#/$defs/Dice" },
+        "ability": { "$ref": "#/$defs/Ability" },
+        "bonus": { "type": "integer" },
+        "type": { "$ref": "#/$defs/DamageType" }
+      }
+    },
+    "Proficiency": { "enum": ["proficient", "expertise"] },
+    "Adjust": { "type": "integer", "not": { "const": 0 } },
+    "DamageType": {
+      "enum": ["acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"]
+    },
+    "Condition": {
+      "enum": ["blinded", "charmed", "deafened", "exhaustion", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious"]
+    },
+    "Ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": { "ref": { "type": "string", "pattern": "^(creature|magic-item|spell)/[a-z0-9-]+$" } }
+    },
+    "RefOrText": { "anyOf": [{ "$ref": "#/$defs/Ref" }, { "type": "string", "minLength": 1 }] },
+    "Text": { "type": "string", "minLength": 1 }
+  }
+}

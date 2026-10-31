@@ -115,12 +115,15 @@ ttrpg-library/
 ├── content/<ruleset>/<type>/<id>.json      entries (the data)
 ├── assets/images/<ruleset>/<type>/<id>.*   optional art (none in v1)
 ├── schemas/envelope.schema.json            fixed keys, tags, meta, image (all rulesets)
+├── rulesets/module.ts                       the contract every ruleset module meets (§6.2)
 ├── rulesets/<ruleset>/                     everything ruleset-specific (§6.2)
+│   ├── index.ts                            the ruleset module: derive and check by type
 │   ├── ruleset.json                        id, label, SRD version, types
 │   ├── tables.json                         rules tables (CR, sizes, skills, enums)
 │   ├── derive.ts                           derived values per type
 │   ├── tokens.ts                           text tokens for derived values in prose
 │   ├── checks.ts                           consistency checks
+│   ├── types.ts                            TypeScript shapes of stats and derived values
 │   ├── schemas/common.schema.json, <type>.schema.json
 │   └── guidelines/<type>.md                generation rules per type
 ├── config/
@@ -261,10 +264,12 @@ Everything specific to a ruleset lives in one folder, so adding a ruleset is add
 | `derive.ts` | Pure functions, one per type: `derive(stats, tables) → derived` |
 | `tokens.ts` | Text tokens that render derived values inside prose (§6.4) |
 | `checks.ts` | Consistency checks a JSON schema cannot express (§6.8) |
+| `index.ts` | Exports `ruleset`, meeting the `RulesetModule` contract in `rulesets/module.ts`: the `ruleset.json` definition, `derive(type, stats)`, and `check(type, stats)` |
+| `types.ts` | TypeScript shapes of the `stats` and derived values, mirroring the schemas |
 | `schemas/common.schema.json`, `schemas/<type>.schema.json` | `stats` schemas |
 | `guidelines/<type>.md` | Generation guidance (§8.6) |
 
-The validator, the index builder, the site templates, and the exporters all import this module, so each derived value is computed in exactly one place. A ruleset or type with no formulas returns `{}` from `derive`.
+The validator, the index builder, the site templates, and the exporters all import this module, so each derived value is computed in exactly one place. The validator loads a ruleset by folder name, so an entry whose `ruleset` has no folder (or no `config/types.json` entry) fails as unknown. A ruleset or type with no formulas returns `{}` from `derive`.
 
 **dnd-5e-2024 creature derivations.** Magic items and spells derive nothing in v1.
 
@@ -272,7 +277,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 |---|---|
 | `derived.abilityMods.<ability>` | floor((score − 10) / 2) |
 | `derived.pb` | CR table (Appendix A) |
-| `derived.xp` | CR table |
+| `derived.xp` | CR table. At CR 0: 10 when any trait or action has `damage`, else 0 |
 | `derived.xpInLair` | XP of the next CR row, when `lair` is true |
 | `derived.initiative.bonus` | DEX mod + (0, PB, or 2×PB for none, `proficient`, or `expertise`) + `adjust` |
 | `derived.initiative.score` | 10 + initiative bonus |
@@ -285,7 +290,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 | `derived.passivePerception` | 10 + Perception bonus if the skill is listed, else 10 + WIS mod |
 | `derived.<actionList>[i].attackBonus` | PB + mod of `ability` + `adjust` |
 | `derived.<actionList>[i].saveDc` | 8 + PB + mod of `ability` + `adjust` |
-| `derived.<actionList>[i].damage[j]` | `modifier` = mod of `ability` (if set) + `bonus`; `average` = floor(dice average) + modifier; `display` such as `6 (1d8 + 2)` |
+| `derived.<actionList>[i].damage[j]` | `modifier` = mod of `ability` (if set) + `bonus`; `average` = floor(dice average) + modifier; `display` such as `6 (1d8 + 2)`, `5 (2d6 - 2)`, or `3 (1d6)` when the modifier is 0 |
 | `derived.spellcasting.dc` | 8 + PB + mod + `adjust` |
 | `derived.spellcasting.attackBonus` | PB + mod + `adjust` |
 
@@ -365,7 +370,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `onHit` | optional `Text` | attack | Prose after the damage |
 | `onFailure`, `onSuccess` | optional `Text` | save | Prose after the failure damage, and the success line |
 | `text` | `Text` | other (required); not allowed on attack and save | Full prose; derived values only through tokens |
-| `recharge` | optional string | all | `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
+| `recharge` | optional enum | all | One of `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
 | `uses` | optional string | all | `"3/day"` |
 
 Attack and save lines are generated in 5.2 form from the structured fields. Example output: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.` and `*Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.` Kind-specific requirements (`ability` and `reach` for melee attacks, `save` for saves, `text` only on `other`) are enforced in the schema with `if`/`then`.
@@ -1127,4 +1132,4 @@ v1 is complete when all six milestones are done, the library holds at least five
 | | | | | 29 | 135,000 | +9 |
 | | | | | 30 | 155,000 | +9 |
 
-This table lives in `rulesets/dnd-5e-2024/tables.json`, which cites the SRD section it comes from. "In lair" XP is the XP of the next row.
+This table lives in `rulesets/dnd-5e-2024/tables.json`, which cites the SRD section it comes from. "In lair" XP is the XP of the next row; a CR 30 creature has none. CR 0 is stored as `xp: 0` with `xpWithDamage: 10`: the derivation gives 10 XP when any of the creature's traits or actions deals damage, and 0 otherwise.

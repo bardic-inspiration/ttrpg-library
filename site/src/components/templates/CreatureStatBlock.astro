@@ -1,0 +1,88 @@
+---
+// The dnd-5e-2024 creature stat block (registry template `creature-stat-block`,
+// SPEC.md §6.5, §7). Content only; styling arrives in milestone 3.
+import type { CreatureStats, DerivedCreature } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import {
+  abilityRows,
+  acLine,
+  actionBlock,
+  crLine,
+  defenseLines,
+  hpLine,
+  initiativeLine,
+  languagesLine,
+  sensesLine,
+  sizeTypeLine,
+  skillsLine,
+  speedLine,
+  spellcastingBlock,
+  type ActionBlock,
+} from '../../lib/creature';
+import { renderTokens } from '../../../../rulesets/dnd-5e-2024/tokens.ts';
+import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
+import Segments from './Segments.astro';
+
+interface Props {
+  name: string;
+  stats: CreatureStats;
+  derived: DerivedCreature;
+  names: Map<string, string>;
+}
+
+const { name, stats: s, derived: d, names } = Astro.props;
+const blocks = (list: 'traits' | 'actions' | 'bonusActions' | 'reactions'): ActionBlock[] =>
+  (s[list] ?? []).map((action, i) => actionBlock(action, d[list][i], d));
+const spellcasting = spellcastingBlock(s, d, names);
+const sections = [
+  { title: 'Traits', items: blocks('traits') },
+  { title: 'Actions', items: [...blocks('actions'), ...(spellcasting ? [spellcasting] : [])] },
+  { title: 'Bonus Actions', items: blocks('bonusActions') },
+  { title: 'Reactions', items: blocks('reactions') },
+].filter((section) => section.items.length > 0);
+const legendary = s.legendaryActions;
+const legendaryItems = (legendary?.items ?? []).map((action, i) => actionBlock(action, d.legendaryActions.items[i], d));
+const skills = skillsLine(d);
+---
+<section class="stat-block" aria-label={`${name} stat block`}>
+  <p>{sizeTypeLine(s)}</p>
+  <dl>
+    <dt>AC</dt><dd>{acLine(s)}</dd>
+    <dt>Initiative</dt><dd>{initiativeLine(d)}</dd>
+    <dt>HP</dt><dd>{hpLine(d)}</dd>
+    <dt>Speed</dt><dd>{speedLine(s)}</dd>
+  </dl>
+  <table>
+    <thead><tr><th scope="col">Ability</th><th scope="col">Score</th><th scope="col">Mod</th><th scope="col">Save</th></tr></thead>
+    <tbody>
+      {abilityRows(s, d).map((row) => (
+        <tr><th scope="row">{row.ability}</th><td>{row.score}</td><td>{row.mod}</td><td>{row.save}</td></tr>
+      ))}
+    </tbody>
+  </table>
+  <dl>
+    {skills && <><dt>Skills</dt><dd>{skills}</dd></>}
+    {defenseLines(s).map((line) => <><dt>{line.label}</dt><dd>{line.value}</dd></>)}
+    {s.gear?.length ? <><dt>Gear</dt><dd>{s.gear.map((g) => (typeof g === 'string' ? g : (names.get(g.ref) ?? g.ref))).join(', ')}</dd></> : null}
+    <dt>Senses</dt><dd>{sensesLine(s, d)}</dd>
+    <dt>Languages</dt><dd>{languagesLine(s)}</dd>
+    <dt>CR</dt><dd>{crLine(s, d)}</dd>
+  </dl>
+  {sections.map((section) => (
+    <section>
+      <h2>{section.title}</h2>
+      {section.items.map((item) => (
+        <p><strong>{item.name}.</strong> <Segments segments={item.body} /></p>
+      ))}
+    </section>
+  ))}
+  {legendary && (
+    <section>
+      <h2>Legendary Actions</h2>
+      {legendary.intro && <p>{renderTokens(legendary.intro, d, tables)}</p>}
+      <p>Legendary Action Uses: {legendary.uses}{legendary.usesInLair ? ` (${legendary.usesInLair} in Lair)` : ''}.</p>
+      {legendaryItems.map((item) => (
+        <p><strong>{item.name}.</strong> <Segments segments={item.body} /></p>
+      ))}
+    </section>
+  )}
+</section>

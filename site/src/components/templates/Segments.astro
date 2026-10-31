@@ -1,0 +1,10 @@
+---
+import type { Segment } from '../../lib/creature';
+
+interface Props {
+  segments: Segment[];
+}
+
+const { segments } = Astro.props;
+---
+{segments.map((s) => (s.em ? <em>{s.text}</em> : s.text))}

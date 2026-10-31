@@ -1,10 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
+import { entryPath, loadEntries } from '../lib/library';
+import { url } from '../lib/url';
+
+const entries = loadEntries();
 ---
 <Base title="TTRPG Content Library">
   <h1>TTRPG Content Library</h1>
   <p>
     Original D&amp;D 5e creatures, magic items, and spells built on the SRD 5.2.
-    The library is being built; entries will appear here.
+    The gallery is being built.
   </p>
+  {entries.length === 0 ? (
+    <p>No entries yet.</p>
+  ) : (
+    <ul>
+      {entries.map(({ entry }) => (
+        <li><a href={url(entryPath(entry))}>{entry.name}</a>: {entry.summary}</li>
+      ))}
+    </ul>
+  )}
 </Base>
