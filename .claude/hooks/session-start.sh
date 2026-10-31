@@ -15,6 +15,9 @@ if [ ! -f package-lock.json ]; then
   exit 0
 fi
 
-# The container is cached once this hook completes, so `npm install` (which
-# reuses what's already there) beats `npm ci` here.
-npm install --no-audit --no-fund
+# `npm ci` installs exactly what the committed lockfile pins and never
+# rewrites it, as CI does (SPEC.md §12.1). `npm install` reuses what's already
+# in node_modules, but it can rewrite package-lock.json (it dropped `"dev":
+# true` from esbuild's optional platform packages), leaving an unrequested
+# change in the session.
+npm ci --no-audit --no-fund
