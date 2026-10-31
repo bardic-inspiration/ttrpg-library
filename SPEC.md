@@ -50,6 +50,7 @@ These were settled in the spec review and override the preliminary design wherev
 | 9 | Exports | PDF via print CSS for printing; PNG via DOM capture for Discord and VTTs; JSON as the native format. Exporters are pluggable modules for future translators. |
 | 10 | Art | No art in v1. Schema field `image` holds a repo-relative path; the UI shows a placeholder when it is absent. |
 | 11 | Derived values | Values the ruleset defines by formula or table (XP, PB, HP, attack bonuses, DCs, damage averages, save and skill bonuses, passive Perception) are never stored in entries. The ruleset module computes them; deviations are explicit `adjust` fields. |
+| 12 | Styling | Plain CSS with layered design tokens, so most UI refinement is a tokens edit. Light and dark themes with a System/Light/Dark toggle. WCAG 2.2 AA, checked in CI. A style guide page for refinement (§9.6–9.8). |
 
 ### 2.1 Changes from the preliminary design
 
@@ -98,8 +99,11 @@ Merge to main ──► deploy.yml: build-index (derive) → astro build → Git
 | Search | MiniSearch | Field boosting, prefix and fuzzy matching, small footprint |
 | Markdown in text fields | `marked` at build time, sanitized | Limited subset (§5.5) |
 | PNG capture | `html-to-image` | Fonts self-hosted so capture is faithful |
-| Fonts | Self-hosted OFL fonts via `@fontsource` packages | No external font requests; required for PNG fidelity |
-| Tests | Vitest | Validator, index builder, URL-state codec, exporters |
+| Styling | Plain CSS: custom properties, cascade layers, nesting, container queries | No framework or preprocessor (§9.6) |
+| Fonts | Alegreya, Alegreya SC, Alegreya Sans (OFL) via `@fontsource` | No external font requests; required for PNG fidelity |
+| UI icons | Lucide (ISC), inlined SVG | A handful of control icons only |
+| CSS lint | Stylelint | Forbids literal design values outside `tokens/` |
+| Tests | Vitest; Playwright with axe-core | Unit suites and contrast checks; accessibility smoke tests on built pages |
 
 The Pages site is served from `https://bardic-inspiration.github.io/ttrpg-library/`; Astro's `base` is `/ttrpg-library/` and every internal link goes through it.
 
@@ -127,7 +131,14 @@ ttrpg-library/
 │   ├── validate/                           CLI, schema stage, ruleset-independent checks
 │   ├── build-index.ts                      content → library.json
 │   └── pr-summary.ts                       job summary for changed entries
-├── site/                                   Astro project (pages, components, islands, styles)
+├── site/                                   Astro project
+│   └── src/
+│       ├── pages/                          routes, including /styleguide/
+│       ├── components/templates/           type templates and their parts
+│       ├── components/gallery/             grid, cards, filters, search (Preact islands)
+│       ├── exporters/                      json, png, print
+│       ├── icons/                          inlined Lucide SVGs
+│       └── styles/                         tokens/ and global layers (§9.6)
 ├── tests/                                  Vitest suites and fixture entries
 ├── .claude/skills/
 │   ├── generate/SKILL.md                   generation (issues and gap-fill)
@@ -142,7 +153,7 @@ ttrpg-library/
 
 `library.json` is built in CI and git-ignored, so pull requests contain only entry files (and, in revise or dependency cases, the files they touch).
 
-npm scripts: `validate`, `build:index`, `dev`, `build` (runs `build:index` then `astro build`), `test`, `check` (types and `astro check`).
+npm scripts: `validate`, `build:index`, `dev`, `build` (runs `build:index` then `astro build`), `test` (Vitest, including contrast), `check` (types, `astro check`, Stylelint), `a11y` (Playwright + axe against the built site), `snapshots` (on-demand visual captures).
 
 ## 5. Content model
 
@@ -624,6 +635,7 @@ Free-form issues with the `request` label are also accepted; the routine interpr
 | `in-progress` | Claimed by a routine run |
 | `needs-info` | Routine asked a question in the issue; skipped until you answer and remove the label |
 | `generated` | On PRs opened by routines |
+| `ui` | On PRs that change the site's look or behavior |
 
 ### 8.2 Routine run order
 
@@ -761,12 +773,121 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 - Export controls: Download JSON, Download PNG, Print (with page size selector).
 - `<title>` and Open Graph tags (name, summary, art when present).
 
-### 9.5 Templates and theming
+### 9.5 Templates
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
+- Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
-- All colors, fonts, and spacing come from CSS variables in `site/src/styles/tokens.css`. A theme change touches one file. Light and dark themes are both defined; print and capture always use the light theme.
+- Markup is semantic so that styling never fights structure. The entry name is a heading, section labels (Actions, Reactions) are subheadings, property lines and ability scores are definition lists or tables, and action names are inline headings.
+
+### 9.6 Styling system
+
+The styling system is built so that the v1 UI can be refined quickly and safely during testing. Most visual changes are edits to one tokens file. Every rendered state can be seen on one page. Tests catch accessibility regressions.
+
+**Approach**
+
+- Plain modern CSS: custom properties, nesting, cascade layers, and container queries. No CSS framework, no preprocessor, no CSS-in-JS. Target: the last two versions of evergreen browsers.
+- Component styles live in each Astro or Preact component's scoped `<style>` block, next to the markup they style.
+- Global styles are a small, fixed set of files, loaded in this layer order:
+
+  ```css
+  @layer reset, tokens, base, layout, components, utilities, overrides;
+  ```
+
+  Component styles go in `components`. The `overrides` layer is an empty file, reserved for quick experiments during refinement, which always win without specificity fights.
+
+**Files (`site/src/styles/`)**
+
+| File | Contents | Edit it to change |
+|---|---|---|
+| `tokens/primitives.css` | Raw values: the palette, font families, type scale, spacing scale, radii, shadows, durations | The palette or the scales themselves |
+| `tokens/semantic.css` | Meanings mapped to primitives, per theme: `--color-bg`, `--color-surface`, `--color-text`, `--color-text-muted`, `--color-accent`, `--color-border`, `--color-control-border`, `--color-focus`, `--font-heading`, `--font-body`, `--font-ui`, `--space-card`, `--radius-card`… | What a role looks like in light or dark |
+| `tokens/components.css` | Per-component knobs that default to semantic tokens: `--statblock-rule-color`, `--statblock-heading-font`, `--card-min-width`, `--grid-gap`, `--art-aspect`… | One component's look without touching its code |
+| `tokens/content.css` | Data-driven accents: one variable per entry type and per item rarity (`--accent-creature`, `--rarity-legendary`…) | Type and rarity colors |
+| `tokens/print.css` | Print and capture sizing per page size: `[data-page-size="card-4x6"] { --print-font-size: 8pt; … }` | Print density per page size |
+| `reset.css`, `base.css`, `layout.css`, `utilities.css`, `overrides.css` | Element defaults, page shell and grid, a handful of utilities, the experiment layer | Rarely |
+
+**Rules that keep editing easy**
+
+- Components use only semantic, component, and content tokens. They never use primitives or literal values. A color, font, size, spacing, radius, shadow, or duration written as a literal anywhere outside `tokens/` fails the lint. Stylelint enforces this in `npm run check`, with an allowlist for `0`, `100%`, `auto`, and similar.
+- Accents are driven by data attributes, not by per-type CSS. Cards and stat blocks carry `data-type="creature"` (and `data-rarity="rare"` for items), and one rule maps each attribute to `--accent`. A new type needs one variable in `content.css`; without one, it falls back to `--color-accent`.
+- Class names are stable, readable, and component-scoped (`.statblock__header`, `.card__summary`), so a quick experiment in `overrides.css` can target anything.
+- Layout values are tokens as well: grid minimum card width, gaps, stat-block column gap, and container-query breakpoints. Density and layout can be tuned without touching component code.
+
+**Visual direction (starting point for refinement)**
+
+- **Feel:** a clean reference book. Warm paper surfaces, dark ink text, thin colored rule lines between stat-block sections, small-caps headings. The design is original: it does not reproduce official book art, textures, ornaments, or logos, which also keeps it safe to make public later.
+- **Typefaces:** the Alegreya superfamily, SIL Open Font License, self-hosted via `@fontsource`. Alegreya SC for headings and stat-block labels, Alegreya for body and rules text, Alegreya Sans for UI controls, filters, and badges. One family keeps the look coherent and the font payload small. Only the weights used (400, 500, 700, and 400 italic) are loaded.
+- **Type scale:** a modular scale (ratio 1.2) as `--font-size--1` through `--font-size-5`. Screen sizes are fluid with `clamp()`; print uses fixed point sizes from `print.css`.
+- **Starting palette:** values below, all of which pass the contrast pairs in §9.7.
+
+| Token | Light | Dark |
+|---|---|---|
+| `--color-bg` | `#f6f0e1` | `#161412` |
+| `--color-surface` | `#fffaf0` | `#211e1a` |
+| `--color-text` | `#1f1a14` | `#ede5d5` |
+| `--color-text-muted` | `#5b5246` | `#b3a892` |
+| `--color-accent` | `#8a1c1c` | `#e8806a` |
+| `--color-border` (decorative) | `#b9ab90` | `#4a4238` |
+| `--color-control-border` | `#857865` | `#8a7f6e` |
+| `--color-focus` | `#1d4ed8` | `#93b4ff` |
+| `--accent-creature` | `#8a1c1c` | `#e8806a` |
+| `--accent-magic-item` | `#6b3fa0` | `#c4a3f0` |
+| `--accent-spell` | `#1f5f8b` | `#7fb8e0` |
+| `--rarity-common` / `uncommon` / `rare` | `#5b5246` / `#2f6b2f` / `#1f5f8b` | `#b3a892` / `#8fcf8f` / `#7fb8e0` |
+| `--rarity-very-rare` / `legendary` / `artifact` | `#6b3fa0` / `#9a5200` / `#8a1c1c` | `#c4a3f0` / `#f0b060` / `#e8806a` |
+
+- **Icons:** a few UI icons (search, filter, sort, theme, download, print, close) from Lucide (ISC license), inlined as SVG components in `site/src/icons/` and colored with `currentColor`. Lucide's license is credited in `ATTRIBUTION.md`. Entry types have no icons in v1; the art placeholder carries the type label.
+
+**Themes**
+
+- Light and dark are sets of semantic tokens in `semantic.css`, under `:root[data-theme="light"]` and `:root[data-theme="dark"]`, plus a `prefers-color-scheme` block for the system default.
+- The header has a three-way toggle: System, Light, Dark. The choice is stored in `localStorage`, with reads and writes wrapped in try/catch so the toggle degrades to System. A tiny inline script in `<head>` sets `data-theme` before first paint, so the page never flashes the wrong theme.
+- Print and PNG capture always render with the light tokens, whatever the active theme.
+- A further theme (for example, high contrast) is one more token block in `semantic.css` plus an option in the toggle; no component changes.
+
+### 9.7 Accessibility
+
+Target: WCAG 2.2 AA.
+
+- **Contrast.** `tests/contrast.test.ts` parses `semantic.css` and `content.css` for both themes and checks declared pairs: text, muted text, accent, every type and rarity color on `--color-bg` and `--color-surface` at ≥ 4.5:1; `--color-control-border` and `--color-focus` at ≥ 3:1. Changing a color and running `npm test` shows immediately whether it still passes.
+- **Color is never the only signal.** Rarity, type, and concentration/ritual badges always carry a text label.
+- **Keyboard.** Every control (filters, chips, sort, search, selection, export, theme toggle) is reachable and operable by keyboard, in visual order. Focus is always visible through a shared `--focus-ring` token (2 px outline in `--color-focus` with offset). Escape closes popovers.
+- **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name; the placeholder is decorative and hidden from assistive technology.
+- **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce`.
+- **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without horizontal scrolling.
+- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build.
+
+### 9.8 UI refinement workflow
+
+UI refinement is an explicit part of v1 testing, so the tooling for it ships with the gallery milestone.
+
+- **Style guide page.** `/styleguide/` (not linked in navigation; `noindex`) renders, from the test fixtures:
+  - every token as a swatch or sample
+  - the type scale and the three typefaces
+  - every template in each mode (`screen`, `capture`, and print previews at each page size)
+  - gallery cards with and without art
+  - filter controls in their states (empty, active, focused)
+
+  Each has a light/dark switch, and there is a side-by-side view of both themes. This page is where most refinement happens: edit a token, and every affected surface updates at once under `npm run dev`.
+- **Fixtures include stress cases:** a creature with legendary actions and spellcasting, a long magic item, a cantrip and a 9th-level spell, a very long name, and an entry with many tags. Layouts get judged against the hard cases, not only the pretty ones.
+- **Visual snapshots on demand.** `npm run snapshots` captures the style guide and key pages in both themes with Playwright into a git-ignored folder, for before/after comparison of a refinement. It is not a CI gate, so deliberate design changes never fight a failing snapshot test.
+- **Where to change what:**
+
+| To change | Edit |
+|---|---|
+| A color in one theme | `tokens/semantic.css` |
+| The palette everywhere | `tokens/primitives.css` |
+| A type or rarity color | `tokens/content.css` |
+| Fonts or the type scale | `tokens/primitives.css` (families and scale) and `semantic.css` (role assignment) |
+| Card size, grid density, gaps | `tokens/components.css` |
+| Print density per page size | `tokens/print.css` |
+| Page size dimensions and margins | `config/export.json` |
+| Stat-block structure or order | The template's part components in `site/src/components/templates/` |
+| A quick experiment | `overrides.css`, then move the result into tokens or the component |
+
+- **UI changes go through PRs** with the label `ui`, reviewed in the same way as content but without routine involvement. Routines never edit `site/` unless an issue explicitly asks for a UI change.
 
 ## 10. Export
 
@@ -826,6 +947,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 ## 11. Licensing and attribution
 
 - **Code:** MIT (`LICENSE`).
+- **Third-party assets:** Alegreya fonts (SIL Open Font License 1.1) and Lucide icons (ISC), each credited in `ATTRIBUTION.md`.
 - **Content** (`content/`, `rulesets/*/guidelines/`): CC-BY-4.0 (`LICENSE-CONTENT`), compatible with the SRD's terms.
 - **SRD attribution statement**, in `ATTRIBUTION.md`, the site footer, the `/about/` page, and every print page:
 
@@ -842,7 +964,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 1. Checkout with full history for the base comparison; set up Node 22 with npm cache; `npm ci`.
 2. `npm run check` and `npm test`.
 3. `npm run validate` across all entries.
-4. `npm run build`.
+4. `npm run build`, then `npm run a11y` against the built site.
 5. `scripts/pr-summary.ts` writes the job summary: changed entries (added, modified, removed) with name, type, `summaryField` value, and summary; for creatures, the derived HP, AC, attack bonuses, DCs, and average damage per action; all warnings, including every formula adjustment; ref changes (new back-links created).
 6. Upload the built site as a workflow artifact (7-day retention) for optional local preview.
 
@@ -886,6 +1008,7 @@ The repo's `CLAUDE.md` instructs any Claude session working in the repo:
 - Content is generated and revised through the `generate` and `revise` skills; follow them exactly.
 - Never push to `main`; always branch and open a PR labeled `generated`.
 - Never change an entry's `id` or move its file.
+- Never edit `site/` unless the issue explicitly asks for a UI change.
 - Never write a value the ruleset derives. Write inputs, use tokens for derived numbers in prose, and use `adjust` only for deliberate deviations.
 - Run `npm run validate` before every push; never push a failing batch.
 - Keep PRs to content changes unless the task is explicitly about code, schemas, or config.
@@ -905,7 +1028,8 @@ The repo's `CLAUDE.md` instructs any Claude session working in the repo:
 | A field a schema validates | The type schema, plus the template if displayed |
 | A page size | One row in `config/export.json` |
 | An export format or translator | One exporter module, listed in `config/export.json` |
-| A theme | `site/src/styles/tokens.css` |
+| A theme | One token block in `site/src/styles/tokens/semantic.css` and an option in the theme toggle |
+| Any visual detail | See the table in §9.8 |
 | Art for an entry | Commit the file under `assets/images/` and set `image` |
 | Data storage outside the repo | `scripts/build-index.ts`; the site keeps reading the same `library.json` shape |
 
@@ -917,12 +1041,12 @@ Each milestone ends with something you can verify.
 |---|---|---|
 | 1 | **Skeleton.** Astro project, envelope schema, `dnd-5e-2024` ruleset module with the creature schema, tables, derivations, and tokens, validator (schema stage and creature checks), one hand-written creature, both workflows, branch protection, Pages live | A merged PR changes the live page, and a PR with a broken entry is blocked |
 | 2 | **Full model.** Magic-item and spell schemas and checks, refs and back-refs, blocklist, markdown-subset check, test fixtures for every error | Fixture suite covers each check and each derivation; the three example entries in §6.9 validate, link to each other, and render the numbers shown there |
-| 3 | **Gallery.** Registry, index builder, card grid, facets, tags, "Add filter," sort, search, URL state, detail pages, placeholder art, about page | Example entries can be found by name, tag, and facet; a copied URL reproduces the view |
+| 3 | **Gallery.** Registry, index builder, token files and global layers, light/dark themes and toggle, card grid, facets, tags, "Add filter," sort, search, URL state, detail pages, placeholder art, about page, style guide page, contrast tests, axe checks in CI | Example entries can be found by name, tag, and facet; a copied URL reproduces the view; changing one semantic token visibly restyles every surface on the style guide; CI passes axe and contrast checks |
 | 4 | **Exports.** JSON (entry and set), PNG, print view with all four sizes, multi-entry print | A Letter print of a long creature paginates cleanly with selectable text; a PNG posts legibly to Discord |
 | 5 | **Generation.** Issue forms, labels, defaults, `generate` skill, guidelines for three types, routine prompts in `docs/routines.md` | One run turns an issue into a passing PR that closes the issue on merge |
 | 6 | **Revision and schedule.** `revise` skill, comment sweep, revise issues, gap-filler, weekly schedule | A review comment on a generated PR is addressed by the next run; a week with no open issues produces a gap-fill PR |
 
-v1 is complete when all six milestones are done and the library holds at least five entries of each type, merged through the routine flow.
+v1 is complete when all six milestones are done, the library holds at least five entries of each type merged through the routine flow, and a UI refinement pass has been made through `ui` PRs. Refinement runs alongside milestones 4–6 rather than after them.
 
 ### 16.1 Later (post-v1)
 
