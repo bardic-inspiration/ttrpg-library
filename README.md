@@ -6,6 +6,9 @@ reviewed as pull requests, and published to GitHub Pages on merge. Browse,
 filter, and search the library, and export any entry as JSON, PNG, or a
 print-ready page.
 
+## Page
+https://bardic-inspiration.github.io/ttrpg-library/
+
 ## Status
 
 Being built toward v1. The delivery plan is [`SPEC.md`](SPEC.md) §16; each
