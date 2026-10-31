@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "wand-of-frost-lances",
+  "name": "Wand of Frost Lances",
+  "summary": "A rime-crusted wand that hurls lances of ice.",
+  "stats": {
+    "category": "wand",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true,
+      "requirement": "by a spellcaster"
+    },
+    "charges": {
+      "max": 7,
+      "recharge": "1d6 + 1 daily at dawn",
+      "depletion": "If you expend the last charge, roll 1d20. On a 1, the wand melts away."
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/frost-lances-of-doom"
+        },
+        "chargeCost": 1,
+        "attackBonus": 5
+      }
+    ],
+    "effect": "While holding this wand, you can expend 1 of its charges to cast *Frost Lance* from it."
+  },
+  "tags": {
+    "theme": "ice"
+  },
+  "meta": {
+    "createdAt": "2026-11-02",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        2
+      ]
+    }
+  }
+}
