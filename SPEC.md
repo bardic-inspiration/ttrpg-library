@@ -130,8 +130,9 @@ ttrpg-library/
 │   └── blocklist.json                      non-SRD proper nouns (§11)
 ├── scripts/
 │   ├── validate/                           CLI, schema stage, ruleset-independent checks
+│   ├── lane/                               lane rules for the `lane` CI job (§12.4)
 │   ├── build-index.ts                      content → library.json
-│   └── pr-summary.ts                       job summary for changed entries
+│   └── pr-summary/                         job summary for changed entries
 ├── site/                                   Astro project
 │   └── src/
 │       ├── pages/                          routes, including /styleguide/
@@ -971,8 +972,8 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 
 Triggered on `opened`, `synchronize`, `reopened`, `labeled`, and `unlabeled`, so label changes re-run the lane rules. Jobs:
 
-1. **`lane`.** Determines the lane from the branch prefix, lists changed paths against the base, and applies the lane rules (§12.4). Outputs the lane and whether content paths changed.
-2. **`content-checks`** (every PR, after `lane`). Checkout with full history; set up Node 22 with npm cache; `npm ci`; `npm run validate` across all entries; `npm run build`. When content paths changed, `scripts/pr-summary.ts` writes the job summary: changed entries (added, modified, removed) with name, type, `summaryField` value, and summary; for creatures, the derived HP, AC, attack bonuses, DCs, and average damage per action; all warnings, including every formula adjustment; ref changes (new back-links created). The built site is uploaded as a workflow artifact (7-day retention) for optional local preview.
+1. **`lane`.** Determines the lane from the branch prefix, lists changed paths against the base, and applies the lane rules (§12.4) with `scripts/lane/`. Outputs the lane and whether content paths changed.
+2. **`content-checks`** (every PR, after `lane`). Checkout with full history; set up Node 22 with npm cache; `npm ci`; `npm run validate` across all entries; `npm run build`. When content paths changed, `scripts/pr-summary/` writes the job summary: changed entries (added, modified, removed) with name, type, `summaryField` value, and summary; for creatures, the derived HP, AC, attack bonuses, DCs, and average damage per action; all warnings, including every formula adjustment; ref changes (new back-links created). The built site is uploaded as a workflow artifact (7-day retention) for optional local preview.
 3. **`dev-checks`** (dev lane only, after `content-checks`). `npm run check` (types, `astro check`, Stylelint), `npm test` (including contrast), and `npm run a11y` against the built-site artifact.
 4. **`validate`** (always runs; needs all of the above). Passes only if every needed job succeeded or was skipped by lane. This job is the single required status check, so branch protection never depends on which jobs a lane runs.
 
