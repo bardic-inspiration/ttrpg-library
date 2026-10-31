@@ -613,11 +613,11 @@ Display and generation defaults only. Validation never reads it except to confir
 
 v1 registry entries:
 
-| Type | Facets | Card fields | Default sort | Gap buckets |
-|---|---|---|---|---|
-| `creature` | CR, size, creature type, six ability scores, AC, HP (derived), XP (derived) | CR, size, creature type | CR ascending | CR bins as above |
-| `magic-item` | rarity, category, attunement required, cursed | rarity, category, attunement | rarity ascending (ordered enum) | rarity |
-| `spell` | level, school, classes, concentration, ritual, casting-time unit | level, school, concentration/ritual badges | level ascending | level × school |
+| Type | Facets | Card fields | Default sort | Default filters | Gap buckets |
+|---|---|---|---|---|---|
+| `creature` | CR, size, creature type, six ability scores, AC, HP (derived), XP (derived) | CR, size, creature type | CR ascending | CR, creature type, `tags.theme` | CR bins as above |
+| `magic-item` | rarity, category, attunement required, cursed | rarity, category, attunement | rarity ascending (ordered enum) | rarity, category, `tags.theme` | rarity |
+| `spell` | level, school, classes, concentration, ritual, casting-time unit | level, school, concentration/ritual badges | level ascending | level, school, `tags.theme` | level × school |
 
 Ordered enums (rarity, size) declare their order in the facet as `"order": [...]` so sorting is semantic, not alphabetical.
 

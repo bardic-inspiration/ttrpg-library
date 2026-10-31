@@ -3,7 +3,7 @@
 
 import { deriveCreature } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
-import type { Action, CreatureStats, DerivedAction, DerivedCreature, Tables } from './types.ts';
+import type { Action, CreatureStats, DerivedAction, DerivedCreature, MagicItemStats, SpellStats, Tables } from './types.ts';
 import { ACTION_LISTS } from './types.ts';
 import type { Issue } from '../module.ts';
 
@@ -122,5 +122,72 @@ export function checkCreature(stats: CreatureStats, tables: Tables): Issue[] {
     }
   }
 
+  return issues;
+}
+
+/** Magic-item checks (SPEC.md §6.8 "Magic item"). */
+export function checkMagicItem(stats: MagicItemStats): Issue[] {
+  const issues: Issue[] = [];
+  const error = (path: string, message: string) => issues.push({ level: 'error', path, message });
+
+  if ((stats.category === 'armor' || stats.category === 'weapon') && stats.baseItem === undefined) {
+    error('stats.baseItem', `a ${stats.category} needs a baseItem, such as "Longsword" or "any medium armor"`);
+  }
+  if (stats.attunement.requirement !== undefined && !stats.attunement.required) {
+    error('stats.attunement.requirement', 'a requirement is allowed only when attunement.required is true');
+  }
+  (stats.spells ?? []).forEach((spell, i) => {
+    const path = `stats.spells[${i}]`;
+    if (spell.chargeCost !== undefined && stats.charges === undefined) {
+      error(`${path}.chargeCost`, 'a chargeCost is allowed only when the item has charges');
+    }
+    // The template renders these from the structured fields (SPEC.md §6.4).
+    if (spell.saveDc !== undefined) {
+      const literal = new RegExp(`\\bDC\\s*${spell.saveDc}(?!\\d)`, 'i').exec(stats.effect);
+      if (literal) issues.push({ level: 'warning', path: 'stats.effect', message: `"${literal[0]}" restates ${path}.saveDc; the template renders it` });
+    }
+    if (spell.attackBonus !== undefined) {
+      const sign = spell.attackBonus < 0 ? '[-−]' : '\\+';
+      const literal = new RegExp(`${sign}\\s*${Math.abs(spell.attackBonus)}(?!\\d)`).exec(stats.effect);
+      if (literal) issues.push({ level: 'warning', path: 'stats.effect', message: `"${literal[0]}" restates ${path}.attackBonus; the template renders it` });
+    }
+  });
+  return issues;
+}
+
+/** Spell checks (SPEC.md §6.8 "Spell"). */
+export function checkSpell(stats: SpellStats): Issue[] {
+  const issues: Issue[] = [];
+  const error = (path: string, message: string) => issues.push({ level: 'error', path, message });
+  const { duration, range, castingTime } = stats;
+
+  if (duration.concentration && duration.kind !== 'timed') {
+    error('stats.duration.concentration', `concentration needs a timed duration, not "${duration.kind}"`);
+  }
+  if (duration.kind === 'timed') {
+    if (duration.amount === undefined) error('stats.duration', 'a timed duration needs an amount');
+    if (duration.unit === undefined) error('stats.duration', 'a timed duration needs a unit');
+  }
+  if (range.kind === 'distance' && range.feet === undefined) {
+    error('stats.range', 'a distance range needs feet');
+  }
+  if (stats.components.m?.consumed && stats.components.m.costGp === undefined) {
+    error('stats.components.m', 'a consumed material component needs a costGp');
+  }
+  if (stats.higherLevels !== undefined && stats.level === 0) {
+    error('stats.higherLevels', 'higherLevels is for leveled spells; a cantrip uses cantripUpgrade');
+  }
+  if (stats.cantripUpgrade !== undefined && stats.level > 0) {
+    error('stats.cantripUpgrade', 'cantripUpgrade is for cantrips; a leveled spell uses higherLevels');
+  }
+  if (castingTime.unit === 'reaction' && castingTime.trigger === undefined) {
+    error('stats.castingTime', 'a reaction casting time needs a trigger');
+  }
+  if (castingTime.unit !== 'reaction' && castingTime.trigger !== undefined) {
+    error('stats.castingTime.trigger', 'a trigger is allowed only on a reaction casting time');
+  }
+  if (stats.level === 0 && stats.ritual) {
+    issues.push({ level: 'warning', path: 'stats.ritual', message: 'a cantrip is marked ritual; confirm it' });
+  }
   return issues;
 }

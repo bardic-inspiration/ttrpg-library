@@ -9,6 +9,16 @@ export async function cinderHound(): Promise<Record<string, any>> {
   return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/creature/cinder-hound.json'), 'utf8'));
 }
 
+/** A fresh copy of the §6.9 Frost Lance. */
+export async function frostLance(): Promise<Record<string, any>> {
+  return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/spell/frost-lance.json'), 'utf8'));
+}
+
+/** A fresh copy of the §6.9 Wand of Frost Lances. */
+export async function wandOfFrostLances(): Promise<Record<string, any>> {
+  return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/magic-item/wand-of-frost-lances.json'), 'utf8'));
+}
+
 /**
  * Writes entries into a temporary repo: `<repo>/content/<path>`. Each entry is
  * placed at `<ruleset>/<type>/<id>.json` unless a path is given.

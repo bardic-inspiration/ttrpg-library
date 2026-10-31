@@ -72,6 +72,50 @@ export interface CreatureStats {
   };
 }
 
+// Shapes of dnd-5e-2024 spell and magic-item stats (SPEC.md §6.6, §6.7),
+// mirroring schemas/spell.schema.json and schemas/magic-item.schema.json.
+
+export interface SpellStats {
+  level: number;
+  school: string;
+  classes: string[];
+  castingTime: { amount: number; unit: 'action' | 'bonus-action' | 'reaction' | 'minute' | 'hour'; trigger?: string };
+  ritual: boolean;
+  range: {
+    kind: 'self' | 'touch' | 'distance' | 'sight' | 'unlimited' | 'special';
+    feet?: number;
+    area?: { shape: string; size: number };
+  };
+  components: { v: boolean; s: boolean; m?: { text: string; costGp?: number; consumed?: boolean } };
+  duration: {
+    kind: 'instantaneous' | 'timed' | 'until-dispelled' | 'special';
+    amount?: number;
+    unit?: 'round' | 'minute' | 'hour' | 'day';
+    concentration: boolean;
+  };
+  effect: string;
+  higherLevels?: string;
+  cantripUpgrade?: string;
+}
+
+export interface MagicItemSpell {
+  spell: RefOrText;
+  chargeCost?: number;
+  saveDc?: number;
+  attackBonus?: number;
+}
+
+export interface MagicItemStats {
+  category: string;
+  baseItem?: string;
+  rarity: string;
+  attunement: { required: boolean; requirement?: string };
+  charges?: { max: number; recharge: string; depletion?: string };
+  spells?: MagicItemSpell[];
+  cursed?: boolean;
+  effect: string;
+}
+
 export interface ChallengeRatingRow {
   cr: number;
   xp: number;

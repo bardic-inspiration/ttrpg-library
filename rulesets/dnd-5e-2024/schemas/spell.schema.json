@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/spell.schema.json",
+  "title": "dnd-5e-2024 spell stats (SPEC.md §6.7)",
+  "description": "Stored inputs only; spells derive nothing in v1 (SPEC.md §6.2). Cross-field rules are checks in checks.ts (SPEC.md §6.8).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["level", "school", "classes", "castingTime", "ritual", "range", "components", "duration", "effect"],
+  "properties": {
+    "level": { "type": "integer", "minimum": 0, "maximum": 9 },
+    "school": {
+      "enum": ["abjuration", "conjuration", "divination", "enchantment", "evocation", "illusion", "necromancy", "transmutation"]
+    },
+    "classes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "enum": ["bard", "cleric", "druid", "paladin", "ranger", "sorcerer", "warlock", "wizard"] }
+    },
+    "castingTime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["amount", "unit"],
+      "properties": {
+        "amount": { "type": "integer", "minimum": 1 },
+        "unit": { "enum": ["action", "bonus-action", "reaction", "minute", "hour"] },
+        "trigger": { "type": "string", "minLength": 1 }
+      }
+    },
+    "ritual": { "type": "boolean" },
+    "range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["self", "touch", "distance", "sight", "unlimited", "special"] },
+        "feet": { "type": "integer", "minimum": 1 },
+        "area": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["shape", "size"],
+          "properties": {
+            "shape": { "enum": ["cone", "cube", "cylinder", "emanation", "line", "sphere"] },
+            "size": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["v", "s"],
+      "properties": {
+        "v": { "type": "boolean" },
+        "s": { "type": "boolean" },
+        "m": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["text"],
+          "properties": {
+            "text": { "type": "string", "minLength": 1 },
+            "costGp": { "type": "number", "exclusiveMinimum": 0 },
+            "consumed": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "duration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "concentration"],
+      "properties": {
+        "kind": { "enum": ["instantaneous", "timed", "until-dispelled", "special"] },
+        "amount": { "type": "integer", "minimum": 1 },
+        "unit": { "enum": ["round", "minute", "hour", "day"] },
+        "concentration": { "type": "boolean" }
+      }
+    },
+    "effect": { "$ref": "common.schema.json#/$defs/Text" },
+    "higherLevels": { "$ref": "common.schema.json#/$defs/Text" },
+    "cantripUpgrade": { "$ref": "common.schema.json#/$defs/Text" }
+  }
+}
