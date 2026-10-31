@@ -977,7 +977,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 
 Triggered on `opened`, `synchronize`, `reopened`, `labeled`, and `unlabeled`, so label changes re-run the lane rules. Jobs:
 
-1. **`lane`.** Determines the lane from the branch prefix, lists changed paths against the base, and applies the lane rules (§12.4) with `scripts/lane/`. Outputs the lane and whether content paths changed.
+1. **`lane`.** Determines the lane from the branch prefix (an unprefixed branch is dev), lists changed paths against the base, and applies the lane rules (§12.4) with `scripts/lane/`. Outputs the lane and whether content paths changed.
 2. **`content-checks`** (every PR, after `lane`). Checkout with full history; set up Node 22 with npm cache; `npm ci`; `npm run validate` across all entries; `npm run build`. When content paths changed, `scripts/pr-summary/` writes the job summary: changed entries (added, modified, removed) with name, type, `summaryField` value, and summary; for creatures, the derived HP, AC, attack bonuses, DCs, and average damage per action; all warnings, including every formula adjustment; ref changes (new back-links created). The built site is uploaded as a workflow artifact (7-day retention) for optional local preview.
 3. **`dev-checks`** (dev lane only, after `content-checks`). `npm run check` (types, `astro check`, Stylelint), `npm test` (including contrast), and `npm run a11y` against the built-site artifact.
 4. **`validate`** (always runs; needs all of the above). Passes only if every needed job succeeded or was skipped by lane. This job is the single required status check, so branch protection never depends on which jobs a lane runs.
@@ -1007,7 +1007,7 @@ One repository holds two kinds of work. **Content** is entries and art, produced
 |---|---|---|
 | Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, spec |
 | Paths it may change | `content/**`, `assets/images/**` | Everything else; content paths only with the `migration` label |
-| Branch prefixes | `gen/`, `revise/` (routines), `manual/` (hand-made entries) | `dev/`, `dependabot/` |
+| Branch prefixes | `gen/`, `revise/` (routines), `manual/` (hand-made entries) | `dev/`, `dependabot/`, or none of the content prefixes (for example a GitHub web-editor `<user>-patch-1`) |
 | Opened by | Routines (or you, for `manual/`) | You, or a Claude session you start for development |
 | Lane label (auto) | `content` | `dev` |
 | Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`) |
@@ -1021,7 +1021,7 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 
 **Lane rules (enforced by the `lane` job in `validate.yml`)**
 
-- A PR's lane comes from its branch prefix. An unknown prefix fails with a message listing the valid ones.
+- A PR's lane comes from its branch prefix: `gen/`, `revise/`, and `manual/` are content; every other branch is dev, so a quick edit from the GitHub web editor needs no branch rename. `spike/` branches get no lane and fail, so a spike can't merge. A dev PR still can't change content without the `migration` label, so content stays protected.
 - A content-lane PR fails if it changes any path outside `content/**` and `assets/images/**`. Routines therefore cannot alter schemas, guidelines, config, or the site, even by accident.
 - A dev-lane PR fails if it changes `content/**` or `assets/images/**` without the `migration` label. The label is applied by hand, never automatically, so every bulk content change made by code is a deliberate, visible decision. A migration PR's body must state what changed in the entries and why.
 - The job re-runs when labels change (`pull_request` types `opened`, `synchronize`, `reopened`, `labeled`, `unlabeled`), so adding `migration` unblocks the PR without a new push.

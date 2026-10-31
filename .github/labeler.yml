@@ -5,25 +5,25 @@ content:
   - head-branch: ['^gen/', '^revise/', '^manual/']
 
 dev:
-  - head-branch: ['^dev/', '^dependabot/']
+  - head-branch: ['^(?!gen/|revise/|manual/|spike/)']
 
 # Area labels apply to dev-lane PRs only.
 ui:
   - all:
-      - head-branch: ['^dev/', '^dependabot/']
+      - head-branch: ['^(?!gen/|revise/|manual/|spike/)']
       - changed-files:
           - any-glob-to-any-file: 'site/**'
 
 ruleset:
   - all:
-      - head-branch: ['^dev/', '^dependabot/']
+      - head-branch: ['^(?!gen/|revise/|manual/|spike/)']
       - changed-files:
           # Some file under rulesets/ that isn't a guideline.
           - all-globs-to-any-file: ['rulesets/**', '!rulesets/*/guidelines/**']
 
 generation:
   - all:
-      - head-branch: ['^dev/', '^dependabot/']
+      - head-branch: ['^(?!gen/|revise/|manual/|spike/)']
       - changed-files:
           - any-glob-to-any-file:
               - 'rulesets/*/guidelines/**'
@@ -33,6 +33,6 @@ generation:
 
 ci:
   - all:
-      - head-branch: ['^dev/', '^dependabot/']
+      - head-branch: ['^(?!gen/|revise/|manual/|spike/)']
       - changed-files:
           - any-glob-to-any-file: '.github/**'
