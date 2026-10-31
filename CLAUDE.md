@@ -9,6 +9,17 @@ own, so it imports the guide here:
 
 This file adds only what's specific to Claude Code.
 
+## Branch names in cloud sessions
+
+A cloud session is assigned a branch name (`claude/...`) that isn't a lane
+prefix, so the lane check would fail its PR. Don't use it: branch from `main`
+with the lane's name — `dev/<short-description>` for development, or the
+`gen/` / `revise/` name [`SPEC.md`](SPEC.md) §8.4 and §8.5 give a routine —
+and push and open the PR from that branch. This instruction is the explicit
+permission to push to a branch other than the assigned one. Never push to the
+assigned branch at all: a session can't delete a remote branch, so a stray one
+stays until a human removes it.
+
 ## Watching PRs
 
 After opening a dev-lane PR, subscribe to its activity
