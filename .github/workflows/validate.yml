@@ -1,0 +1,100 @@
+# SPEC.md §12.1: lane rules, then checks by lane. `validate` is the single
+# required status check, so branch protection never depends on which jobs a
+# lane runs. Label events re-run the lane rules, so adding `migration`
+# unblocks a dev PR without a new push.
+name: validate
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lane:
+    runs-on: ubuntu-latest
+    outputs:
+      lane: ${{ steps.lane.outputs.lane }}
+      content-changed: ${{ steps.lane.outputs.content-changed }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - id: lane
+        run: npx tsx scripts/lane/cli.ts
+        env:
+          BRANCH: ${{ github.head_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+
+  content-checks:
+    needs: lane
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run validate
+      - run: npm run build
+      - if: needs.lane.outputs.content-changed == 'true'
+        run: npx tsx scripts/pr-summary/cli.ts
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site/dist
+          retention-days: 7
+
+  dev-checks:
+    needs: [lane, content-checks]
+    if: needs.lane.outputs.lane == 'dev'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+
+  validate:
+    if: always()
+    needs: [lane, content-checks, dev-checks]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every job the lane needs passed
+        env:
+          LANE: ${{ needs.lane.outputs.lane }}
+          LANE_RESULT: ${{ needs.lane.result }}
+          CONTENT_RESULT: ${{ needs.content-checks.result }}
+          DEV_RESULT: ${{ needs.dev-checks.result }}
+        run: |
+          echo "lane: $LANE_RESULT (${LANE:-none}), content-checks: $CONTENT_RESULT, dev-checks: $DEV_RESULT"
+          [ "$LANE_RESULT" = success ] || { echo "::error::lane did not pass"; exit 1; }
+          [ "$CONTENT_RESULT" = success ] || { echo "::error::content-checks did not pass"; exit 1; }
+          if [ "$LANE" = dev ]; then
+            [ "$DEV_RESULT" = success ] || { echo "::error::dev-checks did not pass"; exit 1; }
+          else
+            [ "$DEV_RESULT" = skipped ] || { echo "::error::dev-checks ran outside the dev lane"; exit 1; }
+          fi

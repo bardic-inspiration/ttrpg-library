@@ -1,0 +1,19 @@
+# SPEC.md §12.4 "Dependencies": grouped monthly updates on dependabot/
+# branches, which run in the dev lane with the full checks.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      npm:
+        patterns: ['*']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      github-actions:
+        patterns: ['*']
