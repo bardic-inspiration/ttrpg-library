@@ -1,7 +1,7 @@
 #!/bin/bash
 # SessionStart hook: installs dependencies in a cloud session so the local
 # checks can run (AGENTS.md "Commands"). Runs only in Claude Code on the web;
-# a local machine is set up by hand (CONTRIBUTING.md).
+# a local machine is set up by hand (README.md).
 set -euo pipefail
 
 if [ "${CLAUDE_CODE_REMOTE:-}" != "true" ]; then

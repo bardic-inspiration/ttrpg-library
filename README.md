@@ -8,8 +8,8 @@ print-ready page.
 
 ## Status
 
-Being built toward v1. The delivery plan is [`SPEC.md`](SPEC.md) §16; what's
-done and what's next is tracked in the repo's GitHub milestones.
+Being built toward v1. The delivery plan is [`SPEC.md`](SPEC.md) §16; each
+milestone is tracked as a GitHub issue.
 
 ## How this repo is built
 
@@ -28,8 +28,17 @@ Agents and humans starting fresh should read [`AGENTS.md`](AGENTS.md) first.
 
 ## Development
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) to get set up; the commands are in
-[`AGENTS.md`](AGENTS.md) "Commands".
+Node 22 LTS and npm. Then:
+
+```bash
+git clone https://github.com/bardic-inspiration/ttrpg-library
+cd ttrpg-library
+npm ci
+npm run dev
+```
+
+The rest of the commands, and how work is done here, are in
+[`AGENTS.md`](AGENTS.md).
 
 ## License
 

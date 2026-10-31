@@ -41,7 +41,7 @@ whether it survives contact with reality, use this skill.
 1. **Read the plan and its context first.** Understand exactly what is being
    proposed, and read the parts of `SPEC.md` and `AGENTS.md` it touches —
    especially the design principles and governing decisions (`SPEC.md`) and
-   the hard rules (`AGENTS.md`) — before attacking it. A challenge that ignores an already-stated constraint just
+   the rules (`AGENTS.md`) — before attacking it. A challenge that ignores an already-stated constraint just
    wastes the user's time.
 
 2. **Ask one hard question at a time.**
@@ -93,10 +93,10 @@ whether it survives contact with reality, use this skill.
 ## Notes for this repo
 
 - Work here is done by memoryless sessions taking one issue at a time
-  (`AGENTS.md` "Working loop"). Grill the plan for *that* issue's acceptance criteria — a
+  (`AGENTS.md` "Dev workflow"). Grill the plan for *that* issue's acceptance criteria — a
   grilling session is not license to expand scope into later work, even when
   the interview surfaces a legitimately good idea for it.
 - If grilling surfaces a real gap outside the current issue's scope (an
   ambiguity in the docs, a missing hard-rule test, an idea for later), don't
-  fold it into the current plan — file it per `docs/workflow.md`
+  fold it into the current plan — file it per `AGENTS.md`
   instead.

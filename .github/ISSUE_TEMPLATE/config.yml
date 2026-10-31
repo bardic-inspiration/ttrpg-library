@@ -4,6 +4,3 @@ contact_links:
   - name: Working guide (AGENTS.md)
     url: https://github.com/bardic-inspiration/ttrpg-library/blob/main/AGENTS.md
     about: How work is scoped, laned, and reviewed in this repo. Read it before filing.
-  - name: Workflow — issues
-    url: https://github.com/bardic-inspiration/ttrpg-library/blob/main/docs/workflow.md#issues
-    about: How to scope, label, and link a dev-lane issue before filing it.
