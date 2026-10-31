@@ -51,6 +51,7 @@ These were settled in the spec review and override the preliminary design wherev
 | 10 | Art | No art in v1. Schema field `image` holds a repo-relative path; the UI shows a placeholder when it is absent. |
 | 11 | Derived values | Values the ruleset defines by formula or table (XP, PB, HP, attack bonuses, DCs, damage averages, save and skill bonuses, passive Perception) are never stored in entries. The ruleset module computes them; deviations are explicit `adjust` fields. |
 | 12 | Styling | Plain CSS with layered design tokens, so most UI refinement is a tokens edit. Light and dark themes with a System/Light/Dark toggle. WCAG 2.2 AA, checked in CI. A style guide page for refinement (§9.6–9.8). |
+| 13 | Work lanes | One repo with two enforced lanes. Content (`content/`, `assets/images/`, opened by routines) and development (everything else). Separated by branch prefix, auto-applied labels, templates, and a CI scope check; a `migration` label is required for dev changes to content (§12.4). |
 
 ### 2.1 Changes from the preliminary design
 
@@ -77,7 +78,7 @@ Claude routine ── reads config, ruleset module, library index
         │         writes content/<ruleset>/<type>/<id>.json (inputs only)
         │         runs npm run validate until clean
         ▼
-Pull request (label: generated, "Closes #n")
+Pull request on gen/ branch (content lane, "Closes #n")
         │
         ├── validate.yml: schema + consistency checks + refs + build → job summary
         │
@@ -144,8 +145,12 @@ ttrpg-library/
 │   ├── generate/SKILL.md                   generation (issues and gap-fill)
 │   └── revise/SKILL.md                     revisions from PR comments or a revise request
 ├── .github/
-│   ├── workflows/validate.yml, deploy.yml
-│   └── ISSUE_TEMPLATE/content-request.yml, revise-request.yml, config.yml
+│   ├── workflows/validate.yml, deploy.yml, labeler.yml
+│   ├── ISSUE_TEMPLATE/                     content: content-request, revise-request
+│   │                                       dev: bug-report, feature-request, ui-refinement
+│   ├── PULL_REQUEST_TEMPLATE/content.md, dev.md
+│   ├── labeler.yml                         lane and area label rules (§12.4)
+│   └── dependabot.yml
 ├── docs/routines.md                        canonical routine prompts and schedule
 ├── SPEC.md  CLAUDE.md  README.md
 └── LICENSE  LICENSE-CONTENT  ATTRIBUTION.md
@@ -634,15 +639,15 @@ Free-form issues with the `request` label are also accepted; the routine interpr
 | `priority:high` | Picked before others |
 | `in-progress` | Claimed by a routine run |
 | `needs-info` | Routine asked a question in the issue; skipped until you answer and remove the label |
-| `generated` | On PRs opened by routines |
-| `ui` | On PRs that change the site's look or behavior |
+
+Lane and area labels for PRs (`content`, `dev`, `ui`, `ruleset`, `generation`, `ci`, `migration`) and the dev-lane issue labels (`bug`, `feature`, `ui`) are defined in §12.4. Issue templates set blank issues off (`config.yml`), so every issue starts in a lane.
 
 ### 8.2 Routine run order
 
 Every run, scheduled or manual, follows the same sequence so that review feedback is never starved by new work.
 
 1. **Sync.** Fetch `main`; run `npm ci` and `npm run build:index` to get the current library.
-2. **Revisions first.** For each open PR labeled `generated`, find owner comments not yet handled (§8.5) and invoke the `revise` skill. Push, reply, continue.
+2. **Revisions first.** For each open PR on a `gen/` or `revise/` branch, find owner comments not yet handled (§8.5) and invoke the `revise` skill. Push, reply, continue.
 3. **Revise requests.** Take open `revise` issues; each becomes a small PR.
 4. **Content requests.** Pick open `request` issues without `in-progress` or `needs-info`, `priority:high` first, then oldest. Group issues into one batch while the total count is ≤ `maxBatch`. Claim each with the `in-progress` label and a short comment.
 5. **Gap-fill.** If no requests were picked and `gapFill.enabled`, choose the type and bucket with the fewest entries (ties go to the type with the fewest entries overall) and generate `gapFill.count` entries for it.
@@ -680,12 +685,12 @@ Defaults are applied only to fields the request leaves unspecified. Request tags
 **PR conventions**
 
 - Title: `Add <n> <type> entries` (mixed batches: `Add <n> entries`).
-- Label: `generated`.
+- Lane label `content` is applied automatically from the branch prefix (§12.4); the body follows `.github/PULL_REQUEST_TEMPLATE/content.md`.
 - Body: a table of each entry (name, type, the type's `summaryField` value, summary); any validator warnings, including every formula adjustment with its reason; one `Closes #n` line per fulfilled issue; for gap-fill runs, the bucket that was filled.
 
 ### 8.5 Comment-driven revisions (the `revise` skill)
 
-- **Input.** Owner comments on a `generated` PR: inline review comments on a file or line, or general PR comments.
+- **Input.** Owner comments on a routine PR (`gen/` or `revise/` branch): inline review comments on a file or line, or general PR comments.
 - **Instructions.** Free text applies to the commented file, or to the whole batch for general comments. `drop <id>` removes an entry (and fails validation if something references it, in which case the routine asks how to proceed). `regenerate <id>` replaces an entry with a fresh one under the same brief.
 - **Handled marker.** The routine posts under your identity, so it marks its own replies with a trailing `<!-- routine:handled -->` comment. An owner comment is pending if no reply with that marker follows it in its thread (inline) or after it (general).
 - **Action.** Edit only the affected files, set `meta.updatedAt`, re-run validation, push one commit per round (`Revise <ids>: <short reason>`), reply to each handled comment with what changed, and resolve inline threads it addressed.
@@ -887,7 +892,7 @@ UI refinement is an explicit part of v1 testing, so the tooling for it ships wit
 | Stat-block structure or order | The template's part components in `site/src/components/templates/` |
 | A quick experiment | `overrides.css`, then move the result into tokens or the component |
 
-- **UI changes go through PRs** with the label `ui`, reviewed in the same way as content but without routine involvement. Routines never edit `site/` unless an issue explicitly asks for a UI change.
+- **UI changes go through the dev lane** (§12.4) on `dev/` branches, labeled `ui` automatically, usually from a UI-refinement issue. Routines never touch `site/`; the lane check rejects it.
 
 ## 10. Export
 
@@ -961,14 +966,14 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 
 ### 12.1 `validate.yml` (on `pull_request` to `main`)
 
-1. Checkout with full history for the base comparison; set up Node 22 with npm cache; `npm ci`.
-2. `npm run check` and `npm test`.
-3. `npm run validate` across all entries.
-4. `npm run build`, then `npm run a11y` against the built site.
-5. `scripts/pr-summary.ts` writes the job summary: changed entries (added, modified, removed) with name, type, `summaryField` value, and summary; for creatures, the derived HP, AC, attack bonuses, DCs, and average damage per action; all warnings, including every formula adjustment; ref changes (new back-links created).
-6. Upload the built site as a workflow artifact (7-day retention) for optional local preview.
+Triggered on `opened`, `synchronize`, `reopened`, `labeled`, and `unlabeled`, so label changes re-run the lane rules. Jobs:
 
-The job is named `validate`; that name is the required status check.
+1. **`lane`.** Determines the lane from the branch prefix, lists changed paths against the base, and applies the lane rules (§12.4). Outputs the lane and whether content paths changed.
+2. **`content-checks`** (every PR, after `lane`). Checkout with full history; set up Node 22 with npm cache; `npm ci`; `npm run validate` across all entries; `npm run build`. When content paths changed, `scripts/pr-summary.ts` writes the job summary: changed entries (added, modified, removed) with name, type, `summaryField` value, and summary; for creatures, the derived HP, AC, attack bonuses, DCs, and average damage per action; all warnings, including every formula adjustment; ref changes (new back-links created). The built site is uploaded as a workflow artifact (7-day retention) for optional local preview.
+3. **`dev-checks`** (dev lane only, after `content-checks`). `npm run check` (types, `astro check`, Stylelint), `npm test` (including contrast), and `npm run a11y` against the built-site artifact.
+4. **`validate`** (always runs; needs all of the above). Passes only if every needed job succeeded or was skipped by lane. This job is the single required status check, so branch protection never depends on which jobs a lane runs.
+
+Content PRs get fast feedback (validation and build only), since they cannot change code. Dev PRs get the full suite.
 
 ### 12.2 `deploy.yml` (on `push` to `main`, plus `workflow_dispatch`)
 
@@ -983,7 +988,46 @@ Pages source is set to GitHub Actions.
 - **Visibility:** public.
 - **Branch protection on `main`:** require the `validate` status check and up-to-date branches; require pull requests (no direct pushes, including from routines); block force-pushes and deletion. No required approvals.
 - **Merge method:** squash merge only, using the PR title as the commit message. Delete head branches after merge.
-- **Labels:** created as listed in §8.1.
+- **Labels:** created as listed in §8.1 (content issues) and §12.4 (lanes and areas), plus `migration`.
+
+### 12.4 Work lanes
+
+One repository holds two kinds of work. **Content** is entries and art, produced by routines. **Development** is everything that decides how content is validated, generated, and shown. They share the ruleset module, so a schema change and the migration of every affected entry land in one commit. A split into separate repos would turn that into a cross-repo version dance. Instead, the two lanes are kept apart by enforced rules within the one repo, not by convention.
+
+| | Content lane | Dev lane |
+|---|---|---|
+| Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, spec |
+| Paths it may change | `content/**`, `assets/images/**` | Everything else; content paths only with the `migration` label |
+| Branch prefixes | `gen/`, `revise/` (routines), `manual/` (hand-made entries) | `dev/`, `dependabot/` |
+| Opened by | Routines (or you, for `manual/`) | You, or a Claude session you start for development |
+| Lane label (auto) | `content` | `dev` |
+| Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`) |
+| Issue templates and labels | Content request (`request`), revise request (`revise`) (§8.1) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
+| PR template | `content.md`: generated by the routine (§8.4) | `dev.md`: what and why, spec sections touched, screenshots for `ui`, migration notes |
+| PR title | `Add <n> <type> entries`, `Revise <ids>: <reason>` | `<area>: <summary>`, for example `ui: tighten stat-block spacing` |
+| CI | Content checks (below) | Full checks (below) |
+| Review focus | Balance, tone, originality, licensing | Code, design, behavior, spec accuracy |
+
+Because merges are squashed with the PR title as the message, `git log` on `main` reads as two visibly distinct streams: "Add/Revise …" for content and "`<area>:` …" for development.
+
+**Lane rules (enforced by the `lane` job in `validate.yml`)**
+
+- A PR's lane comes from its branch prefix. An unknown prefix fails with a message listing the valid ones.
+- A content-lane PR fails if it changes any path outside `content/**` and `assets/images/**`. Routines therefore cannot alter schemas, guidelines, config, or the site, even by accident.
+- A dev-lane PR fails if it changes `content/**` or `assets/images/**` without the `migration` label. The label is applied by hand, never automatically, so every bulk content change made by code is a deliberate, visible decision. A migration PR's body must state what changed in the entries and why.
+- The job re-runs when labels change (`pull_request` types `opened`, `synchronize`, `reopened`, `labeled`, `unlabeled`), so adding `migration` unblocks the PR without a new push.
+
+**Guidelines count as development.** A guideline edit changes every future generation run, so it is reviewed as behavior (`generation` label), not as content. The same applies to the generation and revision skills, the defaults file, and the routine prompts.
+
+**Routines work only the content lane.** They pick up only `request` and `revise` issues and push only to `gen/` and `revise/` branches. Dev-lane issues (bugs, features, UI refinement) are worked in Claude sessions you start, on `dev/` branches.
+
+**Labeling** is done by `actions/labeler` in a `labeler.yml` workflow on `pull_request_target`, configured by `.github/labeler.yml` using branch prefixes for lane labels and changed paths for area labels. The labeler only reads PR metadata and changed paths; it never checks out or runs PR code.
+
+**Dependencies.** Dependabot opens grouped, monthly npm and GitHub Actions updates on `dependabot/` branches. They go through the dev lane and get the full checks.
+
+**Tracking.** GitHub milestones mirror the delivery plan (§16), and dev-lane issues and PRs are assigned to them. Content issues carry no milestone.
+
+**Escape hatch.** Content lives only under `content/` and `assets/images/`, and `scripts/build-index.ts` is the single place the site reads it. If the lanes ever need separate repositories (outside contributors, a second consumer of the content), `git filter-repo` can extract those two folders with history. The ruleset module would then become a versioned package that both repos depend on.
 
 ## 13. Review and quality
 
@@ -1006,12 +1050,12 @@ Pages source is set to GitHub Actions.
 The repo's `CLAUDE.md` instructs any Claude session working in the repo:
 
 - Content is generated and revised through the `generate` and `revise` skills; follow them exactly.
-- Never push to `main`; always branch and open a PR labeled `generated`.
+- Never push to `main`. Work in exactly one lane per PR (§12.4): content tasks on `gen/`, `revise/`, or `manual/` branches touching only `content/` and `assets/images/`; development tasks on `dev/` branches, touching content only in a deliberate migration (ask for the `migration` label).
+- Routines take only `request` and `revise` issues; dev-lane issues are for development sessions.
 - Never change an entry's `id` or move its file.
-- Never edit `site/` unless the issue explicitly asks for a UI change.
 - Never write a value the ruleset derives. Write inputs, use tokens for derived numbers in prose, and use `adjust` only for deliberate deviations.
 - Run `npm run validate` before every push; never push a failing batch.
-- Keep PRs to content changes unless the task is explicitly about code, schemas, or config.
+- Dev PRs that change behavior update `SPEC.md` in the same PR, and use the `dev.md` PR template.
 - SRD-only rules and the blocklist apply to every text field.
 - Mark review replies with `<!-- routine:handled -->`.
 
@@ -1039,12 +1083,12 @@ Each milestone ends with something you can verify.
 
 | # | Milestone | Done when |
 |---|---|---|
-| 1 | **Skeleton.** Astro project, envelope schema, `dnd-5e-2024` ruleset module with the creature schema, tables, derivations, and tokens, validator (schema stage and creature checks), one hand-written creature, both workflows, branch protection, Pages live | A merged PR changes the live page, and a PR with a broken entry is blocked |
+| 1 | **Skeleton.** Astro project, envelope schema, `dnd-5e-2024` ruleset module with the creature schema, tables, derivations, and tokens, validator (schema stage and creature checks), one hand-written creature, workflows with the lane job, labeler, issue and PR templates, branch protection, Pages live | A merged PR changes the live page; a PR with a broken entry is blocked; a `gen/` PR touching `site/` is blocked; a `dev/` PR touching `content/` is blocked until labeled `migration` |
 | 2 | **Full model.** Magic-item and spell schemas and checks, refs and back-refs, blocklist, markdown-subset check, test fixtures for every error | Fixture suite covers each check and each derivation; the three example entries in §6.9 validate, link to each other, and render the numbers shown there |
 | 3 | **Gallery.** Registry, index builder, token files and global layers, light/dark themes and toggle, card grid, facets, tags, "Add filter," sort, search, URL state, detail pages, placeholder art, about page, style guide page, contrast tests, axe checks in CI | Example entries can be found by name, tag, and facet; a copied URL reproduces the view; changing one semantic token visibly restyles every surface on the style guide; CI passes axe and contrast checks |
 | 4 | **Exports.** JSON (entry and set), PNG, print view with all four sizes, multi-entry print | A Letter print of a long creature paginates cleanly with selectable text; a PNG posts legibly to Discord |
 | 5 | **Generation.** Issue forms, labels, defaults, `generate` skill, guidelines for three types, routine prompts in `docs/routines.md` | One run turns an issue into a passing PR that closes the issue on merge |
-| 6 | **Revision and schedule.** `revise` skill, comment sweep, revise issues, gap-filler, weekly schedule | A review comment on a generated PR is addressed by the next run; a week with no open issues produces a gap-fill PR |
+| 6 | **Revision and schedule.** `revise` skill, comment sweep, revise issues, gap-filler, weekly schedule | A review comment on a routine PR is addressed by the next run; a week with no open issues produces a gap-fill PR |
 
 v1 is complete when all six milestones are done, the library holds at least five entries of each type merged through the routine flow, and a UI refinement pass has been made through `ui` PRs. Refinement runs alongside milestones 4–6 rather than after them.
 
