@@ -80,6 +80,16 @@ Content issues follow [`SPEC.md`](SPEC.md) §8.1.
 A dev issue states what to do, the spec section it implements, and how to
 tell it's done.
 
+### Testing backlog
+
+Checks that need a human or a live service, such as repository settings
+(branch protection, Pages source) or behavior seen only on GitHub, are not
+milestone completion criteria. A milestone's "done when" lists only what its
+own PRs and CI can prove. File each such check as its own issue, and
+aggregate related checks into one issue with a checklist where possible. Keep
+them under a "Testing backlog" issue, outside the dev queue's pick order, so
+a pending manual check never blocks a milestone or the next task.
+
 ### Dev Queue
 
 Milestone issues (§16 order) and their sub-issues (GitHub's order) are one
