@@ -30,7 +30,8 @@ The site is a private tool first. The repo and Pages site are public (free plan)
 1. **Files are the database.** One JSON file per entry, reviewed as an ordinary diff.
 2. **Strict rules, open organization.** Rules data (`stats`) is validated strictly and fails closed; organizational tags (`tags`) are fully open and every tag is filterable.
 3. **Configuration over code.** A type registry decides what the gallery shows by default; a new type is a schema, a guideline, and a registry entry.
-4. **Boring tools.** Static build, GitHub Actions, no runtime services.
+4. **Inputs, not outputs.** Entries store only authored choices. Anything the ruleset derives by formula or table is computed by the ruleset module, never stored (§6.1).
+5. **Boring tools.** Static build, GitHub Actions, no runtime services.
 
 ## 2. Governing decisions
 
@@ -48,6 +49,7 @@ These were settled in the spec review and override the preliminary design wherev
 | 8 | Requests | GitHub Issues are the request queue. `config/defaults.json` fills anything a request leaves unspecified. A gap-filler runs when no requests are open. |
 | 9 | Exports | PDF via print CSS for printing; PNG via DOM capture for Discord and VTTs; JSON as the native format. Exporters are pluggable modules for future translators. |
 | 10 | Art | No art in v1. Schema field `image` holds a repo-relative path; the UI shows a placeholder when it is absent. |
+| 11 | Derived values | Values the ruleset defines by formula or table (XP, PB, HP, attack bonuses, DCs, damage averages, save and skill bonuses, passive Perception) are never stored in entries. The ruleset module computes them; deviations are explicit `adjust` fields. |
 
 ### 2.1 Changes from the preliminary design
 
@@ -61,7 +63,8 @@ These were settled in the spec review and override the preliminary design wherev
 | Routine inputs supplied per run | GitHub Issues as a queue, plus defaults and a gap-filler | Scheduled runs need direction without a human in the loop |
 | PDF from a captured card image | PDF from print CSS; PNG stays image capture | Printing needs vector text and multi-page stat blocks |
 | Bulk export is a later phase | Multi-entry print and JSON set export ship in v1 | The print view gets it nearly free |
-| One schema file per ruleset | One schema directory per ruleset, one file per type | Keeps type schemas reviewable in isolation |
+| One schema file per ruleset | One `rulesets/<ruleset>/` folder holding schemas, tables, derivations, checks, and guidelines | Adding a ruleset is adding a folder; type schemas stay reviewable in isolation |
+| Derived values (ability modifiers aside) stored in entries and checked by the validator | Derived values never stored; computed by the ruleset module; prose uses tokens | A stored derived value can drift from its inputs, and every generation run would redo the arithmetic |
 
 ## 3. Architecture
 
@@ -69,18 +72,18 @@ These were settled in the spec review and override the preliminary design wherev
 GitHub Issue (request)
         │
         ▼
-Claude routine ── reads config, schemas, guidelines, library index
-        │         writes content/<ruleset>/<type>/<id>.json
+Claude routine ── reads config, ruleset module, library index
+        │         writes content/<ruleset>/<type>/<id>.json (inputs only)
         │         runs npm run validate until clean
         ▼
 Pull request (label: generated, "Closes #n")
         │
-        ├── validate.yml: schema + derived checks + refs + build → job summary
+        ├── validate.yml: schema + consistency checks + refs + build → job summary
         │
         ├── Review comments ──► routine revises, re-validates, pushes, replies
         │
         ▼
-Merge to main ──► deploy.yml: build-index → astro build → GitHub Pages
+Merge to main ──► deploy.yml: build-index (derive) → astro build → GitHub Pages
 ```
 
 ### 3.1 Technology choices
@@ -106,19 +109,22 @@ The Pages site is served from `https://bardic-inspiration.github.io/ttrpg-librar
 ttrpg-library/
 ├── content/<ruleset>/<type>/<id>.json      entries (the data)
 ├── assets/images/<ruleset>/<type>/<id>.*   optional art (none in v1)
-├── schemas/
-│   ├── envelope.schema.json                fixed keys, tags, meta, image (all rulesets)
-│   └── <ruleset>/
-│       ├── common.schema.json              shared defs: ref, dice, damage, abilities
-│       └── <type>.schema.json              stats schema per type
+├── schemas/envelope.schema.json            fixed keys, tags, meta, image (all rulesets)
+├── rulesets/<ruleset>/                     everything ruleset-specific (§6.2)
+│   ├── ruleset.json                        id, label, SRD version, types
+│   ├── tables.json                         rules tables (CR, sizes, skills, enums)
+│   ├── derive.ts                           derived values per type
+│   ├── tokens.ts                           text tokens for derived values in prose
+│   ├── checks.ts                           consistency checks
+│   ├── schemas/common.schema.json, <type>.schema.json
+│   └── guidelines/<type>.md                generation rules per type
 ├── config/
 │   ├── types.json                          type registry (§7)
 │   ├── defaults.json                       generation defaults (§8.3)
 │   ├── export.json                         page sizes, PNG settings, exporters (§10.5)
 │   └── blocklist.json                      non-SRD proper nouns (§11)
-├── guidelines/<ruleset>/<type>.md          generation rules per type
 ├── scripts/
-│   ├── validate/                           CLI, schema stage, semantic checks per ruleset/type
+│   ├── validate/                           CLI, schema stage, ruleset-independent checks
 │   ├── build-index.ts                      content → library.json
 │   └── pr-summary.ts                       job summary for changed entries
 ├── site/                                   Astro project (pages, components, islands, styles)
@@ -146,13 +152,13 @@ Every entry, in every ruleset, has this shape (`schemas/envelope.schema.json`):
 
 | Key | Required | Type | Rule |
 |---|---|---|---|
-| `ruleset` | yes | string | Must name a directory in `schemas/` and a ruleset in `config/types.json`. v1: `dnd-5e-2024` |
-| `type` | yes | string | Single value. Must have a schema file and a registry entry for the ruleset |
+| `ruleset` | yes | string | Must name a folder in `rulesets/` and a ruleset in `config/types.json`. v1: `dnd-5e-2024` |
+| `type` | yes | string | Single value. Must be listed in the ruleset's `ruleset.json`, with a schema file and a registry entry |
 | `id` | yes | string | `^[a-z0-9]+(-[a-z0-9]+)*$`, 3–64 chars, globally unique, equals filename without `.json`, immutable after merge |
 | `name` | yes | string | Display name, 1–80 chars, globally unique case-insensitively |
 | `summary` | yes | string | One line, 10–160 chars, plain text. Used on cards, in PR bodies, and in link previews |
 | `description` | no | string | Lore and flavor, markdown subset. Not rules text |
-| `stats` | yes | object | Validated by `schemas/<ruleset>/<type>.schema.json`. Unknown keys rejected |
+| `stats` | yes | object | Validated by `rulesets/<ruleset>/schemas/<type>.schema.json`. Unknown keys rejected. Inputs only; no derived values |
 | `tags` | no | object | Open, flat (§5.3) |
 | `image` | no | string | Repo-relative art path (§5.6) |
 | `meta` | yes | object | Provenance (§5.4) |
@@ -189,7 +195,7 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 
 ### 5.5 Text fields
 
-`description`, and the rules-text fields inside `stats` (`text`, `effect`, `higherLevels`, etc.), accept a markdown subset: paragraphs, `**bold**`, `*italic*`, bulleted and numbered lists, and line breaks. No headings, links, HTML, images, or tables. The validator rejects disallowed constructs. Rendering is sanitized.
+`description`, and the rules-text fields inside `stats` (`text`, `effect`, `higherLevels`, etc.), accept a markdown subset: paragraphs, `**bold**`, `*italic*`, bulleted and numbered lists, and line breaks. No headings, links, HTML, images, or tables. The validator rejects disallowed constructs. Rendering is sanitized. A ruleset may also define tokens that render derived values inside text (§6.4).
 
 ### 5.6 Image
 
@@ -208,66 +214,143 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 - The build computes back-references. Detail pages show forward links ("Casts: Frost Lance") and back-links ("Cast by: Cinder Witch").
 - A batch may add its own dependencies (a creature plus the new spell it casts).
 
-## 6. dnd-5e-2024 schemas
+## 6. Rulesets and the dnd-5e-2024 schemas
 
-The ruleset ID is `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0). Field names below are the JSON keys under `stats`. Unless marked optional, a field is required.
+The ruleset ID is `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0).
 
-### 6.1 Shared definitions (`common.schema.json`)
+### 6.1 Stored inputs, derived outputs
+
+An entry stores only the values an author chooses. A value the ruleset defines by fixed formula or table is never stored in an entry. The ruleset module computes it at build time from the stored inputs.
+
+- **No mismatches.** A derived value cannot disagree with its inputs, because it is never written down. That removes a whole class of errors.
+- **No arithmetic in generation.** Routines write choices (ability scores, CR, hit dice count, proficiencies), not computed numbers.
+- **One place per rule.** A correction to a table or formula is a one-file change in the ruleset, and every entry picks it up on the next build.
+
+**Deviations.** Some entries legitimately depart from a formula, such as a creature with a +1 weapon. Such an entry records an explicit integer `adjust` on that value, or a `bonus` on a damage roll. The formula stays authoritative. The adjustment is visible in the diff, and every adjustment is listed as a warning in the job summary for the reviewer to confirm.
+
+**Authored values stay stored.** Numbers the rules leave to the author are inputs, not derived values. Examples: a creature's AC, a spell's damage dice, a magic item's stated spell save DC.
+
+### 6.2 Ruleset module (`rulesets/<ruleset>/`)
+
+Everything specific to a ruleset lives in one folder, so adding a ruleset is adding a folder.
+
+| File | Purpose |
+|---|---|
+| `ruleset.json` | ID, label, SRD version, attribution key, list of types |
+| `tables.json` | Rules tables: CR → XP and PB, size → hit die, skill → ability, and the enums the schemas share |
+| `derive.ts` | Pure functions, one per type: `derive(stats, tables) → derived` |
+| `tokens.ts` | Text tokens that render derived values inside prose (§6.4) |
+| `checks.ts` | Consistency checks a JSON schema cannot express (§6.8) |
+| `schemas/common.schema.json`, `schemas/<type>.schema.json` | `stats` schemas |
+| `guidelines/<type>.md` | Generation guidance (§8.6) |
+
+The validator, the index builder, the site templates, and the exporters all import this module, so each derived value is computed in exactly one place. A ruleset or type with no formulas returns `{}` from `derive`.
+
+**dnd-5e-2024 creature derivations.** Magic items and spells derive nothing in v1.
+
+| Derived path | Formula |
+|---|---|
+| `derived.abilityMods.<ability>` | floor((score − 10) / 2) |
+| `derived.pb` | CR table (Appendix A) |
+| `derived.xp` | CR table |
+| `derived.xpInLair` | XP of the next CR row, when `lair` is true |
+| `derived.initiative.bonus` | DEX mod + (0, PB, or 2×PB for none, `proficient`, or `expertise`) + `adjust` |
+| `derived.initiative.score` | 10 + initiative bonus |
+| `derived.hp.die` | Size table: Tiny d4, Small d6, Medium d8, Large d10, Huge d12, Gargantuan d20 (first listed size) |
+| `derived.hp.modifier` | `hitDice` × CON mod |
+| `derived.hp.formula` | `<hitDice>d<die> + <modifier>` (modifier omitted when 0) |
+| `derived.hp.average` | floor(`hitDice` × (die + 1) / 2) + modifier, minimum 1 |
+| `derived.saves.<ability>` | Mod, + PB when listed in `saveProficiencies` |
+| `derived.skills.<skill>` | Mod of the skill's ability + PB (`proficient`) or 2×PB (`expertise`) |
+| `derived.passivePerception` | 10 + Perception bonus if the skill is listed, else 10 + WIS mod |
+| `derived.<actionList>[i].attackBonus` | PB + mod of `ability` + `adjust` |
+| `derived.<actionList>[i].saveDc` | 8 + PB + mod of `ability` + `adjust` |
+| `derived.<actionList>[i].damage[j]` | `modifier` = mod of `ability` (if set) + `bonus`; `average` = floor(dice average) + modifier; `display` such as `6 (1d8 + 2)` |
+| `derived.spellcasting.dc` | 8 + PB + mod + `adjust` |
+| `derived.spellcasting.attackBonus` | PB + mod + `adjust` |
+
+`<actionList>` is `traits`, `actions`, `bonusActions`, `reactions`, or `legendaryActions.items`.
+
+### 6.3 Shared definitions (`schemas/common.schema.json`)
 
 | Def | Shape |
 |---|---|
 | `Ability` | `str`, `dex`, `con`, `int`, `wis`, `cha` |
-| `Dice` | String `^\d+d(4|6|8|10|12|20|100)([+-]\d+)?$`, for example `2d6+3` |
-| `Damage` | `{ dice: Dice, average: int, type: DamageType }` |
+| `Dice` | String `^\d+d(4|6|8|10|12|20|100)$`, for example `2d6`. No modifier; modifiers come from `ability` and `bonus` |
+| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType }` |
+| `Proficiency` | `proficient`, `expertise` |
+| `Adjust` | Non-zero integer |
 | `DamageType` | `acid`, `bludgeoning`, `cold`, `fire`, `force`, `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder` |
 | `Condition` | `blinded`, `charmed`, `deafened`, `exhaustion`, `frightened`, `grappled`, `incapacitated`, `invisible`, `paralyzed`, `petrified`, `poisoned`, `prone`, `restrained`, `stunned`, `unconscious` |
 | `Ref` | `{ ref: string }` matching `^(creature|magic-item|spell)/[a-z0-9-]+$` |
 | `RefOrText` | `Ref` or non-empty string |
-| `Text` | Markdown-subset string (§5.5) |
+| `Text` | Markdown-subset string (§5.5), which may contain tokens where the ruleset allows them (§6.4) |
 
-### 6.2 Creature (`creature.schema.json`)
+### 6.4 Text tokens
+
+Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `spellcasting.note`, `legendaryActions.intro`) may show a derived value only through a token. Tokens are rendered by `tokens.ts` from the same derivations as the stat block.
+
+| Token | Renders | Example output |
+|---|---|---|
+| `{mod:<ability>}` | Ability modifier | `+2` |
+| `{pb}` | Proficiency bonus | `+2` |
+| `{atk:<ability>[:<adjust>]}` | PB + modifier (+ adjust) | `+4` |
+| `{dc:<ability>[:<adjust>]}` | 8 + PB + modifier (+ adjust) | `DC 12` |
+| `{dmg:<dice>[+<ability>][:<type>]}` | Average, dice, and type | `7 (2d6) Fire damage` |
+
+- An unknown token, ability, or damage type is a validation error.
+- A literal number that looks derived in creature prose is a validation error, and the message names the token to use instead. The patterns caught are `DC <n>`, `+<n> to hit`, and `<n> (<dice>)`.
+- Spell and magic-item text is exempt, because its numbers are authored. Item text must still not restate `saveDc` or `attackBonus`, since the template renders them from the structured fields (warning).
+
+### 6.5 Creature (`schemas/creature.schema.json`)
+
+Field names are the JSON keys under `stats`. Unless marked optional, a field is required.
 
 | Field | Shape | Notes |
 |---|---|---|
-| `size` | array of `tiny`…`gargantuan`, 1–2 items | Two values for "Medium or Small" |
+| `size` | array of `tiny`…`gargantuan`, 1–2 items | Two values for "Medium or Small"; the first sets the hit die |
 | `creatureType` | enum of the 14 SRD creature types | `aberration`, `beast`, `celestial`, `construct`, `dragon`, `elemental`, `fey`, `fiend`, `giant`, `humanoid`, `monstrosity`, `ooze`, `plant`, `undead` |
 | `descriptors` | optional array of strings | Parenthetical tags such as `"Wizard"`; must pass the blocklist |
 | `alignment` | string | Free text from the SRD alignment set, plus `"unaligned"` and `"any alignment"` |
-| `ac` | `{ value: int 1–30, note?: string }` | `note` such as `"natural armor"` |
-| `initiative` | `{ bonus: int }` | Score is derived as 10 + bonus for display |
-| `hp` | `{ average: int, formula: Dice }` | |
+| `ac` | `{ value: int 1–30, note?: string }` | Authored; `note` such as `"natural armor"` |
+| `initiative` | optional `{ proficiency?: Proficiency, adjust?: Adjust }` | Omit for a plain DEX-based initiative |
+| `hitDice` | int 1–99 | Die, modifier, formula, and average are derived |
 | `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: bool }` | Feet; multiples of 5 |
-| `abilities` | `{ str…cha: int 1–30 }` | Modifiers are always derived, never stored |
-| `saves` | optional `{ <Ability>: int }` | Only proficient saves listed; others display as the modifier |
-| `skills` | optional `{ <skill>: int }` | Keys from the 18 SRD skills in kebab-case |
+| `abilities` | `{ str…cha: int 1–30 }` | |
+| `saveProficiencies` | optional array of `Ability` | |
+| `skills` | optional `{ <skill>: Proficiency }` | Keys from the 18 SRD skills in kebab-case |
 | `vulnerabilities`, `resistances` | optional arrays of `DamageType` or string | String for qualified entries |
 | `immunities` | optional `{ damage?: [...], conditions?: [Condition] }` | |
 | `gear` | optional array of `RefOrText` | Items the creature carries |
-| `senses` | `{ darkvision?, blindsight?, tremorsense?, truesight?: int, passivePerception: int }` | |
+| `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int }` | Passive Perception is derived |
 | `languages` | `{ list: [string], telepathy?: int, note?: string }` | Empty list displays as "None" |
-| `cr` | number: `0`, `0.125`, `0.25`, `0.5`, or `1`–`30` | Displayed as fractions |
-| `xp` | int | Must match CR (Appendix A) |
-| `xpInLair` | optional int | |
+| `cr` | number: `0`, `0.125`, `0.25`, `0.5`, or `1`–`30` | Displayed as fractions. XP and PB are derived |
+| `lair` | optional bool | Adds the derived "in lair" XP |
 | `traits`, `actions`, `bonusActions`, `reactions` | arrays of `Action` (`actions` required, others optional) | |
 | `legendaryActions` | optional `{ uses: int, usesInLair?: int, intro?: Text, items: [Action] }` | |
-| `spellcasting` | optional `{ ability, dc, attackBonus?, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action |
+| `spellcasting` | optional `{ ability: Ability, adjust?: Adjust, includeAttack?: bool, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action. `includeAttack` shows the derived spell attack bonus |
 
 **Action**
 
-| Field | Shape | Notes |
-|---|---|---|
-| `name` | string | |
-| `kind` | `melee-attack`, `ranged-attack`, `melee-or-ranged-attack`, `save`, `other` | |
-| `ability` | optional `Ability` | Required for attack and save kinds; drives derived checks |
-| `attackBonus` | int | Attack kinds only |
-| `reach` / `range` | int / `{ normal: int, long?: int }` | Attack kinds |
-| `save` | `{ ability: Ability, dc: int, area?: string }` | `save` kind |
-| `damage` | optional array of `Damage` | First is the primary hit; the rest are "plus" riders |
-| `recharge` | optional string | `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
-| `uses` | optional string | `"3/day"` |
-| `text` | `Text` | Full prose as printed. Always required, so the card never depends on reconstructing prose |
+| Field | Shape | Applies to | Notes |
+|---|---|---|---|
+| `name` | string | all | |
+| `kind` | `melee-attack`, `ranged-attack`, `melee-or-ranged-attack`, `save`, `other` | all | |
+| `ability` | `Ability` | attack, save | The attack ability, or the ability the save DC is based on |
+| `adjust` | optional `Adjust` | attack, save | Applied to the attack bonus or DC |
+| `reach` | int | melee attacks | Feet |
+| `range` | `{ normal: int, long?: int }` | ranged attacks | Feet |
+| `save` | `{ ability: Ability, targets: string }` | save | `targets` such as `"each creature in a 15-foot Cone"` |
+| `damage` | optional array of `Damage` | attack, save | The first is the primary damage; the rest render as "plus" riders |
+| `onHit` | optional `Text` | attack | Prose after the damage |
+| `onFailure`, `onSuccess` | optional `Text` | save | Prose after the failure damage, and the success line |
+| `text` | `Text` | other (required); not allowed on attack and save | Full prose; derived values only through tokens |
+| `recharge` | optional string | all | `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
+| `uses` | optional string | all | `"3/day"` |
 
-### 6.3 Magic item (`magic-item.schema.json`)
+Attack and save lines are generated in 5.2 form from the structured fields. Example output: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.` and `*Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.` Kind-specific requirements (`ability` and `reach` for melee attacks, `save` for saves, `text` only on `other`) are enforced in the schema with `if`/`then`.
+
+### 6.6 Magic item (`schemas/magic-item.schema.json`)
 
 | Field | Shape | Notes |
 |---|---|---|
@@ -276,11 +359,11 @@ The ruleset ID is `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0). Field names b
 | `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | |
 | `attunement` | `{ required: bool, requirement?: string }` | `requirement` such as `"by a spellcaster"` |
 | `charges` | optional `{ max: int, recharge: string, depletion?: Text }` | |
-| `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, saveDc?: int, attackBonus?: int }` | |
+| `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template |
 | `cursed` | optional bool | |
 | `effect` | `Text` | The rules text as printed |
 
-### 6.4 Spell (`spell.schema.json`)
+### 6.7 Spell (`schemas/spell.schema.json`)
 
 | Field | Shape | Notes |
 |---|---|---|
@@ -296,9 +379,9 @@ The ruleset ID is `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0). Field names b
 | `higherLevels` | optional `Text` | Leveled spells only ("Using a Higher-Level Spell Slot") |
 | `cantripUpgrade` | optional `Text` | Cantrips only |
 
-### 6.5 Derived and consistency checks
+### 6.8 Consistency checks
 
-Run after schema validation by `scripts/validate/checks/dnd-5e-2024/<type>.ts`. **Errors** fail CI. **Warnings** appear in local output and the job summary but do not block.
+These run after schema validation, from the ruleset's `checks.ts` plus the ruleset-independent checks. **Errors** fail CI. **Warnings** appear in local output and the job summary but do not block. Derived values are not checked, because they are never stored.
 
 All types:
 
@@ -316,19 +399,11 @@ Creature:
 
 | Check | Level |
 |---|---|
-| `xp` matches `cr` (Appendix A); proficiency bonus derived from CR | error |
-| `hp.formula` die matches size: Tiny d4, Small d6, Medium d8, Large d10, Huge d12, Gargantuan d20 (first size when two are listed) | error |
-| `hp.formula` modifier = dice count × CON modifier | error |
-| `hp.average` = floor(dice average) + modifier | error |
-| Every `Damage.average` = floor of its dice average | error |
-| `attackBonus` = PB + modifier of `ability` | error |
-| Action `save.dc` and `spellcasting.dc` = 8 + PB + modifier of the relevant ability | error |
-| `spellcasting.attackBonus`, when present, = PB + modifier | error |
-| `senses.passivePerception` = 10 + Perception bonus if listed, else 10 + WIS modifier | error |
-| Listed saves = modifier + PB | warning |
-| Listed skills = modifier + PB or modifier + 2×PB | warning |
-| `initiative.bonus` = DEX modifier + 0, PB, or 2×PB | warning |
+| Every token is known and well-formed | error |
+| No literal derived numbers in prose (§6.4) | error |
 | Speeds are multiples of 5 | error |
+| Any `adjust`, damage `bonus`, or token adjustment (listed so the reviewer confirms the deviation) | warning |
+| Derived attack bonus above +17 or save DC above 30 | warning |
 
 Magic item:
 
@@ -337,6 +412,7 @@ Magic item:
 | `baseItem` present for `armor` and `weapon` | error |
 | `attunement.requirement` only when `required` is true | error |
 | `spells[].chargeCost` only when `charges` is present | error |
+| `effect` restates a `saveDc` or `attackBonus` value | warning |
 
 Spell:
 
@@ -350,9 +426,9 @@ Spell:
 | `castingTime.trigger` present iff unit is `reaction` | error |
 | Cantrip marked `ritual` | warning |
 
-Balance (hit points, damage per round, and save DCs for a given CR, item rarity versus power, spell damage for a given level) is judged in review against targets written in the guideline files. It is not enforced by CI.
+Balance (hit points, damage per round, and save DCs for a given CR, item rarity versus power, spell damage for a given level) is judged in review against targets written in the guideline files. CI does not enforce it. The PR summary shows each creature's derived HP, AC, attack bonuses, DCs, and average damage per action, so balance review needs no arithmetic either.
 
-### 6.6 Example entries
+### 6.9 Example entries
 
 `content/dnd-5e-2024/creature/cinder-hound.json`
 
@@ -369,37 +445,40 @@ Balance (hit points, damage per round, and save DCs for a given CR, item rarity 
     "creatureType": "monstrosity",
     "alignment": "unaligned",
     "ac": { "value": 13, "note": "natural armor" },
-    "initiative": { "bonus": 2 },
-    "hp": { "average": 32, "formula": "5d8+10" },
+    "hitDice": 5,
     "speed": { "walk": 40 },
     "abilities": { "str": 15, "dex": 14, "con": 14, "int": 4, "wis": 12, "cha": 6 },
-    "skills": { "perception": 3, "stealth": 4 },
+    "skills": { "perception": "proficient", "stealth": "proficient" },
     "immunities": { "damage": ["fire"] },
-    "senses": { "darkvision": 60, "passivePerception": 13 },
+    "senses": { "darkvision": 60 },
     "languages": { "list": [] },
     "cr": 2,
-    "xp": 450,
+    "traits": [
+      {
+        "name": "Smoldering Hide",
+        "kind": "other",
+        "text": "A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes {dmg:1d4:fire}."
+      }
+    ],
     "actions": [
       {
         "name": "Bite",
         "kind": "melee-attack",
         "ability": "str",
-        "attackBonus": 4,
         "reach": 5,
         "damage": [
-          { "dice": "1d8+2", "average": 6, "type": "piercing" },
-          { "dice": "1d6", "average": 3, "type": "fire" }
-        ],
-        "text": "*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage."
+          { "dice": "1d8", "ability": "str", "type": "piercing" },
+          { "dice": "1d6", "type": "fire" }
+        ]
       },
       {
         "name": "Ember Breath",
         "kind": "save",
         "ability": "con",
-        "save": { "ability": "dex", "dc": 12, "area": "15-foot cone" },
-        "damage": [{ "dice": "3d6", "average": 10, "type": "fire" }],
-        "recharge": "5-6",
-        "text": "*Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage."
+        "save": { "ability": "dex", "targets": "each creature in a 15-foot Cone" },
+        "damage": [{ "dice": "3d6", "type": "fire" }],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
       }
     ]
   },
@@ -407,6 +486,13 @@ Balance (hit points, damage per round, and save DCs for a given CR, item rarity 
   "meta": { "createdAt": "2026-11-02", "source": { "kind": "routine", "issues": [1] } }
 }
 ```
+
+Rendered from the stored inputs plus the ruleset derivations:
+
+- **Initiative** +2 (12) · **HP** 32 (5d8 + 10) · **Skills** Perception +3, Stealth +4 · **Senses** Darkvision 60 ft., Passive Perception 13 · **CR** 2 (XP 450; PB +2)
+- **Smoldering Hide.** A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes 2 (1d4) Fire damage.
+- **Bite.** *Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.
+- **Ember Breath (Recharge 5–6).** *Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.
 
 `content/dnd-5e-2024/spell/frost-lance.json`
 
@@ -449,7 +535,7 @@ Balance (hit points, damage per round, and save DCs for a given CR, item rarity 
     "attunement": { "required": true, "requirement": "by a spellcaster" },
     "charges": { "max": 7, "recharge": "1d6 + 1 daily at dawn", "depletion": "If you expend the last charge, roll 1d20. On a 1, the wand melts away." },
     "spells": [{ "spell": { "ref": "spell/frost-lance" }, "chargeCost": 1, "attackBonus": 5 }],
-    "effect": "While holding this wand, you can expend 1 of its charges to cast *Frost Lance* (+5 to hit) from it."
+    "effect": "While holding this wand, you can expend 1 of its charges to cast *Frost Lance* from it."
   },
   "tags": { "theme": "ice" },
   "meta": { "createdAt": "2026-11-02", "source": { "kind": "routine", "issues": [2] } }
@@ -470,12 +556,14 @@ Display and generation defaults only. Validation never reads it except to confir
         "label": "Creature",
         "plural": "Creatures",
         "template": "creature-stat-block",
-        "guideline": "guidelines/dnd-5e-2024/creature.md",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/creature.md",
         "facets": [
           { "path": "stats.cr", "label": "CR", "kind": "range", "format": "cr" },
           { "path": "stats.size", "label": "Size", "kind": "enum" },
           { "path": "stats.creatureType", "label": "Creature type", "kind": "enum" },
-          { "path": "stats.abilities.str", "label": "STR", "kind": "range" }
+          { "path": "stats.abilities.str", "label": "STR", "kind": "range" },
+          { "path": "derived.hp.average", "label": "HP", "kind": "range" },
+          { "path": "derived.xp", "label": "XP", "kind": "range" }
         ],
         "cardFields": ["stats.cr", "stats.size", "stats.creatureType"],
         "defaultSort": "stats.cr:asc",
@@ -490,7 +578,7 @@ Display and generation defaults only. Validation never reads it except to confir
 
 | Key | Purpose |
 |---|---|
-| `facets` | The `stats` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`) |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`) |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |
@@ -502,7 +590,7 @@ v1 registry entries:
 
 | Type | Facets | Card fields | Default sort | Gap buckets |
 |---|---|---|---|---|
-| `creature` | CR, size, creature type, six ability scores, AC, HP | CR, size, creature type | CR ascending | CR bins as above |
+| `creature` | CR, size, creature type, six ability scores, AC, HP (derived), XP (derived) | CR, size, creature type | CR ascending | CR bins as above |
 | `magic-item` | rarity, category, attunement required, cursed | rarity, category, attunement | rarity ascending (ordered enum) | rarity |
 | `spell` | level, school, classes, concentration, ritual, casting-time unit | level, school, concentration/ritual badges | level ascending | level × school |
 
@@ -570,9 +658,9 @@ Defaults are applied only to fields the request leaves unspecified. Request tags
 
 `.claude/skills/generate/SKILL.md` is generic across types and rulesets. Inputs: ruleset, type, count, brief, tags, issue numbers (or gap bucket). Steps:
 
-1. Read `config/types.json`, `config/defaults.json`, the type's schema, `guidelines/<ruleset>/<type>.md`, `config/blocklist.json`, and `library.json`.
+1. Read `config/types.json`, `config/defaults.json`, the ruleset module (`rulesets/<ruleset>/`: the type's schema, `tables.json`, tokens, guideline), `config/blocklist.json`, and `library.json`.
 2. List existing names and IDs for collision avoidance, and existing entries matching the brief's theme to avoid near-duplicates in concept.
-3. Write entries, including any new dependencies the brief implies (a creature's signature spell). Prefer references to existing library entries over plain text when a matching entry exists.
+3. Write entries, including any new dependencies the brief implies (a creature's signature spell). Prefer references to existing library entries over plain text when a matching entry exists. Write inputs only: never write a value the ruleset derives, use tokens for derived values in prose, and use `adjust` only for a deliberate deviation, explained in the PR body.
 4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and `meta.source.issues`; apply request and default tags.
 5. Run `npm run validate`. Fix and retry up to `validateRetries` times. If still failing, comment the errors on the issue, remove `in-progress`, and stop without opening a PR.
 6. Branch `gen/<issue-numbers-or-gap>-<YYYYMMDD>` (for example `gen/12-14-20261102`, `gen/gap-spell-20261102`), commit with message `Add <n> <type> entries`, push, open the PR.
@@ -581,7 +669,7 @@ Defaults are applied only to fields the request leaves unspecified. Request tags
 
 - Title: `Add <n> <type> entries` (mixed batches: `Add <n> entries`).
 - Label: `generated`.
-- Body: a table of each entry (name, type, the type's `summaryField` value, summary); any validator warnings; one `Closes #n` line per fulfilled issue; for gap-fill runs, the bucket that was filled.
+- Body: a table of each entry (name, type, the type's `summaryField` value, summary); any validator warnings, including every formula adjustment with its reason; one `Closes #n` line per fulfilled issue; for gap-fill runs, the bucket that was filled.
 
 ### 8.5 Comment-driven revisions (the `revise` skill)
 
@@ -594,12 +682,12 @@ Defaults are applied only to fields the request leaves unspecified. Request tags
 
 ### 8.6 Guidelines
 
-Each `guidelines/dnd-5e-2024/<type>.md` contains:
+Each `rulesets/dnd-5e-2024/guidelines/<type>.md` contains:
 
 - Tone and voice, with one short exemplar.
 - Naming conventions: evocative and original; no real-world trademarks; no non-SRD proper nouns; avoid near-collisions with SRD names.
-- Balance targets as our own tables (for creatures, by CR: AC, HP, attack bonus, damage per round, save DC; for items, power expectations by rarity; for spells, damage by level and area).
-- Required prose style for `text` and `effect` fields, matching the 5.2 stat-block phrasing (*Melee Attack Roll:*, *Hit:*, *Dexterity Saving Throw:*, *Failure:*, *Success:*).
+- Balance targets as our own tables (for creatures, by CR: AC, HP, attack bonus, damage per round, save DC; for items, power expectations by rarity; for spells, damage by level and area). For creatures these are met by choosing inputs (ability scores, hit dice, damage dice), since the derived numbers follow from them.
+- Prose style for `text`, `onHit`, `onFailure`, `onSuccess`, and `effect`, matching 5.2 phrasing, with derived numbers written as tokens. Attack and save lines are generated, so they are never written as prose.
 - When to create a dependency entry versus using plain text for an SRD reference.
 
 ### 8.7 Schedule
@@ -613,9 +701,9 @@ Recorded in `docs/routines.md` along with the canonical routine prompts:
 
 ### 9.1 Build
 
-1. `scripts/build-index.ts` reads every file under `content/`, runs the validator (the build fails if validation fails), resolves refs, and computes back-references.
+1. `scripts/build-index.ts` reads every file under `content/`, runs the validator (the build fails if validation fails), computes each entry's `derived` values with its ruleset module, resolves refs, and computes back-references.
 2. It writes `site/public/library.json` (the index) and copies each entry's raw JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export.
-3. Astro builds static pages, reading the full entries at build time.
+3. Astro builds static pages, reading the full entries and their derived values at build time.
 
 **`library.json` record**
 
@@ -628,7 +716,7 @@ Recorded in `docs/routines.md` along with the canonical routine prompts:
   "summary": "…",
   "url": "/ttrpg-library/dnd-5e-2024/creature/cinder-hound/",
   "image": null,
-  "facets": { "stats.cr": 2, "stats.size": ["medium"], "stats.creatureType": "monstrosity" },
+  "facets": { "stats.cr": 2, "stats.size": ["medium"], "stats.creatureType": "monstrosity", "derived.hp.average": 32, "derived.xp": 450 },
   "tags": { "theme": "fire", "environment": ["underdark", "mountains"] },
   "createdAt": "2026-11-02",
   "refs": [],
@@ -676,6 +764,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.5 Templates and theming
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
+- Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
 - All colors, fonts, and spacing come from CSS variables in `site/src/styles/tokens.css`. A theme change touches one file. Light and dark themes are both defined; print and capture always use the light theme.
 
@@ -690,15 +779,15 @@ interface Exporter {
   id: string;                         // "json", "png", "print"
   label: string;                      // button text
   scopes: Array<"entry" | "set">;     // single entry, filtered/selected set, or both
-  run(entries: Entry[], options: ExportOptions): Promise<void>;
+  run(items: Array<{ entry: Entry; derived: Derived }>, options: ExportOptions): Promise<void>;
 }
 ```
 
-Future translators (Foundry VTT, Open5e, and other open formats) are additional exporters that map an `Entry` to the target format. No gallery code changes are needed to add one.
+Future translators (Foundry VTT, Open5e, and other open formats) are additional exporters that map an entry and its derived values to the target format. Most target formats store computed numbers, so translators read `derived` rather than recomputing. No gallery code changes are needed to add one.
 
 ### 10.2 JSON
 
-- Entry scope: downloads the entry's raw file as `<id>.json`.
+- Entry scope: downloads the entry's raw file as `<id>.json`. This is the native format: inputs only, no derived values.
 - Set scope: fetches each entry's raw file and downloads one array as `library-<YYYYMMDD>.json`.
 
 ### 10.3 PNG
@@ -737,7 +826,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 ## 11. Licensing and attribution
 
 - **Code:** MIT (`LICENSE`).
-- **Content** (`content/`, `guidelines/`): CC-BY-4.0 (`LICENSE-CONTENT`), compatible with the SRD's terms.
+- **Content** (`content/`, `rulesets/*/guidelines/`): CC-BY-4.0 (`LICENSE-CONTENT`), compatible with the SRD's terms.
 - **SRD attribution statement**, in `ATTRIBUTION.md`, the site footer, the `/about/` page, and every print page:
 
   > This work includes material from the System Reference Document 5.2 ("SRD 5.2") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
@@ -754,7 +843,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 2. `npm run check` and `npm test`.
 3. `npm run validate` across all entries.
 4. `npm run build`.
-5. `scripts/pr-summary.ts` writes the job summary: changed entries (added, modified, removed) with name, type, `summaryField` value, and summary; all warnings; ref changes (new back-links created).
+5. `scripts/pr-summary.ts` writes the job summary: changed entries (added, modified, removed) with name, type, `summaryField` value, and summary; for creatures, the derived HP, AC, attack bonuses, DCs, and average damage per action; all warnings, including every formula adjustment; ref changes (new back-links created).
 6. Upload the built site as a workflow artifact (7-day retention) for optional local preview.
 
 The job is named `validate`; that name is the required status check.
@@ -780,8 +869,9 @@ Pages source is set to GitHub Actions.
 |---|---|---|
 | Envelope and `stats` schema conformance, unknown keys rejected | Yes | |
 | File path, ID, and name uniqueness | Yes | |
-| Derived values (XP, PB, HP, damage averages, attack bonuses, DCs, passive Perception) | Yes | |
-| Saves, skills, initiative plausibility | Warning | Confirm |
+| Derived values (XP, PB, HP, damage averages, attack bonuses, DCs, saves, skills, passive Perception) | Not stored, so nothing to check; computed by the ruleset module | |
+| Text tokens valid; no literal derived numbers in creature prose | Yes | |
+| Formula adjustments (`adjust`, damage `bonus`) | Warning | Confirm each one |
 | References resolve; deletions don't orphan refs | Yes | |
 | Blocklist | Yes | Edit the blocklist for false positives |
 | Site builds | Yes | |
@@ -796,6 +886,7 @@ The repo's `CLAUDE.md` instructs any Claude session working in the repo:
 - Content is generated and revised through the `generate` and `revise` skills; follow them exactly.
 - Never push to `main`; always branch and open a PR labeled `generated`.
 - Never change an entry's `id` or move its file.
+- Never write a value the ruleset derives. Write inputs, use tokens for derived numbers in prose, and use `adjust` only for deliberate deviations.
 - Run `npm run validate` before every push; never push a failing batch.
 - Keep PRs to content changes unless the task is explicitly about code, schemas, or config.
 - SRD-only rules and the blocklist apply to every text field.
@@ -805,8 +896,9 @@ The repo's `CLAUDE.md` instructs any Claude session working in the repo:
 
 | To add or change | Touch |
 |---|---|
-| A content type | `schemas/<ruleset>/<type>.schema.json`, optional checks module, `guidelines/<ruleset>/<type>.md`, a registry entry, the issue-form dropdown; a template only if the generic layout does not fit |
-| A ruleset | `schemas/<ruleset>/`, guidelines, registry entries, an attribution statement, a licensing review; optional checks modules |
+| A content type | In `rulesets/<ruleset>/`: a schema, a `derive` function if it has formulas, checks if needed, a guideline, and the type in `ruleset.json`. Plus a registry entry and the issue-form dropdown; a template only if the generic layout does not fit |
+| A ruleset | A new `rulesets/<ruleset>/` folder, registry entries, an attribution statement, and a licensing review |
+| A rules formula or table | `rulesets/<ruleset>/tables.json` or `derive.ts`; every entry picks it up on the next build |
 | A world, campaign, author, or theme | A tag on entries |
 | A filter or sort on a tag | Nothing |
 | A filter or sort on a `stats` field | A facet in the registry |
@@ -823,8 +915,8 @@ Each milestone ends with something you can verify.
 
 | # | Milestone | Done when |
 |---|---|---|
-| 1 | **Skeleton.** Astro project, envelope and creature schema, validator (schema stage and creature checks), one hand-written creature, both workflows, branch protection, Pages live | A merged PR changes the live page, and a PR with a broken entry is blocked |
-| 2 | **Full model.** Magic-item and spell schemas and checks, refs and back-refs, blocklist, markdown-subset check, test fixtures for every error | Fixture suite covers each check; the three example entries in §6.6 validate and link to each other |
+| 1 | **Skeleton.** Astro project, envelope schema, `dnd-5e-2024` ruleset module with the creature schema, tables, derivations, and tokens, validator (schema stage and creature checks), one hand-written creature, both workflows, branch protection, Pages live | A merged PR changes the live page, and a PR with a broken entry is blocked |
+| 2 | **Full model.** Magic-item and spell schemas and checks, refs and back-refs, blocklist, markdown-subset check, test fixtures for every error | Fixture suite covers each check and each derivation; the three example entries in §6.9 validate, link to each other, and render the numbers shown there |
 | 3 | **Gallery.** Registry, index builder, card grid, facets, tags, "Add filter," sort, search, URL state, detail pages, placeholder art, about page | Example entries can be found by name, tag, and facet; a copied URL reproduces the view |
 | 4 | **Exports.** JSON (entry and set), PNG, print view with all four sizes, multi-entry print | A Letter print of a long creature paginates cleanly with selectable text; a PNG posts legibly to Discord |
 | 5 | **Generation.** Issue forms, labels, defaults, `generate` skill, guidelines for three types, routine prompts in `docs/routines.md` | One run turns an issue into a passing PR that closes the issue on merge |
@@ -863,4 +955,4 @@ v1 is complete when all six milestones are done and the library holds at least f
 | | | | | 29 | 135,000 | +9 |
 | | | | | 30 | 155,000 | +9 |
 
-The validator encodes this table in `scripts/validate/checks/dnd-5e-2024/tables.ts` and cites the SRD section it comes from.
+This table lives in `rulesets/dnd-5e-2024/tables.json`, which cites the SRD section it comes from. "In lair" XP is the XP of the next row.
