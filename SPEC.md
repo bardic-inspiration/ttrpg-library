@@ -240,6 +240,26 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 - Detail pages show forward links ("Casts: Frost Lance") and back-links ("Cast by: Cinder Witch"), each target once per label. The ruleset's `refLabels(type, path)` names the relation from each end, from the field the ref sits in. dnd-5e-2024: `spellcasting` lists and a magic item's `spells[].spell` are "Casts" / "Cast by", creature `gear` is "Gear" / "Carried by", and any other field is "References" / "Referenced by".
 - A batch may add its own dependencies (a creature plus the new spell it casts).
 
+### 5.8 Situational fields
+
+Many `stats` fields apply to some entries and not others: a spell's material cost, a magic item's `cursed` flag, a creature's `lair`. One rule decides whether a field displays, and it lives in the type's `stats` schema, not in templates or the registry:
+
+- **Required fields always display**, including a value of `0` or `false`. A cantrip's `level: 0` and a spell's `ritual: false` are facts about the entry. How a value reads is the template's formatting (level 0 reads "Cantrip"), not a display decision.
+- **Optional fields display only when present.** A field that doesn't apply is omitted. A present optional field always displays.
+- **Omission is the only way to say "doesn't apply."** The schema rejects every other "none" value for an optional field, so presence and applicability can't disagree:
+
+| Optional shape | Schema constraint | Rejected stand-ins |
+|---|---|---|
+| Number | A minimum that excludes the "none" value, or `not: { const: 0 }` for a signed number | `0` |
+| Boolean flag | `const: true` | `false` |
+| String | `minLength: 1` | `""` |
+| Array | `minItems: 1` | `[]` |
+| Object | `minProperties: 1`, or required keys | `{}` |
+
+An optional number whose `0` is a real value, such as a magic item's `attackBonus` of +0, keeps `0` valid and displays it when present. A facet on an optional boolean flag (§7) reads an omitted key as `false`. A derived value always exists, so a line that shows one displays even when its optional inputs are omitted: the Senses line still shows Passive Perception, and the Initiative line still shows the DEX-based bonus.
+
+Because the schema is the source of the rule, it needs no display annotation. A template, including the generic fallback (§9.5), decides whether an optional field displays from presence alone, never by testing its value against `0`, `false`, or emptiness. The `stats` tables in §6.5–§6.7 mark optional fields with "optional" or a `?` key.
+
 ## 6. Rulesets and the dnd-5e-2024 schemas
 
 The ruleset ID is `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0).
@@ -306,7 +326,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 |---|---|
 | `Ability` | `str`, `dex`, `con`, `int`, `wis`, `cha` |
 | `Dice` | String `^\d+d(4|6|8|10|12|20|100)$`, for example `2d6`. No modifier; modifiers come from `ability` and `bonus` |
-| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType }` |
+| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType }`. `bonus` is non-zero when present (§5.8) |
 | `Proficiency` | `proficient`, `expertise` |
 | `Adjust` | Non-zero integer |
 | `DamageType` | `acid`, `bludgeoning`, `cold`, `fire`, `force`, `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder` |
@@ -333,7 +353,7 @@ Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `spellcasting.note`, 
 
 ### 6.5 Creature (`schemas/creature.schema.json`)
 
-Field names are the JSON keys under `stats`. Unless marked optional, a field is required.
+Field names are the JSON keys under `stats`. Unless marked optional, a field is required. Optional fields follow §5.8: an optional array, object, or string is never empty, an optional number is never a "none" `0`, and an optional flag is `true` or omitted.
 
 | Field | Shape | Notes |
 |---|---|---|
@@ -344,20 +364,20 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `ac` | `{ value: int 1–30, note?: string }` | Authored; `note` such as `"natural armor"` |
 | `initiative` | optional `{ proficiency?: Proficiency, adjust?: Adjust }` | Omit for a plain DEX-based initiative |
 | `hitDice` | int 1–99 | Die, modifier, formula, and average are derived |
-| `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: bool }` | Feet; multiples of 5 |
+| `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: true }` | Feet; multiples of 5. `walk` may be 0; an optional mode is at least 5 |
 | `abilities` | `{ str…cha: int 1–30 }` | |
 | `saveProficiencies` | optional array of `Ability` | |
 | `skills` | optional `{ <skill>: Proficiency }` | Keys from the 18 SRD skills in kebab-case |
 | `vulnerabilities`, `resistances` | optional arrays of `DamageType` or string | String for qualified entries |
 | `immunities` | optional `{ damage?: [...], conditions?: [Condition] }` | |
 | `gear` | optional array of `RefOrText` | Items the creature carries |
-| `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int }` | Passive Perception is derived |
-| `languages` | `{ list: [string], telepathy?: int, note?: string }` | Empty list displays as "None" |
+| `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int }` | Feet, each at least 1. Passive Perception is derived, so the Senses line always displays |
+| `languages` | `{ list: [string], telepathy?: int, note?: string }` | Empty list displays as "None". `telepathy` is at least 1 |
 | `cr` | number: `0`, `0.125`, `0.25`, `0.5`, or `1`–`30` | Displayed as fractions. XP and PB are derived |
-| `lair` | optional bool | Adds the derived "in lair" XP |
+| `lair` | optional `true` | Adds the derived "in lair" XP |
 | `traits`, `actions`, `bonusActions`, `reactions` | arrays of `Action` (`actions` required, others optional) | |
 | `legendaryActions` | optional `{ uses: int, usesInLair?: int, intro?: Text, items: [Action] }` | |
-| `spellcasting` | optional `{ ability: Ability, adjust?: Adjust, includeAttack?: bool, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action. `includeAttack` shows the derived spell attack bonus |
+| `spellcasting` | optional `{ ability: Ability, adjust?: Adjust, includeAttack?: true, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action. `includeAttack` shows the derived spell attack bonus |
 
 **Action**
 
@@ -388,8 +408,8 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | |
 | `attunement` | `{ required: bool, requirement?: string }` | `requirement` such as `"by a spellcaster"` |
 | `charges` | optional `{ max: int, recharge: string, depletion?: Text }` | |
-| `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template |
-| `cursed` | optional bool | |
+| `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8) |
+| `cursed` | optional `true` | |
 | `effect` | `Text` | The rules text as printed |
 
 ### 6.7 Spell (`schemas/spell.schema.json`)
@@ -402,7 +422,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `castingTime` | `{ amount: int, unit: action|bonus-action|reaction|minute|hour, trigger?: string }` | `trigger` required for reactions |
 | `ritual` | bool | |
 | `range` | `{ kind: self|touch|distance|sight|unlimited|special, feet?: int, area?: { shape: cone|cube|cylinder|emanation|line|sphere, size: int } }` | |
-| `components` | `{ v: bool, s: bool, m?: { text: string, costGp?: number, consumed?: bool } }` | |
+| `components` | `{ v: bool, s: bool, m?: { text: string, costGp?: number, consumed?: true } }` | `costGp` is greater than 0 |
 | `duration` | `{ kind: instantaneous|timed|until-dispelled|special, amount?: int, unit?: round|minute|hour|day, concentration: bool }` | |
 | `effect` | `Text` | |
 | `higherLevels` | optional `Text` | Leveled spells only ("Using a Higher-Level Spell Slot") |
@@ -573,7 +593,7 @@ Rendered from the stored inputs plus the ruleset derivations:
 
 ## 7. Type registry (`config/types.json`)
 
-Display and generation defaults only. Validation never reads it except to confirm that a ruleset and type are registered.
+Display and generation defaults only. Validation never reads it except to confirm that a ruleset and type are registered. It doesn't decide whether a field displays; the `stats` schema does (§5.8).
 
 ```json
 {
@@ -607,7 +627,7 @@ Display and generation defaults only. Validation never reads it except to confir
 
 | Key | Purpose |
 |---|---|
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`) |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`) |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |
@@ -794,6 +814,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.5 Templates
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
+- Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this rather than each deciding it.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
