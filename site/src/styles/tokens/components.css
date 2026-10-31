@@ -1,0 +1,56 @@
+/*
+ * Component tokens (SPEC.md §9.6): per-component knobs that default to
+ * semantic tokens. Edit one to change a component's look without touching its
+ * code. Layout values (card width, gaps, columns) live here too.
+ *
+ * The block also applies on [data-theme] so a theme scoped to an element
+ * re-resolves these from that theme's semantic tokens.
+ */
+@layer tokens {
+  :root,
+  [data-theme] {
+    /* Page shell. */
+    --page-width: var(--content-width);
+    --page-gutter: var(--space-s);
+    --header-bg: var(--color-surface);
+    --header-border-color: var(--color-border);
+    --footer-text-color: var(--color-text-muted);
+
+    /* Gallery grid and cards. */
+    --card-min-width: var(--size-card-min);
+    --grid-gap: var(--space-m);
+    --card-bg: var(--color-surface);
+    --card-border-color: var(--color-border);
+    --card-radius: var(--radius-card);
+    --card-padding: var(--space-card);
+    --card-shadow: var(--shadow-card);
+    --art-aspect: var(--ratio-art);
+
+    /* Stat blocks. */
+    --statblock-bg: var(--color-surface);
+    --statblock-heading-font: var(--font-heading);
+    --statblock-label-font: var(--font-heading);
+    --statblock-rule-color: var(--accent);
+    --statblock-rule-width: var(--border-width-strong);
+    --statblock-padding: var(--space-s);
+    --statblock-gap: var(--space-xs);
+    --statblock-column-gap: var(--space-l);
+
+    /* Controls: buttons, inputs, chips. */
+    --control-font: var(--font-ui);
+    --control-bg: var(--color-surface);
+    --control-text: var(--color-text);
+    --control-border: var(--border-width) solid var(--color-control-border);
+    --control-radius: var(--radius-control);
+    --control-padding-block: var(--space-3xs);
+    --control-padding-inline: var(--space-2xs);
+    --control-active-bg: var(--color-accent);
+    --control-active-text: var(--color-surface);
+    --chip-radius: var(--radius-chip);
+
+    /* Badges. */
+    --badge-font: var(--font-ui);
+    --badge-border: var(--border-width) solid var(--accent);
+    --badge-text: var(--accent);
+  }
+}

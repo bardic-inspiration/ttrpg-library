@@ -1,0 +1,7 @@
+/*
+ * The experiment layer (SPEC.md §9.6, §9.8). Empty on main. Rules here beat
+ * every other layer without specificity fights. Try a change here under
+ * `npm run dev`, then move the result into tokens or the component.
+ */
+@layer overrides {
+}

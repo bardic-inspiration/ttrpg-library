@@ -841,7 +841,7 @@ The styling system is built so that the v1 UI can be refined quickly and safely 
   @layer reset, tokens, base, layout, components, utilities, overrides;
   ```
 
-  Component styles go in `components`. The `overrides` layer is an empty file, reserved for quick experiments during refinement, which always win without specificity fights.
+  Component styles go in `components`: each scoped `<style>` block wraps its rules in `@layer components { … }`, because unlayered styles would beat every layer, `overrides` included. The `overrides` layer is an empty file, reserved for quick experiments during refinement, which always win without specificity fights.
 
 **Files (`site/src/styles/`)**
 
@@ -856,7 +856,7 @@ The styling system is built so that the v1 UI can be refined quickly and safely 
 
 **Rules that keep editing easy**
 
-- Components use only semantic, component, and content tokens. They never use primitives or literal values. A color, font, size, spacing, radius, shadow, or duration written as a literal anywhere outside `tokens/` fails the lint. Stylelint enforces this in `npm run check`, with an allowlist for `0`, `100%`, `auto`, and similar.
+- Components use only semantic, component, and content tokens. They never use primitives or literal values. A color, font, size, spacing, radius, shadow, or duration written as a literal anywhere outside `tokens/` fails the lint. Stylelint enforces this in `npm run check` (`stylelint.config.mjs`): hex, named, and functional colors, length and time units (`px`, `rem`, `em`, `pt`, `ms`, `s`…), and literal font families, weights, line heights, and shadows all fail. Percentages, viewport units, `0`, `auto`, and keywords stay allowed. `tests/stylelint.test.ts` proves each rule fires.
 - Accents are driven by data attributes, not by per-type CSS. Cards and stat blocks carry `data-type="creature"` (and `data-rarity="rare"` for items), and one rule maps each attribute to `--accent`. A new type needs one variable in `content.css`; without one, it falls back to `--color-accent`.
 - Class names are stable, readable, and component-scoped (`.statblock__header`, `.card__summary`), so a quick experiment in `overrides.css` can target anything.
 - Layout values are tokens as well: grid minimum card width, gaps, stat-block column gap, and container-query breakpoints. Density and layout can be tuned without touching component code.
@@ -888,20 +888,20 @@ The styling system is built so that the v1 UI can be refined quickly and safely 
 
 **Themes**
 
-- Light and dark are sets of semantic tokens in `semantic.css`, under `:root[data-theme="light"]` and `:root[data-theme="dark"]`, plus a `prefers-color-scheme` block for the system default.
-- The header has a three-way toggle: System, Light, Dark. The choice is stored in `localStorage`, with reads and writes wrapped in try/catch so the toggle degrades to System. A tiny inline script in `<head>` sets `data-theme` before first paint, so the page never flashes the wrong theme.
-- Print and PNG capture always render with the light tokens, whatever the active theme.
+- Light and dark are sets of semantic tokens in `semantic.css` (and type and rarity colors in `content.css`), under `[data-theme="light"]` and `[data-theme="dark"]`, plus a `prefers-color-scheme` block for the system default. The attribute sits on `<html>`, or on any element to scope a theme to it, as the style guide's side-by-side view does; tokens built from theme colors are re-declared on `[data-theme]` so they re-resolve inside a scoped theme. Light is also the plain `:root` default, and the dark blocks apply on `screen` only.
+- The header has a three-way toggle: System, Light, Dark, as a radio group (`site/src/lib/theme.ts`, `ThemeToggle.astro`). The choice is stored in `localStorage`, with reads and writes wrapped in try/catch so the toggle degrades to System; choosing System clears the stored value and removes `data-theme`. A tiny inline script in `<head>` sets `data-theme` before first paint, so the page never flashes the wrong theme.
+- Print and PNG capture always render with the light tokens, whatever the active theme. Print gets them because the dark blocks are screen-only.
 - A further theme (for example, high contrast) is one more token block in `semantic.css` plus an option in the toggle; no component changes.
 
 ### 9.7 Accessibility
 
 Target: WCAG 2.2 AA.
 
-- **Contrast.** `tests/contrast.test.ts` parses `semantic.css` and `content.css` for both themes and checks declared pairs: text, muted text, accent, every type and rarity color on `--color-bg` and `--color-surface` at ≥ 4.5:1; `--color-control-border` and `--color-focus` at ≥ 3:1. Changing a color and running `npm test` shows immediately whether it still passes.
+- **Contrast.** `tests/contrast.test.ts` parses `semantic.css` and `content.css` for both themes, resolving `var()` references through `primitives.css` (`site/src/lib/design-tokens.ts`), and checks declared pairs: text, muted text, accent, every type and rarity color on `--color-bg` and `--color-surface` at ≥ 4.5:1; `--color-control-border` and `--color-focus` at ≥ 3:1. Changing a color and running `npm test` shows immediately whether it still passes.
 - **Color is never the only signal.** Rarity, type, and concentration/ritual badges always carry a text label.
 - **Keyboard.** Every control (filters, chips, sort, search, selection, export, theme toggle) is reachable and operable by keyboard, in visual order. Focus is always visible through a shared `--focus-ring` token (2 px outline in `--color-focus` with offset). Escape closes popovers.
 - **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name; the placeholder is decorative and hidden from assistive technology.
-- **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce`.
+- **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce` (the duration primitives are reset in `primitives.css`, and the contrast suite checks that every one is).
 - **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without horizontal scrolling.
 - **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build.
 
@@ -918,7 +918,7 @@ UI refinement is an explicit part of v1 testing, so the tooling for it ships wit
 
   Each has a light/dark switch, and there is a side-by-side view of both themes. This page is where most refinement happens: edit a token, and every affected surface updates at once under `npm run dev`.
 - **Fixtures include stress cases:** a creature with legendary actions and spellcasting, a long magic item, a cantrip and a 9th-level spell, a very long name, and an entry with many tags. Layouts get judged against the hard cases, not only the pretty ones.
-- **Visual snapshots on demand.** `npm run snapshots` captures the style guide and key pages in both themes with Playwright into a git-ignored folder, for before/after comparison of a refinement. It is not a CI gate, so deliberate design changes never fight a failing snapshot test.
+- **Visual snapshots on demand.** `npm run snapshots [label]` captures the style guide, the home page, and one detail page per type from the built site, in both themes, with Playwright into the git-ignored `snapshots/<label>/` folder, for before/after comparison of a refinement. It is not a CI gate, so deliberate design changes never fight a failing snapshot test.
 - **Where to change what:**
 
 | To change | Edit |

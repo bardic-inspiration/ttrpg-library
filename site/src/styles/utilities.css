@@ -1,0 +1,28 @@
+/* A handful of utilities (SPEC.md §9.6). */
+@layer utilities {
+  .visually-hidden:not(:focus, :active) {
+    position: absolute;
+    /* stylelint-disable-next-line unit-disallowed-list -- the standard 1px clip, not a design value */
+    inline-size: 1px;
+    /* stylelint-disable-next-line unit-disallowed-list -- the standard 1px clip, not a design value */
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .flow > * + * {
+    margin-block-start: var(--space-s);
+  }
+
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .measure {
+    max-inline-size: var(--measure);
+  }
+}

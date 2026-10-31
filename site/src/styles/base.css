@@ -1,0 +1,114 @@
+/*
+ * Element defaults (SPEC.md §9.6). Reads semantic and component tokens only.
+ */
+@layer base {
+  html {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 100%;
+    font-weight: var(--font-weight-body);
+    line-height: var(--leading-body);
+  }
+
+  /* A scoped theme paints its own surface, like <html> does. */
+  [data-theme] {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  body {
+    font-size: var(--text-body);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-label);
+    line-height: var(--leading-heading);
+  }
+
+  h1 { font-size: var(--text-h1); }
+  h2 { font-size: var(--text-h2); }
+  h3 { font-size: var(--text-h3); }
+  h4 { font-size: var(--text-h4); }
+
+  small {
+    font-size: var(--text-small);
+  }
+
+  a {
+    color: var(--color-accent);
+    text-decoration-thickness: var(--border-width);
+    text-underline-offset: var(--space-3xs);
+    transition: color var(--duration-quick);
+
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  hr {
+    border: 0;
+    border-block-start: var(--border-width) solid var(--color-border);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: var(--control-font);
+    line-height: var(--leading-ui);
+  }
+
+  button,
+  input:not([type='checkbox'], [type='radio']),
+  select,
+  textarea {
+    background: var(--control-bg);
+    color: var(--control-text);
+    border: var(--control-border);
+    border-radius: var(--control-radius);
+    padding: var(--control-padding-block) var(--control-padding-inline);
+    transition:
+      background-color var(--duration-quick),
+      color var(--duration-quick);
+  }
+
+  button {
+    cursor: pointer;
+
+    &:hover {
+      background: var(--color-bg);
+    }
+
+    &[aria-pressed='true'] {
+      background: var(--control-active-bg);
+      color: var(--control-active-text);
+    }
+  }
+
+  input[type='checkbox'],
+  input[type='radio'] {
+    accent-color: var(--color-accent);
+  }
+
+  ::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .icon {
+    display: inline-block;
+    inline-size: var(--icon-size);
+    block-size: var(--icon-size);
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+}

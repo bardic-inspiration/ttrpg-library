@@ -1,0 +1,57 @@
+/* Element reset (SPEC.md §9.6): remove browser inconsistencies, nothing more. */
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  html {
+    text-size-adjust: none;
+  }
+
+  body {
+    min-block-size: 100vb;
+  }
+
+  img,
+  picture,
+  svg,
+  video,
+  canvas {
+    display: block;
+    max-inline-size: 100%;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  fieldset {
+    padding: 0;
+    border: 0;
+    min-inline-size: 0;
+  }
+}

@@ -1,0 +1,31 @@
+/*
+ * Print and capture sizing per page size (SPEC.md §9.6, §10.4). Edit this
+ * file to change print density. The page dimensions and margins themselves
+ * live in config/export.json.
+ */
+@layer tokens {
+  :root,
+  [data-page-size='letter'] {
+    --print-font-size: 9.5pt;
+    --print-heading-size: 15pt;
+    --print-columns: 2;
+  }
+
+  [data-page-size='a4'] {
+    --print-font-size: 9.5pt;
+    --print-heading-size: 15pt;
+    --print-columns: 2;
+  }
+
+  [data-page-size='half-letter'] {
+    --print-font-size: 8.5pt;
+    --print-heading-size: 12pt;
+    --print-columns: 1;
+  }
+
+  [data-page-size='card-4x6'] {
+    --print-font-size: 8pt;
+    --print-heading-size: 11pt;
+    --print-columns: 1;
+  }
+}

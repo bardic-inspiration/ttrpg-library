@@ -1,0 +1,110 @@
+/*
+ * Primitives (SPEC.md §9.6): raw values only. Components never read these;
+ * semantic.css, components.css, content.css, and print.css map them to roles.
+ * Edit this file to change the palette or the scales themselves.
+ */
+@layer tokens {
+  :root {
+    /* Palette: warm paper and ink for light, night and bone for dark. */
+    --parchment-50: #fffaf0;
+    --parchment-100: #f6f0e1;
+    --parchment-400: #b9ab90;
+    --ink-400: #857865;
+    --ink-600: #5b5246;
+    --ink-900: #1f1a14;
+    --night-400: #8a7f6e;
+    --night-600: #4a4238;
+    --night-800: #211e1a;
+    --night-900: #161412;
+    --bone-100: #ede5d5;
+    --bone-400: #b3a892;
+
+    /* Hues: -700 reads on light surfaces, -300 on dark ones. */
+    --red-700: #8a1c1c;
+    --red-300: #e8806a;
+    --violet-700: #6b3fa0;
+    --violet-300: #c4a3f0;
+    --sea-700: #1f5f8b;
+    --sea-300: #7fb8e0;
+    --green-700: #2f6b2f;
+    --green-300: #8fcf8f;
+    --amber-700: #9a5200;
+    --amber-300: #f0b060;
+    --blue-700: #1d4ed8;
+    --blue-300: #93b4ff;
+
+    /* Font families: the Alegreya superfamily, self-hosted (§3.1). */
+    --family-serif: 'Alegreya', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    --family-serif-sc: 'Alegreya SC', 'Alegreya', Georgia, serif;
+    --family-sans: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
+
+    /* Font weights: only these are loaded. */
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-bold: 700;
+
+    /*
+     * Type scale: modular, ratio 1.2, fluid between 320px and 1280px wide.
+     * Step 0 is 1rem on phones and 1.125rem on wide screens.
+     */
+    --font-size--1: clamp(0.8333rem, 0.7986rem + 0.1736vw, 0.9375rem);
+    --font-size-0: clamp(1rem, 0.9583rem + 0.2083vw, 1.125rem);
+    --font-size-1: clamp(1.2rem, 1.15rem + 0.25vw, 1.35rem);
+    --font-size-2: clamp(1.44rem, 1.38rem + 0.3vw, 1.62rem);
+    --font-size-3: clamp(1.728rem, 1.656rem + 0.36vw, 1.944rem);
+    --font-size-4: clamp(2.0736rem, 1.9872rem + 0.432vw, 2.3328rem);
+    --font-size-5: clamp(2.4883rem, 2.3846rem + 0.5184vw, 2.7994rem);
+
+    /* Line heights. */
+    --leading-tight: 1.15;
+    --leading-snug: 1.3;
+    --leading-normal: 1.5;
+
+    /* Spacing scale. */
+    --size-1: 0.25rem;
+    --size-2: 0.5rem;
+    --size-3: 0.75rem;
+    --size-4: 1rem;
+    --size-5: 1.5rem;
+    --size-6: 2rem;
+    --size-7: 3rem;
+    --size-8: 4rem;
+
+    /* Measures and widths. */
+    --size-measure: 70ch;
+    --size-content: 80rem;
+    --size-card-min: 16rem;
+    --size-icon: 1.25em;
+
+    /* Line widths. */
+    --stroke-thin: 1px;
+    --stroke-medium: 2px;
+    --stroke-thick: 3px;
+
+    /* Radii. */
+    --radius-1: 2px;
+    --radius-2: 4px;
+    --radius-3: 8px;
+    --radius-pill: 999px;
+
+    /* Shadows. */
+    --shadow-1: 0 1px 2px rgb(31 26 20 / 0.12);
+    --shadow-2: 0 2px 8px rgb(31 26 20 / 0.16);
+
+    /* Durations. Every one becomes 0ms under reduced motion (§9.7). */
+    --duration-fast: 120ms;
+    --duration-normal: 200ms;
+    --duration-slow: 320ms;
+
+    /* Aspect ratios. */
+    --ratio-art: 4 / 3;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --duration-fast: 0ms;
+      --duration-normal: 0ms;
+      --duration-slow: 0ms;
+    }
+  }
+}

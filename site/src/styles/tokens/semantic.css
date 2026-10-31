@@ -1,0 +1,115 @@
+/*
+ * Semantic tokens (SPEC.md §9.6): what each role looks like, per theme.
+ * Components read these, never the primitives. Edit this file to change what a
+ * role looks like in light or dark.
+ *
+ * A theme is a block of tokens under [data-theme="…"]. The attribute sits on
+ * <html> (set by the theme toggle), or on any element to scope a theme to it,
+ * as the style guide's side-by-side view does. With no choice stored, the
+ * prefers-color-scheme block follows the system. The dark blocks apply on
+ * screen only, so print always renders with the light tokens.
+ *
+ * tests/contrast.test.ts checks the §9.7 contrast pairs in both themes, and
+ * that the system-dark block matches the explicit dark block.
+ */
+@layer tokens {
+  :root,
+  [data-theme='light'] {
+    color-scheme: light;
+    --color-bg: var(--parchment-100);
+    --color-surface: var(--parchment-50);
+    --color-text: var(--ink-900);
+    --color-text-muted: var(--ink-600);
+    --color-accent: var(--red-700);
+    --color-border: var(--parchment-400);
+    --color-control-border: var(--ink-400);
+    --color-focus: var(--blue-700);
+  }
+
+  @media screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      color-scheme: dark;
+      --color-bg: var(--night-900);
+      --color-surface: var(--night-800);
+      --color-text: var(--bone-100);
+      --color-text-muted: var(--bone-400);
+      --color-accent: var(--red-300);
+      --color-border: var(--night-600);
+      --color-control-border: var(--night-400);
+      --color-focus: var(--blue-300);
+    }
+  }
+
+  @media screen {
+    [data-theme='dark'] {
+      color-scheme: dark;
+      --color-bg: var(--night-900);
+      --color-surface: var(--night-800);
+      --color-text: var(--bone-100);
+      --color-text-muted: var(--bone-400);
+      --color-accent: var(--red-300);
+      --color-border: var(--night-600);
+      --color-control-border: var(--night-400);
+      --color-focus: var(--blue-300);
+    }
+  }
+
+  /*
+   * Roles shared by both themes. Repeated on [data-theme] so tokens built
+   * from theme colors (--focus-ring) re-resolve inside a scoped theme.
+   */
+  :root,
+  [data-theme] {
+    --font-heading: var(--family-serif-sc);
+    --font-body: var(--family-serif);
+    --font-ui: var(--family-sans);
+
+    --font-weight-body: var(--weight-regular);
+    --font-weight-label: var(--weight-medium);
+    --font-weight-strong: var(--weight-bold);
+
+    --text-small: var(--font-size--1);
+    --text-body: var(--font-size-0);
+    --text-h4: var(--font-size-1);
+    --text-h3: var(--font-size-2);
+    --text-h2: var(--font-size-3);
+    --text-h1: var(--font-size-4);
+    --text-display: var(--font-size-5);
+
+    --leading-body: var(--leading-normal);
+    --leading-heading: var(--leading-tight);
+    --leading-ui: var(--leading-snug);
+
+    --space-3xs: var(--size-1);
+    --space-2xs: var(--size-2);
+    --space-xs: var(--size-3);
+    --space-s: var(--size-4);
+    --space-m: var(--size-5);
+    --space-l: var(--size-6);
+    --space-xl: var(--size-7);
+    --space-2xl: var(--size-8);
+    --space-card: var(--size-4);
+
+    --measure: var(--size-measure);
+    --content-width: var(--size-content);
+    --icon-size: var(--size-icon);
+
+    --border-width: var(--stroke-thin);
+    --border-width-strong: var(--stroke-medium);
+
+    --radius-control: var(--radius-2);
+    --radius-card: var(--radius-3);
+    --radius-chip: var(--radius-pill);
+
+    --shadow-card: var(--shadow-1);
+    --shadow-raised: var(--shadow-2);
+
+    --duration-quick: var(--duration-fast);
+    --duration-base: var(--duration-normal);
+    --duration-gentle: var(--duration-slow);
+
+    --focus-ring-width: var(--stroke-medium);
+    --focus-ring-offset: var(--stroke-medium);
+    --focus-ring: var(--focus-ring-width) solid var(--color-focus);
+  }
+}

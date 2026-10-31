@@ -1,0 +1,70 @@
+/*
+ * Content tokens (SPEC.md §9.6): one accent per entry type and per item
+ * rarity, per theme. Edit this file to change type and rarity colors.
+ *
+ * Cards and stat blocks carry data-type (and data-rarity for items); the
+ * rules at the end map those attributes to --accent. A new type needs one
+ * variable per theme here and one mapping rule; without them, it falls back
+ * to --color-accent. Theme blocks mirror semantic.css.
+ */
+@layer tokens {
+  :root,
+  [data-theme='light'] {
+    --accent-creature: var(--red-700);
+    --accent-magic-item: var(--violet-700);
+    --accent-spell: var(--sea-700);
+    --rarity-common: var(--ink-600);
+    --rarity-uncommon: var(--green-700);
+    --rarity-rare: var(--sea-700);
+    --rarity-very-rare: var(--violet-700);
+    --rarity-legendary: var(--amber-700);
+    --rarity-artifact: var(--red-700);
+  }
+
+  @media screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --accent-creature: var(--red-300);
+      --accent-magic-item: var(--violet-300);
+      --accent-spell: var(--sea-300);
+      --rarity-common: var(--bone-400);
+      --rarity-uncommon: var(--green-300);
+      --rarity-rare: var(--sea-300);
+      --rarity-very-rare: var(--violet-300);
+      --rarity-legendary: var(--amber-300);
+      --rarity-artifact: var(--red-300);
+    }
+  }
+
+  @media screen {
+    [data-theme='dark'] {
+      --accent-creature: var(--red-300);
+      --accent-magic-item: var(--violet-300);
+      --accent-spell: var(--sea-300);
+      --rarity-common: var(--bone-400);
+      --rarity-uncommon: var(--green-300);
+      --rarity-rare: var(--sea-300);
+      --rarity-very-rare: var(--violet-300);
+      --rarity-legendary: var(--amber-300);
+      --rarity-artifact: var(--red-300);
+    }
+  }
+
+  /* Attribute → accent. --accent always resolves, so components can use it. */
+  :root,
+  [data-theme],
+  [data-type],
+  [data-rarity] {
+    --accent: var(--color-accent);
+  }
+
+  [data-type='creature'] { --accent: var(--accent-creature); }
+  [data-type='magic-item'] { --accent: var(--accent-magic-item); }
+  [data-type='spell'] { --accent: var(--accent-spell); }
+
+  [data-rarity='common'] { --accent: var(--rarity-common); }
+  [data-rarity='uncommon'] { --accent: var(--rarity-uncommon); }
+  [data-rarity='rare'] { --accent: var(--rarity-rare); }
+  [data-rarity='very-rare'] { --accent: var(--rarity-very-rare); }
+  [data-rarity='legendary'] { --accent: var(--rarity-legendary); }
+  [data-rarity='artifact'] { --accent: var(--rarity-artifact); }
+}

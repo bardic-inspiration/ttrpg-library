@@ -15,6 +15,9 @@ site/public/data/
 playwright-report/
 test-results/
 
+# Visual snapshots from `npm run snapshots` (SPEC.md §9.8)
+snapshots/
+
 # Environment
 .env
 .env.*

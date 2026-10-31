@@ -1,0 +1,319 @@
+---
+// The style guide (SPEC.md §9.8): every token, the type scale and typefaces,
+// controls, badges, and templates, in both themes side by side. Not linked
+// in navigation and kept out of search indexes. Edit a token under
+// `npm run dev` and every surface here updates at once.
+//
+// Gallery cards and filter controls join this page with the gallery (#11);
+// template modes and print previews with the detail pages and exports.
+import Base from '../layouts/Base.astro';
+import CreatureStatBlock from '../components/templates/CreatureStatBlock.astro';
+import SearchIcon from '../icons/Search';
+import FilterIcon from '../icons/Filter';
+import SortIcon from '../icons/Sort';
+import ThemeIcon from '../icons/Theme';
+import DownloadIcon from '../icons/Download';
+import PrintIcon from '../icons/Print';
+import CloseIcon from '../icons/Close';
+import { readTokens, resolveToken, themeTokens, tokensIn, type TokenDecl } from '../lib/design-tokens';
+import { loadEntries } from '../lib/library';
+import primitivesCss from '../styles/tokens/primitives.css?raw';
+import semanticCss from '../styles/tokens/semantic.css?raw';
+import componentsCss from '../styles/tokens/components.css?raw';
+import contentCss from '../styles/tokens/content.css?raw';
+import type { CreatureStats, DerivedCreature } from '../../../rulesets/dnd-5e-2024/types.ts';
+
+const semantic = readTokens(semanticCss);
+const content = readTokens(contentCss);
+const components = readTokens(componentsCss);
+const all: TokenDecl[] = [...readTokens(primitivesCss), ...semantic, ...content, ...components];
+const light = themeTokens(all, 'light');
+const dark = themeTokens(all, 'dark');
+const names = (decls: TokenDecl[], test: RegExp) =>
+  [...new Set(decls.filter((d) => d.scope !== 'other' && test.test(d.name)).map((d) => d.name))];
+
+const colorTokens = names(semantic, /^--color-/);
+const contentTokens = names(content, /^--(accent|rarity)-/);
+const fontTokens = names(semantic, /^--font-(heading|body|ui)$/);
+const textTokens = names(semantic, /^--text-/);
+const spaceTokens = names(semantic, /^--space-/);
+const radiusTokens = names(semantic, /^--radius-/);
+const shadowTokens = names(semantic, /^--shadow-/);
+const durationTokens = names(semantic, /^--duration-/);
+const componentTokens = [...tokensIn(components, 'base').entries()];
+
+const types = contentTokens.filter((n) => n.startsWith('--accent-')).map((n) => n.replace('--accent-', ''));
+const rarities = contentTokens.filter((n) => n.startsWith('--rarity-')).map((n) => n.replace('--rarity-', ''));
+const label = (slug: string) => slug.replace(/-/g, ' ');
+
+const icons = [
+  ['Search', SearchIcon], ['Filter', FilterIcon], ['Sort', SortIcon], ['Theme', ThemeIcon],
+  ['Download', DownloadIcon], ['Print', PrintIcon], ['Close', CloseIcon],
+] as const;
+
+const entries = loadEntries();
+const entryNames = new Map(entries.map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name]));
+const creatures = entries.filter(({ entry }) => entry.ruleset === 'dnd-5e-2024' && entry.type === 'creature');
+---
+<Base title="Style guide · TTRPG Content Library" noindex>
+  <h1>Style guide</h1>
+  <p class="measure">
+    Every token and rendered state on one page. The header toggle switches the
+    whole page; the samples below also show both themes side by side. To change
+    what you see, edit <code>site/src/styles/tokens/</code> (SPEC.md §9.8).
+  </p>
+
+  <section class="sg-section" aria-labelledby="sg-colors">
+    <h2 id="sg-colors">Colors</h2>
+    <h3>Semantic</h3>
+    <ul class="sg-swatches">
+      {colorTokens.map((name) => (
+        <li class="sg-swatch">
+          <span class="sg-swatch__chip" style={`background: var(${name})`}></span>
+          <code>{name}</code>
+          <small>{resolveToken(light, name)} / {resolveToken(dark, name)}</small>
+        </li>
+      ))}
+    </ul>
+    <h3>Types and rarities</h3>
+    <ul class="sg-swatches">
+      {contentTokens.map((name) => (
+        <li class="sg-swatch">
+          <span class="sg-swatch__chip" style={`background: var(${name})`}></span>
+          <code>{name}</code>
+          <small>{resolveToken(light, name)} / {resolveToken(dark, name)}</small>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="sg-section" aria-labelledby="sg-type">
+    <h2 id="sg-type">Typography</h2>
+    <h3>Typefaces</h3>
+    <ul class="sg-list">
+      {fontTokens.map((name) => (
+        <li><p class="sg-sample" style={`font-family: var(${name})`}>The ember hound bays at the cold stars.</p><code>{name}</code></li>
+      ))}
+      <li><p class="sg-sample sg-sample--italic">Italic lore text, as in a description.</p><code>--font-body, italic</code></li>
+    </ul>
+    <h3>Type scale</h3>
+    <ul class="sg-list">
+      {textTokens.map((name) => (
+        <li><p class="sg-sample" style={`font-size: var(${name})`}>Cinder Hound</p><code>{name}</code></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="sg-section" aria-labelledby="sg-scales">
+    <h2 id="sg-scales">Spacing, radii, shadows, durations</h2>
+    <ul class="sg-list">
+      {spaceTokens.map((name) => (
+        <li><span class="sg-bar" style={`inline-size: var(${name})`}></span><code>{name}</code> <small>{resolveToken(light, name)}</small></li>
+      ))}
+    </ul>
+    <ul class="sg-swatches">
+      {radiusTokens.map((name) => (
+        <li class="sg-swatch"><span class="sg-swatch__chip sg-swatch__chip--outline" style={`border-radius: var(${name})`}></span><code>{name}</code></li>
+      ))}
+      {shadowTokens.map((name) => (
+        <li class="sg-swatch"><span class="sg-swatch__chip sg-swatch__chip--surface" style={`box-shadow: var(${name})`}></span><code>{name}</code></li>
+      ))}
+    </ul>
+    <ul class="sg-list">
+      {durationTokens.map((name) => (
+        <li><code>{name}</code> <small>{resolveToken(light, name)} (0ms with reduced motion)</small></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="sg-section" aria-labelledby="sg-components">
+    <h2 id="sg-components">Component tokens</h2>
+    <table class="sg-table">
+      <thead><tr><th scope="col">Token</th><th scope="col">Defaults to</th></tr></thead>
+      <tbody>
+        {componentTokens.map(([name, value]) => <tr><td><code>{name}</code></td><td><code>{value}</code></td></tr>)}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sg-section" aria-labelledby="sg-samples">
+    <h2 id="sg-samples">Samples in both themes</h2>
+    <div class="sg-themes">
+      {(['light', 'dark'] as const).map((theme) => (
+        <div class="sg-theme" data-theme={theme}>
+          <h3>{theme === 'light' ? 'Light' : 'Dark'}</h3>
+          <p>Body text with a <a href="#sg-samples">link</a> and <span class="sg-muted">muted text</span>.</p>
+
+          <h4>Controls</h4>
+          <div class="cluster">
+            <button type="button">Button</button>
+            <button type="button" aria-pressed="true">Active</button>
+            <button type="button" class="sg-focused">Focused</button>
+            <button type="button" aria-label="Close"><CloseIcon /></button>
+          </div>
+          <div class="cluster">
+            <label>Search <input type="search" placeholder="Name, tag, or text" /></label>
+            <label><input type="checkbox" checked /> Selected</label>
+          </div>
+
+          <h4>Icons</h4>
+          <ul class="cluster sg-row sg-icons">
+            {icons.map(([name, IconComponent]) => <li><IconComponent /><small>{name}</small></li>)}
+          </ul>
+
+          <h4>Type and rarity badges</h4>
+          <ul class="cluster sg-row">
+            {types.map((type) => <li class="sg-badge" data-type={type}>{label(type)}</li>)}
+          </ul>
+          <ul class="cluster sg-row">
+            {rarities.map((rarity) => <li class="sg-badge" data-rarity={rarity}>{label(rarity)}</li>)}
+          </ul>
+
+          {creatures.map(({ entry, derived }) => (
+            <>
+              <h4>{entry.name}: creature stat block</h4>
+              <CreatureStatBlock
+                name={entry.name}
+                stats={entry.stats as CreatureStats}
+                derived={derived as unknown as DerivedCreature}
+                names={entryNames}
+              />
+            </>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  @layer components {
+    .sg-section {
+      display: grid;
+      gap: var(--space-s);
+      padding-block-start: var(--space-l);
+    }
+
+    .sg-swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-width)), 1fr));
+      gap: var(--space-s);
+      padding: 0;
+      list-style: none;
+    }
+
+    .sg-swatch {
+      display: grid;
+      gap: var(--space-3xs);
+      font-family: var(--font-ui);
+
+      & small {
+        color: var(--color-text-muted);
+      }
+    }
+
+    .sg-swatch__chip {
+      display: block;
+      block-size: var(--space-xl);
+      border: var(--border-width) solid var(--color-control-border);
+      border-radius: var(--radius-control);
+    }
+
+    .sg-swatch__chip--outline {
+      background: var(--color-surface);
+    }
+
+    .sg-swatch__chip--surface {
+      background: var(--color-surface);
+      border-color: var(--color-border);
+    }
+
+    .sg-list {
+      display: grid;
+      gap: var(--space-xs);
+      padding: 0;
+      list-style: none;
+    }
+
+    .sg-sample {
+      line-height: var(--leading-heading);
+    }
+
+    .sg-sample--italic {
+      font-style: italic;
+    }
+
+    .sg-bar {
+      display: inline-block;
+      block-size: var(--space-s);
+      background: var(--color-accent);
+      vertical-align: middle;
+      margin-inline-end: var(--space-2xs);
+    }
+
+    .sg-table {
+      font-family: var(--font-ui);
+      font-size: var(--text-small);
+      display: block;
+      overflow-x: auto;
+
+      & th,
+      & td {
+        text-align: start;
+        padding: var(--space-3xs) var(--space-2xs);
+        border-block-end: var(--border-width) solid var(--color-border);
+      }
+    }
+
+    .sg-themes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--page-width) / 3)), 1fr));
+      gap: var(--grid-gap);
+    }
+
+    .sg-theme {
+      display: grid;
+      align-content: start;
+      gap: var(--space-s);
+      padding: var(--card-padding);
+      border: var(--border-width) solid var(--card-border-color);
+      border-radius: var(--card-radius);
+    }
+
+    .sg-muted {
+      color: var(--color-text-muted);
+    }
+
+    .sg-focused {
+      outline: var(--focus-ring);
+      outline-offset: var(--focus-ring-offset);
+    }
+
+    .sg-icons {
+      padding: 0;
+      list-style: none;
+
+      & li {
+        display: grid;
+        justify-items: center;
+        gap: var(--space-3xs);
+      }
+    }
+
+    .sg-badge {
+      list-style: none;
+      font-family: var(--badge-font);
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-label);
+      text-transform: capitalize;
+      color: var(--badge-text);
+      border: var(--badge-border);
+      border-radius: var(--chip-radius);
+      padding: 0 var(--space-2xs);
+    }
+
+    .sg-row {
+      padding: 0;
+    }
+  }
+</style>

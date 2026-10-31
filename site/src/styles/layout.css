@@ -1,0 +1,53 @@
+/*
+ * Page shell (SPEC.md §9.6): header, main column, footer. Widths and gutters
+ * come from components.css.
+ */
+@layer layout {
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .site-header,
+  .site-main,
+  .site-footer {
+    padding-inline: var(--page-gutter);
+  }
+
+  .site-header {
+    background: var(--header-bg);
+    border-block-end: var(--border-width) solid var(--header-border-color);
+    padding-block: var(--space-xs);
+  }
+
+  .site-main {
+    flex: 1;
+    padding-block: var(--space-l);
+  }
+
+  .site-footer {
+    color: var(--footer-text-color);
+    font-size: var(--text-small);
+    border-block-start: var(--border-width) solid var(--header-border-color);
+    padding-block: var(--space-m);
+  }
+
+  .site-header__inner,
+  .site-main__inner,
+  .site-footer__inner {
+    max-inline-size: var(--page-width);
+    margin-inline: auto;
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-xs);
+  }
+
+  .site-main__inner > * + * {
+    margin-block-start: var(--space-s);
+  }
+}
