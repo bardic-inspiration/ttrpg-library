@@ -1,0 +1,280 @@
+{
+  "source": "SRD 5.2, \"Monsters\": Challenge Rating table (Experience Points by Challenge Rating, Proficiency Bonus by Challenge Rating); \"Creature Size\" table; \"Skills\" table.",
+  "challengeRatings": [
+    {
+      "cr": 0,
+      "xp": 0,
+      "xpWithDamage": 10,
+      "pb": 2
+    },
+    {
+      "cr": 0.125,
+      "xp": 25,
+      "pb": 2
+    },
+    {
+      "cr": 0.25,
+      "xp": 50,
+      "pb": 2
+    },
+    {
+      "cr": 0.5,
+      "xp": 100,
+      "pb": 2
+    },
+    {
+      "cr": 1,
+      "xp": 200,
+      "pb": 2
+    },
+    {
+      "cr": 2,
+      "xp": 450,
+      "pb": 2
+    },
+    {
+      "cr": 3,
+      "xp": 700,
+      "pb": 2
+    },
+    {
+      "cr": 4,
+      "xp": 1100,
+      "pb": 2
+    },
+    {
+      "cr": 5,
+      "xp": 1800,
+      "pb": 3
+    },
+    {
+      "cr": 6,
+      "xp": 2300,
+      "pb": 3
+    },
+    {
+      "cr": 7,
+      "xp": 2900,
+      "pb": 3
+    },
+    {
+      "cr": 8,
+      "xp": 3900,
+      "pb": 3
+    },
+    {
+      "cr": 9,
+      "xp": 5000,
+      "pb": 4
+    },
+    {
+      "cr": 10,
+      "xp": 5900,
+      "pb": 4
+    },
+    {
+      "cr": 11,
+      "xp": 7200,
+      "pb": 4
+    },
+    {
+      "cr": 12,
+      "xp": 8400,
+      "pb": 4
+    },
+    {
+      "cr": 13,
+      "xp": 10000,
+      "pb": 5
+    },
+    {
+      "cr": 14,
+      "xp": 11500,
+      "pb": 5
+    },
+    {
+      "cr": 15,
+      "xp": 13000,
+      "pb": 5
+    },
+    {
+      "cr": 16,
+      "xp": 15000,
+      "pb": 5
+    },
+    {
+      "cr": 17,
+      "xp": 18000,
+      "pb": 6
+    },
+    {
+      "cr": 18,
+      "xp": 20000,
+      "pb": 6
+    },
+    {
+      "cr": 19,
+      "xp": 22000,
+      "pb": 6
+    },
+    {
+      "cr": 20,
+      "xp": 25000,
+      "pb": 6
+    },
+    {
+      "cr": 21,
+      "xp": 33000,
+      "pb": 7
+    },
+    {
+      "cr": 22,
+      "xp": 41000,
+      "pb": 7
+    },
+    {
+      "cr": 23,
+      "xp": 50000,
+      "pb": 7
+    },
+    {
+      "cr": 24,
+      "xp": 62000,
+      "pb": 7
+    },
+    {
+      "cr": 25,
+      "xp": 75000,
+      "pb": 8
+    },
+    {
+      "cr": 26,
+      "xp": 90000,
+      "pb": 8
+    },
+    {
+      "cr": 27,
+      "xp": 105000,
+      "pb": 8
+    },
+    {
+      "cr": 28,
+      "xp": 120000,
+      "pb": 8
+    },
+    {
+      "cr": 29,
+      "xp": 135000,
+      "pb": 9
+    },
+    {
+      "cr": 30,
+      "xp": 155000,
+      "pb": 9
+    }
+  ],
+  "sizes": {
+    "tiny": {
+      "hitDie": 4
+    },
+    "small": {
+      "hitDie": 6
+    },
+    "medium": {
+      "hitDie": 8
+    },
+    "large": {
+      "hitDie": 10
+    },
+    "huge": {
+      "hitDie": 12
+    },
+    "gargantuan": {
+      "hitDie": 20
+    }
+  },
+  "abilities": [
+    "str",
+    "dex",
+    "con",
+    "int",
+    "wis",
+    "cha"
+  ],
+  "abilityNames": {
+    "str": "Strength",
+    "dex": "Dexterity",
+    "con": "Constitution",
+    "int": "Intelligence",
+    "wis": "Wisdom",
+    "cha": "Charisma"
+  },
+  "skills": {
+    "acrobatics": "dex",
+    "animal-handling": "wis",
+    "arcana": "int",
+    "athletics": "str",
+    "deception": "cha",
+    "history": "int",
+    "insight": "wis",
+    "intimidation": "cha",
+    "investigation": "int",
+    "medicine": "wis",
+    "nature": "int",
+    "perception": "wis",
+    "performance": "cha",
+    "persuasion": "cha",
+    "religion": "int",
+    "sleight-of-hand": "dex",
+    "stealth": "dex",
+    "survival": "wis"
+  },
+  "damageTypes": [
+    "acid",
+    "bludgeoning",
+    "cold",
+    "fire",
+    "force",
+    "lightning",
+    "necrotic",
+    "piercing",
+    "poison",
+    "psychic",
+    "radiant",
+    "slashing",
+    "thunder"
+  ],
+  "conditions": [
+    "blinded",
+    "charmed",
+    "deafened",
+    "exhaustion",
+    "frightened",
+    "grappled",
+    "incapacitated",
+    "invisible",
+    "paralyzed",
+    "petrified",
+    "poisoned",
+    "prone",
+    "restrained",
+    "stunned",
+    "unconscious"
+  ],
+  "creatureTypes": [
+    "aberration",
+    "beast",
+    "celestial",
+    "construct",
+    "dragon",
+    "elemental",
+    "fey",
+    "fiend",
+    "giant",
+    "humanoid",
+    "monstrosity",
+    "ooze",
+    "plant",
+    "undead"
+  ]
+}

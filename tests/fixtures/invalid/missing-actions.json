@@ -1,0 +1,70 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "cinder-hound",
+  "name": "Cinder Hound",
+  "summary": "A soot-black hunting hound that exhales a cone of embers and tracks prey by the smell of smoke.",
+  "description": "Bred in the forges of fire-touched cults, cinder hounds leave scorched paw prints that smolder for an hour.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 14,
+      "int": 4,
+      "wis": 12,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "list": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Smoldering Hide",
+        "kind": "other",
+        "text": "A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes {dmg:1d4:fire}."
+      }
+    ]
+  },
+  "tags": {
+    "theme": "fire",
+    "environment": [
+      "underdark",
+      "mountains"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-10-31",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        6
+      ]
+    }
+  }
+}

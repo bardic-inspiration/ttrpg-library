@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/envelope.schema.json",
+  "title": "Entry envelope (SPEC.md §5.1)",
+  "description": "Fixed keys, tags, meta, and image for every entry in every ruleset. `stats` is validated by the ruleset's type schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ruleset", "type", "id", "name", "summary", "stats", "meta"],
+  "properties": {
+    "ruleset": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "type": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 3, "maxLength": 64 },
+    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "summary": { "type": "string", "minLength": 10, "maxLength": 160 },
+    "description": { "type": "string", "minLength": 1 },
+    "stats": { "type": "object" },
+    "tags": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": {
+        "anyOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "boolean" },
+          { "type": "array", "items": { "type": "string" } }
+        ]
+      }
+    },
+    "image": { "type": "string", "pattern": "^assets/images/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+\\.(png|jpg|webp)$" },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdAt", "source"],
+      "properties": {
+        "createdAt": { "type": "string", "format": "date" },
+        "updatedAt": { "type": "string", "format": "date" },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind"],
+          "properties": {
+            "kind": { "enum": ["routine", "revise", "manual"] },
+            "issues": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+            "gapFill": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}

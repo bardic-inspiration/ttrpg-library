@@ -1,0 +1,27 @@
+{
+  "dnd-5e-2024": {
+    "label": "D&D 5e (SRD 5.2)",
+    "attribution": "srd-5.2",
+    "types": {
+      "creature": {
+        "label": "Creature",
+        "plural": "Creatures",
+        "template": "creature-stat-block",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/creature.md",
+        "facets": [
+          { "path": "stats.cr", "label": "CR", "kind": "range", "format": "cr" },
+          { "path": "stats.size", "label": "Size", "kind": "enum" },
+          { "path": "stats.creatureType", "label": "Creature type", "kind": "enum" },
+          { "path": "stats.abilities.str", "label": "STR", "kind": "range" },
+          { "path": "derived.hp.average", "label": "HP", "kind": "range" },
+          { "path": "derived.xp", "label": "XP", "kind": "range" }
+        ],
+        "cardFields": ["stats.cr", "stats.size", "stats.creatureType"],
+        "defaultSort": "stats.cr:asc",
+        "defaultFilters": ["stats.cr", "stats.creatureType", "tags.theme"],
+        "summaryField": "stats.cr",
+        "gapBuckets": { "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }
+      }
+    }
+  }
+}
