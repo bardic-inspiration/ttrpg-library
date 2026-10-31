@@ -1,0 +1,38 @@
+# Lane and area labels (SPEC.md §12.4), applied by workflows/labeler.yml.
+# `migration` is never applied here: it is a deliberate, manual decision.
+
+content:
+  - head-branch: ['^gen/', '^revise/', '^manual/']
+
+dev:
+  - head-branch: ['^dev/', '^dependabot/']
+
+# Area labels apply to dev-lane PRs only.
+ui:
+  - all:
+      - head-branch: ['^dev/', '^dependabot/']
+      - changed-files:
+          - any-glob-to-any-file: 'site/**'
+
+ruleset:
+  - all:
+      - head-branch: ['^dev/', '^dependabot/']
+      - changed-files:
+          # Some file under rulesets/ that isn't a guideline.
+          - all-globs-to-any-file: ['rulesets/**', '!rulesets/*/guidelines/**']
+
+generation:
+  - all:
+      - head-branch: ['^dev/', '^dependabot/']
+      - changed-files:
+          - any-glob-to-any-file:
+              - 'rulesets/*/guidelines/**'
+              - '.claude/skills/**'
+              - 'config/defaults.json'
+              - 'docs/routines.md'
+
+ci:
+  - all:
+      - head-branch: ['^dev/', '^dependabot/']
+      - changed-files:
+          - any-glob-to-any-file: '.github/**'
