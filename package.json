@@ -10,6 +10,7 @@
   "scripts": {
     "validate": "tsx scripts/validate/cli.ts",
     "build:index": "tsx scripts/build-index/cli.ts",
+    "gap-fill": "tsx scripts/generate/gap-cli.ts",
     "build": "npm run build:index && astro build --root site",
     "dev": "astro dev --root site",
     "check": "tsc --noEmit && astro check --root site && stylelint \"site/src/**/*.{css,astro}\"",

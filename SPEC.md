@@ -138,7 +138,7 @@ ttrpg-library/
 │   ├── lane/                               lane rules for the `lane` CI job (§12.4)
 │   ├── build-index/                        content → library.json and data/ copies (CLI, builder, schema walk)
 │   ├── pr-summary/                         job summary for changed entries
-│   ├── generate/                           generation helpers: defaults and how a request takes them (§8.3)
+│   ├── generate/                           generation helpers: defaults and how a request takes them (§8.3), the gap-fill picker (§7.1)
 │   ├── serve/                              static server for site/dist under the site base
 │   └── a11y/                               axe checks on the built site (§9.7)
 ├── site/                                   Astro project
@@ -172,7 +172,7 @@ ttrpg-library/
 
 `library.json` is built in CI and git-ignored, so pull requests contain only entry files (and, in revise or dependency cases, the files they touch).
 
-npm scripts: `validate`, `build:index`, `dev`, `build` (runs `build:index` then `astro build`), `test` (Vitest, including contrast), `check` (types, `astro check`, Stylelint), `a11y` (Playwright + axe against the built site), `snapshots` (on-demand visual captures).
+npm scripts: `validate`, `build:index`, `gap-fill` (the gap-fill picker, §8.2 step 5), `dev`, `build` (runs `build:index` then `astro build`), `test` (Vitest, including contrast), `check` (types, `astro check`, Stylelint), `a11y` (Playwright + axe against the built site), `snapshots` (on-demand visual captures).
 
 ## 5. Content model
 
@@ -668,7 +668,7 @@ Ordered enums (rarity, size) declare their order in the facet as `"order": [...]
 }
 ```
 
-An entry belongs to a bucket when its value on every axis falls in that bucket's bin or equals its value. An entry with no value on an axis belongs to no bucket. A bucket's **label**, recorded in `meta.source.gapFill` (§5.4) and named in the PR body (§8.4), joins one `<path>=<value>` per axis with `&`, in axis order. A bin reads as `min..max`, as in a gallery range (§9.3), and a categorical value reads as itself: `stats.cr=2..4`, `stats.rarity=rare`, `stats.level=1..3&stats.school=evocation`. With `f.` before each path, a label is a gallery query that shows the bucket's entries.
+An entry belongs to a bucket when its value on every axis falls in that bucket's bin or equals its value. An entry with no value on an axis belongs to no bucket, and one whose value on a categorical axis is a list belongs to each bucket whose value the list holds. A bucket's **label**, recorded in `meta.source.gapFill` (§5.4) and named in the PR body (§8.4), joins one `<path>=<value>` per axis with `&`, in axis order. A bin reads as `min..max`, as in a gallery range (§9.3), and a categorical value reads as itself: `stats.cr=2..4`, `stats.rarity=rare`, `stats.level=1..3&stats.school=evocation`. With `f.` before each path, a label is a gallery query that shows the bucket's entries.
 
 ## 8. Generation and revision
 
@@ -708,7 +708,7 @@ Every run, scheduled or manual, follows the same sequence so that review feedbac
 2. **Revisions first.** For each open PR on a `gen/` or `revise/` branch, find owner comments not yet handled (§8.5) and invoke the `revise` skill. Push, reply, continue.
 3. **Revise requests.** Take open `revise` issues; each becomes a small PR.
 4. **Content requests.** Pick open `request` issues without `in-progress` or `needs-info`, `priority:high` first, then oldest. Group issues into one batch while the total count is ≤ `maxBatch`. Claim each with the `in-progress` label and a short comment.
-5. **Gap-fill.** If no requests were picked and `gapFill.enabled`, choose the type and bucket with the fewest entries (ties go to the type with the fewest entries overall) and generate `gapFill.count` entries for it.
+5. **Gap-fill.** If no requests were picked and `gapFill.enabled`, choose the type and bucket with the fewest entries (ties go to the type with the fewest entries overall, then to the type listed first in `config/types.json`; ties within a type go to the first bucket in `gapBuckets` order, first axis outermost) and generate `gapFill.count` entries for it. `npm run gap-fill` (`scripts/generate/gap.ts`) makes this choice among the types of `defaults.ruleset`: it reads `site/public/library.json` and `config/types.json`, and prints the type and the bucket label (§7.1), as in `spell stats.level=0..0&stats.school=abjuration`.
 6. **Ambiguity.** If a request cannot be fulfilled as written (contradictory constraints, unknown type), comment a single question on the issue, add `needs-info`, remove `in-progress`, and move on.
 7. **Stale claims.** An `in-progress` issue with no open linked PR after 24 hours is treated as unclaimed.
 
