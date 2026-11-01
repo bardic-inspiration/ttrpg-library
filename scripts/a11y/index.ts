@@ -1,9 +1,10 @@
 // Which pages `npm run a11y` checks (SPEC.md §9.7), read from the built
-// library.json: the home page, a type gallery with a filter applied, and one
-// detail page per type that has an entry. A type with no entries has no
-// detail page to check yet. The print view joins once it exists (§10.4).
+// library.json: the home page, a type gallery with a filter applied, one
+// detail page per type that has an entry, and the print view (§10.4) showing
+// those same entries. A type with no entries has no detail page to check yet.
 
 export interface IndexRecord {
+  id: string;
   type: string;
   ruleset: string;
   name: string;
@@ -15,6 +16,8 @@ export interface A11yPage {
   label: string;
   /** Path under the site base, with any query string. */
   path: string;
+  /** A selector to wait for before checking, for content the page loads itself. */
+  ready?: string;
 }
 
 const SITE_PATH = /^\/[^/]+\//; // the site base, which `url` in library.json starts with
@@ -39,8 +42,16 @@ export function a11yPages(records: IndexRecord[]): A11yPage[] {
       path: `${first.ruleset}/${first.type}/${filter ? `?${filter}` : ''}`,
     });
   }
-  for (const record of firstOfEachType(records)) {
+  const firsts = firstOfEachType(records);
+  for (const record of firsts) {
     pages.push({ label: `${record.type} detail: ${record.name}`, path: detailPath(record) });
+  }
+  if (firsts.length > 0) {
+    pages.push({
+      label: `print view: ${firsts.map((r) => r.name).join(', ')}`,
+      path: `print/?ids=${firsts.map((r) => encodeURIComponent(r.id)).join(',')}`,
+      ready: '.print-entry',
+    });
   }
   return pages;
 }

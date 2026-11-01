@@ -1,5 +1,5 @@
 // Default browser IO for exporters: fetch, a Blob download through a
-// temporary link, the clock, and a DOM capture of the detail page's capture
+// temporary link, the clock, opening a page, and a DOM capture of the detail page's capture
 // source (loaded only when a capture runs).
 import type { ExportFile, ExportIO, ExportOptions } from './types.ts';
 
@@ -16,12 +16,18 @@ export function downloadFile(file: ExportFile): void {
   setTimeout(() => URL.revokeObjectURL(href), 0);
 }
 
+/** Opens a site page in a new tab, or in this one when the browser blocks the tab. */
+export function openPage(url: string): void {
+  if (!window.open(url, '_blank')) window.location.assign(url);
+}
+
 export function resolveIO(options: ExportOptions): ExportIO {
   return {
     fetch: (url) => fetch(url),
     download: downloadFile,
     now: () => new Date(),
     capture: async (request) => (await import('../lib/capture.ts')).captureEntry(request),
+    open: openPage,
     ...options.io,
   };
 }

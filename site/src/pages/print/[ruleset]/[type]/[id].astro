@@ -1,0 +1,28 @@
+---
+// An entry's print fragment (SPEC.md §10.4): bare markup, with no page shell,
+// that the print view (`/print/`) fetches and inserts. Served at
+// `print/<ruleset>/<type>/<id>/`, so a print run loads only the entries it
+// names. The print view's page carries the styles.
+import type { GetStaticPaths } from 'astro';
+import PrintEntry from '../../../../components/print/PrintEntry.astro';
+import { entryNames, loadEntries, type LoadedEntry } from '../../../../lib/library';
+
+export const partial = true;
+
+export const getStaticPaths = (() => {
+  const all = loadEntries();
+  const names = entryNames(all);
+  return all.map((loaded) => ({
+    params: { ruleset: loaded.entry.ruleset, type: loaded.entry.type, id: loaded.entry.id },
+    props: { loaded, names },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  loaded: LoadedEntry;
+  names: Map<string, string>;
+}
+
+const { loaded, names } = Astro.props;
+---
+<PrintEntry loaded={loaded} names={names} />

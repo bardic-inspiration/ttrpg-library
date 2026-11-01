@@ -1,0 +1,54 @@
+---
+// One entry as the print view shows it (SPEC.md §10.4): the type template in
+// `print` mode, sized by the page-size tokens in tokens/print.css. Two
+// columns on Letter and A4, one with smaller type on the smaller sizes; no
+// action or trait is split across a column or page. The print fragments and
+// the style guide's print previews both render this.
+import type { LoadedEntry } from '../../lib/library';
+import EntryTemplate from '../templates/EntryTemplate.astro';
+
+interface Props {
+  loaded: LoadedEntry;
+  /** `<type>/<id>` → entry name. */
+  names: Map<string, string>;
+  /** Heading level of the entry name. Default 2, under the print view's `h1`. */
+  level?: number;
+}
+
+const { loaded, names, level = 2 } = Astro.props;
+const { entry, derived } = loaded;
+---
+<article class="print-entry" data-id={entry.id} data-name={entry.name} data-type={entry.type}>
+  <EntryTemplate entry={entry} derived={derived} names={names} mode="print" level={level} />
+</article>
+
+<style>
+  @layer components {
+    .print-entry {
+      --text-body: var(--print-font-size);
+      --text-small: var(--print-small-size);
+      --text-h4: var(--print-section-size);
+      --text-h3: var(--print-heading-size);
+
+      font-size: var(--text-body);
+
+      & :global(.statblock) {
+        max-inline-size: none;
+        columns: var(--print-columns);
+        column-gap: var(--statblock-column-gap);
+      }
+
+      & :global(.statblock-header),
+      & :global(.action-list__heading),
+      & :global(.action-list__item),
+      & :global(.property-list),
+      & :global(.ability-table) {
+        break-inside: avoid;
+      }
+
+      & :global(.action-list__heading) {
+        break-after: avoid;
+      }
+    }
+  }
+</style>

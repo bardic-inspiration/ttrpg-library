@@ -1,0 +1,29 @@
+---
+// The print view (SPEC.md §9.2, §10.4): `/print/?ids=a,b&size=letter` or
+// `/print/?<gallery query>&size=letter`. The island fetches each entry's print
+// fragment; this page carries their styles, since a fragment has no shell.
+// In print, only the entries and the site footer's full SRD attribution show.
+import Base from '../../layouts/Base.astro';
+import PrintView from '../../components/print/PrintView';
+import { url } from '../../lib/url';
+// Imported for its styles (and the templates' styles), which the fragments rely on.
+import PrintEntry from '../../components/print/PrintEntry.astro';
+
+void PrintEntry;
+---
+<Base title="Print · TTRPG Content Library" noindex>
+  <h1 class="print-page__title">Print</h1>
+  <noscript><p>The print view needs JavaScript to load its entries.</p></noscript>
+  <PrintView client:load base={url()} />
+</Base>
+
+<style>
+  @layer components {
+    @media print {
+      :global(.site-header),
+      .print-page__title {
+        display: none;
+      }
+    }
+  }
+</style>

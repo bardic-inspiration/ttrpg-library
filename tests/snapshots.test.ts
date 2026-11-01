@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { defaultLabel, isValidLabel, snapshotPages } from '../scripts/snapshots/index.ts';
 
 const record = (ruleset: string, type: string, id: string) => ({
+  id,
   ruleset,
   type,
   name: id,

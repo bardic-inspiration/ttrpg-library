@@ -27,12 +27,16 @@ async function renderBase(props: Record<string, unknown>): Promise<string> {
 }
 
 describe('site shell (SPEC.md §9.2, §11)', () => {
-  it('every page renders in the Base layout', async () => {
+  it('every page renders in the Base layout, except the print fragments (§10.4)', async () => {
     const pages = (await readdir(PAGES, { recursive: true })).filter((f) => f.endsWith('.astro'));
     expect(pages).toContain('about.astro');
+    const partials: string[] = [];
     for (const page of pages) {
-      expect(await readFile(join(PAGES, page), 'utf8'), page).toMatch(/import Base from '(\.\.\/)+layouts\/Base\.astro'/);
+      const source = await readFile(join(PAGES, page), 'utf8');
+      if (/^export const partial = true;$/m.test(source)) partials.push(page);
+      else expect(source, page).toMatch(/import Base from '(\.\.\/)+layouts\/Base\.astro'/);
     }
+    expect(partials).toEqual([join('print', '[ruleset]', '[type]', '[id].astro')]);
   });
 
   it('the layout carries the SRD 5.2 attribution statement verbatim', async () => {

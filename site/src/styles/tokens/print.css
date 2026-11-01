@@ -1,31 +1,44 @@
 /*
  * Print and capture sizing per page size (SPEC.md §9.6, §10.4). Edit this
  * file to change print density. The page dimensions and margins themselves
- * live in config/export.json.
+ * live in config/export.json. `--print-columns` sets the stat block in two
+ * columns on Letter and A4 and one on the smaller sizes.
  */
 @layer tokens {
   :root,
   [data-page-size='letter'] {
     --print-font-size: 9.5pt;
+    --print-small-size: 8.5pt;
+    --print-section-size: 11pt;
     --print-heading-size: 15pt;
+    --print-footer-size: 7pt;
     --print-columns: 2;
   }
 
   [data-page-size='a4'] {
     --print-font-size: 9.5pt;
+    --print-small-size: 8.5pt;
+    --print-section-size: 11pt;
     --print-heading-size: 15pt;
+    --print-footer-size: 7pt;
     --print-columns: 2;
   }
 
   [data-page-size='half-letter'] {
     --print-font-size: 8.5pt;
+    --print-small-size: 7.5pt;
+    --print-section-size: 9.5pt;
     --print-heading-size: 12pt;
+    --print-footer-size: 6.5pt;
     --print-columns: 1;
   }
 
   [data-page-size='card-4x6'] {
     --print-font-size: 8pt;
+    --print-small-size: 7pt;
+    --print-section-size: 9pt;
     --print-heading-size: 11pt;
+    --print-footer-size: 6pt;
     --print-columns: 1;
   }
 }
