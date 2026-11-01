@@ -2,9 +2,10 @@
 // exporters, in button order, by id.
 import config from '../../../config/export.json' with { type: 'json' };
 import { json } from './json.ts';
+import { png } from './png.ts';
 import type { ExportScope, Exporter } from './types.ts';
 
-export const modules: Record<string, Exporter> = { json };
+export const modules: Record<string, Exporter> = { json, png };
 
 /** The exporters named by `ids`, in order. An unknown id is a build error. */
 export function exportersFor(ids: string[], scope?: ExportScope): Exporter[] {
@@ -20,4 +21,4 @@ export function exportersFor(ids: string[], scope?: ExportScope): Exporter[] {
 /** The configured exporters, optionally only those offering `scope`. */
 export const configuredExporters = (scope?: ExportScope): Exporter[] => exportersFor(config.exporters, scope);
 
-export type { ExportItem, ExportOptions, ExportScope, Exporter } from './types.ts';
+export type { CaptureRequest, ExportItem, ExportOptions, ExportScope, Exporter } from './types.ts';

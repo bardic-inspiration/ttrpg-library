@@ -1,5 +1,6 @@
 // Default browser IO for exporters: fetch, a Blob download through a
-// temporary link, and the clock.
+// temporary link, the clock, and a DOM capture of the detail page's capture
+// source (loaded only when a capture runs).
 import type { ExportFile, ExportIO, ExportOptions } from './types.ts';
 
 export function downloadFile(file: ExportFile): void {
@@ -20,6 +21,7 @@ export function resolveIO(options: ExportOptions): ExportIO {
     fetch: (url) => fetch(url),
     download: downloadFile,
     now: () => new Date(),
+    capture: async (request) => (await import('../lib/capture.ts')).captureEntry(request),
     ...options.io,
   };
 }

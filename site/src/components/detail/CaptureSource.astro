@@ -1,0 +1,67 @@
+---
+// The PNG exporter's capture source (SPEC.md §10.3): the entry's type
+// template in `capture` mode with the light tokens, its art when present (the
+// placeholder is left out), and the short SRD attribution in a footer. It sits
+// in a <template>, so it is inert and outside the accessibility tree until the
+// exporter clones it off-screen (site/src/lib/capture.ts).
+import type { LoadedEntry } from '../../lib/library';
+import { isWide } from '../../exporters/png';
+import { url } from '../../lib/url';
+import ArtFrame from '../templates/parts/ArtFrame.astro';
+import EntryTemplate from '../templates/EntryTemplate.astro';
+
+interface Props {
+  loaded: LoadedEntry;
+  /** `<type>/<id>` → entry name. */
+  names: Map<string, string>;
+}
+
+const { loaded, names } = Astro.props;
+const { entry, derived } = loaded;
+---
+<template data-capture={entry.id}>
+  <div class="capture" data-theme="light" data-type={entry.type} data-wide={isWide(entry) ? '' : undefined}>
+    {entry.image && <ArtFrame name={entry.name} typeLabel={entry.type} src={url(entry.image)} />}
+    <EntryTemplate entry={entry} derived={derived} names={names} mode="capture" level={2} />
+    <p class="capture__footer">Includes SRD 5.2 material, CC-BY-4.0</p>
+  </div>
+</template>
+
+<style>
+  @layer components {
+    :global(.capture-host) {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      translate: -100% 0;
+      pointer-events: none;
+    }
+
+    .capture {
+      display: grid;
+      gap: var(--space-xs);
+      padding: var(--space-s);
+      background: var(--color-bg);
+      color: var(--color-text);
+
+      & :global(.statblock) {
+        max-inline-size: none;
+      }
+
+      &[data-wide] :global(.statblock) {
+        columns: 2;
+        column-gap: var(--statblock-column-gap);
+
+        & > :global(*) {
+          break-inside: avoid;
+        }
+      }
+    }
+
+    .capture__footer {
+      font-family: var(--font-ui);
+      font-size: var(--text-small);
+      color: var(--color-text-muted);
+    }
+  }
+</style>

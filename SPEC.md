@@ -955,7 +955,7 @@ interface Exporter {
 }
 ```
 
-`ExportOptions` carries the `scope` being run and the site `base` URL (ending in `/`), plus optional injected browser IO (fetch, download, clock) so exporters are testable without a DOM. The registry (`site/src/exporters/index.ts`) maps the ids in `config/export.json` to modules, in config order; an id without a module is a build error. The detail page and the gallery build their controls from the configured exporters offering the scope they need.
+`ExportOptions` carries the `scope` being run and the site `base` URL (ending in `/`), plus optional injected browser IO (fetch, download, clock, capture) so exporters are testable without a DOM. The registry (`site/src/exporters/index.ts`) maps the ids in `config/export.json` to modules, in config order; an id without a module is a build error. The detail page and the gallery build their controls from the configured exporters offering the scope they need.
 
 Future translators (Foundry VTT, Open5e, and other open formats) are additional exporters that map an entry and its derived values to the target format. Most target formats store computed numbers, so translators read `derived` rather than recomputing. No gallery code changes are needed to add one.
 
@@ -967,10 +967,11 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 
 ### 10.3 PNG
 
-- Renders the type template in `capture` mode at a fixed CSS width from config, off-screen, then captures it with `html-to-image` at the configured scale.
+- Renders the type template in `capture` mode at a fixed CSS width from config (`png.width`, or `png.wideWidth` per §10.5), off-screen, then captures it with `html-to-image` at the configured scale.
+- The capture source is built with the detail page: a `<template data-capture="<id>">` (`components/detail/CaptureSource.astro`) holding the art when present, the template in `capture` mode, and the §11 short attribution as a footer, all under `data-theme="light"` (§9.6). Being a `<template>`, it is inert and outside the accessibility tree. At export, `site/src/lib/capture.ts` clones it into an off-screen host at the chosen width, waits for fonts and art, captures it, and removes the host; `html-to-image` loads only then. A wide capture sets the stat block in two columns, with no section split across them.
 - Includes art when present and omits the placeholder.
 - Fonts are self-hosted and embedded so the capture matches the screen.
-- Filename `<id>.png`. Entry scope only in v1.
+- Filename `<id>.png`. Entry scope only in v1. If the capture fails, nothing downloads.
 
 ### 10.4 Print (PDF)
 
