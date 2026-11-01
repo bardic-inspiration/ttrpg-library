@@ -1,0 +1,54 @@
+# Content lane (SPEC.md §8.1). A routine picks this up; you review the PR.
+name: Content request
+description: Ask a routine to generate new entries.
+labels: [request]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A routine turns this into a content PR. Fields left blank take the
+        values in `config/defaults.json`.
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      description: The kind of entry to generate.
+      options:
+        - creature
+        - magic-item
+        - spell
+    validations:
+      required: true
+  - type: dropdown
+    id: count
+    attributes:
+      label: Count
+      description: How many entries. Leave blank for the default.
+      options: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+    validations:
+      required: false
+  - type: textarea
+    id: brief
+    attributes:
+      label: Brief
+      description: Theme, constraints, CR/level/rarity range, anything else.
+    validations:
+      required: true
+  - type: textarea
+    id: tags
+    attributes:
+      label: Tags
+      description: "One `key: value` per line; separate list values with commas."
+      placeholder: |
+        setting: drowned coast
+        theme: tides, salt
+    validations:
+      required: false
+  - type: input
+    id: ruleset
+    attributes:
+      label: Ruleset
+      description: A ruleset id from `config/types.json`. Leave blank for the default.
+      placeholder: dnd-5e-2024
+    validations:
+      required: false

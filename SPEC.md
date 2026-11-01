@@ -679,12 +679,12 @@ An entry belongs to a bucket when its value on every axis falls in that bucket's
 | Field | Kind | Required |
 |---|---|---|
 | Type | dropdown: creature, magic-item, spell | yes |
-| Count | number, 1–10 | no (defaults) |
+| Count | dropdown: 1–10 (issue forms have no number field) | no (defaults) |
 | Brief | textarea: theme, constraints, CR/level/rarity range, anything else | yes |
 | Tags | textarea, one `key: value` per line (comma-separated for lists) | no |
 | Ruleset | text | no (defaults) |
 
-**Revise request** (`revise-request.yml`, adds label `revise`): entry IDs and an instruction, for changes to already-merged entries.
+**Revise request** (`revise-request.yml`, adds label `revise`): entry IDs (one per line) and an instruction, both required, for changes to already-merged entries.
 
 Free-form issues with the `request` label are also accepted; the routine interprets them against defaults.
 
