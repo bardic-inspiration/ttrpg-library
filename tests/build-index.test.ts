@@ -230,6 +230,42 @@ describe('the type registry', () => {
     expect(types.creature!.facets.find((f) => f.path === 'stats.size')?.order).toEqual(sizes);
     expect(types['magic-item']!.facets.find((f) => f.path === 'stats.rarity')?.order).toEqual(rarities);
   });
+
+  // §7.1: every axis is a facet of its type; bins sit on range facets, ascending
+  // and disjoint; categorical values sit on enum facets and are values the schema allows.
+  it('gives every type gap buckets whose axes are its facets', async () => {
+    const registry = await loadRegistryFile();
+    for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
+      const axes = config.gapBuckets as Array<{ path: string; bins?: [number, number][]; enum?: string[] }>;
+      expect(Array.isArray(axes) && axes.length > 0, `${type} gapBuckets`).toBe(true);
+      const schema = await readSchema(`${type}.schema.json`);
+      for (const axis of axes) {
+        const facet = config.facets.find((f) => f.path === axis.path);
+        expect(facet, `${type} ${axis.path} is a facet`).toBeDefined();
+        expect(Object.keys(axis).sort(), `${type} ${axis.path} has one kind`).toEqual(['path', axis.bins ? 'bins' : 'enum'].sort());
+        if (axis.bins) {
+          expect(facet!.kind).toBe('range');
+          expect(axis.bins.length).toBeGreaterThan(0);
+          axis.bins.forEach(([min, max], i) => {
+            expect(min).toBeLessThanOrEqual(max);
+            if (i > 0) expect(min).toBeGreaterThan(axis.bins![i - 1]![1]);
+          });
+        } else {
+          expect(facet!.kind).toBe('enum');
+          // stats.<a>.<b> → properties.a.properties.b; an array's values sit in items.
+          const node = axis.path
+            .split('.')
+            .slice(1)
+            .reduce<any>((at, key) => at?.properties?.[key], schema);
+          const allowed = (node?.enum ?? node?.items?.enum) as string[] | undefined;
+          expect(allowed, `${type} ${axis.path} has a schema enum`).toBeDefined();
+          expect(axis.enum!.length).toBeGreaterThan(0);
+          expect(new Set(axis.enum).size).toBe(axis.enum!.length);
+          for (const value of axis.enum!) expect(allowed).toContain(value);
+        }
+      }
+    }
+  });
 });
 
 describe('schema walk', () => {
