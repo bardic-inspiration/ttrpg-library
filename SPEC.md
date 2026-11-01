@@ -738,9 +738,11 @@ Defaults are applied only to fields the request leaves unspecified. Request tags
 1. Read `config/types.json`, `config/defaults.json`, the ruleset module (`rulesets/<ruleset>/`: the type's schema, `tables.json`, tokens, guideline), `config/blocklist.json`, and `library.json`.
 2. List existing names and IDs for collision avoidance, and existing entries matching the brief's theme to avoid near-duplicates in concept.
 3. Write entries, including any new dependencies the brief implies (a creature's signature spell). Prefer references to existing library entries over plain text when a matching entry exists. Write inputs only: never write a value the ruleset derives, use tokens for derived values in prose, and use `adjust` only for a deliberate deviation, explained in the PR body.
-4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and `meta.source.issues`; apply request and default tags.
-5. Run `npm run validate`. Fix and retry up to `validateRetries` times. If still failing, comment the errors on the issue, remove `in-progress`, and stop without opening a PR.
-6. Branch `gen/<issue-numbers-or-gap>-<YYYYMMDD>` (for example `gen/12-14-20261102`, `gen/gap-spell-20261102`), commit with message `Add <n> <type> entries`, push, open the PR.
+4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and `meta.source.issues` (or `meta.source.gapFill` for a gap-fill run); apply request and default tags.
+5. Run `npm run validate`. Fix and retry up to `validateRetries` times. If still failing, comment the errors on the issue, remove `in-progress`, and stop without opening a PR. A gap-fill run or inline request has no issue, so it reports the errors in the run output instead.
+6. Branch `gen/<issue-numbers-or-gap>-<YYYYMMDD>` (for example `gen/12-14-20261102`, `gen/gap-spell-20261102`; issue numbers ascending; an inline request uses `gen/inline-<type>-<YYYYMMDD>`), commit with message `Add <n> <type> entries`, push, open the PR.
+
+A test checks that every repo path, npm script, and `config/defaults.json` key the skill names exists, and that `content.md` has the body sections below.
 
 **PR conventions**
 
