@@ -94,20 +94,14 @@ export async function loadDefaults(root = PROJECT_ROOT): Promise<Defaults> {
 }
 
 /**
- * Fills the fields a request leaves out from the defaults, and merges request
- * tags over default tags (§8.3). `problems` lists what makes the request
- * unfulfillable as written, which the routine treats as ambiguity (§8.2 step 6).
+ * Fills the fields a request leaves out from the defaults, merges request tags
+ * over default tags, and reduces a count above `maxBatch` to `maxBatch` (§8.3).
  */
-export function applyDefaults(request: Request, defaults: Defaults): { request: ResolvedRequest; problems: string[] } {
-  const resolved: ResolvedRequest = {
+export function applyDefaults(request: Request, defaults: Defaults): ResolvedRequest {
+  return {
     ...request,
     ruleset: request.ruleset ?? defaults.ruleset,
-    count: request.count ?? defaults.count,
+    count: Math.min(request.count ?? defaults.count, defaults.maxBatch),
     tags: { ...defaults.tags, ...request.tags },
   };
-  const problems: string[] = [];
-  if (!isWhole(resolved.count, 1, defaults.maxBatch)) {
-    problems.push(`count: ${resolved.count} is not a whole number from 1 to ${defaults.maxBatch}`);
-  }
-  return { request: resolved, problems };
 }

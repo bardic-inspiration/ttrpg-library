@@ -75,30 +75,31 @@ describe('checkDefaults', () => {
 
 describe('applyDefaults', () => {
   it('fills only the fields the request leaves out', () => {
-    const { request, problems } = applyDefaults({ type: 'spell', brief: 'frost magic' }, base());
-    expect(problems).toEqual([]);
-    expect(request).toEqual({ type: 'spell', brief: 'frost magic', ruleset: 'dnd-5e-2024', count: 5, tags: {} });
+    expect(applyDefaults({ type: 'spell', brief: 'frost magic' }, base())).toEqual({
+      type: 'spell',
+      brief: 'frost magic',
+      ruleset: 'dnd-5e-2024',
+      count: 5,
+      tags: {},
+    });
   });
 
   it('keeps fields the request gives', () => {
-    const { request } = applyDefaults({ type: 'creature', count: 2, ruleset: 'other' }, base());
+    const request = applyDefaults({ type: 'creature', count: 2, ruleset: 'other' }, base());
     expect(request.count).toBe(2);
     expect(request.ruleset).toBe('other');
   });
 
   it('merges request tags over default tags', () => {
     const defaults = { ...base(), tags: { world: 'Aldmere', author: 'routine' } };
-    const { request } = applyDefaults({ type: 'creature', tags: { world: 'Vell', theme: ['ice'] } }, defaults);
+    const request = applyDefaults({ type: 'creature', tags: { world: 'Vell', theme: ['ice'] } }, defaults);
     expect(request.tags).toEqual({ world: 'Vell', author: 'routine', theme: ['ice'] });
     expect(defaults.tags).toEqual({ world: 'Aldmere', author: 'routine' });
   });
 
-  it('reports a count that is not a whole number from 1 to maxBatch', () => {
-    for (const count of [0, 11, 1.5]) {
-      expect(applyDefaults({ type: 'creature', count }, base()).problems).toEqual([
-        `count: ${count} is not a whole number from 1 to 10`,
-      ]);
-    }
-    expect(applyDefaults({ type: 'creature', count: 10 }, base()).problems).toEqual([]);
+  it('reduces a count above maxBatch to maxBatch', () => {
+    expect(applyDefaults({ type: 'creature', count: 10 }, base()).count).toBe(10);
+    expect(applyDefaults({ type: 'creature', count: 11 }, base()).count).toBe(10);
+    expect(applyDefaults({ type: 'creature', count: 10_000_000_000 }, base()).count).toBe(10);
   });
 });

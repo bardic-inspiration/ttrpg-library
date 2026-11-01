@@ -729,7 +729,7 @@ A manual run may name specific issues, or pass an inline request (type, count, b
 
 Defaults are applied only to fields the request leaves unspecified. Request tags are merged over default tags.
 
-`count` and `gapFill.count` are whole numbers from 1 to `maxBatch`, matching the form's 1–10 range. A request whose count, after defaults, falls outside that range cannot be fulfilled as written, so the routine asks about it (§8.2 step 6) rather than clamping it. `scripts/generate/defaults.ts` loads and checks the file, and applies it to a request.
+`count` and `gapFill.count` in the file are whole numbers from 1 to `maxBatch`, matching the form's 1–10 range. A request that asks for more than `maxBatch` entries gets `maxBatch`; the count is otherwise taken on trust. `scripts/generate/defaults.ts` loads and checks the file, and applies it to a request.
 
 ### 8.4 The `generate` skill
 
