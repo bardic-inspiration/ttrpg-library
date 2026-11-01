@@ -6,5 +6,5 @@
     { "id": "card-4x6", "label": "4 × 6 in card", "width": "4in", "height": "6in", "margin": "0.25in", "columns": 1 }
   ],
   "png": { "scale": 2, "width": 420, "wideWidth": 840 },
-  "exporters": ["json"]
+  "exporters": ["json", "png"]
 }

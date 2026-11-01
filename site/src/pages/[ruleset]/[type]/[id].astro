@@ -1,8 +1,10 @@
 ---
 // Detail page for one entry (SPEC.md §9.2, §9.4), with Open Graph tags from
-// the entry's name, summary, and art, and its export controls (§10).
+// the entry's name, summary, and art, its export controls, and the PNG
+// exporter's capture source (§10).
 import type { GetStaticPaths } from 'astro';
 import Base from '../../../layouts/Base.astro';
+import CaptureSource from '../../../components/detail/CaptureSource.astro';
 import EntryDetail from '../../../components/detail/EntryDetail.astro';
 import ExportControls from '../../../components/detail/ExportControls';
 import { entryNames, loadEntries, refTargets, type LoadedEntry } from '../../../lib/library';
@@ -35,4 +37,5 @@ const { entry, derived } = loaded;
   <EntryDetail loaded={loaded} names={names} targets={targets}>
     <ExportControls slot="export" client:load item={{ entry, derived }} base={url()} />
   </EntryDetail>
+  <CaptureSource loaded={loaded} names={names} />
 </Base>
