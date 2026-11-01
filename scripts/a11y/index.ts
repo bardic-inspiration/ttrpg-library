@@ -39,12 +39,24 @@ export function a11yPages(records: IndexRecord[]): A11yPage[] {
       path: `${first.ruleset}/${first.type}/${filter ? `?${filter}` : ''}`,
     });
   }
-  const seen = new Set<string>();
-  for (const record of records) {
-    const key = `${record.ruleset}/${record.type}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    pages.push({ label: `${record.type} detail: ${record.name}`, path: record.url.replace(SITE_PATH, '') });
+  for (const record of firstOfEachType(records)) {
+    pages.push({ label: `${record.type} detail: ${record.name}`, path: detailPath(record) });
   }
   return pages;
+}
+
+/** The first record of each ruleset and type, in index order. */
+export function firstOfEachType(records: IndexRecord[]): IndexRecord[] {
+  const seen = new Set<string>();
+  return records.filter((record) => {
+    const key = `${record.ruleset}/${record.type}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+/** A record's detail page path under the site base. */
+export function detailPath(record: IndexRecord): string {
+  return record.url.replace(SITE_PATH, '');
 }
