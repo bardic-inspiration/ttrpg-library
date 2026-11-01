@@ -1,0 +1,66 @@
+---
+// Header navigation (SPEC.md §9.2): each ruleset, its types, and the about
+// page, from the type registry (§7). The current page is marked for
+// assistive technology.
+import registry from '../../../config/types.json';
+import { url } from '../lib/url';
+
+const rulesets = Object.entries(registry as Record<string, { label: string; types: Record<string, { plural: string }> }>).map(
+  ([id, config]) => ({
+    label: config.label,
+    path: `${id}/`,
+    types: Object.entries(config.types).map(([type, t]) => ({ label: t.plural, path: `${id}/${type}/` })),
+  }),
+);
+const here = Astro.url.pathname;
+const current = (path: string) => (here === url(path) ? 'page' : undefined);
+---
+<nav class="site-nav" aria-label="Library">
+  <ul class="site-nav__list">
+    {rulesets.map((ruleset) => (
+      <li class="site-nav__ruleset">
+        <a href={url(ruleset.path)} aria-current={current(ruleset.path)}>{ruleset.label}</a>
+        <ul class="site-nav__types">
+          {ruleset.types.map((type) => (
+            <li><a href={url(type.path)} aria-current={current(type.path)}>{type.label}</a></li>
+          ))}
+        </ul>
+      </li>
+    ))}
+    <li><a href={url('about/')} aria-current={current('about/')}>About</a></li>
+  </ul>
+</nav>
+
+<style>
+  @layer components {
+    .site-nav {
+      font-family: var(--font-ui);
+    }
+
+    .site-nav__list,
+    .site-nav__types {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--space-xs);
+      padding: 0;
+      list-style: none;
+    }
+
+    .site-nav__ruleset {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--space-xs);
+
+      & > a {
+        font-weight: var(--font-weight-strong);
+      }
+    }
+
+    .site-nav a[aria-current='page'] {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+  }
+</style>

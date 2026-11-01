@@ -1,0 +1,55 @@
+---
+// The dnd-5e-2024 magic item card (registry template `magic-item-card`,
+// SPEC.md §6.6, §9.5): name, category, rarity and attunement, the rules text,
+// then charges and the spells the item casts. The accent follows the rarity.
+// Optional fields display only when present (§5.8).
+import type { MagicItemStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { present, whenPresent } from '../../lib/display';
+import { chargesLine, spellLine, subtitleLine } from '../../lib/magic-item';
+import type { PropertyLine, TemplateProps } from '../../lib/template';
+import PropertyList from './parts/PropertyList.astro';
+import RulesText from './parts/RulesText.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+import Heading from './parts/Heading.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, mode, level = 2 } = Astro.props;
+const s = entry.stats as MagicItemStats;
+const charges = chargesLine(s);
+const properties: PropertyLine[] = [
+  ...(present(charges) ? [{ label: 'Charges', value: charges }] : []),
+  ...(present(s.cursed) ? [{ label: 'Cursed', value: 'Yes' }] : []),
+];
+const spells = whenPresent(s.spells, (list) => list.map((spell) => spellLine(spell, names)));
+---
+<StatBlock name={`${entry.name} magic item`} type="magic-item" rarity={s.rarity} mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={subtitleLine(s)} level={level} />
+  <RulesText text={s.effect} />
+  {properties.length > 0 && <PropertyList lines={properties} />}
+  {present(s.charges?.depletion) && <RulesText text={s.charges.depletion} />}
+  {present(spells) && (
+    <section class="magic-item-card__spells">
+      <Heading level={level + 1} class="magic-item-card__heading">Spells</Heading>
+      <ul>
+        {spells.map((spell) => <li>{spell.name}{present(spell.notes) && ` (${spell.notes})`}</li>)}
+      </ul>
+    </section>
+  )}
+</StatBlock>
+
+<style>
+  @layer components {
+    .magic-item-card__spells :global(.magic-item-card__heading) {
+      font-family: var(--statblock-heading-font);
+      font-size: var(--text-h4);
+      color: var(--accent);
+      margin-block-end: var(--space-3xs);
+    }
+
+    .magic-item-card__spells ul {
+      padding-inline-start: var(--space-m);
+    }
+  }
+</style>

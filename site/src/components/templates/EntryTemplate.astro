@@ -1,0 +1,23 @@
+---
+// Renders an entry with its type's template (SPEC.md §7 `template`, §9.5),
+// or the generic fallback when the registry names none this site has.
+import { templateFor, type TemplateProps } from '../../lib/template';
+import registry from '../../../../config/types.json';
+import CreatureStatBlock from './CreatureStatBlock.astro';
+import GenericTemplate from './GenericTemplate.astro';
+import MagicItemCard from './MagicItemCard.astro';
+import SpellCard from './SpellCard.astro';
+
+type Props = TemplateProps;
+
+const { entry } = Astro.props;
+const types = (registry as Record<string, { types: Record<string, { template?: string }> }>)[entry.ruleset]?.types;
+const components = {
+  'creature-stat-block': CreatureStatBlock,
+  'magic-item-card': MagicItemCard,
+  'spell-card': SpellCard,
+  generic: GenericTemplate,
+};
+const Template = components[templateFor(types?.[entry.type]?.template)];
+---
+<Template {...Astro.props} />

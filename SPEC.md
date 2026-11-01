@@ -137,7 +137,9 @@ ttrpg-library/
 │   ├── validate/                           CLI, schema stage, ruleset-independent checks, text checks, refs
 │   ├── lane/                               lane rules for the `lane` CI job (§12.4)
 │   ├── build-index/                        content → library.json and data/ copies (CLI, builder, schema walk)
-│   └── pr-summary/                         job summary for changed entries
+│   ├── pr-summary/                         job summary for changed entries
+│   ├── serve/                              static server for site/dist under the site base
+│   └── a11y/                               axe checks on the built site (§9.7)
 ├── site/                                   Astro project
 │   └── src/
 │       ├── pages/                          routes, including /styleguide/
@@ -825,7 +827,8 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
-- Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves.
+- Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves. `EntryTemplate` picks the component from the registry's `template` name, falling back to `generic`. Each template renders the entry name as a heading at a `level` its page chooses (2 by default; the detail page's own `h1` sits above it), with section headings one level below.
+- Rules-text fields and `description` render through one sanitizing markdown helper (`site/src/lib/markdown.ts`): raw HTML is escaped, and links, images, headings, and tables read as plain text.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
 - Markup is semantic so that styling never fights structure. The entry name is a heading, section labels (Actions, Reactions) are subheadings, property lines and ability scores are definition lists or tables, and action names are inline headings.
 
@@ -905,7 +908,7 @@ Target: WCAG 2.2 AA.
 - **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name; the placeholder is decorative and hidden from assistive technology.
 - **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce` (the duration primitives are reset in `primitives.css`, and the contrast suite checks that every one is).
 - **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without horizontal scrolling.
-- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build.
+- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, and the first detail page of each type that has an entry. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The print view joins the list when it exists (§10.4).
 
 ### 9.8 UI refinement workflow
 

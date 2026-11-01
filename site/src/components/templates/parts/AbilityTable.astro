@@ -1,0 +1,42 @@
+---
+// The six ability scores with modifiers and saves (SPEC.md §6.5, §9.5).
+// Every number arrives formatted from the derived values.
+interface Row {
+  ability: string;
+  score: number;
+  mod: string;
+  save: string;
+}
+
+interface Props {
+  rows: Row[];
+}
+
+const { rows } = Astro.props;
+---
+<table class="ability-table">
+  <thead><tr><th scope="col">Ability</th><th scope="col">Score</th><th scope="col">Mod</th><th scope="col">Save</th></tr></thead>
+  <tbody>
+    {rows.map((row) => (
+      <tr><th scope="row">{row.ability}</th><td>{row.score}</td><td>{row.mod}</td><td>{row.save}</td></tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  @layer components {
+    .ability-table {
+      inline-size: 100%;
+      text-align: center;
+
+      & th {
+        font-family: var(--statblock-label-font);
+        font-weight: var(--font-weight-label);
+      }
+
+      & thead th {
+        color: var(--accent);
+      }
+    }
+  }
+</style>

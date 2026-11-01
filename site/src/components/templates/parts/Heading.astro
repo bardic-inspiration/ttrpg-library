@@ -1,0 +1,12 @@
+---
+// A heading at a level chosen by the page, so a template nests under the
+// page's own headings (h1 on a detail page, deeper on the style guide).
+interface Props {
+  level: number;
+  class?: string;
+}
+
+const { level, class: className } = Astro.props;
+const Tag = `h${Math.min(Math.max(level, 1), 6)}` as 'h1';
+---
+<Tag class={className}><slot /></Tag>

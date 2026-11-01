@@ -1,0 +1,27 @@
+---
+// A markdown-subset rules-text field (SPEC.md §5.5), optionally led by a bold
+// label such as "Using a Higher-Level Spell Slot."
+import { renderMarkdown } from '../../../lib/markdown';
+
+interface Props {
+  text: string;
+  label?: string;
+}
+
+const { text, label } = Astro.props;
+const html = renderMarkdown(label ? `**${label}.** ${text}` : text);
+---
+<div class="rules-text" set:html={html} />
+
+<style>
+  @layer components {
+    .rules-text > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+
+    .rules-text :global(ul),
+    .rules-text :global(ol) {
+      padding-inline-start: var(--space-m);
+    }
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+// The dnd-5e-2024 spell card (registry template `spell-card`, SPEC.md §6.7,
+// §9.5): name, level and school, casting properties, then the rules text.
+// Optional fields display only when present (§5.8).
+import type { SpellStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { present } from '../../lib/display';
+import { castingTimeLine, componentsLine, durationLine, levelLine, rangeLine } from '../../lib/spell';
+import type { TemplateProps } from '../../lib/template';
+import PropertyList from './parts/PropertyList.astro';
+import RulesText from './parts/RulesText.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, mode, level = 2 } = Astro.props;
+const s = entry.stats as SpellStats;
+const lines = [
+  { label: 'Casting Time', value: castingTimeLine(s) },
+  { label: 'Range', value: rangeLine(s) },
+  { label: 'Components', value: componentsLine(s) },
+  { label: 'Duration', value: durationLine(s) },
+];
+---
+<StatBlock name={`${entry.name} spell`} type="spell" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={levelLine(s)} level={level} />
+  <PropertyList lines={lines} />
+  <div class="spell-card__text">
+    <RulesText text={s.effect} />
+    {present(s.higherLevels) && <RulesText label="Using a Higher-Level Spell Slot" text={s.higherLevels} />}
+    {present(s.cantripUpgrade) && <RulesText label="Cantrip Upgrade" text={s.cantripUpgrade} />}
+  </div>
+</StatBlock>
+
+<style>
+  @layer components {
+    .spell-card__text > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+  }
+</style>

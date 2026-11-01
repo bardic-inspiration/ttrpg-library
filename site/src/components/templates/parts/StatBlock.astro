@@ -1,0 +1,35 @@
+---
+// The frame every type template renders in (SPEC.md §9.5, §9.6): accent from
+// `data-type` (and `data-rarity` for items), thin rules between sections, and
+// a `mode` that adjusts only spacing (`screen`, `capture`, `print`).
+import type { TemplateMode } from '../../../lib/template';
+
+interface Props {
+  name: string;
+  type: string;
+  rarity?: string;
+  mode?: TemplateMode;
+}
+
+const { name, type, rarity, mode = 'screen' } = Astro.props;
+---
+<section class="statblock" data-type={type} data-rarity={rarity} data-mode={mode} aria-label={name}>
+  <slot />
+</section>
+
+<style>
+  @layer components {
+    .statblock {
+      background: var(--statblock-bg);
+      border-block: var(--statblock-rule-width) solid var(--statblock-rule-color);
+      padding: var(--statblock-padding);
+      max-inline-size: var(--measure);
+
+      & > :global(* + *) {
+        margin-block-start: var(--statblock-gap);
+        padding-block-start: var(--statblock-gap);
+        border-block-start: var(--border-width) solid var(--statblock-rule-color);
+      }
+    }
+  }
+</style>

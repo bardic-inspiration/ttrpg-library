@@ -1,0 +1,32 @@
+---
+// The entry name as a heading, and the italic line under it (SPEC.md §9.5).
+import Heading from './Heading.astro';
+
+interface Props {
+  name: string;
+  subtitle: string;
+  /** The name's heading level; section headings sit one below it. */
+  level: number;
+}
+
+const { name, subtitle, level } = Astro.props;
+---
+<header class="statblock-header">
+  <Heading level={level} class="statblock-header__name">{name}</Heading>
+  <p class="statblock-header__subtitle">{subtitle}</p>
+</header>
+
+<style>
+  @layer components {
+    .statblock-header :global(.statblock-header__name) {
+      font-family: var(--statblock-heading-font);
+      font-size: var(--text-h3);
+      color: var(--accent);
+    }
+
+    .statblock-header__subtitle {
+      font-style: italic;
+      color: var(--color-text-muted);
+    }
+  }
+</style>

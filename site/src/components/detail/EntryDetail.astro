@@ -1,0 +1,184 @@
+---
+// The body of a detail page (SPEC.md §9.4): art or placeholder, name, type,
+// and summary; the type template; the description as lore; forward refs and
+// back-refs; tag chips into the filtered type gallery; and provenance.
+// Export controls arrive with milestone 4 (§10).
+import type { LoadedEntry } from '../../lib/library';
+import { rulesetModule } from '../../lib/library';
+import { groupRefs, type RefTarget } from '../../lib/refs';
+import { provenance, tagChips } from '../../lib/detail';
+import { renderMarkdown } from '../../lib/markdown';
+import { present } from '../../lib/display';
+import { url } from '../../lib/url';
+import registry from '../../../../config/types.json';
+import ArtFrame from '../templates/parts/ArtFrame.astro';
+import EntryTemplate from '../templates/EntryTemplate.astro';
+
+interface Props {
+  loaded: LoadedEntry;
+  /** `<type>/<id>` → entry name. */
+  names: Map<string, string>;
+  /** `<type>/<id>` → link target. */
+  targets: Map<string, RefTarget>;
+}
+
+const { loaded, names, targets } = Astro.props;
+const { entry, derived } = loaded;
+const typeLabel =
+  (registry as Record<string, { types: Record<string, { label: string }> }>)[entry.ruleset]?.types[entry.type]?.label ?? entry.type;
+const module = rulesetModule(entry.ruleset);
+const links = groupRefs(entry.type, loaded.refs, loaded.refBy, targets, (type, path) => module.refLabels(type, path));
+const linkGroups = [...links.forward, ...links.back];
+const chips = tagChips(entry);
+const source = provenance(entry);
+---
+<article class="entry-detail" data-type={entry.type}>
+  <header class="entry-detail__header">
+    <div class="entry-detail__art">
+      <ArtFrame name={entry.name} typeLabel={typeLabel} src={entry.image ? url(entry.image) : undefined} />
+    </div>
+    <div class="entry-detail__intro">
+      <h1>{entry.name}</h1>
+      <p><a class="entry-detail__type" href={url(`${entry.ruleset}/${entry.type}/`)}>{typeLabel}</a></p>
+      <p class="entry-detail__summary">{entry.summary}</p>
+    </div>
+  </header>
+
+  <EntryTemplate entry={entry} derived={derived} names={names} mode="screen" level={2} />
+
+  {present(entry.description) && (
+    <section class="entry-detail__lore" aria-labelledby="lore-heading">
+      <h2 id="lore-heading">Lore</h2>
+      <div class="lore" set:html={renderMarkdown(entry.description)} />
+    </section>
+  )}
+
+  {linkGroups.length > 0 && (
+    <section aria-labelledby="links-heading">
+      <h2 id="links-heading">Links</h2>
+      <dl class="entry-detail__links">
+        {linkGroups.map((group) => (
+          <>
+            <dt>{group.label}</dt>
+            <dd>
+              {group.targets.map((target, i) => (
+                <>{i > 0 && ', '}<a href={url(target.path)}>{target.name}</a></>
+              ))}
+            </dd>
+          </>
+        ))}
+      </dl>
+    </section>
+  )}
+
+  {chips.length > 0 && (
+    <section aria-labelledby="tags-heading">
+      <h2 id="tags-heading">Tags</h2>
+      <ul class="entry-detail__tags">
+        {chips.map((chip) => (
+          <li><a class="tag-chip" href={url(chip.path)}><span class="tag-chip__key">{chip.key}:</span> {chip.value}</a></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <p class="entry-detail__provenance">
+    <small>
+      Added {source.createdAt}{present(source.updatedAt) && `, revised ${source.updatedAt}`}.
+      {source.issues.length > 0 && (
+        <>
+          {' '}From {source.issues.map((issue, i) => (
+            <>{i > 0 && ', '}<a href={issue.url}>#{issue.number}</a></>
+          ))}.
+        </>
+      )}
+    </small>
+  </p>
+</article>
+
+<style>
+  @layer components {
+    .entry-detail {
+      display: grid;
+      gap: var(--space-l);
+      max-inline-size: var(--measure);
+    }
+
+    .entry-detail__header {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min-width)), 1fr));
+      gap: var(--space-m);
+      align-items: start;
+    }
+
+    .entry-detail__intro {
+      display: grid;
+      gap: var(--space-2xs);
+    }
+
+    .entry-detail__type {
+      font-family: var(--badge-font);
+      font-size: var(--text-small);
+      font-weight: var(--font-weight-label);
+      color: var(--badge-text);
+      border: var(--badge-border);
+      border-radius: var(--chip-radius);
+      padding: 0 var(--space-2xs);
+      text-decoration: none;
+    }
+
+    .entry-detail__summary {
+      font-size: var(--text-h4);
+    }
+
+    .lore {
+      font-style: italic;
+      color: var(--color-text-muted);
+      border-inline-start: var(--border-width-strong) solid var(--color-border);
+      padding-inline-start: var(--space-s);
+
+      & > :global(* + *) {
+        margin-block-start: var(--space-2xs);
+      }
+    }
+
+    .entry-detail__links {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      column-gap: var(--space-2xs);
+
+      & dt {
+        font-weight: var(--font-weight-strong);
+      }
+    }
+
+    .entry-detail__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2xs);
+      padding: 0;
+      list-style: none;
+    }
+
+    .tag-chip {
+      display: inline-block;
+      font-family: var(--control-font);
+      font-size: var(--text-small);
+      color: var(--control-text);
+      background: var(--control-bg);
+      border: var(--control-border);
+      border-radius: var(--chip-radius);
+      padding: var(--control-padding-block) var(--control-padding-inline);
+      text-decoration: none;
+    }
+
+    .tag-chip__key {
+      color: var(--color-text-muted);
+    }
+
+    .entry-detail__provenance {
+      color: var(--color-text-muted);
+    }
+  }
+
+</style>
