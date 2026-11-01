@@ -9,6 +9,8 @@ const read = (path: string) => readFileSync(join(ROOT, path), 'utf8');
 
 const SKILL = '.claude/skills/generate/SKILL.md';
 const ENTRY_PATH = 'content/<ruleset>/<type>/<id>.json';
+/** Built by `npm run build:index` and git-ignored (§4), so absent from a clean checkout. */
+const GENERATED = new Set(['site/public/library.json']);
 
 /** Top-level directories and files a code span must start with to count as a repo path. */
 const PATH = /^(?:(?:\.claude|\.github|config|content|docs|lib|rulesets|schemas|scripts|site|tests)\/|[A-Z]+\.md$)/;
@@ -58,6 +60,7 @@ function unresolved(markdown: string, repo: Repo): string[] {
     }
     if (!PATH.test(span)) continue;
     if (span === ENTRY_PATH) continue; // where new entries are written (§5.1)
+    if (GENERATED.has(span)) continue;
     for (const path of expand(span, repo.registry)) {
       if (/<[^>]+>/.test(path)) problems.push(`${span}: unknown placeholder`);
       else if (!repo.exists(path.replace(/\/$/, ''))) problems.push(`${span}: ${path} does not exist`);
@@ -119,6 +122,11 @@ describe(SKILL, () => {
 
   it('names only repo paths, npm scripts, and defaults keys that exist', () => {
     expect(unresolved(skill, repo)).toEqual([]);
+  });
+
+  it('exempts only git-ignored build outputs from the existence check', () => {
+    const ignored = read('.gitignore').split('\n').map((line) => line.trim());
+    for (const path of GENERATED) expect(ignored).toContain(path);
   });
 
   it('names every config/defaults.json key it depends on', () => {
