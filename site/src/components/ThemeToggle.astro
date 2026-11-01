@@ -1,0 +1,100 @@
+---
+// Three-way theme toggle: System, Light, Dark (SPEC.md §9.6 "Themes"). A
+// radio group, so it works by keyboard with no extra code. It stays hidden
+// until its script runs, because without the script it can't do anything.
+// The inline <head> script in Base.astro applies the stored theme before
+// first paint; this script only syncs the radios and handles changes.
+import ThemeIcon from '../icons/Theme';
+import { THEME_CHOICES } from '../lib/theme';
+
+const labels = { system: 'System', light: 'Light', dark: 'Dark' } as const;
+---
+<fieldset class="theme-toggle" data-theme-toggle hidden>
+  <legend class="theme-toggle__legend"><ThemeIcon /> Theme</legend>
+  <div class="theme-toggle__options">
+    {THEME_CHOICES.map((choice) => (
+      <label class="theme-toggle__option">
+        <input type="radio" name="theme" value={choice} checked={choice === 'system'} />
+        <span>{labels[choice]}</span>
+      </label>
+    ))}
+  </div>
+</fieldset>
+
+<script>
+  import { applyThemeChoice, isThemeChoice, readThemeChoice, writeThemeChoice } from '../lib/theme';
+
+  const storage = () => window.localStorage;
+  for (const toggle of document.querySelectorAll<HTMLFieldSetElement>('[data-theme-toggle]')) {
+    const current = readThemeChoice(storage);
+    for (const radio of toggle.querySelectorAll<HTMLInputElement>('input[name="theme"]')) {
+      radio.checked = radio.value === current;
+    }
+    toggle.addEventListener('change', (event) => {
+      const value = (event.target as HTMLInputElement).value;
+      if (!isThemeChoice(value)) return;
+      writeThemeChoice(storage, value);
+      applyThemeChoice(document.documentElement, value);
+    });
+    toggle.hidden = false;
+  }
+</script>
+
+<style>
+  @layer components {
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2xs);
+      font-family: var(--control-font);
+      font-size: var(--text-small);
+    }
+
+    .theme-toggle__legend {
+      display: contents;
+    }
+
+    .theme-toggle__options {
+      display: flex;
+      border: var(--control-border);
+      border-radius: var(--control-radius);
+      overflow: hidden;
+    }
+
+    .theme-toggle__option {
+      position: relative;
+      cursor: pointer;
+
+      & span {
+        display: block;
+        padding: var(--control-padding-block) var(--control-padding-inline);
+        transition:
+          background-color var(--duration-quick),
+          color var(--duration-quick);
+      }
+
+      & + & {
+        border-inline-start: var(--control-border);
+      }
+
+      /* The native radio stays in the tab order but is drawn as the label. */
+      & input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        margin: 0;
+        cursor: pointer;
+      }
+
+      & input:checked + span {
+        background: var(--control-active-bg);
+        color: var(--control-active-text);
+      }
+
+      & input:focus-visible + span {
+        outline: var(--focus-ring);
+        outline-offset: calc(-1 * var(--focus-ring-width) - var(--focus-ring-offset));
+      }
+    }
+  }
+</style>

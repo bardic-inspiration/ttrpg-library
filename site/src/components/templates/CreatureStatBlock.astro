@@ -1,7 +1,8 @@
 ---
 // The dnd-5e-2024 creature stat block (registry template `creature-stat-block`,
-// SPEC.md §6.5, §7). Content only; styling arrives in milestone 3. Optional
-// fields display only when present (SPEC.md §5.8), through lib/display.
+// SPEC.md §6.5, §7). Optional fields display only when present (SPEC.md
+// §5.8), through lib/display. Styled with component tokens only (§9.6); the
+// full part-by-part template arrives with the detail pages (#12).
 import type { CreatureStats, DerivedCreature } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import {
   abilityRows,
@@ -47,15 +48,15 @@ const legendaryItems = (legendary?.items ?? []).map((action, i) => actionBlock(a
 const skills = skillsLine(s, d);
 const gear = whenPresent(s.gear, (list) => list.map((g) => (typeof g === 'string' ? g : (names.get(g.ref) ?? g.ref))).join(', '));
 ---
-<section class="stat-block" aria-label={`${name} stat block`}>
-  <p>{sizeTypeLine(s)}</p>
-  <dl>
+<section class="statblock" data-type="creature" aria-label={`${name} stat block`}>
+  <p class="statblock__subtitle">{sizeTypeLine(s)}</p>
+  <dl class="statblock__properties">
     <dt>AC</dt><dd>{acLine(s)}</dd>
     <dt>Initiative</dt><dd>{initiativeLine(d)}</dd>
     <dt>HP</dt><dd>{hpLine(d)}</dd>
     <dt>Speed</dt><dd>{speedLine(s)}</dd>
   </dl>
-  <table>
+  <table class="statblock__abilities">
     <thead><tr><th scope="col">Ability</th><th scope="col">Score</th><th scope="col">Mod</th><th scope="col">Save</th></tr></thead>
     <tbody>
       {abilityRows(s, d).map((row) => (
@@ -63,7 +64,7 @@ const gear = whenPresent(s.gear, (list) => list.map((g) => (typeof g === 'string
       ))}
     </tbody>
   </table>
-  <dl>
+  <dl class="statblock__properties">
     {present(skills) && <><dt>Skills</dt><dd>{skills}</dd></>}
     {defenseLines(s).map((line) => <><dt>{line.label}</dt><dd>{line.value}</dd></>)}
     {present(gear) && <><dt>Gear</dt><dd>{gear}</dd></>}
@@ -72,16 +73,16 @@ const gear = whenPresent(s.gear, (list) => list.map((g) => (typeof g === 'string
     <dt>CR</dt><dd>{crLine(s, d)}</dd>
   </dl>
   {sections.map((section) => (
-    <section>
-      <h2>{section.title}</h2>
+    <section class="statblock__section">
+      <h2 class="statblock__heading">{section.title}</h2>
       {section.items.map((item) => (
         <p><strong>{item.name}.</strong> <Segments segments={item.body} /></p>
       ))}
     </section>
   ))}
   {legendary && (
-    <section>
-      <h2>Legendary Actions</h2>
+    <section class="statblock__section">
+      <h2 class="statblock__heading">Legendary Actions</h2>
       {present(legendary.intro) && <p>{renderTokens(legendary.intro, d, tables)}</p>}
       <p>Legendary Action Uses: {legendary.uses}{whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? ''}.</p>
       {legendaryItems.map((item) => (
@@ -90,3 +91,62 @@ const gear = whenPresent(s.gear, (list) => list.map((g) => (typeof g === 'string
     </section>
   )}
 </section>
+
+<style>
+  @layer components {
+    .statblock {
+      background: var(--statblock-bg);
+      border-block: var(--statblock-rule-width) solid var(--statblock-rule-color);
+      padding: var(--statblock-padding);
+      max-inline-size: var(--measure);
+
+      & > * + * {
+        margin-block-start: var(--statblock-gap);
+        padding-block-start: var(--statblock-gap);
+        border-block-start: var(--border-width) solid var(--statblock-rule-color);
+      }
+    }
+
+    .statblock__subtitle {
+      font-style: italic;
+      color: var(--color-text-muted);
+    }
+
+    .statblock__properties {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      column-gap: var(--space-2xs);
+
+      & dt {
+        font-family: var(--statblock-label-font);
+        font-weight: var(--font-weight-strong);
+        color: var(--accent);
+      }
+    }
+
+    .statblock__abilities {
+      inline-size: 100%;
+      text-align: center;
+
+      & th {
+        font-family: var(--statblock-label-font);
+        font-weight: var(--font-weight-label);
+      }
+
+      & thead th {
+        color: var(--accent);
+      }
+    }
+
+    .statblock__heading {
+      font-family: var(--statblock-heading-font);
+      font-size: var(--text-h4);
+      color: var(--accent);
+      margin-block-end: var(--space-3xs);
+    }
+
+    .statblock__section p + p {
+      margin-block-start: var(--space-3xs);
+    }
+  }
+</style>

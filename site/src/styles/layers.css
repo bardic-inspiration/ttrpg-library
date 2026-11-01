@@ -1,0 +1,6 @@
+/*
+ * Cascade layer order (SPEC.md §9.6). Imported first, so every later file and
+ * every component style lands in a declared layer. Component <style> blocks
+ * wrap their rules in @layer components; overrides always wins.
+ */
+@layer reset, tokens, base, layout, components, utilities, overrides;

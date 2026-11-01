@@ -1,27 +1,74 @@
 ---
+// Page shell (SPEC.md §9.2, §9.6). Loads the fonts and the global styles in
+// cascade-layer order, applies a stored theme before first paint, and wraps
+// every page in the header, main column, and footer.
+import '@fontsource/alegreya/400.css';
+import '@fontsource/alegreya/400-italic.css';
+import '@fontsource/alegreya/500.css';
+import '@fontsource/alegreya/700.css';
+import '@fontsource/alegreya-sc/400.css';
+import '@fontsource/alegreya-sc/500.css';
+import '@fontsource/alegreya-sc/700.css';
+import '@fontsource/alegreya-sans/400.css';
+import '@fontsource/alegreya-sans/500.css';
+import '@fontsource/alegreya-sans/700.css';
+import '../styles/layers.css';
+import '../styles/reset.css';
+import '../styles/tokens/primitives.css';
+import '../styles/tokens/semantic.css';
+import '../styles/tokens/components.css';
+import '../styles/tokens/content.css';
+import '../styles/tokens/print.css';
+import '../styles/base.css';
+import '../styles/layout.css';
+import '../styles/utilities.css';
+import '../styles/overrides.css';
 import Footer from '../components/Footer.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import { themeBootstrapScript } from '../lib/theme';
 import { url } from '../lib/url';
 
 interface Props {
   title: string;
+  /** Keep the page out of search indexes (the style guide, §9.8). */
+  noindex?: boolean;
 }
 
-const { title } = Astro.props;
+const { title, noindex = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {noindex && <meta name="robots" content="noindex" />}
     <title>{title}</title>
+    <script is:inline set:html={themeBootstrapScript()} />
   </head>
   <body>
-    <header>
-      <a href={url()}>TTRPG Content Library</a>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-header__home" href={url()}>TTRPG Content Library</a>
+        <ThemeToggle />
+      </div>
     </header>
-    <main>
-      <slot />
+    <main class="site-main">
+      <div class="site-main__inner">
+        <slot />
+      </div>
     </main>
     <Footer />
   </body>
 </html>
+
+<style>
+  @layer components {
+    .site-header__home {
+      font-family: var(--font-heading);
+      font-size: var(--text-h4);
+      font-weight: var(--font-weight-label);
+      color: var(--color-text);
+      text-decoration: none;
+    }
+  }
+</style>
