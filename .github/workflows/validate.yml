@@ -81,7 +81,7 @@ jobs:
       - run: npm run check
       - run: npm test
       # Accessibility checks run against the site content-checks built (SPEC.md §9.7).
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: site
           path: site/dist
