@@ -1,5 +1,5 @@
 // The index builder (SPEC.md §9.1): validates every entry, then writes
-// library.json and a raw copy of each entry for export. Derived values, refs,
+// library.json, a raw copy of each entry, and each entry's export bundle. Derived values, refs,
 // and back-refs come from the validator, which computes them with the ruleset
 // module and scripts/validate/refs.ts, so nothing here recomputes a rule.
 
@@ -56,6 +56,14 @@ export interface BuildResult {
   records: LibraryRecord[];
   /** Each entry's file under the content root, such as `dnd-5e-2024/creature/cinder-hound.json`, in record order. */
   files: string[];
+  /** Each entry's export bundle (§9.1 step 2), in record order. */
+  bundles: ExportBundle[];
+}
+
+/** `data/<ruleset>/<type>/<id>.export.json`: the entry and its derived values, as an exporter receives them (§10.1). */
+export interface ExportBundle {
+  entry: ValidEntry['entry'];
+  derived: Record<string, unknown>;
 }
 
 export interface BuildOptions extends ValidateOptions {
@@ -133,7 +141,7 @@ const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
  */
 export async function buildIndex(root: string, options: BuildOptions = {}): Promise<BuildResult> {
   const { errors, warnings, entries } = await validateLibrary(root, options);
-  if (errors.length > 0) return { errors, warnings, records: [], files: [] };
+  if (errors.length > 0) return { errors, warnings, records: [], files: [], bundles: [] };
   const registry = options.registry ?? (await loadRegistryFile());
 
   const nameOf = new Map(entries.map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name]));
@@ -167,13 +175,20 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
       search: searchText(item, schemas, nameOf),
     });
   }
-  return { errors, warnings, records, files: sorted.map((item) => item.file) };
+  return {
+    errors,
+    warnings,
+    records,
+    files: sorted.map((item) => item.file),
+    bundles: sorted.map(({ entry, derived }) => ({ entry, derived })),
+  };
 }
 
 /**
- * Writes `<out>/library.json` and copies each entry's raw file to
- * `<out>/data/<ruleset>/<type>/<id>.json` (§9.1 step 2). `data/` is cleared
- * first, so a deleted entry leaves no stale copy behind.
+ * Writes `<out>/library.json`, copies each entry's raw file to
+ * `<out>/data/<ruleset>/<type>/<id>.json`, and writes its export bundle beside
+ * it as `<id>.export.json` (§9.1 step 2). `data/` is cleared first, so a
+ * deleted entry leaves no stale file behind.
  */
 export async function writeIndex(root: string, out: string, result: BuildResult): Promise<void> {
   await mkdir(out, { recursive: true });
@@ -182,6 +197,7 @@ export async function writeIndex(root: string, out: string, result: BuildResult)
     const target = join(out, 'data', record.ruleset, record.type, `${record.id}.json`);
     await mkdir(dirname(target), { recursive: true });
     await copyFile(join(root, result.files[i] ?? ''), target);
+    await writeFile(join(dirname(target), `${record.id}.export.json`), `${JSON.stringify(result.bundles[i])}\n`);
   }
   await writeFile(join(out, 'library.json'), `${JSON.stringify(result.records)}\n`);
 }

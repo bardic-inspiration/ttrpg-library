@@ -189,6 +189,20 @@ describe('the build', () => {
     }
   });
 
+  it('writes each entry’s export bundle, the entry with its derived values, beside the raw copy', async () => {
+    const out = await tempDir();
+    await writeIndex(valid, out, await buildIndex(valid));
+    for (const path of ['creature/cinder-hound', 'magic-item/wand-of-frost-lances', 'spell/frost-lance']) {
+      const entry = JSON.parse(await readFile(join(valid, 'dnd-5e-2024', `${path}.json`), 'utf8')) as { type: string; stats: unknown };
+      const bundle = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024', `${path}.export.json`), 'utf8')) as unknown;
+      expect(bundle).toEqual({ entry, derived: ruleset.derive(entry.type, entry.stats) });
+    }
+    const creature = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024/creature/cinder-hound.export.json'), 'utf8')) as {
+      derived: { xp: number };
+    };
+    expect(creature.derived.xp).toBe(450);
+  });
+
   it('removes the copy of a deleted entry', async () => {
     const out = await tempDir();
     await writeIndex(valid, out, await buildIndex(valid));

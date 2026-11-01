@@ -1,6 +1,6 @@
 /*
  * Gallery styles (SPEC.md §9.3, §9.6): the controls, filter panel, card grid,
- * cards, and art placeholder. Preact islands can't carry a scoped <style>
+ * cards, set actions, and art placeholder. Preact islands can't carry a scoped <style>
  * block, so the gallery's components share this file, imported by
  * Gallery.tsx. Tokens only; knobs live in tokens/components.css.
  */
@@ -72,6 +72,36 @@
 
   .gallery__count {
     font-weight: var(--font-weight-label);
+  }
+
+  /* Set actions (§9.3 "Selection"): export the selection or the filtered set. */
+  .set-actions {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .set-actions__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    padding: 0;
+    list-style: none;
+  }
+
+  .set-actions__item {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+  }
+
+  .set-actions__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .set-actions__status {
+    color: var(--color-text-muted);
   }
 
   .gallery__grid {

@@ -9,8 +9,10 @@ import { isActive, parseQuery, toQuery, type FilterValue, type GalleryState } fr
 import { addableFilters, bounds, chips, computeView, hasValues, searchIndex, withoutFilter } from '../../lib/gallery/view.ts';
 import SearchIcon from '../../icons/Search.tsx';
 import SortIcon from '../../icons/Sort.tsx';
+import { setTarget } from '../../lib/gallery/selection.ts';
 import Card from './Card.tsx';
 import { AddFilter, EnumFilter, RangeFilter, idFor } from './Filters.tsx';
+import SetActions from './SetActions.tsx';
 import './gallery.css';
 
 export interface GalleryProps extends GalleryScope {
@@ -208,6 +210,7 @@ export default function Gallery({ ruleset, type, indexUrl, base, records: given,
                 </button>
               </p>
             )}
+            <SetActions target={setTarget(records, view.results, selected)} base={base} />
           </div>
           <ul class="gallery__grid">
             {view.results.map((record) => {
