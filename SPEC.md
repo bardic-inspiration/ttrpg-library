@@ -712,7 +712,7 @@ Every run, scheduled or manual, follows the same sequence so that review feedbac
 6. **Ambiguity.** If a request cannot be fulfilled as written (contradictory constraints, unknown type), comment a single question on the issue, add `needs-info`, remove `in-progress`, and move on.
 7. **Stale claims.** An `in-progress` issue with no open linked PR after 24 hours is treated as unclaimed.
 
-A manual run may name specific issues, or pass an inline request (type, count, brief, tags) that is handled as if it were an issue but without one.
+A manual run may name specific issues, or pass an inline request (type, count, brief, tags) that is handled as if it were an issue but without one. Such a run still does steps 1–3, but step 4 takes only what it was given. Named issues must be open `request` issues without `needs-info`; any other is reported and left alone, and named issues whose total count exceeds `maxBatch` are taken in the order named while they fit, with the rest reported for a later run. It never gap-fills (step 5). An inline request that is ambiguous (step 6) has no issue to ask on, so the run reports the question instead.
 
 ### 8.3 Defaults (`config/defaults.json`)
 
@@ -777,6 +777,8 @@ Recorded in `docs/routines.md` along with the canonical routine prompts:
 
 - **Scheduled routine:** weekly, Monday morning local time, one run. Default batch 5, never above `maxBatch` (10).
 - **On-demand routine:** same prompt, with optional issue numbers or an inline request.
+
+The prompts tell the run to follow the run order written out in `docs/routines.md`, read from `main`, so a change to the run order is a reviewed dev PR to that file rather than an edit to the routine's settings. Steps that depend on a skill or script not yet built are marked there as unavailable and skipped. A test checks that every repo path, npm script, and `config/defaults.json` key the file names exists, that it lists the §8.2 steps in order, and that the on-demand prompts are the scheduled prompt with inputs added.
 
 ## 9. Gallery site
 
