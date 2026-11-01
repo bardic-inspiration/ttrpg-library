@@ -31,7 +31,7 @@
         "defaultSort": "stats.cr:asc",
         "defaultFilters": ["stats.cr", "stats.creatureType", "tags.theme"],
         "summaryField": "stats.cr",
-        "gapBuckets": { "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }
+        "gapBuckets": [{ "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }]
       },
       "magic-item": {
         "label": "Magic item",
@@ -53,7 +53,8 @@
         "cardFields": ["stats.rarity", "stats.category", "stats.attunement.required"],
         "defaultSort": "stats.rarity:asc",
         "defaultFilters": ["stats.rarity", "stats.category", "tags.theme"],
-        "summaryField": "stats.rarity"
+        "summaryField": "stats.rarity",
+        "gapBuckets": [{ "path": "stats.rarity", "enum": ["common", "uncommon", "rare", "very-rare", "legendary"] }]
       },
       "spell": {
         "label": "Spell",
@@ -71,7 +72,14 @@
         "cardFields": ["stats.level", "stats.school", "stats.duration.concentration", "stats.ritual"],
         "defaultSort": "stats.level:asc",
         "defaultFilters": ["stats.level", "stats.school", "tags.theme"],
-        "summaryField": "stats.level"
+        "summaryField": "stats.level",
+        "gapBuckets": [
+          { "path": "stats.level", "bins": [[0, 0], [1, 3], [4, 6], [7, 9]] },
+          {
+            "path": "stats.school",
+            "enum": ["abjuration", "conjuration", "divination", "enchantment", "evocation", "illusion", "necromancy", "transmutation"]
+          }
+        ]
       }
     }
   }

@@ -218,7 +218,7 @@ The file path must be `content/<ruleset>/<type>/<id>.json`. Unknown top-level ke
 | `meta.updatedAt` | no | ISO date, set on any revision |
 | `meta.source.kind` | yes | `routine`, `revise`, or `manual` |
 | `meta.source.issues` | no | Array of issue numbers this entry fulfilled |
-| `meta.source.gapFill` | no | Gap bucket label when created by the gap-filler |
+| `meta.source.gapFill` | no | Gap bucket label (§7.1) when created by the gap-filler |
 
 Meta is shown on the detail page in a small provenance line and is sortable (`meta.createdAt`), but it is not a tag.
 
@@ -622,7 +622,7 @@ Display and generation defaults only. Validation never reads it except to confir
         "defaultSort": "stats.cr:asc",
         "defaultFilters": ["stats.cr", "stats.creatureType", "tags.theme"],
         "summaryField": "stats.cr",
-        "gapBuckets": { "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }
+        "gapBuckets": [{ "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }]
       }
     }
   }
@@ -637,7 +637,7 @@ Display and generation defaults only. Validation never reads it except to confir
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |
 | `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level) |
 | `template` | Card and print component; a missing template falls back to the generic layout |
-| `gapBuckets` | How the gap-filler partitions the type (one path with numeric bins, or `enum` for categorical paths) |
+| `gapBuckets` | How the gap-filler partitions the type: a list of axes, each one facet path (§7.1) |
 
 v1 registry entries:
 
@@ -645,9 +645,29 @@ v1 registry entries:
 |---|---|---|---|---|---|
 | `creature` | CR, size, creature type, six ability scores, AC, HP (derived), XP (derived) | CR, size, creature type | CR ascending | CR, creature type, `tags.theme` | CR bins as above |
 | `magic-item` | rarity, category, attunement required, cursed | rarity, category, attunement | rarity ascending (ordered enum) | rarity, category, `tags.theme` | rarity |
-| `spell` | level, school, classes, concentration, ritual, casting-time unit | level, school, concentration/ritual badges | level ascending | level, school, `tags.theme` | level × school |
+| `spell` | level, school, classes, concentration, ritual, casting-time unit | level, school, concentration/ritual badges | level ascending | level, school, `tags.theme` | level tiers × school |
 
 Ordered enums (rarity, size) declare their order in the facet as `"order": [...]` so sorting is semantic, not alphabetical.
+
+### 7.1 Gap buckets
+
+`gapBuckets` is a list of axes. Each axis partitions one of the type's facets, and the buckets are every combination of one value per axis: one axis partitions the type, and two axes cross. There are two kinds of axis:
+
+- **Numeric bins** on a `range` facet: `{ "path": "stats.cr", "bins": [[0, 1], [2, 4]] }`. Each bin is `[min, max]`, inclusive at both ends, so `[0, 1]` holds CR 0, 1/8, 1/4, 1/2 and 1. Bins are in ascending order and don't overlap.
+- **Categorical values** on an `enum` facet: `{ "path": "stats.rarity", "enum": ["common", "uncommon"] }`. There is one bucket per listed value. Every value must be one the type's schema allows at that path. A value left out, such as `artifact`, is never a gap to fill.
+
+```json
+"creature":   { "gapBuckets": [{ "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }] },
+"magic-item": { "gapBuckets": [{ "path": "stats.rarity", "enum": ["common", "uncommon", "rare", "very-rare", "legendary"] }] },
+"spell": {
+  "gapBuckets": [
+    { "path": "stats.level", "bins": [[0, 0], [1, 3], [4, 6], [7, 9]] },
+    { "path": "stats.school", "enum": ["abjuration", "conjuration", "divination", "enchantment", "evocation", "illusion", "necromancy", "transmutation"] }
+  ]
+}
+```
+
+An entry belongs to a bucket when its value on every axis falls in that bucket's bin or equals its value. An entry with no value on an axis belongs to no bucket. A bucket's **label**, recorded in `meta.source.gapFill` (§5.4) and named in the PR body (§8.4), joins one `<path>=<value>` per axis with `&`, in axis order. A bin reads as `min..max`, as in a gallery range (§9.3), and a categorical value reads as itself: `stats.cr=2..4`, `stats.rarity=rare`, `stats.level=1..3&stats.school=evocation`. With `f.` before each path, a label is a gallery query that shows the bucket's entries.
 
 ## 8. Generation and revision
 
