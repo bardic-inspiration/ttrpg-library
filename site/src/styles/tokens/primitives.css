@@ -74,6 +74,7 @@
     --size-measure: 70ch;
     --size-content: 80rem;
     --size-card-min: 16rem;
+    --size-filters: 16rem;
     --size-icon: 1.25em;
 
     /* Line widths. */
@@ -98,6 +99,7 @@
 
     /* Aspect ratios. */
     --ratio-art: 4 / 3;
+    --ratio-square: 1 / 1;
   }
 
   @media (prefers-reduced-motion: reduce) {

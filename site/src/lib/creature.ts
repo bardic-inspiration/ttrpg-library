@@ -7,6 +7,7 @@ import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { renderTokens } from '../../../rulesets/dnd-5e-2024/tokens.ts';
 import { present, whenPresent } from './display.ts';
+import { formatCr } from './format.ts';
 import type {
   Action,
   CreatureStats,
@@ -29,8 +30,7 @@ export interface ActionBlock {
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(' ');
 
-const FRACTIONS: Record<number, string> = { 0.125: '1/8', 0.25: '1/4', 0.5: '1/2' };
-export const formatCr = (cr: number): string => FRACTIONS[cr] ?? String(cr);
+export { formatCr };
 
 export const sizeTypeLine = (s: CreatureStats): string => {
   const descriptors = whenPresent(s.descriptors, (list) => ` (${list.join(', ')})`) ?? '';

@@ -1,5 +1,5 @@
 // Lucide `sun-moon` (ISC).
-import { Icon, type IconProps } from './Icon';
+import { Icon, type IconProps } from './Icon.tsx';
 
 export default function ThemeIcon(props: IconProps) {
   return (

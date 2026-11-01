@@ -143,6 +143,7 @@ ttrpg-library/
 │       ├── pages/                          routes, including /styleguide/
 │       ├── components/templates/           type templates and their parts
 │       ├── components/gallery/             grid, cards, filters, search (Preact islands)
+│       ├── lib/gallery/                    gallery logic: route config, URL state, filter, sort, search
 │       ├── exporters/                      json, png, print
 │       ├── icons/                          inlined Lucide SVGs
 │       └── styles/                         tokens/ and global layers (§9.6)
@@ -789,7 +790,7 @@ The index stays lean; full entries are fetched only for export.
 | Route | Content |
 |---|---|
 | `/` | All entries, with a type filter and the latest additions first |
-| `/<ruleset>/` | All entries in the ruleset |
+| `/<ruleset>/` | All entries in the ruleset, with the same type filter and order as `/` |
 | `/<ruleset>/<type>/` | Gallery for one type with that type's default facets and sort |
 | `/<ruleset>/<type>/<id>/` | Detail page |
 | `/print/` | Print view for one or many entries (§10.4) |
@@ -799,12 +800,13 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 
 ### 9.3 Gallery behavior
 
-- **Card grid.** Each card shows art or the placeholder, name, type badge, `cardFields`, and summary. Responsive: one column on phones, up to four on wide screens.
-- **Filters.** The registry's `defaultFilters` are expanded. "Add filter" lists every facet for the current type(s) plus every tag key present in the current result set. Range facets show min/max inputs; enum facets and tags show multi-select chips with counts. Values within a facet combine as OR; facets combine as AND.
-- **Sort.** Name, created date, or any facet, ascending or descending. Ordered enums sort by declared order. Entries missing the sort value go last.
+- **Loading.** The gallery is one Preact island (`site/src/components/gallery/`, with its logic in `site/src/lib/gallery/`) shared by `/`, `/<ruleset>/`, and `/<ruleset>/<type>/`. It fetches `library.json` once and filters it in memory. Without JavaScript, the page shows a plain list of the route's entries, linked to their detail pages.
+- **Card grid.** Each card shows art or the placeholder, name, type badge, `cardFields`, and summary. A boolean card field (concentration, ritual, attunement) reads as a badge labeled with the facet when `true` and is left out when `false`. A `rarity`-formatted field reads as a badge carrying `data-rarity`. Other fields read as label and value. Responsive: one column on phones, up to four on wide screens.
+- **Filters.** On a type gallery, the registry's `defaultFilters` are expanded. Routes that span types (`/` and `/<ruleset>/`) have one default filter instead: `type`, an enum over the registered types. A default filter shows when some entry on the route has a value for it. Active filters and filters the reader added always show, and a non-default filter has a button to remove it. "Add filter" lists every facet for the current type(s) plus every tag key present in the current result set. The current types are the type filter's values when it is set, otherwise every type on the route. Range facets show min/max inputs, which also accept fractions such as `1/8`. Enum facets and tags show multi-select chips with counts. A chip's count is the number of results it matches under the search and every other active filter. Chips list every value present on the route in declared order (for ordered enums) or alphabetically, plus any selected value no entry has. Values within a facet combine as OR; facets combine as AND. An entry missing a filter's value never matches it.
+- **Sort.** Name (`name`), created date (`createdAt`), or any facet, ascending or descending. Ordered enums sort by declared order, an array facet (size) by its first item, and ties by name. Entries missing the sort value go last in either direction. A type gallery starts on the registry's `defaultSort`; `/` and `/<ruleset>/` start on `createdAt:desc`.
 - **Search.** MiniSearch over `name` (boost 3), `summary` (2), tag values (1.5), and `search` (1), with prefix and light fuzzy matching. Search narrows within active filters. Results order by relevance when a query is present, otherwise by the active sort.
-- **URL state.** Query, sort, and filters live in the query string, so any view can be bookmarked or linked: `?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8&f.tags.theme=fire`. Ranges use `min..max` (either side may be empty). Keys and values are URL-encoded. Unknown parameters are ignored.
-- **Selection.** Cards have a checkbox. Selected entries (or the whole filtered set) can be sent to the print view or exported as a JSON array.
+- **URL state.** Query, sort, and filters live in the query string, so any view can be bookmarked or linked: `?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8&f.tags.theme=fire`. Ranges use `min..max` (either side may be empty). Keys and values are URL-encoded, so a comma inside a value is `%2C` and a bare comma separates values. Enum values are case-folded. The type filter is `f.type`. Unknown parameters are ignored, as are filters on paths the route doesn't have, unknown sort paths, and malformed values. The gallery rewrites the URL as the view changes (replacing the history entry, not adding one). It writes one canonical form: filters in registry order, then tags by key, with the default sort and ignored parameters left out.
+- **Selection.** Cards have a checkbox. Selection lives in the page, not the URL. Selected entries (or the whole filtered set) can be sent to the print view or exported as a JSON array; those actions arrive with the exports (§10).
 - **Scale.** The index is loaded once and filtered in memory. This is sized for a few thousand entries; past roughly 2,000 entries, revisit index size and prebuilt search indexes.
 
 ### 9.4 Detail page
@@ -834,7 +836,7 @@ The styling system is built so that the v1 UI can be refined quickly and safely 
 **Approach**
 
 - Plain modern CSS: custom properties, nesting, cascade layers, and container queries. No CSS framework, no preprocessor, no CSS-in-JS. Target: the last two versions of evergreen browsers.
-- Component styles live in each Astro or Preact component's scoped `<style>` block, next to the markup they style.
+- Component styles live in each Astro component's scoped `<style>` block, next to the markup they style. Preact components can't carry a scoped block, so a Preact island's styles sit in one stylesheet beside its components, imported by the island (`components/gallery/gallery.css`) and linted like any other.
 - Global styles are a small, fixed set of files, loaded in this layer order:
 
   ```css
@@ -857,7 +859,7 @@ The styling system is built so that the v1 UI can be refined quickly and safely 
 **Rules that keep editing easy**
 
 - Components use only semantic, component, and content tokens. They never use primitives or literal values. A color, font, size, spacing, radius, shadow, or duration written as a literal anywhere outside `tokens/` fails the lint. Stylelint enforces this in `npm run check` (`stylelint.config.mjs`): hex, named, and functional colors, length and time units (`px`, `rem`, `em`, `pt`, `ms`, `s`…), and literal font families, weights, line heights, and shadows all fail. Percentages, viewport units, `0`, `auto`, and keywords stay allowed. `tests/stylelint.test.ts` proves each rule fires.
-- Accents are driven by data attributes, not by per-type CSS. Cards and stat blocks carry `data-type="creature"` (and `data-rarity="rare"` for items), and one rule maps each attribute to `--accent`. A new type needs one variable in `content.css`; without one, it falls back to `--color-accent`.
+- Accents are driven by data attributes, not by per-type CSS. Cards and stat blocks carry `data-type="creature"` (and `data-rarity="rare"` for items), and one rule maps each attribute to `--accent`. A new type needs one variable in `content.css`; without one, it falls back to `--color-accent`. Component tokens built on `--accent` (badge, placeholder, and stat-block rule colors) are re-declared on `[data-type]` and `[data-rarity]` in `components.css`, so each element takes its own accent rather than the one resolved at `:root`.
 - Class names are stable, readable, and component-scoped (`.statblock__header`, `.card__summary`), so a quick experiment in `overrides.css` can target anything.
 - Layout values are tokens as well: grid minimum card width, gaps, stat-block column gap, and container-query breakpoints. Density and layout can be tuned without touching component code.
 

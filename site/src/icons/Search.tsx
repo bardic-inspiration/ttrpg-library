@@ -1,5 +1,5 @@
 // Lucide `search` (ISC).
-import { Icon, type IconProps } from './Icon';
+import { Icon, type IconProps } from './Icon.tsx';
 
 export default function SearchIcon(props: IconProps) {
   return (

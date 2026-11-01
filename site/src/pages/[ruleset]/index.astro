@@ -1,0 +1,17 @@
+---
+// Every entry in one ruleset (SPEC.md §9.2), one page per registered ruleset.
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import GalleryIsland from '../../components/gallery/GalleryIsland.astro';
+import registry from '../../../../config/types.json';
+
+export const getStaticPaths = (() =>
+  Object.entries(registry).map(([ruleset, config]) => ({ params: { ruleset }, props: { label: config.label } }))) satisfies GetStaticPaths;
+
+const { ruleset } = Astro.params;
+const { label } = Astro.props;
+---
+<Base title={`${label} · TTRPG Content Library`}>
+  <h1>{label}</h1>
+  <GalleryIsland ruleset={ruleset} />
+</Base>

@@ -1,7 +1,8 @@
 // The schema stage (SPEC.md §5.1, §6.2): Ajv with JSON Schema draft 2020-12.
 
+import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { Ajv2020, type ErrorObject, type ValidateFunction } from 'ajv/dist/2020.js';
 import addFormatsModule from 'ajv-formats';
 import type { RulesetModule } from '../../rulesets/module.ts';
@@ -9,8 +10,20 @@ import type { RulesetModule } from '../../rulesets/module.ts';
 // ajv-formats ships CommonJS; under NodeNext its default import is the module object.
 const addFormats = addFormatsModule as unknown as typeof addFormatsModule.default;
 
-/** The repo root, where schemas/, rulesets/, and config/ live. */
-export const PROJECT_ROOT = join(import.meta.dirname, '../..');
+/**
+ * The repo root, where schemas/, rulesets/, and config/ live: the nearest
+ * directory above this module that holds config/types.json. Searching rather
+ * than counting `..` keeps it right when Astro bundles this module into
+ * site/dist (the style guide builds the fixtures at build time).
+ */
+export const PROJECT_ROOT = findRoot(import.meta.dirname);
+
+function findRoot(start: string): string {
+  for (let dir = start; ; dir = dirname(dir)) {
+    if (existsSync(join(dir, 'config/types.json'))) return dir;
+    if (dirname(dir) === dir) return join(import.meta.dirname, '../..');
+  }
+}
 
 const readJson = async (path: string): Promise<unknown> => JSON.parse(await readFile(path, 'utf8'));
 

@@ -1,0 +1,30 @@
+---
+// Mounts the gallery island for a route (SPEC.md §9.2, §9.3). The island
+// fetches library.json once it runs; without JavaScript, a plain list of the
+// route's entries links to every detail page instead.
+import Gallery from './Gallery';
+import { entryPath, loadEntries } from '../../lib/library';
+import { url } from '../../lib/url';
+
+interface Props {
+  ruleset?: string;
+  type?: string;
+}
+
+const { ruleset, type } = Astro.props;
+const entries = loadEntries().filter(
+  ({ entry }) => (!ruleset || entry.ruleset === ruleset) && (!type || entry.type === type),
+);
+---
+<Gallery client:load ruleset={ruleset} type={type} indexUrl={url('library.json')} base={url()} />
+<noscript>
+  {entries.length === 0 ? (
+    <p>No entries yet.</p>
+  ) : (
+    <ul>
+      {entries.map(({ entry }) => (
+        <li><a href={url(entryPath(entry))}>{entry.name}</a>: {entry.summary}</li>
+      ))}
+    </ul>
+  )}
+</noscript>
