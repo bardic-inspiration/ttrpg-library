@@ -6,7 +6,8 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { PROJECT_ROOT } from '../validate/schema.ts';
 import { loadDefaults } from './defaults.ts';
-import { pickGap, type GapRecord, type GapRegistry } from './gap.ts';
+import type { GapRecord } from '../../lib/buckets.ts';
+import { pickGap, type GapRegistry } from './gap.ts';
 
 const library = await readFile(join(PROJECT_ROOT, 'site/public/library.json'), 'utf8').catch(() => {
   console.error('site/public/library.json not found; run `npm run build:index` first.');
