@@ -759,6 +759,8 @@ A test checks that every repo path, npm script, and `config/defaults.json` key t
 - **Post-merge revisions.** A `revise` issue produces a PR on branch `revise/<issue>-<YYYYMMDD>` with `meta.source.kind` left as-is and `meta.updatedAt` set. IDs never change.
 - **Delivery.** The run-order sweep in §8.2 step 2 is the guaranteed path, so a comment is handled by the next run at the latest. A routine session may also subscribe to the PR it opened for faster turnaround where the platform supports it; correctness never depends on that.
 
+A test checks that every repo path, npm script, and `config/defaults.json` key the skill (`.claude/skills/revise/SKILL.md`) names exists, and that it names the handled marker, `drop` and `regenerate`, and the commit and branch formats above.
+
 ### 8.6 Guidelines
 
 Each `rulesets/dnd-5e-2024/guidelines/<type>.md` contains:
