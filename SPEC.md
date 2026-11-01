@@ -767,6 +767,8 @@ Each `rulesets/dnd-5e-2024/guidelines/<type>.md` contains:
 - Prose style for `text`, `onHit`, `onFailure`, `onSuccess`, and `effect`, matching 5.2 phrasing, with derived numbers written as tokens. Attack and save lines are generated, so they are never written as prose.
 - When to create a dependency entry versus using plain text for an SRD reference.
 
+Each topic is one `##` section, in this order and with exactly these headings: `Tone and voice`, `Naming`, `Balance targets`, `Prose style`, `Dependencies and SRD references`. A test checks that every registered type's `guideline` path is `rulesets/<ruleset>/guidelines/<type>.md` and exists, that it has those sections, that every `{...}` in it is a token the ruleset defines (§6.4), and that it passes the blocklist (§11). Spell and magic-item text has no tokens, so their guidelines use none.
+
 ### 8.7 Schedule
 
 Recorded in `docs/routines.md` along with the canonical routine prompts:
