@@ -3,6 +3,7 @@ import { a11yPages } from '../scripts/a11y/index.ts';
 import { resolvePath } from '../scripts/serve/index.ts';
 
 const record = (type: string, id: string, facets: Record<string, unknown>) => ({
+  id,
   ruleset: 'dnd-5e-2024',
   type,
   name: id,
@@ -11,7 +12,7 @@ const record = (type: string, id: string, facets: Record<string, unknown>) => ({
 });
 
 describe('a11yPages (SPEC.md §9.7)', () => {
-  it('checks home, a filtered type gallery, and one detail page per type with entries', () => {
+  it('checks home, a filtered type gallery, one detail page per type with entries, and the print view', () => {
     const pages = a11yPages([
       record('creature', 'cinder-hound', { 'stats.cr': 2, 'stats.size': ['medium'] }),
       record('creature', 'ash-wolf', { 'stats.cr': 1 }),
@@ -22,7 +23,9 @@ describe('a11yPages (SPEC.md §9.7)', () => {
       'dnd-5e-2024/creature/?f.stats.cr=2..2',
       'dnd-5e-2024/creature/cinder-hound/',
       'dnd-5e-2024/spell/frost-lance/',
+      'print/?ids=cinder-hound,frost-lance',
     ]);
+    expect(pages.at(-1)).toMatchObject({ label: 'print view: cinder-hound, frost-lance', ready: '.print-entry' });
   });
 
   it('filters by an enum facet value when the first facet is one', () => {

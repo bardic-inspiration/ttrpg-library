@@ -27,9 +27,14 @@ let failures = 0;
 try {
   for (const theme of ['light', 'dark'] as const) {
     const context = await browser.newContext({ colorScheme: theme });
+    // The print view opens the print dialog on load; there is no one to close it.
+    await context.addInitScript(() => {
+      window.print = () => {};
+    });
     for (const page of pages) {
       const tab = await context.newPage();
       await tab.goto(server.url + page.path, { waitUntil: 'networkidle' });
+      if (page.ready) await tab.waitForSelector(page.ready);
       const { violations } = await new AxeBuilder({ page: tab }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
       const blocking = violations.filter((v) => BLOCKING.has(v.impact ?? ''));
       const other = violations.length - blocking.length;

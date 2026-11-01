@@ -1,0 +1,55 @@
+/* Styles for the print view island (SPEC.md §9.6: a Preact island's styles
+   sit in one stylesheet beside its components). */
+@layer components {
+  .print-view {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .print-view__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s);
+  }
+
+  .print-view__field {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .print-view__print {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .print-view__status {
+    color: var(--color-text-muted);
+  }
+
+  .print-view__entries {
+    display: grid;
+    gap: var(--space-l);
+  }
+
+  .print-view__entries:not([data-continuous]) .print-view__entry + .print-view__entry {
+    break-before: page;
+  }
+
+  @media print {
+    .print-view__controls,
+    .print-view__status {
+      display: none;
+    }
+
+    .print-view__entries {
+      display: block;
+    }
+
+    .print-view__entries[data-continuous] .print-view__entry + .print-view__entry {
+      margin-block-start: var(--space-m);
+    }
+  }
+}

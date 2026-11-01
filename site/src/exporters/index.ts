@@ -3,9 +3,10 @@
 import config from '../../../config/export.json' with { type: 'json' };
 import { json } from './json.ts';
 import { png } from './png.ts';
+import { print } from './print.ts';
 import type { ExportScope, Exporter } from './types.ts';
 
-export const modules: Record<string, Exporter> = { json, png };
+export const modules: Record<string, Exporter> = { json, png, print };
 
 /** The exporters named by `ids`, in order. An unknown id is a build error. */
 export function exportersFor(ids: string[], scope?: ExportScope): Exporter[] {

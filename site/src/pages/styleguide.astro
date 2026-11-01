@@ -8,6 +8,8 @@
 // fixtures (§9.8). Print previews at each page size join with the exports.
 import Base from '../layouts/Base.astro';
 import EntryTemplate from '../components/templates/EntryTemplate.astro';
+import PrintEntry from '../components/print/PrintEntry.astro';
+import { pageSizes } from '../lib/print';
 import SearchIcon from '../icons/Search';
 import FilterIcon from '../icons/Filter';
 import SortIcon from '../icons/Sort';
@@ -232,10 +234,54 @@ const modes = ['screen', 'capture'] as const;
       ))}
     </div>
   </section>
+
+  <section class="sg-section" aria-labelledby="sg-print">
+    <h2 id="sg-print">Print previews</h2>
+    <p class="measure">
+      Each template in <code>print</code> mode at each page size, at the page's
+      width inside its margins, with the light tokens print always uses. Density
+      per size is in <code>tokens/print.css</code>; sizes and margins are in
+      <code>config/export.json</code>.
+    </p>
+    {pageSizes.map((size) => (
+      <>
+        <h3>{size.label}</h3>
+        <div class="sg-print-row">
+          {fixtureEntries.map((loaded) => (
+            <div
+              class="sg-print"
+              data-theme="light"
+              data-page-size={size.id}
+              style={`inline-size: calc(${size.width} - 2 * ${size.margin})`}
+            >
+              <PrintEntry loaded={loaded} names={entryNames} level={4} />
+            </div>
+          ))}
+        </div>
+      </>
+    ))}
+  </section>
 </Base>
 
 <style>
   @layer components {
+    .sg-print-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+      gap: var(--space-m);
+      overflow-x: auto;
+    }
+
+    .sg-print {
+      flex: none;
+      max-inline-size: 100%;
+      background: var(--color-bg);
+      color: var(--color-text);
+      border: var(--border-width) solid var(--color-border);
+      padding: var(--space-s);
+    }
+
     .sg-section {
       display: grid;
       gap: var(--space-s);

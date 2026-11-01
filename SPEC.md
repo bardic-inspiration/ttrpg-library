@@ -145,6 +145,7 @@ ttrpg-library/
 │       ├── pages/                          routes, including /styleguide/
 │       ├── components/templates/           type templates and their parts
 │       ├── components/gallery/             grid, cards, filters, search (Preact islands)
+│       ├── components/print/               the print view island and the print-mode entry its fragments render
 │       ├── lib/gallery/                    gallery logic: route config, URL state, filter, sort, search
 │       ├── exporters/                      json, png, print
 │       ├── icons/                          inlined Lucide SVGs
@@ -908,7 +909,7 @@ Target: WCAG 2.2 AA.
 - **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name; the placeholder is decorative and hidden from assistive technology.
 - **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce` (the duration primitives are reset in `primitives.css`, and the contrast suite checks that every one is).
 - **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without horizontal scrolling.
-- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, and the first detail page of each type that has an entry. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The print view joins the list when it exists (§10.4).
+- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, the first detail page of each type that has an entry, and the print view of those same entries (`print/?ids=…`), checked once its entries have loaded. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The check stubs `window.print`, since the print view opens the dialog on load.
 
 ### 9.8 UI refinement workflow
 
@@ -951,11 +952,12 @@ interface Exporter {
   id: string;                         // "json", "png", "print"
   label: string;                      // button text
   scopes: Array<"entry" | "set">;     // single entry, filtered/selected set, or both
+  pageSize?: boolean;                 // takes a page size, so its control comes with a page size selector
   run(items: Array<{ entry: Entry; derived: Derived }>, options: ExportOptions): Promise<void>;
 }
 ```
 
-`ExportOptions` carries the `scope` being run and the site `base` URL (ending in `/`), plus optional injected browser IO (fetch, download, clock, capture) so exporters are testable without a DOM. The registry (`site/src/exporters/index.ts`) maps the ids in `config/export.json` to modules, in config order; an id without a module is a build error. The detail page and the gallery build their controls from the configured exporters offering the scope they need.
+`ExportOptions` carries the `scope` being run, the site `base` URL (ending in `/`), and the chosen `pageSize` id for an exporter that takes one, plus optional injected browser IO (fetch, download, clock, capture, open a page) so exporters are testable without a DOM. The registry (`site/src/exporters/index.ts`) maps the ids in `config/export.json` to modules, in config order; an id without a module is a build error. The detail page and the gallery build their controls from the configured exporters offering the scope they need.
 
 Future translators (Foundry VTT, Open5e, and other open formats) are additional exporters that map an entry and its derived values to the target format. Most target formats store computed numbers, so translators read `derived` rather than recomputing. No gallery code changes are needed to add one.
 
@@ -975,12 +977,15 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 
 ### 10.4 Print (PDF)
 
-- `/print/?ids=a,b,c&size=letter` or `/print/?<gallery query>&size=letter` renders the entries in `print` mode.
-- The page size comes from `config/export.json`. The print view injects an `@page { size; margin }` rule for the chosen size at runtime, because `@page` cannot be toggled by class.
+- `/print/?ids=a,b,c&size=letter` or `/print/?<gallery query>&size=letter` renders the entries in `print` mode. The `ids` form prints in the given order, ignoring repeats. Without `ids`, the rest of the query is read as the home gallery's (`/`, §9.3) with the gallery's own parsing and filtering (`site/src/lib/gallery/`), so `f.type` narrows by type, and the results print in the gallery's order. A missing or unknown `size` is the default page size.
+- **Print fragments.** `astro build` also emits each entry's print fragment at `print/<ruleset>/<type>/<id>/`: the type template in `print` mode (`components/print/PrintEntry.astro`), as bare markup with no page shell. The print view (`components/print/PrintView.tsx`, logic in `site/src/lib/print.ts` and `print-run.ts`) resolves its entries against `library.json`, fetches only their fragments, and inserts them; the `/print/` page carries the templates' styles. Page weight follows the selection, not the library. If an id names no entry, a fragment fails to load, or nothing matches, the page shows a message in a polite status region and the print dialog doesn't open.
+- The page size comes from `config/export.json`. The print view injects an `@page { size; margin }` rule for the chosen size at runtime, because `@page` cannot be toggled by class, and sets `data-page-size` on `<html>` for the density tokens in `tokens/print.css`. A page size selector on the print view changes the size in place (and in the URL).
 - Layout per size: Letter and A4 use the two-column 5.2 stat-block layout; Half-Letter and 4×6 use one column with smaller type.
 - Each entry starts on a new page by default; a "continuous" toggle packs entries. Long stat blocks flow onto following pages with `break-inside: avoid` on actions and traits so no action is split.
-- A small footer on each page carries the entry name and the SRD attribution line.
-- You save as PDF from the browser's print dialog. The print view opens the dialog automatically once fonts load.
+- A small footer on each page, in the `@page` bottom margin, carries the entry name and the short SRD attribution line (§11). Each entry prints on its own named page, whose footer names it; in continuous mode, where a page can hold several entries, the footer carries the attribution line only. The site footer, with the full SRD statement, prints after the last entry, on that entry's page.
+- The site header and the print view's controls don't print.
+- You save as PDF from the browser's print dialog. The print view opens the dialog automatically once the entries are in and fonts load.
+- The print exporter (entry and set scope) opens the print view in a new tab with `?ids=…&size=…`, or in the same tab if the browser blocks the new one. On the detail page, its Print control has a page size selector beside it, defaulting to the configured default size.
 
 ### 10.5 `config/export.json`
 
@@ -1006,11 +1011,11 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 - **Code:** MIT (`LICENSE`).
 - **Third-party assets:** Alegreya fonts (SIL Open Font License 1.1) and Lucide icons (ISC), each credited in `ATTRIBUTION.md`.
 - **Content** (`content/`, `rulesets/*/guidelines/`): CC-BY-4.0 (`LICENSE-CONTENT`), compatible with the SRD's terms.
-- **SRD attribution statement**, in `ATTRIBUTION.md`, the site footer, the `/about/` page, and every print page:
+- **SRD attribution statement**, in `ATTRIBUTION.md`, the site footer, the `/about/` page, and every print run (§10.4):
 
   > This work includes material from the System Reference Document 5.2 ("SRD 5.2") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode.
 
-- PNG exports carry a one-line short form ("Includes SRD 5.2 material, CC-BY-4.0") in the capture footer.
+- PNG exports carry a one-line short form ("Includes SRD 5.2 material, CC-BY-4.0") in the capture footer. Every printed page carries the same short form in its page footer, since the full statement doesn't fit a 4×6 page margin; the full statement prints after the last entry.
 - **Blocklist** (`config/blocklist.json`): a list of non-SRD proper nouns (product-identity monsters, named characters, settings, and named spell prefixes, for example "Beholder," "Mind Flayer," "Illithid," "Displacer Beast," "Githyanki," "Forgotten Realms," "Faerûn," "Greyhawk," "Eberron," "Waterdeep," "Mordenkainen," "Bigby," "Tasha"). The file is a JSON array of strings. Matching runs across `name`, `summary`, `description`, `descriptors`, and all `stats` text, on word boundaries (any character that isn't a letter, digit, or underscore). It ignores case and diacritics ("Faerun" matches "Faerûn"), and catches cheap variants so the list holds only base forms: plurals in -s, -es, and -y → -ies; possessives with `'` or `’` ("Tasha's", "beholders'"); and the words of a multi-word term joined by whitespace, a hyphen, or nothing ("mind-flayer", "mindflayer"). Irregular plurals are listed as their own terms. The matcher is `termMatcher` in `lib/text.ts`. A match is an error. For a borderline false positive, the fix is a PR that edits the blocklist, so the decision is visible in history.
 - Other rulesets require their own licensing review and attribution entry before they are added. `config/types.json` `attribution` points each ruleset to its statement.
 
