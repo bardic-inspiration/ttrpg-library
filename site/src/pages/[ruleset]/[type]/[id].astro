@@ -1,9 +1,10 @@
 ---
 // Detail page for one entry (SPEC.md §9.2, §9.4), with Open Graph tags from
-// the entry's name, summary, and art.
+// the entry's name, summary, and art, and its export controls (§10).
 import type { GetStaticPaths } from 'astro';
 import Base from '../../../layouts/Base.astro';
 import EntryDetail from '../../../components/detail/EntryDetail.astro';
+import ExportControls from '../../../components/detail/ExportControls';
 import { entryNames, loadEntries, refTargets, type LoadedEntry } from '../../../lib/library';
 import type { RefTarget } from '../../../lib/refs';
 import { url } from '../../../lib/url';
@@ -25,11 +26,13 @@ interface Props {
 }
 
 const { loaded, names, targets } = Astro.props;
-const { entry } = loaded;
+const { entry, derived } = loaded;
 ---
 <Base
   title={`${entry.name} · TTRPG Content Library`}
   og={{ title: entry.name, description: entry.summary, image: entry.image ? url(entry.image) : undefined, type: 'article' }}
 >
-  <EntryDetail loaded={loaded} names={names} targets={targets} />
+  <EntryDetail loaded={loaded} names={names} targets={targets}>
+    <ExportControls slot="export" client:load item={{ entry, derived }} base={url()} />
+  </EntryDetail>
 </Base>

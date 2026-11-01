@@ -63,4 +63,14 @@ describe('detail helpers (SPEC.md §9.3, §9.4)', () => {
     expect(provenance(entry).updatedAt).toBeUndefined();
     expect(provenance({ ...entry, meta: { ...entry.meta, updatedAt: '2026-12-01' } }).updatedAt).toBe('2026-12-01');
   });
+
+  it('places the page\'s export controls in the intro, after the summary', async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(EntryDetail, {
+      props: { loaded: lib.byId('cinder-hound'), names: lib.names, targets: lib.targets },
+      slots: { export: '<div class="export-slot-probe"></div>' },
+    });
+    const intro = html.slice(html.indexOf('entry-detail__intro'), html.indexOf('</header>'));
+    expect(intro).toMatch(/entry-detail__summary[\s\S]*export-slot-probe/);
+  });
 });

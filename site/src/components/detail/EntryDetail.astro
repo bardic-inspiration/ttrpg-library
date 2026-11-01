@@ -1,8 +1,8 @@
 ---
 // The body of a detail page (SPEC.md §9.4): art or placeholder, name, type,
 // and summary; the type template; the description as lore; forward refs and
-// back-refs; tag chips into the filtered type gallery; and provenance.
-// Export controls arrive with milestone 4 (§10).
+// back-refs; tag chips into the filtered type gallery; and provenance. The
+// page passes its export controls (an island) in the `export` slot.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
 import { groupRefs, type RefTarget } from '../../lib/refs';
@@ -41,6 +41,7 @@ const source = provenance(entry);
       <h1>{entry.name}</h1>
       <p><a class="entry-detail__type" href={url(`${entry.ruleset}/${entry.type}/`)}>{typeLabel}</a></p>
       <p class="entry-detail__summary">{entry.summary}</p>
+      <slot name="export" />
     </div>
   </header>
 
