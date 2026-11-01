@@ -1,0 +1,21 @@
+# Content lane (SPEC.md §8.1). A routine turns this into a small revise PR.
+name: Revise request
+description: Ask a routine to change entries that are already merged.
+labels: [revise]
+body:
+  - type: textarea
+    id: ids
+    attributes:
+      label: Entry IDs
+      description: The `id` of each entry to revise, one per line.
+      placeholder: |
+        tidewrack-hulk
+    validations:
+      required: true
+  - type: textarea
+    id: instruction
+    attributes:
+      label: Instruction
+      description: What to change, and why.
+    validations:
+      required: true
