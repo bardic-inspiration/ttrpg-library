@@ -1,7 +1,7 @@
 // Default browser IO for exporters: fetch, a Blob download through a
 // temporary link, the clock, opening a page, and a DOM capture of the detail page's capture
 // source (loaded only when a capture runs).
-import type { ExportFile, ExportIO, ExportOptions } from './types.ts';
+import type { ExportFile, ExportIO, ExportItem, ExportOptions } from './types.ts';
 
 export function downloadFile(file: ExportFile): void {
   const blob = typeof file.data === 'string' ? new Blob([file.data], { type: file.type }) : file.data;
@@ -35,3 +35,27 @@ export function resolveIO(options: ExportOptions): ExportIO {
 /** The URL of an entry's raw file, copied by build:index (§9.1 step 2). */
 export const rawFileUrl = (base: string, entry: { ruleset: string; type: string; id: string }): string =>
   `${base}data/${entry.ruleset}/${entry.type}/${entry.id}.json`;
+
+/** The URL of an entry's export bundle, `{ entry, derived }`, written by build:index (§9.1 step 2). */
+export const bundleUrl = (base: string, entry: { ruleset: string; type: string; id: string }): string =>
+  `${base}data/${entry.ruleset}/${entry.type}/${entry.id}.export.json`;
+
+/**
+ * Fetches the export bundles for these entries, in order, so a set action can
+ * hand exporters real items (§10.1). Rejects if any bundle fails to load, so
+ * the action runs on all of them or none.
+ */
+export async function loadExportItems(
+  base: string,
+  entries: Array<{ ruleset: string; type: string; id: string }>,
+  fetchFn: ExportIO['fetch'] = (url) => fetch(url),
+): Promise<ExportItem[]> {
+  return Promise.all(
+    entries.map(async (entry) => {
+      const url = bundleUrl(base, entry);
+      const response = await fetchFn(url);
+      if (!response.ok) throw new Error(`Fetching ${url} failed with status ${response.status}`);
+      return JSON.parse(await response.text()) as ExportItem;
+    }),
+  );
+}

@@ -51,6 +51,12 @@ describe('Gallery', () => {
     expect(html).toContain('Select<span class="visually-hidden"> Cinder Hound</span>');
   });
 
+  it('offers set actions on the filtered set beside the result count', () => {
+    const html = render({ initialQuery: '?f.type=spell' });
+    expect(html).toMatch(/class="gallery__summary">.*class="set-actions"/);
+    expect(html).toContain('Print<span class="visually-hidden"> 1 entry</span>');
+  });
+
   it('links each card to its detail page', () => {
     expect(render({})).toContain('href="/ttrpg-library/dnd-5e-2024/creature/cinder-hound/"');
   });

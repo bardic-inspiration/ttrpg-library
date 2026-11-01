@@ -776,7 +776,7 @@ Recorded in `docs/routines.md` along with the canonical routine prompts:
 ### 9.1 Build
 
 1. `scripts/build-index/` reads every file under `content/`, runs the validator (the build fails if validation fails), computes each entry's `derived` values with its ruleset module, resolves refs, and computes back-references.
-2. It writes `site/public/library.json` (the index) and copies each entry's raw JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export.
+2. It writes `site/public/library.json` (the index) and copies each entry's raw JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export. Beside each copy it writes the entry's export bundle, `<id>.export.json`: `{ "entry": …, "derived": … }`, the entry with its derived values, as an exporter receives it (§10.1).
 3. Astro builds static pages, reading the full entries and their derived values at build time.
 
 **`library.json` record**
@@ -806,7 +806,7 @@ Records are sorted by ruleset, type, then `id`, and the file is written without 
 - `tags` is the entry's `tags`, or `{}`. `refs` and `refBy` are the §5.7 link lists.
 - `search` holds action, trait, and spell names plus `description` and rules text with markup stripped. Names are every `name` in `stats` and every value at a `RefOrText` field (§5.7), a ref read as its target's name. Rules text is every markdown-subset field (§5.5), with markdown and ruleset text tokens (§6.4) removed.
 
-The index stays lean; full entries are fetched only for export.
+The index stays lean; full entries and their derived values are fetched only for export, from the export bundles.
 
 ### 9.2 Pages and navigation
 
@@ -829,7 +829,8 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 - **Sort.** Name (`name`), created date (`createdAt`), or any facet, ascending or descending. Ordered enums sort by declared order, an array facet (size) by its first item, and ties by name. Entries missing the sort value go last in either direction. A type gallery starts on the registry's `defaultSort`; `/` and `/<ruleset>/` start on `createdAt:desc`.
 - **Search.** MiniSearch over `name` (boost 3), `summary` (2), tag values (1.5), and `search` (1), with prefix and light fuzzy matching. Search narrows within active filters. Results order by relevance when a query is present, otherwise by the active sort.
 - **URL state.** Query, sort, and filters live in the query string, so any view can be bookmarked or linked: `?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8&f.tags.theme=fire`. Ranges use `min..max` (either side may be empty). Keys and values are URL-encoded, so a comma inside a value is `%2C` and a bare comma separates values. Enum values are case-folded. The type filter is `f.type`. Unknown parameters are ignored, as are filters on paths the route doesn't have, unknown sort paths, and malformed values. The gallery rewrites the URL as the view changes (replacing the history entry, not adding one). It writes one canonical form: filters in registry order, then tags by key, with the default sort and ignored parameters left out.
-- **Selection.** Cards have a checkbox. Selection lives in the page, not the URL. Selected entries (or the whole filtered set) can be sent to the print view or exported as a JSON array; those actions arrive with the exports (§10).
+- **Selection.** Cards have a checkbox. Selection lives in the page, not the URL. A selected entry that the current filters hide stays selected, and the "N selected" text counts it.
+- **Set actions.** The results summary, beside the count, has one button per configured exporter that offers set scope (§10.1), in config order, with a page size selector beside an exporter that takes one, as on the detail page. An action targets the selection when anything is selected: the selected results in the gallery's current order, then selected entries the filters hide, in index order. Otherwise it targets the whole filtered set in the gallery's current order. Each button's accessible name says which ("Print 3 selected", "Download JSON 12 entries"), and the buttons are disabled when they would target nothing. An action first fetches the export bundles (§9.1 step 2) of the entries it targets and runs the exporter on them; if any bundle fails to load, nothing runs, and a polite status region says the action failed. Set actions live in `components/gallery/SetActions.tsx`, the target logic in `lib/gallery/selection.ts`.
 - **Scale.** The index is loaded once and filtered in memory. This is sized for a few thousand entries; past roughly 2,000 entries, revisit index size and prebuilt search indexes.
 
 ### 9.4 Detail page
@@ -977,7 +978,7 @@ interface Exporter {
 }
 ```
 
-`ExportOptions` carries the `scope` being run, the site `base` URL (ending in `/`), and the chosen `pageSize` id for an exporter that takes one, plus optional injected browser IO (fetch, download, clock, capture, open a page) so exporters are testable without a DOM. The registry (`site/src/exporters/index.ts`) maps the ids in `config/export.json` to modules, in config order; an id without a module is a build error. The detail page and the gallery build their controls from the configured exporters offering the scope they need.
+`ExportOptions` carries the `scope` being run, the site `base` URL (ending in `/`), and the chosen `pageSize` id for an exporter that takes one, plus optional injected browser IO (fetch, download, clock, capture, open a page) so exporters are testable without a DOM. The registry (`site/src/exporters/index.ts`) maps the ids in `config/export.json` to modules, in config order; an id without a module is a build error. The detail page and the gallery build their controls from the configured exporters offering the scope they need. The detail page has its entry and derived values at build time; a gallery set action fetches them from each entry's export bundle (§9.1 step 2, §9.3), so every exporter receives real items in either scope.
 
 Future translators (Foundry VTT, Open5e, and other open formats) are additional exporters that map an entry and its derived values to the target format. Most target formats store computed numbers, so translators read `derived` rather than recomputing. No gallery code changes are needed to add one.
 
