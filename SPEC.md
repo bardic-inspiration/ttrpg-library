@@ -138,6 +138,7 @@ ttrpg-library/
 │   ├── lane/                               lane rules for the `lane` CI job (§12.4)
 │   ├── build-index/                        content → library.json and data/ copies (CLI, builder, schema walk)
 │   ├── pr-summary/                         job summary for changed entries
+│   ├── generate/                           generation helpers: defaults and how a request takes them (§8.3)
 │   ├── serve/                              static server for site/dist under the site base
 │   └── a11y/                               axe checks on the built site (§9.7)
 ├── site/                                   Astro project
@@ -727,6 +728,8 @@ A manual run may name specific issues, or pass an inline request (type, count, b
 ```
 
 Defaults are applied only to fields the request leaves unspecified. Request tags are merged over default tags.
+
+`count` and `gapFill.count` are whole numbers from 1 to `maxBatch`, matching the form's 1–10 range. A request whose count, after defaults, falls outside that range cannot be fulfilled as written, so the routine asks about it (§8.2 step 6) rather than clamping it. `scripts/generate/defaults.ts` loads and checks the file, and applies it to a request.
 
 ### 8.4 The `generate` skill
 
