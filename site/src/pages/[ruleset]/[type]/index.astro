@@ -1,0 +1,23 @@
+---
+// The gallery for one type (SPEC.md §9.2), with that type's default filters
+// and sort from the registry (§7). One page per registered type.
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import GalleryIsland from '../../../components/gallery/GalleryIsland.astro';
+import registry from '../../../../../config/types.json';
+
+export const getStaticPaths = (() =>
+  Object.entries(registry).flatMap(([ruleset, config]) =>
+    Object.entries(config.types).map(([type, typeConfig]) => ({
+      params: { ruleset, type },
+      props: { plural: typeConfig.plural, rulesetLabel: config.label },
+    })),
+  )) satisfies GetStaticPaths;
+
+const { ruleset, type } = Astro.params;
+const { plural, rulesetLabel } = Astro.props;
+---
+<Base title={`${plural} · ${rulesetLabel} · TTRPG Content Library`}>
+  <h1>{plural}</h1>
+  <GalleryIsland ruleset={ruleset} type={type} />
+</Base>

@@ -1,23 +1,11 @@
 ---
+// The home gallery (SPEC.md §9.2): every entry, with a type filter and the
+// latest additions first.
 import Base from '../layouts/Base.astro';
-import { entryPath, loadEntries } from '../lib/library';
-import { url } from '../lib/url';
-
-const entries = loadEntries();
+import GalleryIsland from '../components/gallery/GalleryIsland.astro';
 ---
 <Base title="TTRPG Content Library">
   <h1>TTRPG Content Library</h1>
-  <p>
-    Original D&amp;D 5e creatures, magic items, and spells built on the SRD 5.2.
-    The gallery is being built.
-  </p>
-  {entries.length === 0 ? (
-    <p>No entries yet.</p>
-  ) : (
-    <ul>
-      {entries.map(({ entry }) => (
-        <li><a href={url(entryPath(entry))}>{entry.name}</a>: {entry.summary}</li>
-      ))}
-    </ul>
-  )}
+  <p class="measure">Original D&amp;D 5e creatures, magic items, and spells built on the SRD 5.2.</p>
+  <GalleryIsland />
 </Base>

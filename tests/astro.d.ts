@@ -4,3 +4,6 @@ declare module '*.astro' {
   const Component: import('astro/runtime/server/index.js').AstroComponentFactory;
   export default Component;
 }
+
+// Components import their stylesheets for Vite; tsc only needs to know they exist.
+declare module '*.css';

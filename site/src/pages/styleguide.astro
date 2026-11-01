@@ -4,8 +4,8 @@
 // in navigation and kept out of search indexes. Edit a token under
 // `npm run dev` and every surface here updates at once.
 //
-// Gallery cards and filter controls join this page with the gallery (#11);
-// template modes and print previews with the detail pages and exports.
+// Gallery cards and filter controls come from the §6.9 test fixtures (§9.8);
+// template modes and print previews join with the detail pages and exports.
 import Base from '../layouts/Base.astro';
 import CreatureStatBlock from '../components/templates/CreatureStatBlock.astro';
 import SearchIcon from '../icons/Search';
@@ -15,6 +15,15 @@ import ThemeIcon from '../icons/Theme';
 import DownloadIcon from '../icons/Download';
 import PrintIcon from '../icons/Print';
 import CloseIcon from '../icons/Close';
+import Card from '../components/gallery/Card';
+import { AddFilter, EnumFilter, RangeFilter } from '../components/gallery/Filters';
+import '../components/gallery/gallery.css';
+import sampleArt from '../assets/sample-art.svg';
+import { galleryConfig, type Registry } from '../lib/gallery/config';
+import { chips } from '../lib/gallery/view';
+import registryJson from '../../../config/types.json';
+import { buildIndex } from '../../../scripts/build-index/index.ts';
+import { PROJECT_ROOT } from '../../../scripts/validate/schema.ts';
 import { readTokens, resolveToken, themeTokens, tokensIn, type TokenDecl } from '../lib/design-tokens';
 import { loadEntries } from '../lib/library';
 import primitivesCss from '../styles/tokens/primitives.css?raw';
@@ -53,6 +62,17 @@ const icons = [
 
 const entries = loadEntries();
 const entryNames = new Map(entries.map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name]));
+// Cards and filters render the §6.9 fixtures, which have one entry per type.
+const fixtures = await buildIndex(`${PROJECT_ROOT}/tests/fixtures/library/valid`);
+const registry = registryJson as unknown as Registry;
+const home = galleryConfig(registry, {});
+const creatureConfig = galleryConfig(registry, { ruleset: 'dnd-5e-2024', type: 'creature' });
+const typeFilter = home.filters.find((f) => f.path === 'type')!;
+const crFilter = creatureConfig.filters.find((f) => f.path === 'stats.cr')!;
+const typeChips = chips(typeFilter, fixtures.records, fixtures.records);
+const noop = () => {};
+const cardInfo = (r: (typeof fixtures.records)[number]) => home.types.get(`${r.ruleset}/${r.type}`)!;
+
 const creatures = entries.filter(({ entry }) => entry.ruleset === 'dnd-5e-2024' && entry.type === 'creature');
 ---
 <Base title="Style guide · TTRPG Content Library" noindex>
@@ -168,6 +188,35 @@ const creatures = entries.filter(({ entry }) => entry.ruleset === 'dnd-5e-2024' 
           <ul class="cluster sg-row">
             {rarities.map((rarity) => <li class="sg-badge" data-rarity={rarity}>{label(rarity)}</li>)}
           </ul>
+
+          <h4>Gallery cards</h4>
+          <ul class="sg-cards">
+            {fixtures.records.map((record, i) => (
+              <li>
+                <Card
+                  record={record}
+                  typeLabel={cardInfo(record).label}
+                  cardFields={cardInfo(record).cardFields}
+                  imageSrc={i === 0 ? sampleArt.src : undefined}
+                  selected={i === 1}
+                  onSelect={noop}
+                />
+              </li>
+            ))}
+          </ul>
+
+          <h4>Filter controls</h4>
+          <div class="sg-filters">
+            <EnumFilter def={typeFilter} chips={typeChips} value={undefined} onChange={noop} />
+            <EnumFilter def={typeFilter} chips={typeChips} value={{ kind: 'enum', values: ['spell'] }} onChange={noop} onRemove={noop} />
+            <div class="sg-focus-demo">
+              <EnumFilter def={{ ...typeFilter, label: 'Type (focused chip)' }} chips={typeChips} value={undefined} onChange={noop} />
+            </div>
+            <EnumFilter def={{ path: 'tags.world', label: 'world', kind: 'enum' }} chips={[]} value={undefined} onChange={noop} />
+            <RangeFilter def={crFilter} bounds={{ min: 0.125, max: 2 }} value={undefined} onChange={noop} />
+            <RangeFilter def={crFilter} bounds={{ min: 0.125, max: 2 }} value={{ kind: 'range', min: 0.25, max: 2 }} onChange={noop} onRemove={noop} />
+            <AddFilter options={creatureConfig.filters} onAdd={noop} />
+          </div>
 
           {creatures.map(({ entry, derived }) => (
             <>
@@ -314,6 +363,26 @@ const creatures = entries.filter(({ entry }) => entry.ruleset === 'dnd-5e-2024' 
 
     .sg-row {
       padding: 0;
+    }
+
+    .sg-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-width)), 1fr));
+      gap: var(--grid-gap);
+      padding: 0;
+      list-style: none;
+    }
+
+    .sg-filters {
+      display: grid;
+      gap: var(--filters-gap);
+      max-inline-size: var(--filters-width);
+    }
+
+    /* A static stand-in for keyboard focus on the first chip. */
+    .sg-focus-demo :global(li:first-child .chip) {
+      outline: var(--focus-ring);
+      outline-offset: var(--focus-ring-offset);
     }
   }
 </style>

@@ -1,0 +1,301 @@
+/*
+ * Gallery styles (SPEC.md §9.3, §9.6): the controls, filter panel, card grid,
+ * cards, and art placeholder. Preact islands can't carry a scoped <style>
+ * block, so the gallery's components share this file, imported by
+ * Gallery.tsx. Tokens only; knobs live in tokens/components.css.
+ */
+@layer components {
+  .gallery {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .gallery__status,
+  .gallery__note {
+    color: var(--color-text-muted);
+  }
+
+  .gallery__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--space-s);
+    font-family: var(--control-font);
+  }
+
+  .gallery__search,
+  .gallery__sort {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .gallery__search {
+    flex: 1 1 var(--filters-width);
+
+    & input {
+      flex: 1;
+      min-inline-size: 0;
+    }
+  }
+
+  /* Sidebar on wide screens, stacked on narrow ones, with no breakpoint. */
+  .gallery__layout {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: var(--grid-gap);
+  }
+
+  .gallery__filters {
+    flex: 1 1 var(--filters-width);
+    display: grid;
+    gap: var(--filters-gap);
+    font-family: var(--control-font);
+  }
+
+  .gallery__results {
+    flex: 999 1 0%;
+    min-inline-size: min(100%, calc(2 * var(--card-min-width)));
+    display: grid;
+    gap: var(--space-s);
+  }
+
+  .gallery__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-xs) var(--space-s);
+    font-family: var(--control-font);
+  }
+
+  .gallery__count {
+    font-weight: var(--font-weight-label);
+  }
+
+  .gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-width)), 1fr));
+    gap: var(--grid-gap);
+    padding: 0;
+    list-style: none;
+  }
+
+  .gallery__clear {
+    justify-self: start;
+  }
+
+  /* Filters. */
+  .filter {
+    display: grid;
+    gap: var(--space-2xs);
+    min-inline-size: 0;
+    padding: var(--space-xs);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--control-radius);
+
+    &[data-active] {
+      border-color: var(--color-control-border);
+    }
+  }
+
+  .filter__legend {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding-inline: var(--space-3xs);
+    font-weight: var(--font-weight-label);
+  }
+
+  .filter__remove {
+    display: inline-flex;
+    padding: var(--space-3xs);
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .filter__empty {
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .filter__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    padding: 0;
+    list-style: none;
+  }
+
+  .filter__range {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--filters-width) / 3)), 1fr));
+    gap: var(--space-2xs);
+  }
+
+  .filter__bound {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+
+    & input {
+      flex: 1;
+      min-inline-size: 0;
+    }
+  }
+
+  .chip {
+    border-radius: var(--chip-radius);
+    font-size: var(--text-small);
+
+    &[aria-pressed='true'] .chip__count {
+      color: inherit;
+    }
+  }
+
+  .chip__count {
+    color: var(--chip-count-text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .add-filter {
+    position: relative;
+    justify-self: start;
+  }
+
+  .add-filter__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .add-filter__menu {
+    display: grid;
+    gap: var(--space-3xs);
+    margin-block-start: var(--space-3xs);
+    padding: var(--space-2xs);
+    list-style: none;
+    background: var(--card-bg);
+    border: var(--control-border);
+    border-radius: var(--control-radius);
+    box-shadow: var(--shadow-raised);
+
+    & button {
+      inline-size: 100%;
+      text-align: start;
+    }
+  }
+
+  /* Cards. */
+  .card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    block-size: 100%;
+    background: var(--card-bg);
+    border: var(--border-width) solid var(--card-border-color);
+    border-block-start: var(--border-width-strong) solid var(--accent);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+  }
+
+  .card__art {
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: var(--art-aspect);
+    object-fit: cover;
+  }
+
+  .card__body {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2xs);
+    padding: var(--card-padding);
+  }
+
+  .card__name {
+    font-size: var(--text-h4);
+    overflow-wrap: anywhere;
+
+    & a {
+      color: var(--color-text);
+      text-decoration-color: var(--accent);
+    }
+  }
+
+  .card__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+    padding: 0;
+    list-style: none;
+  }
+
+  .badge {
+    font-family: var(--badge-font);
+    font-size: var(--text-small);
+    font-weight: var(--font-weight-label);
+    color: var(--badge-text);
+    border: var(--badge-border);
+    border-radius: var(--chip-radius);
+    padding: 0 var(--space-2xs);
+  }
+
+  .card__fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs) var(--space-s);
+    font-family: var(--font-ui);
+    font-size: var(--text-small);
+  }
+
+  .card__field {
+    display: flex;
+    gap: var(--space-3xs);
+
+    & dt {
+      color: var(--color-text-muted);
+    }
+  }
+
+  .card__summary {
+    font-size: var(--text-small);
+  }
+
+  .card__select {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    justify-self: start;
+    font-family: var(--control-font);
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    cursor: pointer;
+  }
+
+  /* The art placeholder (§5.6). */
+  .art-placeholder {
+    display: grid;
+    place-content: center;
+    gap: var(--space-3xs);
+    aspect-ratio: var(--placeholder-aspect);
+    margin: var(--card-padding) var(--card-padding) 0;
+    background: var(--placeholder-bg);
+    border: var(--placeholder-border);
+    border-radius: var(--card-radius);
+    text-align: center;
+    font-family: var(--font-ui);
+  }
+
+  .art-placeholder__type {
+    font-family: var(--font-heading);
+    font-size: var(--text-h3);
+    color: var(--accent);
+  }
+
+  .art-placeholder__note {
+    font-size: var(--text-small);
+    color: var(--placeholder-text);
+  }
+}

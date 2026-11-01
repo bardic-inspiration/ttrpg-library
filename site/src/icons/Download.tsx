@@ -1,5 +1,5 @@
 // Lucide `download` (ISC).
-import { Icon, type IconProps } from './Icon';
+import { Icon, type IconProps } from './Icon.tsx';
 
 export default function DownloadIcon(props: IconProps) {
   return (

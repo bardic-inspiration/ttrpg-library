@@ -12,7 +12,9 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
   },
   "include": ["lib/**/*", "scripts/**/*", "rulesets/**/*", "tests/**/*", "vitest.config.ts"]
 }

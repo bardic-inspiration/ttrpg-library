@@ -25,6 +25,13 @@
     --card-padding: var(--space-card);
     --card-shadow: var(--shadow-card);
     --art-aspect: var(--ratio-art);
+    --placeholder-aspect: var(--ratio-square);
+    --placeholder-bg: var(--color-bg);
+    --placeholder-border: var(--border-width) dashed var(--accent);
+    --placeholder-text: var(--color-text-muted);
+    --filters-width: var(--size-filters);
+    --filters-gap: var(--space-s);
+    --chip-count-text: var(--color-text-muted);
 
     /* Stat blocks. */
     --statblock-bg: var(--color-surface);
@@ -50,6 +57,19 @@
 
     /* Badges. */
     --badge-font: var(--font-ui);
+    --badge-border: var(--border-width) solid var(--accent);
+    --badge-text: var(--accent);
+  }
+
+  /*
+   * Knobs built on --accent are re-declared wherever data-type or data-rarity
+   * sets it (content.css), so a card, badge, or stat block takes its own
+   * accent rather than the one resolved at :root.
+   */
+  [data-type],
+  [data-rarity] {
+    --statblock-rule-color: var(--accent);
+    --placeholder-border: var(--border-width) dashed var(--accent);
     --badge-border: var(--border-width) solid var(--accent);
     --badge-text: var(--accent);
   }

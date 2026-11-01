@@ -1,5 +1,5 @@
 // Lucide `printer` (ISC).
-import { Icon, type IconProps } from './Icon';
+import { Icon, type IconProps } from './Icon.tsx';
 
 export default function PrintIcon(props: IconProps) {
   return (

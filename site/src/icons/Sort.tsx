@@ -1,5 +1,5 @@
 // Lucide `arrow-up-down` (ISC).
-import { Icon, type IconProps } from './Icon';
+import { Icon, type IconProps } from './Icon.tsx';
 
 export default function SortIcon(props: IconProps) {
   return (
