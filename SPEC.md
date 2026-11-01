@@ -819,7 +819,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 - Forward refs and back-refs as links.
 - Tags as chips; clicking a chip opens the type gallery filtered by that tag.
 - Provenance line: created and updated dates, source issues linked to GitHub.
-- Export controls: Download JSON, Download PNG, Print (with page size selector).
+- Export controls: Download JSON, Download PNG, Print (with page size selector), one per configured entry-scope exporter (§10.1), below the summary. They are a Preact island (`components/detail/ExportControls.tsx`) that renders only once hydrated, since every export needs JavaScript; a failed export shows a message in a polite status region.
 - `<title>` and Open Graph tags (name, summary, art when present).
 
 ### 9.5 Templates
@@ -955,12 +955,15 @@ interface Exporter {
 }
 ```
 
+`ExportOptions` carries the `scope` being run and the site `base` URL (ending in `/`), plus optional injected browser IO (fetch, download, clock) so exporters are testable without a DOM. The registry (`site/src/exporters/index.ts`) maps the ids in `config/export.json` to modules, in config order; an id without a module is a build error. The detail page and the gallery build their controls from the configured exporters offering the scope they need.
+
 Future translators (Foundry VTT, Open5e, and other open formats) are additional exporters that map an entry and its derived values to the target format. Most target formats store computed numbers, so translators read `derived` rather than recomputing. No gallery code changes are needed to add one.
 
 ### 10.2 JSON
 
 - Entry scope: downloads the entry's raw file as `<id>.json`. This is the native format: inputs only, no derived values.
-- Set scope: fetches each entry's raw file and downloads one array as `library-<YYYYMMDD>.json`.
+- Set scope: fetches each entry's raw file and downloads one array as `library-<YYYYMMDD>.json`, dated by the reader's local clock. If any file fails to fetch, nothing downloads.
+- Raw files are fetched from `data/<ruleset>/<type>/<id>.json` under the site base (§9.1 step 2).
 
 ### 10.3 PNG
 
@@ -992,6 +995,8 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
   "exporters": ["json", "png", "print"]
 }
 ```
+
+`exporters` lists the exporters in button order; an id joins the list in the PR that adds its module.
 
 `wideWidth` is used for creatures with legendary actions or more than six actions, matching the two-column layout.
 

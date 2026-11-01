@@ -1,0 +1,26 @@
+/* Styles for the detail page's export controls island (SPEC.md §9.6: a Preact
+   island's styles sit in one stylesheet beside its components). */
+@layer components {
+  .export-controls {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .export-controls__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    padding: 0;
+    list-style: none;
+  }
+
+  .export-controls__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .export-controls__status {
+    color: var(--color-text-muted);
+  }
+}
