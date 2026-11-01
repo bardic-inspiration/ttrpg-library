@@ -1,0 +1,57 @@
+---
+// Entry art, or the placeholder when there is none (SPEC.md §5.6): a 1:1
+// framed panel with the type's label. The placeholder is decorative, so it is
+// hidden from assistive technology; art takes the entry name as alt text.
+interface Props {
+  name: string;
+  typeLabel: string;
+  /** The art's URL, when the entry has art. */
+  src?: string;
+}
+
+const { name, typeLabel, src } = Astro.props;
+---
+{src ? (
+  <img class="art-frame art-frame--image" src={src} alt={name} />
+) : (
+  <div class="art-frame art-frame--placeholder" aria-hidden="true">
+    <span class="art-frame__type">{typeLabel}</span>
+    <span class="art-frame__note">Art placeholder</span>
+  </div>
+)}
+
+<style>
+  @layer components {
+    .art-frame {
+      inline-size: 100%;
+      border-radius: var(--card-radius);
+    }
+
+    .art-frame--image {
+      aspect-ratio: var(--art-aspect);
+      object-fit: cover;
+    }
+
+    .art-frame--placeholder {
+      aspect-ratio: var(--placeholder-aspect);
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      gap: var(--space-3xs);
+      background: var(--placeholder-bg);
+      border: var(--placeholder-border);
+      color: var(--placeholder-text);
+      font-family: var(--font-ui);
+    }
+
+    .art-frame__type {
+      font-family: var(--font-heading);
+      font-size: var(--text-h4);
+      color: var(--accent);
+    }
+
+    .art-frame__note {
+      font-size: var(--text-small);
+    }
+  }
+</style>

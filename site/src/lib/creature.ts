@@ -8,6 +8,7 @@ import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { renderTokens } from '../../../rulesets/dnd-5e-2024/tokens.ts';
 import { present, whenPresent } from './display.ts';
 import { formatCr } from './format.ts';
+import type { PropertyLine } from './template.ts';
 import type {
   Action,
   CreatureStats,
@@ -71,11 +72,6 @@ export const skillsLine = (s: CreatureStats, d: DerivedCreature): string | undef
 
 const damageList = (list: string[]): string => list.map(capitalize).join(', ');
 
-/** A labeled stat-block line. */
-export interface PropertyLine {
-  label: string;
-  value: string;
-}
 
 /** Vulnerabilities, Resistances, and Immunities, each only when present (SPEC.md §5.8). */
 export function defenseLines(s: CreatureStats): PropertyLine[] {

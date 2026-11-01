@@ -14,6 +14,7 @@
     "dev": "astro dev --root site",
     "check": "tsc --noEmit && astro check --root site && stylelint \"site/src/**/*.{css,astro}\"",
     "test": "vitest run",
+    "a11y": "tsx scripts/a11y/cli.ts",
     "snapshots": "tsx scripts/snapshots/cli.ts"
   },
   "dependencies": {
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@axe-core/playwright": "^4.14.0",
     "@types/node": "^26.6.5",
     "playwright": "^1.63.0",
     "postcss-html": "^2.0.0",

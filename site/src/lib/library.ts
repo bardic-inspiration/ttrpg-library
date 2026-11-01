@@ -3,6 +3,7 @@
 // has already run in build:index, so entries here are known good.
 
 import type { RulesetModule } from '../../../rulesets/module.ts';
+import type { RefTarget } from './refs.ts';
 import { entryKey, linkEntries, type Link } from '../../../scripts/validate/refs.ts';
 
 export interface Entry {
@@ -14,7 +15,8 @@ export interface Entry {
   description?: string;
   stats: unknown;
   tags?: Record<string, unknown>;
-  meta: { createdAt: string; updatedAt?: string; source: { kind: string; issues?: number[] } };
+  image?: string;
+  meta: { createdAt: string; updatedAt?: string; source: { kind: string; issues?: number[]; gapFill?: string } };
 }
 
 export interface LoadedEntry {
@@ -35,8 +37,11 @@ export function rulesetModule(id: string): RulesetModule {
   return module.ruleset;
 }
 
-export function loadEntries(): LoadedEntry[] {
-  const entries = Object.values(files);
+/** Every entry under content/, derived and linked, sorted by name. */
+export const loadEntries = (): LoadedEntry[] => loadLibrary(Object.values(files));
+
+/** Derives and links a set of entries, sorted by name. */
+export function loadLibrary(entries: Entry[]): LoadedEntry[] {
   const { links } = linkEntries(entries.map((entry) => ({ ...entry, file: entryPath(entry) })));
   return entries
     .map((entry) => ({
@@ -48,3 +53,11 @@ export function loadEntries(): LoadedEntry[] {
 }
 
 export const entryPath = (entry: Entry): string => `${entry.ruleset}/${entry.type}/${entry.id}/`;
+
+/** `<type>/<id>` → entry name, for rendering refs as names. */
+export const entryNames = (all: LoadedEntry[]): Map<string, string> =>
+  new Map(all.map(({ entry }) => [entryKey(entry), entry.name]));
+
+/** `<type>/<id>` → link target, for the detail page's refs and back-refs. */
+export const refTargets = (all: LoadedEntry[]): Map<string, RefTarget> =>
+  new Map(all.map(({ entry }) => [entryKey(entry), { type: entry.type, name: entry.name, path: entryPath(entry) }]));

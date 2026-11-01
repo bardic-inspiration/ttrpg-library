@@ -4,10 +4,10 @@
 // in navigation and kept out of search indexes. Edit a token under
 // `npm run dev` and every surface here updates at once.
 //
-// Gallery cards and filter controls come from the §6.9 test fixtures (§9.8);
-// template modes and print previews join with the detail pages and exports.
+// Gallery cards, filter controls, and templates come from the §6.9 test
+// fixtures (§9.8). Print previews at each page size join with the exports.
 import Base from '../layouts/Base.astro';
-import CreatureStatBlock from '../components/templates/CreatureStatBlock.astro';
+import EntryTemplate from '../components/templates/EntryTemplate.astro';
 import SearchIcon from '../icons/Search';
 import FilterIcon from '../icons/Filter';
 import SortIcon from '../icons/Sort';
@@ -25,12 +25,12 @@ import registryJson from '../../../config/types.json';
 import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { PROJECT_ROOT } from '../../../scripts/validate/schema.ts';
 import { readTokens, resolveToken, themeTokens, tokensIn, type TokenDecl } from '../lib/design-tokens';
-import { loadEntries } from '../lib/library';
+import { entryNames as namesOf, loadLibrary, type Entry } from '../lib/library';
+import { readFileSync } from 'node:fs';
 import primitivesCss from '../styles/tokens/primitives.css?raw';
 import semanticCss from '../styles/tokens/semantic.css?raw';
 import componentsCss from '../styles/tokens/components.css?raw';
 import contentCss from '../styles/tokens/content.css?raw';
-import type { CreatureStats, DerivedCreature } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 const semantic = readTokens(semanticCss);
 const content = readTokens(contentCss);
@@ -60,10 +60,12 @@ const icons = [
   ['Download', DownloadIcon], ['Print', PrintIcon], ['Close', CloseIcon],
 ] as const;
 
-const entries = loadEntries();
-const entryNames = new Map(entries.map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name]));
-// Cards and filters render the §6.9 fixtures, which have one entry per type.
+// Cards, filters, and templates render the §6.9 fixtures, which have one entry per type.
 const fixtures = await buildIndex(`${PROJECT_ROOT}/tests/fixtures/library/valid`);
+const fixtureEntries = loadLibrary(
+  fixtures.files.map((file) => JSON.parse(readFileSync(`${PROJECT_ROOT}/tests/fixtures/library/valid/${file}`, 'utf8')) as Entry),
+);
+const entryNames = namesOf(fixtureEntries);
 const registry = registryJson as unknown as Registry;
 const home = galleryConfig(registry, {});
 const creatureConfig = galleryConfig(registry, { ruleset: 'dnd-5e-2024', type: 'creature' });
@@ -73,7 +75,7 @@ const typeChips = chips(typeFilter, fixtures.records, fixtures.records);
 const noop = () => {};
 const cardInfo = (r: (typeof fixtures.records)[number]) => home.types.get(`${r.ruleset}/${r.type}`)!;
 
-const creatures = entries.filter(({ entry }) => entry.ruleset === 'dnd-5e-2024' && entry.type === 'creature');
+const modes = ['screen', 'capture'] as const;
 ---
 <Base title="Style guide · TTRPG Content Library" noindex>
   <h1>Style guide</h1>
@@ -218,17 +220,14 @@ const creatures = entries.filter(({ entry }) => entry.ruleset === 'dnd-5e-2024' 
             <AddFilter options={creatureConfig.filters} onAdd={noop} />
           </div>
 
-          {creatures.map(({ entry, derived }) => (
-            <>
-              <h4>{entry.name}: creature stat block</h4>
-              <CreatureStatBlock
-                name={entry.name}
-                stats={entry.stats as CreatureStats}
-                derived={derived as unknown as DerivedCreature}
-                names={entryNames}
-              />
-            </>
-          ))}
+          {fixtureEntries.map(({ entry, derived }) =>
+            modes.map((mode) => (
+              <>
+                <h4>{entry.name}: {mode}</h4>
+                <EntryTemplate entry={entry} derived={derived} names={entryNames} mode={mode} level={5} />
+              </>
+            )),
+          )}
         </div>
       ))}
     </div>

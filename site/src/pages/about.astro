@@ -1,0 +1,68 @@
+---
+// What the library is, the SRD attribution, and licenses (SPEC.md §9.2, §11).
+import Base from '../layouts/Base.astro';
+import { REPO_URL } from '../../../lib/site.ts';
+import { url } from '../lib/url';
+---
+<Base
+  title="About · TTRPG Content Library"
+  og={{ title: 'About the TTRPG Content Library', description: 'What the library is, where its rules come from, and how it is licensed.' }}
+>
+  <article class="measure about">
+    <h1>About</h1>
+    <p>
+      The TTRPG Content Library is a growing collection of original tabletop
+      roleplaying content (creatures, magic items, and spells) built on the
+      System Reference Document 5.2 for the 2024 edition of the fifth-edition
+      rules. Every entry is stored as data, so its stat block is computed from
+      the same rules everywhere it appears. Browse it from the <a href={url()}>gallery</a>.
+    </p>
+
+    <h2>SRD attribution</h2>
+    <blockquote>
+      <p>
+        This work includes material from the System Reference Document 5.2
+        ("SRD 5.2") by Wizards of the Coast LLC, available at <a href="https://www.dndbeyond.com/srd">https://www.dndbeyond.com/srd</a>.
+        The SRD 5.2 is licensed under the Creative Commons Attribution 4.0
+        International License, available at <a href="https://creativecommons.org/licenses/by/4.0/legalcode">https://creativecommons.org/licenses/by/4.0/legalcode</a>.
+      </p>
+    </blockquote>
+    <p>
+      The library uses only SRD material. It is not affiliated with or
+      endorsed by Wizards of the Coast.
+    </p>
+
+    <h2>Licenses</h2>
+    <ul>
+      <li>
+        <strong>Content</strong> (the entries and the generation guidelines): <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0</a>.
+      </li>
+      <li><strong>Code:</strong> MIT.</li>
+      <li>
+        <strong>Fonts:</strong> Alegreya, Alegreya SC, and Alegreya Sans, under the SIL Open Font License 1.1.
+      </li>
+      <li><strong>Icons:</strong> Lucide, under the ISC License.</li>
+    </ul>
+    <p>
+      Full credits are in <a href={`${REPO_URL}/blob/main/ATTRIBUTION.md`}>ATTRIBUTION.md</a>.
+      The source is on <a href={REPO_URL}>GitHub</a>.
+    </p>
+  </article>
+</Base>
+
+<style>
+  @layer components {
+    .about > * + * {
+      margin-block-start: var(--space-s);
+    }
+
+    .about blockquote {
+      border-inline-start: var(--border-width-strong) solid var(--color-border);
+      padding-inline-start: var(--space-s);
+    }
+
+    .about ul {
+      padding-inline-start: var(--space-m);
+    }
+  }
+</style>

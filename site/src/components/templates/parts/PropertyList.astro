@@ -1,0 +1,32 @@
+---
+// Labeled stat-block lines as a definition list (SPEC.md §9.5): "AC 13",
+// "Range 60 feet". Callers pass only the lines that display (§5.8).
+import type { PropertyLine } from '../../../lib/template';
+
+interface Props {
+  lines: PropertyLine[];
+}
+
+const { lines } = Astro.props;
+---
+{lines.length > 0 && (
+  <dl class="property-list">
+    {lines.map((line) => <><dt>{line.label}</dt><dd>{line.value}</dd></>)}
+  </dl>
+)}
+
+<style>
+  @layer components {
+    .property-list {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      column-gap: var(--space-2xs);
+
+      & dt {
+        font-family: var(--statblock-label-font);
+        font-weight: var(--font-weight-strong);
+        color: var(--accent);
+      }
+    }
+  }
+</style>

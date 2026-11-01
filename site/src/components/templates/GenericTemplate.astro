@@ -1,0 +1,27 @@
+---
+// The fallback for a type with no template of its own (`generic`, SPEC.md
+// §9.5): the fixed keys, `stats` as a definition list, and tags. Optional
+// fields display by presence alone (§5.8): an omitted key has no line, and a
+// present one always does, even at 0 or false.
+import { renderMarkdown } from '../../lib/markdown';
+import { present } from '../../lib/display';
+import { genericLines } from '../../lib/generic';
+import type { TemplateProps } from '../../lib/template';
+import PropertyList from './parts/PropertyList.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, mode, level = 2 } = Astro.props;
+const tags = Object.entries(entry.tags ?? {}).map(([key, value]) => ({
+  label: key,
+  value: Array.isArray(value) ? value.join(', ') : String(value),
+}));
+---
+<StatBlock name={entry.name} type={entry.type} mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={entry.summary} level={level} />
+  {present(entry.description) && <div class="generic__description" set:html={renderMarkdown(entry.description)} />}
+  <PropertyList lines={genericLines(entry.stats, names)} />
+  {tags.length > 0 && <PropertyList lines={tags} />}
+</StatBlock>

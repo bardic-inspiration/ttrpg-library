@@ -24,6 +24,7 @@ import '../styles/layout.css';
 import '../styles/utilities.css';
 import '../styles/overrides.css';
 import Footer from '../components/Footer.astro';
+import SiteNav from '../components/SiteNav.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { themeBootstrapScript } from '../lib/theme';
 import { url } from '../lib/url';
@@ -32,9 +33,12 @@ interface Props {
   title: string;
   /** Keep the page out of search indexes (the style guide, §9.8). */
   noindex?: boolean;
+  /** Open Graph tags for link previews (§9.4). `image` is a path under the site base. */
+  og?: { title: string; description: string; image?: string; type?: 'website' | 'article' };
 }
 
-const { title, noindex = false } = Astro.props;
+const { title, noindex = false, og } = Astro.props;
+const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
 ---
 <!doctype html>
 <html lang="en">
@@ -43,12 +47,23 @@ const { title, noindex = false } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {noindex && <meta name="robots" content="noindex" />}
     <title>{title}</title>
+    {og && (
+      <>
+        <meta name="description" content={og.description} />
+        <meta property="og:title" content={og.title} />
+        <meta property="og:description" content={og.description} />
+        <meta property="og:type" content={og.type ?? 'website'} />
+        <meta property="og:url" content={absolute(Astro.url.pathname)} />
+        {og.image && <meta property="og:image" content={absolute(og.image)} />}
+      </>
+    )}
     <script is:inline set:html={themeBootstrapScript()} />
   </head>
   <body>
     <header class="site-header">
       <div class="site-header__inner">
         <a class="site-header__home" href={url()}>TTRPG Content Library</a>
+        <SiteNav />
         <ThemeToggle />
       </div>
     </header>

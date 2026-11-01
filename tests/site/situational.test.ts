@@ -18,7 +18,11 @@ describe('display helpers (SPEC.md §5.8)', () => {
 async function render(stats: CreatureStats): Promise<string> {
   const container = await AstroContainer.create();
   const html = await container.renderToString(CreatureStatBlock, {
-    props: { name: 'Test Creature', stats, derived: deriveCreature(stats, tables), names: new Map() },
+    props: {
+      entry: { ...(await cinderHound()), name: 'Test Creature', stats },
+      derived: deriveCreature(stats, tables),
+      names: new Map(),
+    },
   });
   // Compare text, not markup: drop tags and collapse whitespace.
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
