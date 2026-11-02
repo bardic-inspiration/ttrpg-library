@@ -66,6 +66,14 @@ export function checkCreature(stats: CreatureStats, tables: Tables): Issue[] {
     }
   }
 
+  // A language is either spoken (and so understood) or understood only (SPEC.md §6.8).
+  const spoken = new Set(stats.languages.spoken.map((language) => language.toLowerCase()));
+  (stats.languages.understood ?? []).forEach((language, i) => {
+    if (spoken.has(language.toLowerCase())) {
+      error(`stats.languages.understood[${i}]`, `"${language}" is also in languages.spoken; list it once, under spoken if the creature speaks it`);
+    }
+  });
+
   for (const { path, text } of proseFields(stats)) {
     for (const match of findTokens(text, tables)) {
       if (!match.token) {

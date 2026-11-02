@@ -100,13 +100,27 @@ export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
   return [senses.join(', '), `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
 }
 
+/** "A", "A and B", "A, B, and C". */
+function andList(items: string[]): string {
+  if (items.length <= 2) return items.join(' and ');
+  return `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
+}
+
 export function languagesLine(s: CreatureStats): string {
-  // `list` is required and may be empty; an empty list reads "None" (SPEC.md §6.5).
-  const parts = s.languages.list.length ? [s.languages.list.join(', ')] : [];
-  const telepathy = whenPresent(s.languages.telepathy, (feet) => `telepathy ${feet} ft.`);
-  if (present(telepathy)) parts.push(telepathy);
+  // `spoken` is required and may be empty; with nothing spoken, understood, or
+  // telepathic, the line reads "None" (SPEC.md §6.5).
+  const { spoken, understood, telepathy, note } = s.languages;
+  const parts = spoken.length ? [spoken.join(', ')] : [];
+  if (present(understood)) {
+    // SRD 5.2 adds no pronoun when the creature speaks nothing; after spoken languages, "it" or "them" says which.
+    const pronoun = spoken.length ? (understood.length === 1 ? ' it' : ' them') : '';
+    const clause = `understands ${andList(understood)} but can't speak${pronoun}`;
+    parts.push(parts.length ? clause : capitalize(clause));
+  }
+  const telepathyText = whenPresent(telepathy, (feet) => `telepathy ${feet} ft.`);
+  if (present(telepathyText)) parts.push(telepathyText);
   const line = parts.join('; ') || 'None';
-  return whenPresent(s.languages.note, (note) => `${line} (${note})`) ?? line;
+  return whenPresent(note, (n) => `${line} (${n})`) ?? line;
 }
 
 export function crLine(s: CreatureStats, d: DerivedCreature): string {

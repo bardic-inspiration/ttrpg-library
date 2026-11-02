@@ -95,6 +95,7 @@ const INVALID: Record<string, RegExp> = {
   'other-with-damage': /^stats\.traits\[0\]\.damage: not allowed here/,
   'other-without-text': /^stats\.traits\[0\]: missing required key "text"/,
   'bad-recharge': /^stats\.actions\[1\]\.recharge: must be one of/,
+  'language-spoken-and-understood': /^stats\.languages\.understood\[0\]: "common" is also in languages\.spoken; list it once, under spoken/,
   'speed-not-multiple-of-5': /^stats\.speed\.walk: speed 42 ft\. is not a multiple of 5/,
   'unknown-token': /^stats\.traits\[0\]\.text: bad token \{fire\}: unknown token/,
   'token-unknown-ability': /^stats\.traits\[0\]\.text: bad token \{mod:luck\}: unknown ability "luck"/,
@@ -197,6 +198,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'senses', {}, /^stats\.senses: must NOT have fewer than 1 properties/],
   ['creature', 'senses.darkvision', 0, /^stats\.senses\.darkvision: must be >= 1/],
   ['creature', 'languages.telepathy', 0, /^stats\.languages\.telepathy: must be >= 1/],
+  ['creature', 'languages.understood', [], /^stats\.languages\.understood: must NOT have fewer than 1 items/],
   ['creature', 'languages.note', '', /^stats\.languages\.note: must NOT have fewer than 1 characters/],
   ['creature', 'ac.note', '', /^stats\.ac\.note: must NOT have fewer than 1 characters/],
   ['creature', 'lair', false, /^stats\.lair: must be equal to constant/],
@@ -249,7 +251,7 @@ describe('situational fields (SPEC.md §5.8)', () => {
 
   it('keeps required fields valid at 0, false, and empty', async () => {
     const hound = await cinderHound();
-    Object.assign(hound.stats, { speed: { walk: 0 }, languages: { list: [] } });
+    Object.assign(hound.stats, { speed: { walk: 0 }, languages: { spoken: [] } });
     const spell = await frostLance();
     Object.assign(spell.stats, { ritual: false });
     spell.stats.duration.concentration = false;

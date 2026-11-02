@@ -88,4 +88,20 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(d.hp.formula).toBe('5d8 - 5');
     expect(d.actions[0]!.damage[0]!.display).toBe('6 (2d8 - 3)');
   });
+
+  it('prints languages spoken and understood in SRD 5.2 form (#83)', async () => {
+    const base = (await cinderHound()).stats as CreatureStats;
+    const line = (languages: CreatureStats['languages']) => languagesLine({ ...base, languages });
+    expect(line({ spoken: ['Common', 'Giant'] })).toBe('Common, Giant');
+    // The two SRD 5.2 phrasings of a creature that understands but can't speak.
+    expect(line({ spoken: [], understood: ['Common plus one other language'] })).toBe('Understands Common plus one other language but can\'t speak');
+    expect(line({ spoken: [], understood: ['Infernal'] })).toBe('Understands Infernal but can\'t speak');
+    expect(line({ spoken: [], understood: ['Abyssal', 'Infernal'] })).toBe('Understands Abyssal and Infernal but can\'t speak');
+    expect(line({ spoken: [], understood: ['Abyssal', 'Celestial', 'Infernal'] })).toBe('Understands Abyssal, Celestial, and Infernal but can\'t speak');
+    expect(line({ spoken: [], understood: ['Abyssal'], telepathy: 120 })).toBe('Understands Abyssal but can\'t speak; telepathy 120 ft.');
+    // Both: what it speaks, then what it only understands.
+    expect(line({ spoken: ['Goblin'], understood: ['Common'] })).toBe('Goblin; understands Common but can\'t speak it');
+    expect(line({ spoken: ['Goblin'], understood: ['Common', 'Elvish'] })).toBe('Goblin; understands Common and Elvish but can\'t speak them');
+    expect(line({ spoken: [] })).toBe('None');
+  });
 });
