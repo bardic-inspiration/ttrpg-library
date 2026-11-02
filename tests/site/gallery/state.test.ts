@@ -18,8 +18,8 @@ describe('route defaults', () => {
     expect(creature.defaultFilters).toEqual(['stats.cr', 'stats.creatureType', 'tags.theme']);
   });
 
-  it('the home gallery lists the latest additions first, with a type filter', () => {
-    expect(home.defaultSort).toEqual({ path: 'createdAt', dir: 'desc' });
+  it('the home gallery sorts by name, with a type filter', () => {
+    expect(home.defaultSort).toEqual({ path: 'name', dir: 'asc' });
     expect(home.defaultFilters).toEqual(['type']);
     expect(home.filters[0]).toMatchObject({ path: 'type', labels: { creature: 'Creature', spell: 'Spell' } });
   });

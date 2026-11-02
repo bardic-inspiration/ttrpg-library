@@ -44,10 +44,10 @@ export const CREATED = 'createdAt';
 export const TYPE = 'type';
 
 /**
- * Every route without a single type lists the latest additions first and
- * offers a type filter (§9.2).
+ * Every route without a single type sorts by name and offers a type filter
+ * (§9.2, §9.3).
  */
-const ALL_TYPES_SORT: SortKey = { path: CREATED, dir: 'desc' };
+const ALL_TYPES_SORT: SortKey = { path: NAME, dir: 'asc' };
 
 export function parseSortKey(value: string | undefined): SortKey | undefined {
   const match = /^(.+):(asc|desc)$/.exec(value ?? '');

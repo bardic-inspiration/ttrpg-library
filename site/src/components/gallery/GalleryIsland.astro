@@ -12,9 +12,9 @@ interface Props {
 }
 
 const { ruleset, type } = Astro.props;
-const entries = loadEntries().filter(
-  ({ entry }) => (!ruleset || entry.ruleset === ruleset) && (!type || entry.type === type),
-);
+const entries = loadEntries()
+  .filter(({ entry }) => (!ruleset || entry.ruleset === ruleset) && (!type || entry.type === type))
+  .sort((a, b) => a.entry.name.localeCompare(b.entry.name, 'en', { sensitivity: 'base' }));
 ---
 <Gallery client:load ruleset={ruleset} type={type} indexUrl={url('library.json')} base={url()} />
 <noscript>

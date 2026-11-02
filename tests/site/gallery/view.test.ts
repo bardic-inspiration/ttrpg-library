@@ -1,6 +1,6 @@
 // Gallery filtering, search, sort, and chips (SPEC.md §9.3).
 import { beforeAll, describe, expect, it } from 'vitest';
-import { galleryConfig, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
+import { galleryConfig, sortChoices, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
 import { addableFilters, chips, computeView, searchIndex, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
 import { fixtureRecords, record, registry } from './helpers.ts';
@@ -103,6 +103,45 @@ describe('sorting', () => {
     const items = [record({ id: 'b', name: 'beta', createdAt: '2026-03-01' }), record({ id: 'a', name: 'Alpha', createdAt: '2026-05-01' })];
     expect(sortRecords(items, { path: 'name', dir: 'asc' }, creature).map((r) => r.id)).toEqual(['a', 'b']);
     expect(sortRecords(items, { path: 'createdAt', dir: 'desc' }, home).map((r) => r.id)).toEqual(['a', 'b']);
+  });
+
+  it('breaks name ties by ruleset, type, and id, so input order never matters', () => {
+    const items = [
+      record({ id: 'twin-b', name: 'Twin' }),
+      record({ id: 'twin-a', name: 'Twin', type: 'spell' }),
+      record({ id: 'twin-c', name: 'twin' }),
+    ];
+    const expected = ['twin-b', 'twin-c', 'twin-a'];
+    expect(sortRecords(items, { path: 'name', dir: 'asc' }, home).map((r) => r.id)).toEqual(expected);
+    expect(sortRecords([...items].reverse(), { path: 'name', dir: 'asc' }, home).map((r) => r.id)).toEqual(expected);
+  });
+});
+
+describe('default sort on routes that span types', () => {
+  const mixed = () => [
+    record({ id: 'zephyr', name: 'Zephyr Drake', createdAt: '2026-11-02', facets: { 'stats.cr': 3 } }),
+    record({ id: 'arcane-bolt', name: 'Arcane Bolt', type: 'spell', createdAt: '2026-10-31' }),
+    record({ id: 'mire-imp', name: 'Mire Imp', createdAt: '2026-11-02', facets: { 'stats.cr': 0.5 } }),
+    record({ id: 'bone-ring', name: 'Bone Ring', type: 'magic-item', createdAt: '2026-11-01' }),
+  ];
+
+  it('lists `/` and `/<ruleset>/` alphabetically, whatever the library.json order', () => {
+    const alphabetical = ['Arcane Bolt', 'Bone Ring', 'Mire Imp', 'Zephyr Drake'];
+    const ruleset = galleryConfig(reg, { ruleset: 'dnd-5e-2024' });
+    for (const config of [home, ruleset]) {
+      expect(config.defaultSort).toEqual({ path: 'name', dir: 'asc' });
+      expect(view(mixed(), config, '')).toEqual(alphabetical);
+      expect(view(mixed().reverse(), config, '')).toEqual(alphabetical);
+    }
+  });
+
+  it('offers CR as a sort there, with entries that have no CR last', () => {
+    const ruleset = galleryConfig(reg, { ruleset: 'dnd-5e-2024' });
+    for (const config of [home, ruleset]) {
+      expect(sortChoices(config).map((c) => c.path)).toContain('stats.cr');
+      expect(view(mixed(), config, '?sort=stats.cr:asc')).toEqual(['Mire Imp', 'Zephyr Drake', 'Arcane Bolt', 'Bone Ring']);
+      expect(view(mixed(), config, '?sort=stats.cr:desc')).toEqual(['Zephyr Drake', 'Mire Imp', 'Arcane Bolt', 'Bone Ring']);
+    }
   });
 });
 
