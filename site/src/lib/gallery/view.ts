@@ -42,6 +42,12 @@ export function search(index: MiniSearch<LibraryRecord>, q: string): string[] | 
 
 const compareText = (a: string, b: string) => a.localeCompare(b, 'en', { sensitivity: 'base' });
 
+const compareCode = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
+
+/** The last tie-break: ruleset, type, then id, which together are unique, so order never depends on input order. */
+const compareIdentity = (a: LibraryRecord, b: LibraryRecord) =>
+  compareCode(a.ruleset, b.ruleset) || compareCode(a.type, b.type) || compareCode(a.id, b.id);
+
 /** The value a record sorts by: the first item of an array, an ordered enum by its declared position. */
 function sortValue(record: LibraryRecord, key: SortKey, def: FilterDef | undefined): string | number | boolean | undefined {
   let value = valueAt(record, key.path);
@@ -53,7 +59,7 @@ function sortValue(record: LibraryRecord, key: SortKey, def: FilterDef | undefin
   return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' ? value : undefined;
 }
 
-/** Sorts by one key; entries missing the value go last in either direction, ties by name. */
+/** Sorts by one key; entries missing the value go last in either direction, ties by name, then ruleset, type, and id. */
 export function sortRecords(records: LibraryRecord[], key: SortKey, config: GalleryConfig): LibraryRecord[] {
   const def = filterDef(config, key.path);
   const sign = key.dir === 'asc' ? 1 : -1;
@@ -69,7 +75,7 @@ export function sortRecords(records: LibraryRecord[], key: SortKey, config: Gall
             : Number(a.value) - Number(b.value);
         if (order !== 0) return sign * order;
       }
-      return key.path === NAME ? 0 : compareText(a.record.name, b.record.name);
+      return (key.path === NAME ? 0 : compareText(a.record.name, b.record.name)) || compareIdentity(a.record, b.record);
     })
     .map(({ record }) => record);
 }
