@@ -840,6 +840,8 @@ Records are sorted by ruleset, type, then `id`, and the file is written without 
 
 The index stays lean; full entries and their derived values are fetched only for export, from the export bundles.
 
+**Fresh data.** `library.json`, the raw files, the export bundles, and print fragments live at fixed URLs, and GitHub Pages lets browsers cache them for several minutes. Every data fetch on the site goes through `fetchFresh` (`site/src/lib/fetch-fresh.ts`), which requests with `cache: "no-cache"`: the browser revalidates its copy with the server before using it, so a deploy shows on the next load, and an unchanged file costs only a `304`. A test fails if site code calls `fetch` directly.
+
 ### 9.2 Pages and navigation
 
 | Route | Content |
@@ -855,7 +857,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 
 ### 9.3 Gallery behavior
 
-- **Loading.** The gallery is one Preact island (`site/src/components/gallery/`, with its logic in `site/src/lib/gallery/`) shared by `/`, `/<ruleset>/`, and `/<ruleset>/<type>/`. It fetches `library.json` once and filters it in memory. Without JavaScript, the page shows a plain list of the route's entries, linked to their detail pages.
+- **Loading.** The gallery is one Preact island (`site/src/components/gallery/`, with its logic in `site/src/lib/gallery/`) shared by `/`, `/<ruleset>/`, and `/<ruleset>/<type>/`. It fetches `library.json` once per page load, revalidated with the server (§9.1), and filters it in memory. Without JavaScript, the page shows a plain list of the route's entries, linked to their detail pages.
 - **Card grid.** Each card shows art or the placeholder, name, type badge, `cardFields`, and summary. A boolean card field (concentration, ritual, attunement) reads as a badge labeled with the facet when `true` and is left out when `false`. A `rarity`-formatted field reads as a badge carrying `data-rarity`. Other fields read as label and value. Responsive: one column on phones, up to four on wide screens.
 - **Filters.** On a type gallery, the registry's `defaultFilters` are expanded. Routes that span types (`/` and `/<ruleset>/`) have one default filter instead: `type`, an enum over the registered types. A default filter shows when some entry on the route has a value for it. Active filters and filters the reader added always show, and a non-default filter has a button to remove it. "Add filter" lists every facet for the current type(s) plus every tag key present in the current result set. The current types are the type filter's values when it is set, otherwise every type on the route. Range facets show min/max inputs, which also accept fractions such as `1/8`. Enum facets and tags show multi-select chips with counts. A chip's count is the number of results it matches under the search and every other active filter. Chips list every value present on the route in declared order (for ordered enums) or alphabetically, plus any selected value no entry has. Values within a facet combine as OR; facets combine as AND. An entry missing a filter's value never matches it.
 - **Sort.** Name (`name`), created date (`createdAt`), or any facet, ascending or descending. Ordered enums sort by declared order, an array facet (size) by its first item, and ties by name. Entries missing the sort value go last in either direction. A type gallery starts on the registry's `defaultSort`; `/` and `/<ruleset>/` start on `createdAt:desc`.
