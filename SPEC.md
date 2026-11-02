@@ -706,7 +706,7 @@ Every run, scheduled or manual, follows the same sequence so that review feedbac
 
 1. **Sync.** Fetch `main`; run `npm ci` and `npm run build:index` to get the current library.
 2. **Revisions first.** For each open PR on a `gen/` or `revise/` branch, find owner comments not yet handled (§8.5) and invoke the `revise` skill. Push, reply, continue.
-3. **Revise requests.** Take open `revise` issues; each becomes a small PR.
+3. **Revise requests.** Take open `revise` issues without `in-progress` or `needs-info`, oldest first, claim each as in step 4, and invoke the `revise` skill on each; each becomes a small PR.
 4. **Content requests.** Pick open `request` issues without `in-progress` or `needs-info`, `priority:high` first, then oldest. Group issues into one batch while the total count is ≤ `maxBatch`. Claim each with the `in-progress` label and a short comment.
 5. **Gap-fill.** If no requests were picked and `gapFill.enabled`, choose the type and bucket with the fewest entries (ties go to the type with the fewest entries overall, then to the type listed first in `config/types.json`; ties within a type go to the first bucket in `gapBuckets` order, first axis outermost) and generate `gapFill.count` entries for it. `npm run gap-fill` (`scripts/generate/gap.ts`, counting with `lib/buckets.ts`) makes this choice among the types of `defaults.ruleset`: it reads `site/public/library.json` and `config/types.json`, and prints the type and the bucket label (§7.1), as in `spell stats.level=0..0&stats.school=abjuration`.
 6. **Ambiguity.** If a request cannot be fulfilled as written (contradictory constraints, unknown type), comment a single question on the issue, add `needs-info`, remove `in-progress`, and move on.
