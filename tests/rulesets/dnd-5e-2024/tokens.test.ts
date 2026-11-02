@@ -17,7 +17,7 @@ describe('renderTokens (SPEC.md §6.4)', () => {
 
   it.each([
     ['{mod:dex}', '+2'],
-    ['{mod:int}', '-3'],
+    ['{mod:int}', '\u22123'],
     ['{pb}', '+2'],
     ['{atk:str}', '+4'],
     ['{atk:str:1}', '+5'],
@@ -26,7 +26,7 @@ describe('renderTokens (SPEC.md §6.4)', () => {
     ['{dc:con:+2}', 'DC 14'],
     ['{dmg:2d6}', '7 (2d6)'],
     ['{dmg:2d6+str:fire}', '9 (2d6 + 2) Fire damage'],
-    ['{dmg:1d4+int}', '-1 (1d4 - 3)'],
+    ['{dmg:1d4+int}', '\u22121 (1d4 \u2212 3)'],
   ])('renders %s as %s', async (token, expected) => {
     expect(renderTokens(token, await derived(), tables)).toBe(expected);
   });
