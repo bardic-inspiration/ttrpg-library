@@ -1,0 +1,68 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "black-bear",
+  "name": "Black Bear",
+  "summary": "A forest bear that climbs, swims, and fights with its claws.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 30,
+      "climb": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 12,
+      "con": 14,
+      "int": 2,
+      "wis": 12,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "list": []
+    },
+    "cr": 0.5,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The bear makes two Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-02",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}

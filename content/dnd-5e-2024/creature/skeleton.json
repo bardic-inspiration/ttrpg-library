@@ -1,0 +1,92 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "skeleton",
+  "name": "Skeleton",
+  "summary": "An animated skeleton that fights with a shortsword and shortbow at the command of whoever raised it.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 16,
+      "con": 15,
+      "int": 6,
+      "wis": 8,
+      "cha": 5
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "gear": [
+      "Shortbow",
+      "Shortsword"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "list": [
+        "Understands Common plus one other language but can't speak"
+      ]
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Shortsword",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Shortbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-02",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}

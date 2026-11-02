@@ -1,0 +1,70 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "wolf",
+  "name": "Wolf",
+  "summary": "A pack-hunting wolf that drags prey to the ground with its bite.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 15,
+      "con": 12,
+      "int": 3,
+      "wis": 12,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "list": []
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The wolf has Advantage on attack rolls against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-02",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}
