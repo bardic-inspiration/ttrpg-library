@@ -45,8 +45,9 @@
       "darkvision": 60
     },
     "languages": {
-      "list": [
-        "Understands Common plus one other language but can't speak"
+      "spoken": [],
+      "understood": [
+        "Common plus one other language"
       ]
     },
     "cr": 0.25,

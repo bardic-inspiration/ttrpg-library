@@ -388,7 +388,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `immunities` | optional `{ damage?: [...], conditions?: [Condition] }` | |
 | `gear` | optional array of `RefOrText` | Items the creature carries |
 | `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int }` | Feet, each at least 1. Passive Perception is derived, so the Senses line always displays |
-| `languages` | `{ list: [string], telepathy?: int, note?: string }` | Empty list displays as "None". `telepathy` is at least 1 |
+| `languages` | `{ spoken: [string], understood?: [string], telepathy?: int, note?: string }` | `spoken` lists languages the creature speaks (and so understands), and may be empty. `understood` lists languages it understands but can't speak. `telepathy` is at least 1. Rendering is under "Display forms" below |
 | `cr` | number: `0`, `0.125`, `0.25`, `0.5`, or `1`–`30` | Displayed as fractions. XP and PB are derived |
 | `lair` | optional `true` | Adds the derived "in lair" XP |
 | `traits`, `actions`, `bonusActions`, `reactions` | arrays of `Action` (`actions` required, others optional) | |
@@ -419,6 +419,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 
 - Negative numbers and subtractions print U+2212 (`−`), not ASCII `-`: `−1 (9)`, `INT 5 −3 −3`, `17 (5d8 − 5)`. Tokens in prose (§6.4) render the same way. This is display only: derived values, `library.json`, and the export bundles keep numbers and ASCII formula strings such as `2d6 - 2`.
 - The Senses line separates senses with commas and puts a semicolon before Passive Perception: `Darkvision 60 ft., Blindsight 10 ft.; Passive Perception 13`.
+- The Languages line joins, with semicolons: the `spoken` list (comma-separated), then the `understood` clause, then telepathy, with `note` in parentheses after the whole line. The clause is "Understands … but can't speak" when nothing is spoken, and "understands … but can't speak it" (or "them" for two or more) after a spoken list. Each item is free text, so a phrase such as "Common plus one other language" is one item. With nothing spoken, understood, or telepathic, the line reads "None". Examples: `Common, Giant`; `Understands Common plus one other language but can't speak`; `Understands Infernal but can't speak; telepathy 60 ft.`; `Common; understands Giant but can't speak it`.
 - An action's `uses` is title-cased, including the word after a slash: `"4/day"` prints `Loathsome Limbs (4/Day)`.
 
 ### 6.6 Magic item (`schemas/magic-item.schema.json`)
@@ -522,7 +523,7 @@ Balance (hit points, damage per round, and save DCs for a given CR, item rarity 
     "skills": { "perception": "proficient", "stealth": "proficient" },
     "immunities": { "damage": ["fire"] },
     "senses": { "darkvision": 60 },
-    "languages": { "list": [] },
+    "languages": { "spoken": [] },
     "cr": 2,
     "traits": [
       {

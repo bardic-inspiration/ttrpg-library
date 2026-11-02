@@ -88,4 +88,23 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(d.hp.formula).toBe('5d8 - 5');
     expect(d.actions[0]!.damage[0]!.display).toBe('6 (2d8 - 3)');
   });
+  it('renders spoken and understood languages in SRD 5.2 form (#83)', async () => {
+    const base = (await cinderHound()).stats as CreatureStats;
+    const line = (languages: CreatureStats['languages']) => languagesLine({ ...base, languages });
+    expect(line({ spoken: ['Common', 'Giant'] })).toBe('Common, Giant');
+    // Skeleton and Zombie: one understood phrase, nothing spoken.
+    expect(line({ spoken: [], understood: ['Common plus one other language'] })).toBe(
+      "Understands Common plus one other language but can't speak",
+    );
+    // Hell Hound: a single understood language.
+    expect(line({ spoken: [], understood: ['Infernal'] })).toBe("Understands Infernal but can't speak");
+    expect(line({ spoken: [], understood: ['Abyssal', 'Infernal'], telepathy: 60 })).toBe(
+      "Understands Abyssal, Infernal but can't speak; telepathy 60 ft.",
+    );
+    expect(line({ spoken: ['Common'], understood: ['Giant'] })).toBe("Common; understands Giant but can't speak it");
+    expect(line({ spoken: ['Common'], understood: ['Giant', 'Orc'] })).toBe(
+      "Common; understands Giant, Orc but can't speak them",
+    );
+    expect(line({ spoken: [], note: 'see below' })).toBe('None (see below)');
+  });
 });

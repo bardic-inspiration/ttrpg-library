@@ -39,7 +39,7 @@ describe('creature stat block situational fields (SPEC.md §5.8, §9.5)', () => 
 
   it('shows required fields even at 0 or empty, and derived lines without their optional inputs', async () => {
     const { senses, ...base } = (await cinderHound()).stats as CreatureStats;
-    const text = await render({ ...base, speed: { walk: 0 }, cr: 0, languages: { list: [] } });
+    const text = await render({ ...base, speed: { walk: 0 }, cr: 0, languages: { spoken: [] } });
     expect(text).toContain('Speed 0 ft.');
     expect(text).toContain('CR 0 (XP 10; PB +2)'); // CR 0 that deals damage is worth 10 XP
     expect(text).toContain('Languages None');
@@ -54,7 +54,7 @@ describe('creature stat block situational fields (SPEC.md §5.8, §9.5)', () => 
       speed: { walk: 30, fly: 60, hover: true },
       lair: true,
       gear: ['Spear'],
-      languages: { list: ['Common'], telepathy: 60 },
+      languages: { spoken: ['Common'], telepathy: 60 },
       legendaryActions: { uses: 3, usesInLair: 4, items: [{ name: 'Snap', kind: 'other', text: 'The hound bites.' }] },
     });
     expect(text).toContain('Skills Perception +3, Stealth +4');
