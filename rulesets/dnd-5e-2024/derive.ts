@@ -20,8 +20,17 @@ export const abilityMod = (score: number): number => Math.floor((score - 10) / 2
 const proficiencyMultiplier = (proficiency: Proficiency | undefined): number =>
   proficiency === 'expertise' ? 2 : proficiency === 'proficient' ? 1 : 0;
 
-/** `+2`, `+0`, `-1`. */
-export const signed = (n: number): string => (n < 0 ? `-${-n}` : `+${n}`);
+/** U+2212, the minus sign SRD 5.2 prints (SPEC.md §6.5). */
+export const MINUS = '\u2212';
+
+/** `+2`, `+0`, `−1`, with U+2212 for negatives. Display only. */
+export const signed = (n: number): string => (n < 0 ? `${MINUS}${-n}` : `+${n}`);
+
+/**
+ * A derived formula or damage display, such as `5 (2d6 - 2)`, with U+2212 for
+ * each minus. Display only: the derived values themselves keep ASCII `-`.
+ */
+export const printMinus = (formula: string): string => formula.replace(/-(?=\s?\d)/g, MINUS);
 
 /** `1d8 + 2`, `1d8 - 1`, or `1d8` when the modifier is 0. */
 const withModifier = (base: string, modifier: number): string =>

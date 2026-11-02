@@ -6,7 +6,7 @@
 // tokens render, plain fields are escaped, and labels such as "Hit:" are
 // italic. Templates render them through ./markdown.ts.
 
-import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
+import { printMinus, signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { renderTokens } from '../../../rulesets/dnd-5e-2024/tokens.ts';
 import { present, whenPresent } from './display.ts';
@@ -32,7 +32,12 @@ export interface ActionBlock {
 const label = (text: string): string => `*${text}*`;
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(' ');
+/** Capitalizes each word, splitting on spaces, hyphens, and slashes: `4/day` is `4/Day`. */
+const titleCase = (s: string): string =>
+  s
+    .split(/[\s-]+/)
+    .map((word) => word.split('/').map(capitalize).join('/'))
+    .join(' ');
 
 export { formatCr };
 
@@ -45,7 +50,7 @@ export const acLine = (s: CreatureStats): string => whenPresent(s.ac.note, (note
 
 export const initiativeLine = (d: DerivedCreature): string => `${signed(d.initiative.bonus)} (${d.initiative.score})`;
 
-export const hpLine = (d: DerivedCreature): string => `${d.hp.average} (${d.hp.formula})`;
+export const hpLine = (d: DerivedCreature): string => `${d.hp.average} (${printMinus(d.hp.formula)})`;
 
 export function speedLine(s: CreatureStats): string {
   const { walk, hover, ...others } = s.speed;
@@ -90,8 +95,9 @@ export function defenseLines(s: CreatureStats): PropertyLine[] {
 }
 
 export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
+  // Senses are comma-separated; Passive Perception follows a semicolon (SPEC.md §6.5).
   const senses = Object.entries(s.senses ?? {}).map(([sense, feet]) => `${capitalize(sense)} ${feet} ft.`);
-  return [...senses, `Passive Perception ${d.passivePerception}`].join(', ');
+  return [senses.join(', '), `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
 }
 
 export function languagesLine(s: CreatureStats): string {
@@ -122,7 +128,7 @@ function actionName(action: Action): string {
 
 function damageText(action: Action, derived: DerivedAction | undefined): string | undefined {
   return whenPresent(action.damage, (list) =>
-    list.map((damage, i) => `${derived?.damage[i]?.display ?? damage.dice} ${capitalize(damage.type)} damage`).join(' plus '),
+    list.map((damage, i) => `${whenPresent(derived?.damage[i]?.display, printMinus) ?? damage.dice} ${capitalize(damage.type)} damage`).join(' plus '),
   );
 }
 
