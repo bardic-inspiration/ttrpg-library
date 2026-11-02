@@ -14,7 +14,8 @@
         "dice": { "$ref": "#/$defs/Dice" },
         "ability": { "$ref": "#/$defs/Ability" },
         "bonus": { "type": "integer", "not": { "const": 0 } },
-        "type": { "$ref": "#/$defs/DamageType" }
+        "type": { "$ref": "#/$defs/DamageType" },
+        "condition": { "type": "string", "minLength": 1 }
       }
     },
     "Proficiency": { "enum": ["proficient", "expertise"] },

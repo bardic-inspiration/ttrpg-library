@@ -73,6 +73,9 @@ export function checkCreature(stats: CreatureStats, tables: Tables): Issue[] {
         continue;
       }
       const { token } = match;
+      if (token.kind === 'authored-dc') {
+        warning(path, `token ${match.raw} is an authored DC; confirm it isn't derived (a save DC from an ability uses {dc:<ability>})`);
+      }
       if ((token.kind === 'atk' || token.kind === 'dc') && token.adjust !== 0) {
         warning(path, `token ${match.raw} adjusts the formula by ${token.adjust}; confirm the deviation`);
       }
@@ -110,6 +113,9 @@ export function checkCreature(stats: CreatureStats, tables: Tables): Issue[] {
       warning(`${path}.adjust`, `${action.name} adjusted by ${action.adjust}; confirm the deviation`);
     }
     (action.damage ?? []).forEach((damage, j) => {
+      if (j === 0 && damage.condition !== undefined) {
+        error(`${path}.damage[0].condition`, 'a condition is allowed only on a rider (damage after the first)');
+      }
       if (damage.bonus !== undefined && damage.bonus !== 0) {
         warning(`${path}.damage[${j}].bonus`, `${action.name} damage has a bonus of ${damage.bonus}; confirm the deviation`);
       }

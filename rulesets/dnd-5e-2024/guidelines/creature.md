@@ -136,6 +136,12 @@ What you write:
 - **`onHit`**: what happens after the damage, as full sentences. "The target
   has the Grappled condition (escape DC 13)" is wrong because the DC is
   derived; write "The target has the Grappled condition (escape {dc:str})."
+- **`attackNote`** (attacks only): a parenthetical after the attack bonus,
+  such as "with Advantage if the target is Grappled by the bugbear". The
+  template adds the parentheses.
+- **Damage `condition`** (riders only): when a rider applies, such as "if the
+  attack roll had Advantage". The template writes ", plus … if the attack roll
+  had Advantage".
 - **`onFailure`**: what happens on a failed save beyond the listed damage.
 - **`onSuccess`**: the success line, usually "Half damage." Omit it when a
   success means nothing happens.
@@ -164,12 +170,18 @@ Rules for all of these:
   | An attack bonus with STR | {atk:str} | +4 |
   | A STR attack bonus with a +1 deviation | {atk:str:1} | +5 |
   | A save DC based on CON | {dc:con} | DC 12 |
+  | A DC the rules leave to you, such as an ability check's | {dc=12} | DC 12 |
   | Damage with no modifier | {dmg:2d6:fire} | 7 (2d6) Fire damage |
   | Damage plus the STR modifier | {dmg:1d8+str:piercing} | 6 (1d8 + 2) Piercing damage |
 
   Name the save's ability in words after a DC token: "a {dc:wis} Wisdom saving
   throw". A token with an adjust (`{atk:str:1}`) is a deviation like `adjust`
   and needs the same explanation in the PR body.
+- An authored DC (`{dc=12}`) is only for a DC that isn't 8 + PB + an
+  ability modifier: an ability check to escape ("a {dc=12} Strength
+  (Athletics) check") or a base in a formula ("{dc=5} plus the damage
+  taken"). A save DC against the creature's own ability is always a derived
+  token such as `{dc:con}`.
 - Numbers the author chooses stay literal: distances ("within 30 feet"),
   durations ("until the end of its next turn"), counts ("two Bite attacks"),
   and recharge or uses, which go in `recharge` and `uses`, not in the name or

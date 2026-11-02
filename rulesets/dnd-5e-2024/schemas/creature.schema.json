@@ -422,6 +422,10 @@
             }
           }
         },
+        "attackNote": {
+          "type": "string",
+          "minLength": 1
+        },
         "save": {
           "type": "object",
           "additionalProperties": false,
@@ -531,6 +535,7 @@
           "then": {
             "required": ["ability", "save"],
             "properties": {
+              "attackNote": false,
               "reach": false,
               "range": false,
               "text": false,
@@ -551,6 +556,7 @@
             "properties": {
               "ability": false,
               "adjust": false,
+              "attackNote": false,
               "reach": false,
               "range": false,
               "save": false,

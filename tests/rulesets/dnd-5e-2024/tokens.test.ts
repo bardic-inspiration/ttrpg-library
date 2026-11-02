@@ -24,6 +24,8 @@ describe('renderTokens (SPEC.md §6.4)', () => {
     ['{atk:str:-1}', '+3'],
     ['{dc:con}', 'DC 12'],
     ['{dc:con:+2}', 'DC 14'],
+    ['{dc=5}', 'DC 5'],
+    ['{dc=12}', 'DC 12'],
     ['{dmg:2d6}', '7 (2d6)'],
     ['{dmg:2d6+str:fire}', '9 (2d6 + 2) Fire damage'],
     ['{dmg:1d4+int}', '\u22121 (1d4 \u2212 3)'],
@@ -46,6 +48,9 @@ describe('findTokens', () => {
     ['{mod:luck}', /unknown ability "luck"/],
     ['{atk:str:0}', /not a non-zero integer/],
     ['{dc:con:x}', /not a non-zero integer/],
+    ['{dc=0}', /authored DC "0" is not a positive integer/],
+    ['{dc=x}', /authored DC "x" is not a positive integer/],
+    ['{dc=5:con}', /authored DC "5:con" is not a positive integer/],
     ['{dmg:1d7}', /dice "1d7"/],
     ['{dmg:1d6+str+dex}', /more than one ability/],
     ['{dmg:1d6:ice}', /unknown damage type "ice"/],
@@ -59,6 +64,6 @@ describe('findTokens', () => {
   });
 
   it('finds no errors in well-formed text', () => {
-    expect(findTokens('Hits {atk:str} for {dmg:1d6+str:fire}; {dc:wis:-1}, {pb}, {mod:cha}.', tables).every((m) => m.token)).toBe(true);
+    expect(findTokens('Hits {atk:str} for {dmg:1d6+str:fire}; {dc:wis:-1}, {dc=15}, {pb}, {mod:cha}.', tables).every((m) => m.token)).toBe(true);
   });
 });

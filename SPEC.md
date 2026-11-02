@@ -342,7 +342,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 |---|---|
 | `Ability` | `str`, `dex`, `con`, `int`, `wis`, `cha` |
 | `Dice` | String `^\d+d(4|6|8|10|12|20|100)$`, for example `2d6`. No modifier; modifiers come from `ability` and `bonus` |
-| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType }`. `bonus` is non-zero when present (§5.8) |
+| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType, condition?: string }`. `bonus` is non-zero when present (§5.8). `condition` is when a rider applies, such as `"if the attack roll had Advantage"`, and is allowed only on a rider (§6.8) |
 | `Proficiency` | `proficient`, `expertise` |
 | `Adjust` | Non-zero integer |
 | `DamageType` | `acid`, `bludgeoning`, `cold`, `fire`, `force`, `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder` |
@@ -361,10 +361,12 @@ Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `spellcasting.note`, 
 | `{pb}` | Proficiency bonus | `+2` |
 | `{atk:<ability>[:<adjust>]}` | PB + modifier (+ adjust) | `+4` |
 | `{dc:<ability>[:<adjust>]}` | 8 + PB + modifier (+ adjust) | `DC 12` |
+| `{dc=<n>}` | An authored DC: `n`, a positive integer, as written | `DC 5` |
 | `{dmg:<dice>[+<ability>][:<type>]}` | Average, dice, and type | `7 (2d6) Fire damage` |
 
 - An unknown token, ability, or damage type is a validation error.
 - A literal number that looks derived in creature prose is a validation error, and the message names the token to use instead. The patterns caught are `DC <n>`, `+<n> to hit`, and `<n> (<dice>)`.
+- A DC the rules leave to the author, such as an ability check's ("a {dc=12} Strength (Athletics) check") or a base for a formula in prose ("({dc=5} plus the damage taken)"), uses `{dc=<n>}`. The token marks the number as authored (§6.1), so the literal check stays strict. A save DC from one of the creature's abilities always uses `{dc:<ability>}`. Each authored DC is listed as a warning for the reviewer to confirm (§6.8).
 - Spell and magic-item text is exempt, because its numbers are authored. Item text must still not restate `saveDc` or `attackBonus`, since the template renders them from the structured fields (warning).
 
 ### 6.5 Creature (`schemas/creature.schema.json`)
@@ -405,15 +407,16 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `adjust` | optional `Adjust` | attack, save | Applied to the attack bonus or DC |
 | `reach` | int | melee attacks | Feet |
 | `range` | `{ normal: int, long?: int }` | ranged attacks | Feet |
+| `attackNote` | optional string | attack | A parenthetical after the attack bonus, such as `"with Advantage if the target is Grappled by the bugbear"` |
 | `save` | `{ ability: Ability, targets: string }` | save | `targets` such as `"each creature in a 15-foot Cone"` |
-| `damage` | optional array of `Damage` | attack, save | The first is the primary damage; the rest render as "plus" riders |
+| `damage` | optional array of `Damage` | attack, save | The first is the primary damage; the rest render as "plus" riders, and a rider with a `condition` as ", plus … <condition>" |
 | `onHit` | optional `Text` | attack | Prose after the damage |
 | `onFailure`, `onSuccess` | optional `Text` | save | Prose after the failure damage, and the success line |
 | `text` | `Text` | other (required); not allowed on attack and save | Full prose; derived values only through tokens |
 | `recharge` | optional enum | all | One of `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
 | `uses` | optional string | all | `"3/day"` |
 
-Attack and save lines are generated in 5.2 form from the structured fields. Example output: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.` and `*Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.` Kind-specific requirements (`ability` and `reach` for melee attacks, `save` for saves, `text` only on `other`) are enforced in the schema with `if`/`then`.
+Attack and save lines are generated in 5.2 form from the structured fields. Example output: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.` and `*Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.` With an `attackNote` and a conditional rider: `*Melee or Ranged Attack Roll:* +4 (with Advantage if the target is Grappled by the bugbear), reach 10 ft. or range 20/60 ft.` and `*Hit:* 5 (1d6 + 2) Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage.` Kind-specific requirements (`ability` and `reach` for melee attacks, `save` for saves, `text` only on `other`, `attackNote` only on attacks) are enforced in the schema with `if`/`then`.
 
 **Display forms.** The stat block follows SRD 5.2 typography:
 
@@ -474,7 +477,9 @@ Creature:
 | Every token is known and well-formed | error |
 | No literal derived numbers in prose (§6.4) | error |
 | Speeds are multiples of 5 | error |
+| A damage `condition` only on a rider, not on `damage[0]` | error |
 | Any `adjust`, damage `bonus`, or token adjustment (listed so the reviewer confirms the deviation) | warning |
+| Any authored DC token `{dc=<n>}` (listed so the reviewer confirms it isn't derived) | warning |
 | Derived attack bonus above +17 or save DC above 30 | warning |
 
 Magic item:

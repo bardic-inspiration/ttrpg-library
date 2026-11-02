@@ -134,9 +134,20 @@ function actionName(action: Action): string {
   return notes.length ? `${action.name} (${notes.join('; ')})` : action.name;
 }
 
+/**
+ * The damage list: riders join with "plus", and a conditional rider takes a
+ * comma before "plus" and its condition after (SPEC.md §6.5): "5 (1d6 + 2)
+ * Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage".
+ */
 function damageText(action: Action, derived: DerivedAction | undefined): string | undefined {
   return whenPresent(action.damage, (list) =>
-    list.map((damage, i) => `${whenPresent(derived?.damage[i]?.display, printMinus) ?? damage.dice} ${capitalize(damage.type)} damage`).join(' plus '),
+    list
+      .map((damage, i) => {
+        const text = `${whenPresent(derived?.damage[i]?.display, printMinus) ?? damage.dice} ${capitalize(damage.type)} damage`;
+        if (i === 0) return text;
+        return whenPresent(damage.condition, (condition) => `, plus ${text} ${escapeMarkdown(condition)}`) ?? ` plus ${text}`;
+      })
+      .join(''),
   );
 }
 
@@ -165,7 +176,8 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
   } else {
     const reach = whenPresent(action.reach, (feet) => `reach ${feet} ft.`);
     const range = whenPresent(action.range, rangeText);
-    parts.push(`${label(ATTACK_LABEL[action.kind] ?? '')} ${signed(derived?.attackBonus ?? 0)}, ${[reach, range].filter(present).join(' or ')}`);
+    const note = whenPresent(action.attackNote, (text) => ` (${escapeMarkdown(text)})`) ?? '';
+    parts.push(`${label(ATTACK_LABEL[action.kind] ?? '')} ${signed(derived?.attackBonus ?? 0)}${note}, ${[reach, range].filter(present).join(' or ')}`);
     const damage = damageText(action, derived);
     const hit = [whenPresent(damage, sentence), whenPresent(action.onHit, prose)].filter(present).join(' ');
     parts.push(`${label('Hit:')} ${hit}`);
