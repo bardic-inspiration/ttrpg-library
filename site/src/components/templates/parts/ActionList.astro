@@ -1,10 +1,11 @@
 ---
 // A titled stat-block section (Traits, Actions, Reactions…) of named blocks,
 // each with its name as an inline heading (SPEC.md §9.5). Content before the
-// blocks, such as the legendary-action intro, goes in the default slot.
+// blocks, such as the legendary-action intro, goes in the default slot. Each
+// body is markdown (SPEC.md §5.5) and renders through RulesText.
 import type { ActionBlock } from '../../../lib/creature';
 import Heading from './Heading.astro';
-import Segments from './Segments.astro';
+import RulesText from './RulesText.astro';
 
 interface Props {
   title: string;
@@ -18,7 +19,7 @@ const { title, items, level } = Astro.props;
   <Heading level={level} class="action-list__heading">{title}</Heading>
   <slot />
   {items.map((item) => (
-    <p class="action-list__item"><strong>{item.name}.</strong> <Segments segments={item.body} /></p>
+    <RulesText class="action-list__item" label={item.name} text={item.body} />
   ))}
 </section>
 
@@ -31,7 +32,7 @@ const { title, items, level } = Astro.props;
       margin-block-end: var(--space-3xs);
     }
 
-    .action-list > :global(p + p) {
+    .action-list > :global(* + *) {
       margin-block-start: var(--space-3xs);
     }
   }

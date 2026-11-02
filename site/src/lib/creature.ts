@@ -1,13 +1,17 @@
 // Text for the dnd-5e-2024 creature stat block in SRD 5.2 form (SPEC.md §6.5),
 // built from stored inputs and derived values. Styling arrives with the
 // templates in milestone 3; this is the content. Optional fields display by
-// presence alone (SPEC.md §5.8), through ./display.ts.
+// presence alone (SPEC.md §5.8), through ./display.ts. Action bodies are
+// markdown: stored text fields (`Text`, SPEC.md §5.5) go in as written after
+// tokens render, plain fields are escaped, and labels such as "Hit:" are
+// italic. Templates render them through ./markdown.ts.
 
 import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { renderTokens } from '../../../rulesets/dnd-5e-2024/tokens.ts';
 import { present, whenPresent } from './display.ts';
 import { formatCr } from './format.ts';
+import { escapeMarkdown } from './markdown.ts';
 import type { PropertyLine } from './template.ts';
 import type {
   Action,
@@ -17,16 +21,15 @@ import type {
   RefOrText,
 } from '../../../rulesets/dnd-5e-2024/types.ts';
 
-/** A run of text, optionally emphasized. Templates render these; nothing is raw HTML. */
-export interface Segment {
-  text: string;
-  em?: boolean;
+export interface ActionBlock {
+  /** Plain text. */
+  name: string;
+  /** Markdown-subset text (SPEC.md §5.5). */
+  body: string;
 }
 
-export interface ActionBlock {
-  name: string;
-  body: Segment[];
-}
+/** An italic label such as "Hit:". */
+const label = (text: string): string => `*${text}*`;
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(' ');
@@ -135,46 +138,44 @@ const rangeText = (range: { normal: number; long?: number }): string =>
 /** One action, trait, or reaction as SRD 5.2 prose. */
 export function actionBlock(action: Action, derived: DerivedAction | undefined, d: DerivedCreature): ActionBlock {
   const prose = (text: string) => renderTokens(text, d, tables);
-  const body: Segment[] = [];
   const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
+  const parts: string[] = [];
   if (action.kind === 'other') {
-    body.push({ text: prose(action.text ?? '') });
+    parts.push(prose(action.text ?? ''));
   } else if (action.kind === 'save' && action.save) {
-    body.push({ text: `${tables.abilityNames[action.save.ability]} Saving Throw:`, em: true });
-    body.push({ text: ` DC ${derived?.saveDc}, ${action.save.targets}. ` });
+    parts.push(`${label(`${tables.abilityNames[action.save.ability]} Saving Throw:`)} DC ${derived?.saveDc}, ${escapeMarkdown(action.save.targets)}.`);
     const damage = damageText(action, derived);
     const failure = [whenPresent(damage, (text) => `${text}.`), whenPresent(action.onFailure, prose)].filter(present).join(' ');
-    if (failure) body.push({ text: 'Failure:', em: true }, { text: ` ${failure}` });
-    if (present(action.onSuccess)) body.push({ text: ' ' }, { text: 'Success:', em: true }, { text: ` ${prose(action.onSuccess)}` });
+    if (failure) parts.push(`${label('Failure:')} ${failure}`);
+    if (present(action.onSuccess)) parts.push(`${label('Success:')} ${prose(action.onSuccess)}`);
   } else {
     const reach = whenPresent(action.reach, (feet) => `reach ${feet} ft.`);
     const range = whenPresent(action.range, rangeText);
-    body.push({ text: ATTACK_LABEL[action.kind] ?? '', em: true });
-    body.push({ text: ` ${signed(derived?.attackBonus ?? 0)}, ${[reach, range].filter(present).join(' or ')} ` });
+    parts.push(`${label(ATTACK_LABEL[action.kind] ?? '')} ${signed(derived?.attackBonus ?? 0)}, ${[reach, range].filter(present).join(' or ')}`);
     const damage = damageText(action, derived);
     const hit = [whenPresent(damage, sentence), whenPresent(action.onHit, prose)].filter(present).join(' ');
-    body.push({ text: 'Hit:', em: true }, { text: ` ${hit}` });
+    parts.push(`${label('Hit:')} ${hit}`);
   }
-  return { name: actionName(action), body };
+  return { name: actionName(action), body: parts.join(' ') };
 }
 
 const refOrText = (value: RefOrText, names: Map<string, string>): string =>
-  typeof value === 'string' ? value : (names.get(value.ref) ?? value.ref);
+  escapeMarkdown(typeof value === 'string' ? value : (names.get(value.ref) ?? value.ref));
 
 /** The 5.2 "Spellcasting" action (SPEC.md §6.5). `names` maps `<type>/<id>` to entry names. */
 export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>): ActionBlock | undefined {
   const sc = s.spellcasting;
   if (!sc || !d.spellcasting) return undefined;
   const attack = present(sc.includeAttack) ? `, ${signed(d.spellcasting.attackBonus)} to hit with spell attacks` : '';
-  const body: Segment[] = [
-    { text: `The creature casts one of the following spells, using ${tables.abilityNames[sc.ability]} as the spellcasting ability (spell save DC ${d.spellcasting.dc}${attack}):` },
+  const parts = [
+    `The creature casts one of the following spells, using ${tables.abilityNames[sc.ability]} as the spellcasting ability (spell save DC ${d.spellcasting.dc}${attack}):`,
   ];
-  const list = (label: string, spells: RefOrText[] | undefined) => {
+  const list = (name: string, spells: RefOrText[] | undefined) => {
     if (!present(spells)) return;
-    body.push({ text: ' ' }, { text: `${label}:`, em: true }, { text: ` ${spells.map((spell) => refOrText(spell, names)).join(', ')}` });
+    parts.push(`${label(`${name}:`)} ${spells.map((spell) => refOrText(spell, names)).join(', ')}`);
   };
   list('At Will', sc.atWill);
   for (const n of ['3', '2', '1'] as const) list(`${n}/Day Each`, sc.perDay?.[n]);
-  if (present(sc.note)) body.push({ text: ` ${renderTokens(sc.note, d, tables)}` });
-  return { name: 'Spellcasting', body };
+  if (present(sc.note)) parts.push(renderTokens(sc.note, d, tables));
+  return { name: 'Spellcasting', body: parts.join(' ') };
 }
