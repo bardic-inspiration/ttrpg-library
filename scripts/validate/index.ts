@@ -97,7 +97,11 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       continue;
     }
     for (const { path, text } of statsResult.texts) for (const message of checkMarkdown(path, text)) error(file, message);
+    // An SRD entry is literal (SPEC.md §5.9): its deviations and authored
+    // numbers match the SRD, so the ruleset's review warnings are skipped.
+    const srd = (entry.meta as { source?: { srd?: true } }).source?.srd === true;
     for (const issue of ruleset.module.check(entry.type, entry.stats)) {
+      if (srd && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
     }
     linked.stats = entry.stats;

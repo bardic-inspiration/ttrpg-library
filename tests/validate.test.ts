@@ -444,6 +444,20 @@ describe('authored DCs (SPEC.md §6.4, #88)', () => {
     expect(literal.errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/"DC 12" writes a derived number/));
   });
 
+  it('skips ruleset warnings on an SRD entry, which is literal, but keeps its errors (SPEC.md §5.9)', async () => {
+    const entry = await cinderHound();
+    entry.meta.source.srd = true;
+    entry.stats.actions[0].adjust = 1;
+    entry.stats.actions[0].damage[0].bonus = 1;
+    entry.stats.traits[0].text = 'It escapes with a {dc=12} Strength (Athletics) check, or a {dc:con:+1} save.';
+    const { errors, warnings } = await validateLibrary((await temp([entry])).content);
+    expect(errors).toEqual([]);
+    expect(warnings).toEqual([]);
+    entry.stats.traits[0].text = 'It escapes with a DC 12 Strength (Athletics) check.';
+    const literal = await validateLibrary((await temp([entry])).content);
+    expect(literal.errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/"DC 12" writes a derived number/));
+  });
+
   it('accepts a conditional rider and an attack note on an attack', async () => {
     const entry = await cinderHound();
     entry.stats.actions[0].attackNote = 'with Advantage if the target is Prone';
