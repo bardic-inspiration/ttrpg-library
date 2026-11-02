@@ -23,7 +23,7 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
       'Initiative +2 (12)',
       'HP 32 (5d8 + 10)',
       'Skills Perception +3, Stealth +4',
-      'Senses Darkvision 60 ft., Passive Perception 13',
+      'Senses Darkvision 60 ft.; Passive Perception 13',
       'CR 2 (XP 450; PB +2)',
       'Smoldering Hide. A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes 2 (1d4) Fire damage.',
       'Bite. Melee Attack Roll: +4, reach 5 ft. Hit: 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.',

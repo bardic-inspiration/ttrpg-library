@@ -415,6 +415,12 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 
 Attack and save lines are generated in 5.2 form from the structured fields. Example output: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.` and `*Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.` Kind-specific requirements (`ability` and `reach` for melee attacks, `save` for saves, `text` only on `other`) are enforced in the schema with `if`/`then`.
 
+**Display forms.** The stat block follows SRD 5.2 typography:
+
+- Negative numbers and subtractions print U+2212 (`−`), not ASCII `-`: `−1 (9)`, `INT 5 −3 −3`, `17 (5d8 − 5)`. Tokens in prose (§6.4) render the same way. This is display only: derived values, `library.json`, and the export bundles keep numbers and ASCII formula strings such as `2d6 - 2`.
+- The Senses line separates senses with commas and puts a semicolon before Passive Perception: `Darkvision 60 ft., Blindsight 10 ft.; Passive Perception 13`.
+- An action's `uses` is title-cased, including the word after a slash: `"4/day"` prints `Loathsome Limbs (4/Day)`.
+
 ### 6.6 Magic item (`schemas/magic-item.schema.json`)
 
 | Field | Shape | Notes |
@@ -554,7 +560,7 @@ Balance (hit points, damage per round, and save DCs for a given CR, item rarity 
 
 Rendered from the stored inputs plus the ruleset derivations:
 
-- **Initiative** +2 (12) · **HP** 32 (5d8 + 10) · **Skills** Perception +3, Stealth +4 · **Senses** Darkvision 60 ft., Passive Perception 13 · **CR** 2 (XP 450; PB +2)
+- **Initiative** +2 (12) · **HP** 32 (5d8 + 10) · **Skills** Perception +3, Stealth +4 · **Senses** Darkvision 60 ft.; Passive Perception 13 · **CR** 2 (XP 450; PB +2)
 - **Smoldering Hide.** A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes 2 (1d4) Fire damage.
 - **Bite.** *Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.
 - **Ember Breath (Recharge 5–6).** *Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.

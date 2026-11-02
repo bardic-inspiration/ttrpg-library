@@ -23,8 +23,7 @@ Every PR is in exactly one lane ([`SPEC.md`](SPEC.md) §12.4 "Work lanes"):
 
 ## Rules
 
-- **Never push to `main`.** Every change is a PR; a human merges it once
-  `validate` is green.
+- **Never push to `main`.** Every change is a PR.
 - **Don't invent behavior.** If the spec is silent, ambiguous, or wrong, ask
   (the user, or on the issue) and fix the spec before writing code that
   depends on it.
@@ -81,6 +80,10 @@ Content issues follow [`SPEC.md`](SPEC.md) §8.1.
 
 A dev issue states what to do, the spec section it implements, and how to
 tell it's done.
+
+Bundle small related dev issues (a few lines each, same area) into one issue
+and one PR, and close the originals as duplicates. Only a larger change stays
+a sub-issue of the bundle, with its own PR.
 
 ### Testing backlog
 
