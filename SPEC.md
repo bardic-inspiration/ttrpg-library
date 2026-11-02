@@ -40,7 +40,7 @@ These were settled in the spec review and override the preliminary design wherev
 | # | Topic | Decision |
 |---|---|---|
 | 1 | Audience and visibility | Private tool built to be shareable later. Public repo and Pages site on the free plan; no promotion. |
-| 2 | v1 scope | SRD 5.2 baseline. Types: `creature`, `magic-item`, `spell`. |
+| 2 | v1 scope | SRD 5.2 baseline. Types: `creature`, `magic-item`, `spell`. The library holds SRD entries, reproduced unmodified, and custom entries, which stay clear of SRD content (§5.9). |
 | 3 | Entry model | Three zones: fixed keys, strictly validated `stats`, and open flat `tags`. Provenance in `meta`. `version` renamed to `ruleset`. |
 | 4 | Validation posture | Fail closed. Unknown ruleset, type, or `stats` key fails CI. Only `tags` are open. |
 | 5 | IDs | Kebab-case slug of the name, globally unique, immutable, equals the filename. |
@@ -220,6 +220,7 @@ The file path must be `content/<ruleset>/<type>/<id>.json`. Unknown top-level ke
 | `meta.source.kind` | yes | `routine`, `revise`, or `manual` |
 | `meta.source.issues` | no | Array of issue numbers this entry fulfilled |
 | `meta.source.gapFill` | no | Gap bucket label (§7.1) when created by the gap-filler |
+| `meta.source.srd` | no | `true` on an SRD entry (§5.9); omitted on a custom entry |
 
 Meta is shown on the detail page in a small provenance line and is sortable (`meta.createdAt`), but it is not a tag.
 
@@ -238,7 +239,7 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 ### 5.7 References
 
 - A reference is an object `{ "ref": "<type>/<id>" }`, valid only inside `stats` at fields the schema declares as `RefOrText`.
-- `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`).
+- `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`). Once an SRD entry is in the library, new entries ref it instead.
 - The validator fails if a ref's target does not exist, or if its type does not match the ref's type prefix. Cross-ruleset refs are not allowed in v1. An entry that fails its own `stats` schema can still be a ref target, but its refs are not checked until its schema passes.
 - Deleting an entry that other entries reference fails CI until those refs are removed or replaced.
 - The validator and the build compute back-references (`scripts/validate/refs.ts`). Each entry's `refs` (forward) and `refBy` (back) are lists of `{ path, key }`: `path` is where the ref sits in the referring entry (for example `stats.spells[0].spell`), and `key` is the other end as `<type>/<id>`. Only resolved refs are listed, in document order.
@@ -264,6 +265,16 @@ Many `stats` fields apply to some entries and not others: a spell's material cos
 An optional number whose `0` is a real value, such as a magic item's `attackBonus` of +0, keeps `0` valid and displays it when present. A facet on an optional boolean flag (§7) reads an omitted key as `false`. A derived value always exists, so a line that shows one displays even when its optional inputs are omitted: the Senses line still shows Passive Perception, and the Initiative line still shows the DEX-based bonus.
 
 Because the schema is the source of the rule, it needs no display annotation. A template, including the generic fallback (§9.5), decides whether an optional field displays from presence alone, never by testing its value against `0`, `false`, or emptiness. The `stats` tables in §6.5–§6.7 mark optional fields with "optional" or a `?` key.
+
+### 5.9 SRD and custom entries
+
+Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom entry**, original to this library.
+
+- **SRD entries are included unmodified.** `name` is the SRD name exactly. `stats` reproduce the SRD stat block, so every number the template renders, derived or not, matches the SRD. Rules text is the SRD's text word for word, except that derived numbers are written as tokens (§6.4) that render the same values. Where the ruleset's derivation can't reach an SRD number from inputs, an `adjust` or damage `bonus` matches it, with "matches SRD" as its reason.
+- Only what the SRD doesn't provide is authored: `summary`, which is required, is one plain factual line. `description` is omitted, since SRD stat blocks carry no lore. The guidelines' tone, naming, and balance targets don't apply (§8.6).
+- An SRD entry sets `meta.source.srd: true` (§5.4). It is added only when a request asks for SRD content (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
+- A revision of an SRD entry only brings it closer to the SRD, such as a transcription fix. A variant of an SRD entry is a new custom entry.
+- **Custom entries stay clear of SRD content,** whether or not the SRD entry is in the library: no SRD name, no near collision with one, and no concept that duplicates an SRD entry (§8.6). A custom entry omits `meta.source.srd`.
 
 ## 6. Rulesets and the dnd-5e-2024 schemas
 
@@ -688,6 +699,8 @@ An entry belongs to a bucket when its value on every axis falls in that bucket's
 
 Free-form issues with the `request` label are also accepted; the routine interprets them against defaults.
 
+A brief that asks for SRD content (by name, or as a description such as "ten SRD creatures of CR 1 to 3") is fulfilled with SRD entries (§5.9). Any other brief is fulfilled with custom entries.
+
 **Labels**
 
 | Label | Meaning |
@@ -737,8 +750,8 @@ Defaults are applied only to fields the request leaves unspecified. Request tags
 
 1. Read `config/types.json`, `config/defaults.json`, the ruleset module (`rulesets/<ruleset>/`: the type's schema, `tables.json`, tokens, guideline), `config/blocklist.json`, and `library.json`.
 2. List existing names and IDs for collision avoidance, and existing entries matching the brief's theme to avoid near-duplicates in concept.
-3. Write entries, including any new dependencies the brief implies (a creature's signature spell). Prefer references to existing library entries over plain text when a matching entry exists. Write inputs only: never write a value the ruleset derives, use tokens for derived values in prose, and use `adjust` only for a deliberate deviation, explained in the PR body.
-4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and `meta.source.issues` (or `meta.source.gapFill` for a gap-fill run); apply request and default tags.
+3. Write entries, including any new dependencies the brief implies (a creature's signature spell). Prefer references to existing library entries over plain text when a matching entry exists. Write inputs only: never write a value the ruleset derives, use tokens for derived values in prose, and use `adjust` only for a deliberate deviation, explained in the PR body. For an SRD request, transcribe the SRD entries unmodified instead (§5.9); they have no dependencies of their own.
+4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and `meta.source.issues` (or `meta.source.gapFill` for a gap-fill run), plus `meta.source.srd: true` on SRD entries; apply request and default tags.
 5. Run `npm run validate`. Fix and retry up to `validateRetries` times. If still failing, comment the errors on the issue, remove `in-progress`, and stop without opening a PR. A gap-fill run or inline request has no issue, so it reports the errors in the run output instead.
 6. Branch `gen/<issue-numbers-or-gap>-<YYYYMMDD>` (for example `gen/12-14-20261102`, `gen/gap-spell-20261102`; issue numbers ascending; an inline request uses `gen/inline-<type>-<YYYYMMDD>`), commit with message `Add <n> <type> entries`, push, open the PR.
 
@@ -756,6 +769,7 @@ A test checks that every repo path, npm script, and `config/defaults.json` key t
 - **Instructions.** Free text applies to the commented file, or to the whole batch for general comments. `drop <id>` removes an entry (and fails validation if something references it, in which case the routine asks how to proceed). `regenerate <id>` replaces an entry with a fresh one under the same brief.
 - **Handled marker.** The routine posts under your identity, so it marks its own replies with a trailing `<!-- routine:handled -->` comment. An owner comment is pending if no reply with that marker follows it in its thread (inline) or after it (general).
 - **Action.** Edit only the affected files, set `meta.updatedAt`, re-run validation, push one commit per round (`Revise <ids>: <short reason>`), reply to each handled comment with what changed, and resolve inline threads it addressed.
+- **SRD entries.** A revision of an SRD entry only brings it closer to the SRD (§5.9). An instruction to change it otherwise isn't applied; the reply (or a `needs-info` question on a `revise` issue) says so and suggests requesting a custom variant. `regenerate <id>` on an SRD entry transcribes the same SRD entry again, keeping its name and ID.
 - **Post-merge revisions.** A `revise` issue produces a PR on branch `revise/<issue>-<YYYYMMDD>` with `meta.source.kind` left as-is and `meta.updatedAt` set. IDs never change.
 - **Delivery.** The run-order sweep in §8.2 step 2 is the guaranteed path, so a comment is handled by the next run at the latest. A routine session may also subscribe to the PR it opened for faster turnaround where the platform supports it; correctness never depends on that.
 
@@ -763,10 +777,10 @@ A test checks that every repo path, npm script, and `config/defaults.json` key t
 
 ### 8.6 Guidelines
 
-Each `rulesets/dnd-5e-2024/guidelines/<type>.md` contains:
+Each `rulesets/dnd-5e-2024/guidelines/<type>.md` is written for custom entries, and says so. An SRD entry follows only its token rules and its dependency section (§5.9). It contains:
 
 - Tone and voice, with one short exemplar.
-- Naming conventions: evocative and original; no real-world trademarks; no non-SRD proper nouns; avoid near-collisions with SRD names.
+- Naming conventions: evocative and original; no real-world trademarks; no non-SRD proper nouns; no SRD name and no near collision with one, whether or not the SRD entry is in the library.
 - Balance targets as our own tables (for creatures, by CR: AC, HP, attack bonus, damage per round, save DC; for items, power expectations by rarity; for spells, damage by level and area). For creatures these are met by choosing inputs (ability scores, hit dice, damage dice), since the derived numbers follow from them.
 - Prose style for `text`, `onHit`, `onFailure`, `onSuccess`, and `effect`, matching 5.2 phrasing, with derived numbers written as tokens. Attack and save lines are generated, so they are never written as prose.
 - When to create a dependency entry versus using plain text for an SRD reference.
@@ -1130,8 +1144,9 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 | References resolve; deletions don't orphan refs | Yes | |
 | Blocklist | Yes | Edit the blocklist for false positives |
 | Site builds | Yes | |
-| Balance against guideline targets | | Yes |
-| Flavor, tone, originality | | Yes |
+| Balance against guideline targets (custom entries) | | Yes |
+| Flavor, tone, originality (custom entries) | | Yes |
+| Fidelity to SRD 5.2 (SRD entries) | | Yes |
 | Rules legality beyond derived checks | | Yes |
 
 ## 14. CLAUDE.md contents
@@ -1146,6 +1161,7 @@ The repo's `CLAUDE.md` imports `AGENTS.md`, the canonical working guide for any 
 - Run `npm run validate` before every push; never push a failing batch.
 - Dev PRs that change behavior update `SPEC.md` in the same PR, and use the `dev.md` PR template.
 - SRD-only rules and the blocklist apply to every text field.
+- SRD entries are reproduced unmodified; custom entries never reuse or nearly reuse an SRD name (§5.9).
 - Mark review replies with `<!-- routine:handled -->`.
 
 ## 15. Extensibility

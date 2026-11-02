@@ -38,6 +38,11 @@ the default (`defaults.ruleset`, `defaults.count`), a count above
 `defaults.tags`. A form tag line `key: a, b` is the list `["a", "b"]`; a
 line with no comma is a single string.
 
+A brief that asks for SRD content, by name or by description ("ten SRD
+creatures of CR 1 to 3"), is an **SRD request**: it is fulfilled with SRD
+entries reproduced unmodified from SRD 5.2 (§5.9). Any other brief, and every
+gap-fill run, is fulfilled with custom entries.
+
 If a request can't be fulfilled as written (contradictory constraints, a type
 or ruleset not in `config/types.json`), don't generate it: comment one
 question on the issue, add `needs-info`, remove `in-progress`, and leave it
@@ -73,7 +78,12 @@ batch doesn't repeat a concept already in the library.
   suffix.
 - Avoid names within a small edit of an existing name ("Frost Lance" vs
   "Frost Lances"); the validator warns on them.
-- Avoid near-collisions with SRD names and every blocklist term (§11).
+- Custom entries: avoid SRD names and near collisions with them, whether or
+  not the SRD entry is in the library, and every blocklist term (§11).
+- SRD request: skip any SRD entry already in the library. If an SRD name
+  collides with an existing custom entry, leave that SRD entry out and report
+  the collision in the PR body (or the run's output if nothing else is
+  generated). Never rename an SRD entry to dodge a collision.
 
 ## Step 3: Write entries
 
@@ -101,6 +111,23 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` (§5.8).
 - Don't add `image` (no art in v1).
 
+### SRD entries
+
+For an SRD request, transcribe each entry from SRD 5.2 unmodified (§5.9)
+instead of following the guideline's tone, naming, and balance targets:
+
+- `name` is the SRD name exactly, and `id` is its slug.
+- `stats` reproduce the SRD stat block: choose inputs so every derived value
+  the template renders matches the SRD number. Where no input reaches it, set
+  `adjust` or a damage `bonus` to match, with the reason "matches SRD".
+- Rules text is the SRD's text word for word, except that every derived
+  number is written as its token (§6.4), which renders the same value.
+- `summary` is one plain, factual line written for the entry, since the SRD
+  has none. Omit `description`.
+- Everything the entry uses (spells, gear) is SRD content: a ref if it's in
+  the library, a plain string otherwise. Never create a dependency entry.
+- Set `meta.source.srd` to `true` (step 4).
+
 Never modify, rename, or move an existing entry. This skill only adds files.
 
 ## Step 4: Meta and tags
@@ -113,6 +140,7 @@ Set on every entry in the batch, including dependencies:
   batch. Omit it otherwise.
 - `meta.source.gapFill`: the bucket label, for a gap-fill run. Omit it
   otherwise.
+- `meta.source.srd`: `true` on an SRD entry. Omit it on a custom entry.
 - `tags`: the resolved request tags (request tags merged over
   `defaults.tags`), on every entry. Omit `tags` if it would be empty.
 
