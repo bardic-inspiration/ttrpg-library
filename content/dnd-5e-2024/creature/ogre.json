@@ -1,0 +1,82 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ogre",
+  "name": "Ogre",
+  "summary": "A brutish giant that smashes with a greatclub and hurls javelins.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "giant",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 8,
+      "con": 16,
+      "int": 5,
+      "wis": 7,
+      "cha": 7
+    },
+    "gear": [
+      "Greatclub",
+      "Javelins (3)"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "list": [
+        "Common",
+        "Giant"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Greatclub",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Javelin",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-02",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}

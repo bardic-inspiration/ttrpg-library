@@ -1,0 +1,67 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "owlbear",
+  "name": "Owlbear",
+  "summary": "A ferocious owl-headed bear that climbs well and tears foes apart with its claws.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 40,
+      "climb": 40
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 12,
+      "con": 17,
+      "int": 3,
+      "wis": 12,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "list": []
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The owlbear makes two Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-02",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}
