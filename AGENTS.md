@@ -23,8 +23,7 @@ Every PR is in exactly one lane ([`SPEC.md`](SPEC.md) §12.4 "Work lanes"):
 
 ## Rules
 
-- **Never push to `main`.** Every change is a PR; a human merges it once
-  `validate` is green.
+- **Never push to `main`.** Every change is a PR.
 - **Don't invent behavior.** If the spec is silent, ambiguous, or wrong, ask
   (the user, or on the issue) and fix the spec before writing code that
   depends on it.
