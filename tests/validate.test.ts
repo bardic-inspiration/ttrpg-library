@@ -237,6 +237,16 @@ describe('situational fields (SPEC.md §5.8)', () => {
     expect((await validateLibrary(content)).errors).toEqual([]);
   });
 
+  it('accepts the SRD marker meta.source.srd as true and rejects false (SPEC.md §5.4)', async () => {
+    const srd = await cinderHound();
+    srd.meta.source.srd = true;
+    expect((await validateLibrary((await temp([srd])).content)).errors).toEqual([]);
+    const none = await cinderHound();
+    none.meta.source.srd = false;
+    const { errors } = await validateLibrary((await temp([none])).content);
+    expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/^meta\.source\.srd: must be equal to constant/));
+  });
+
   it('keeps required fields valid at 0, false, and empty', async () => {
     const hound = await cinderHound();
     Object.assign(hound.stats, { speed: { walk: 0 }, languages: { list: [] } });

@@ -5,6 +5,12 @@ How to write a `magic-item` entry. The schema is
 covers what the schema can't: voice, names, balance, prose, and when an item
 needs a dependency entry.
 
+These rules are for custom entries, original to this library. An SRD entry is
+reproduced from SRD 5.2 unmodified (SPEC.md §5.9): its name, numbers, and
+rules text are the SRD's, so tone, naming, and balance targets don't apply to
+it. It still follows the token rules in prose style and the dependencies
+section below.
+
 ## Tone and voice
 
 - An item is a thing someone made, carried, and lost. Let the `description`
@@ -41,7 +47,8 @@ Exemplar (summary, description, and effect):
   Personal-name prefixes are how product-identity items are named, and the
   known ones are in `config/blocklist.json`, which the validator checks; the
   list is a floor, not the whole rule.
-- Stay clear of SRD item names. Don't reuse one, and don't make a near
+- Stay clear of SRD item names, whether or not the SRD item is in the
+  library. Don't reuse one, and don't make a near
   collision by swapping one word or pluralizing ("Boots of Striding" next to an
   SRD item of nearly that name). An item that does what an SRD item does is a
   duplicate; ref or name the SRD item instead.
@@ -119,9 +126,12 @@ string.
 
 - **Ref an existing library spell** whenever the item casts one. Check
   `library.json` first.
-- **Use a plain string** for an SRD 5.2 spell, spelled exactly as the SRD
-  names it ("Fireball", "Cure Wounds"). Never copy an SRD spell into the
-  library to ref it.
+- **Use a plain string** for an SRD 5.2 spell that isn't in the library,
+  spelled exactly as the SRD names it ("Fireball", "Cure Wounds"). Don't add
+  an SRD spell to the library just to ref it; SRD entries are added only when
+  a request asks for them (SPEC.md §5.9).
+- An SRD item never gets a dependency entry: the spells it casts are SRD
+  spells, reffed if they're in the library and plain strings otherwise.
 - **Create a spell entry** in the same batch when the item's power is a new
   spell that others could also cast or carry ("Wand of Frost Lances" casts the
   new *Frost Lance*). Write it to `spell.md` and ref it as `spell/<id>`.

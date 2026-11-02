@@ -4,6 +4,12 @@ How to write a `creature` entry. The schema is `schemas/creature.schema.json`
 and SPEC.md §6.5 lists every field. This file covers what the schema can't:
 voice, names, balance, prose, and when a creature needs a dependency entry.
 
+These rules are for custom entries, original to this library. An SRD entry is
+reproduced from SRD 5.2 unmodified (SPEC.md §5.9): its name, numbers, and
+rules text are the SRD's, so tone, naming, and balance targets don't apply to
+it. It still follows the token rules in prose style and the dependencies
+section below.
+
 ## Tone and voice
 
 - Write like a field guide kept by people who have met the creature and
@@ -40,8 +46,8 @@ Exemplar (summary, description, and one trait):
   characters, or product-identity monsters. `config/blocklist.json` is checked
   by the validator, but it is a floor, not the whole rule; a name that would
   only be recognized from a non-SRD book is out even if it isn't listed.
-- Stay clear of SRD creature names. Don't reuse one, and don't make a near
-  collision: a one-word swap ("Ice Troll" for an SRD troll) or a near spelling
+- Stay clear of SRD creature names, whether or not the SRD creature is in the
+  library. Don't reuse one, and don't make a near collision: a one-word swap ("Ice Troll" for an SRD troll) or a near spelling
   is too close. A new name should not make a reader think of a specific SRD
   stat block.
 - The `id` is the slug of the name and never changes. On a collision with an
@@ -181,13 +187,16 @@ A creature mentions spells (`spellcasting`) and gear (`gear`) through
 - **Ref an existing library entry** whenever one matches what the creature
   uses. Check `library.json` for it before writing anything new.
 - **Use a plain string** for SRD 5.2 content that isn't in the library, spelled
-  exactly as the SRD names it ("Fireball", "Longsword", "Chain Mail"). Never
-  copy an SRD spell or item into the library to ref it.
+  exactly as the SRD names it ("Fireball", "Longsword", "Chain Mail"). Don't
+  add an SRD spell or item to the library just to ref it; SRD entries are
+  added only when a request asks for them (SPEC.md §5.9).
 - **Create a dependency entry** in the same batch when the brief or the
   creature's concept calls for something new: a signature spell no SRD spell
   covers, or a named magic item the creature carries. Write it to its own
   guideline (`spell.md`, `magic-item.md`) and ref it with its `<type>/<id>`,
   such as `spell/frost-lance`.
+- An SRD creature never gets a dependency entry: everything it uses is SRD
+  content, reffed if it's in the library and a plain string otherwise.
 - Don't create a dependency for a one-off effect. If only this creature will
   ever use it and it fits in a trait or action, write it as a trait or action.
 - A plain string is never a non-SRD name. The blocklist applies to it like any

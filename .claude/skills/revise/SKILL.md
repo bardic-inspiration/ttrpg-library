@@ -74,6 +74,13 @@ Then read every entry file the revision may touch, under `content/`.
   brief. The brief is the one the PR was generated from: the issues in the
   entry's `meta.source.issues`, or the bucket in `meta.source.gapFill`.
 
+An entry with `meta.source.srd` is an SRD entry, reproduced unmodified from
+SRD 5.2 (§5.9). Change it only to bring it closer to the SRD, such as a
+transcription fix. Don't apply any other change: reply (or, for a revise
+issue, ask on the issue with `needs-info`) that SRD entries stay as the SRD
+has them, and suggest requesting a custom variant. `regenerate <id>` on an SRD
+entry transcribes the same SRD entry again, keeping its `name` and `id`.
+
 A comment that is only a question or an acknowledgement and asks for no
 change still gets a reply (step 6), but no edit.
 

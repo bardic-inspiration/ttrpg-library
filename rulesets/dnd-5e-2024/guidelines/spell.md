@@ -4,6 +4,12 @@ How to write a `spell` entry. The schema is `schemas/spell.schema.json` and
 SPEC.md §6.7 lists every field. This file covers what the schema can't: voice,
 names, balance, prose, and when a spell needs a dependency entry.
 
+These rules are for custom entries, original to this library. An SRD entry is
+reproduced from SRD 5.2 unmodified (SPEC.md §5.9): its name, numbers, and
+rules text are the SRD's, so tone, naming, and balance targets don't apply to
+it. It still follows the token rules in prose style and the dependencies
+section below.
+
 ## Tone and voice
 
 - A spell is a precise tool. `effect` is rules text and reads like SRD 5.2:
@@ -40,7 +46,8 @@ Exemplar (summary, description, and effect):
   are product identity; the known ones are in `config/blocklist.json`, which the
   validator checks, and the list is a floor, not the whole rule.
 - No other proper noun that isn't in SRD 5.2.
-- Stay clear of SRD spell names. Don't reuse one, and don't make a near
+- Stay clear of SRD spell names, whether or not the SRD spell is in the
+  library. Don't reuse one, and don't make a near
   collision by swapping one word or pluralizing. A spell that does what an SRD
   spell does at the same level is a duplicate; name the SRD spell instead.
 - The `id` is the slug of the name and never changes. On a collision, pick a

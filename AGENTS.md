@@ -49,6 +49,8 @@ These come from [`SPEC.md`](SPEC.md) §14:
 - Run `npm run validate` before every push; never push a failing batch.
 - SRD-only rules and the blocklist apply to every text field
   ([`SPEC.md`](SPEC.md) §11).
+- SRD entries are reproduced unmodified; custom entries never reuse or
+  nearly reuse an SRD name ([`SPEC.md`](SPEC.md) §5.9).
 - Mark review replies with `<!-- routine:handled -->`.
 
 ## Dev workflow

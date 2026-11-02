@@ -16,7 +16,7 @@ export interface Entry {
   stats: unknown;
   tags?: Record<string, unknown>;
   image?: string;
-  meta: { createdAt: string; updatedAt?: string; source: { kind: string; issues?: number[]; gapFill?: string } };
+  meta: { createdAt: string; updatedAt?: string; source: { kind: string; issues?: number[]; gapFill?: string; srd?: true } };
 }
 
 export interface LoadedEntry {
