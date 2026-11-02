@@ -48,18 +48,18 @@ type Fetch = (url: string) => Promise<{ ok: boolean; status: number; text(): Pro
  * fetch fails the run with a message, so the print dialog never opens on a
  * partial set.
  */
-export async function loadPrintRun(search: string, base: string, registry: Registry, fetch: Fetch): Promise<PrintRun> {
+export async function loadPrintRun(search: string, base: string, registry: Registry, load: Fetch): Promise<PrintRun> {
   const query = parsePrintQuery(search);
   const { size } = query;
   const fail = (message: string): PrintRun => ({ ok: false, size, message });
-  const index = await fetch(`${base}library.json`).catch(() => undefined);
+  const index = await load(`${base}library.json`).catch(() => undefined);
   if (!index?.ok) return fail('The library couldn’t be loaded. Try reloading the page.');
   const { records, missing } = selectEntries(query, JSON.parse(await index.text()) as LibraryRecord[], registry);
   if (missing.length > 0) return fail(`No entry has the id ${missing.map((id) => `“${id}”`).join(', ')}.`);
   if (records.length === 0) return fail('No entries to print.');
   const fragments = await Promise.all(
     records.map(async (record) => {
-      const response = await fetch(fragmentUrl(base, record)).catch(() => undefined);
+      const response = await load(fragmentUrl(base, record)).catch(() => undefined);
       return response?.ok ? { record, html: await response.text() } : undefined;
     }),
   );

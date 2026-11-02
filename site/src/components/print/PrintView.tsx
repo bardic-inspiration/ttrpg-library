@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import registryJson from '../../../../config/types.json' with { type: 'json' };
 import type { Registry } from '../../lib/gallery/config.ts';
 import { pageName, pageRules, pageSizes, resolveSize } from '../../lib/print.ts';
+import { fetchFresh } from '../../lib/fetch-fresh.ts';
 import { loadPrintRun, type PrintRun } from '../../lib/print-run.ts';
 import PrintIcon from '../../icons/Print.tsx';
 import './print-view.css';
@@ -26,7 +27,7 @@ export default function PrintView({ base }: PrintViewProps) {
   const printed = useRef(false);
 
   useEffect(() => {
-    loadPrintRun(window.location.search, base, registry, (url) => fetch(url)).then((loaded) => {
+    loadPrintRun(window.location.search, base, registry, fetchFresh).then((loaded) => {
       setSize(loaded.size);
       setRun(loaded);
     });

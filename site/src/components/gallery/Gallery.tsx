@@ -4,6 +4,7 @@
 // in lib/gallery/; this file is the view.
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import registryJson from '../../../../config/types.json' with { type: 'json' };
+import { fetchFresh } from '../../lib/fetch-fresh.ts';
 import { filterDef, galleryConfig, sortChoices, type GalleryScope, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
 import { isActive, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
 import { addableFilters, bounds, chips, computeView, hasValues, searchIndex, withoutFilter } from '../../lib/gallery/view.ts';
@@ -42,7 +43,7 @@ export default function Gallery({ ruleset, type, indexUrl, base, records: given,
 
   useEffect(() => {
     if (given) return;
-    fetch(indexUrl)
+    fetchFresh(indexUrl)
       .then((response) => (response.ok ? (response.json() as Promise<LibraryRecord[]>) : Promise.reject(response.status)))
       .then(setRecords)
       .catch(() => setFailed(true));
