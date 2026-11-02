@@ -411,9 +411,11 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `onFailure`, `onSuccess` | optional `Text` | save | Prose after the failure damage, and the success line |
 | `text` | `Text` | other (required); not allowed on attack and save | Full prose; derived values only through tokens |
 | `recharge` | optional enum | all | One of `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
-| `uses` | optional string | all | `"3/day"` |
+| `uses` | optional string | all | `"3/day"`; each word is capitalized on display, including after a slash: "(3/Day)" |
 
 Attack and save lines are generated in 5.2 form from the structured fields. Example output: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.` and `*Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.` Kind-specific requirements (`ability` and `reach` for melee attacks, `save` for saves, `text` only on `other`) are enforced in the schema with `if`/`then`.
+
+Displayed text follows SRD 5.2 typography. A negative number shows the minus sign U+2212, not ASCII `-`: "Initiative −1 (9)", "INT 5 −3 −3", "17 (5d8 − 5)", and the same in rendered tokens (§6.4). This is display only: the derived strings in `library.json` and the JSON export (`hp.formula`, a damage `display`) keep ASCII `-`, and every other derived value is a number. The Senses line separates senses with commas and puts Passive Perception after a semicolon: "Darkvision 60 ft.; Passive Perception 13".
 
 ### 6.6 Magic item (`schemas/magic-item.schema.json`)
 
@@ -554,7 +556,7 @@ Balance (hit points, damage per round, and save DCs for a given CR, item rarity 
 
 Rendered from the stored inputs plus the ruleset derivations:
 
-- **Initiative** +2 (12) · **HP** 32 (5d8 + 10) · **Skills** Perception +3, Stealth +4 · **Senses** Darkvision 60 ft., Passive Perception 13 · **CR** 2 (XP 450; PB +2)
+- **Initiative** +2 (12) · **HP** 32 (5d8 + 10) · **Skills** Perception +3, Stealth +4 · **Senses** Darkvision 60 ft.; Passive Perception 13 · **CR** 2 (XP 450; PB +2)
 - **Smoldering Hide.** A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes 2 (1d4) Fire damage.
 - **Bite.** *Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.
 - **Ember Breath (Recharge 5–6).** *Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.

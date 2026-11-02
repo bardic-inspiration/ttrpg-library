@@ -20,10 +20,20 @@ export const abilityMod = (score: number): number => Math.floor((score - 10) / 2
 const proficiencyMultiplier = (proficiency: Proficiency | undefined): number =>
   proficiency === 'expertise' ? 2 : proficiency === 'proficient' ? 1 : 0;
 
-/** `+2`, `+0`, `-1`. */
-export const signed = (n: number): string => (n < 0 ? `-${-n}` : `+${n}`);
+/** U+2212, the minus sign SRD 5.2 prints before a negative number (SPEC.md §6.5). */
+export const MINUS = '\u2212';
 
-/** `1d8 + 2`, `1d8 - 1`, or `1d8` when the modifier is 0. */
+/** `+2`, `+0`, `−1`, for display. */
+export const signed = (n: number): string => (n < 0 ? `${MINUS}${-n}` : `+${n}`);
+
+/**
+ * Display form of a derived roll string such as `5 (2d6 - 2)` or `1d4 - 5`,
+ * with each ASCII minus as U+2212. The derived strings themselves stay ASCII,
+ * so `library.json` and the JSON export don't change (SPEC.md §6.5).
+ */
+export const typesetRoll = (text: string): string => text.replaceAll('-', MINUS);
+
+/** `1d8 + 2`, `1d8 - 1`, or `1d8` when the modifier is 0. ASCII; see `typesetRoll`. */
 const withModifier = (base: string, modifier: number): string =>
   modifier === 0 ? base : `${base} ${modifier < 0 ? '-' : '+'} ${Math.abs(modifier)}`;
 

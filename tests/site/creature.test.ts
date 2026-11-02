@@ -29,7 +29,7 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(hpLine(d)).toBe('32 (5d8 + 10)');
     expect(speedLine(s)).toBe('40 ft.');
     expect(skillsLine(s, d)).toBe('Perception +3, Stealth +4');
-    expect(sensesLine(s, d)).toBe('Darkvision 60 ft., Passive Perception 13');
+    expect(sensesLine(s, d)).toBe('Darkvision 60 ft.; Passive Perception 13');
     expect(languagesLine(s)).toBe('None');
     expect(crLine(s, d)).toBe('2 (XP 450; PB +2)');
     expect(plain(actionBlock(s.traits![0]!, d.traits[0], d))).toBe(
@@ -63,5 +63,33 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(plain(spellcastingBlock(s, d, names)!)).toBe(
       'Spellcasting. The creature casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 11, +3 to hit with spell attacks): *At Will:* Light, Frost Lance *1/Day Each:* Fog Cloud',
     );
+  });
+
+  it('typesets SRD 5.2 forms: uses casing, the Senses semicolon, and the minus sign (SPEC.md §6.5)', async () => {
+    const base = (await cinderHound()).stats as CreatureStats;
+    const s: CreatureStats = {
+      ...base,
+      abilities: { ...base.abilities, dex: 8, con: 9 },
+      senses: { darkvision: 60, tremorsense: 10 },
+      actions: [
+        { name: 'Loathsome Limbs', kind: 'other', uses: '4/day', text: 'The troll regrows a limb.' },
+        { name: 'Clumsy Swipe', kind: 'melee-attack', ability: 'dex', reach: 5, damage: [{ dice: '2d8', ability: 'dex', type: 'slashing' }] },
+        { name: 'Feeble Grasp', kind: 'other', text: 'The creature makes a check at {mod:dex} and takes {dmg:1d4+dex}.' },
+      ],
+    };
+    const d = deriveCreature(s, tables);
+    expect(actionBlock(s.actions[0]!, d.actions[0], d).name).toBe('Loathsome Limbs (4/Day)');
+    expect(sensesLine(s, d)).toBe('Darkvision 60 ft., Tremorsense 10 ft.; Passive Perception 13');
+    expect(initiativeLine(d)).toBe('\u22121 (9)');
+    expect(hpLine(d)).toBe('17 (5d8 \u2212 5)');
+    expect(plain(actionBlock(s.actions[1]!, d.actions[1], d))).toBe(
+      'Clumsy Swipe. *Melee Attack Roll:* +1, reach 5 ft. *Hit:* 8 (2d8 \u2212 1) Slashing damage.',
+    );
+    expect(plain(actionBlock(s.actions[2]!, d.actions[2], d))).toBe(
+      'Feeble Grasp. The creature makes a check at \u22121 and takes 1 (1d4 \u2212 1).',
+    );
+    // Data keeps ASCII: library.json and the JSON export are unchanged.
+    expect(d.hp.formula).toBe('5d8 - 5');
+    expect(d.actions[1]!.damage[0]!.display).toBe('8 (2d8 - 1)');
   });
 });
