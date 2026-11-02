@@ -31,5 +31,12 @@ const marked = new Marked({
   },
 });
 
+/**
+ * Plain text made safe to splice into markdown, so a name like "Bite *Hot*"
+ * reads as written: every character markdown could treat as syntax is
+ * backslash-escaped.
+ */
+export const escapeMarkdown = (text: string): string => text.replace(/[\\`*_[\]<>#~|!&]/g, (c) => `\\${c}`);
+
 /** HTML for a markdown-subset text field. */
 export const renderMarkdown = (text: string): string => marked.parse(text, { async: false });
