@@ -18,7 +18,7 @@ import {
 } from '../../site/src/lib/creature.ts';
 import { cinderHound } from '../helpers.ts';
 
-const plain = (block: ActionBlock) => `${block.name}. ${block.body.map((s) => (s.em ? `*${s.text}*` : s.text)).join('')}`;
+const plain = (block: ActionBlock) => `${block.name}. ${block.body}`;
 
 describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
   it('renders the cinder hound as the spec shows it', async () => {

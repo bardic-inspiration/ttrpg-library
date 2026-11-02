@@ -67,6 +67,33 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     }
   });
 
+  it('renders markdown in every creature text field, after tokens, and plain fields as plain text (SPEC.md §5.5)', async () => {
+    const { entry, derived } = lib.byId('cinder-hound');
+    const e = structuredClone(entry) as Entry & { stats: Record<string, any> };
+    const d = structuredClone(derived) as Record<string, any>;
+    const s = e.stats;
+    s.traits[0].text = 'It glows *dimly*, dealing {dmg:1d4} Fire damage.\n\n- one\n- two';
+    s.actions[0].name = 'Bite *Hot*';
+    s.actions[0].onHit = '*Constitution Saving Throw:* DC 10. **Charred**';
+    s.actions[1].onSuccess = 'Half damage. *Ouch.*';
+    s.legendaryActions = { uses: 3, intro: 'It acts **{atk:dex}** times.', items: [{ name: 'Snap', kind: 'other', text: 'It *snaps*.' }] };
+    d.legendaryActions = { items: [{}] };
+    s.spellcasting = { ability: 'wis', atWill: ['Light *Bright*'], note: 'It casts *nothing* else.' };
+    d.spellcasting = { dc: 11, attackBonus: 3 };
+    const html = await render(e, d);
+    expect(html).toContain('<em>dimly</em>, dealing 2 (1d4) Fire damage.');
+    expect(html).toMatch(/<ul>\s*<li>one<\/li>\s*<li>two<\/li>\s*<\/ul>/);
+    expect(html).toContain('<em>Constitution Saving Throw:</em> DC 10. <strong>Charred</strong>');
+    expect(html).toContain('Half damage. <em>Ouch.</em>');
+    expect(html).toContain('<strong>+4</strong> times.');
+    expect(html).toContain('<strong>Snap.</strong> It <em>snaps</em>.');
+    expect(html).toContain('It casts <em>nothing</em> else.');
+    // Names and spell strings are plain text, not markdown.
+    expect(html).toContain('<strong>Bite *Hot*.</strong>');
+    expect(html).toContain('Light *Bright*');
+    expect(html).not.toMatch(/\*(dimly|Charred|snaps|nothing)\*/);
+  });
+
   it('nests headings under the level it is given', async () => {
     const { entry, derived } = lib.byId('cinder-hound');
     const html = await render(entry, derived, { level: 3 });

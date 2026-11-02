@@ -27,6 +27,7 @@ import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import AbilityTable from './parts/AbilityTable.astro';
 import ActionList from './parts/ActionList.astro';
 import PropertyList from './parts/PropertyList.astro';
+import RulesText from './parts/RulesText.astro';
 import StatBlock from './parts/StatBlock.astro';
 import StatBlockHeader from './parts/StatBlockHeader.astro';
 
@@ -72,7 +73,7 @@ const details: PropertyLine[] = [
   {sections.map((section) => <ActionList title={section.title} items={section.items} level={level + 1} />)}
   {legendary && (
     <ActionList title="Legendary Actions" items={legendaryItems} level={level + 1}>
-      {present(legendary.intro) && <p>{renderTokens(legendary.intro, d, tables)}</p>}
+      {present(legendary.intro) && <RulesText text={renderTokens(legendary.intro, d, tables)} />}
       <p>Legendary Action Uses: {legendary.uses}{whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? ''}.</p>
     </ActionList>
   )}
