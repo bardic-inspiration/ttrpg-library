@@ -51,8 +51,33 @@ describe(DOC, () => {
     ]);
   });
 
+  /** The body of the run-order step with this number, up to the next `###`. */
+  const step = (n: number): string => {
+    const order = section('Run order');
+    const start = order.search(new RegExp(`^### ${n}\\. `, 'm'));
+    if (start === -1) return '';
+    const next = order.indexOf('\n### ', start + 1);
+    return order.slice(start, next === -1 ? undefined : next);
+  };
+
   it('wires content requests to the generate skill', () => {
-    expect(section('Run order')).toContain('`.claude/skills/generate/SKILL.md`');
+    expect(step(4)).toContain('`.claude/skills/generate/SKILL.md`');
+  });
+
+  it('wires revisions and revise requests to the revise skill', () => {
+    expect(step(2)).toContain('`.claude/skills/revise/SKILL.md`');
+    expect(step(3)).toContain('`.claude/skills/revise/SKILL.md`');
+  });
+
+  it('wires gap-fill to the picker and the generate skill', () => {
+    expect(step(5)).toContain('`npm run gap-fill`');
+    expect(step(5)).toContain('`.claude/skills/generate/SKILL.md`');
+    expect(step(5)).toContain('`defaults.gapFill.enabled`');
+    expect(step(5)).toContain('`defaults.gapFill.count`');
+  });
+
+  it('marks no step unavailable', () => {
+    expect(doc).not.toMatch(/not yet available/i);
   });
 
   it('pushes only to content-lane routine branches', () => {

@@ -77,8 +77,7 @@ brief, tags, and ruleset. Type and brief are required; the others default.
 ## Run order
 
 Every run, scheduled or on-demand, follows these steps in order (§8.2), so
-review feedback is never starved by new work. A step marked **Not yet
-available** depends on Milestone 6 (#15); skip it and say so in the report.
+review feedback is never starved by new work.
 
 `defaults.<key>` below means that key of `config/defaults.json`.
 
@@ -89,14 +88,23 @@ build `site/public/library.json`, the current library.
 
 ### 2. Revisions first
 
-**Not yet available.** For each open PR on a `gen/` or `revise/` branch,
-this step will find owner comments not yet handled and apply them with the
-`revise` skill (§8.5).
+For each open PR on a `gen/` or `revise/` branch, find the owner comments
+not yet handled, as the `revise` skill's "Pending comments" section defines
+them. If a PR has any, run the `revise` skill
+(`.claude/skills/revise/SKILL.md`) on that PR and its pending comments. It
+edits the entries, validates them, pushes one commit to the PR's branch, and
+replies to each comment. Then continue with the next PR. Skip a PR with no
+pending comments.
 
 ### 3. Revise requests
 
-**Not yet available.** This step will take open `revise` issues, each
-becoming a small PR on a `revise/` branch, with the `revise` skill (§8.5).
+Take open `revise` issues without `needs-info`, and without `in-progress`
+unless the claim is stale (step 7), oldest first. Claim each as step 4 does:
+add the `in-progress` label and comment that this run has picked it up. Then
+run the `revise` skill (`.claude/skills/revise/SKILL.md`) on each issue in
+turn. Each becomes its own small PR on a `revise/` branch, or a question on
+the issue if it can't be fulfilled as written. An on-demand run takes these
+too, whatever its inputs (§8.2).
 
 ### 4. Content requests
 
@@ -123,11 +131,22 @@ validates them, and opens the content PR, or reports why it couldn't.
 
 ### 5. Gap-fill
 
-**Not yet available.** If no requests were picked in step 4 and
-`defaults.gapFill.enabled` is true, this step will choose the type and gap
-bucket with the fewest entries (§7.1) and run the `generate` skill on it for
-`defaults.gapFill.count` entries. An on-demand run with named issues or an
-inline request never gap-fills.
+Only if no requests were picked in step 4 and `defaults.gapFill.enabled` is
+true. An on-demand run with named issues or an inline request never
+gap-fills.
+
+Run `npm run gap-fill`. It reads `site/public/library.json` (built in step
+1) and `config/types.json`, and prints the type and gap bucket with the
+fewest entries among the types of `defaults.ruleset`, breaking ties as §8.2
+step 5 says, as one line: the type, a space, and the bucket label (§7.1),
+as in `spell stats.level=0..0&stats.school=abjuration`. Use that choice
+as printed; don't pick a bucket by eye. If it exits with an error, skip
+gap-fill and report its message.
+
+Then run the `generate` skill (`.claude/skills/generate/SKILL.md`) with
+that type and bucket label as a gap bucket, for `defaults.gapFill.count`
+entries. It writes the entries, validates them, and opens the content PR on
+a `gen/` branch.
 
 ### 6. Ambiguity
 
@@ -140,4 +159,5 @@ question instead.
 ### 7. Stale claims
 
 An `in-progress` issue with no open linked PR after 24 hours is treated as
-unclaimed, so step 4 may pick it again. Check this while picking in step 4.
+unclaimed, so step 3 or 4 may pick it again. Check this while picking in
+steps 3 and 4.
