@@ -1,6 +1,7 @@
 // Default browser IO for exporters: fetch, a Blob download through a
 // temporary link, the clock, opening a page, and a DOM capture of the detail page's capture
 // source (loaded only when a capture runs).
+import { fetchFresh } from '../lib/fetch-fresh.ts';
 import type { ExportFile, ExportIO, ExportItem, ExportOptions } from './types.ts';
 
 export function downloadFile(file: ExportFile): void {
@@ -23,7 +24,7 @@ export function openPage(url: string): void {
 
 export function resolveIO(options: ExportOptions): ExportIO {
   return {
-    fetch: (url) => fetch(url),
+    fetch: fetchFresh,
     download: downloadFile,
     now: () => new Date(),
     capture: async (request) => (await import('../lib/capture.ts')).captureEntry(request),
@@ -48,7 +49,7 @@ export const bundleUrl = (base: string, entry: { ruleset: string; type: string; 
 export async function loadExportItems(
   base: string,
   entries: Array<{ ruleset: string; type: string; id: string }>,
-  fetchFn: ExportIO['fetch'] = (url) => fetch(url),
+  fetchFn: ExportIO['fetch'] = fetchFresh,
 ): Promise<ExportItem[]> {
   return Promise.all(
     entries.map(async (entry) => {
