@@ -82,6 +82,10 @@ Content issues follow [`SPEC.md`](SPEC.md) §8.1.
 A dev issue states what to do, the spec section it implements, and how to
 tell it's done.
 
+Bundle small related dev issues (a few lines each, same area) into one issue
+and one PR, and close the originals as duplicates. Only a larger change stays
+a sub-issue of the bundle, with its own PR.
+
 ### Testing backlog
 
 Checks that need a human or a live service, such as repository settings
