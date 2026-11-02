@@ -101,8 +101,16 @@ export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
 }
 
 export function languagesLine(s: CreatureStats): string {
-  // `list` is required and may be empty; an empty list reads "None" (SPEC.md §6.5).
-  const parts = s.languages.list.length ? [s.languages.list.join(', ')] : [];
+  // `spoken` is required and may be empty; `understood` lists languages the
+  // creature understands but can't speak. With neither, the line reads "None"
+  // (SPEC.md §6.5).
+  const { spoken, understood } = s.languages;
+  const parts = spoken.length ? [spoken.join(', ')] : [];
+  if (understood?.length) {
+    const object = spoken.length ? (understood.length > 1 ? ' them' : ' it') : '';
+    const clause = `understands ${understood.join(', ')} but can't speak${object}`;
+    parts.push(parts.length ? clause : capitalize(clause));
+  }
   const telepathy = whenPresent(s.languages.telepathy, (feet) => `telepathy ${feet} ft.`);
   if (present(telepathy)) parts.push(telepathy);
   const line = parts.join('; ') || 'None';
