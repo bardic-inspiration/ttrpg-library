@@ -16,6 +16,8 @@ export interface Damage {
   ability?: Ability;
   bonus?: number;
   type: string;
+  /** When a rider applies, such as "if the attack roll had Advantage". Riders only. */
+  condition?: string;
 }
 
 export type ActionKind = 'melee-attack' | 'ranged-attack' | 'melee-or-ranged-attack' | 'save' | 'other';
@@ -27,6 +29,8 @@ export interface Action {
   adjust?: number;
   reach?: number;
   range?: { normal: number; long?: number };
+  /** Attack kinds only: a parenthetical after the attack bonus. */
+  attackNote?: string;
   save?: { ability: Ability; targets: string };
   damage?: Damage[];
   onHit?: string;

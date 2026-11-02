@@ -9,6 +9,8 @@ export type Token =
   | { kind: 'mod'; ability: Ability }
   | { kind: 'pb' }
   | { kind: 'atk' | 'dc'; ability: Ability; adjust: number }
+  /** A DC the rules leave to the author, such as an ability check's (§6.4). */
+  | { kind: 'authored-dc'; value: number }
   | { kind: 'dmg'; dice: string; ability?: Ability; damageType?: string };
 
 export interface TokenMatch {
@@ -22,9 +24,16 @@ export interface TokenMatch {
 const TOKEN = /\{([^{}]*)\}/g;
 const ADJUST = /^[+-]?[1-9]\d*$/;
 const DICE = /^[1-9]\d*d(4|6|8|10|12|20|100)$/;
+const AUTHORED_DC = /^[1-9]\d*$/;
 
 /** Parses the inside of one `{...}` token. */
 export function parseToken(body: string, tables: Tables): { token?: Token; error?: string } {
+  if (body.startsWith('dc=')) {
+    const value = body.slice(3);
+    return AUTHORED_DC.test(value)
+      ? { token: { kind: 'authored-dc', value: Number(value) } }
+      : { error: `authored DC "${value}" is not a positive integer; expected {dc=<n>}` };
+  }
   const [kind, ...args] = body.split(':');
   const isAbility = (value: string | undefined): value is Ability =>
     value !== undefined && (tables.abilities as string[]).includes(value);
@@ -33,6 +42,7 @@ export function parseToken(body: string, tables: Tables): { token?: Token; error
     pb: '{pb}',
     atk: '{atk:<ability>[:<adjust>]}',
     dc: '{dc:<ability>[:<adjust>]}',
+    'dc=': '{dc=<n>}',
     dmg: '{dmg:<dice>[+<ability>][:<type>]}',
   };
   const malformed = (detail: string) => ({ error: `${detail}; expected ${usage[kind ?? '']}` });
@@ -99,6 +109,8 @@ export function renderToken(token: Token, derived: DerivedCreature): string {
       return signed(derived.pb + derived.abilityMods[token.ability] + token.adjust);
     case 'dc':
       return `DC ${8 + derived.pb + derived.abilityMods[token.ability] + token.adjust}`;
+    case 'authored-dc':
+      return `DC ${token.value}`;
     case 'dmg': {
       const display = printMinus(deriveDamage(token.dice, token.ability, 0, derived.abilityMods).display);
       return token.damageType ? `${display} ${capitalize(token.damageType)} damage` : display;

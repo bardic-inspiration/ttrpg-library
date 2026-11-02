@@ -94,6 +94,10 @@ const INVALID: Record<string, RegExp> = {
   'save-with-onhit': /^stats\.actions\[1\]\.onHit: not allowed here/,
   'other-with-damage': /^stats\.traits\[0\]\.damage: not allowed here/,
   'other-without-text': /^stats\.traits\[0\]: missing required key "text"/,
+  'attack-note-on-save': /^stats\.actions\[1\]\.attackNote: not allowed here/,
+  'attack-note-on-other': /^stats\.traits\[0\]\.attackNote: not allowed here/,
+  'condition-on-primary-damage': /^stats\.actions\[0\]\.damage\[0\]\.condition: a condition is allowed only on a rider \(damage after the first\)/,
+  'bad-authored-dc': /^stats\.traits\[0\]\.text: bad token \{dc=twelve\}: authored DC "twelve" is not a positive integer/,
   'bad-recharge': /^stats\.actions\[1\]\.recharge: must be one of/,
   'speed-not-multiple-of-5': /^stats\.speed\.walk: speed 42 ft\. is not a multiple of 5/,
   'unknown-token': /^stats\.traits\[0\]\.text: bad token \{fire\}: unknown token/,
@@ -204,6 +208,8 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'traits', [], /^stats\.traits: must NOT have fewer than 1 items/],
   ['creature', 'bonusActions', [], /^stats\.bonusActions: must NOT have fewer than 1 items/],
   ['creature', 'reactions', [], /^stats\.reactions: must NOT have fewer than 1 items/],
+  ['creature', 'actions.0.attackNote', '', /^stats\.actions\[0\]\.attackNote: must NOT have fewer than 1 characters/],
+  ['creature', 'actions.0.damage.1.condition', '', /^stats\.actions\[0\]\.damage\[1\]\.condition: must NOT have fewer than 1 characters/],
   ['creature', 'actions.0.damage.0.bonus', 0, /^stats\.actions\[0\]\.damage\[0\]\.bonus: must NOT be valid/],
   ['creature', 'spellcasting', { ability: 'wis', includeAttack: false }, /^stats\.spellcasting\.includeAttack: must be equal to constant/],
   ['spell', 'components.m.consumed', false, /^stats\.components\.m\.consumed: must be equal to constant/],
@@ -420,6 +426,45 @@ describe('creature warnings (SPEC.md §6.8)', () => {
       expect.stringMatching(/^stats\.actions\[2\]\.adjust: Glare adjusted by 30/),
       expect.stringMatching(/^stats\.actions\[2\]: Glare save DC 38 is above DC 30/),
     ]);
+  });
+});
+
+describe('authored DCs (SPEC.md §6.4, #88)', () => {
+  it('accepts an authored DC token, lists it for the reviewer, and still rejects a literal DC', async () => {
+    const entry = await cinderHound();
+    entry.stats.traits[0].text = 'It escapes with a {dc=12} Strength (Athletics) check, or a ({dc=5} plus the damage taken) save.';
+    const { errors, warnings } = await validateLibrary((await temp([entry])).content);
+    expect(errors).toEqual([]);
+    expect(warnings.map((w) => w.message)).toEqual([
+      expect.stringMatching(/^stats\.traits\[0\]\.text: token \{dc=12\} is an authored DC; confirm it isn't derived/),
+      expect.stringMatching(/^stats\.traits\[0\]\.text: token \{dc=5\} is an authored DC; confirm it isn't derived/),
+    ]);
+    entry.stats.traits[0].text = 'It escapes with a DC 12 Strength (Athletics) check.';
+    const literal = await validateLibrary((await temp([entry])).content);
+    expect(literal.errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/"DC 12" writes a derived number/));
+  });
+
+  it('skips ruleset warnings on an SRD entry, which is literal, but keeps its errors (SPEC.md §5.9)', async () => {
+    const entry = await cinderHound();
+    entry.meta.source.srd = true;
+    entry.stats.actions[0].adjust = 1;
+    entry.stats.actions[0].damage[0].bonus = 1;
+    entry.stats.traits[0].text = 'It escapes with a {dc=12} Strength (Athletics) check, or a {dc:con:+1} save.';
+    const { errors, warnings } = await validateLibrary((await temp([entry])).content);
+    expect(errors).toEqual([]);
+    expect(warnings).toEqual([]);
+    entry.stats.traits[0].text = 'It escapes with a DC 12 Strength (Athletics) check.';
+    const literal = await validateLibrary((await temp([entry])).content);
+    expect(literal.errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/"DC 12" writes a derived number/));
+  });
+
+  it('accepts a conditional rider and an attack note on an attack', async () => {
+    const entry = await cinderHound();
+    entry.stats.actions[0].attackNote = 'with Advantage if the target is Prone';
+    entry.stats.actions[0].damage[1].condition = 'if the target is Prone';
+    const { errors, warnings } = await validateLibrary((await temp([entry])).content);
+    expect(errors).toEqual([]);
+    expect(warnings).toEqual([]);
   });
 });
 

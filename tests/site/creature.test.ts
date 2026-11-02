@@ -66,6 +66,65 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     );
   });
 
+  it('renders conditional riders, attack notes, and authored DCs as SRD 5.2 prints them (#88)', async () => {
+    const base = (await cinderHound()).stats as CreatureStats;
+    const s: CreatureStats = {
+      ...base,
+      traits: [
+        {
+          name: 'Undead Fortitude',
+          kind: 'other',
+          text: 'If damage reduces the zombie to 0 Hit Points, it makes a Constitution saving throw ({dc=5} plus the damage taken) unless the damage is Radiant or from a Critical Hit. On a successful save, the zombie drops to 1 Hit Point instead.',
+        },
+      ],
+      actions: [
+        {
+          name: 'Scimitar',
+          kind: 'melee-attack',
+          ability: 'dex',
+          reach: 5,
+          damage: [
+            { dice: '1d6', ability: 'dex', type: 'slashing' },
+            { dice: '1d4', type: 'slashing', condition: 'if the attack roll had Advantage' },
+          ],
+        },
+        {
+          name: 'Light Hammer',
+          kind: 'melee-or-ranged-attack',
+          ability: 'str',
+          attackNote: 'with Advantage if the target is Grappled by the bugbear',
+          reach: 10,
+          range: { normal: 20, long: 60 },
+          damage: [{ dice: '3d4', ability: 'str', type: 'bludgeoning' }],
+        },
+        {
+          name: 'Gore',
+          kind: 'melee-attack',
+          ability: 'str',
+          reach: 5,
+          damage: [
+            { dice: '1d8', ability: 'str', type: 'piercing' },
+            { dice: '1d6', type: 'fire' },
+            { dice: '2d6', type: 'fire', condition: 'if the target is Prone' },
+          ],
+        },
+      ],
+    };
+    const d = deriveCreature(s, tables);
+    expect(plain(actionBlock(s.traits![0]!, d.traits[0], d))).toBe(
+      'Undead Fortitude. If damage reduces the zombie to 0 Hit Points, it makes a Constitution saving throw (DC 5 plus the damage taken) unless the damage is Radiant or from a Critical Hit. On a successful save, the zombie drops to 1 Hit Point instead.',
+    );
+    expect(plain(actionBlock(s.actions[0]!, d.actions[0], d))).toBe(
+      'Scimitar. *Melee Attack Roll:* +4, reach 5 ft. *Hit:* 5 (1d6 + 2) Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage.',
+    );
+    expect(plain(actionBlock(s.actions[1]!, d.actions[1], d))).toBe(
+      'Light Hammer. *Melee or Ranged Attack Roll:* +4 (with Advantage if the target is Grappled by the bugbear), reach 10 ft. or range 20/60 ft. *Hit:* 9 (3d4 + 2) Bludgeoning damage.',
+    );
+    expect(plain(actionBlock(s.actions[2]!, d.actions[2], d))).toBe(
+      'Gore. *Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage, plus 7 (2d6) Fire damage if the target is Prone.',
+    );
+  });
+
   it('prints SRD 5.2 forms: uses casing, the senses semicolon, and minus signs (#87)', async () => {
     const { senses: _senses, skills: _skills, ...base } = (await cinderHound()).stats as CreatureStats;
     const s: CreatureStats = {
