@@ -1,9 +1,8 @@
-// One gallery card (SPEC.md §9.3 "Card grid"): art or the placeholder, name,
-// type badge, the type's card fields, and the summary, with a selection
+// One gallery card (SPEC.md §9.3 "Card grid"): art when the entry has it,
+// name, type badge, the type's card fields, and the summary, with a selection
 // checkbox. Accents come from data-type (and data-rarity), never per-type CSS.
 import type { FilterDef, LibraryRecord } from '../../lib/gallery/config.ts';
 import { displayValue, valueAt } from '../../lib/gallery/values.ts';
-import ArtPlaceholder from './ArtPlaceholder.tsx';
 
 export interface CardProps {
   record: LibraryRecord;
@@ -49,11 +48,7 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, selected
   const id = `card-${record.type}-${record.id}`;
   return (
     <article class="card" data-type={record.type} aria-labelledby={`${id}-name`}>
-      {imageSrc ? (
-        <img class="card__art" src={imageSrc} alt={record.name} loading="lazy" />
-      ) : (
-        <ArtPlaceholder typeLabel={typeLabel} />
-      )}
+      {imageSrc && <img class="card__art" src={imageSrc} alt={record.name} loading="lazy" />}
       <div class="card__body">
         <h2 class="card__name" id={`${id}-name`}>
           <a href={record.url}>{record.name}</a>

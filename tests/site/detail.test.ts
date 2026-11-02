@@ -21,15 +21,31 @@ describe('detail page (SPEC.md §9.4)', () => {
     expect(wand).toMatch(/<a href="[^"]*\/dnd-5e-2024\/spell\/frost-lance\/"[^>]*>Frost Lance<\/a>/);
   });
 
-  it('shows the name, type, summary, placeholder art, template, and lore', async () => {
+  it('shows the name, type, summary, template, and lore, with no art frame when there is no art', async () => {
     const html = await render('cinder-hound');
     const text = textOf(html);
     expect(html).toMatch(/<h1[^>]*>Cinder Hound<\/h1>/);
     expect(html).toMatch(/<h2[^>]*>Cinder Hound<\/h2>/); // the stat block's own name, one level down
     expect(text).toContain('A soot-black hunting hound');
-    expect(html).toMatch(/class="art-frame art-frame--placeholder[^"]*" aria-hidden="true"/);
+    expect(html).not.toContain('art-frame');
+    expect(html).not.toContain('entry-detail__art');
+    expect(text).not.toContain('Art placeholder');
     expect(text).toContain('HP 32 (5d8 + 10)');
     expect(html).toMatch(/class="lore[^"]*"[^>]*>\s*<p>Bred in the forges/);
+  });
+
+  it('shows the art frame when the entry has art', async () => {
+    const loaded = lib.byId('cinder-hound');
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(EntryDetail, {
+      props: {
+        loaded: { ...loaded, entry: { ...loaded.entry, image: 'assets/images/dnd-5e-2024/creature/cinder-hound.webp' } },
+        names: lib.names,
+        targets: lib.targets,
+      },
+    });
+    expect(html).toContain('entry-detail__art');
+    expect(html).toMatch(/<img class="art-frame art-frame--image[^"]*" src="[^"]*cinder-hound\.webp" alt="Cinder Hound"/);
   });
 
   it('links each tag to the type gallery filtered by it', async () => {

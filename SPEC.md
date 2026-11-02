@@ -48,7 +48,7 @@ These were settled in the spec review and override the preliminary design wherev
 | 7 | Review | Comment-driven revisions on PRs. No required approving review (you cannot approve your own PR); your merge is the approval. |
 | 8 | Requests | GitHub Issues are the request queue. `config/defaults.json` fills anything a request leaves unspecified. A gap-filler runs when no requests are open. |
 | 9 | Exports | PDF via print CSS for printing; PNG via DOM capture for Discord and VTTs; JSON as the native format. Exporters are pluggable modules for future translators. |
-| 10 | Art | No art in v1. Schema field `image` holds a repo-relative path; the UI shows a placeholder when it is absent. |
+| 10 | Art | No art in v1. Schema field `image` holds a repo-relative path; the UI shows no art when it is absent. |
 | 11 | Derived values | Values the ruleset defines by formula or table (XP, PB, HP, attack bonuses, DCs, damage averages, save and skill bonuses, passive Perception) are never stored in entries. The ruleset module computes them; deviations are explicit `adjust` fields. |
 | 12 | Styling | Plain CSS with layered design tokens, so most UI refinement is a tokens edit. Light and dark themes with a System/Light/Dark toggle. WCAG 2.2 AA, checked in CI. A style guide page for refinement (§9.6–9.8). |
 | 13 | Work lanes | One repo with two enforced lanes. Content (`content/`, `assets/images/`, opened by routines) and development (everything else). Separated by branch prefix, auto-applied labels, templates, and a CI scope check; a `migration` label is required for dev changes to content (§12.4). |
@@ -233,7 +233,7 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 - `image` is a repo-relative path matching `^assets/images/<ruleset>/<type>/<id>\.(png|jpg|webp)$`. The file must exist.
 - Validation warns above 500 KB and fails above 2 MB.
 - The build copies `assets/images/` into the site output.
-- When `image` is absent, the gallery card and detail page render a placeholder: a 1:1 framed panel with the type's label and "Art placeholder," styled from theme variables. The placeholder appears in gallery and detail views only; PNG and print exports include art when present and omit the placeholder.
+- Art is shown only when `image` is set. When it is absent, the gallery card, detail page, and PNG and print exports render no art and no art container or placeholder; the rest of the layout closes up.
 - Art committed to the repo must be something you have the rights to publish; credit for any art goes in `ATTRIBUTION.md`.
 
 ### 5.7 References
@@ -863,7 +863,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.3 Gallery behavior
 
 - **Loading.** The gallery is one Preact island (`site/src/components/gallery/`, with its logic in `site/src/lib/gallery/`) shared by `/`, `/<ruleset>/`, and `/<ruleset>/<type>/`. It fetches `library.json` once per page load, revalidated with the server (§9.1), and filters it in memory. Without JavaScript, the page shows a plain list of the route's entries, linked to their detail pages.
-- **Card grid.** Each card shows art or the placeholder, name, type badge, `cardFields`, and summary. A boolean card field (concentration, ritual, attunement) reads as a badge labeled with the facet when `true` and is left out when `false`. A `rarity`-formatted field reads as a badge carrying `data-rarity`. Other fields read as label and value. Responsive: one column on phones, up to four on wide screens.
+- **Card grid.** Each card shows art (only when the entry has it, §5.6), name, type badge, `cardFields`, and summary. A boolean card field (concentration, ritual, attunement) reads as a badge labeled with the facet when `true` and is left out when `false`. A `rarity`-formatted field reads as a badge carrying `data-rarity`. Other fields read as label and value. Responsive: one column on phones, up to four on wide screens.
 - **Filters.** On a type gallery, the registry's `defaultFilters` are expanded. Routes that span types (`/` and `/<ruleset>/`) have one default filter instead: `type`, an enum over the registered types. A default filter shows when some entry on the route has a value for it. Active filters and filters the reader added always show, and a non-default filter has a button to remove it. "Add filter" lists every facet for the current type(s) plus every tag key present in the current result set. The current types are the type filter's values when it is set, otherwise every type on the route. Range facets show min/max inputs, which also accept fractions such as `1/8`. Enum facets and tags show multi-select chips with counts. A chip's count is the number of results it matches under the search and every other active filter. Chips list every value present on the route in declared order (for ordered enums) or alphabetically, plus any selected value no entry has. Values within a facet combine as OR; facets combine as AND. An entry missing a filter's value never matches it.
 - **Sort.** Name (`name`), created date (`createdAt`), or any facet, ascending or descending. Ordered enums sort by declared order, an array facet (size) by its first item, and ties by name. Entries missing the sort value go last in either direction. A type gallery starts on the registry's `defaultSort`; `/` and `/<ruleset>/` start on `createdAt:desc`.
 - **Search.** MiniSearch over `name` (boost 3), `summary` (2), tag values (1.5), and `search` (1), with prefix and light fuzzy matching. Search narrows within active filters. Results order by relevance when a query is present, otherwise by the active sort.
@@ -874,7 +874,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 
 ### 9.4 Detail page
 
-- Art or placeholder, name, type, summary.
+- Art (only when the entry has it, §5.6), name, type, summary.
 - The full stat block or card rendered by the type's template, matching 5.2 layout conventions.
 - `description` as lore, visually distinct from rules text.
 - Forward refs and back-refs as links.
@@ -923,7 +923,7 @@ The styling system is built so that the v1 UI can be refined quickly and safely 
 **Rules that keep editing easy**
 
 - Components use only semantic, component, and content tokens. They never use primitives or literal values. A color, font, size, spacing, radius, shadow, or duration written as a literal anywhere outside `tokens/` fails the lint. Stylelint enforces this in `npm run check` (`stylelint.config.mjs`): hex, named, and functional colors, length and time units (`px`, `rem`, `em`, `pt`, `ms`, `s`…), and literal font families, weights, line heights, and shadows all fail. Percentages, viewport units, `0`, `auto`, and keywords stay allowed. `tests/stylelint.test.ts` proves each rule fires.
-- Accents are driven by data attributes, not by per-type CSS. Cards and stat blocks carry `data-type="creature"` (and `data-rarity="rare"` for items), and one rule maps each attribute to `--accent`. A new type needs one variable in `content.css`; without one, it falls back to `--color-accent`. Component tokens built on `--accent` (badge, placeholder, and stat-block rule colors) are re-declared on `[data-type]` and `[data-rarity]` in `components.css`, so each element takes its own accent rather than the one resolved at `:root`.
+- Accents are driven by data attributes, not by per-type CSS. Cards and stat blocks carry `data-type="creature"` (and `data-rarity="rare"` for items), and one rule maps each attribute to `--accent`. A new type needs one variable in `content.css`; without one, it falls back to `--color-accent`. Component tokens built on `--accent` (badge and stat-block rule colors) are re-declared on `[data-type]` and `[data-rarity]` in `components.css`, so each element takes its own accent rather than the one resolved at `:root`.
 - Class names are stable, readable, and component-scoped (`.statblock__header`, `.card__summary`), so a quick experiment in `overrides.css` can target anything.
 - Layout values are tokens as well: grid minimum card width, gaps, stat-block column gap, and container-query breakpoints. Density and layout can be tuned without touching component code.
 
@@ -950,7 +950,7 @@ The styling system is built so that the v1 UI can be refined quickly and safely 
 | `--rarity-common` / `uncommon` / `rare` | `#5b5246` / `#2f6b2f` / `#1f5f8b` | `#b3a892` / `#8fcf8f` / `#7fb8e0` |
 | `--rarity-very-rare` / `legendary` / `artifact` | `#6b3fa0` / `#9a5200` / `#8a1c1c` | `#c4a3f0` / `#f0b060` / `#e8806a` |
 
-- **Icons:** a few UI icons (search, filter, sort, theme, download, print, close) from Lucide (ISC license), inlined as SVG components in `site/src/icons/` and colored with `currentColor`. Lucide's license is credited in `ATTRIBUTION.md`. Entry types have no icons in v1; the art placeholder carries the type label.
+- **Icons:** a few UI icons (search, filter, sort, theme, download, print, close) from Lucide (ISC license), inlined as SVG components in `site/src/icons/` and colored with `currentColor`. Lucide's license is credited in `ATTRIBUTION.md`. Entry types have no icons in v1; the type badge carries the type label.
 
 **Themes**
 
@@ -966,7 +966,7 @@ Target: WCAG 2.2 AA.
 - **Contrast.** `tests/contrast.test.ts` parses `semantic.css` and `content.css` for both themes, resolving `var()` references through `primitives.css` (`site/src/lib/design-tokens.ts`), and checks declared pairs: text, muted text, accent, every type and rarity color on `--color-bg` and `--color-surface` at ≥ 4.5:1; `--color-control-border` and `--color-focus` at ≥ 3:1. Changing a color and running `npm test` shows immediately whether it still passes.
 - **Color is never the only signal.** Rarity, type, and concentration/ritual badges always carry a text label.
 - **Keyboard.** Every control (filters, chips, sort, search, selection, export, theme toggle) is reachable and operable by keyboard, in visual order. Focus is always visible through a shared `--focus-ring` token (2 px outline in `--color-focus` with offset). Escape closes popovers.
-- **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name; the placeholder is decorative and hidden from assistive technology.
+- **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name.
 - **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce` (the duration primitives are reset in `primitives.css`, and the contrast suite checks that every one is).
 - **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without horizontal scrolling.
 - **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, the first detail page of each type that has an entry, and the print view of those same entries (`print/?ids=…`), checked once its entries have loaded. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The check stubs `window.print`, since the print view opens the dialog on load.
@@ -1031,7 +1031,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 
 - Renders the type template in `capture` mode at a fixed CSS width from config (`png.width`, or `png.wideWidth` per §10.5), off-screen, then captures it with `html-to-image` at the configured scale.
 - The capture source is built with the detail page: a `<template data-capture="<id>">` (`components/detail/CaptureSource.astro`) holding the art when present, the template in `capture` mode, and the §11 short attribution as a footer, all under `data-theme="light"` (§9.6). Being a `<template>`, it is inert and outside the accessibility tree. At export, `site/src/lib/capture.ts` clones it into an off-screen host at the chosen width, waits for fonts and art, captures it, and removes the host; `html-to-image` loads only then. A wide capture sets the stat block in two columns, with no section split across them.
-- Includes art when present and omits the placeholder.
+- Includes art when present.
 - Fonts are self-hosted and embedded so the capture matches the screen.
 - Filename `<id>.png`. Entry scope only in v1. If the capture fails, nothing downloads.
 

@@ -1,6 +1,6 @@
 ---
-// The body of a detail page (SPEC.md §9.4): art or placeholder, name, type,
-// and summary; the type template; the description as lore; forward refs and
+// The body of a detail page (SPEC.md §9.4): art when the entry has it, name,
+// type, and summary; the type template; the description as lore; forward refs and
 // back-refs; tag chips into the filtered type gallery; and provenance. The
 // page passes its export controls (an island) in the `export` slot.
 import type { LoadedEntry } from '../../lib/library';
@@ -34,9 +34,11 @@ const source = provenance(entry);
 ---
 <article class="entry-detail" data-type={entry.type}>
   <header class="entry-detail__header">
-    <div class="entry-detail__art">
-      <ArtFrame name={entry.name} typeLabel={typeLabel} src={entry.image ? url(entry.image) : undefined} />
-    </div>
+    {entry.image && (
+      <div class="entry-detail__art">
+        <ArtFrame name={entry.name} src={url(entry.image)} />
+      </div>
+    )}
     <div class="entry-detail__intro">
       <h1>{entry.name}</h1>
       <p><a class="entry-detail__type" href={url(`${entry.ruleset}/${entry.type}/`)}>{typeLabel}</a></p>
