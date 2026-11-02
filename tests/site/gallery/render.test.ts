@@ -19,14 +19,27 @@ describe('Gallery', () => {
     expect(render({ records: undefined })).toContain('Loading the library');
   });
 
-  it('renders a card per result, with the type badge, card fields, and placeholder', () => {
+  it('renders a card per result, with the type badge and card fields, and no art when there is none', () => {
     const html = render({});
     expect(html.match(/<article class="card"/g)).toHaveLength(3);
     expect(html).toContain('data-type="creature"');
     expect(html).toContain('<dt>CR</dt><dd>2</dd>');
     expect(html).toContain('<dt>Level</dt><dd>1st level</dd>');
-    expect(html).toMatch(/class="art-placeholder" aria-hidden="true"/);
+    expect(html).not.toContain('art-placeholder');
+    expect(html).not.toContain('Art placeholder');
+    expect(html).not.toContain('card__art');
     expect(html).toContain('data-rarity="uncommon"');
+  });
+
+  it('shows art on a card only when the entry has it', () => {
+    const withArt = records.map((r) =>
+      r.id === 'cinder-hound' ? { ...r, image: 'assets/images/dnd-5e-2024/creature/cinder-hound.webp' } : r,
+    );
+    const html = render({ records: withArt });
+    expect(html.match(/<img class="card__art"/g)).toHaveLength(1);
+    expect(html).toMatch(/<img class="card__art" src="[^"]*cinder-hound\.webp" alt="Cinder Hound"/);
+    expect(html).not.toContain('art-placeholder');
+    expect(html).not.toContain('Art placeholder');
   });
 
   it('announces the result count in a polite live region', () => {

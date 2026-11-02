@@ -25,10 +25,6 @@
     --card-padding: var(--space-card);
     --card-shadow: var(--shadow-card);
     --art-aspect: var(--ratio-art);
-    --placeholder-aspect: var(--ratio-square);
-    --placeholder-bg: var(--color-bg);
-    --placeholder-border: var(--border-width) dashed var(--accent);
-    --placeholder-text: var(--color-text-muted);
     --filters-width: var(--size-filters);
     --filters-gap: var(--space-s);
     --chip-count-text: var(--color-text-muted);
@@ -69,7 +65,6 @@
   [data-type],
   [data-rarity] {
     --statblock-rule-color: var(--accent);
-    --placeholder-border: var(--border-width) dashed var(--accent);
     --badge-border: var(--border-width) solid var(--accent);
     --badge-text: var(--accent);
   }

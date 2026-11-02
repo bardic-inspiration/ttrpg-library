@@ -1,6 +1,6 @@
 /*
  * Gallery styles (SPEC.md §9.3, §9.6): the controls, filter panel, card grid,
- * cards, set actions, and art placeholder. Preact islands can't carry a scoped <style>
+ * cards, and set actions. Preact islands can't carry a scoped <style>
  * block, so the gallery's components share this file, imported by
  * Gallery.tsx. Tokens only; knobs live in tokens/components.css.
  */
@@ -302,30 +302,5 @@
     font-size: var(--text-small);
     color: var(--color-text-muted);
     cursor: pointer;
-  }
-
-  /* The art placeholder (§5.6). */
-  .art-placeholder {
-    display: grid;
-    place-content: center;
-    gap: var(--space-3xs);
-    aspect-ratio: var(--placeholder-aspect);
-    margin: var(--card-padding) var(--card-padding) 0;
-    background: var(--placeholder-bg);
-    border: var(--placeholder-border);
-    border-radius: var(--card-radius);
-    text-align: center;
-    font-family: var(--font-ui);
-  }
-
-  .art-placeholder__type {
-    font-family: var(--font-heading);
-    font-size: var(--text-h3);
-    color: var(--accent);
-  }
-
-  .art-placeholder__note {
-    font-size: var(--text-small);
-    color: var(--placeholder-text);
   }
 }
