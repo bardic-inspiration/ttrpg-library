@@ -274,7 +274,7 @@ Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom e
 
 - **SRD entries are included unmodified.** `name` is the SRD name exactly. `stats` reproduce the SRD stat block, so every number the template renders, derived or not, matches the SRD. Rules text is the SRD's text word for word, except that derived numbers are written as tokens (§6.4) that render the same values. An SRD entry carries both the data and the verbatim rule: every structured field its type defines is filled from the SRD (an item's `charges` and `spells`, with their costs and DCs), and the rules text still keeps every sentence, even where it states the same thing. An SRD wand's `effect` keeps "This wand has 7 charges", its spell's save DC, and its "Regaining Charges" paragraph, while `charges` holds the maximum, recharge, and depletion. The card shows both. The rule that item text doesn't restate structured fields is for custom entries only. Where the ruleset's derivation can't reach an SRD number from inputs, an `adjust` or damage `bonus` matches it, with "matches SRD" as its reason. SRD content is literal, so the ruleset's consistency warnings (§6.8) are skipped on an SRD entry: its adjustments, authored DCs, and high values are the SRD's, not deviations to confirm. Its errors still apply.
 - Only what the SRD doesn't provide is authored: `summary`, which is required, is one plain factual line. `description` is omitted, since SRD stat blocks carry no lore. The guidelines' tone, naming, and balance targets don't apply (§8.6).
-- An SRD entry sets `meta.source.srd: true` (§5.4). It is added only when a request asks for SRD content (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
+- An SRD entry sets `meta.source.srd: true` (§5.4). It is added only by a request that asks for SRD content or by an SRD import stage (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
 - A revision of an SRD entry only brings it closer to the SRD, such as a transcription fix. A variant of an SRD entry is a new custom entry.
 - **SRD manifest.** `rulesets/<ruleset>/srd-manifest.json` lists every SRD entry of the ruleset's types, transcribed from the reference PDF: `{ ruleset, source, entries: [{ type, name, tier }] }`, where `name` is the SRD name exactly and each type and name pair appears once. For `dnd-5e-2024` it holds 329 creatures, 243 magic items, and 339 spells. Where the PDF misprints a heading, the manifest uses the entry's correct name: the Knight's stat block is headed "Iron Golem". Each record's `tier` is `complex` if the SRD entry has any of the following, and `simple` otherwise:
   - creature: legendary actions, a lair, a Spellcasting action, reactions, or a Shape-Shift action (more than one form);
@@ -721,6 +721,8 @@ Free-form issues with the `request` label are also accepted; the routine interpr
 
 A brief that asks for SRD content (by name, or as a description such as "ten SRD creatures of CR 1 to 3") is fulfilled with SRD entries (§5.9). Any other brief is fulfilled with custom entries.
 
+**SRD import stages.** The full SRD import (Milestone 7, §16) bypasses requests. Each stage is a sub-issue of the milestone issue, without the `request` label, so routines never take it; it is worked in sessions you start. A session runs the `generate` skill on a batch picked from `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress` claim, on branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs that day). The PR uses `content.md` and says `Refs #<stage>`; the PR that finishes the stage uses `Closes #<stage>`.
+
 **Labels**
 
 | Label | Meaning |
@@ -766,7 +768,7 @@ Defaults are applied only to fields the request leaves unspecified. Request tags
 
 ### 8.4 The `generate` skill
 
-`.claude/skills/generate/SKILL.md` is generic across types and rulesets. Inputs: ruleset, type, count, brief, tags, issue numbers (or gap bucket). Steps:
+`.claude/skills/generate/SKILL.md` is generic across types and rulesets. Inputs: ruleset, type, count, brief, tags, issue numbers (or gap bucket, or an SRD import stage, §8.1). Steps:
 
 1. Read `config/types.json`, `config/defaults.json`, the ruleset module (`rulesets/<ruleset>/`: the type's schema, `tables.json`, tokens, guideline), `config/blocklist.json`, and `library.json`.
 2. List existing names and IDs for collision avoidance, and existing entries matching the brief's theme to avoid near-duplicates in concept.
@@ -1127,7 +1129,7 @@ One repository holds two kinds of work. **Content** is entries and art, produced
 | Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, spec |
 | Paths it may change | `content/**`, `assets/images/**` | Everything else; content paths only with the `migration` label |
 | Branch prefixes | `gen/`, `revise/` (routines), `manual/` (hand-made entries) | `dev/`, `dependabot/`, or none of the content prefixes (for example a GitHub web-editor `<user>-patch-1`) |
-| Opened by | Routines (or you, for `manual/`) | You, or a Claude session you start for development |
+| Opened by | Routines (or you, for `manual/`; a session you start, for SRD import stages, §8.1) | You, or a Claude session you start for development |
 | Lane label (auto) | `content` | `dev` |
 | Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`) |
 | Issue templates and labels | Content request (`request`), revise request (`revise`) (§8.1) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
@@ -1147,13 +1149,13 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 
 **Guidelines count as development.** A guideline edit changes every future generation run, so it is reviewed as behavior (`generation` label), not as content. The same applies to the generation and revision skills, the defaults file, and the routine prompts.
 
-**Routines work only the content lane.** They pick up only `request` and `revise` issues and push only to `gen/` and `revise/` branches. Dev-lane issues (bugs, features, UI refinement) are worked in Claude sessions you start, on `dev/` branches.
+**Routines work only the content lane.** They pick up only `request` and `revise` issues and push only to `gen/` and `revise/` branches. Dev-lane issues (bugs, features, UI refinement) are worked in Claude sessions you start, on `dev/` branches. SRD import stages are content work done in sessions you start, not by routines (§8.1).
 
 **Labeling** is done by `actions/labeler` in a `labeler.yml` workflow on `pull_request_target`, configured by `.github/labeler.yml` using branch prefixes for lane labels and changed paths for area labels. The labeler only reads PR metadata and changed paths; it never checks out or runs PR code.
 
 **Dependencies.** Dependabot opens grouped, monthly npm and GitHub Actions updates on `dependabot/` branches. They go through the dev lane and get the full checks.
 
-**Tracking.** Each milestone in the delivery plan (§16) is one dev-lane issue; a milestone that needs more than one PR has its tasks as sub-issues. Content issues stand alone.
+**Tracking.** Each milestone in the delivery plan (§16) is one dev-lane issue; a milestone that needs more than one PR has its tasks as sub-issues. Content issues stand alone, except SRD import stages, which are sub-issues of Milestone 7 (§8.1).
 
 **Escape hatch.** Content lives only under `content/` and `assets/images/`, and `scripts/build-index/` is the single place the site reads it. If the lanes ever need separate repositories (outside contributors, a second consumer of the content), `git filter-repo` can extract those two folders with history. The ruleset module would then become a versioned package that both repos depend on.
 
@@ -1219,8 +1221,9 @@ Each milestone ends with something you can verify.
 | 4 | **Exports.** JSON (entry and set), PNG, print view with all four sizes, multi-entry print | A Letter print of a long creature paginates cleanly with selectable text; a PNG posts legibly to Discord |
 | 5 | **Generation.** Issue forms, labels, defaults, `generate` skill, guidelines for three types, routine prompts in `docs/routines.md` | One run turns an issue into a passing PR that closes the issue on merge |
 | 6 | **Revision and schedule.** `revise` skill, comment sweep, revise issues, gap-filler, weekly schedule | A review comment on a routine PR is addressed by the next run; a week with no open issues produces a gap-fill PR |
+| 7 | **Full SRD import.** SRD manifest and coverage script, SRD batch limit, then import stages (§8.1): a pilot of `complex` entries, the `simple` entries in bulk, then the remaining `complex` entries | `npm run srd-coverage` reports no missing entries, and every format-fix issue filed during the import is closed |
 
-v1 is complete when all six milestones are done, the library holds at least five entries of each type merged through the routine flow, and a UI refinement pass has been made through `ui` PRs. Refinement runs alongside milestones 4–6 rather than after them.
+v1 is complete when all seven milestones are done, the library holds at least five entries of each type merged through the routine flow, and a UI refinement pass has been made through `ui` PRs. Refinement runs alongside milestones 4–6 rather than after them.
 
 ### 16.1 Later (post-v1)
 
