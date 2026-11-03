@@ -228,7 +228,9 @@ export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: M
     parts.push(`${label(`${name}:`)} ${spells.map((spell) => refOrText(spell, names)).join(', ')}`);
   };
   list('At Will', sc.atWill);
-  for (const n of ['3', '2', '1'] as const) list(`${n}/Day Each`, sc.perDay?.[n]);
+  // "Each" only when the level lists more than one spell: "1/Day: Fireball".
+  for (const n of ['3', '2', '1'] as const) list(`${n}/Day${(sc.perDay?.[n]?.length ?? 0) > 1 ? ' Each' : ''}`, sc.perDay?.[n]);
   if (present(sc.note)) parts.push(renderTokens(sc.note, d, tables));
-  return { name: 'Spellcasting', body: parts.join(' ') };
+  // Each list, and the note, starts a line of its own (a markdown hard break).
+  return { name: 'Spellcasting', body: parts.join('\\\n') };
 }

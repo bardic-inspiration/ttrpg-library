@@ -62,7 +62,7 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     );
     const names = new Map([['spell/frost-lance', 'Frost Lance']]);
     expect(plain(spellcastingBlock(s, d, names, 'Cinder Hound')!)).toBe(
-      'Spellcasting. The hound casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 11, +3 to hit with spell attacks): *At Will:* Light, Frost Lance *1/Day Each:* Fog Cloud',
+      'Spellcasting. The hound casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 11, +3 to hit with spell attacks):\\\n*At Will:* Light, Frost Lance\\\n*1/Day:* Fog Cloud',
     );
   });
 
@@ -203,5 +203,13 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       'The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save DC 8)',
     );
     expect(intro({ ...s, shortName: 'bandit' }, 'Bandit Captain')).toMatch(/^The bandit casts/);
+  });
+  it('puts each spell list on its own line, with "Each" only for more than one spell', async () => {
+    const { s, d } = await build({ spellcasting: { ability: 'int', atWill: ['Light'], perDay: { '2': ['Fly', 'Invisibility'], '1': ['Fireball'] } } });
+    expect(spellcastingBlock(s, d, new Map(), 'Mage')!.body.split('\\\n').slice(1)).toEqual([
+      '*At Will:* Light',
+      '*2/Day Each:* Fly, Invisibility',
+      '*1/Day:* Fireball',
+    ]);
   });
 });
