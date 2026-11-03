@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatRarity, formatSpellLevel, formatValue } from '../../site/src/lib/format.ts';
+import { formatRarity, formatSpellLevel, formatTitle, formatValue } from '../../site/src/lib/format.ts';
 
 describe('display formatters (SPEC.md §7 `format`)', () => {
   it('formats spell levels', () => {
@@ -8,6 +8,12 @@ describe('display formatters (SPEC.md §7 `format`)', () => {
 
   it('formats rarities', () => {
     expect(formatRarity('very-rare')).toBe('Very rare');
+  });
+
+  it('formats enum slugs as title case', () => {
+    expect(formatTitle('wondrous-item')).toBe('Wondrous Item');
+    expect(formatTitle('bonus-action')).toBe('Bonus Action');
+    expect(formatValue('evocation', 'title')).toBe('Evocation');
   });
 
   it('formats by name, booleans as Yes and No, and anything else as stored', () => {

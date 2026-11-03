@@ -28,10 +28,14 @@ export const chargesLine = (s: MagicItemStats): string | undefined =>
 const refOrText = (value: RefOrText, names: Map<string, string>): string =>
   typeof value === 'string' ? value : (names.get(value.ref) ?? value.ref);
 
+/** "1 charge", "3 charges", or a variable cost's range, "1–3 charges". */
+const chargeCost = (least: number, most: number | undefined): string =>
+  most === undefined ? `${least} charge${least === 1 ? '' : 's'}` : `${least}–${most} charges`;
+
 /** One spell the item casts: its name, then "1 charge; save DC 13; +5 to hit" for what's present. */
 export function spellLine(spell: MagicItemSpell, names: Map<string, string>): { name: string; notes?: string } {
   const notes = [
-    whenPresent(spell.chargeCost, (n) => `${n} charge${n === 1 ? '' : 's'}`),
+    whenPresent(spell.chargeCost, (n) => chargeCost(n, spell.maxChargeCost)),
     whenPresent(spell.saveDc, (dc) => `save DC ${dc}`),
     whenPresent(spell.attackBonus, (bonus) => `${signed(bonus)} to hit`),
   ].filter(present);

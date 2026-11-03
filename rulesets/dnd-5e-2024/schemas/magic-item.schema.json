@@ -43,6 +43,7 @@
         "properties": {
           "spell": { "$ref": "common.schema.json#/$defs/RefOrText" },
           "chargeCost": { "type": "integer", "minimum": 1 },
+          "maxChargeCost": { "type": "integer", "minimum": 2 },
           "saveDc": { "type": "integer", "minimum": 1 },
           "attackBonus": { "type": "integer" }
         }

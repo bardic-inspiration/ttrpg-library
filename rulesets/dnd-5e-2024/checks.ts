@@ -147,6 +147,12 @@ export function checkMagicItem(stats: MagicItemStats): Issue[] {
     if (spell.chargeCost !== undefined && stats.charges === undefined) {
       error(`${path}.chargeCost`, 'a chargeCost is allowed only when the item has charges');
     }
+    if (spell.maxChargeCost !== undefined) {
+      if (spell.chargeCost === undefined) error(`${path}.maxChargeCost`, 'a maxChargeCost needs a chargeCost, the least charges spent');
+      else if (spell.maxChargeCost <= spell.chargeCost) {
+        error(`${path}.maxChargeCost`, `maxChargeCost must be above chargeCost (${spell.chargeCost}); omit it for a fixed cost`);
+      }
+    }
     // The template renders these from the structured fields (SPEC.md §6.4).
     if (spell.saveDc !== undefined) {
       const literal = new RegExp(`\\bDC\\s*${spell.saveDc}(?!\\d)`, 'i').exec(stats.effect);

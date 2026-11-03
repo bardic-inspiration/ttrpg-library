@@ -39,7 +39,7 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     const text = textOf(html);
     expect(html).toContain('data-type="spell"');
     for (const line of [
-      'Level 1 Evocation (Sorcerer, Wizard)',
+      '1st-level Evocation (Sorcerer, Wizard)',
       'Casting Time Action',
       'Range 60 feet',
       'Components V, S, M (a sliver of ice)',
@@ -49,6 +49,14 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     ]) {
       expect(text).toContain(line);
     }
+  });
+
+  it('renders a reaction trigger as markdown (SPEC.md §6.7)', async () => {
+    const { entry, derived } = lib.byId('frost-lance');
+    const stats = { ...(entry.stats as Record<string, unknown>), castingTime: { amount: 1, unit: 'reaction', trigger: 'when targeted by the *Magic Missile* spell' } };
+    const html = await render({ ...entry, stats }, derived);
+    expect(html).toContain('which you take when targeted by the <em>Magic Missile</em> spell');
+    expect(textOf(html)).toContain('Casting Time Reaction, which you take when targeted by the Magic Missile spell');
   });
 
   it('renders the Wand of Frost Lances as a magic item card, with the spell by name and markdown as markup', async () => {

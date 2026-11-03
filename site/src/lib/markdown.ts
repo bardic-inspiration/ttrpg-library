@@ -38,5 +38,8 @@ const marked = new Marked({
  */
 export const escapeMarkdown = (text: string): string => text.replace(/[\\`*_[\]<>#~|!&]/g, (c) => `\\${c}`);
 
+/** HTML for a markdown-subset text field that reads inline, inside a line: no paragraph wrapper. */
+export const renderInlineMarkdown = (text: string): string => marked.parseInline(text, { async: false });
+
 /** HTML for a markdown-subset text field. */
 export const renderMarkdown = (text: string): string => marked.parse(text, { async: false });

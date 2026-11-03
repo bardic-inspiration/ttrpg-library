@@ -24,7 +24,7 @@
       "properties": {
         "amount": { "type": "integer", "minimum": 1 },
         "unit": { "enum": ["action", "bonus-action", "reaction", "minute", "hour"] },
-        "trigger": { "type": "string", "minLength": 1 }
+        "trigger": { "$ref": "common.schema.json#/$defs/Text" }
       }
     },
     "ritual": { "type": "boolean" },
