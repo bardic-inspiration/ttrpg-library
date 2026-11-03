@@ -102,6 +102,18 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     expect(html).not.toMatch(/\*(dimly|Charred|snaps|nothing)\*/);
   });
 
+  it('opens Legendary Actions with the italic uses line, then the intro, in one paragraph (#142)', async () => {
+    const { entry, derived } = lib.byId('cinder-hound');
+    const e = structuredClone(entry) as Entry & { stats: Record<string, any> };
+    const d = structuredClone(derived) as Record<string, any>;
+    e.stats.legendaryActions = { uses: 3, usesInLair: 4, intro: 'Immediately after another creature\'s turn, it acts.', items: [{ name: 'Snap', kind: 'other', text: 'It snaps.' }] };
+    d.legendaryActions = { items: [{}] };
+    const html = await render(e, d);
+    expect(html).toContain('<p><em>Legendary Action Uses: 3 (4 in Lair).</em> Immediately after another creature&#39;s turn, it acts.</p>');
+    delete e.stats.legendaryActions.intro;
+    expect(await render(e, d)).toContain('<p><em>Legendary Action Uses: 3 (4 in Lair).</em></p>');
+  });
+
   it('nests headings under the level it is given', async () => {
     const { entry, derived } = lib.byId('cinder-hound');
     const html = await render(entry, derived, { level: 3 });

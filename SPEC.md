@@ -420,7 +420,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `cr` | number: `0`, `0.125`, `0.25`, `0.5`, or `1`–`30` | Displayed as fractions. XP and PB are derived |
 | `lair` | optional `true` | Adds the derived "in lair" XP |
 | `traits`, `actions`, `bonusActions`, `reactions` | arrays of `Action` (`actions` required, others optional) | |
-| `legendaryActions` | optional `{ uses: int, usesInLair?: int, intro?: Text, items: [Action] }` | |
+| `legendaryActions` | optional `{ uses: int, usesInLair?: int, intro?: Text, items: [Action] }` | Opens with one paragraph: the italic uses line, then `intro`: "*Legendary Action Uses: 3 (4 in Lair).* Immediately after another creature's turn, …" |
 | `spellcasting` | optional `{ ability: Ability, noComponents?: string, adjust?: Adjust, includeAttack?: true, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action: "The <shortName> casts one of the following spells, using <Ability> as the spellcasting ability (spell save DC <n>):". `noComponents` names the components the spells skip, as printed (`"Material"`, `"Somatic or Material"`, `"spell"`), and adds "requiring no <noComponents> components and " before "using". `includeAttack` shows the derived spell attack bonus |
 
 **Action**

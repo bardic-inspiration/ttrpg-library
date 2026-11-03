@@ -207,6 +207,17 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
 
 const refOrText = (value: RefOrText, names: Map<string, string>): string => escapeMarkdown(refOrTextName(value, names));
 
+/**
+ * The Legendary Actions paragraph before the actions (SPEC.md §6.5): the
+ * italic uses line, then the intro, as one paragraph: "*Legendary Action Uses:
+ * 3 (4 in Lair).* Immediately after another creature's turn, …".
+ */
+export function legendaryIntro(legendary: NonNullable<CreatureStats['legendaryActions']>, d: DerivedCreature): string {
+  const lair = whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? '';
+  const uses = label(`Legendary Action Uses: ${legendary.uses}${lair}.`);
+  return whenPresent(legendary.intro, (intro) => `${uses} ${renderTokens(intro, d, tables)}`) ?? uses;
+}
+
 /** What generated prose calls the creature after "The": `shortName`, or the name's last word, lowercase (SPEC.md §6.5). */
 export const shortName = (s: CreatureStats, name: string): string =>
   s.shortName ?? (name.trim().split(/\s+/).at(-1) ?? name).toLowerCase();

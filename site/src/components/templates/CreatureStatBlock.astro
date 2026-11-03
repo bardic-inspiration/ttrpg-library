@@ -13,6 +13,7 @@ import {
   hpLine,
   initiativeLine,
   languagesLine,
+  legendaryIntro,
   sensesLine,
   sizeTypeLine,
   skillsLine,
@@ -23,8 +24,6 @@ import {
 import { present, whenPresent } from '../../lib/display';
 import { refOrTextName } from '../../lib/refs';
 import type { PropertyLine, TemplateProps } from '../../lib/template';
-import { renderTokens } from '../../../../rulesets/dnd-5e-2024/tokens.ts';
-import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import AbilityTable from './parts/AbilityTable.astro';
 import ActionList from './parts/ActionList.astro';
 import PropertyList from './parts/PropertyList.astro';
@@ -75,8 +74,7 @@ const details: PropertyLine[] = [
   {sections.map((section) => <ActionList title={section.title} items={section.items} level={level + 1} refs={refs} />)}
   {legendary && (
     <ActionList title="Legendary Actions" items={legendaryItems} level={level + 1} refs={refs}>
-      {present(legendary.intro) && <RulesText text={renderTokens(legendary.intro, d, tables)} refs={refs} />}
-      <p>Legendary Action Uses: {legendary.uses}{whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? ''}.</p>
+      <RulesText text={legendaryIntro(legendary, d)} refs={refs} />
     </ActionList>
   )}
 </StatBlock>
