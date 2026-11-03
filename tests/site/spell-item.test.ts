@@ -9,8 +9,8 @@ describe('spell card lines (SPEC.md §6.7)', async () => {
 
   it('reads a cantrip as "<School> Cantrip"', () => {
     expect(levelLine({ ...base, level: 0 })).toBe('Evocation Cantrip (Sorcerer, Wizard)');
-    expect(levelLine(base)).toBe('1st-level Evocation (Sorcerer, Wizard)');
-    expect(levelLine({ ...base, level: 3, school: 'conjuration' })).toBe('3rd-level Conjuration (Sorcerer, Wizard)');
+    expect(levelLine(base)).toBe('Level 1 Evocation (Sorcerer, Wizard)');
+    expect(levelLine({ ...base, level: 3, school: 'conjuration' })).toBe('Level 3 Conjuration (Sorcerer, Wizard)');
   });
 
   it('formats casting time, with a reaction trigger and ritual', () => {

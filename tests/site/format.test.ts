@@ -3,7 +3,7 @@ import { formatRarity, formatSpellLevel, formatTitle, formatValue } from '../../
 
 describe('display formatters (SPEC.md §7 `format`)', () => {
   it('formats spell levels', () => {
-    expect([0, 1, 2, 3, 4, 9].map(formatSpellLevel)).toEqual(['Cantrip', '1st level', '2nd level', '3rd level', '4th level', '9th level']);
+    expect([0, 1, 2, 3, 4, 9].map(formatSpellLevel)).toEqual(['Cantrip', 'Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 9']);
   });
 
   it('formats rarities', () => {

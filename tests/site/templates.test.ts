@@ -39,7 +39,7 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     const text = textOf(html);
     expect(html).toContain('data-type="spell"');
     for (const line of [
-      '1st-level Evocation (Sorcerer, Wizard)',
+      'Level 1 Evocation (Sorcerer, Wizard)',
       'Casting Time Action',
       'Range 60 feet',
       'Components V, S, M (a sliver of ice)',
