@@ -6,7 +6,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { AxeBuilder } from '@axe-core/playwright';
-import { chromium } from 'playwright';
+import { launchChromium } from '../browser/index.ts';
 import { PROJECT_ROOT } from '../validate/schema.ts';
 import { serveSite } from '../serve/index.ts';
 import { a11yPages, type IndexRecord } from './index.ts';
@@ -21,7 +21,7 @@ const index = await readFile(join(DIST, 'library.json'), 'utf8').catch(() => {
 const records = JSON.parse(index) as IndexRecord[];
 const pages = a11yPages(records);
 const server = await serveSite(DIST);
-const browser = await chromium.launch();
+const browser = await launchChromium();
 let failures = 0;
 
 try {
