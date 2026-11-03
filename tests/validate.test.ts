@@ -133,6 +133,8 @@ const INVALID: Record<string, RegExp> = {
   'magic-item-zero-charge-cost': /^stats\.spells\[0\]\.chargeCost: must be >= 1/,
   'magic-item-weapon-without-base': /^stats\.baseItem: a weapon needs a baseItem/,
   'magic-item-requirement-without-attunement': /^stats\.attunement\.requirement: a requirement is allowed only when attunement\.required is true/,
+  'magic-item-max-charge-cost-not-above': /^stats\.spells\[0\]\.maxChargeCost: maxChargeCost must be above chargeCost \(3\)/,
+  'magic-item-max-charge-cost-without-charge-cost': /^stats\.spells\[0\]\.maxChargeCost: a maxChargeCost needs a chargeCost/,
   'magic-item-charge-cost-without-charges': /^stats\.spells\[0\]\.chargeCost: a chargeCost is allowed only when the item has charges/,
   'magic-item-ref-missing-target': /^stats\.spells\[0\]\.spell: ref "spell\/frost-lances-of-doom" does not resolve: no entry has id "frost-lances-of-doom"$/,
   'magic-item-ref-type-mismatch': /^stats\.spells\[0\]\.spell: ref "creature\/frost-lance" does not resolve: "frost-lance" is a spell, not a creature$/,
@@ -216,6 +218,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['spell', 'components.m.costGp', 0, /^stats\.components\.m\.costGp: must be > 0/],
   ['magic-item', 'cursed', false, /^stats\.cursed: must be equal to constant/],
   ['magic-item', 'spells.0.chargeCost', 0, /^stats\.spells\[0\]\.chargeCost: must be >= 1/],
+  ['magic-item', 'spells.0.maxChargeCost', 1.5, /^stats\.spells\[0\]\.maxChargeCost: must be integer/],
 ];
 
 const EXAMPLES = { creature: cinderHound, spell: frostLance, 'magic-item': wandOfFrostLances };

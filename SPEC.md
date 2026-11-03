@@ -434,7 +434,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | |
 | `attunement` | `{ required: bool, requirement?: string }` | `requirement` such as `"by a spellcaster"` |
 | `charges` | optional `{ max: int, recharge: string, depletion?: Text }` | |
-| `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8) |
+| `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, maxChargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8). A variable cost, such as spending 1 to 3 charges to cast at a higher level, sets `chargeCost` to the least and `maxChargeCost` to the most, and reads "1–3 charges" |
 | `cursed` | optional `true` | |
 | `effect` | `Text` | The rules text as printed |
 
@@ -489,6 +489,7 @@ Magic item:
 | `baseItem` present for `armor` and `weapon` | error |
 | `attunement.requirement` only when `required` is true | error |
 | `spells[].chargeCost` only when `charges` is present | error |
+| `spells[].maxChargeCost` only with `chargeCost`, and above it | error |
 | `effect` restates a `saveDc` or `attackBonus` value | warning |
 
 Spell:
