@@ -71,7 +71,16 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     const entry = data as ValidEntry['entry'];
     for (const { path, text } of envelopeResult.texts) for (const message of checkMarkdown(path, text)) error(file, message);
     for (const message of checkBlocklist(entry, blocklist)) error(file, message);
-    heads.push({ file, ruleset: entry.ruleset, type: entry.type, id: entry.id, name: entry.name, ...(entry.image ? { image: entry.image } : {}) });
+    const srd = (entry.meta as { source?: { srd?: true } }).source?.srd === true;
+    heads.push({
+      file,
+      ruleset: entry.ruleset,
+      type: entry.type,
+      id: entry.id,
+      name: entry.name,
+      ...(entry.image ? { image: entry.image } : {}),
+      ...(srd ? { srd } : {}),
+    });
     const linked: RefEntry = { file, ruleset: entry.ruleset, type: entry.type, id: entry.id };
     linkable.push(linked);
     const pathError = checkPath({ ...entry, file });
@@ -99,7 +108,6 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     for (const { path, text } of statsResult.texts) for (const message of checkMarkdown(path, text)) error(file, message);
     // An SRD entry is literal (SPEC.md §5.9): its deviations and authored
     // numbers match the SRD, so the ruleset's review warnings are skipped.
-    const srd = (entry.meta as { source?: { srd?: true } }).source?.srd === true;
     for (const issue of ruleset.module.check(entry.type, entry.stats)) {
       if (srd && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
