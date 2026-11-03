@@ -22,7 +22,8 @@
     },
     "hitDice": 11,
     "speed": {
-      "walk": 30
+      "walk": 30,
+      "note": "40 ft. (wolf form only)"
     },
     "abilities": {
       "str": 16,

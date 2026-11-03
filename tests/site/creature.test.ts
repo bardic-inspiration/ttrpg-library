@@ -220,4 +220,8 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       /\*Failure:\* 31 \(9d6\) Necrotic damage\. \*Success:\* Half damage\. \*Failure or Success:\* The hound can't take this action again until the start of its next turn\.$/,
     );
   });
+  it('prints a speed note after the structured speeds', async () => {
+    const { s } = await build({ speed: { walk: 30, note: '40 ft. (wolf form only)' } });
+    expect(speedLine(s)).toBe('30 ft., 40 ft. (wolf form only)');
+  });
 });

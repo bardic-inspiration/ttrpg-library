@@ -408,7 +408,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `ac` | `{ value: int 1–30, note?: string }` | Authored; `note` such as `"natural armor"` |
 | `initiative` | optional `{ proficiency?: Proficiency, adjust?: Adjust }` | Omit for a plain DEX-based initiative |
 | `hitDice` | int 1–99 | Die, modifier, formula, and average are derived |
-| `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: true }` | Feet; multiples of 5. `walk` may be 0; an optional mode is at least 5 |
+| `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: true, note?: string }` | Feet; multiples of 5. `walk` may be 0; an optional mode is at least 5. `note` holds, as printed, any speed the fields can't express (a form-limited or conditional speed), and prints after the others: `"40 ft. (wolf form only)"` reads "30 ft., 40 ft. (wolf form only)". A mode written in `note` is left out of the fields |
 | `abilities` | `{ str…cha: int 1–30 }` | |
 | `saveProficiencies` | optional array of `Ability` | |
 | `skills` | optional `{ <skill>: Proficiency }` | Keys from the 18 SRD skills in kebab-case |

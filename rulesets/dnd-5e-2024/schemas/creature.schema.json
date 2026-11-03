@@ -97,6 +97,11 @@
         },
         "hover": {
           "const": true
+        },
+        "note": {
+          "description": "Speeds the fields can't express, printed after the others as written, such as \"40 ft. (wolf form only)\".",
+          "type": "string",
+          "minLength": 1
         }
       }
     },

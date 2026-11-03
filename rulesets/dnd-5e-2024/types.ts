@@ -55,7 +55,7 @@ export interface CreatureStats {
   ac: { value: number; note?: string };
   initiative?: { proficiency?: Proficiency; adjust?: number };
   hitDice: number;
-  speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: true };
+  speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: true; note?: string };
   abilities: Record<Ability, number>;
   saveProficiencies?: Ability[];
   skills?: Record<string, Proficiency>;

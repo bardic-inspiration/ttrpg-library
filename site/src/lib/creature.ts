@@ -61,11 +61,13 @@ export const initiativeLine = (d: DerivedCreature): string => `${signed(d.initia
 export const hpLine = (d: DerivedCreature): string => `${d.hp.average} (${printMinus(d.hp.formula)})`;
 
 export function speedLine(s: CreatureStats): string {
-  const { walk, hover, ...others } = s.speed;
+  const { walk, hover, note, ...others } = s.speed;
   const parts = [`${walk} ft.`];
   for (const [mode, feet] of Object.entries(others)) {
     parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
   }
+  // A speed the fields can't express, such as a form-limited one, as written (SPEC.md §6.5).
+  if (present(note)) parts.push(note);
   return parts.join(', ');
 }
 

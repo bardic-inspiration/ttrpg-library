@@ -192,6 +192,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'speed.swim', 0, /^stats\.speed\.swim: must be >= 5/],
   ['creature', 'speed.climb', 0, /^stats\.speed\.climb: must be >= 5/],
   ['creature', 'speed.burrow', 0, /^stats\.speed\.burrow: must be >= 5/],
+  ['creature', 'speed.note', '', /^stats\.speed\.note: must NOT have fewer than 1 characters/],
   ['creature', 'speed.hover', false, /^stats\.speed\.hover: must be equal to constant/],
   ['creature', 'saveProficiencies', [], /^stats\.saveProficiencies: must NOT have fewer than 1 items/],
   ['creature', 'skills', {}, /^stats\.skills: must NOT have fewer than 1 properties/],
