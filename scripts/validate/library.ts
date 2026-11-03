@@ -11,6 +11,8 @@ export interface EntryHead {
   id: string;
   name: string;
   image?: string;
+  /** `meta.source.srd` is true (§5.9). */
+  srd?: boolean;
 }
 
 export interface FileIssue {
@@ -49,7 +51,10 @@ export function editDistance(a: string, b: string): number {
   return previous[b.length] ?? 0;
 }
 
-/** Unique IDs and names (errors), and near-duplicate names (warnings). */
+/**
+ * Unique IDs and names (errors), and near-duplicate names (warnings). Two SRD
+ * entries are never warned about, since neither name can change (§5.2).
+ */
 export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
   const issues: FileIssue[] = [];
   const byId = new Map<string, EntryHead>();
@@ -66,7 +71,7 @@ export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
   for (let i = 0; i < entries.length; i++) {
     for (let j = i + 1; j < entries.length; j++) {
       const [a, b] = [entries[i], entries[j]];
-      if (!a || !b || a.name.toLowerCase() === b.name.toLowerCase()) continue;
+      if (!a || !b || a.name.toLowerCase() === b.name.toLowerCase() || (a.srd && b.srd)) continue;
       if (editDistance(normalizeName(a.name), normalizeName(b.name)) <= 2) {
         issues.push({ level: 'warning', file: b.file, message: `name "${b.name}" is close to "${a.name}" (${a.file})` });
       }
