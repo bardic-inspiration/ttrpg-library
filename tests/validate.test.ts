@@ -150,6 +150,7 @@ const INVALID: Record<string, RegExp> = {
   'markdown-link': /^stats\.traits\[0\]\.text: a link is not allowed/,
   'markdown-html': /^stats\.actions\[1\]\.onSuccess: HTML is not allowed/,
   'spell-markdown-table': /^stats\.higherLevels: a table is not allowed/,
+  'spell-markdown-trigger': /^stats\.castingTime\.trigger: a link is not allowed/,
   'magic-item-markdown-autolink': /^stats\.effect: a link is not allowed/,
 };
 
