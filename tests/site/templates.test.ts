@@ -51,6 +51,14 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     }
   });
 
+  it('renders a reaction trigger as markdown (SPEC.md §6.7)', async () => {
+    const { entry, derived } = lib.byId('frost-lance');
+    const stats = { ...(entry.stats as Record<string, unknown>), castingTime: { amount: 1, unit: 'reaction', trigger: 'when targeted by the *Magic Missile* spell' } };
+    const html = await render({ ...entry, stats }, derived);
+    expect(html).toContain('which you take when targeted by the <em>Magic Missile</em> spell');
+    expect(textOf(html)).toContain('Casting Time Reaction, which you take when targeted by the Magic Missile spell');
+  });
+
   it('renders the Wand of Frost Lances as a magic item card, with the spell by name and markdown as markup', async () => {
     const { entry, derived } = lib.byId('wand-of-frost-lances');
     const html = await render(entry, derived);

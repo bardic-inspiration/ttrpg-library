@@ -22,7 +22,10 @@ export function levelLine(s: SpellStats): string {
 
 const ACTION_UNITS: Record<string, string> = { action: 'Action', 'bonus-action': 'Bonus Action', reaction: 'Reaction' };
 
-/** "Action", "Reaction, which you take when …", "10 minutes", with " or Ritual" when `ritual` is true. */
+/**
+ * "Action", "Reaction, which you take when …", "10 minutes", with " or Ritual"
+ * when `ritual` is true. Markdown, since `trigger` is a `Text` field.
+ */
 export function castingTimeLine(s: SpellStats): string {
   const { amount, unit, trigger } = s.castingTime;
   const action = ACTION_UNITS[unit];

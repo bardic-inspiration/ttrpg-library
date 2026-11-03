@@ -16,7 +16,7 @@ type Props = TemplateProps;
 const { entry, mode, level = 2 } = Astro.props;
 const s = entry.stats as SpellStats;
 const lines = [
-  { label: 'Casting Time', value: castingTimeLine(s) },
+  { label: 'Casting Time', value: castingTimeLine(s), markdown: true },
   { label: 'Range', value: rangeLine(s) },
   { label: 'Components', value: componentsLine(s) },
   { label: 'Duration', value: durationLine(s) },
