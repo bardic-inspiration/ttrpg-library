@@ -28,8 +28,9 @@ Every PR is in exactly one lane ([`SPEC.md`](SPEC.md) §12.4 "Work lanes"):
   (the user, or on the issue) and fix the spec before writing code that
   depends on it.
 - **A dev PR that changes behavior updates `SPEC.md` in the same PR.**
-- **One concern per PR.** Out-of-scope work becomes an issue, not a `TODO`
-  or a drive-by change.
+- **One issue per PR.** Out-of-scope work becomes an issue, not a `TODO`
+  or a drive-by change. An issue that lists several items gets one PR, not
+  one per item (see "Tracking work").
 - **Never skip, disable, or weaken a test or check to get green.**
 - **Never rewrite pushed history** (no amend, rebase, or force-push). To catch
   up with `main`, merge it in.
@@ -84,6 +85,14 @@ tell it's done.
 Bundle small related dev issues (a few lines each, same area) into one issue
 and one PR, and close the originals as duplicates. Only a larger change stays
 a sub-issue of the bundle, with its own PR.
+
+An issue with several items, such as a list of problems found in one pass, is
+fixed in one PR with one commit per item, so each reads on its own in review
+and the owner merges once. Title it by the area most of it touches. An item
+waiting on a spec decision doesn't hold up the rest: open the PR with the
+items that are ready, and add the others as commits once they're decided, or
+in a follow-up PR if the first has merged. Split an item into its own
+sub-issue and PR only when it's too large to review alongside the others.
 
 ### Testing backlog
 
