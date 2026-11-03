@@ -68,6 +68,7 @@ describe('magic item card lines (SPEC.md §6.6)', async () => {
   it('lists a spell by name with the authored numbers present, including a +0 attack bonus', () => {
     expect(spellLine(wand.spells![0]!, names)).toEqual({ name: 'Frost Lance', notes: '1 charge; +5 to hit' });
     expect(spellLine({ spell: 'Fireball', chargeCost: 3, saveDc: 15 }, names)).toEqual({ name: 'Fireball', notes: '3 charges; save DC 15' });
+    expect(spellLine({ spell: 'Magic Missile', chargeCost: 1, maxChargeCost: 3 }, names)).toEqual({ name: 'Magic Missile', notes: '1–3 charges' });
     expect(spellLine({ spell: 'Light', attackBonus: 0 }, names)).toEqual({ name: 'Light', notes: '+0 to hit' });
     expect(spellLine({ spell: 'Light' }, names)).toEqual({ name: 'Light' });
   });
