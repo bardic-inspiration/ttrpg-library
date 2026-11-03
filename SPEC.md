@@ -270,7 +270,7 @@ Because the schema is the source of the rule, it needs no display annotation. A 
 
 Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom entry**, original to this library.
 
-- **SRD entries are included unmodified.** `name` is the SRD name exactly. `stats` reproduce the SRD stat block, so every number the template renders, derived or not, matches the SRD. Rules text is the SRD's text word for word, except that derived numbers are written as tokens (§6.4) that render the same values. Where the ruleset's derivation can't reach an SRD number from inputs, an `adjust` or damage `bonus` matches it, with "matches SRD" as its reason. SRD content is literal, so the ruleset's consistency warnings (§6.8) are skipped on an SRD entry: its adjustments, authored DCs, and high values are the SRD's, not deviations to confirm. Its errors still apply.
+- **SRD entries are included unmodified.** `name` is the SRD name exactly. `stats` reproduce the SRD stat block, so every number the template renders, derived or not, matches the SRD. Rules text is the SRD's text word for word, except that derived numbers are written as tokens (§6.4) that render the same values. An SRD entry carries both the data and the verbatim rule: every structured field its type defines is filled from the SRD (an item's `charges` and `spells`, with their costs and DCs), and the rules text still keeps every sentence, even where it states the same thing. An SRD wand's `effect` keeps "This wand has 7 charges", its spell's save DC, and its "Regaining Charges" paragraph, while `charges` holds the maximum, recharge, and depletion. The card shows both. The rule that item text doesn't restate structured fields is for custom entries only. Where the ruleset's derivation can't reach an SRD number from inputs, an `adjust` or damage `bonus` matches it, with "matches SRD" as its reason. SRD content is literal, so the ruleset's consistency warnings (§6.8) are skipped on an SRD entry: its adjustments, authored DCs, and high values are the SRD's, not deviations to confirm. Its errors still apply.
 - Only what the SRD doesn't provide is authored: `summary`, which is required, is one plain factual line. `description` is omitted, since SRD stat blocks carry no lore. The guidelines' tone, naming, and balance targets don't apply (§8.6).
 - An SRD entry sets `meta.source.srd: true` (§5.4). It is added only when a request asks for SRD content (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
 - A revision of an SRD entry only brings it closer to the SRD, such as a transcription fix. A variant of an SRD entry is a new custom entry.
@@ -367,7 +367,7 @@ Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `spellcasting.note`, 
 - An unknown token, ability, or damage type is a validation error.
 - A literal number that looks derived in creature prose is a validation error, and the message names the token to use instead. The patterns caught are `DC <n>`, `+<n> to hit`, and `<n> (<dice>)`.
 - A DC the rules leave to the author, such as an ability check's ("a {dc=12} Strength (Athletics) check") or a base for a formula in prose ("({dc=5} plus the damage taken)"), uses `{dc=<n>}`. The token marks the number as authored (§6.1), so the literal check stays strict. A save DC from one of the creature's abilities always uses `{dc:<ability>}`. Each authored DC is listed as a warning for the reviewer to confirm (§6.8).
-- Spell and magic-item text is exempt, because its numbers are authored. Item text must still not restate `saveDc` or `attackBonus`, since the template renders them from the structured fields (warning).
+- Spell and magic-item text is exempt, because its numbers are authored. A custom item's text must still not restate `saveDc` or `attackBonus`, since the template renders them from the structured fields (warning). An SRD item's text is verbatim and may (§5.9).
 
 ### 6.5 Creature (`schemas/creature.schema.json`)
 
@@ -434,7 +434,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | |
 | `attunement` | `{ required: bool, requirement?: string }` | `requirement` such as `"by a spellcaster"` |
 | `charges` | optional `{ max: int, recharge: string, depletion?: Text }` | |
-| `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8) |
+| `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, maxChargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8). A variable cost, such as spending 1 to 3 charges to cast at a higher level, sets `chargeCost` to the least and `maxChargeCost` to the most, and reads "1–3 charges" |
 | `cursed` | optional `true` | |
 | `effect` | `Text` | The rules text as printed |
 
@@ -445,7 +445,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `level` | int 0–9 | 0 is a cantrip |
 | `school` | `abjuration`, `conjuration`, `divination`, `enchantment`, `evocation`, `illusion`, `necromancy`, `transmutation` | |
 | `classes` | array, ≥1, of `bard`, `cleric`, `druid`, `paladin`, `ranger`, `sorcerer`, `warlock`, `wizard` | |
-| `castingTime` | `{ amount: int, unit: action|bonus-action|reaction|minute|hour, trigger?: string }` | `trigger` required for reactions |
+| `castingTime` | `{ amount: int, unit: action|bonus-action|reaction|minute|hour, trigger?: Text }` | `trigger` required for reactions. It is `Text` so a spell name in it can be italic, as in SRD 5.2 ("targeted by the *Magic Missile* spell"); the card renders it inline after "Reaction, which you take" |
 | `ritual` | bool | |
 | `range` | `{ kind: self|touch|distance|sight|unlimited|special, feet?: int, area?: { shape: cone|cube|cylinder|emanation|line|sphere, size: int } }` | |
 | `components` | `{ v: bool, s: bool, m?: { text: string, costGp?: number, consumed?: true } }` | `costGp` is greater than 0 |
@@ -489,6 +489,7 @@ Magic item:
 | `baseItem` present for `armor` and `weapon` | error |
 | `attunement.requirement` only when `required` is true | error |
 | `spells[].chargeCost` only when `charges` is present | error |
+| `spells[].maxChargeCost` only with `chargeCost`, and above it | error |
 | `effect` restates a `saveDc` or `attackBonus` value | warning |
 
 Spell:
@@ -655,7 +656,7 @@ Display and generation defaults only. Validation never reads it except to confir
 
 | Key | Purpose |
 |---|---|
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`) |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |
@@ -886,10 +887,11 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.5 Templates
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
+- The spell card's level line words the level as the `spell-level` format does (§7), the D&D convention, so cards and detail pages agree: "1st-level Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves. `EntryTemplate` picks the component from the registry's `template` name, falling back to `generic`. Each template renders the entry name as a heading at a `level` its page chooses (2 by default; the detail page's own `h1` sits above it), with section headings one level below.
-- Rules-text fields and `description` render through one sanitizing markdown helper (`site/src/lib/markdown.ts`): raw HTML is escaped, and links, images, headings, and tables read as plain text. Tokens render first, then markdown, in every `Text` field, including a creature's action prose, `spellcasting.note`, and `legendaryActions.intro`. Fields that aren't `Text`, such as action names, save targets, and plain-string spells, are plain text: they are escaped before they join generated markdown, so a `*` in them displays as typed.
+- Rules-text fields and `description` render through one sanitizing markdown helper (`site/src/lib/markdown.ts`): raw HTML is escaped, and links, images, headings, and tables read as plain text. Tokens render first, then markdown, in every `Text` field, including a creature's action prose, `spellcasting.note`, `legendaryActions.intro`, and a spell's `castingTime.trigger`, which renders inline within the Casting Time line. Fields that aren't `Text`, such as action names, save targets, and plain-string spells, are plain text: they are escaped before they join generated markdown, so a `*` in them displays as typed.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
 - Markup is semantic so that styling never fights structure. The entry name is a heading, section labels (Actions, Reactions) are subheadings, property lines and ability scores are definition lists or tables, and action names are inline headings.
 

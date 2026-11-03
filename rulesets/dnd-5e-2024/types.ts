@@ -105,6 +105,8 @@ export interface SpellStats {
 export interface MagicItemSpell {
   spell: RefOrText;
   chargeCost?: number;
+  /** The most charges a variable-cost casting spends; `chargeCost` is then the least. */
+  maxChargeCost?: number;
   saveDc?: number;
   attackBonus?: number;
 }
