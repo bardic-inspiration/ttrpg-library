@@ -15,14 +15,14 @@ const diff = execFileSync('git', ['diff', '--name-only', `${env('BASE_SHA')}...$
 });
 const paths = diff.split('\n').filter(Boolean);
 const labels = JSON.parse(env('LABELS')) as string[];
-const { lane, contentChanged, errors } = checkLane({ branch: env('BRANCH'), paths, labels });
+const { lane, contentChanged, docsOnly, errors } = checkLane({ branch: env('BRANCH'), paths, labels });
 
-console.log(`Lane: ${lane ?? 'none'}. ${paths.length} paths changed; content changed: ${contentChanged}.`);
+console.log(`Lane: ${lane ?? 'none'}. ${paths.length} paths changed; content changed: ${contentChanged}; docs only: ${docsOnly}.`);
 for (const error of errors) {
   // One annotation per error; %0A keeps multi-line messages together.
   console.log(`::error title=Lane rules::${error.replaceAll('\n', '%0A')}`);
 }
 if (process.env.GITHUB_OUTPUT) {
-  appendFileSync(process.env.GITHUB_OUTPUT, `lane=${lane ?? ''}\ncontent-changed=${contentChanged}\n`);
+  appendFileSync(process.env.GITHUB_OUTPUT, `lane=${lane ?? ''}\ncontent-changed=${contentChanged}\ndocs-only=${docsOnly}\n`);
 }
 process.exitCode = errors.length > 0 ? 1 : 0;

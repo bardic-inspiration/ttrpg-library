@@ -9,6 +9,22 @@ export const LANE_PREFIXES: Record<Lane, readonly string[]> = {
 /** Paths only the content lane may change, or a dev PR with the `migration` label. */
 const CONTENT_PATHS = ['content/', 'assets/images/'];
 
+/**
+ * Paths no code or test reads, so a PR that changes only these skips the
+ * content and dev checks (SPEC.md §12.1 "Docs-only PRs"): Markdown at the repo
+ * root, `docs/**`, and the issue and dev PR templates. A file that a test or
+ * script reads (`docs/routines.md`, the content PR template) stays code.
+ */
+const DOCS_EXCEPTIONS = ['docs/routines.md'];
+
+export function isDocsPath(path: string): boolean {
+  if (DOCS_EXCEPTIONS.includes(path)) return false;
+  if (!path.includes('/')) return path.endsWith('.md');
+  if (path.startsWith('docs/')) return true;
+  if (/^\.github\/ISSUE_TEMPLATE\/[^/]+\.md$/.test(path)) return true;
+  return path === '.github/PULL_REQUEST_TEMPLATE/dev.md';
+}
+
 export interface LaneInput {
   branch: string;
   /** Paths the PR changes, relative to the repo root. */
@@ -19,6 +35,8 @@ export interface LaneInput {
 export interface LaneResult {
   lane: Lane | undefined;
   contentChanged: boolean;
+  /** Every changed path is docs (and there is at least one). */
+  docsOnly: boolean;
   errors: string[];
 }
 
@@ -47,6 +65,7 @@ export function isContentPath(path: string): boolean {
 export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
   const lane = laneOf(branch);
   const contentChanged = paths.some(isContentPath);
+  const docsOnly = paths.length > 0 && paths.every(isDocsPath);
   const errors: string[] = [];
   const list = (items: string[]) => items.map((item) => `  ${item}`).join('\n');
 
@@ -66,5 +85,5 @@ export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
       `A dev-lane PR may change content only with the migration label, applied by hand. Content paths:\n${list(paths.filter(isContentPath))}`,
     );
   }
-  return { lane, contentChanged, errors };
+  return { lane, contentChanged, docsOnly, errors };
 }
