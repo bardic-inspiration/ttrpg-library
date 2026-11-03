@@ -7,9 +7,9 @@ body:
     id: ids
     attributes:
       label: Entry IDs
-      description: The `id` of each entry to revise, one per line.
+      description: Each entry to revise, one per line, as `<type>/<id>` (for example `spell/fireball`). A bare `id` works when only one type has it.
       placeholder: |
-        tidewrack-hulk
+        creature/tidewrack-hulk
     validations:
       required: true
   - type: textarea

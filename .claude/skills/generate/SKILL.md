@@ -74,8 +74,9 @@ For the batch's ruleset and each type in it, read:
 
 ## Step 2: Avoid collisions
 
-From `site/public/library.json`, list every existing `name` and `id`, across
-all types: IDs and names are unique library-wide (§5.2). Then find existing
+From `site/public/library.json`, list every existing `name` and `id` of each
+type in the batch: IDs and names are unique within a type (§5.2), so a new
+spell may share a name with a creature but not with another spell. Then find existing
 entries that match the brief's theme (by tags, summary, and facets) so the
 batch doesn't repeat a concept already in the library.
 
@@ -83,10 +84,12 @@ batch doesn't repeat a concept already in the library.
   suffix.
 - Avoid names within a small edit of an existing name ("Frost Lance" vs
   "Frost Lances"); the validator warns on them.
-- Custom entries: avoid SRD names and near collisions with them, whether or
-  not the SRD entry is in the library, and every blocklist term (§11).
+- Custom entries: never use an SRD entry's exact name (of any type) or an
+  SRD proper noun, whether or not the SRD entry is in the library, and avoid
+  every blocklist term (§11). Building on common words from SRD names
+  ("Fire Zombie") is fine (§5.9).
 - SRD request: skip any SRD entry already in the library. If an SRD name
-  collides with an existing custom entry, leave that SRD entry out and report
+  collides with an existing custom entry of the same type, leave that SRD entry out and report
   the collision in the PR body (or the run's output if nothing else is
   generated). Never rename an SRD entry to dodge a collision.
 
@@ -111,6 +114,9 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
   when one matches. Use plain text only for SRD content not in the library,
   as the guideline's dependency section says.
 - **Text.** Rules text and `description` use the markdown subset only (§5.5).
+  A mention of a library entry in text is a `{ref:<type>/<id>}` link token
+  (§5.7), wrapped in `*…*` for a spell name; SRD content not in the library is
+  plain text.
   No non-SRD proper nouns anywhere (§11).
 - **Situational fields.** Omit an optional field that doesn't apply; never
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` (§5.8).
@@ -136,6 +142,11 @@ against it before pushing.
   structured fields" rule is for custom entries.
 - `summary` is one plain, factual line written for the entry, since the SRD
   has none. Omit `description`.
+- A stat block the SRD prints inside a spell or item goes in `statBlocks`,
+  written as printed, when the SRD has no creature entry of that name (§6.7).
+  When it does (Animate Dead's Zombie), link the creature from the text with
+  `{ref:creature/<id>}` if it's in the library, and leave the name as plain
+  text if it isn't.
 - Everything the entry uses (spells, gear) is SRD content: a ref if it's in
   the library, a plain string otherwise. Never create a dependency entry.
 - Set `meta.source.srd` to `true` (step 4).

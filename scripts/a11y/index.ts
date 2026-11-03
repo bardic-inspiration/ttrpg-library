@@ -49,7 +49,7 @@ export function a11yPages(records: IndexRecord[]): A11yPage[] {
   if (firsts.length > 0) {
     pages.push({
       label: `print view: ${firsts.map((r) => r.name).join(', ')}`,
-      path: `print/?ids=${firsts.map((r) => encodeURIComponent(r.id)).join(',')}`,
+      path: `print/?ids=${firsts.map((r) => `${r.type}/${encodeURIComponent(r.id)}`).join(',')}`,
       ready: '.print-entry',
     });
   }

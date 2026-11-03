@@ -1,6 +1,7 @@
 ---
 // The dnd-5e-2024 spell card (registry template `spell-card`, SPEC.md §6.7,
-// §9.5): name, level and school, casting properties, then the rules text.
+// §9.5): name, level and school, casting properties, the rules text, then any
+// stat blocks the spell prints.
 // Optional fields display only when present (§5.8).
 import type { SpellStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { present } from '../../lib/display';
@@ -10,10 +11,14 @@ import PropertyList from './parts/PropertyList.astro';
 import RulesText from './parts/RulesText.astro';
 import StatBlock from './parts/StatBlock.astro';
 import StatBlockHeader from './parts/StatBlockHeader.astro';
+import EmbeddedStatBlock from './parts/EmbeddedStatBlock.astro';
+import type { DerivedStatBlock } from '../../../../rulesets/dnd-5e-2024/types.ts';
 
 type Props = TemplateProps;
 
-const { entry, mode, level = 2 } = Astro.props;
+const { entry, derived, names, mode, level = 2 } = Astro.props;
+const blocks = (derived as { statBlocks?: DerivedStatBlock[] }).statBlocks ?? [];
+const refs = { names, ruleset: entry.ruleset };
 const s = entry.stats as SpellStats;
 const lines = [
   { label: 'Casting Time', value: castingTimeLine(s), markdown: true },
@@ -24,12 +29,13 @@ const lines = [
 ---
 <StatBlock name={`${entry.name} spell`} type="spell" mode={mode}>
   <StatBlockHeader name={entry.name} subtitle={levelLine(s)} level={level} />
-  <PropertyList lines={lines} />
+  <PropertyList lines={lines} refs={refs} />
   <div class="spell-card__text">
-    <RulesText text={s.effect} />
-    {present(s.higherLevels) && <RulesText label="Using a Higher-Level Spell Slot" text={s.higherLevels} />}
-    {present(s.cantripUpgrade) && <RulesText label="Cantrip Upgrade" text={s.cantripUpgrade} />}
+    <RulesText text={s.effect} refs={refs} />
+    {present(s.higherLevels) && <RulesText label="Using a Higher-Level Spell Slot" text={s.higherLevels} refs={refs} />}
+    {present(s.cantripUpgrade) && <RulesText label="Cantrip Upgrade" text={s.cantripUpgrade} refs={refs} />}
   </div>
+  {present(s.statBlocks) && s.statBlocks.map((block, i) => <EmbeddedStatBlock block={block} derived={blocks[i]!} level={level + 1} refs={refs} />)}
 </StatBlock>
 
 <style>

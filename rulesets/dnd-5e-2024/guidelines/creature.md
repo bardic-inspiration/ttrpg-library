@@ -46,10 +46,11 @@ Exemplar (summary, description, and one trait):
   characters, or product-identity monsters. `config/blocklist.json` is checked
   by the validator, but it is a floor, not the whole rule; a name that would
   only be recognized from a non-SRD book is out even if it isn't listed.
-- Stay clear of SRD creature names, whether or not the SRD creature is in the
-  library. Don't reuse one, and don't make a near collision: a one-word swap ("Ice Troll" for an SRD troll) or a near spelling
-  is too close. A new name should not make a reader think of a specific SRD
-  stat block.
+- Don't reuse an SRD entry's exact name or an SRD proper noun, whether or not
+  the SRD entry is in the library (SPEC.md §5.9). Building on common words
+  from SRD names is fine: "Fire Zombie" and "Ice Troll" are new creatures, not
+  copies of the SRD's Zombie and Troll. The creature itself must still be a
+  new concept, not an SRD stat block under a new name.
 - The `id` is the slug of the name and never changes. On a collision with an
   existing name or id, pick a different name; never add a number.
 - `descriptors` (the parenthetical tags such as "Wizard") follow the same
@@ -190,6 +191,9 @@ Rules for all of these:
   pipe tables. No headings or links in entry text. Italicize spell names: *Frost
   Lance*.
 - Every brace in entry text starts a token. Don't use braces for anything else.
+- To mention a library entry in prose, link it with `{ref:<type>/<id>}`
+  instead of writing its name: `*{ref:spell/frost-lance}*` (SPEC.md §5.7). The
+  site shows the entry's name, linked.
 
 ## Dependencies and SRD references
 

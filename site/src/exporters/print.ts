@@ -14,6 +14,6 @@ export const print: Exporter = {
   async run(items, options) {
     if (items.length === 0) throw new Error('Print takes at least one entry');
     if (options.scope === 'entry' && items.length !== 1) throw new Error('Entry export takes exactly one entry');
-    resolveIO(options).open(printUrl(options.base, items.map((item) => item.entry.id), options.pageSize));
+    resolveIO(options).open(printUrl(options.base, items.map((item) => `${item.entry.type}/${item.entry.id}`), options.pageSize));
   },
 };

@@ -21,7 +21,7 @@ const tags = Object.entries(entry.tags ?? {}).map(([key, value]) => ({
 ---
 <StatBlock name={entry.name} type={entry.type} mode={mode}>
   <StatBlockHeader name={entry.name} subtitle={entry.summary} level={level} />
-  {present(entry.description) && <div class="generic__description" set:html={renderMarkdown(entry.description)} />}
-  <PropertyList lines={genericLines(entry.stats, names)} />
+  {present(entry.description) && <div class="generic__description" set:html={renderMarkdown(entry.description, { names, ruleset: entry.ruleset })} />}
+  <PropertyList lines={genericLines(entry.stats, names)} refs={{ names, ruleset: entry.ruleset }} />
   {tags.length > 0 && <PropertyList lines={tags} />}
 </StatBlock>

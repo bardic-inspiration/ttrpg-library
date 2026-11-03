@@ -45,7 +45,7 @@ describe('validateLibrary', () => {
     expect(result.warnings).toEqual([]);
     const derived = Object.fromEntries(result.entries.map((e) => [e.entry.id, e.derived]));
     expect(derived['cinder-hound']).toMatchObject({ xp: 450, hp: { average: 32 } });
-    // Magic items and spells derive nothing in v1 (SPEC.md §6.2).
+    // Magic items and spells derive nothing in v1 without an embedded stat block (SPEC.md §6.2).
     expect(derived['frost-lance']).toEqual({});
     expect(derived['wand-of-frost-lances']).toEqual({});
   });
@@ -136,8 +136,8 @@ const INVALID: Record<string, RegExp> = {
   'magic-item-max-charge-cost-not-above': /^stats\.spells\[0\]\.maxChargeCost: maxChargeCost must be above chargeCost \(3\)/,
   'magic-item-max-charge-cost-without-charge-cost': /^stats\.spells\[0\]\.maxChargeCost: a maxChargeCost needs a chargeCost/,
   'magic-item-charge-cost-without-charges': /^stats\.spells\[0\]\.chargeCost: a chargeCost is allowed only when the item has charges/,
-  'magic-item-ref-missing-target': /^stats\.spells\[0\]\.spell: ref "spell\/frost-lances-of-doom" does not resolve: no entry has id "frost-lances-of-doom"$/,
-  'magic-item-ref-type-mismatch': /^stats\.spells\[0\]\.spell: ref "creature\/frost-lance" does not resolve: "frost-lance" is a spell, not a creature$/,
+  'magic-item-ref-missing-target': /^stats\.spells\[0\]\.spell: ref "spell\/frost-lances-of-doom" does not resolve: no spell has id "frost-lances-of-doom"$/,
+  'magic-item-ref-type-mismatch': /^stats\.spells\[0\]\.spell: ref "creature\/frost-lance" does not resolve: no creature has id "frost-lance"; "frost-lance" is a spell$/,
   'blocklist-in-name': /^name: "Beholder" is on the blocklist \(config\/blocklist\.json\); use an SRD or original name$/,
   'blocklist-in-summary': /^summary: "mind flayer" is on the blocklist/,
   'blocklist-in-description': /^description: "Faerûn" is on the blocklist/,
@@ -300,6 +300,17 @@ describe('library checks (SPEC.md §6.8, all types)', () => {
     ]);
   });
 
+  it('allows the same id and name in different types, and warns on near names only within a type (SPEC.md §5.2)', async () => {
+    const spell = await frostLance();
+    const creature = { ...(await cinderHound()), name: 'Frost Lance', id: 'frost-lance' };
+    const nearCreature = { ...(await cinderHound()), name: 'Frost Lances', id: 'frost-lances' };
+    const result = await validateLibrary((await temp([spell, creature, await wandOfFrostLances()])).content);
+    expect(result.errors).toEqual([]);
+    expect(result.warnings).toEqual([]);
+    const near = await validateLibrary((await temp([spell, creature, nearCreature, await wandOfFrostLances()])).content);
+    expect(near.warnings.map((w) => w.file)).toEqual(['dnd-5e-2024/creature/frost-lances.json']);
+  });
+
   it('skips the near-duplicate warning when both entries are SRD entries (SPEC.md §5.2)', async () => {
     const srd = await cinderHound();
     srd.meta.source.srd = true;
@@ -396,7 +407,7 @@ describe('references (SPEC.md §5.7)', () => {
     expect(errors).toEqual([
       {
         file: 'dnd-5e-2024/magic-item/wand-of-frost-lances.json',
-        message: 'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: no entry has id "frost-lance"',
+        message: 'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: no spell has id "frost-lance"',
       },
     ]);
   });

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/magic-item.schema.json",
   "title": "dnd-5e-2024 magic item stats (SPEC.md §6.6)",
-  "description": "Stored inputs only; magic items derive nothing in v1 (SPEC.md §6.2). saveDc and attackBonus are authored. Cross-field rules are checks in checks.ts (SPEC.md §6.8).",
+  "description": "Stored inputs only; magic items derive nothing in v1 except an embedded stat block's ability modifiers and saves (SPEC.md §6.2). saveDc and attackBonus are authored. Cross-field rules are checks in checks.ts (SPEC.md §6.8).",
   "type": "object",
   "additionalProperties": false,
   "required": ["category", "rarity", "attunement", "effect"],
@@ -50,6 +50,7 @@
       }
     },
     "cursed": { "const": true },
-    "effect": { "$ref": "common.schema.json#/$defs/Text" }
+    "effect": { "$ref": "common.schema.json#/$defs/Text" },
+    "statBlocks": { "$ref": "common.schema.json#/$defs/StatBlocks" }
   }
 }

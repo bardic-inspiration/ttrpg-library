@@ -33,6 +33,56 @@
       "properties": { "ref": { "type": "string", "pattern": "^(creature|magic-item|spell)/[a-z0-9-]+$" } }
     },
     "RefOrText": { "anyOf": [{ "$ref": "#/$defs/Ref" }, { "type": "string", "minLength": 1 }] },
-    "Text": { "type": "string", "minLength": 1, "markdownSubset": true }
+    "Text": { "type": "string", "minLength": 1, "markdownSubset": true },
+    "Line": { "type": "string", "minLength": 1 },
+    "StatBlockItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "text"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "text": { "$ref": "#/$defs/Text" }
+      }
+    },
+    "StatBlockItems": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/StatBlockItem" } },
+    "StatBlock": {
+      "description": "A stat block printed inside a spell or magic item (SPEC.md §6.6, §6.7). Authored as printed: only the ability modifiers and saves are derived.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "typeLine", "abilities"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "typeLine": { "$ref": "#/$defs/Line" },
+        "ac": { "$ref": "#/$defs/Line" },
+        "hp": { "$ref": "#/$defs/Line" },
+        "speed": { "$ref": "#/$defs/Line" },
+        "abilities": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["str", "dex", "con", "int", "wis", "cha"],
+          "properties": {
+            "str": { "type": "integer", "minimum": 1, "maximum": 30 },
+            "dex": { "type": "integer", "minimum": 1, "maximum": 30 },
+            "con": { "type": "integer", "minimum": 1, "maximum": 30 },
+            "int": { "type": "integer", "minimum": 1, "maximum": 30 },
+            "wis": { "type": "integer", "minimum": 1, "maximum": 30 },
+            "cha": { "type": "integer", "minimum": 1, "maximum": 30 }
+          }
+        },
+        "skills": { "$ref": "#/$defs/Line" },
+        "vulnerabilities": { "$ref": "#/$defs/Line" },
+        "resistances": { "$ref": "#/$defs/Line" },
+        "immunities": { "$ref": "#/$defs/Line" },
+        "gear": { "$ref": "#/$defs/Line" },
+        "senses": { "$ref": "#/$defs/Line" },
+        "languages": { "$ref": "#/$defs/Line" },
+        "cr": { "$ref": "#/$defs/Line" },
+        "traits": { "$ref": "#/$defs/StatBlockItems" },
+        "actions": { "$ref": "#/$defs/StatBlockItems" },
+        "bonusActions": { "$ref": "#/$defs/StatBlockItems" },
+        "reactions": { "$ref": "#/$defs/StatBlockItems" }
+      }
+    },
+    "StatBlocks": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/StatBlock" } }
   }
 }

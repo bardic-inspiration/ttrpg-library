@@ -89,7 +89,7 @@ export default function PrintView({ base }: PrintViewProps) {
       <div class="print-view__entries" data-continuous={continuous ? '' : undefined}>
         {fragments.map((fragment, i) => (
           <div
-            key={fragment.record.id}
+            key={fragment.record.url}
             class="print-view__entry"
             style={continuous ? undefined : { page: pageName(i) }}
             dangerouslySetInnerHTML={{ __html: fragment.html }}

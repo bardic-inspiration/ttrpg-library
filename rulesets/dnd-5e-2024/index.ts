@@ -2,7 +2,7 @@
 
 import type { RulesetModule } from '../module.ts';
 import { checkCreature, checkMagicItem, checkSpell } from './checks.ts';
-import { deriveCreature } from './derive.ts';
+import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { refLabels } from './refs.ts';
 import definition from './ruleset.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
@@ -14,6 +14,9 @@ export const ruleset: RulesetModule = {
   definition,
   derive(type, stats) {
     if (type === 'creature') return { ...deriveCreature(stats as CreatureStats, tables) };
+    if (type === 'spell' || type === 'magic-item') {
+      return deriveStatBlocks((stats as SpellStats | MagicItemStats).statBlocks, tables);
+    }
     return {};
   },
   check(type, stats) {

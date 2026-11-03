@@ -52,7 +52,7 @@ const source = provenance(entry);
   {present(entry.description) && (
     <section class="entry-detail__lore" aria-labelledby="lore-heading">
       <h2 id="lore-heading">Lore</h2>
-      <div class="lore" set:html={renderMarkdown(entry.description)} />
+      <div class="lore" set:html={renderMarkdown(entry.description, { names, ruleset: entry.ruleset })} />
     </section>
   )}
 

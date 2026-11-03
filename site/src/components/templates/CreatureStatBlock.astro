@@ -34,6 +34,7 @@ import StatBlockHeader from './parts/StatBlockHeader.astro';
 type Props = TemplateProps;
 
 const { entry, derived, names, mode, level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset };
 const s = entry.stats as CreatureStats;
 const d = derived as unknown as DerivedCreature;
 const blocks = (list: 'traits' | 'actions' | 'bonusActions' | 'reactions'): ActionBlock[] | undefined =>
@@ -67,13 +68,13 @@ const details: PropertyLine[] = [
 ---
 <StatBlock name={`${entry.name} stat block`} type="creature" mode={mode}>
   <StatBlockHeader name={entry.name} subtitle={sizeTypeLine(s)} level={level} />
-  <PropertyList lines={core} />
+  <PropertyList lines={core} refs={refs} />
   <AbilityTable rows={abilityRows(s, d)} />
-  <PropertyList lines={details} />
-  {sections.map((section) => <ActionList title={section.title} items={section.items} level={level + 1} />)}
+  <PropertyList lines={details} refs={refs} />
+  {sections.map((section) => <ActionList title={section.title} items={section.items} level={level + 1} refs={refs} />)}
   {legendary && (
-    <ActionList title="Legendary Actions" items={legendaryItems} level={level + 1}>
-      {present(legendary.intro) && <RulesText text={renderTokens(legendary.intro, d, tables)} />}
+    <ActionList title="Legendary Actions" items={legendaryItems} level={level + 1} refs={refs}>
+      {present(legendary.intro) && <RulesText text={renderTokens(legendary.intro, d, tables)} refs={refs} />}
       <p>Legendary Action Uses: {legendary.uses}{whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? ''}.</p>
     </ActionList>
   )}

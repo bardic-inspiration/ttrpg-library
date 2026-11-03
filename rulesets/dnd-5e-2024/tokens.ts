@@ -83,10 +83,18 @@ export function parseToken(body: string, tables: Tables): { token?: Token; error
   }
 }
 
-/** Every token in a text, parsed. A stray brace is reported as an error. */
+/**
+ * A `{ref:…}` link token belongs to the core, not the ruleset (SPEC.md §5.7):
+ * the validator checks it with the other refs, and the site renders it as a
+ * link after the ruleset's tokens.
+ */
+const isRefToken = (body: string): boolean => body.startsWith('ref:');
+
+/** Every ruleset token in a text, parsed. A stray brace is reported as an error. */
 export function findTokens(text: string, tables: Tables): TokenMatch[] {
   const matches: TokenMatch[] = [];
   for (const match of text.matchAll(TOKEN)) {
+    if (isRefToken(match[1] ?? '')) continue;
     matches.push({ raw: match[0], index: match.index, ...parseToken(match[1] ?? '', tables) });
   }
   const rest = text.replace(TOKEN, '');
@@ -118,9 +126,10 @@ export function renderToken(token: Token, derived: DerivedCreature): string {
   }
 }
 
-/** Replaces every token in `text` with its rendered value. Throws on a bad token; validate first. */
+/** Replaces every ruleset token in `text` with its rendered value, leaving `{ref:…}` links. Throws on a bad token; validate first. */
 export function renderTokens(text: string, derived: DerivedCreature, tables: Tables): string {
   return text.replace(TOKEN, (raw, body: string) => {
+    if (isRefToken(body)) return raw;
     const { token, error } = parseToken(body, tables);
     if (!token) throw new Error(`${raw}: ${error}`);
     return renderToken(token, derived);

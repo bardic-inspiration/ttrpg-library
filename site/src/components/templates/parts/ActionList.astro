@@ -4,6 +4,7 @@
 // blocks, such as the legendary-action intro, goes in the default slot. Each
 // body is markdown (SPEC.md §5.5) and renders through RulesText.
 import type { ActionBlock } from '../../../lib/creature';
+import type { TextRefs } from '../../../lib/markdown';
 import Heading from './Heading.astro';
 import RulesText from './RulesText.astro';
 
@@ -11,15 +12,16 @@ interface Props {
   title: string;
   items: ActionBlock[];
   level: number;
+  refs?: TextRefs;
 }
 
-const { title, items, level } = Astro.props;
+const { title, items, level, refs } = Astro.props;
 ---
 <section class="action-list">
   <Heading level={level} class="action-list__heading">{title}</Heading>
   <slot />
   {items.map((item) => (
-    <RulesText class="action-list__item" label={item.name} text={item.body} />
+    <RulesText class="action-list__item" label={item.name} text={item.body} refs={refs} />
   ))}
 </section>
 

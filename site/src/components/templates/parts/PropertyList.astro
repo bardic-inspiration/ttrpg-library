@@ -1,18 +1,19 @@
 ---
 // Labeled stat-block lines as a definition list (SPEC.md §9.5): "AC 13",
 // "Range 60 feet". Callers pass only the lines that display (§5.8).
-import { renderInlineMarkdown } from '../../../lib/markdown';
+import { renderInlineMarkdown, type TextRefs } from '../../../lib/markdown';
 import type { PropertyLine } from '../../../lib/template';
 
 interface Props {
   lines: PropertyLine[];
+  refs?: TextRefs;
 }
 
-const { lines } = Astro.props;
+const { lines, refs } = Astro.props;
 ---
 {lines.length > 0 && (
   <dl class="property-list">
-    {lines.map((line) => <><dt>{line.label}</dt>{line.markdown ? <dd set:html={renderInlineMarkdown(line.value)} /> : <dd>{line.value}</dd>}</>)}
+    {lines.map((line) => <><dt>{line.label}</dt>{line.markdown ? <dd set:html={renderInlineMarkdown(line.value, refs)} /> : <dd>{line.value}</dd>}</>)}
   </dl>
 )}
 

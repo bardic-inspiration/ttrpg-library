@@ -43,7 +43,7 @@ These were settled in the spec review and override the preliminary design wherev
 | 2 | v1 scope | SRD 5.2 baseline. Types: `creature`, `magic-item`, `spell`. The library holds SRD entries, reproduced unmodified, and custom entries, which stay clear of SRD content (§5.9). |
 | 3 | Entry model | Three zones: fixed keys, strictly validated `stats`, and open flat `tags`. Provenance in `meta`. `version` renamed to `ruleset`. |
 | 4 | Validation posture | Fail closed. Unknown ruleset, type, or `stats` key fails CI. Only `tags` are open. |
-| 5 | IDs | Kebab-case slug of the name, globally unique, immutable, equals the filename. |
+| 5 | IDs | Kebab-case slug of the name, unique within its type, immutable, equals the filename. |
 | 6 | References | Typed refs between entries in v1, validated in CI, with computed back-references. |
 | 7 | Review | Comment-driven revisions on PRs. No required approving review (you cannot approve your own PR); your merge is the approval. |
 | 8 | Requests | GitHub Issues are the request queue. `config/defaults.json` fills anything a request leaves unspecified. A gap-filler runs when no requests are open. |
@@ -59,7 +59,7 @@ These were settled in the spec review and override the preliminary design wherev
 |---|---|---|
 | Every non-fixed key is an open tag; all paths flattened into filters | `stats` (strict) and `tags` (open) are separate; only curated `stats` paths become facets | Stat blocks contain lists of objects (actions) that flatten into meaningless paths, and open rules data lets typos pass silently |
 | Unknown `version` is ignored | Unknown `ruleset` fails CI | A silent skip means a merged entry can vanish with no signal |
-| `id: "001"`, unique within version and type | Global slug ID | Sequential IDs collide across parallel branches and make poor URLs |
+| `id: "001"`, unique within version and type | Slug ID, unique within its type | Sequential IDs collide across parallel branches and make poor URLs |
 | Branch protection requires one approving review | Requires the `validate` check only | The routine opens PRs under your identity; GitHub blocks self-approval |
 | Reject by deleting files or closing the PR | Comment-driven revision loop | Most feedback is "adjust this," not "discard this" |
 | Routine inputs supplied per run | GitHub Issues as a queue, plus defaults and a gap-filler | Scheduled runs need direction without a human in the loop |
@@ -186,8 +186,8 @@ Every entry, in every ruleset, has this shape (`schemas/envelope.schema.json`):
 |---|---|---|---|
 | `ruleset` | yes | string | Must name a folder in `rulesets/` and a ruleset in `config/types.json`. v1: `dnd-5e-2024` |
 | `type` | yes | string | Single value. Must be listed in the ruleset's `ruleset.json`, with a schema file and a registry entry |
-| `id` | yes | string | `^[a-z0-9]+(-[a-z0-9]+)*$`, 3–64 chars, globally unique, equals filename without `.json`, immutable after merge |
-| `name` | yes | string | Display name, 1–80 chars, globally unique case-insensitively |
+| `id` | yes | string | `^[a-z0-9]+(-[a-z0-9]+)*$`, 3–64 chars, unique within its type, equals filename without `.json`, immutable after merge |
+| `name` | yes | string | Display name, 1–80 chars, unique within its type case-insensitively |
 | `summary` | yes | string | One line, 10–160 chars, plain text. Used on cards, in PR bodies, and in link previews |
 | `description` | no | string | Lore and flavor, markdown subset. Not rules text |
 | `stats` | yes | object | Validated by `rulesets/<ruleset>/schemas/<type>.schema.json`. Unknown keys rejected. Inputs only; no derived values |
@@ -200,10 +200,10 @@ The file path must be `content/<ruleset>/<type>/<id>.json`. Unknown top-level ke
 ### 5.2 IDs and names
 
 - The ID is the slug of the name at creation: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`.
-- IDs are unique across the whole library, not per type, so a reference or URL never needs disambiguation.
+- IDs and names are unique within a type, not across the library. The rule exists to keep one thing from entering twice, and entries of different types are different things even when they share a name: the Giant Insect spell and a Giant Insect creature can both exist. Everything that identifies an entry carries its type, so nothing needs disambiguation: a ref is `<type>/<id>` (§5.7), a page URL is `/<ruleset>/<type>/<id>/`, and the print view takes `<type>/<id>` keys (§10.4).
 - An ID never changes after merge, even if `name` is later revised. A rename keeps the old ID.
 - On a name or ID collision the generator picks a different name; it never appends a numeric suffix.
-- The validator warns on near-duplicate names (normalized edit distance ≤ 2) so reviewers can catch "Frost Lance" vs "Frost Lances." It skips a pair when both entries are SRD entries (§5.9), since neither name can change: "Fireball" and "Fire Bolt" are both canonical.
+- The validator warns on near-duplicate names within a type (normalized edit distance ≤ 2) so reviewers can catch "Frost Lance" vs "Frost Lances." It skips a pair when both entries are SRD entries (§5.9), since neither name can change: "Fireball" and "Fire Bolt" are both canonical.
 
 ### 5.3 Tags
 
@@ -228,7 +228,7 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 
 ### 5.5 Text fields
 
-`description`, and the rules-text fields inside `stats` (`text`, `effect`, `higherLevels`, etc.), accept a markdown subset: paragraphs, `**bold**`, `*italic*`, bulleted and numbered lists, line breaks, and pipe tables. No headings, links (including bare URLs, which render as links), HTML, or images. The validator rejects disallowed constructs, parsing the text with the same `marked` lexer the site renders with (`scripts/validate/text.ts`). A schema marks these fields with the `markdownSubset: true` keyword: the envelope's `description`, and the ruleset's `Text` def. Rendering is sanitized. A ruleset may also define tokens that render derived values inside text (§6.4).
+`description`, and the rules-text fields inside `stats` (`text`, `effect`, `higherLevels`, etc.), accept a markdown subset: paragraphs, `**bold**`, `*italic*`, bulleted and numbered lists, line breaks, and pipe tables. No headings, links (including bare URLs, which render as links), HTML, or images. The validator rejects disallowed constructs, parsing the text with the same `marked` lexer the site renders with (`scripts/validate/text.ts`). A schema marks these fields with the `markdownSubset: true` keyword: the envelope's `description`, and the ruleset's `Text` def. Rendering is sanitized. A ruleset may also define tokens that render derived values inside text (§6.4), and any text may link to another entry with a `{ref:<type>/<id>}` token (§5.7).
 
 **Pipe tables.** A table is GitHub-style markdown inside the text, at the point where it reads, so an SRD entry keeps its text in order (§5.9). Any markdown-subset field may hold one, in SRD and custom entries alike. It has a header row, a delimiter row (`|---|---|`, with `:` for column alignment), and at least one body row, and sits between paragraphs:
 
@@ -252,12 +252,16 @@ Cells hold only inline text: bold, italic, and tokens where the ruleset allows t
 
 ### 5.7 References
 
-- A reference is an object `{ "ref": "<type>/<id>" }`, valid only inside `stats` at fields the schema declares as `RefOrText`.
-- `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`). Once an SRD entry is in the library, new entries ref it instead.
-- The validator fails if a ref's target does not exist, or if its type does not match the ref's type prefix. Cross-ruleset refs are not allowed in v1. An entry that fails its own `stats` schema can still be a ref target, but its refs are not checked until its schema passes.
+- A reference takes one of two forms, both keyed by `<type>/<id>`, since the ID never changes (§5.2) and is unique within its type:
+  - an object `{ "ref": "<type>/<id>" }`, valid only inside `stats` at fields the schema declares as `RefOrText`;
+  - a text token `{ref:<type>/<id>}`, valid in any markdown-subset field (§5.5), in every ruleset and type. It is the one way text links to another entry.
+- Neither form carries display text. The site shows the target's current name, so a rename updates every link, and no link text is ever written by hand. A token renders as that name linked to the target's detail page, and reads as the name in search text (§9.1). It takes inline markup around it: a spell name is written `*{ref:spell/cure-wounds}*`, as SRD text italicizes spell names. Because the token renders the name, SRD text stays word for word when a mention becomes a link: "becomes a {ref:creature/zombie}" reads "becomes a Zombie".
+- A token anywhere else (`name`, `summary`, or a plain-string `stats` field) is a validation error, as is a malformed one, such as `{ref:zombie}`.
+- `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`). Once an SRD entry is in the library, new entries ref it instead. Text follows the same rule: a mention of a library entry may be a token, and a mention of SRD content not in the library is plain text.
+- The validator fails if no entry of a ref's type has its id. Cross-ruleset refs are not allowed in v1. An entry that fails its own `stats` schema can still be a ref target, but its refs are not checked until its schema passes.
 - Deleting an entry that other entries reference fails CI until those refs are removed or replaced.
-- The validator and the build compute back-references (`scripts/validate/refs.ts`). Each entry's `refs` (forward) and `refBy` (back) are lists of `{ path, key }`: `path` is where the ref sits in the referring entry (for example `stats.spells[0].spell`), and `key` is the other end as `<type>/<id>`. Only resolved refs are listed, in document order.
-- Detail pages show forward links ("Casts: Frost Lance") and back-links ("Cast by: Cinder Witch"), each target once per label. The ruleset's `refLabels(type, path)` names the relation from each end, from the field the ref sits in. dnd-5e-2024: `spellcasting` lists and a magic item's `spells[].spell` are "Casts" / "Cast by", creature `gear` is "Gear" / "Carried by", and any other field is "References" / "Referenced by".
+- The validator and the build compute back-references (`scripts/validate/refs.ts`). Each entry's `refs` (forward) and `refBy` (back) are lists of `{ path, key }`: `path` is where the ref sits in the referring entry (for example `stats.spells[0].spell`, or `stats.effect` for a token), and `key` is the other end as `<type>/<id>`. Only resolved refs are listed, in document order.
+- Detail pages show forward links ("Casts: Frost Lance") and back-links ("Cast by: Cinder Witch"), each target once per label. The ruleset's `refLabels(type, path)` names the relation from each end, from the field the ref sits in. dnd-5e-2024: `spellcasting` lists and a magic item's `spells[].spell` are "Casts" / "Cast by", creature `gear` is "Gear" / "Carried by", and any other field, including a `{ref:…}` token in text, is "References" / "Referenced by".
 - A batch may add its own dependencies (a creature plus the new spell it casts).
 
 ### 5.8 Situational fields
@@ -286,14 +290,14 @@ Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom e
 
 - **SRD entries are included unmodified.** `name` is the SRD name exactly. `stats` reproduce the SRD stat block, so every number the template renders, derived or not, matches the SRD. Rules text is the SRD's text word for word, except that derived numbers are written as tokens (§6.4) that render the same values. An SRD entry carries both the data and the verbatim rule: every structured field its type defines is filled from the SRD (an item's `charges` and `spells`, with their costs and DCs), and the rules text still keeps every sentence, even where it states the same thing. An SRD wand's `effect` keeps "This wand has 7 charges", its spell's save DC, and its "Regaining Charges" paragraph, while `charges` holds the maximum, recharge, and depletion. The card shows both. The rule that item text doesn't restate structured fields is for custom entries only. Where the ruleset's derivation can't reach an SRD number from inputs, an `adjust` or damage `bonus` matches it, with "matches SRD" as its reason. SRD content is literal, so the ruleset's consistency warnings (§6.8) are skipped on an SRD entry: its adjustments, authored DCs, and high values are the SRD's, not deviations to confirm. Its errors still apply.
 - Only what the SRD doesn't provide is authored: `summary`, which is required, is one plain factual line. `description` is omitted, since SRD stat blocks carry no lore. The guidelines' tone, naming, and balance targets don't apply (§8.6).
-- An SRD entry sets `meta.source.srd: true` (§5.4). It is added only by a request that asks for SRD content or by an SRD import stage (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
+- An SRD entry sets `meta.source.srd: true` (§5.4). It is added only by a request that asks for SRD content or by an SRD import stage (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry of the same type, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
 - A revision of an SRD entry only brings it closer to the SRD, such as a transcription fix. A variant of an SRD entry is a new custom entry.
 - **SRD manifest.** `rulesets/<ruleset>/srd-manifest.json` lists every SRD entry of the ruleset's types, transcribed from the reference PDF: `{ ruleset, source, entries: [{ type, name, tier }] }`, where `name` is the SRD name exactly and each type and name pair appears once. For `dnd-5e-2024` it holds 329 creatures, 243 magic items, and 339 spells. Where the PDF misprints a heading, the manifest uses the entry's correct name: the Knight's stat block is headed "Iron Golem". Each record's `tier` is `complex` if the SRD entry has any of the following, and `simple` otherwise:
   - creature: legendary actions, a lair, a Spellcasting action, reactions, or a Shape-Shift action (more than one form);
   - magic item: a table, a stat block, variants under one name (a "+1, +2, or +3" name, a rarity of "Varies", or several versions such as giant types), several spells cast for charges, or a variable charge cost;
   - spell: a table, a stat block, or a Reaction casting time with a trigger.
 - **Coverage.** `npm run srd-coverage` (`scripts/srd-coverage/`) matches entries with `meta.source.srd: true` to manifest records by type and exact name. It prints, for each type and tier, the count missing of the total and the missing names, then any SRD entry that isn't in the manifest (usually a name that doesn't match the SRD exactly). `--type <type>` and `--tier <complex|simple>` narrow the report so a batch can be picked from it; `--ruleset` overrides `defaults.ruleset`. A test checks that the manifest is valid, that its per-type counts are the ones above, and that every SRD entry in the library is in it.
-- **Custom entries stay clear of SRD content,** whether or not the SRD entry is in the library: no SRD name, no near collision with one, and no concept that duplicates an SRD entry (§8.6). A custom entry omits `meta.source.srd`.
+- **Custom entries stay clear of SRD content,** whether or not the SRD entry is in the library: no SRD entry's exact name, of any type, no SRD proper noun (a specific person, place, or thing named in the SRD), and no concept that duplicates an SRD entry (§8.6). A custom name may build on the common words in SRD names: "Fire Zombie" and "Ice Troll" are fine beside the SRD's Zombie and Troll. A custom entry omits `meta.source.srd`.
 
 ## 6. Rulesets and the dnd-5e-2024 schemas
 
@@ -330,7 +334,7 @@ Everything specific to a ruleset lives in one folder, so adding a ruleset is add
 
 The validator, the index builder, the site templates, and the exporters all import this module, so each derived value is computed in exactly one place. The validator loads a ruleset by folder name, so an entry whose `ruleset` has no folder (or no `config/types.json` entry) fails as unknown. A ruleset or type with no formulas returns `{}` from `derive`.
 
-**dnd-5e-2024 creature derivations.** Magic items and spells derive nothing in v1.
+**dnd-5e-2024 creature derivations.** Magic items and spells derive nothing in v1, except the ability modifiers and saves of an embedded stat block (`statBlocks`, §6.6, §6.7): `derived.statBlocks[i]` holds `abilityMods` and `saves`, which equal the modifiers, since these blocks have no proficiencies.
 
 | Derived path | Formula |
 |---|---|
@@ -369,6 +373,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 | `Ref` | `{ ref: string }` matching `^(creature|magic-item|spell)/[a-z0-9-]+$` |
 | `RefOrText` | `Ref` or non-empty string |
 | `Text` | Markdown-subset string (§5.5, marked `markdownSubset: true`), which may contain tokens where the ruleset allows them (§6.4) |
+| `StatBlock` | A stat block printed inside a spell or magic item (§6.7): `{ name, typeLine, abilities: { str…cha: int 1–30 }, ac?, hp?, speed?, skills?, vulnerabilities?, resistances?, immunities?, gear?, senses?, languages?, cr?, traits?, actions?, bonusActions?, reactions? }`. `name` is the block's heading and `typeLine` its size, type, and alignment ("Large Dragon, Neutral"). Each other line is a non-empty string written as printed, displayed only when present (§5.8). The four lists are arrays, at least one item each, of `{ name, text: Text }` |
 
 ### 6.4 Text tokens
 
@@ -386,6 +391,7 @@ Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `spellcasting.note`, 
 - An unknown token, ability, or damage type is a validation error.
 - A literal number that looks derived in creature prose is a validation error, and the message names the token to use instead. The patterns caught are `DC <n>`, `+<n> to hit`, and `<n> (<dice>)`.
 - A DC the rules leave to the author, such as an ability check's ("a {dc=12} Strength (Athletics) check") or a base for a formula in prose ("({dc=5} plus the damage taken)"), uses `{dc=<n>}`. The token marks the number as authored (§6.1), so the literal check stays strict. A save DC from one of the creature's abilities always uses `{dc:<ability>}`. Each authored DC is listed as a warning for the reviewer to confirm (§6.8).
+- `{ref:…}` is not a ruleset token: it links to another entry in any type's text (§5.7), and the ruleset's token parsing leaves it alone.
 - Spell and magic-item text is exempt, because its numbers are authored. A custom item's text must still not restate `saveDc` or `attackBonus`, since the template renders them from the structured fields (warning). An SRD item's text is verbatim and may (§5.9).
 
 ### 6.5 Creature (`schemas/creature.schema.json`)
@@ -456,6 +462,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, maxChargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8). A variable cost, such as spending 1 to 3 charges to cast at a higher level, sets `chargeCost` to the least and `maxChargeCost` to the most, and reads "1–3 charges" |
 | `cursed` | optional `true` | |
 | `effect` | `Text` | The rules text as printed |
+| `statBlocks` | optional array of `StatBlock` (§6.3) | Stat blocks the item prints, such as a figurine's creature. See "Embedded stat blocks" below |
 
 ### 6.7 Spell (`schemas/spell.schema.json`)
 
@@ -472,6 +479,11 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `effect` | `Text` | |
 | `higherLevels` | optional `Text` | Leveled spells only ("Using a Higher-Level Spell Slot") |
 | `cantripUpgrade` | optional `Text` | Cantrips only |
+| `statBlocks` | optional array of `StatBlock` (§6.3) | Stat blocks the spell prints, such as Summon Dragon's Draconic Spirit |
+
+**Embedded stat blocks (spells and magic items).** Some spells and items print a creature's stat block. One that also exists in the SRD as its own creature, such as the Zombie that Animate Dead raises, is a creature entry, and the spell or item links to it from its text with a `{ref:creature/<id>}` token (§5.7). One that is printed only inside its spell or item, such as Summon Dragon's Draconic Spirit, goes in `statBlocks`. It isn't an entry: it has no ID, file, page, or gallery card, so its name never collides with an entry's, and the SRD manifest (§5.9) doesn't list it. Custom entries follow the same rule: a creature that stands on its own is an entry, and a summon that exists only through its spell or item is embedded.
+
+An embedded block is authored as printed, because its numbers often scale with the spell's level or depend on the caster ("AC 14 + the spell's level", "Bonus equals your spell attack modifier"), which the creature schema's derivations can't express. Only its ability modifiers and saves are derived (§6.2). The card renders each block after the rules text with the creature stat block's parts, its name one heading level below the entry's (§9.5).
 
 ### 6.8 Consistency checks
 
@@ -482,7 +494,7 @@ All types:
 | Check | Level |
 |---|---|
 | File path matches `ruleset`, `type`, `id` | error |
-| ID unique across library; name unique (case-insensitive) | error |
+| ID unique within its type; name unique within its type (case-insensitive) | error |
 | Near-duplicate names, unless both entries are SRD entries | warning |
 | Every ref resolves and its type matches | error |
 | Text fields use only the markdown subset | error |
@@ -727,7 +739,7 @@ An entry belongs to a bucket when its value on every axis falls in that bucket's
 | Tags | textarea, one `key: value` per line (comma-separated for lists) | no |
 | Ruleset | text | no (defaults) |
 
-**Revise request** (`revise-request.yml`, adds label `revise`): entry IDs (one per line) and an instruction, both required, for changes to already-merged entries.
+**Revise request** (`revise-request.yml`, adds label `revise`): entries (one per line, as `<type>/<id>`, or a bare `id` when only one type has it) and an instruction, both required, for changes to already-merged entries.
 
 Free-form issues with the `request` label are also accepted; the routine interprets them against defaults.
 
@@ -817,7 +829,7 @@ A test checks that every repo path, npm script, and `config/defaults.json` key t
 Each `rulesets/dnd-5e-2024/guidelines/<type>.md` is written for custom entries, and says so. An SRD entry follows only its token rules and its dependency section (§5.9). It contains:
 
 - Tone and voice, with one short exemplar.
-- Naming conventions: evocative and original; no real-world trademarks; no non-SRD proper nouns; no SRD name and no near collision with one, whether or not the SRD entry is in the library.
+- Naming conventions: evocative and original; no real-world trademarks; no non-SRD proper nouns; no SRD entry's exact name and no SRD proper noun, whether or not the SRD entry is in the library. Building on common words from SRD names ("Fire Zombie") is fine (§5.9).
 - Balance targets as our own tables (for creatures, by CR: AC, HP, attack bonus, damage per round, save DC; for items, power expectations by rarity; for spells, damage by level and area). For creatures these are met by choosing inputs (ability scores, hit dice, damage dice), since the derived numbers follow from them.
 - Prose style for `text`, `onHit`, `onFailure`, `onSuccess`, and `effect`, matching 5.2 phrasing, with derived numbers written as tokens. Attack and save lines are generated, so they are never written as prose.
 - When to create a dependency entry versus using plain text for an SRD reference.
@@ -866,7 +878,7 @@ Records are sorted by ruleset, type, then `id`, and the file is written without 
 - `url` is the detail page under the site base (§3.1). `image` is the stored repo-relative path, or `null` when the entry has none.
 - `facets` holds the registry's facet paths (§7) in registry order, read from `stats` and from the ruleset module's `derived` values; the builder never computes a rules value itself. A facet whose optional value is omitted is left out, except an optional flag (§5.8), which reads as `false`.
 - `tags` is the entry's `tags`, or `{}`. `refs` and `refBy` are the §5.7 link lists.
-- `search` holds action, trait, and spell names plus `description` and rules text with markup stripped. Names are every `name` in `stats` and every value at a `RefOrText` field (§5.7), a ref read as its target's name. Rules text is every markdown-subset field (§5.5), with markdown and ruleset text tokens (§6.4) removed.
+- `search` holds action, trait, and spell names plus `description` and rules text with markup stripped. Names are every `name` in `stats` and every value at a `RefOrText` field (§5.7), a ref read as its target's name. Rules text is every markdown-subset field (§5.5), with markdown and ruleset text tokens (§6.4) removed and each `{ref:…}` token (§5.7) read as its target's name.
 
 The index stays lean; full entries and their derived values are fetched only for export, from the export bundles.
 
@@ -911,11 +923,12 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.5 Templates
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
+- A spell or item's embedded stat blocks (`statBlocks`, §6.7) render after its rules text, inside its card, with the creature stat block's parts (`EmbeddedStatBlock`): the block's name as a heading one level below the entry's, its type line, the AC, HP, and Speed lines, the ability table, the remaining lines, then its Traits, Actions, Bonus Actions, and Reactions. Lines display as written; the ability table's modifiers and saves come from the derived values.
 - The spell card's level line words the level as the `spell-level` format does (§7), the D&D convention, so cards and detail pages agree: "1st-level Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves. `EntryTemplate` picks the component from the registry's `template` name, falling back to `generic`. Each template renders the entry name as a heading at a `level` its page chooses (2 by default; the detail page's own `h1` sits above it), with section headings one level below.
-- Rules-text fields and `description` render through one sanitizing markdown helper (`site/src/lib/markdown.ts`): raw HTML is escaped, and links, images, and headings read as plain text. Tokens render first, then markdown, in every `Text` field, including a creature's action prose, `spellcasting.note`, `legendaryActions.intro`, and a spell's `castingTime.trigger`, which renders inline within the Casting Time line. Fields that aren't `Text`, such as action names, save targets, and plain-string spells, are plain text: they are escaped before they join generated markdown, so a `*` in them displays as typed.
+- Rules-text fields and `description` render through one sanitizing markdown helper (`site/src/lib/markdown.ts`): raw HTML is escaped, and links, images, and headings read as plain text. Tokens render first, then markdown, in every `Text` field, and markdown renders each `{ref:…}` token as its target's name linked to the target's page (§5.7), including a creature's action prose, `spellcasting.note`, `legendaryActions.intro`, and a spell's `castingTime.trigger`, which renders inline within the Casting Time line. Fields that aren't `Text`, such as action names, save targets, and plain-string spells, are plain text: they are escaped before they join generated markdown, so a `*` in them displays as typed.
 - A pipe table (§5.5) renders as a `<table>` with `scope="col"` header cells, inside a `.md-table` box that scrolls sideways on its own when the table is wider than its column. The page never does (§9.7; data tables are exempt from WCAG reflow). The box is focusable and labeled "Table: " plus its column headers, so a keyboard can scroll it. One style in `base.css` serves every template, mode, and theme: column headers in the heading font over an accent rule, thin rules between rows, no striping, and cell text that wraps, except that a one-word cell such as a die range (`9–10`) stays on one line. Its knobs are the `--table-*` component tokens, and print and capture take their size from the surrounding text.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
 - Markup is semantic so that styling never fights structure. The entry name is a heading, section labels (Actions, Reactions) are subheadings, property lines and ability scores are definition lists or tables, and action names are inline headings.
@@ -996,7 +1009,7 @@ Target: WCAG 2.2 AA.
 - **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name.
 - **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce` (the duration primitives are reset in `primitives.css`, and the contrast suite checks that every one is).
 - **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without horizontal scrolling.
-- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, the first detail page of each type that has an entry, and the print view of those same entries (`print/?ids=…`), checked once its entries have loaded. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The check stubs `window.print`, since the print view opens the dialog on load. It launches Playwright's own Chromium; if that fails and `/opt/pw-browsers/chromium` exists (the browser preinstalled in cloud sessions, whose build can lag the installed Playwright), it retries with that one. `npm run snapshots` launches the same way.
+- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, the first detail page of each type that has an entry, and the print view of those same entries (`print/?ids=<type>/<id>,…`), checked once its entries have loaded. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The check stubs `window.print`, since the print view opens the dialog on load. It launches Playwright's own Chromium; if that fails and `/opt/pw-browsers/chromium` exists (the browser preinstalled in cloud sessions, whose build can lag the installed Playwright), it retries with that one. `npm run snapshots` launches the same way.
 
 ### 9.8 UI refinement workflow
 
@@ -1064,7 +1077,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 
 ### 10.4 Print (PDF)
 
-- `/print/?ids=a,b,c&size=letter` or `/print/?<gallery query>&size=letter` renders the entries in `print` mode. The `ids` form prints in the given order, ignoring repeats. Without `ids`, the rest of the query is read as the home gallery's (`/`, §9.3) with the gallery's own parsing and filtering (`site/src/lib/gallery/`), so `f.type` narrows by type, and the results print in the gallery's order. A missing or unknown `size` is the default page size.
+- `/print/?ids=spell/a,creature/b&size=letter` or `/print/?<gallery query>&size=letter` renders the entries in `print` mode. `ids` lists `<type>/<id>` keys, since an ID is unique only within its type (§5.2). The `ids` form prints in the given order, ignoring repeats. Without `ids`, the rest of the query is read as the home gallery's (`/`, §9.3) with the gallery's own parsing and filtering (`site/src/lib/gallery/`), so `f.type` narrows by type, and the results print in the gallery's order. A missing or unknown `size` is the default page size.
 - **Print fragments.** `astro build` also emits each entry's print fragment at `print/<ruleset>/<type>/<id>/`: the type template in `print` mode (`components/print/PrintEntry.astro`), as bare markup with no page shell. The print view (`components/print/PrintView.tsx`, logic in `site/src/lib/print.ts` and `print-run.ts`) resolves its entries against `library.json`, fetches only their fragments, and inserts them; the `/print/` page carries the templates' styles. Page weight follows the selection, not the library. If an id names no entry, a fragment fails to load, or nothing matches, the page shows a message in a polite status region and the print dialog doesn't open.
 - The page size comes from `config/export.json`. The print view injects an `@page { size; margin }` rule for the chosen size at runtime, because `@page` cannot be toggled by class, and sets `data-page-size` on `<html>` for the density tokens in `tokens/print.css`. A page size selector on the print view changes the size in place (and in the URL).
 - Layout per size: Letter and A4 use the two-column 5.2 stat-block layout; Half-Letter and 4×6 use one column with smaller type.
@@ -1204,7 +1217,7 @@ The repo's `CLAUDE.md` imports `AGENTS.md`, the canonical working guide for any 
 - Run `npm run validate` before every push; never push a failing batch.
 - Dev PRs that change behavior update `SPEC.md` in the same PR, and use the `dev.md` PR template.
 - SRD-only rules and the blocklist apply to every text field.
-- SRD entries are reproduced unmodified; custom entries never reuse or nearly reuse an SRD name (§5.9).
+- SRD entries are reproduced unmodified; custom entries never reuse an SRD entry's exact name or an SRD proper noun (§5.9).
 - Mark review replies with `<!-- routine:handled -->`.
 
 ## 15. Extensibility

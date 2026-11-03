@@ -115,7 +115,8 @@ no tokens: its numbers are authored, so write them as numbers.
   levels 5 (2d10), 11 (3d10), and 17 (4d10)."
 - Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
   pipe tables. No headings or links. Italicize spell names: *Frost Lance*.
-- Don't use braces in spell text. Tokens are a creature feature and don't
+- Don't use braces in spell text except for a `{ref:<type>/<id>}` link
+  (SPEC.md §5.7). The derived-number tokens are a creature feature and don't
   render here.
 
 ## Dependencies and SRD references
@@ -129,7 +130,23 @@ itself the most common dependency.
 - **Mentioning an SRD spell** in `effect` (for example "as if it were under
   the effect of *Dispel Magic*") uses the SRD name in italics. Don't create a
   library spell just to mention it.
-- **Mentioning a library spell** in prose uses its name in italics. There is
-  no ref in prose; a mention is only text.
+- **Mentioning a library entry** in prose links it with a token instead of
+  writing its name: `*{ref:spell/frost-lance}*` for a spell, which keeps the
+  italics, or `{ref:creature/cinder-hound}` for a creature. The site shows the
+  entry's name, linked (SPEC.md §5.7). Check `library.json` for the `id`.
 - A spell that would duplicate an existing library or SRD spell isn't written.
   Point the requesting entry at the existing spell instead.
+
+### Stat blocks the spell prints
+
+Some spells bring a creature into play. Decide where its stat block lives
+(SPEC.md §6.7):
+
+- **A creature that stands on its own** is its own creature entry. Link it
+  from `effect` with `{ref:creature/<id>}`. If it's new, write it to
+  `creature.md` in the same batch.
+- **A creature that exists only through this spell**, whose numbers scale with
+  the spell's level or the caster, goes in `statBlocks`. Write each line as it should read
+  ("AC 14 + the spell's level" is written `"ac": "14 + the spell's level"`),
+  and write actions as text, since nothing in the block is derived but its
+  ability modifiers.
