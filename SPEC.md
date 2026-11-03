@@ -886,6 +886,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.5 Templates
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
+- The spell card's level line words the level as the `spell-level` format does (§7), the D&D convention, so cards and detail pages agree: "1st-level Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves. `EntryTemplate` picks the component from the registry's `template` name, falling back to `generic`. Each template renders the entry name as a heading at a `level` its page chooses (2 by default; the detail page's own `h1` sits above it), with section headings one level below.
