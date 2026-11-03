@@ -3,16 +3,20 @@
 // formatted. Optional fields display by presence alone (SPEC.md §5.8).
 
 import { whenPresent } from './display.ts';
+import { formatSpellLevel } from './format.ts';
 import type { SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(' ');
 const plural = (n: number, unit: string): string => `${n} ${unit}${n === 1 ? '' : 's'}`;
 
-/** "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at level 0. */
+/**
+ * "1st-level Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at
+ * level 0. The level reads as the gallery's `spell-level` format does.
+ */
 export function levelLine(s: SpellStats): string {
   const school = capitalize(s.school);
-  const head = s.level === 0 ? `${school} Cantrip` : `Level ${s.level} ${school}`;
+  const head = s.level === 0 ? `${school} Cantrip` : `${formatSpellLevel(s.level).replace(' ', '-')} ${school}`;
   return `${head} (${s.classes.map(capitalize).join(', ')})`;
 }
 

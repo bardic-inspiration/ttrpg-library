@@ -655,7 +655,7 @@ Display and generation defaults only. Validation never reads it except to confir
 
 | Key | Purpose |
 |---|---|
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`) |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |
@@ -886,6 +886,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.5 Templates
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
+- The spell card's level line words the level as the `spell-level` format does (§7), the D&D convention, so cards and detail pages agree: "1st-level Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves. `EntryTemplate` picks the component from the registry's `template` name, falling back to `generic`. Each template renders the entry name as a heading at a `level` its page chooses (2 by default; the detail page's own `h1` sits above it), with section headings one level below.
@@ -969,7 +970,7 @@ Target: WCAG 2.2 AA.
 - **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name.
 - **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce` (the duration primitives are reset in `primitives.css`, and the contrast suite checks that every one is).
 - **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without horizontal scrolling.
-- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, the first detail page of each type that has an entry, and the print view of those same entries (`print/?ids=…`), checked once its entries have loaded. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The check stubs `window.print`, since the print view opens the dialog on load.
+- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, the first detail page of each type that has an entry, and the print view of those same entries (`print/?ids=…`), checked once its entries have loaded. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The check stubs `window.print`, since the print view opens the dialog on load. It launches Playwright's own Chromium; if that fails and `/opt/pw-browsers/chromium` exists (the browser preinstalled in cloud sessions, whose build can lag the installed Playwright), it retries with that one. `npm run snapshots` launches the same way.
 
 ### 9.8 UI refinement workflow
 
