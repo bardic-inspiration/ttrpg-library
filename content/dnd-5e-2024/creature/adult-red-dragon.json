@@ -109,6 +109,7 @@
     ],
     "spellcasting": {
       "ability": "cha",
+      "noComponents": "Material",
       "includeAttack": true,
       "atWill": [
         "Command (level 2 version)",

@@ -61,8 +61,8 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
       'Spit. *Ranged Attack Roll:* +4, range 30/120 ft. *Hit:* 5 (1d6 + 2) Acid damage.',
     );
     const names = new Map([['spell/frost-lance', 'Frost Lance']]);
-    expect(plain(spellcastingBlock(s, d, names)!)).toBe(
-      'Spellcasting. The creature casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 11, +3 to hit with spell attacks): *At Will:* Light, Frost Lance *1/Day Each:* Fog Cloud',
+    expect(plain(spellcastingBlock(s, d, names, 'Cinder Hound')!)).toBe(
+      'Spellcasting. The hound casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 11, +3 to hit with spell attacks): *At Will:* Light, Frost Lance *1/Day Each:* Fog Cloud',
     );
   });
 
@@ -194,5 +194,14 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     expect(body(0)).toContain('*Hit:* 12 (3d6 + 2) Cold damage, and the target has the Paralyzed condition.');
     expect(body(1)).toContain('*Hit:* 3 (1d6) Piercing damage. If the target is a creature, it is cursed.');
     expect(body(2)).toContain('*Failure:* 28 (8d6) Psychic damage, and the target has the Frightened condition.');
+  });
+  it('names the caster and the components its spells skip in the Spellcasting intro', async () => {
+    const spellcasting = { ability: 'cha' as const, noComponents: 'Material', atWill: ['Light'] };
+    const { s, d } = await build({ spellcasting });
+    const intro = (stats: CreatureStats, name: string) => spellcastingBlock(stats, d, new Map(), name)!.body.split(':')[0];
+    expect(intro(s, 'Adult Red Dragon')).toBe(
+      'The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save DC 8)',
+    );
+    expect(intro({ ...s, shortName: 'bandit' }, 'Bandit Captain')).toMatch(/^The bandit casts/);
   });
 });

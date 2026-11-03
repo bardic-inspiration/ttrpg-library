@@ -207,13 +207,21 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
 const refOrText = (value: RefOrText, names: Map<string, string>): string =>
   escapeMarkdown(typeof value === 'string' ? value : (names.get(value.ref) ?? value.ref));
 
-/** The 5.2 "Spellcasting" action (SPEC.md §6.5). `names` maps `<type>/<id>` to entry names. */
-export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>): ActionBlock | undefined {
+/** What generated prose calls the creature after "The": `shortName`, or the name's last word, lowercase (SPEC.md §6.5). */
+export const shortName = (s: CreatureStats, name: string): string =>
+  s.shortName ?? (name.trim().split(/\s+/).at(-1) ?? name).toLowerCase();
+
+/**
+ * The 5.2 "Spellcasting" action (SPEC.md §6.5). `name` is the entry's name,
+ * and `names` maps `<type>/<id>` to entry names.
+ */
+export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>, name: string): ActionBlock | undefined {
   const sc = s.spellcasting;
   if (!sc || !d.spellcasting) return undefined;
   const attack = present(sc.includeAttack) ? `, ${signed(d.spellcasting.attackBonus)} to hit with spell attacks` : '';
+  const components = whenPresent(sc.noComponents, (c) => `requiring no ${escapeMarkdown(c)} components and `) ?? '';
   const parts = [
-    `The creature casts one of the following spells, using ${tables.abilityNames[sc.ability]} as the spellcasting ability (spell save DC ${d.spellcasting.dc}${attack}):`,
+    `The ${escapeMarkdown(shortName(s, name))} casts one of the following spells, ${components}using ${tables.abilityNames[sc.ability]} as the spellcasting ability (spell save DC ${d.spellcasting.dc}${attack}):`,
   ];
   const list = (name: string, spells: RefOrText[] | undefined) => {
     if (!present(spells)) return;

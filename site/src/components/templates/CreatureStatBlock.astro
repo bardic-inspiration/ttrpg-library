@@ -39,7 +39,7 @@ const s = entry.stats as CreatureStats;
 const d = derived as unknown as DerivedCreature;
 const blocks = (list: 'traits' | 'actions' | 'bonusActions' | 'reactions'): ActionBlock[] | undefined =>
   whenPresent(s[list], (actions) => actions.map((action, i) => actionBlock(action, d[list][i], d)));
-const spellcasting = spellcastingBlock(s, d, names);
+const spellcasting = spellcastingBlock(s, d, names, entry.name);
 // `actions` is required, so its section always displays; the others only when present.
 const sections = [
   { title: 'Traits', items: blocks('traits') },

@@ -44,6 +44,8 @@ export interface Action {
 export interface CreatureStats {
   size: Size[];
   creatureType: string;
+  /** What generated prose calls the creature after "The"; defaults to the name's last word, lowercase. */
+  shortName?: string;
   descriptors?: string[];
   alignment: string;
   ac: { value: number; note?: string };
@@ -68,6 +70,8 @@ export interface CreatureStats {
   legendaryActions?: { uses: number; usesInLair?: number; intro?: string; items: Action[] };
   spellcasting?: {
     ability: Ability;
+    /** "Material" reads "requiring no Material components and using …". */
+    noComponents?: string;
     adjust?: number;
     includeAttack?: true;
     atWill?: RefOrText[];
