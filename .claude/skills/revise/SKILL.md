@@ -80,6 +80,8 @@ transcription fix. Don't apply any other change: reply (or, for a revise
 issue, ask on the issue with `needs-info`) that SRD entries stay as the SRD
 has them, and suggest requesting a custom variant. `regenerate <id>` on an SRD
 entry transcribes the same SRD entry again, keeping its `name` and `id`.
+Transcribe from `docs/SRD_CC_v5.2.pdf`, not from memory, and check the result
+against it before pushing.
 
 A comment that is only a question or an acknowledgement and asks for no
 change still gets a reply (step 6), but no edit.

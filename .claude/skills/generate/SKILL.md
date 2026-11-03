@@ -114,7 +114,9 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
 ### SRD entries
 
 For an SRD request, transcribe each entry from SRD 5.2 unmodified (§5.9)
-instead of following the guideline's tone, naming, and balance targets:
+instead of following the guideline's tone, naming, and balance targets.
+Transcribe from `docs/SRD_CC_v5.2.pdf`, not from memory, and check each entry
+against it before pushing.
 
 - `name` is the SRD name exactly, and `id` is its slug.
 - `stats` reproduce the SRD stat block: choose inputs so every derived value
