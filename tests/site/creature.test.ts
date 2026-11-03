@@ -182,4 +182,17 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     expect(actionBlock(s.traits![0]!, d.traits[0], d).name).toBe('Legendary Resistance (4/Day, or 5/Day in Lair)');
     expect(skillsLine(s, d)).toBe('Sleight of Hand +4');
   });
+  it('continues the damage sentence when the prose after it starts lowercase', async () => {
+    const { s, d } = await build({
+      actions: [
+        { name: 'Touch', kind: 'melee-attack', ability: 'str', reach: 5, damage: [{ dice: '3d6', ability: 'str', type: 'cold' }], onHit: 'and the target has the Paralyzed condition.' },
+        { name: 'Bite', kind: 'melee-attack', ability: 'str', reach: 5, damage: [{ dice: '1d6', type: 'piercing' }], onHit: 'If the target is a creature, it is cursed.' },
+        { name: 'Wail', kind: 'save', ability: 'con', save: { ability: 'wis', targets: 'one creature' }, damage: [{ dice: '8d6', type: 'psychic' }], onFailure: 'and the target has the Frightened condition.' },
+      ],
+    });
+    const body = (i: number) => actionBlock(s.actions[i]!, d.actions[i], d).body;
+    expect(body(0)).toContain('*Hit:* 12 (3d6 + 2) Cold damage, and the target has the Paralyzed condition.');
+    expect(body(1)).toContain('*Hit:* 3 (1d6) Piercing damage. If the target is a creature, it is cursed.');
+    expect(body(2)).toContain('*Failure:* 28 (8d6) Psychic damage, and the target has the Frightened condition.');
+  });
 });

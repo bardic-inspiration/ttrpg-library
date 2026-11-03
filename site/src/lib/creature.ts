@@ -167,17 +167,29 @@ const ATTACK_LABEL: Record<string, string> = {
 const rangeText = (range: { normal: number; long?: number }): string =>
   `range ${range.normal}${whenPresent(range.long, (long) => `/${long}`) ?? ''} ft.`;
 
+const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
+
+/**
+ * The damage, then the prose after it (`onHit`, `onFailure`). Prose that
+ * starts lowercase continues the damage sentence after a comma ("Cold damage,
+ * and the target…"); otherwise the damage ends its sentence (SPEC.md §6.5).
+ */
+function afterDamage(damage: string | undefined, prose: string | undefined): string {
+  if (!present(damage)) return prose ?? '';
+  if (!present(prose)) return sentence(damage);
+  return /^[a-z]/.test(prose) ? `${damage}, ${prose}` : `${sentence(damage)} ${prose}`;
+}
+
 /** One action, trait, or reaction as SRD 5.2 prose. */
 export function actionBlock(action: Action, derived: DerivedAction | undefined, d: DerivedCreature): ActionBlock {
   const prose = (text: string) => renderTokens(text, d, tables);
-  const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
   const parts: string[] = [];
   if (action.kind === 'other') {
     parts.push(prose(action.text ?? ''));
   } else if (action.kind === 'save' && action.save) {
     parts.push(`${label(`${tables.abilityNames[action.save.ability]} Saving Throw:`)} DC ${derived?.saveDc}, ${escapeMarkdown(action.save.targets)}.`);
     const damage = damageText(action, derived);
-    const failure = [whenPresent(damage, (text) => `${text}.`), whenPresent(action.onFailure, prose)].filter(present).join(' ');
+    const failure = afterDamage(damage, whenPresent(action.onFailure, prose));
     if (failure) parts.push(`${label('Failure:')} ${failure}`);
     if (present(action.onSuccess)) parts.push(`${label('Success:')} ${prose(action.onSuccess)}`);
   } else {
@@ -186,7 +198,7 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
     const note = whenPresent(action.attackNote, (text) => ` (${escapeMarkdown(text)})`) ?? '';
     parts.push(`${label(ATTACK_LABEL[action.kind] ?? '')} ${signed(derived?.attackBonus ?? 0)}${note}, ${[reach, range].filter(present).join(' or ')}`);
     const damage = damageText(action, derived);
-    const hit = [whenPresent(damage, sentence), whenPresent(action.onHit, prose)].filter(present).join(' ');
+    const hit = afterDamage(damage, whenPresent(action.onHit, prose));
     parts.push(`${label('Hit:')} ${hit}`);
   }
   return { name: actionName(action), body: parts.join(' ') };
