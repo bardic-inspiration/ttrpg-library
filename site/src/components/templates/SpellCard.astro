@@ -13,7 +13,8 @@ import StatBlockHeader from './parts/StatBlockHeader.astro';
 
 type Props = TemplateProps;
 
-const { entry, mode, level = 2 } = Astro.props;
+const { entry, names, mode, level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset };
 const s = entry.stats as SpellStats;
 const lines = [
   { label: 'Casting Time', value: castingTimeLine(s), markdown: true },
@@ -24,11 +25,11 @@ const lines = [
 ---
 <StatBlock name={`${entry.name} spell`} type="spell" mode={mode}>
   <StatBlockHeader name={entry.name} subtitle={levelLine(s)} level={level} />
-  <PropertyList lines={lines} />
+  <PropertyList lines={lines} refs={refs} />
   <div class="spell-card__text">
-    <RulesText text={s.effect} />
-    {present(s.higherLevels) && <RulesText label="Using a Higher-Level Spell Slot" text={s.higherLevels} />}
-    {present(s.cantripUpgrade) && <RulesText label="Cantrip Upgrade" text={s.cantripUpgrade} />}
+    <RulesText text={s.effect} refs={refs} />
+    {present(s.higherLevels) && <RulesText label="Using a Higher-Level Spell Slot" text={s.higherLevels} refs={refs} />}
+    {present(s.cantripUpgrade) && <RulesText label="Cantrip Upgrade" text={s.cantripUpgrade} refs={refs} />}
   </div>
 </StatBlock>
 

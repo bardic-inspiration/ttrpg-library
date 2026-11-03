@@ -114,6 +114,9 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
   when one matches. Use plain text only for SRD content not in the library,
   as the guideline's dependency section says.
 - **Text.** Rules text and `description` use the markdown subset only (§5.5).
+  A mention of a library entry in text is a `{ref:<type>/<id>}` link token
+  (§5.7), wrapped in `*…*` for a spell name; SRD content not in the library is
+  plain text.
   No non-SRD proper nouns anywhere (§11).
 - **Situational fields.** Omit an optional field that doesn't apply; never
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` (§5.8).

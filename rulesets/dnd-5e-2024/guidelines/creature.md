@@ -191,6 +191,9 @@ Rules for all of these:
   pipe tables. No headings or links in entry text. Italicize spell names: *Frost
   Lance*.
 - Every brace in entry text starts a token. Don't use braces for anything else.
+- To mention a library entry in prose, link it with `{ref:<type>/<id>}`
+  instead of writing its name: `*{ref:spell/frost-lance}*` (SPEC.md §5.7). The
+  site shows the entry's name, linked.
 
 ## Dependencies and SRD references
 

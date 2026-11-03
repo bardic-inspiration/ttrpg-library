@@ -116,7 +116,8 @@ authored, so write them as numbers.
 - The `charges.depletion` text is its own field. Don't repeat it in `effect`.
 - Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
   pipe tables. No headings or links. Italicize spell names: *Frost Lance*.
-- Don't use braces in item text. Tokens are a creature feature and don't
+- Don't use braces in item text except for a `{ref:<type>/<id>}` link
+  (SPEC.md §5.7). The derived-number tokens are a creature feature and don't
   render here.
 
 ## Dependencies and SRD references
@@ -137,5 +138,8 @@ string.
   new *Frost Lance*). Write it to `spell.md` and ref it as `spell/<id>`.
 - **Write the power into `effect`** instead when it belongs only to this item
   and isn't a spell anyone would learn.
+- **Mentioning a library entry** in `effect` links it with a token instead of
+  writing its name: `*{ref:spell/frost-lance}*` for a spell, which keeps the
+  italics. The site shows the entry's name, linked (SPEC.md §5.7).
 - `baseItem` and any item named in `effect` use SRD names. The blocklist applies
   to every plain string.

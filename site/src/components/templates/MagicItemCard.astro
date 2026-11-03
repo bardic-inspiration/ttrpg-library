@@ -16,6 +16,7 @@ import Heading from './parts/Heading.astro';
 type Props = TemplateProps;
 
 const { entry, names, mode, level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset };
 const s = entry.stats as MagicItemStats;
 const charges = chargesLine(s);
 const properties: PropertyLine[] = [
@@ -26,9 +27,9 @@ const spells = whenPresent(s.spells, (list) => list.map((spell) => spellLine(spe
 ---
 <StatBlock name={`${entry.name} magic item`} type="magic-item" rarity={s.rarity} mode={mode}>
   <StatBlockHeader name={entry.name} subtitle={subtitleLine(s)} level={level} />
-  <RulesText text={s.effect} />
+  <RulesText text={s.effect} refs={refs} />
   {properties.length > 0 && <PropertyList lines={properties} />}
-  {present(s.charges?.depletion) && <RulesText text={s.charges.depletion} />}
+  {present(s.charges?.depletion) && <RulesText text={s.charges.depletion} refs={refs} />}
   {present(spells) && (
     <section class="magic-item-card__spells">
       <Heading level={level + 1} class="magic-item-card__heading">Spells</Heading>

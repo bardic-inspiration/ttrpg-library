@@ -1,8 +1,9 @@
-// References between entries (SPEC.md §5.7, §6.8 "Every ref resolves").
-// Pure functions with no Node imports, so the validator, the index builder,
-// and the site all link entries the same way.
+// References between entries (SPEC.md §5.7, §6.8 "Every ref resolves"):
+// `{ "ref": "<type>/<id>" }` objects at `RefOrText` fields, and `{ref:<type>/<id>}`
+// tokens in text. Pure functions with no Node imports, so the validator, the
+// index builder, and the site all link entries the same way.
 
-/** A `{ "ref": "<type>/<id>" }` found in an entry's `stats`. */
+/** A ref found in an entry: a `{ "ref": … }` object, or a `{ref:…}` token in a string. */
 export interface FoundRef {
   /** Where in the entry, such as `stats.spells[0].spell`. */
   path: string;
@@ -18,6 +19,8 @@ export interface RefEntry {
   id: string;
   /** Omitted for an entry that failed its `stats` schema: it can be a target but contributes no refs. */
   stats?: unknown;
+  /** Searched for `{ref:…}` tokens, before `stats`. */
+  description?: string;
 }
 
 /** One link from one entry to another, as both ends see it. */
@@ -48,15 +51,49 @@ const isRef = (value: unknown): value is { ref: string } =>
   typeof (value as { ref?: unknown }).ref === 'string';
 
 /**
- * Every ref in schema-valid `stats`, in document order. The schemas allow the
- * `Ref` shape only at `RefOrText` fields, so any object that is exactly
- * `{ ref: string }` is a reference.
+ * A link written in text (§5.7): `{ref:<type>/<id>}`. It renders as the
+ * target's current name, linked to its page. The validator allows it only in
+ * markdown-subset fields.
  */
-export function collectRefs(stats: unknown, path = 'stats'): FoundRef[] {
+export const REF_TOKEN = /\{ref:([^{}]*)\}/g;
+
+/** What a `{ref:…}` token must hold: a type and an id. */
+const REF_KEY = /^[a-z][a-z0-9-]*\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** A `{ref:…}` token whose inside isn't `<type>/<id>`. */
+export interface MalformedRef {
+  path: string;
+  raw: string;
+}
+
+/** The `{ref:…}` tokens in one string, in order. */
+export function textRefs(text: string, path: string): { refs: FoundRef[]; malformed: MalformedRef[] } {
+  const refs: FoundRef[] = [];
+  const malformed: MalformedRef[] = [];
+  for (const match of text.matchAll(REF_TOKEN)) {
+    const key = match[1] ?? '';
+    if (REF_KEY.test(key)) refs.push({ path, ref: key });
+    else malformed.push({ path, raw: match[0] });
+  }
+  return { refs, malformed };
+}
+
+/**
+ * Every ref in schema-valid `stats`, in document order: `{ ref }` objects
+ * and `{ref:…}` tokens in its strings. The schemas allow the `Ref` shape only
+ * at `RefOrText` fields, so any object that is exactly `{ ref: string }` is a
+ * reference.
+ */
+export function collectRefs(stats: unknown, path = 'stats', malformed: MalformedRef[] = []): FoundRef[] {
   if (isRef(stats)) return [{ path, ref: stats.ref }];
-  if (Array.isArray(stats)) return stats.flatMap((item, i) => collectRefs(item, `${path}[${i}]`));
+  if (typeof stats === 'string') {
+    const found = textRefs(stats, path);
+    malformed.push(...found.malformed);
+    return found.refs;
+  }
+  if (Array.isArray(stats)) return stats.flatMap((item, i) => collectRefs(item, `${path}[${i}]`, malformed));
   if (typeof stats === 'object' && stats !== null) {
-    return Object.entries(stats).flatMap(([key, value]) => collectRefs(value, `${path}.${key}`));
+    return Object.entries(stats).flatMap(([key, value]) => collectRefs(value, `${path}.${key}`, malformed));
   }
   return [];
 }
@@ -86,7 +123,15 @@ export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; i
   for (const entry of entries) {
     if (entry.stats === undefined) continue;
     const from = entryKey(entry);
-    for (const { path, ref } of collectRefs(entry.stats)) {
+    const malformed: MalformedRef[] = [];
+    const found = [
+      ...(entry.description === undefined ? [] : collectRefs(entry.description, 'description', malformed)),
+      ...collectRefs(entry.stats, 'stats', malformed),
+    ];
+    for (const { path, raw } of malformed) {
+      issues.push({ file: entry.file, message: `${path}: ref token ${raw} is malformed; write {ref:<type>/<id>}, such as {ref:spell/fireball}` });
+    }
+    for (const { path, ref } of found) {
       const slash = ref.indexOf('/');
       const [type, id] = [ref.slice(0, slash), ref.slice(slash + 1)];
       const target = byKey.get(ref);

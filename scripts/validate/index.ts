@@ -1,10 +1,10 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { checkImage, checkPath, checkUniqueness, type EntryHead, type FileIssue } from './library.ts';
-import { entryKey, linkEntries, type Link, type RefEntry } from './refs.ts';
+import { entryKey, linkEntries, REF_TOKEN, type Link, type RefEntry } from './refs.ts';
 import { PROJECT_ROOT, formatErrors, loadEnvelopeValidator, loadRegistry, loadRuleset, validateWithText, type LoadedRuleset } from './schema.ts';
 import { termMatcher } from '../../lib/text.ts';
-import { checkBlocklist, checkMarkdown, loadBlocklist } from './text.ts';
+import { checkBlocklist, checkMarkdown, loadBlocklist, stringsIn } from './text.ts';
 import { listEntryFiles } from './walk.ts';
 
 export interface ValidationError {
@@ -82,6 +82,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       ...(srd ? { srd } : {}),
     });
     const linked: RefEntry = { file, ruleset: entry.ruleset, type: entry.type, id: entry.id };
+    if (typeof entry.description === 'string') linked.description = entry.description;
     linkable.push(linked);
     const pathError = checkPath({ ...entry, file });
     if (pathError) error(file, pathError);
@@ -106,6 +107,16 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       continue;
     }
     for (const { path, text } of statsResult.texts) for (const message of checkMarkdown(path, text)) error(file, message);
+    // A {ref:…} token renders only in text fields (§5.7); anywhere else it would show as typed.
+    const textPaths = new Set(statsResult.texts.map((t) => t.path));
+    const plain = [
+      { path: 'name', text: entry.name },
+      { path: 'summary', text: entry.summary },
+      ...stringsIn(entry.stats, 'stats').filter((s) => !textPaths.has(s.path)),
+    ];
+    for (const { path } of plain.filter(({ text }) => new RegExp(REF_TOKEN.source).test(text))) {
+      error(file, `${path}: a {ref:…} token works only in text fields (rules text and description)`);
+    }
     // An SRD entry is literal (SPEC.md §5.9): its deviations and authored
     // numbers match the SRD, so the ruleset's review warnings are skipped.
     for (const issue of ruleset.module.check(entry.type, entry.stats)) {
