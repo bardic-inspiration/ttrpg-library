@@ -6,7 +6,7 @@
 
 import { mkdir, readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
-import { chromium } from 'playwright';
+import { launchChromium } from '../browser/index.ts';
 import type { IndexRecord } from '../a11y/index.ts';
 import { serveSite } from '../serve/index.ts';
 import { PROJECT_ROOT } from '../validate/schema.ts';
@@ -29,7 +29,7 @@ const out = join(PROJECT_ROOT, 'snapshots', label);
 await mkdir(out, { recursive: true });
 
 const server = await serveSite(DIST);
-const browser = await chromium.launch();
+const browser = await launchChromium();
 let failures = 0;
 
 try {
