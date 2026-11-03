@@ -122,6 +122,11 @@ instead of following the guideline's tone, naming, and balance targets:
   `adjust` or a damage `bonus` to match, with the reason "matches SRD".
 - Rules text is the SRD's text word for word, except that every derived
   number is written as its token (§6.4), which renders the same value.
+- Fill every structured field the type defines from the SRD too (an item's
+  `charges` and `spells`), and still keep every sentence of the rules text,
+  even where it states the same thing (§5.9). Don't move a paragraph out of
+  `effect` into a structured field; the guideline's "don't restate
+  structured fields" rule is for custom entries.
 - `summary` is one plain, factual line written for the entry, since the SRD
   has none. Omit `description`.
 - Everything the entry uses (spells, gear) is SRD content: a ref if it's in
