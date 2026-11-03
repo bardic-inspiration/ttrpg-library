@@ -1,0 +1,46 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "revivify",
+  "name": "Revivify",
+  "summary": "Returns a creature that died within the last minute to life with 1 Hit Point.",
+  "stats": {
+    "level": 3,
+    "school": "necromancy",
+    "classes": [
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a diamond worth 300+ GP",
+        "costGp": 300,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You touch a creature that has died within the last minute. That creature revives with 1 Hit Point. This spell can't revive a creature that has died of old age, nor does it restore any missing body parts."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}

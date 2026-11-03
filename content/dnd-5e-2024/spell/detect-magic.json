@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "detect-magic",
+  "name": "Detect Magic",
+  "summary": "Lets you sense magic within 30 feet and see auras around magical creatures and objects.",
+  "stats": {
+    "level": 1,
+    "school": "divination",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": true,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "For the duration, you sense the presence of magical effects within 30 feet of yourself. If you sense such effects, you can take the Magic action to see a faint aura around any visible creature or object in the area that bears the magic, and if an effect was created by a spell, you learn the spell's school of magic.\n\nThe spell is blocked by 1 foot of stone, dirt, or wood; 1 inch of metal; or a thin sheet of lead."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}
