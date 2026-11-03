@@ -3,6 +3,8 @@
 // presence alone (§5.8): an omitted key has no line, and a present one
 // always does, even at 0 or false.
 
+import { isRef } from '../../../scripts/validate/refs.ts';
+import { refOrTextName } from './refs.ts';
 import type { PropertyLine } from './template.ts';
 
 /** `castingTime` → "Casting time". */
@@ -11,12 +13,10 @@ const humanize = (key: string): string => {
   return words.charAt(0).toUpperCase() + words.slice(1);
 };
 
-const isRef = (value: unknown): value is { ref: string } =>
-  typeof value === 'object' && value !== null && !Array.isArray(value) && typeof (value as { ref?: unknown }).ref === 'string' && Object.keys(value).length === 1;
 
-/** One value as text: a ref reads as its target's name, a list joins its items. */
+/** One value as text: a ref reads as its target's name (and note), a list joins its items. */
 function text(value: unknown, names: Map<string, string>): string {
-  if (isRef(value)) return names.get(value.ref) ?? value.ref;
+  if (isRef(value)) return refOrTextName(value, names);
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
   if (Array.isArray(value)) return value.map((item) => text(item, names)).join(', ');
   if (typeof value === 'object' && value !== null) {

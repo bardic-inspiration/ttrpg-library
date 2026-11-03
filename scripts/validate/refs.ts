@@ -43,11 +43,14 @@ export interface RefIssue {
 
 export const entryKey = (entry: { type: string; id: string }): string => `${entry.type}/${entry.id}`;
 
-const isRef = (value: unknown): value is { ref: string } =>
+/** The keys a `Ref` object may have (§5.7): `ref`, and an optional `note`. */
+const REF_KEYS = new Set(['ref', 'note']);
+
+export const isRef = (value: unknown): value is { ref: string; note?: string } =>
   typeof value === 'object' &&
   value !== null &&
   !Array.isArray(value) &&
-  Object.keys(value).length === 1 &&
+  Object.keys(value).every((key) => REF_KEYS.has(key)) &&
   typeof (value as { ref?: unknown }).ref === 'string';
 
 /**
@@ -81,8 +84,8 @@ export function textRefs(text: string, path: string): { refs: FoundRef[]; malfor
 /**
  * Every ref in schema-valid `stats`, in document order: `{ ref }` objects
  * and `{ref:…}` tokens in its strings. The schemas allow the `Ref` shape only
- * at `RefOrText` fields, so any object that is exactly `{ ref: string }` is a
- * reference.
+ * at `RefOrText` fields, so any object that is `{ ref: string }`, with an
+ * optional `note`, is a reference.
  */
 export function collectRefs(stats: unknown, path = 'stats', malformed: MalformedRef[] = []): FoundRef[] {
   if (isRef(stats)) return [{ path, ref: stats.ref }];

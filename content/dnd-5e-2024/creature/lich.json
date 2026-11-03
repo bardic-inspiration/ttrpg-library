@@ -131,7 +131,10 @@
         },
         "Detect Thoughts",
         "Dispel Magic",
-        "Fireball (level 5 version)",
+        {
+          "ref": "spell/fireball",
+          "note": "level 5 version"
+        },
         "Invisibility",
         "Lightning Bolt (level 5 version)",
         "Mage Hand",

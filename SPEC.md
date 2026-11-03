@@ -253,11 +253,11 @@ Cells hold only inline text: bold, italic, and tokens where the ruleset allows t
 ### 5.7 References
 
 - A reference takes one of two forms, both keyed by `<type>/<id>`, since the ID never changes (§5.2) and is unique within its type:
-  - an object `{ "ref": "<type>/<id>" }`, valid only inside `stats` at fields the schema declares as `RefOrText`;
+  - an object `{ "ref": "<type>/<id>" }`, valid only inside `stats` at fields the schema declares as `RefOrText`. It may add a `note`, a qualifier printed in parentheses after the name wherever the ref renders: `{ "ref": "spell/fireball", "note": "level 5 version" }` reads "Fireball (level 5 version)" in a spell list, gear, or an item's spells;
   - a text token `{ref:<type>/<id>}`, valid in any markdown-subset field (§5.5), in every ruleset and type. It is the one way text links to another entry.
 - Neither form carries display text. The site shows the target's current name, so a rename updates every link, and no link text is ever written by hand. A token renders as that name linked to the target's detail page, and reads as the name in search text (§9.1). It takes inline markup around it: a spell name is written `*{ref:spell/cure-wounds}*`, as SRD text italicizes spell names. Because the token renders the name, SRD text stays word for word when a mention becomes a link: "becomes a {ref:creature/zombie}" reads "becomes a Zombie".
 - A token anywhere else (`name`, `summary`, or a plain-string `stats` field) is a validation error, as is a malformed one, such as `{ref:zombie}`.
-- `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`). Once an SRD entry is in the library, new entries ref it instead. Text follows the same rule: a mention of a library entry may be a token, and a mention of SRD content not in the library is plain text.
+- `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`, or `"Lightning Bolt (level 5 version)"` with its qualifier). Once an SRD entry is in the library, new entries ref it instead. Text follows the same rule: a mention of a library entry may be a token, and a mention of SRD content not in the library is plain text.
 - The validator fails if no entry of a ref's type has its id. Cross-ruleset refs are not allowed in v1. An entry that fails its own `stats` schema can still be a ref target, but its refs are not checked until its schema passes.
 - Deleting an entry that other entries reference fails CI until those refs are removed or replaced.
 - The validator and the build compute back-references (`scripts/validate/refs.ts`). Each entry's `refs` (forward) and `refBy` (back) are lists of `{ path, key }`: `path` is where the ref sits in the referring entry (for example `stats.spells[0].spell`, or `stats.effect` for a token), and `key` is the other end as `<type>/<id>`. Only resolved refs are listed, in document order.
@@ -370,7 +370,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 | `Adjust` | Non-zero integer |
 | `DamageType` | `acid`, `bludgeoning`, `cold`, `fire`, `force`, `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder` |
 | `Condition` | `blinded`, `charmed`, `deafened`, `exhaustion`, `frightened`, `grappled`, `incapacitated`, `invisible`, `paralyzed`, `petrified`, `poisoned`, `prone`, `restrained`, `stunned`, `unconscious` |
-| `Ref` | `{ ref: string }` matching `^(creature|magic-item|spell)/[a-z0-9-]+$` |
+| `Ref` | `{ ref: string, note?: string }`, `ref` matching `^(creature|magic-item|spell)/[a-z0-9-]+$`; `note` is a non-empty qualifier (§5.7) |
 | `RefOrText` | `Ref` or non-empty string |
 | `Text` | Markdown-subset string (§5.5, marked `markdownSubset: true`), which may contain tokens where the ruleset allows them (§6.4) |
 | `StatBlock` | A stat block printed inside a spell or magic item (§6.7): `{ name, typeLine, abilities: { str…cha: int 1–30 }, ac?, hp?, speed?, skills?, vulnerabilities?, resistances?, immunities?, gear?, senses?, languages?, cr?, traits?, actions?, bonusActions?, reactions? }`. `name` is the block's heading and `typeLine` its size, type, and alignment ("Large Dragon, Neutral"). Each other line is a non-empty string written as printed, displayed only when present (§5.8). The four lists are arrays, at least one item each, of `{ name, text: Text }` |

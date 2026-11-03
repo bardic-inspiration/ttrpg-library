@@ -8,6 +8,8 @@ export type Size = 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'gargantuan'
 
 export interface Ref {
   ref: string;
+  /** A qualifier printed in parentheses after the name: "Fireball (level 5 version)". */
+  note?: string;
 }
 export type RefOrText = Ref | string;
 

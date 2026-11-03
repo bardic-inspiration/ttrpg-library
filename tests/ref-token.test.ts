@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { buildIndex } from '../scripts/build-index/index.ts';
 import { validateLibrary } from '../scripts/validate/index.ts';
 import { renderInlineMarkdown, renderMarkdown } from '../site/src/lib/markdown.ts';
+import { refOrTextName } from '../site/src/lib/refs.ts';
 import { cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
 
 const temps: string[] = [];
@@ -92,5 +93,26 @@ describe('rendering {ref:…} (SPEC.md §5.7, §9.5)', () => {
   it('falls back to the id, unlinked, when the target is unknown', () => {
     expect(renderMarkdown('A {ref:creature/ghast}.', refs)).toBe('<p>A ghast.</p>\n');
     expect(renderMarkdown('A {ref:creature/zombie}.')).toBe('<p>A zombie.</p>\n');
+  });
+});
+
+describe('a ref with a note (SPEC.md §5.7)', () => {
+  it('resolves like any ref and reads as the name with the note in parentheses', async () => {
+    const wand = await wandOfFrostLances();
+    wand.stats.spells[0].spell = { ref: 'spell/frost-lance', note: 'level 3 version' };
+    const { errors, entries: valid } = await validateLibrary(await library([wand, await frostLance(), await cinderHound()]));
+    expect(errors).toEqual([]);
+    expect(valid.find((e) => e.entry.id === 'wand-of-frost-lances')!.refs).toEqual([{ path: 'stats.spells[0].spell', key: 'spell/frost-lance' }]);
+    const names = new Map([['spell/frost-lance', 'Frost Lance']]);
+    expect(refOrTextName(wand.stats.spells[0].spell, names)).toBe('Frost Lance (level 3 version)');
+    expect(refOrTextName({ ref: 'spell/frost-lance' }, names)).toBe('Frost Lance');
+    expect(refOrTextName('Fireball (level 5 version)', names)).toBe('Fireball (level 5 version)');
+  });
+
+  it('rejects any other key on a ref', async () => {
+    const wand = await wandOfFrostLances();
+    wand.stats.spells[0].spell = { ref: 'spell/frost-lance', level: 3 };
+    const { errors } = await validateLibrary(await library([wand, await frostLance(), await cinderHound()]));
+    expect(errors.length).toBeGreaterThan(0);
   });
 });

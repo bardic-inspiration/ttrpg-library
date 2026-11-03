@@ -6,7 +6,8 @@
 import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { present, whenPresent } from './display.ts';
 import { formatRarity } from './format.ts';
-import type { MagicItemSpell, MagicItemStats, RefOrText } from '../../../rulesets/dnd-5e-2024/types.ts';
+import { refOrTextName } from './refs.ts';
+import type { MagicItemSpell, MagicItemStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(' ');
@@ -25,8 +26,6 @@ export function subtitleLine(s: MagicItemStats): string {
 export const chargesLine = (s: MagicItemStats): string | undefined =>
   whenPresent(s.charges, (c) => `${c.max}; regains ${c.recharge}`);
 
-const refOrText = (value: RefOrText, names: Map<string, string>): string =>
-  typeof value === 'string' ? value : (names.get(value.ref) ?? value.ref);
 
 /** "1 charge", "3 charges", or a variable cost's range, "1–3 charges". */
 const chargeCost = (least: number, most: number | undefined): string =>
@@ -39,5 +38,5 @@ export function spellLine(spell: MagicItemSpell, names: Map<string, string>): { 
     whenPresent(spell.saveDc, (dc) => `save DC ${dc}`),
     whenPresent(spell.attackBonus, (bonus) => `${signed(bonus)} to hit`),
   ].filter(present);
-  return { name: refOrText(spell.spell, names), ...(notes.length ? { notes: notes.join('; ') } : {}) };
+  return { name: refOrTextName(spell.spell, names), ...(notes.length ? { notes: notes.join('; ') } : {}) };
 }

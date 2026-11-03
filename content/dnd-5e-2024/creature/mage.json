@@ -85,7 +85,10 @@
       ],
       "perDay": {
         "2": [
-          "Fireball (level 4 version)",
+          {
+            "ref": "spell/fireball",
+            "note": "level 4 version"
+          },
           "Invisibility"
         ],
         "1": [

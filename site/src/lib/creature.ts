@@ -12,6 +12,7 @@ import { renderTokens } from '../../../rulesets/dnd-5e-2024/tokens.ts';
 import { present, whenPresent } from './display.ts';
 import { formatCr } from './format.ts';
 import { escapeMarkdown } from './markdown.ts';
+import { refOrTextName } from './refs.ts';
 import type { PropertyLine } from './template.ts';
 import type {
   Action,
@@ -204,8 +205,7 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
   return { name: actionName(action), body: parts.join(' ') };
 }
 
-const refOrText = (value: RefOrText, names: Map<string, string>): string =>
-  escapeMarkdown(typeof value === 'string' ? value : (names.get(value.ref) ?? value.ref));
+const refOrText = (value: RefOrText, names: Map<string, string>): string => escapeMarkdown(refOrTextName(value, names));
 
 /** What generated prose calls the creature after "The": `shortName`, or the name's last word, lowercase (SPEC.md §6.5). */
 export const shortName = (s: CreatureStats, name: string): string =>
