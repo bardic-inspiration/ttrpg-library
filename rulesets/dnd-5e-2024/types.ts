@@ -38,6 +38,8 @@ export interface Action {
   onHit?: string;
   onFailure?: string;
   onSuccess?: string;
+  /** Save kind only: the "Failure or Success:" line. */
+  onFailureOrSuccess?: string;
   text?: string;
   recharge?: string;
   uses?: string;

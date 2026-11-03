@@ -377,7 +377,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 
 ### 6.4 Text tokens
 
-Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `spellcasting.note`, `legendaryActions.intro`) may show a derived value only through a token. Tokens are rendered by `tokens.ts` from the same derivations as the stat block.
+Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `onFailureOrSuccess`, `spellcasting.note`, `legendaryActions.intro`) may show a derived value only through a token. Tokens are rendered by `tokens.ts` from the same derivations as the stat block.
 
 | Token | Renders | Example output |
 |---|---|---|
@@ -438,6 +438,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `damage` | optional array of `Damage` | attack, save | The first is the primary damage; the rest render as "plus" riders, and a rider with a `condition` as ", plus … <condition>" |
 | `onHit` | optional `Text` | attack | Prose after the damage |
 | `onFailure`, `onSuccess` | optional `Text` | save | Prose after the failure damage, and the success line |
+| `onFailureOrSuccess` | optional `Text` | save | The "*Failure or Success:*" line after the success line, for what happens either way |
 | `text` | `Text` | other (required); not allowed on attack and save | Full prose; derived values only through tokens |
 | `recharge` | optional enum | all | One of `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
 | `uses` | optional string | all | `"3/day"` |

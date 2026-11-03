@@ -193,6 +193,7 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
     const failure = afterDamage(damage, whenPresent(action.onFailure, prose));
     if (failure) parts.push(`${label('Failure:')} ${failure}`);
     if (present(action.onSuccess)) parts.push(`${label('Success:')} ${prose(action.onSuccess)}`);
+    if (present(action.onFailureOrSuccess)) parts.push(`${label('Failure or Success:')} ${prose(action.onFailureOrSuccess)}`);
   } else {
     const reach = whenPresent(action.reach, (feet) => `reach ${feet} ft.`);
     const range = whenPresent(action.range, rangeText);

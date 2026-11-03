@@ -212,4 +212,12 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       '*1/Day:* Fireball',
     ]);
   });
+  it('renders a save action\'s "Failure or Success:" line after Success', async () => {
+    const { s, d } = await build({
+      actions: [{ name: 'Disrupt Life', kind: 'save', ability: 'con', save: { ability: 'con', targets: 'each creature in a 20-foot Emanation' }, damage: [{ dice: '9d6', type: 'necrotic' }], onSuccess: 'Half damage.', onFailureOrSuccess: 'The hound can\'t take this action again until the start of its next turn.' }],
+    });
+    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toMatch(
+      /\*Failure:\* 31 \(9d6\) Necrotic damage\. \*Success:\* Half damage\. \*Failure or Success:\* The hound can't take this action again until the start of its next turn\.$/,
+    );
+  });
 });
