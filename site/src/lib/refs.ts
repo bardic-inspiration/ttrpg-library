@@ -4,6 +4,16 @@
 import type { Link } from '../../../scripts/validate/refs.ts';
 import type { RefLabels } from '../../../rulesets/module.ts';
 
+/**
+ * How a stored `RefOrText` value reads (SPEC.md §5.7): a plain string as
+ * written, a ref as its target's name, with its `note` in parentheses after.
+ */
+export function refOrTextName(value: string | { ref: string; note?: string }, names: Map<string, string>): string {
+  if (typeof value === 'string') return value;
+  const name = names.get(value.ref) ?? value.ref;
+  return value.note === undefined ? name : `${name} (${value.note})`;
+}
+
 export interface RefTarget {
   type: string;
   name: string;

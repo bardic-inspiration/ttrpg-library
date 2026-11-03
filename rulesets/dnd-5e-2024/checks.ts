@@ -17,7 +17,7 @@ const LITERALS: { pattern: RegExp; token: string }[] = [
   { pattern: /\b\d+\s*\(\s*\d+\s*d\s*\d+(\s*[-+−–]\s*\d+)?\s*\)/i, token: '{dmg:<dice>}' },
 ];
 
-const PROSE_FIELDS = ['text', 'onHit', 'onFailure', 'onSuccess'] as const;
+const PROSE_FIELDS = ['text', 'onHit', 'onFailure', 'onSuccess', 'onFailureOrSuccess'] as const;
 
 /** Every prose field of a creature that may hold tokens, with its path. */
 function proseFields(stats: CreatureStats): { path: string; text: string }[] {

@@ -253,11 +253,11 @@ Cells hold only inline text: bold, italic, and tokens where the ruleset allows t
 ### 5.7 References
 
 - A reference takes one of two forms, both keyed by `<type>/<id>`, since the ID never changes (§5.2) and is unique within its type:
-  - an object `{ "ref": "<type>/<id>" }`, valid only inside `stats` at fields the schema declares as `RefOrText`;
+  - an object `{ "ref": "<type>/<id>" }`, valid only inside `stats` at fields the schema declares as `RefOrText`. It may add a `note`, a qualifier printed in parentheses after the name wherever the ref renders: `{ "ref": "spell/fireball", "note": "level 5 version" }` reads "Fireball (level 5 version)" in a spell list, gear, or an item's spells;
   - a text token `{ref:<type>/<id>}`, valid in any markdown-subset field (§5.5), in every ruleset and type. It is the one way text links to another entry.
 - Neither form carries display text. The site shows the target's current name, so a rename updates every link, and no link text is ever written by hand. A token renders as that name linked to the target's detail page, and reads as the name in search text (§9.1). It takes inline markup around it: a spell name is written `*{ref:spell/cure-wounds}*`, as SRD text italicizes spell names. Because the token renders the name, SRD text stays word for word when a mention becomes a link: "becomes a {ref:creature/zombie}" reads "becomes a Zombie".
 - A token anywhere else (`name`, `summary`, or a plain-string `stats` field) is a validation error, as is a malformed one, such as `{ref:zombie}`.
-- `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`). Once an SRD entry is in the library, new entries ref it instead. Text follows the same rule: a mention of a library entry may be a token, and a mention of SRD content not in the library is plain text.
+- `RefOrText` fields accept either a ref or a plain string. Plain strings are for SRD content not in the library (for example, `"Fireball"`, or `"Lightning Bolt (level 5 version)"` with its qualifier). Once an SRD entry is in the library, new entries ref it instead. Text follows the same rule: a mention of a library entry may be a token, and a mention of SRD content not in the library is plain text.
 - The validator fails if no entry of a ref's type has its id. Cross-ruleset refs are not allowed in v1. An entry that fails its own `stats` schema can still be a ref target, but its refs are not checked until its schema passes.
 - Deleting an entry that other entries reference fails CI until those refs are removed or replaced.
 - The validator and the build compute back-references (`scripts/validate/refs.ts`). Each entry's `refs` (forward) and `refBy` (back) are lists of `{ path, key }`: `path` is where the ref sits in the referring entry (for example `stats.spells[0].spell`, or `stats.effect` for a token), and `key` is the other end as `<type>/<id>`. Only resolved refs are listed, in document order.
@@ -289,6 +289,7 @@ Because the schema is the source of the rule, it needs no display annotation. A 
 Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom entry**, original to this library. The SRD text is transcribed from `docs/SRD_CC_v5.2.pdf`, the reference copy in the repo, never from memory.
 
 - **SRD entries are included unmodified.** `name` is the SRD name exactly. `stats` reproduce the SRD stat block, so every number the template renders, derived or not, matches the SRD. Rules text is the SRD's text word for word, except that derived numbers are written as tokens (§6.4) that render the same values. An SRD entry carries both the data and the verbatim rule: every structured field its type defines is filled from the SRD (an item's `charges` and `spells`, with their costs and DCs), and the rules text still keeps every sentence, even where it states the same thing. An SRD wand's `effect` keeps "This wand has 7 charges", its spell's save DC, and its "Regaining Charges" paragraph, while `charges` holds the maximum, recharge, and depletion. The card shows both. The rule that item text doesn't restate structured fields is for custom entries only. Where the ruleset's derivation can't reach an SRD number from inputs, an `adjust` or damage `bonus` matches it, with "matches SRD" as its reason. SRD content is literal, so the ruleset's consistency warnings (§6.8) are skipped on an SRD entry: its adjustments, authored DCs, and high values are the SRD's, not deviations to confirm. Its errors still apply.
+- **Formatting.** An SRD entry matches the SRD's words, numbers, and order, and the templates print them in SRD 5.2 form (§6.5, §9.5). Typography beyond that is not matched entry by entry: line wrapping, hanging indents, column layout, and the italics the PDF puts on names inside plain-string fields (spell lists, gear) come from the templates, never from per-entry workarounds. A printed detail the structured fields can't express goes, as printed, in the nearest free-text field the schema offers: a form-limited speed in `speed.note`, a qualifier in a ref's `note` or a plain string. A new field is added only when a detail recurs across many entries and has a fixed shape (§6.5's `onFailureOrSuccess`).
 - Only what the SRD doesn't provide is authored: `summary`, which is required, is one plain factual line. `description` is omitted, since SRD stat blocks carry no lore. The guidelines' tone, naming, and balance targets don't apply (§8.6).
 - An SRD entry sets `meta.source.srd: true` (§5.4). It is added only by a request that asks for SRD content or by an SRD import stage (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry of the same type, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
 - A revision of an SRD entry only brings it closer to the SRD, such as a transcription fix. A variant of an SRD entry is a new custom entry.
@@ -370,14 +371,14 @@ The validator, the index builder, the site templates, and the exporters all impo
 | `Adjust` | Non-zero integer |
 | `DamageType` | `acid`, `bludgeoning`, `cold`, `fire`, `force`, `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder` |
 | `Condition` | `blinded`, `charmed`, `deafened`, `exhaustion`, `frightened`, `grappled`, `incapacitated`, `invisible`, `paralyzed`, `petrified`, `poisoned`, `prone`, `restrained`, `stunned`, `unconscious` |
-| `Ref` | `{ ref: string }` matching `^(creature|magic-item|spell)/[a-z0-9-]+$` |
+| `Ref` | `{ ref: string, note?: string }`, `ref` matching `^(creature|magic-item|spell)/[a-z0-9-]+$`; `note` is a non-empty qualifier (§5.7) |
 | `RefOrText` | `Ref` or non-empty string |
 | `Text` | Markdown-subset string (§5.5, marked `markdownSubset: true`), which may contain tokens where the ruleset allows them (§6.4) |
 | `StatBlock` | A stat block printed inside a spell or magic item (§6.7): `{ name, typeLine, abilities: { str…cha: int 1–30 }, ac?, hp?, speed?, skills?, vulnerabilities?, resistances?, immunities?, gear?, senses?, languages?, cr?, traits?, actions?, bonusActions?, reactions? }`. `name` is the block's heading and `typeLine` its size, type, and alignment ("Large Dragon, Neutral"). Each other line is a non-empty string written as printed, displayed only when present (§5.8). The four lists are arrays, at least one item each, of `{ name, text: Text }` |
 
 ### 6.4 Text tokens
 
-Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `spellcasting.note`, `legendaryActions.intro`) may show a derived value only through a token. Tokens are rendered by `tokens.ts` from the same derivations as the stat block.
+Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `onFailureOrSuccess`, `spellcasting.note`, `legendaryActions.intro`) may show a derived value only through a token. Tokens are rendered by `tokens.ts` from the same derivations as the stat block.
 
 | Token | Renders | Example output |
 |---|---|---|
@@ -402,12 +403,13 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 |---|---|---|
 | `size` | array of `tiny`…`gargantuan`, 1–2 items | Two values for "Medium or Small"; the first sets the hit die |
 | `creatureType` | enum of the 14 SRD creature types | `aberration`, `beast`, `celestial`, `construct`, `dragon`, `elemental`, `fey`, `fiend`, `giant`, `humanoid`, `monstrosity`, `ooze`, `plant`, `undead` |
+| `shortName` | optional string | What generated prose calls the creature after "The", lowercase, such as `"dragon"`. Omit it when that is the last word of `name`, lowercase (the Lich's "lich", the Adult Red Dragon's "dragon"), which is the default |
 | `descriptors` | optional array of strings | Parenthetical tags such as `"Wizard"`; must pass the blocklist |
 | `alignment` | string | Free text from the SRD alignment set, plus `"unaligned"` and `"any alignment"` |
 | `ac` | `{ value: int 1–30, note?: string }` | Authored; `note` such as `"natural armor"` |
 | `initiative` | optional `{ proficiency?: Proficiency, adjust?: Adjust }` | Omit for a plain DEX-based initiative |
 | `hitDice` | int 1–99 | Die, modifier, formula, and average are derived |
-| `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: true }` | Feet; multiples of 5. `walk` may be 0; an optional mode is at least 5 |
+| `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: true, note?: string }` | Feet; multiples of 5. `walk` may be 0; an optional mode is at least 5. `note` holds, as printed, any speed the fields can't express (a form-limited or conditional speed), and prints after the others: `"40 ft. (wolf form only)"` reads "30 ft., 40 ft. (wolf form only)". A mode written in `note` is left out of the fields |
 | `abilities` | `{ str…cha: int 1–30 }` | |
 | `saveProficiencies` | optional array of `Ability` | |
 | `skills` | optional `{ <skill>: Proficiency }` | Keys from the 18 SRD skills in kebab-case |
@@ -419,8 +421,8 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `cr` | number: `0`, `0.125`, `0.25`, `0.5`, or `1`–`30` | Displayed as fractions. XP and PB are derived |
 | `lair` | optional `true` | Adds the derived "in lair" XP |
 | `traits`, `actions`, `bonusActions`, `reactions` | arrays of `Action` (`actions` required, others optional) | |
-| `legendaryActions` | optional `{ uses: int, usesInLair?: int, intro?: Text, items: [Action] }` | |
-| `spellcasting` | optional `{ ability: Ability, adjust?: Adjust, includeAttack?: true, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action. `includeAttack` shows the derived spell attack bonus |
+| `legendaryActions` | optional `{ uses: int, usesInLair?: int, intro?: Text, items: [Action] }` | Opens with one paragraph: the italic uses line, then `intro`: "*Legendary Action Uses: 3 (4 in Lair).* Immediately after another creature's turn, …" |
+| `spellcasting` | optional `{ ability: Ability, noComponents?: string, adjust?: Adjust, includeAttack?: true, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action: "The <shortName> casts one of the following spells, using <Ability> as the spellcasting ability (spell save DC <n>):". `noComponents` names the components the spells skip, as printed (`"Material"`, `"Somatic or Material"`, `"spell"`), and adds "requiring no <noComponents> components and " before "using". `includeAttack` shows the derived spell attack bonus |
 
 **Action**
 
@@ -437,6 +439,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `damage` | optional array of `Damage` | attack, save | The first is the primary damage; the rest render as "plus" riders, and a rider with a `condition` as ", plus … <condition>" |
 | `onHit` | optional `Text` | attack | Prose after the damage |
 | `onFailure`, `onSuccess` | optional `Text` | save | Prose after the failure damage, and the success line |
+| `onFailureOrSuccess` | optional `Text` | save | The "*Failure or Success:*" line after the success line, for what happens either way |
 | `text` | `Text` | other (required); not allowed on attack and save | Full prose; derived values only through tokens |
 | `recharge` | optional enum | all | One of `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
 | `uses` | optional string | all | `"3/day"` |
@@ -446,9 +449,11 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 **Display forms.** The stat block follows SRD 5.2 typography:
 
 - Negative numbers and subtractions print U+2212 (`−`), not ASCII `-`: `−1 (9)`, `INT 5 −3 −3`, `17 (5d8 − 5)`. Tokens in prose (§6.4) render the same way. This is display only: derived values, `library.json`, and the export bundles keep numbers and ASCII formula strings such as `2d6 - 2`.
-- The Senses line separates senses with commas and puts a semicolon before Passive Perception: `Darkvision 60 ft., Blindsight 10 ft.; Passive Perception 13`.
+- The Speed line prints `walk`, then Burrow, Climb, Fly, and Swim in that order, then `note`. The Senses line prints Blindsight, Darkvision, Tremorsense, and Truesight in that order, separated by commas, with a semicolon before Passive Perception: `Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 13`. The order is fixed, whatever the entry's key order.
 - The Languages line joins, with semicolons: the `spoken` list (comma-separated), then the `understood` clause, then telepathy, with `note` in parentheses after the whole line. The clause is "Understands … but can't speak" when nothing is spoken, and "understands … but can't speak it" (or "them" for two or more) after a spoken list. Each item is free text, so a phrase such as "Common plus one other language" is one item. With nothing spoken, understood, or telepathic, the line reads "None". Examples: `Common, Giant`; `Understands Common plus one other language but can't speak`; `Understands Infernal but can't speak; telepathy 60 ft.`; `Common; understands Giant but can't speak it`.
-- An action's `uses` is title-cased, including the word after a slash: `"4/day"` prints `Loathsome Limbs (4/Day)`.
+- The Spellcasting action puts the intro, then each spell list, then `note`, on lines of their own: "At Will:", then "3/Day Each:", "2/Day Each:", and "1/Day Each:". A level that lists one spell drops "Each" ("1/Day: Fireball").
+- Prose after damage (`onHit`, `onFailure`) that starts with a lowercase letter continues the damage sentence after a comma; prose that starts any other way follows the damage as a new sentence. `"onHit": "and the target has the Paralyzed condition…"` prints `*Hit:* 15 (3d6 + 5) Cold damage, and the target has the Paralyzed condition…`, and `"If the target is a creature, …"` prints `… Piercing damage. If the target is a creature, …`.
+- An action's `uses` is title-cased, including the word after a slash, with minor words (`a`, `an`, `and`, `at`, `by`, `for`, `in`, `of`, `on`, `or`, `per`, `the`, `to`, `with`) lowercase unless they come first: `"4/day"` prints `Loathsome Limbs (4/Day)`, and `"4/day, or 5/day in lair"` prints `(4/Day, or 5/Day in Lair)`. Skill names and the alignment follow the same rule (`Sleight of Hand`).
 
 ### 6.6 Magic item (`schemas/magic-item.schema.json`)
 
@@ -687,7 +692,7 @@ Display and generation defaults only. Validation never reads it except to confir
 
 | Key | Purpose |
 |---|---|
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `spell-level` reads 0 as "Cantrip" and any other level as SRD 5.2 does, "Level 3". `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |
@@ -924,7 +929,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
 - A spell or item's embedded stat blocks (`statBlocks`, §6.7) render after its rules text, inside its card, with the creature stat block's parts (`EmbeddedStatBlock`): the block's name as a heading one level below the entry's, its type line, the AC, HP, and Speed lines, the ability table, the remaining lines, then its Traits, Actions, Bonus Actions, and Reactions. Lines display as written; the ability table's modifiers and saves come from the derived values.
-- The spell card's level line words the level as the `spell-level` format does (§7), the D&D convention, so cards and detail pages agree: "1st-level Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
+- The spell card's level line words the level as SRD 5.2 does, and as the `spell-level` format does (§7), so cards and detail pages agree: "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves. `EntryTemplate` picks the component from the registry's `template` name, falling back to `generic`. Each template renders the entry name as a heading at a `level` its page chooses (2 by default; the detail page's own `h1` sits above it), with section headings one level below.

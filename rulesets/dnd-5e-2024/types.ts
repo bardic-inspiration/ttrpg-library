@@ -8,6 +8,8 @@ export type Size = 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'gargantuan'
 
 export interface Ref {
   ref: string;
+  /** A qualifier printed in parentheses after the name: "Fireball (level 5 version)". */
+  note?: string;
 }
 export type RefOrText = Ref | string;
 
@@ -36,6 +38,8 @@ export interface Action {
   onHit?: string;
   onFailure?: string;
   onSuccess?: string;
+  /** Save kind only: the "Failure or Success:" line. */
+  onFailureOrSuccess?: string;
   text?: string;
   recharge?: string;
   uses?: string;
@@ -44,12 +48,14 @@ export interface Action {
 export interface CreatureStats {
   size: Size[];
   creatureType: string;
+  /** What generated prose calls the creature after "The"; defaults to the name's last word, lowercase. */
+  shortName?: string;
   descriptors?: string[];
   alignment: string;
   ac: { value: number; note?: string };
   initiative?: { proficiency?: Proficiency; adjust?: number };
   hitDice: number;
-  speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: true };
+  speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: true; note?: string };
   abilities: Record<Ability, number>;
   saveProficiencies?: Ability[];
   skills?: Record<string, Proficiency>;
@@ -68,6 +74,8 @@ export interface CreatureStats {
   legendaryActions?: { uses: number; usesInLair?: number; intro?: string; items: Action[] };
   spellcasting?: {
     ability: Ability;
+    /** "Material" reads "requiring no Material components and using …". */
+    noComponents?: string;
     adjust?: number;
     includeAttack?: true;
     atWill?: RefOrText[];

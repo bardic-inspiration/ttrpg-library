@@ -6,12 +6,8 @@ const FRACTIONS: Record<number, string> = { 0.125: '1/8', 0.25: '1/4', 0.5: '1/2
 /** A challenge rating: 0.125 reads "1/8". */
 export const formatCr = (cr: number): string => FRACTIONS[cr] ?? String(cr);
 
-const ORDINAL: Record<string, string> = { one: 'st', two: 'nd', few: 'rd', other: 'th' };
-const plural = new Intl.PluralRules('en', { type: 'ordinal' });
-
-/** A spell level: 0 reads "Cantrip", 3 reads "3rd level". */
-export const formatSpellLevel = (level: number): string =>
-  level === 0 ? 'Cantrip' : `${level}${ORDINAL[plural.select(level)] ?? 'th'} level`;
+/** A spell level as SRD 5.2 words it: 0 reads "Cantrip", 3 reads "Level 3". */
+export const formatSpellLevel = (level: number): string => (level === 0 ? 'Cantrip' : `Level ${level}`);
 
 /** An item rarity: `very-rare` reads "Very rare". */
 export const formatRarity = (rarity: string): string => {

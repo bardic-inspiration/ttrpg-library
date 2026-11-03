@@ -11,12 +11,13 @@ const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(
 const plural = (n: number, unit: string): string => `${n} ${unit}${n === 1 ? '' : 's'}`;
 
 /**
- * "1st-level Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at
- * level 0. The level reads as the gallery's `spell-level` format does.
+ * "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at
+ * level 0, as SRD 5.2 prints them. The level reads as the gallery's
+ * `spell-level` format does.
  */
 export function levelLine(s: SpellStats): string {
   const school = capitalize(s.school);
-  const head = s.level === 0 ? `${school} Cantrip` : `${formatSpellLevel(s.level).replace(' ', '-')} ${school}`;
+  const head = s.level === 0 ? `${school} Cantrip` : `${formatSpellLevel(s.level)} ${school}`;
   return `${head} (${s.classes.map(capitalize).join(', ')})`;
 }
 

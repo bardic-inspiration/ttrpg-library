@@ -12,6 +12,7 @@ import { renderTokens } from '../../../rulesets/dnd-5e-2024/tokens.ts';
 import { present, whenPresent } from './display.ts';
 import { formatCr } from './format.ts';
 import { escapeMarkdown } from './markdown.ts';
+import { refOrTextName } from './refs.ts';
 import type { PropertyLine } from './template.ts';
 import type {
   Action,
@@ -32,11 +33,18 @@ export interface ActionBlock {
 const label = (text: string): string => `*${text}*`;
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-/** Capitalizes each word, splitting on spaces, hyphens, and slashes: `4/day` is `4/Day`. */
+/** Words title case leaves lowercase unless they come first (SPEC.md §6.5). */
+const MINOR_WORDS = new Set(['a', 'an', 'and', 'at', 'by', 'for', 'in', 'of', 'on', 'or', 'per', 'the', 'to', 'with']);
+
+/**
+ * Capitalizes each word but a minor one, splitting on spaces, hyphens, and
+ * slashes: `4/day, or 5/day in lair` is `4/Day, or 5/Day in Lair`, and
+ * `sleight-of-hand` is `Sleight of Hand`.
+ */
 const titleCase = (s: string): string =>
   s
     .split(/[\s-]+/)
-    .map((word) => word.split('/').map(capitalize).join('/'))
+    .map((word, i) => (i > 0 && MINOR_WORDS.has(word) ? word : word.split('/').map(capitalize).join('/')))
     .join(' ');
 
 export { formatCr };
@@ -52,12 +60,19 @@ export const initiativeLine = (d: DerivedCreature): string => `${signed(d.initia
 
 export const hpLine = (d: DerivedCreature): string => `${d.hp.average} (${printMinus(d.hp.formula)})`;
 
+/** Speed modes and senses print in this fixed order, whatever the entry's key order (SPEC.md §6.5). */
+const SPEED_ORDER = ['burrow', 'climb', 'fly', 'swim'] as const;
+const SENSE_ORDER = ['blindsight', 'darkvision', 'tremorsense', 'truesight'] as const;
+
 export function speedLine(s: CreatureStats): string {
-  const { walk, hover, ...others } = s.speed;
+  const { walk, hover, note } = s.speed;
   const parts = [`${walk} ft.`];
-  for (const [mode, feet] of Object.entries(others)) {
-    parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
+  for (const mode of SPEED_ORDER) {
+    const feet = s.speed[mode];
+    if (present(feet)) parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
   }
+  // A speed the fields can't express, such as a form-limited one, as written (SPEC.md §6.5).
+  if (present(note)) parts.push(note);
   return parts.join(', ');
 }
 
@@ -96,7 +111,7 @@ export function defenseLines(s: CreatureStats): PropertyLine[] {
 
 export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
   // Senses are comma-separated; Passive Perception follows a semicolon (SPEC.md §6.5).
-  const senses = Object.entries(s.senses ?? {}).map(([sense, feet]) => `${capitalize(sense)} ${feet} ft.`);
+  const senses = SENSE_ORDER.flatMap((sense) => whenPresent(s.senses?.[sense], (feet) => [`${capitalize(sense)} ${feet} ft.`]) ?? []);
   return [senses.join(', '), `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
 }
 
@@ -160,48 +175,81 @@ const ATTACK_LABEL: Record<string, string> = {
 const rangeText = (range: { normal: number; long?: number }): string =>
   `range ${range.normal}${whenPresent(range.long, (long) => `/${long}`) ?? ''} ft.`;
 
+const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
+
+/**
+ * The damage, then the prose after it (`onHit`, `onFailure`). Prose that
+ * starts lowercase continues the damage sentence after a comma ("Cold damage,
+ * and the target…"); otherwise the damage ends its sentence (SPEC.md §6.5).
+ */
+function afterDamage(damage: string | undefined, prose: string | undefined): string {
+  if (!present(damage)) return prose ?? '';
+  if (!present(prose)) return sentence(damage);
+  return /^[a-z]/.test(prose) ? `${damage}, ${prose}` : `${sentence(damage)} ${prose}`;
+}
+
 /** One action, trait, or reaction as SRD 5.2 prose. */
 export function actionBlock(action: Action, derived: DerivedAction | undefined, d: DerivedCreature): ActionBlock {
   const prose = (text: string) => renderTokens(text, d, tables);
-  const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
   const parts: string[] = [];
   if (action.kind === 'other') {
     parts.push(prose(action.text ?? ''));
   } else if (action.kind === 'save' && action.save) {
     parts.push(`${label(`${tables.abilityNames[action.save.ability]} Saving Throw:`)} DC ${derived?.saveDc}, ${escapeMarkdown(action.save.targets)}.`);
     const damage = damageText(action, derived);
-    const failure = [whenPresent(damage, (text) => `${text}.`), whenPresent(action.onFailure, prose)].filter(present).join(' ');
+    const failure = afterDamage(damage, whenPresent(action.onFailure, prose));
     if (failure) parts.push(`${label('Failure:')} ${failure}`);
     if (present(action.onSuccess)) parts.push(`${label('Success:')} ${prose(action.onSuccess)}`);
+    if (present(action.onFailureOrSuccess)) parts.push(`${label('Failure or Success:')} ${prose(action.onFailureOrSuccess)}`);
   } else {
     const reach = whenPresent(action.reach, (feet) => `reach ${feet} ft.`);
     const range = whenPresent(action.range, rangeText);
     const note = whenPresent(action.attackNote, (text) => ` (${escapeMarkdown(text)})`) ?? '';
     parts.push(`${label(ATTACK_LABEL[action.kind] ?? '')} ${signed(derived?.attackBonus ?? 0)}${note}, ${[reach, range].filter(present).join(' or ')}`);
     const damage = damageText(action, derived);
-    const hit = [whenPresent(damage, sentence), whenPresent(action.onHit, prose)].filter(present).join(' ');
+    const hit = afterDamage(damage, whenPresent(action.onHit, prose));
     parts.push(`${label('Hit:')} ${hit}`);
   }
   return { name: actionName(action), body: parts.join(' ') };
 }
 
-const refOrText = (value: RefOrText, names: Map<string, string>): string =>
-  escapeMarkdown(typeof value === 'string' ? value : (names.get(value.ref) ?? value.ref));
+const refOrText = (value: RefOrText, names: Map<string, string>): string => escapeMarkdown(refOrTextName(value, names));
 
-/** The 5.2 "Spellcasting" action (SPEC.md §6.5). `names` maps `<type>/<id>` to entry names. */
-export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>): ActionBlock | undefined {
+/**
+ * The Legendary Actions paragraph before the actions (SPEC.md §6.5): the
+ * italic uses line, then the intro, as one paragraph: "*Legendary Action Uses:
+ * 3 (4 in Lair).* Immediately after another creature's turn, …".
+ */
+export function legendaryIntro(legendary: NonNullable<CreatureStats['legendaryActions']>, d: DerivedCreature): string {
+  const lair = whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? '';
+  const uses = label(`Legendary Action Uses: ${legendary.uses}${lair}.`);
+  return whenPresent(legendary.intro, (intro) => `${uses} ${renderTokens(intro, d, tables)}`) ?? uses;
+}
+
+/** What generated prose calls the creature after "The": `shortName`, or the name's last word, lowercase (SPEC.md §6.5). */
+export const shortName = (s: CreatureStats, name: string): string =>
+  s.shortName ?? (name.trim().split(/\s+/).at(-1) ?? name).toLowerCase();
+
+/**
+ * The 5.2 "Spellcasting" action (SPEC.md §6.5). `name` is the entry's name,
+ * and `names` maps `<type>/<id>` to entry names.
+ */
+export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>, name: string): ActionBlock | undefined {
   const sc = s.spellcasting;
   if (!sc || !d.spellcasting) return undefined;
   const attack = present(sc.includeAttack) ? `, ${signed(d.spellcasting.attackBonus)} to hit with spell attacks` : '';
+  const components = whenPresent(sc.noComponents, (c) => `requiring no ${escapeMarkdown(c)} components and `) ?? '';
   const parts = [
-    `The creature casts one of the following spells, using ${tables.abilityNames[sc.ability]} as the spellcasting ability (spell save DC ${d.spellcasting.dc}${attack}):`,
+    `The ${escapeMarkdown(shortName(s, name))} casts one of the following spells, ${components}using ${tables.abilityNames[sc.ability]} as the spellcasting ability (spell save DC ${d.spellcasting.dc}${attack}):`,
   ];
   const list = (name: string, spells: RefOrText[] | undefined) => {
     if (!present(spells)) return;
     parts.push(`${label(`${name}:`)} ${spells.map((spell) => refOrText(spell, names)).join(', ')}`);
   };
   list('At Will', sc.atWill);
-  for (const n of ['3', '2', '1'] as const) list(`${n}/Day Each`, sc.perDay?.[n]);
+  // "Each" only when the level lists more than one spell: "1/Day: Fireball".
+  for (const n of ['3', '2', '1'] as const) list(`${n}/Day${(sc.perDay?.[n]?.length ?? 0) > 1 ? ' Each' : ''}`, sc.perDay?.[n]);
   if (present(sc.note)) parts.push(renderTokens(sc.note, d, tables));
-  return { name: 'Spellcasting', body: parts.join(' ') };
+  // Each list, and the note, starts a line of its own (a markdown hard break).
+  return { name: 'Spellcasting', body: parts.join('\\\n') };
 }

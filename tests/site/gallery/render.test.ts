@@ -24,7 +24,7 @@ describe('Gallery', () => {
     expect(html.match(/<article class="card"/g)).toHaveLength(3);
     expect(html).toContain('data-type="creature"');
     expect(html).toContain('<dt>CR</dt><dd>2</dd>');
-    expect(html).toContain('<dt>Level</dt><dd>1st level</dd>');
+    expect(html).toContain('<dt>Level</dt><dd>Level 1</dd>');
     expect(html).not.toContain('art-placeholder');
     expect(html).not.toContain('Art placeholder');
     expect(html).not.toContain('card__art');

@@ -61,8 +61,8 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
       'Spit. *Ranged Attack Roll:* +4, range 30/120 ft. *Hit:* 5 (1d6 + 2) Acid damage.',
     );
     const names = new Map([['spell/frost-lance', 'Frost Lance']]);
-    expect(plain(spellcastingBlock(s, d, names)!)).toBe(
-      'Spellcasting. The creature casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 11, +3 to hit with spell attacks): *At Will:* Light, Frost Lance *1/Day Each:* Fog Cloud',
+    expect(plain(spellcastingBlock(s, d, names, 'Cinder Hound')!)).toBe(
+      'Spellcasting. The hound casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 11, +3 to hit with spell attacks):\\\n*At Will:* Light, Frost Lance\\\n*1/Day:* Fog Cloud',
     );
   });
 
@@ -136,7 +136,7 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     const d = deriveCreature(s, tables);
     expect(plain(actionBlock(s.traits![0]!, d.traits[0], d))).toBe('Loathsome Limbs (4/Day). The creature regrows a limb.');
     expect(sensesLine(s, d)).toBe('Passive Perception 11');
-    expect(sensesLine({ ...s, senses: { darkvision: 60, blindsight: 10 } }, d)).toBe('Darkvision 60 ft., Blindsight 10 ft.; Passive Perception 11');
+    expect(sensesLine({ ...s, senses: { darkvision: 60, blindsight: 10 } }, d)).toBe('Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 11');
     expect(initiativeLine(d)).toBe('\u22121 (9)');
     expect(hpLine(d)).toBe('17 (5d8 \u2212 5)');
     expect(abilityRows(s, d).find((row) => row.ability === 'INT')).toEqual({ ability: 'INT', score: 5, mod: '\u22123', save: '\u22123' });
@@ -165,5 +165,68 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
       "Common; understands Giant, Orc but can't speak them",
     );
     expect(line({ spoken: [], note: 'see below' })).toBe('None (see below)');
+  });
+});
+
+describe('SRD 5.2 forms found by the import pilot (#142)', () => {
+  const build = async (patch: Partial<CreatureStats>) => {
+    const s = { ...((await cinderHound()).stats as CreatureStats), ...patch };
+    return { s, d: deriveCreature(s, tables) };
+  };
+
+  it('title-cases a uses note but leaves minor words lowercase', async () => {
+    const { s, d } = await build({
+      traits: [{ name: 'Legendary Resistance', kind: 'other', uses: '4/day, or 5/day in lair', text: 'It succeeds instead.' }],
+      skills: { 'sleight-of-hand': 'proficient' },
+    });
+    expect(actionBlock(s.traits![0]!, d.traits[0], d).name).toBe('Legendary Resistance (4/Day, or 5/Day in Lair)');
+    expect(skillsLine(s, d)).toBe('Sleight of Hand +4');
+  });
+  it('continues the damage sentence when the prose after it starts lowercase', async () => {
+    const { s, d } = await build({
+      actions: [
+        { name: 'Touch', kind: 'melee-attack', ability: 'str', reach: 5, damage: [{ dice: '3d6', ability: 'str', type: 'cold' }], onHit: 'and the target has the Paralyzed condition.' },
+        { name: 'Bite', kind: 'melee-attack', ability: 'str', reach: 5, damage: [{ dice: '1d6', type: 'piercing' }], onHit: 'If the target is a creature, it is cursed.' },
+        { name: 'Wail', kind: 'save', ability: 'con', save: { ability: 'wis', targets: 'one creature' }, damage: [{ dice: '8d6', type: 'psychic' }], onFailure: 'and the target has the Frightened condition.' },
+      ],
+    });
+    const body = (i: number) => actionBlock(s.actions[i]!, d.actions[i], d).body;
+    expect(body(0)).toContain('*Hit:* 12 (3d6 + 2) Cold damage, and the target has the Paralyzed condition.');
+    expect(body(1)).toContain('*Hit:* 3 (1d6) Piercing damage. If the target is a creature, it is cursed.');
+    expect(body(2)).toContain('*Failure:* 28 (8d6) Psychic damage, and the target has the Frightened condition.');
+  });
+  it('names the caster and the components its spells skip in the Spellcasting intro', async () => {
+    const spellcasting = { ability: 'cha' as const, noComponents: 'Material', atWill: ['Light'] };
+    const { s, d } = await build({ spellcasting });
+    const intro = (stats: CreatureStats, name: string) => spellcastingBlock(stats, d, new Map(), name)!.body.split(':')[0];
+    expect(intro(s, 'Adult Red Dragon')).toBe(
+      'The dragon casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save DC 8)',
+    );
+    expect(intro({ ...s, shortName: 'bandit' }, 'Bandit Captain')).toMatch(/^The bandit casts/);
+  });
+  it('puts each spell list on its own line, with "Each" only for more than one spell', async () => {
+    const { s, d } = await build({ spellcasting: { ability: 'int', atWill: ['Light'], perDay: { '2': ['Fly', 'Invisibility'], '1': ['Fireball'] } } });
+    expect(spellcastingBlock(s, d, new Map(), 'Mage')!.body.split('\\\n').slice(1)).toEqual([
+      '*At Will:* Light',
+      '*2/Day Each:* Fly, Invisibility',
+      '*1/Day:* Fireball',
+    ]);
+  });
+  it('renders a save action\'s "Failure or Success:" line after Success', async () => {
+    const { s, d } = await build({
+      actions: [{ name: 'Disrupt Life', kind: 'save', ability: 'con', save: { ability: 'con', targets: 'each creature in a 20-foot Emanation' }, damage: [{ dice: '9d6', type: 'necrotic' }], onSuccess: 'Half damage.', onFailureOrSuccess: 'The hound can\'t take this action again until the start of its next turn.' }],
+    });
+    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toMatch(
+      /\*Failure:\* 31 \(9d6\) Necrotic damage\. \*Success:\* Half damage\. \*Failure or Success:\* The hound can't take this action again until the start of its next turn\.$/,
+    );
+  });
+  it('prints a speed note after the structured speeds', async () => {
+    const { s } = await build({ speed: { walk: 30, note: '40 ft. (wolf form only)' } });
+    expect(speedLine(s)).toBe('30 ft., 40 ft. (wolf form only)');
+  });
+  it('prints speeds and senses in a fixed order, whatever the key order', async () => {
+    const { s, d } = await build({ speed: { walk: 40, swim: 30, fly: 80, climb: 40, burrow: 20 }, senses: { truesight: 30, darkvision: 120, tremorsense: 10, blindsight: 60 } });
+    expect(speedLine(s)).toBe('40 ft., Burrow 20 ft., Climb 40 ft., Fly 80 ft., Swim 30 ft.');
+    expect(sensesLine(s, d)).toBe('Blindsight 60 ft., Darkvision 120 ft., Tremorsense 10 ft., Truesight 30 ft.; Passive Perception 13');
   });
 });

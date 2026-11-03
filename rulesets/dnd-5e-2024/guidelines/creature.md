@@ -134,7 +134,10 @@ The template renders "*Melee Attack Roll:* +4, reach 5 ft. *Hit:* …" and
 
 What you write:
 
-- **`onHit`**: what happens after the damage, as full sentences. "The target
+- **`onHit`**: what happens after the damage, as full sentences. Start with
+  a lowercase word ("and the target has the Prone condition.") to continue
+  the damage sentence after a comma; start with a capital for a new
+  sentence. "The target
   has the Grappled condition (escape DC 13)" is wrong because the DC is
   derived; write "The target has the Grappled condition (escape {dc:str})."
 - **`attackNote`** (attacks only): a parenthetical after the attack bonus,
@@ -143,17 +146,24 @@ What you write:
 - **Damage `condition`** (riders only): when a rider applies, such as "if the
   attack roll had Advantage". The template writes ", plus … if the attack roll
   had Advantage".
-- **`onFailure`**: what happens on a failed save beyond the listed damage.
+- **`onFailure`**: what happens on a failed save beyond the listed damage,
+  continuing the damage sentence when it starts lowercase, as `onHit` does.
 - **`onSuccess`**: the success line, usually "Half damage." Omit it when a
   success means nothing happens.
+- **`onFailureOrSuccess`**: what happens either way, printed after the
+  success line as "*Failure or Success:* …".
 - **`text`** (`kind: other` only): the full rules text of a trait, a
   Multiattack, or an effect with no attack or save line of its own. A
   Multiattack reads "The toad makes two Bite attacks." and names the actions
   exactly as they appear in the entry.
 - **`spellcasting.note`** and **`legendaryActions.intro`**: one or two
   sentences that the generated lines don't already say. The template already
-  writes the spellcasting ability, DC, and spell lists, and the Legendary
-  Action Uses line.
+  writes the spellcasting intro ("The hound casts one of the following
+  spells, using …"), its DC and spell lists, and the Legendary Action Uses
+  line. Set `spellcasting.noComponents` (`"Material"`) for "requiring no
+  Material components", and `shortName` only when the prose calls the
+  creature something other than the last word of its name ("the bandit"
+  for a Bandit Captain).
 
 Rules for all of these:
 

@@ -13,6 +13,7 @@ import {
   hpLine,
   initiativeLine,
   languagesLine,
+  legendaryIntro,
   sensesLine,
   sizeTypeLine,
   skillsLine,
@@ -21,9 +22,8 @@ import {
   type ActionBlock,
 } from '../../lib/creature';
 import { present, whenPresent } from '../../lib/display';
+import { refOrTextName } from '../../lib/refs';
 import type { PropertyLine, TemplateProps } from '../../lib/template';
-import { renderTokens } from '../../../../rulesets/dnd-5e-2024/tokens.ts';
-import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import AbilityTable from './parts/AbilityTable.astro';
 import ActionList from './parts/ActionList.astro';
 import PropertyList from './parts/PropertyList.astro';
@@ -39,7 +39,7 @@ const s = entry.stats as CreatureStats;
 const d = derived as unknown as DerivedCreature;
 const blocks = (list: 'traits' | 'actions' | 'bonusActions' | 'reactions'): ActionBlock[] | undefined =>
   whenPresent(s[list], (actions) => actions.map((action, i) => actionBlock(action, d[list][i], d)));
-const spellcasting = spellcastingBlock(s, d, names);
+const spellcasting = spellcastingBlock(s, d, names, entry.name);
 // `actions` is required, so its section always displays; the others only when present.
 const sections = [
   { title: 'Traits', items: blocks('traits') },
@@ -50,7 +50,7 @@ const sections = [
 const legendary = s.legendaryActions;
 const legendaryItems = (legendary?.items ?? []).map((action, i) => actionBlock(action, d.legendaryActions.items[i], d));
 const skills = skillsLine(s, d);
-const gear = whenPresent(s.gear, (list) => list.map((g) => (typeof g === 'string' ? g : (names.get(g.ref) ?? g.ref))).join(', '));
+const gear = whenPresent(s.gear, (list) => list.map((g) => refOrTextName(g, names)).join(', '));
 const core: PropertyLine[] = [
   { label: 'AC', value: acLine(s) },
   { label: 'Initiative', value: initiativeLine(d) },
@@ -74,8 +74,7 @@ const details: PropertyLine[] = [
   {sections.map((section) => <ActionList title={section.title} items={section.items} level={level + 1} refs={refs} />)}
   {legendary && (
     <ActionList title="Legendary Actions" items={legendaryItems} level={level + 1} refs={refs}>
-      {present(legendary.intro) && <RulesText text={renderTokens(legendary.intro, d, tables)} refs={refs} />}
-      <p>Legendary Action Uses: {legendary.uses}{whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? ''}.</p>
+      <RulesText text={legendaryIntro(legendary, d)} refs={refs} />
     </ActionList>
   )}
 </StatBlock>

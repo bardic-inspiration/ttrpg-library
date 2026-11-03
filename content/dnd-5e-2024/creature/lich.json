@@ -131,7 +131,10 @@
         },
         "Detect Thoughts",
         "Dispel Magic",
-        "Fireball (level 5 version)",
+        {
+          "ref": "spell/fireball",
+          "note": "level 5 version"
+        },
         "Invisibility",
         "Lightning Bolt (level 5 version)",
         "Mage Hand",
@@ -182,7 +185,8 @@
               "type": "necrotic"
             }
           ],
-          "onSuccess": "Half damage. *Failure or Success:* The lich can't take this action again until the start of its next turn."
+          "onSuccess": "Half damage.",
+          "onFailureOrSuccess": "The lich can't take this action again until the start of its next turn."
         },
         {
           "name": "Frightening Gaze",
@@ -194,6 +198,7 @@
   },
   "meta": {
     "createdAt": "2026-11-03",
+    "updatedAt": "2026-11-03",
     "source": {
       "kind": "routine",
       "issues": [
