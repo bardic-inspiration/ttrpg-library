@@ -84,8 +84,10 @@ batch doesn't repeat a concept already in the library.
   suffix.
 - Avoid names within a small edit of an existing name ("Frost Lance" vs
   "Frost Lances"); the validator warns on them.
-- Custom entries: avoid SRD names and near collisions with them, whether or
-  not the SRD entry is in the library, and every blocklist term (§11).
+- Custom entries: never use an SRD entry's exact name (of any type) or an
+  SRD proper noun, whether or not the SRD entry is in the library, and avoid
+  every blocklist term (§11). Building on common words from SRD names
+  ("Fire Zombie") is fine (§5.9).
 - SRD request: skip any SRD entry already in the library. If an SRD name
   collides with an existing custom entry of the same type, leave that SRD entry out and report
   the collision in the PR body (or the run's output if nothing else is

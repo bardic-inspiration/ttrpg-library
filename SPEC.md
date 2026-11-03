@@ -293,7 +293,7 @@ Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom e
   - magic item: a table, a stat block, variants under one name (a "+1, +2, or +3" name, a rarity of "Varies", or several versions such as giant types), several spells cast for charges, or a variable charge cost;
   - spell: a table, a stat block, or a Reaction casting time with a trigger.
 - **Coverage.** `npm run srd-coverage` (`scripts/srd-coverage/`) matches entries with `meta.source.srd: true` to manifest records by type and exact name. It prints, for each type and tier, the count missing of the total and the missing names, then any SRD entry that isn't in the manifest (usually a name that doesn't match the SRD exactly). `--type <type>` and `--tier <complex|simple>` narrow the report so a batch can be picked from it; `--ruleset` overrides `defaults.ruleset`. A test checks that the manifest is valid, that its per-type counts are the ones above, and that every SRD entry in the library is in it.
-- **Custom entries stay clear of SRD content,** whether or not the SRD entry is in the library: no SRD name, no near collision with one, and no concept that duplicates an SRD entry (§8.6). A custom entry omits `meta.source.srd`.
+- **Custom entries stay clear of SRD content,** whether or not the SRD entry is in the library: no SRD entry's exact name, of any type, no SRD proper noun (a specific person, place, or thing named in the SRD), and no concept that duplicates an SRD entry (§8.6). A custom name may build on the common words in SRD names: "Fire Zombie" and "Ice Troll" are fine beside the SRD's Zombie and Troll. A custom entry omits `meta.source.srd`.
 
 ## 6. Rulesets and the dnd-5e-2024 schemas
 
@@ -817,7 +817,7 @@ A test checks that every repo path, npm script, and `config/defaults.json` key t
 Each `rulesets/dnd-5e-2024/guidelines/<type>.md` is written for custom entries, and says so. An SRD entry follows only its token rules and its dependency section (§5.9). It contains:
 
 - Tone and voice, with one short exemplar.
-- Naming conventions: evocative and original; no real-world trademarks; no non-SRD proper nouns; no SRD name and no near collision with one, whether or not the SRD entry is in the library.
+- Naming conventions: evocative and original; no real-world trademarks; no non-SRD proper nouns; no SRD entry's exact name and no SRD proper noun, whether or not the SRD entry is in the library. Building on common words from SRD names ("Fire Zombie") is fine (§5.9).
 - Balance targets as our own tables (for creatures, by CR: AC, HP, attack bonus, damage per round, save DC; for items, power expectations by rarity; for spells, damage by level and area). For creatures these are met by choosing inputs (ability scores, hit dice, damage dice), since the derived numbers follow from them.
 - Prose style for `text`, `onHit`, `onFailure`, `onSuccess`, and `effect`, matching 5.2 phrasing, with derived numbers written as tokens. Attack and save lines are generated, so they are never written as prose.
 - When to create a dependency entry versus using plain text for an SRD reference.
@@ -1204,7 +1204,7 @@ The repo's `CLAUDE.md` imports `AGENTS.md`, the canonical working guide for any 
 - Run `npm run validate` before every push; never push a failing batch.
 - Dev PRs that change behavior update `SPEC.md` in the same PR, and use the `dev.md` PR template.
 - SRD-only rules and the blocklist apply to every text field.
-- SRD entries are reproduced unmodified; custom entries never reuse or nearly reuse an SRD name (§5.9).
+- SRD entries are reproduced unmodified; custom entries never reuse an SRD entry's exact name or an SRD proper noun (§5.9).
 - Mark review replies with `<!-- routine:handled -->`.
 
 ## 15. Extensibility
