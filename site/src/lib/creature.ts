@@ -60,11 +60,16 @@ export const initiativeLine = (d: DerivedCreature): string => `${signed(d.initia
 
 export const hpLine = (d: DerivedCreature): string => `${d.hp.average} (${printMinus(d.hp.formula)})`;
 
+/** Speed modes and senses print in this fixed order, whatever the entry's key order (SPEC.md §6.5). */
+const SPEED_ORDER = ['burrow', 'climb', 'fly', 'swim'] as const;
+const SENSE_ORDER = ['blindsight', 'darkvision', 'tremorsense', 'truesight'] as const;
+
 export function speedLine(s: CreatureStats): string {
-  const { walk, hover, note, ...others } = s.speed;
+  const { walk, hover, note } = s.speed;
   const parts = [`${walk} ft.`];
-  for (const [mode, feet] of Object.entries(others)) {
-    parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
+  for (const mode of SPEED_ORDER) {
+    const feet = s.speed[mode];
+    if (present(feet)) parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
   }
   // A speed the fields can't express, such as a form-limited one, as written (SPEC.md §6.5).
   if (present(note)) parts.push(note);
@@ -106,7 +111,7 @@ export function defenseLines(s: CreatureStats): PropertyLine[] {
 
 export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
   // Senses are comma-separated; Passive Perception follows a semicolon (SPEC.md §6.5).
-  const senses = Object.entries(s.senses ?? {}).map(([sense, feet]) => `${capitalize(sense)} ${feet} ft.`);
+  const senses = SENSE_ORDER.flatMap((sense) => whenPresent(s.senses?.[sense], (feet) => [`${capitalize(sense)} ${feet} ft.`]) ?? []);
   return [senses.join(', '), `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
 }
 

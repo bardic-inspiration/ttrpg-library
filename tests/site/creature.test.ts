@@ -136,7 +136,7 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     const d = deriveCreature(s, tables);
     expect(plain(actionBlock(s.traits![0]!, d.traits[0], d))).toBe('Loathsome Limbs (4/Day). The creature regrows a limb.');
     expect(sensesLine(s, d)).toBe('Passive Perception 11');
-    expect(sensesLine({ ...s, senses: { darkvision: 60, blindsight: 10 } }, d)).toBe('Darkvision 60 ft., Blindsight 10 ft.; Passive Perception 11');
+    expect(sensesLine({ ...s, senses: { darkvision: 60, blindsight: 10 } }, d)).toBe('Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 11');
     expect(initiativeLine(d)).toBe('\u22121 (9)');
     expect(hpLine(d)).toBe('17 (5d8 \u2212 5)');
     expect(abilityRows(s, d).find((row) => row.ability === 'INT')).toEqual({ ability: 'INT', score: 5, mod: '\u22123', save: '\u22123' });
@@ -223,5 +223,10 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
   it('prints a speed note after the structured speeds', async () => {
     const { s } = await build({ speed: { walk: 30, note: '40 ft. (wolf form only)' } });
     expect(speedLine(s)).toBe('30 ft., 40 ft. (wolf form only)');
+  });
+  it('prints speeds and senses in a fixed order, whatever the key order', async () => {
+    const { s, d } = await build({ speed: { walk: 40, swim: 30, fly: 80, climb: 40, burrow: 20 }, senses: { truesight: 30, darkvision: 120, tremorsense: 10, blindsight: 60 } });
+    expect(speedLine(s)).toBe('40 ft., Burrow 20 ft., Climb 40 ft., Fly 80 ft., Swim 30 ft.');
+    expect(sensesLine(s, d)).toBe('Blindsight 60 ft., Darkvision 120 ft., Tremorsense 10 ft., Truesight 30 ft.; Passive Perception 13');
   });
 });
