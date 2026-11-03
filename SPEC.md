@@ -937,7 +937,6 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 - A pipe table (§5.5) renders as a `<table>` with `scope="col"` header cells, inside a `.md-table` box that scrolls sideways on its own when the table is wider than its column. The page never does (§9.7; data tables are exempt from WCAG reflow). The box is focusable and labeled "Table: " plus its column headers, so a keyboard can scroll it. One style in `base.css` serves every template, mode, and theme: column headers in the heading font over an accent rule, thin rules between rows, no striping, and cell text that wraps, except that a one-word cell such as a die range (`9–10`) stays on one line. Its knobs are the `--table-*` component tokens, and print and capture take their size from the surrounding text.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
 - Markup is semantic so that styling never fights structure. The entry name is a heading, section labels (Actions, Reactions) are subheadings, property lines and ability scores are definition lists or tables, and action names are inline headings.
-- Every inline heading prints bold italic, as SRD 5.2 prints them: the ones a template adds (action names, "Using a Higher-Level Spell Slot.", "Cantrip Upgrade.") and the ones rules text writes itself, which are written `***Regaining Charges.***`.
 
 ### 9.6 Styling system
 

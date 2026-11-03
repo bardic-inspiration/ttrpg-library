@@ -1,7 +1,6 @@
 ---
-// A markdown-subset rules-text field (SPEC.md §5.5), optionally led by a
-// bold-italic inline heading such as "Using a Higher-Level Spell Slot." or an
-// action's name, as SRD 5.2 prints them (§9.5). The
+// A markdown-subset rules-text field (SPEC.md §5.5), optionally led by a bold
+// label such as "Using a Higher-Level Spell Slot." or an action's name. The
 // label is plain text, so it is escaped before it joins the markdown.
 // `refs` turns `{ref:…}` tokens into links (§5.7).
 import { escapeMarkdown, renderMarkdown, type TextRefs } from '../../../lib/markdown';
@@ -14,7 +13,7 @@ interface Props {
 }
 
 const { text, label, class: className, refs } = Astro.props;
-const html = renderMarkdown(label ? `***${escapeMarkdown(label)}.*** ${text}` : text, refs);
+const html = renderMarkdown(label ? `**${escapeMarkdown(label)}.** ${text}` : text, refs);
 ---
 <div class:list={['rules-text', className]} set:html={html} />
 
