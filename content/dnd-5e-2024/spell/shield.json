@@ -14,7 +14,7 @@
     "castingTime": {
       "amount": 1,
       "unit": "reaction",
-      "trigger": "when you are hit by an attack roll or targeted by the Magic Missile spell"
+      "trigger": "when you are hit by an attack roll or targeted by the *Magic Missile* spell"
     },
     "ritual": false,
     "range": {
@@ -34,6 +34,7 @@
   },
   "meta": {
     "createdAt": "2026-11-03",
+    "updatedAt": "2026-11-03",
     "source": {
       "kind": "routine",
       "srd": true
