@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkLane, laneOf } from '../scripts/lane/index.ts';
+import { checkLane, isDocsPath, laneOf } from '../scripts/lane/index.ts';
 
 describe('laneOf', () => {
   it.each([
@@ -34,7 +34,7 @@ describe('checkLane', () => {
 
   it('passes an unprefixed branch that touches no content', () => {
     const result = checkLane({ branch: 'user-patch-1', paths: ['README.md'], labels: [] });
-    expect(result).toEqual({ lane: 'dev', contentChanged: false, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, errors: [] });
   });
 
   it('fails an unprefixed branch that touches content without the migration label', () => {
@@ -53,7 +53,7 @@ describe('checkLane', () => {
       paths: ['content/dnd-5e-2024/creature/cinder-hound.json', 'assets/images/x.png'],
       labels: [],
     });
-    expect(result).toEqual({ lane: 'content', contentChanged: true, errors: [] });
+    expect(result).toEqual({ lane: 'content', contentChanged: true, docsOnly: false, errors: [] });
   });
 
   it('fails a content PR that touches site/', () => {
@@ -80,7 +80,7 @@ describe('checkLane', () => {
 
   it('passes a dev PR that touches no content', () => {
     const result = checkLane({ branch: 'dev/lane-ci', paths: ['SPEC.md'], labels: [] });
-    expect(result).toEqual({ lane: 'dev', contentChanged: false, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, errors: [] });
   });
 
   it('fails a dev PR that touches content without the migration label', () => {
@@ -101,6 +101,60 @@ describe('checkLane', () => {
       paths: ['content/dnd-5e-2024/creature/a.json'],
       labels: ['dev', 'migration'],
     });
-    expect(result).toEqual({ lane: 'dev', contentChanged: true, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: true, docsOnly: false, errors: [] });
+  });
+});
+
+describe('isDocsPath (SPEC.md §12.1 "Docs-only PRs")', () => {
+  it.each([
+    'SPEC.md',
+    'AGENTS.md',
+    'CLAUDE.md',
+    'README.md',
+    'ATTRIBUTION.md',
+    'docs/notes.md',
+    'docs/SRD_CC_v5.2.pdf',
+    '.github/ISSUE_TEMPLATE/bug-report.md',
+    '.github/PULL_REQUEST_TEMPLATE/dev.md',
+  ])('treats %s as docs', (path) => {
+    expect(isDocsPath(path)).toBe(true);
+  });
+
+  it.each([
+    // Read by tests, so a change to them is checked as code.
+    'docs/routines.md',
+    '.claude/skills/generate/SKILL.md',
+    '.github/PULL_REQUEST_TEMPLATE/content.md',
+    '.github/ISSUE_TEMPLATE/content-request.yml',
+    'rulesets/dnd-5e-2024/guidelines/creature.md',
+    'content/dnd-5e-2024/creature/a.md',
+    'site/README.md',
+    'package.json',
+    'SPEC.txt',
+  ])('treats %s as code', (path) => {
+    expect(isDocsPath(path)).toBe(false);
+  });
+});
+
+describe('checkLane docsOnly', () => {
+  it('is true when every path is docs', () => {
+    const result = checkLane({ branch: 'dev/spec', paths: ['SPEC.md', 'AGENTS.md'], labels: [] });
+    expect(result.docsOnly).toBe(true);
+  });
+
+  it('is false when any path is code', () => {
+    const result = checkLane({ branch: 'dev/spec', paths: ['SPEC.md', 'scripts/lane/index.ts'], labels: [] });
+    expect(result.docsOnly).toBe(false);
+  });
+
+  it('is false for an empty diff, so it gets the full checks', () => {
+    const result = checkLane({ branch: 'dev/empty', paths: [], labels: [] });
+    expect(result.docsOnly).toBe(false);
+  });
+
+  it('still fails a content-lane PR that touches only docs', () => {
+    const result = checkLane({ branch: 'gen/12-20261102', paths: ['README.md'], labels: [] });
+    expect(result.docsOnly).toBe(true);
+    expect(result.errors).toHaveLength(1);
   });
 });

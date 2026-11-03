@@ -137,3 +137,6 @@ The npm scripts are defined in [`SPEC.md`](SPEC.md) §4.
 
 - **Content:** `npm run validate` and `npm run build`.
 - **Dev:** those two, then `npm run check`, `npm test`, and `npm run a11y`.
+- **Docs-only** (only root Markdown, `docs/` other than `docs/routines.md`,
+  and the dev and Markdown issue templates; [`SPEC.md`](SPEC.md) §12.1): CI
+  runs only the lane rules, so no local checks are needed.
