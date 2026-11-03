@@ -1,0 +1,43 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "cure-wounds",
+  "name": "Cure Wounds",
+  "summary": "A touch that restores Hit Points to a creature.",
+  "stats": {
+    "level": 1,
+    "school": "abjuration",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "A creature you touch regains a number of Hit Points equal to 2d8 plus your spellcasting ability modifier.",
+    "higherLevels": "The healing increases by 2d8 for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "shield",
+  "name": "Shield",
+  "summary": "A reaction that wraps you in an invisible barrier, raising your AC until your next turn.",
+  "stats": {
+    "level": 1,
+    "school": "abjuration",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "reaction",
+      "trigger": "when you are hit by an attack roll or targeted by the Magic Missile spell"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "round",
+      "concentration": false
+    },
+    "effect": "An imperceptible barrier of magical force protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from *Magic Missile*."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}
