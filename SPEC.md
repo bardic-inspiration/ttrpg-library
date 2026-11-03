@@ -655,7 +655,7 @@ Display and generation defaults only. Validation never reads it except to confir
 
 | Key | Purpose |
 |---|---|
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`) |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |

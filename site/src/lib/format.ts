@@ -19,11 +19,19 @@ export const formatRarity = (rarity: string): string => {
   return words.charAt(0).toUpperCase() + words.slice(1);
 };
 
+/** An enum slug: `wondrous-item` reads "Wondrous Item". */
+export const formatTitle = (slug: string): string =>
+  slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
 /** Formats one value by a registry `format` name, or as stored when there is none. */
 export function formatValue(value: unknown, format?: string): string {
   if (format === 'cr' && typeof value === 'number') return formatCr(value);
   if (format === 'spell-level' && typeof value === 'number') return formatSpellLevel(value);
   if (format === 'rarity' && typeof value === 'string') return formatRarity(value);
+  if (format === 'title' && typeof value === 'string') return formatTitle(value);
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
   return String(value);
 }
