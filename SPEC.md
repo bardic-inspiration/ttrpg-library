@@ -201,7 +201,7 @@ The file path must be `content/<ruleset>/<type>/<id>.json`. Unknown top-level ke
 - IDs are unique across the whole library, not per type, so a reference or URL never needs disambiguation.
 - An ID never changes after merge, even if `name` is later revised. A rename keeps the old ID.
 - On a name or ID collision the generator picks a different name; it never appends a numeric suffix.
-- The validator warns on near-duplicate names (normalized edit distance ≤ 2) so reviewers can catch "Frost Lance" vs "Frost Lances."
+- The validator warns on near-duplicate names (normalized edit distance ≤ 2) so reviewers can catch "Frost Lance" vs "Frost Lances." It skips a pair when both entries are SRD entries (§5.9), since neither name can change: "Fireball" and "Fire Bolt" are both canonical.
 
 ### 5.3 Tags
 
@@ -464,7 +464,7 @@ All types:
 |---|---|
 | File path matches `ruleset`, `type`, `id` | error |
 | ID unique across library; name unique (case-insensitive) | error |
-| Near-duplicate names | warning |
+| Near-duplicate names, unless both entries are SRD entries | warning |
 | Every ref resolves and its type matches | error |
 | Text fields use only the markdown subset | error |
 | Blocklist match in any text-bearing field (§11) | error |
