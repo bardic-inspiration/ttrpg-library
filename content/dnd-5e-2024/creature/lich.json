@@ -1,0 +1,205 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "lich",
+  "name": "Lich",
+  "summary": "An undead wizard of immense power that reforms from its spirit jar and wields high-level spells, paralyzing touch, and legendary actions.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "descriptors": [
+      "Wizard"
+    ],
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 20
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 42,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 16,
+      "con": 16,
+      "int": 21,
+      "wis": 14,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "dex",
+      "con",
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "expertise",
+      "history": "proficient",
+      "insight": "proficient",
+      "perception": "proficient"
+    },
+    "resistances": [
+      "cold",
+      "lightning"
+    ],
+    "immunities": {
+      "damage": [
+        "necrotic",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "frightened",
+        "paralyzed",
+        "poisoned"
+      ]
+    },
+    "gear": [
+      "Component Pouch"
+    ],
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "All"
+      ]
+    },
+    "cr": 21,
+    "lair": true,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the lich fails a saving throw, it can choose to succeed instead.",
+        "uses": "4/day, or 5/day in lair"
+      },
+      {
+        "name": "Spirit Jar",
+        "kind": "other",
+        "text": "If destroyed, the lich reforms in 1d10 days if it has a spirit jar, reviving with all its Hit Points. The new body appears in an unoccupied space within the lich's lair."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The lich makes three attacks, using Eldritch Burst or Paralyzing Touch in any combination."
+      },
+      {
+        "name": "Eldritch Burst",
+        "kind": "melee-or-ranged-attack",
+        "ability": "int",
+        "reach": 5,
+        "range": {
+          "normal": 120
+        },
+        "damage": [
+          {
+            "dice": "4d12",
+            "ability": "int",
+            "type": "force"
+          }
+        ]
+      },
+      {
+        "name": "Paralyzing Touch",
+        "kind": "melee-attack",
+        "ability": "int",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "int",
+            "type": "cold"
+          }
+        ],
+        "onHit": "and the target has the Paralyzed condition until the start of the lich's next turn."
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        "Detect Thoughts",
+        "Dispel Magic",
+        "Fireball (level 5 version)",
+        "Invisibility",
+        "Lightning Bolt (level 5 version)",
+        "Mage Hand",
+        "Prestidigitation"
+      ],
+      "perDay": {
+        "2": [
+          "Animate Dead",
+          "Dimension Door",
+          "Plane Shift"
+        ],
+        "1": [
+          "Chain Lightning",
+          "Finger of Death",
+          "Power Word Kill",
+          "Scrying"
+        ]
+      }
+    },
+    "reactions": [
+      {
+        "name": "Protective Magic",
+        "kind": "other",
+        "text": "The lich casts *Counterspell* or *Shield* in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
+      }
+    ],
+    "legendaryActions": {
+      "uses": 3,
+      "usesInLair": 4,
+      "intro": "Immediately after another creature's turn, the lich can expend a use to take one of the following actions. The lich regains all expended uses at the start of each of its turns.",
+      "items": [
+        {
+          "name": "Deathly Teleport",
+          "kind": "other",
+          "text": "The lich teleports up to 60 feet to an unoccupied space it can see, and each creature within 10 feet of the space it left takes {dmg:2d10:necrotic}."
+        },
+        {
+          "name": "Disrupt Life",
+          "kind": "save",
+          "ability": "int",
+          "save": {
+            "ability": "con",
+            "targets": "each creature that isn't an Undead in a 20-foot Emanation originating from the lich"
+          },
+          "damage": [
+            {
+              "dice": "9d6",
+              "type": "necrotic"
+            }
+          ],
+          "onSuccess": "Half damage. *Failure or Success:* The lich can't take this action again until the start of its next turn."
+        },
+        {
+          "name": "Frightening Gaze",
+          "kind": "other",
+          "text": "The lich casts *Fear*, using the same spellcasting ability as Spellcasting. The lich can't take this action again until the start of its next turn."
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        132
+      ],
+      "srd": true
+    }
+  }
+}

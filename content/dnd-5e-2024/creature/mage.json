@@ -1,0 +1,124 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "mage",
+  "name": "Mage",
+  "summary": "A spellcasting humanoid that blasts foes with arcane bursts and wizard spells and wards itself with counterspells and shields.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Wizard"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 18,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 14,
+      "con": 11,
+      "int": 17,
+      "wis": 12,
+      "cha": 11
+    },
+    "saveProficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "history": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      "Wand"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus three other languages"
+      ]
+    },
+    "cr": 6,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The mage makes three Arcane Burst attacks."
+      },
+      {
+        "name": "Arcane Burst",
+        "kind": "melee-or-ranged-attack",
+        "ability": "int",
+        "reach": 5,
+        "range": {
+          "normal": 120
+        },
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "int",
+            "type": "force"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/light"
+        },
+        "Mage Armor (included in AC)",
+        "Mage Hand",
+        "Prestidigitation"
+      ],
+      "perDay": {
+        "2": [
+          "Fireball (level 4 version)",
+          "Invisibility"
+        ],
+        "1": [
+          "Cone of Cold",
+          "Fly"
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Misty Step",
+        "kind": "other",
+        "text": "The mage casts *Misty Step*, using the same spellcasting ability as Spellcasting.",
+        "uses": "3/day"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Protective Magic",
+        "kind": "other",
+        "text": "The mage casts *Counterspell* or *Shield* in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "uses": "3/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        132
+      ],
+      "srd": true
+    }
+  }
+}
