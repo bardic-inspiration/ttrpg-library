@@ -334,7 +334,7 @@ Everything specific to a ruleset lives in one folder, so adding a ruleset is add
 
 The validator, the index builder, the site templates, and the exporters all import this module, so each derived value is computed in exactly one place. The validator loads a ruleset by folder name, so an entry whose `ruleset` has no folder (or no `config/types.json` entry) fails as unknown. A ruleset or type with no formulas returns `{}` from `derive`.
 
-**dnd-5e-2024 creature derivations.** Magic items and spells derive nothing in v1.
+**dnd-5e-2024 creature derivations.** Magic items and spells derive nothing in v1, except the ability modifiers and saves of an embedded stat block (`statBlocks`, §6.6, §6.7): `derived.statBlocks[i]` holds `abilityMods` and `saves`, which equal the modifiers, since these blocks have no proficiencies.
 
 | Derived path | Formula |
 |---|---|
@@ -373,6 +373,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 | `Ref` | `{ ref: string }` matching `^(creature|magic-item|spell)/[a-z0-9-]+$` |
 | `RefOrText` | `Ref` or non-empty string |
 | `Text` | Markdown-subset string (§5.5, marked `markdownSubset: true`), which may contain tokens where the ruleset allows them (§6.4) |
+| `StatBlock` | A stat block printed inside a spell or magic item (§6.7): `{ name, typeLine, abilities: { str…cha: int 1–30 }, ac?, hp?, speed?, skills?, vulnerabilities?, resistances?, immunities?, gear?, senses?, languages?, cr?, traits?, actions?, bonusActions?, reactions? }`. `name` is the block's heading and `typeLine` its size, type, and alignment ("Large Dragon, Neutral"). Each other line is a non-empty string written as printed, displayed only when present (§5.8). The four lists are arrays, at least one item each, of `{ name, text: Text }` |
 
 ### 6.4 Text tokens
 
@@ -461,6 +462,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, maxChargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8). A variable cost, such as spending 1 to 3 charges to cast at a higher level, sets `chargeCost` to the least and `maxChargeCost` to the most, and reads "1–3 charges" |
 | `cursed` | optional `true` | |
 | `effect` | `Text` | The rules text as printed |
+| `statBlocks` | optional array of `StatBlock` (§6.3) | Stat blocks the item prints, such as a figurine's creature. See "Embedded stat blocks" below |
 
 ### 6.7 Spell (`schemas/spell.schema.json`)
 
@@ -477,6 +479,11 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `effect` | `Text` | |
 | `higherLevels` | optional `Text` | Leveled spells only ("Using a Higher-Level Spell Slot") |
 | `cantripUpgrade` | optional `Text` | Cantrips only |
+| `statBlocks` | optional array of `StatBlock` (§6.3) | Stat blocks the spell prints, such as Summon Dragon's Draconic Spirit |
+
+**Embedded stat blocks (spells and magic items).** Some spells and items print a creature's stat block. One that also exists in the SRD as its own creature, such as the Zombie that Animate Dead raises, is a creature entry, and the spell or item links to it from its text with a `{ref:creature/<id>}` token (§5.7). One that is printed only inside its spell or item, such as Summon Dragon's Draconic Spirit, goes in `statBlocks`. It isn't an entry: it has no ID, file, page, or gallery card, so its name never collides with an entry's, and the SRD manifest (§5.9) doesn't list it. Custom entries follow the same rule: a creature that stands on its own is an entry, and a summon that exists only through its spell or item is embedded.
+
+An embedded block is authored as printed, because its numbers often scale with the spell's level or depend on the caster ("AC 14 + the spell's level", "Bonus equals your spell attack modifier"), which the creature schema's derivations can't express. Only its ability modifiers and saves are derived (§6.2). The card renders each block after the rules text with the creature stat block's parts, its name one heading level below the entry's (§9.5).
 
 ### 6.8 Consistency checks
 
@@ -916,6 +923,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.5 Templates
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
+- A spell or item's embedded stat blocks (`statBlocks`, §6.7) render after its rules text, inside its card, with the creature stat block's parts (`EmbeddedStatBlock`): the block's name as a heading one level below the entry's, its type line, the AC, HP, and Speed lines, the ability table, the remaining lines, then its Traits, Actions, Bonus Actions, and Reactions. Lines display as written; the ability table's modifiers and saves come from the derived values.
 - The spell card's level line words the level as the `spell-level` format does (§7), the D&D convention, so cards and detail pages agree: "1st-level Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.

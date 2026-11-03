@@ -100,6 +100,47 @@ export interface SpellStats {
   effect: string;
   higherLevels?: string;
   cantripUpgrade?: string;
+  statBlocks?: StatBlock[];
+}
+
+/** A named block of text in an embedded stat block: a trait or an action. */
+export interface StatBlockItem {
+  name: string;
+  /** Markdown-subset text (SPEC.md §5.5), written as printed. */
+  text: string;
+}
+
+/**
+ * A stat block printed inside a spell or magic item (SPEC.md §6.6, §6.7):
+ * authored as printed, since its numbers often depend on the caster. Only the
+ * ability modifiers and saves are derived.
+ */
+export interface StatBlock {
+  name: string;
+  /** Size, type, and alignment, such as "Large Dragon, Neutral". */
+  typeLine: string;
+  ac?: string;
+  hp?: string;
+  speed?: string;
+  abilities: Record<Ability, number>;
+  skills?: string;
+  vulnerabilities?: string;
+  resistances?: string;
+  immunities?: string;
+  gear?: string;
+  senses?: string;
+  languages?: string;
+  cr?: string;
+  traits?: StatBlockItem[];
+  actions?: StatBlockItem[];
+  bonusActions?: StatBlockItem[];
+  reactions?: StatBlockItem[];
+}
+
+/** Derived values of an embedded stat block: modifiers, and saves (no proficiencies, so equal to the modifiers). */
+export interface DerivedStatBlock {
+  abilityMods: Record<Ability, number>;
+  saves: Record<Ability, number>;
 }
 
 export interface MagicItemSpell {
@@ -120,6 +161,7 @@ export interface MagicItemStats {
   spells?: MagicItemSpell[];
   cursed?: true;
   effect: string;
+  statBlocks?: StatBlock[];
 }
 
 export interface ChallengeRatingRow {

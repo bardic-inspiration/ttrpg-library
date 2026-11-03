@@ -10,6 +10,8 @@ import type {
   DerivedAction,
   DerivedCreature,
   DerivedDamage,
+  DerivedStatBlock,
+  StatBlock,
   Proficiency,
   Tables,
 } from './types.ts';
@@ -145,4 +147,21 @@ export function deriveCreature(stats: CreatureStats, tables: Tables): DerivedCre
     derived.spellcasting = { dc: 8 + base, attackBonus: base };
   }
   return derived;
+}
+
+/**
+ * The ability modifiers and saves of each stat block embedded in a spell or
+ * magic item (SPEC.md §6.6, §6.7). Everything else in one is authored as
+ * printed. These blocks have no save proficiencies, so a save is the modifier.
+ */
+export function deriveStatBlocks(blocks: StatBlock[] | undefined, tables: Tables): { statBlocks?: DerivedStatBlock[] } {
+  if (!blocks) return {};
+  return {
+    statBlocks: blocks.map((block) => {
+      const mods = Object.fromEntries(
+        tables.abilities.map((ability) => [ability, abilityMod(block.abilities[ability])]),
+      ) as Record<Ability, number>;
+      return { abilityMods: mods, saves: { ...mods } };
+    }),
+  };
 }

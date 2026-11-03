@@ -142,6 +142,11 @@ against it before pushing.
   structured fields" rule is for custom entries.
 - `summary` is one plain, factual line written for the entry, since the SRD
   has none. Omit `description`.
+- A stat block the SRD prints inside a spell or item goes in `statBlocks`,
+  written as printed, when the SRD has no creature entry of that name (§6.7).
+  When it does (Animate Dead's Zombie), link the creature from the text with
+  `{ref:creature/<id>}` if it's in the library, and leave the name as plain
+  text if it isn't.
 - Everything the entry uses (spells, gear) is SRD content: a ref if it's in
   the library, a plain string otherwise. Never create a dependency entry.
 - Set `meta.source.srd` to `true` (step 4).

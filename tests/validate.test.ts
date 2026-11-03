@@ -45,7 +45,7 @@ describe('validateLibrary', () => {
     expect(result.warnings).toEqual([]);
     const derived = Object.fromEntries(result.entries.map((e) => [e.entry.id, e.derived]));
     expect(derived['cinder-hound']).toMatchObject({ xp: 450, hp: { average: 32 } });
-    // Magic items and spells derive nothing in v1 (SPEC.md §6.2).
+    // Magic items and spells derive nothing in v1 without an embedded stat block (SPEC.md §6.2).
     expect(derived['frost-lance']).toEqual({});
     expect(derived['wand-of-frost-lances']).toEqual({});
   });

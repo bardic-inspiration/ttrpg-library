@@ -143,3 +143,17 @@ string.
   italics. The site shows the entry's name, linked (SPEC.md §5.7).
 - `baseItem` and any item named in `effect` use SRD names. The blocklist applies
   to every plain string.
+
+### Stat blocks the item prints
+
+Some items bring a creature into play. Decide where its stat block lives
+(SPEC.md §6.7):
+
+- **A creature that stands on its own** is its own creature entry. Link it
+  from `effect` with `{ref:creature/<id>}`. If it's new, write it to
+  `creature.md` in the same batch.
+- **A creature that exists only through this item**, whose numbers scale with
+  the item or its user, goes in `statBlocks`. Write each line as it should read
+  ("AC 14 + the spell's level" is written `"ac": "14 + the spell's level"`),
+  and write actions as text, since nothing in the block is derived but its
+  ability modifiers.

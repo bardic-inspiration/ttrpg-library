@@ -1,0 +1,43 @@
+---
+// A stat block printed inside a spell or magic item (SPEC.md §6.6, §6.7,
+// §9.5), such as Summon Dragon's Draconic Spirit. It reuses the creature stat
+// block's parts and sits inside the parent card, one heading level down. Its
+// lines are authored as printed; only the ability modifiers and saves are
+// derived.
+import type { DerivedStatBlock, StatBlock } from '../../../../../rulesets/dnd-5e-2024/types.ts';
+import type { TextRefs } from '../../../lib/markdown';
+import { abilityRows, coreLines, detailLines, itemSections } from '../../../lib/stat-block';
+import AbilityTable from './AbilityTable.astro';
+import ActionList from './ActionList.astro';
+import PropertyList from './PropertyList.astro';
+import StatBlockHeader from './StatBlockHeader.astro';
+
+interface Props {
+  block: StatBlock;
+  derived: DerivedStatBlock;
+  /** The block name's heading level; its section headings sit one below. */
+  level: number;
+  refs?: TextRefs;
+}
+
+const { block, derived, level, refs } = Astro.props;
+const core = coreLines(block);
+const details = detailLines(block);
+---
+<section class="embedded-statblock" aria-label={`${block.name} stat block`}>
+  <StatBlockHeader name={block.name} subtitle={block.typeLine} level={level} />
+  {core.length > 0 && <PropertyList lines={core} />}
+  <AbilityTable rows={abilityRows(block, derived)} />
+  {details.length > 0 && <PropertyList lines={details} />}
+  {itemSections(block).map((section) => <ActionList title={section.title} items={section.items} level={level + 1} refs={refs} />)}
+</section>
+
+<style>
+  @layer components {
+    .embedded-statblock > :global(* + *) {
+      margin-block-start: var(--statblock-gap);
+      padding-block-start: var(--statblock-gap);
+      border-block-start: var(--border-width) solid var(--statblock-rule-color);
+    }
+  }
+</style>
