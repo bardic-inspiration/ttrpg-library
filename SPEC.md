@@ -126,6 +126,7 @@ ttrpg-library/
 │   ├── checks.ts                           consistency checks
 │   ├── refs.ts                             ref labels for detail pages (§5.7)
 │   ├── types.ts                            TypeScript shapes of stats and derived values
+│   ├── srd-manifest.json                   every SRD entry of the ruleset, with its tier (§5.9)
 │   ├── schemas/common.schema.json, <type>.schema.json
 │   └── guidelines/<type>.md                generation rules per type
 ├── config/
@@ -139,6 +140,7 @@ ttrpg-library/
 │   ├── build-index/                        content → library.json and data/ copies (CLI, builder, schema walk)
 │   ├── pr-summary/                         job summary for changed entries
 │   ├── generate/                           generation helpers: defaults and how a request takes them (§8.3), the gap-fill picker (§8.2)
+│   ├── srd-coverage/                       SRD manifest records the library lacks (§5.9)
 │   ├── serve/                              static server for site/dist under the site base
 │   └── a11y/                               axe checks on the built site (§9.7)
 ├── site/                                   Astro project
@@ -172,7 +174,7 @@ ttrpg-library/
 
 `library.json` is built in CI and git-ignored, so pull requests contain only entry files (and, in revise or dependency cases, the files they touch).
 
-npm scripts: `validate`, `build:index`, `gap-fill` (the gap-fill picker, §8.2 step 5), `dev`, `build` (runs `build:index` then `astro build`), `test` (Vitest, including contrast), `check` (types, `astro check`, Stylelint), `a11y` (Playwright + axe against the built site), `snapshots` (on-demand visual captures).
+npm scripts: `validate`, `build:index`, `gap-fill` (the gap-fill picker, §8.2 step 5), `srd-coverage` (the SRD manifest records the library lacks, §5.9), `dev`, `build` (runs `build:index` then `astro build`), `test` (Vitest, including contrast), `check` (types, `astro check`, Stylelint), `a11y` (Playwright + axe against the built site), `snapshots` (on-demand visual captures).
 
 ## 5. Content model
 
@@ -274,6 +276,11 @@ Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom e
 - Only what the SRD doesn't provide is authored: `summary`, which is required, is one plain factual line. `description` is omitted, since SRD stat blocks carry no lore. The guidelines' tone, naming, and balance targets don't apply (§8.6).
 - An SRD entry sets `meta.source.srd: true` (§5.4). It is added only when a request asks for SRD content (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
 - A revision of an SRD entry only brings it closer to the SRD, such as a transcription fix. A variant of an SRD entry is a new custom entry.
+- **SRD manifest.** `rulesets/<ruleset>/srd-manifest.json` lists every SRD entry of the ruleset's types, transcribed from the reference PDF: `{ ruleset, source, entries: [{ type, name, tier }] }`, where `name` is the SRD name exactly and each type and name pair appears once. For `dnd-5e-2024` it holds 329 creatures, 243 magic items, and 339 spells. Where the PDF misprints a heading, the manifest uses the entry's correct name: the Knight's stat block is headed "Iron Golem". Each record's `tier` is `complex` if the SRD entry has any of the following, and `simple` otherwise:
+  - creature: legendary actions, a lair, a Spellcasting action, reactions, or a Shape-Shift action (more than one form);
+  - magic item: a table, a stat block, variants under one name (a "+1, +2, or +3" name, a rarity of "Varies", or several versions such as giant types), several spells cast for charges, or a variable charge cost;
+  - spell: a table, a stat block, or a Reaction casting time with a trigger.
+- **Coverage.** `npm run srd-coverage` (`scripts/srd-coverage/`) matches entries with `meta.source.srd: true` to manifest records by type and exact name. It prints, for each type and tier, the count missing of the total and the missing names, then any SRD entry that isn't in the manifest (usually a name that doesn't match the SRD exactly). `--type <type>` and `--tier <complex|simple>` narrow the report so a batch can be picked from it; `--ruleset` overrides `defaults.ruleset`. A test checks that the manifest is valid, that its per-type counts are the ones above, and that every SRD entry in the library is in it.
 - **Custom entries stay clear of SRD content,** whether or not the SRD entry is in the library: no SRD name, no near collision with one, and no concept that duplicates an SRD entry (§8.6). A custom entry omits `meta.source.srd`.
 
 ## 6. Rulesets and the dnd-5e-2024 schemas
