@@ -28,14 +28,14 @@ export function resolveSize(id: string | null | undefined, sizes: PageSize[] = p
 }
 
 export interface PrintQuery {
-  /** Entry ids from `ids`, in order and without repeats, or undefined for the gallery-query form. */
+  /** Entry keys (`<type>/<id>`) from `ids`, in order and without repeats, or undefined for the gallery-query form. */
   ids?: string[];
   size: PageSize;
   /** The query string without `ids` and `size`, read as a gallery query when `ids` is absent. */
   gallery: string;
 }
 
-/** Reads a `/print/` query string: `?ids=a,b&size=letter` or `?<gallery query>&size=letter`. */
+/** Reads a `/print/` query string: `?ids=spell/a,creature/b&size=letter` or `?<gallery query>&size=letter`. */
 export function parsePrintQuery(search: string, sizes: PageSize[] = pageSizes): PrintQuery {
   const params = new URLSearchParams(search);
   const rawIds = params.get('ids');
@@ -53,9 +53,9 @@ export function parsePrintQuery(search: string, sizes: PageSize[] = pageSizes): 
 export const fragmentUrl = (base: string, entry: { ruleset: string; type: string; id: string }): string =>
   `${base}print/${entry.ruleset}/${entry.type}/${entry.id}/`;
 
-/** The print view URL for these entries at a page size. */
-export const printUrl = (base: string, ids: string[], size?: string): string =>
-  `${base}print/?ids=${ids.map(encodeURIComponent).join(',')}${size ? `&size=${encodeURIComponent(size)}` : ''}`;
+/** The print view URL for these entries (`<type>/<id>` keys) at a page size. The slash stays readable. */
+export const printUrl = (base: string, keys: string[], size?: string): string =>
+  `${base}print/?ids=${keys.map((key) => encodeURIComponent(key).replace(/%2F/g, '/')).join(',')}${size ? `&size=${encodeURIComponent(size)}` : ''}`;
 
 /** A CSS string literal. */
 export const cssString = (text: string): string =>

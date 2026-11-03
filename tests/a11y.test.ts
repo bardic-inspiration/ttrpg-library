@@ -23,7 +23,7 @@ describe('a11yPages (SPEC.md §9.7)', () => {
       'dnd-5e-2024/creature/?f.stats.cr=2..2',
       'dnd-5e-2024/creature/cinder-hound/',
       'dnd-5e-2024/spell/frost-lance/',
-      'print/?ids=cinder-hound,frost-lance',
+      'print/?ids=creature/cinder-hound,spell/frost-lance',
     ]);
     expect(pages.at(-1)).toMatchObject({ label: 'print view: cinder-hound, frost-lance', ready: '.print-entry' });
   });

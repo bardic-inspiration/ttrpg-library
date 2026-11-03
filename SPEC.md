@@ -43,7 +43,7 @@ These were settled in the spec review and override the preliminary design wherev
 | 2 | v1 scope | SRD 5.2 baseline. Types: `creature`, `magic-item`, `spell`. The library holds SRD entries, reproduced unmodified, and custom entries, which stay clear of SRD content (§5.9). |
 | 3 | Entry model | Three zones: fixed keys, strictly validated `stats`, and open flat `tags`. Provenance in `meta`. `version` renamed to `ruleset`. |
 | 4 | Validation posture | Fail closed. Unknown ruleset, type, or `stats` key fails CI. Only `tags` are open. |
-| 5 | IDs | Kebab-case slug of the name, globally unique, immutable, equals the filename. |
+| 5 | IDs | Kebab-case slug of the name, unique within its type, immutable, equals the filename. |
 | 6 | References | Typed refs between entries in v1, validated in CI, with computed back-references. |
 | 7 | Review | Comment-driven revisions on PRs. No required approving review (you cannot approve your own PR); your merge is the approval. |
 | 8 | Requests | GitHub Issues are the request queue. `config/defaults.json` fills anything a request leaves unspecified. A gap-filler runs when no requests are open. |
@@ -59,7 +59,7 @@ These were settled in the spec review and override the preliminary design wherev
 |---|---|---|
 | Every non-fixed key is an open tag; all paths flattened into filters | `stats` (strict) and `tags` (open) are separate; only curated `stats` paths become facets | Stat blocks contain lists of objects (actions) that flatten into meaningless paths, and open rules data lets typos pass silently |
 | Unknown `version` is ignored | Unknown `ruleset` fails CI | A silent skip means a merged entry can vanish with no signal |
-| `id: "001"`, unique within version and type | Global slug ID | Sequential IDs collide across parallel branches and make poor URLs |
+| `id: "001"`, unique within version and type | Slug ID, unique within its type | Sequential IDs collide across parallel branches and make poor URLs |
 | Branch protection requires one approving review | Requires the `validate` check only | The routine opens PRs under your identity; GitHub blocks self-approval |
 | Reject by deleting files or closing the PR | Comment-driven revision loop | Most feedback is "adjust this," not "discard this" |
 | Routine inputs supplied per run | GitHub Issues as a queue, plus defaults and a gap-filler | Scheduled runs need direction without a human in the loop |
@@ -186,8 +186,8 @@ Every entry, in every ruleset, has this shape (`schemas/envelope.schema.json`):
 |---|---|---|---|
 | `ruleset` | yes | string | Must name a folder in `rulesets/` and a ruleset in `config/types.json`. v1: `dnd-5e-2024` |
 | `type` | yes | string | Single value. Must be listed in the ruleset's `ruleset.json`, with a schema file and a registry entry |
-| `id` | yes | string | `^[a-z0-9]+(-[a-z0-9]+)*$`, 3–64 chars, globally unique, equals filename without `.json`, immutable after merge |
-| `name` | yes | string | Display name, 1–80 chars, globally unique case-insensitively |
+| `id` | yes | string | `^[a-z0-9]+(-[a-z0-9]+)*$`, 3–64 chars, unique within its type, equals filename without `.json`, immutable after merge |
+| `name` | yes | string | Display name, 1–80 chars, unique within its type case-insensitively |
 | `summary` | yes | string | One line, 10–160 chars, plain text. Used on cards, in PR bodies, and in link previews |
 | `description` | no | string | Lore and flavor, markdown subset. Not rules text |
 | `stats` | yes | object | Validated by `rulesets/<ruleset>/schemas/<type>.schema.json`. Unknown keys rejected. Inputs only; no derived values |
@@ -200,10 +200,10 @@ The file path must be `content/<ruleset>/<type>/<id>.json`. Unknown top-level ke
 ### 5.2 IDs and names
 
 - The ID is the slug of the name at creation: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`.
-- IDs are unique across the whole library, not per type, so a reference or URL never needs disambiguation.
+- IDs and names are unique within a type, not across the library. The rule exists to keep one thing from entering twice, and entries of different types are different things even when they share a name: the Giant Insect spell and a Giant Insect creature can both exist. Everything that identifies an entry carries its type, so nothing needs disambiguation: a ref is `<type>/<id>` (§5.7), a page URL is `/<ruleset>/<type>/<id>/`, and the print view takes `<type>/<id>` keys (§10.4).
 - An ID never changes after merge, even if `name` is later revised. A rename keeps the old ID.
 - On a name or ID collision the generator picks a different name; it never appends a numeric suffix.
-- The validator warns on near-duplicate names (normalized edit distance ≤ 2) so reviewers can catch "Frost Lance" vs "Frost Lances." It skips a pair when both entries are SRD entries (§5.9), since neither name can change: "Fireball" and "Fire Bolt" are both canonical.
+- The validator warns on near-duplicate names within a type (normalized edit distance ≤ 2) so reviewers can catch "Frost Lance" vs "Frost Lances." It skips a pair when both entries are SRD entries (§5.9), since neither name can change: "Fireball" and "Fire Bolt" are both canonical.
 
 ### 5.3 Tags
 
@@ -286,7 +286,7 @@ Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom e
 
 - **SRD entries are included unmodified.** `name` is the SRD name exactly. `stats` reproduce the SRD stat block, so every number the template renders, derived or not, matches the SRD. Rules text is the SRD's text word for word, except that derived numbers are written as tokens (§6.4) that render the same values. An SRD entry carries both the data and the verbatim rule: every structured field its type defines is filled from the SRD (an item's `charges` and `spells`, with their costs and DCs), and the rules text still keeps every sentence, even where it states the same thing. An SRD wand's `effect` keeps "This wand has 7 charges", its spell's save DC, and its "Regaining Charges" paragraph, while `charges` holds the maximum, recharge, and depletion. The card shows both. The rule that item text doesn't restate structured fields is for custom entries only. Where the ruleset's derivation can't reach an SRD number from inputs, an `adjust` or damage `bonus` matches it, with "matches SRD" as its reason. SRD content is literal, so the ruleset's consistency warnings (§6.8) are skipped on an SRD entry: its adjustments, authored DCs, and high values are the SRD's, not deviations to confirm. Its errors still apply.
 - Only what the SRD doesn't provide is authored: `summary`, which is required, is one plain factual line. `description` is omitted, since SRD stat blocks carry no lore. The guidelines' tone, naming, and balance targets don't apply (§8.6).
-- An SRD entry sets `meta.source.srd: true` (§5.4). It is added only by a request that asks for SRD content or by an SRD import stage (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
+- An SRD entry sets `meta.source.srd: true` (§5.4). It is added only by a request that asks for SRD content or by an SRD import stage (§8.1); gap fill never adds one. Each SRD entry enters once: the name and ID uniqueness rules (§5.2) enforce it. If an SRD name collides with an existing custom entry of the same type, the SRD entry isn't added, and the run reports the collision so the custom entry can be renamed through a `revise` issue.
 - A revision of an SRD entry only brings it closer to the SRD, such as a transcription fix. A variant of an SRD entry is a new custom entry.
 - **SRD manifest.** `rulesets/<ruleset>/srd-manifest.json` lists every SRD entry of the ruleset's types, transcribed from the reference PDF: `{ ruleset, source, entries: [{ type, name, tier }] }`, where `name` is the SRD name exactly and each type and name pair appears once. For `dnd-5e-2024` it holds 329 creatures, 243 magic items, and 339 spells. Where the PDF misprints a heading, the manifest uses the entry's correct name: the Knight's stat block is headed "Iron Golem". Each record's `tier` is `complex` if the SRD entry has any of the following, and `simple` otherwise:
   - creature: legendary actions, a lair, a Spellcasting action, reactions, or a Shape-Shift action (more than one form);
@@ -482,7 +482,7 @@ All types:
 | Check | Level |
 |---|---|
 | File path matches `ruleset`, `type`, `id` | error |
-| ID unique across library; name unique (case-insensitive) | error |
+| ID unique within its type; name unique within its type (case-insensitive) | error |
 | Near-duplicate names, unless both entries are SRD entries | warning |
 | Every ref resolves and its type matches | error |
 | Text fields use only the markdown subset | error |
@@ -727,7 +727,7 @@ An entry belongs to a bucket when its value on every axis falls in that bucket's
 | Tags | textarea, one `key: value` per line (comma-separated for lists) | no |
 | Ruleset | text | no (defaults) |
 
-**Revise request** (`revise-request.yml`, adds label `revise`): entry IDs (one per line) and an instruction, both required, for changes to already-merged entries.
+**Revise request** (`revise-request.yml`, adds label `revise`): entries (one per line, as `<type>/<id>`, or a bare `id` when only one type has it) and an instruction, both required, for changes to already-merged entries.
 
 Free-form issues with the `request` label are also accepted; the routine interprets them against defaults.
 
@@ -996,7 +996,7 @@ Target: WCAG 2.2 AA.
 - **Semantics.** The gallery result count is announced through a polite live region when filters change. Filter groups use `fieldset` and `legend`. Art images take alt text from the entry name.
 - **Motion.** Transitions use duration tokens, all of which become `0ms` under `prefers-reduced-motion: reduce` (the duration primitives are reset in `primitives.css`, and the contrast suite checks that every one is).
 - **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without horizontal scrolling.
-- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, the first detail page of each type that has an entry, and the print view of those same entries (`print/?ids=…`), checked once its entries have loaded. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The check stubs `window.print`, since the print view opens the dialog on load. It launches Playwright's own Chromium; if that fails and `/opt/pw-browsers/chromium` exists (the browser preinstalled in cloud sessions, whose build can lag the installed Playwright), it retries with that one. `npm run snapshots` launches the same way.
+- **Automated check.** CI runs axe-core through Playwright on the home page, a type gallery with filters applied, a detail page for each type, and the print view, in both themes. Any serious or critical violation fails the build. `npm run a11y` (`scripts/a11y/`) serves `site/dist` under the site base and picks its pages from the built `library.json`: the first record's type gallery, filtered by that record's first facet value, the first detail page of each type that has an entry, and the print view of those same entries (`print/?ids=<type>/<id>,…`), checked once its entries have loaded. A type with no entries has no detail page to check yet. Themes come from the browser's color scheme, so the dark run exercises the system-default dark tokens. The check stubs `window.print`, since the print view opens the dialog on load. It launches Playwright's own Chromium; if that fails and `/opt/pw-browsers/chromium` exists (the browser preinstalled in cloud sessions, whose build can lag the installed Playwright), it retries with that one. `npm run snapshots` launches the same way.
 
 ### 9.8 UI refinement workflow
 
@@ -1064,7 +1064,7 @@ Future translators (Foundry VTT, Open5e, and other open formats) are additional 
 
 ### 10.4 Print (PDF)
 
-- `/print/?ids=a,b,c&size=letter` or `/print/?<gallery query>&size=letter` renders the entries in `print` mode. The `ids` form prints in the given order, ignoring repeats. Without `ids`, the rest of the query is read as the home gallery's (`/`, §9.3) with the gallery's own parsing and filtering (`site/src/lib/gallery/`), so `f.type` narrows by type, and the results print in the gallery's order. A missing or unknown `size` is the default page size.
+- `/print/?ids=spell/a,creature/b&size=letter` or `/print/?<gallery query>&size=letter` renders the entries in `print` mode. `ids` lists `<type>/<id>` keys, since an ID is unique only within its type (§5.2). The `ids` form prints in the given order, ignoring repeats. Without `ids`, the rest of the query is read as the home gallery's (`/`, §9.3) with the gallery's own parsing and filtering (`site/src/lib/gallery/`), so `f.type` narrows by type, and the results print in the gallery's order. A missing or unknown `size` is the default page size.
 - **Print fragments.** `astro build` also emits each entry's print fragment at `print/<ruleset>/<type>/<id>/`: the type template in `print` mode (`components/print/PrintEntry.astro`), as bare markup with no page shell. The print view (`components/print/PrintView.tsx`, logic in `site/src/lib/print.ts` and `print-run.ts`) resolves its entries against `library.json`, fetches only their fragments, and inserts them; the `/print/` page carries the templates' styles. Page weight follows the selection, not the library. If an id names no entry, a fragment fails to load, or nothing matches, the page shows a message in a polite status region and the print dialog doesn't open.
 - The page size comes from `config/export.json`. The print view injects an `@page { size; margin }` rule for the chosen size at runtime, because `@page` cannot be toggled by class, and sets `data-page-size` on `<html>` for the density tokens in `tokens/print.css`. A page size selector on the print view changes the size in place (and in the URL).
 - Layout per size: Letter and A4 use the two-column 5.2 stat-block layout; Half-Letter and 4×6 use one column with smaller type.

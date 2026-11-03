@@ -63,13 +63,17 @@ export function collectRefs(stats: unknown, path = 'stats'): FoundRef[] {
 
 /**
  * Resolves every ref against the library and computes back-references. A ref
- * fails when no entry has its id, when that entry's type differs from the
- * ref's prefix, or when it is in another ruleset (not allowed in v1). Links
+ * fails when no entry of its type has its id (IDs are unique per type,
+ * §5.2), or when the target is in another ruleset (not allowed in v1). Links
  * are keyed by `<type>/<id>`; only resolved refs become links.
  */
 export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; issues: RefIssue[] } {
+  const byKey = new Map<string, RefEntry>();
   const byId = new Map<string, RefEntry>();
-  for (const entry of entries) if (!byId.has(entry.id)) byId.set(entry.id, entry);
+  for (const entry of entries) {
+    if (!byKey.has(entryKey(entry))) byKey.set(entryKey(entry), entry);
+    if (!byId.has(entry.id)) byId.set(entry.id, entry);
+  }
   const links = new Map<string, Links>();
   const linksOf = (key: string): Links => {
     let found = links.get(key);
@@ -85,10 +89,11 @@ export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; i
     for (const { path, ref } of collectRefs(entry.stats)) {
       const slash = ref.indexOf('/');
       const [type, id] = [ref.slice(0, slash), ref.slice(slash + 1)];
-      const target = byId.get(id);
+      const target = byKey.get(ref);
+      const other = byId.get(id);
       let problem: string | undefined;
-      if (!target) problem = `no entry has id "${id}"`;
-      else if (target.type !== type) problem = `"${id}" is a ${target.type}, not a ${type}`;
+      if (!target && other) problem = `no ${type} has id "${id}"; "${id}" is a ${other.type}`;
+      else if (!target) problem = `no ${type} has id "${id}"`;
       else if (target.ruleset !== entry.ruleset) problem = `"${id}" is in ${target.ruleset}; refs can't cross rulesets in v1`;
       if (problem || !target) {
         issues.push({ file: entry.file, message: `${path}: ref "${ref}" does not resolve: ${problem}` });

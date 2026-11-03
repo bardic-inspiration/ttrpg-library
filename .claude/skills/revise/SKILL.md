@@ -24,12 +24,13 @@ Exactly one of:
   the PR's own branch.
 - **A `revise` issue.** One open issue with the `revise` label, for entries
   already on `main`. A revise-request form body has a `### Entry IDs` heading
-  (one `id` per line) and an `### Instruction` heading. A free-form `revise`
+  (one entry per line, as `<type>/<id>`, or a bare `id` when only one type
+  has it; §5.2) and an `### Instruction` heading. A free-form `revise`
   issue is read for the same two things in its prose. Read the issue's
   comments too. Work on a new branch (step 5).
 
 If a revise issue can't be fulfilled as written (an ID that isn't in the
-library, an instruction that contradicts itself), don't edit anything:
+library, a bare ID that more than one type has, an instruction that contradicts itself), don't edit anything:
 comment one question on the issue, add `needs-info`, remove `in-progress` if
 it has it, and stop (§8.2 step 6).
 

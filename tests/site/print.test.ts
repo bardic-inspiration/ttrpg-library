@@ -40,9 +40,9 @@ describe('page sizes (SPEC.md §10.4, §10.5)', () => {
 });
 
 describe('parsePrintQuery', () => {
-  it('reads ids in order, without repeats or blanks, and the size', () => {
-    const query = parsePrintQuery('?ids=frost-lance,cinder-hound,frost-lance,,&size=a4');
-    expect(query.ids).toEqual(['frost-lance', 'cinder-hound']);
+  it('reads <type>/<id> keys in order, without repeats or blanks, and the size', () => {
+    const query = parsePrintQuery('?ids=spell/frost-lance,creature/cinder-hound,spell/frost-lance,,&size=a4');
+    expect(query.ids).toEqual(['spell/frost-lance', 'creature/cinder-hound']);
     expect(query.size.id).toBe('a4');
   });
 
@@ -65,9 +65,15 @@ describe('parsePrintQuery', () => {
 
 describe('selectEntries', () => {
   it('keeps the order of ids and reports ids no entry has', () => {
-    const selection = selectEntries(parsePrintQuery('?ids=frost-lance,nope,cinder-hound'), records, reg);
+    const selection = selectEntries(parsePrintQuery('?ids=spell/frost-lance,spell/nope,creature/cinder-hound'), records, reg);
     expect(selection.records.map((r) => r.id)).toEqual(['frost-lance', 'cinder-hound']);
-    expect(selection.missing).toEqual(['nope']);
+    expect(selection.missing).toEqual(['spell/nope']);
+  });
+
+  it('tells apart entries of different types that share an id (SPEC.md §5.2)', () => {
+    const twin = { ...records.find((r) => r.id === 'frost-lance')!, type: 'creature', name: 'Frost Lance', url: '/ttrpg-library/dnd-5e-2024/creature/frost-lance/' };
+    const selection = selectEntries(parsePrintQuery('?ids=creature/frost-lance'), [...records, twin], reg);
+    expect(selection.records.map((r) => `${r.type}/${r.id}`)).toEqual(['creature/frost-lance']);
   });
 
   it('reads a gallery query as the home gallery’s, with f.type narrowing by type', () => {
@@ -88,8 +94,8 @@ describe('URLs', () => {
   });
 
   it('build a print view URL with ids and an optional size', () => {
-    expect(printUrl(BASE, ['cinder-hound', 'frost-lance'], 'a4')).toBe('/ttrpg-library/print/?ids=cinder-hound,frost-lance&size=a4');
-    expect(printUrl(BASE, ['cinder-hound'])).toBe('/ttrpg-library/print/?ids=cinder-hound');
+    expect(printUrl(BASE, ['creature/cinder-hound', 'spell/frost-lance'], 'a4')).toBe('/ttrpg-library/print/?ids=creature/cinder-hound,spell/frost-lance&size=a4');
+    expect(printUrl(BASE, ['creature/cinder-hound'])).toBe('/ttrpg-library/print/?ids=creature/cinder-hound');
   });
 });
 
@@ -138,7 +144,7 @@ describe('loadPrintRun', () => {
 
   it('fetches only the named entries’ fragments, in order, at the chosen size', async () => {
     const { fetch, fetched } = site();
-    const run = await loadPrintRun('?ids=frost-lance,cinder-hound&size=half-letter', BASE, reg, fetch);
+    const run = await loadPrintRun('?ids=spell/frost-lance,creature/cinder-hound&size=half-letter', BASE, reg, fetch);
     expect(run.ok).toBe(true);
     if (!run.ok) return;
     expect(run.size.id).toBe('half-letter');
@@ -152,12 +158,12 @@ describe('loadPrintRun', () => {
   });
 
   it('fails with a message when an id has no entry', async () => {
-    const run = await loadPrintRun('?ids=cinder-hound,nope', BASE, reg, site().fetch);
-    expect(run).toMatchObject({ ok: false, message: 'No entry has the id “nope”.' });
+    const run = await loadPrintRun('?ids=creature/cinder-hound,creature/nope', BASE, reg, site().fetch);
+    expect(run).toMatchObject({ ok: false, message: 'No entry matches “creature/nope”.' });
   });
 
   it('fails with a message when a fragment fails to load', async () => {
-    const run = await loadPrintRun('?ids=cinder-hound,frost-lance', BASE, reg, site({ [fragmentUrl(BASE, records.find((r) => r.id === 'frost-lance')!)]: undefined }).fetch);
+    const run = await loadPrintRun('?ids=creature/cinder-hound,spell/frost-lance', BASE, reg, site({ [fragmentUrl(BASE, records.find((r) => r.id === 'frost-lance')!)]: undefined }).fetch);
     expect(run).toMatchObject({ ok: false, message: 'Frost Lance couldn’t be loaded. Try reloading the page.' });
   });
 
@@ -199,13 +205,13 @@ describe('print exporter (SPEC.md §10.1, §10.4)', () => {
   it('opens the print view for one entry at the chosen size', async () => {
     const fake = opened();
     await print.run([item('cinder-hound')], { scope: 'entry', base: BASE, pageSize: 'card-4x6', io: fake.io });
-    expect(fake.urls).toEqual(['/ttrpg-library/print/?ids=cinder-hound&size=card-4x6']);
+    expect(fake.urls).toEqual(['/ttrpg-library/print/?ids=creature/cinder-hound&size=card-4x6']);
   });
 
   it('opens the print view for a set, in order', async () => {
     const fake = opened();
     await print.run([item('frost-lance'), item('cinder-hound')], { scope: 'set', base: BASE, io: fake.io });
-    expect(fake.urls).toEqual(['/ttrpg-library/print/?ids=frost-lance,cinder-hound']);
+    expect(fake.urls).toEqual(['/ttrpg-library/print/?ids=spell/frost-lance,creature/cinder-hound']);
   });
 
   it('rejects an empty set and more than one entry in entry scope', async () => {

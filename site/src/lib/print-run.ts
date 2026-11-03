@@ -10,7 +10,7 @@ import { fragmentUrl, parsePrintQuery, type PageSize, type PrintQuery } from './
 export interface PrintSelection {
   /** The records to print, in print order. */
   records: LibraryRecord[];
-  /** Ids from `ids` that no record has. */
+  /** Keys (`<type>/<id>`) from `ids` that no record has. */
   missing: string[];
 }
 
@@ -21,10 +21,10 @@ export interface PrintSelection {
  */
 export function selectEntries(query: PrintQuery, records: LibraryRecord[], registry: Registry): PrintSelection {
   if (query.ids) {
-    const byId = new Map(records.map((record) => [record.id, record]));
+    const byKey = new Map(records.map((record) => [`${record.type}/${record.id}`, record]));
     return {
-      records: query.ids.map((id) => byId.get(id)).filter((r): r is LibraryRecord => r !== undefined),
-      missing: query.ids.filter((id) => !byId.has(id)),
+      records: query.ids.map((key) => byKey.get(key)).filter((r): r is LibraryRecord => r !== undefined),
+      missing: query.ids.filter((key) => !byKey.has(key)),
     };
   }
   const gallery = galleryConfig(registry, {});
@@ -55,7 +55,7 @@ export async function loadPrintRun(search: string, base: string, registry: Regis
   const index = await load(`${base}library.json`).catch(() => undefined);
   if (!index?.ok) return fail('The library couldn’t be loaded. Try reloading the page.');
   const { records, missing } = selectEntries(query, JSON.parse(await index.text()) as LibraryRecord[], registry);
-  if (missing.length > 0) return fail(`No entry has the id ${missing.map((id) => `“${id}”`).join(', ')}.`);
+  if (missing.length > 0) return fail(`No entry matches ${missing.map((key) => `“${key}”`).join(', ')}.`);
   if (records.length === 0) return fail('No entries to print.');
   const fragments = await Promise.all(
     records.map(async (record) => {

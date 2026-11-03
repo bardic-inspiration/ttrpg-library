@@ -74,8 +74,9 @@ For the batch's ruleset and each type in it, read:
 
 ## Step 2: Avoid collisions
 
-From `site/public/library.json`, list every existing `name` and `id`, across
-all types: IDs and names are unique library-wide (§5.2). Then find existing
+From `site/public/library.json`, list every existing `name` and `id` of each
+type in the batch: IDs and names are unique within a type (§5.2), so a new
+spell may share a name with a creature but not with another spell. Then find existing
 entries that match the brief's theme (by tags, summary, and facets) so the
 batch doesn't repeat a concept already in the library.
 
@@ -86,7 +87,7 @@ batch doesn't repeat a concept already in the library.
 - Custom entries: avoid SRD names and near collisions with them, whether or
   not the SRD entry is in the library, and every blocklist term (§11).
 - SRD request: skip any SRD entry already in the library. If an SRD name
-  collides with an existing custom entry, leave that SRD entry out and report
+  collides with an existing custom entry of the same type, leave that SRD entry out and report
   the collision in the PR body (or the run's output if nothing else is
   generated). Never rename an SRD entry to dodge a collision.
 

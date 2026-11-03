@@ -52,18 +52,20 @@ export function editDistance(a: string, b: string): number {
 }
 
 /**
- * Unique IDs and names (errors), and near-duplicate names (warnings). Two SRD
- * entries are never warned about, since neither name can change (§5.2).
+ * Unique IDs and names within a type (errors), and near-duplicate names within
+ * a type (warnings) (§5.2). A spell and a creature may share a name. Two SRD
+ * entries are never warned about, since neither name can change.
  */
 export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
   const issues: FileIssue[] = [];
   const byId = new Map<string, EntryHead>();
   const byName = new Map<string, EntryHead>();
   for (const entry of entries) {
-    const sameId = byId.get(entry.id);
+    const idKey = `${entry.type}/${entry.id}`;
+    const sameId = byId.get(idKey);
     if (sameId) issues.push({ level: 'error', file: entry.file, message: `id "${entry.id}" is already used by ${sameId.file}` });
-    else byId.set(entry.id, entry);
-    const key = entry.name.toLowerCase();
+    else byId.set(idKey, entry);
+    const key = `${entry.type}/${entry.name.toLowerCase()}`;
     const sameName = byName.get(key);
     if (sameName) issues.push({ level: 'error', file: entry.file, message: `name "${entry.name}" is already used by ${sameName.file}` });
     else byName.set(key, entry);
@@ -71,7 +73,7 @@ export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
   for (let i = 0; i < entries.length; i++) {
     for (let j = i + 1; j < entries.length; j++) {
       const [a, b] = [entries[i], entries[j]];
-      if (!a || !b || a.name.toLowerCase() === b.name.toLowerCase() || (a.srd && b.srd)) continue;
+      if (!a || !b || a.type !== b.type || a.name.toLowerCase() === b.name.toLowerCase() || (a.srd && b.srd)) continue;
       if (editDistance(normalizeName(a.name), normalizeName(b.name)) <= 2) {
         issues.push({ level: 'warning', file: b.file, message: `name "${b.name}" is close to "${a.name}" (${a.file})` });
       }
