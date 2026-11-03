@@ -158,7 +158,7 @@
       {
         "name": "Protective Magic",
         "kind": "other",
-        "text": "The lich casts *{ref:spell/counterspell}* or *{ref:spell/shield}* in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
+        "text": "The lich casts *Counterspell* or *Shield* in response to the spell's trigger, using the same spellcasting ability as Spellcasting."
       }
     ],
     "legendaryActions": {
@@ -198,7 +198,6 @@
   },
   "meta": {
     "createdAt": "2026-11-03",
-    "updatedAt": "2026-11-03",
     "source": {
       "kind": "routine",
       "issues": [

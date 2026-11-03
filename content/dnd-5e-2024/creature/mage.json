@@ -101,7 +101,7 @@
       {
         "name": "Misty Step",
         "kind": "other",
-        "text": "The mage casts *{ref:spell/misty-step}*, using the same spellcasting ability as Spellcasting.",
+        "text": "The mage casts *Misty Step*, using the same spellcasting ability as Spellcasting.",
         "uses": "3/day"
       }
     ],
@@ -109,14 +109,13 @@
       {
         "name": "Protective Magic",
         "kind": "other",
-        "text": "The mage casts *{ref:spell/counterspell}* or *{ref:spell/shield}* in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "text": "The mage casts *Counterspell* or *Shield* in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
         "uses": "3/day"
       }
     ]
   },
   "meta": {
     "createdAt": "2026-11-03",
-    "updatedAt": "2026-11-03",
     "source": {
       "kind": "routine",
       "issues": [
