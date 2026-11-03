@@ -1,0 +1,51 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "confusion",
+  "name": "Confusion",
+  "summary": "Creatures in a sphere that fail a save act at random each turn, rolling on a behavior table.",
+  "stats": {
+    "level": 4,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 90
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "three nut shells"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "Each creature in a 10-foot-radius Sphere centered on a point you choose within range must succeed on a Wisdom saving throw, or that target can't take Bonus Actions or Reactions and must roll 1d10 at the start of each of its turns to determine its behavior for that turn, consulting the table below.\n\n| 1d10 | Behavior for the Turn |\n|---|---|\n| 1 | The target doesn't take an action, and it uses all its movement to move. Roll 1d4 for the direction: 1, north; 2, east; 3, south; or 4, west. |\n| 2–6 | The target doesn't move or take actions. |\n| 7–8 | The target doesn't move, and it takes the Attack action to make one melee attack against a random creature within reach. If none are within reach, the target takes no action. |\n| 9–10 | The target chooses its behavior. |\n\nAt the end of each of its turns, an affected target repeats the save, ending the spell on itself on a success.",
+    "higherLevels": "The Sphere's radius increases by 5 feet for each spell slot level above 4."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        140
+      ],
+      "srd": true
+    }
+  }
+}

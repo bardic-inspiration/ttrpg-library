@@ -145,11 +145,11 @@ const INVALID: Record<string, RegExp> = {
   'blocklist-in-stats-text': /^stats\.traits\[0\]\.text: "beholders" is on the blocklist/,
   'magic-item-blocklist-in-spell': /^stats\.spells\[0\]\.spell: "Bigby's" is on the blocklist/,
   'spell-blocklist-in-effect': /^stats\.effect: "Tasha's" is on the blocklist/,
-  'markdown-heading': /^description: a heading is not allowed; text fields use only paragraphs, \*\*bold\*\*, \*italic\*, lists, and line breaks$/,
+  'markdown-heading': /^description: a heading is not allowed; text fields use only paragraphs, \*\*bold\*\*, \*italic\*, lists, line breaks, and pipe tables$/,
   'markdown-image': /^description: an image is not allowed/,
   'markdown-link': /^stats\.traits\[0\]\.text: a link is not allowed/,
   'markdown-html': /^stats\.actions\[1\]\.onSuccess: HTML is not allowed/,
-  'spell-markdown-table': /^stats\.higherLevels: a table is not allowed/,
+  'spell-malformed-table': /^stats\.higherLevels: table row 1 has 1 cell; its header has 2$/,
   'spell-markdown-trigger': /^stats\.castingTime\.trigger: a link is not allowed/,
   'magic-item-markdown-autolink': /^stats\.effect: a link is not allowed/,
 };

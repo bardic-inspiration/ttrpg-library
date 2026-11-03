@@ -113,8 +113,8 @@ no tokens: its numbers are authored, so write them as numbers.
 - `higherLevels`: "The damage increases by 1d8 for each spell slot level
   above 1." `cantripUpgrade`: "The damage increases by 1d10 when you reach
   levels 5 (2d10), 11 (3d10), and 17 (4d10)."
-- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists. No
-  headings, links, or tables. Italicize spell names: *Frost Lance*.
+- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
+  pipe tables. No headings or links. Italicize spell names: *Frost Lance*.
 - Don't use braces in spell text. Tokens are a creature feature and don't
   render here.
 

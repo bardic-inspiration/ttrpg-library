@@ -2,8 +2,9 @@
 // validator already rejects everything outside the subset with the same
 // `marked` lexer; rendering is sanitized anyway, so a construct that slipped
 // through reads as its plain text, never as markup: raw HTML is escaped,
-// links and images keep only their text, and headings and tables read as
-// paragraphs.
+// links and images keep only their text, and headings read as paragraphs.
+// Pipe tables render as one site-wide table (SPEC.md §9.5), inside a box that
+// scrolls on its own when the table is wider than the text column.
 
 import { Marked, type Tokens } from 'marked';
 
@@ -25,8 +26,18 @@ const marked = new Marked({
     heading({ tokens }: Tokens.Heading) {
       return `<p>${this.parser.parseInline(tokens)}</p>\n`;
     },
-    table({ raw }: Tokens.Table) {
-      return `<p>${escapeHtml(raw)}</p>\n`;
+    table({ header, rows }: Tokens.Table) {
+      const cell = (c: Tokens.TableCell, tag: 'th' | 'td') => {
+        // A one-word cell, such as a die range "9–10", never breaks at its dash.
+        const classes = [c.align && `md-table__cell--${c.align}`, !/\s/.test(c.text.trim()) && 'md-table__cell--nowrap'].filter(Boolean);
+        const attrs = (tag === 'th' ? ' scope="col"' : '') + (classes.length ? ` class="${classes.join(' ')}"` : '');
+        return `<${tag}${attrs}>${this.parser.parseInline(c.tokens)}</${tag}>`;
+      };
+      const label = header.map((c) => this.parser.parseInline(c.tokens, this.parser.textRenderer)).join(', ');
+      const head = `<thead><tr>${header.map((c) => cell(c, 'th')).join('')}</tr></thead>`;
+      const body = `<tbody>${rows.map((row) => `<tr>${row.map((c) => cell(c, 'td')).join('')}</tr>`).join('')}</tbody>`;
+      // Focusable and labeled, so a keyboard can scroll it when it overflows.
+      return `<div class="md-table" role="region" tabindex="0" aria-label="Table: ${escapeHtml(label)}"><table>${head}${body}</table></div>\n`;
     },
   },
 });

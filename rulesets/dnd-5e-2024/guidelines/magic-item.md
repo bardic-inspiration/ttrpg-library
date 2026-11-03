@@ -114,8 +114,8 @@ authored, so write them as numbers.
   to cast *Frost Lance* from it") without repeating the DC or attack bonus; a
   repeated value is a validator warning.
 - The `charges.depletion` text is its own field. Don't repeat it in `effect`.
-- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists. No
-  headings, links, or tables. Italicize spell names: *Frost Lance*.
+- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
+  pipe tables. No headings or links. Italicize spell names: *Frost Lance*.
 - Don't use braces in item text. Tokens are a creature feature and don't
   render here.
 

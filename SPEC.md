@@ -228,7 +228,19 @@ Meta is shown on the detail page in a small provenance line and is sortable (`me
 
 ### 5.5 Text fields
 
-`description`, and the rules-text fields inside `stats` (`text`, `effect`, `higherLevels`, etc.), accept a markdown subset: paragraphs, `**bold**`, `*italic*`, bulleted and numbered lists, and line breaks. No headings, links (including bare URLs, which render as links), HTML, images, or tables. The validator rejects disallowed constructs, parsing the text with the same `marked` lexer the site renders with (`scripts/validate/text.ts`). A schema marks these fields with the `markdownSubset: true` keyword: the envelope's `description`, and the ruleset's `Text` def. Rendering is sanitized. A ruleset may also define tokens that render derived values inside text (§6.4).
+`description`, and the rules-text fields inside `stats` (`text`, `effect`, `higherLevels`, etc.), accept a markdown subset: paragraphs, `**bold**`, `*italic*`, bulleted and numbered lists, line breaks, and pipe tables. No headings, links (including bare URLs, which render as links), HTML, or images. The validator rejects disallowed constructs, parsing the text with the same `marked` lexer the site renders with (`scripts/validate/text.ts`). A schema marks these fields with the `markdownSubset: true` keyword: the envelope's `description`, and the ruleset's `Text` def. Rendering is sanitized. A ruleset may also define tokens that render derived values inside text (§6.4).
+
+**Pipe tables.** A table is GitHub-style markdown inside the text, at the point where it reads, so an SRD entry keeps its text in order (§5.9). Any markdown-subset field may hold one, in SRD and custom entries alike. It has a header row, a delimiter row (`|---|---|`, with `:` for column alignment), and at least one body row, and sits between paragraphs:
+
+```text
+The type of giant determines the score (see the table below).
+
+| Belt | Str. | Rarity |
+|---|---|---|
+| Belt of Giant Strength (hill) | 21 | Rare |
+```
+
+Cells hold only inline text: bold, italic, and tokens where the ruleset allows them. A `|` inside a cell is escaped as `\|`. The validator rejects a malformed table: a row with more or fewer cells than the header, an empty header cell, a table with no body rows, and a line that starts with `|` but doesn't parse as a table (usually a missing delimiter row, or one with a different number of columns). The site renders every table the same way (§9.5).
 
 ### 5.6 Image
 
@@ -723,6 +735,8 @@ A brief that asks for SRD content (by name, or as a description such as "ten SRD
 
 **SRD import stages.** The full SRD import (Milestone 7, §16) bypasses requests. Each stage is a sub-issue of the milestone issue, without the `request` label, so routines never take it; it is worked in sessions you start. A session runs the `generate` skill on a batch picked from `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress` claim, on branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs that day). The PR uses `content.md` and says `Refs #<stage>`; the PR that finishes the stage uses `Closes #<stage>`.
 
+**Format fixes during the import.** An SRD entry that the model can't hold yet, such as one that prints a table, gets a format-fix issue under Milestone 7, worked as a dev PR. Until Milestone 7 is done, that PR may also add the SRD entries that motivated the fix, so the PR shows the fix working on real entries. Those entries are transcribed by the `generate` skill's SRD rules, with `meta.source.issues` set to the format-fix issue, and the PR carries the `migration` label (§12.4). The remaining entries the fix unblocks come through the import stages as usual.
+
 **Labels**
 
 | Label | Meaning |
@@ -901,7 +915,8 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves. `EntryTemplate` picks the component from the registry's `template` name, falling back to `generic`. Each template renders the entry name as a heading at a `level` its page chooses (2 by default; the detail page's own `h1` sits above it), with section headings one level below.
-- Rules-text fields and `description` render through one sanitizing markdown helper (`site/src/lib/markdown.ts`): raw HTML is escaped, and links, images, headings, and tables read as plain text. Tokens render first, then markdown, in every `Text` field, including a creature's action prose, `spellcasting.note`, `legendaryActions.intro`, and a spell's `castingTime.trigger`, which renders inline within the Casting Time line. Fields that aren't `Text`, such as action names, save targets, and plain-string spells, are plain text: they are escaped before they join generated markdown, so a `*` in them displays as typed.
+- Rules-text fields and `description` render through one sanitizing markdown helper (`site/src/lib/markdown.ts`): raw HTML is escaped, and links, images, and headings read as plain text. Tokens render first, then markdown, in every `Text` field, including a creature's action prose, `spellcasting.note`, `legendaryActions.intro`, and a spell's `castingTime.trigger`, which renders inline within the Casting Time line. Fields that aren't `Text`, such as action names, save targets, and plain-string spells, are plain text: they are escaped before they join generated markdown, so a `*` in them displays as typed.
+- A pipe table (§5.5) renders as a `<table>` with `scope="col"` header cells, inside a `.md-table` box that scrolls sideways on its own when the table is wider than its column. The page never does (§9.7; data tables are exempt from WCAG reflow). The box is focusable and labeled "Table: " plus its column headers, so a keyboard can scroll it. One style in `base.css` serves every template, mode, and theme: column headers in the heading font over an accent rule, thin rules between rows, no striping, and cell text that wraps, except that a one-word cell such as a die range (`9–10`) stays on one line. Its knobs are the `--table-*` component tokens, and print and capture take their size from the surrounding text.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
 - Markup is semantic so that styling never fights structure. The entry name is a heading, section labels (Actions, Reactions) are subheadings, property lines and ability scores are definition lists or tables, and action names are inline headings.
 
@@ -1145,7 +1160,7 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 
 - A PR's lane comes from its branch prefix: `gen/`, `revise/`, and `manual/` are content; every other branch is dev, so a quick edit from the GitHub web editor needs no branch rename. `spike/` branches get no lane and fail, so a spike can't merge. A dev PR still can't change content without the `migration` label, so content stays protected.
 - A content-lane PR fails if it changes any path outside `content/**` and `assets/images/**`. Routines therefore cannot alter schemas, guidelines, config, or the site, even by accident.
-- A dev-lane PR fails if it changes `content/**` or `assets/images/**` without the `migration` label. The label is applied by hand, never automatically, so every bulk content change made by code is a deliberate, visible decision. A migration PR's body must state what changed in the entries and why.
+- A dev-lane PR fails if it changes `content/**` or `assets/images/**` without the `migration` label. The label is applied by hand, never automatically, so every bulk content change made by code is a deliberate, visible decision. A migration PR's body must state what changed in the entries and why. Until Milestone 7 is done, a format-fix PR may use the label to add the SRD entries that motivated it (§8.1).
 - The job re-runs when labels change (`pull_request` types `opened`, `synchronize`, `reopened`, `labeled`, `unlabeled`), so adding `migration` unblocks the PR without a new push.
 
 **Guidelines count as development.** A guideline edit changes every future generation run, so it is reviewed as behavior (`generation` label), not as content. The same applies to the generation and revision skills, the defaults file, and the routine prompts.

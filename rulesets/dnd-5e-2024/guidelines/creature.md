@@ -186,8 +186,8 @@ Rules for all of these:
   durations ("until the end of its next turn"), counts ("two Bite attacks"),
   and recharge or uses, which go in `recharge` and `uses`, not in the name or
   the text.
-- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists. No
-  headings, links, or tables in entry text. Italicize spell names: *Frost
+- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
+  pipe tables. No headings or links in entry text. Italicize spell names: *Frost
   Lance*.
 - Every brace in entry text starts a token. Don't use braces for anything else.
 

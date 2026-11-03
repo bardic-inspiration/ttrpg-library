@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "staff-of-healing",
+  "name": "Staff of Healing",
+  "summary": "A staff that casts Cure Wounds, Lesser Restoration, and Mass Cure Wounds for charges.",
+  "stats": {
+    "category": "staff",
+    "rarity": "rare",
+    "attunement": {
+      "required": true,
+      "requirement": "by a Bard, Cleric, or Druid"
+    },
+    "charges": {
+      "max": 10,
+      "recharge": "1d6 + 4 daily at dawn",
+      "depletion": "If you expend the last charge, roll 1d20. On a 1, the staff vanishes in a flash of light, lost forever."
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/cure-wounds"
+        },
+        "chargeCost": 1,
+        "maxChargeCost": 4
+      },
+      {
+        "spell": "Lesser Restoration",
+        "chargeCost": 2
+      },
+      {
+        "spell": "Mass Cure Wounds",
+        "chargeCost": 5
+      }
+    ],
+    "effect": "This staff has 10 charges. While holding the staff, you can cast one of the spells on the following table from it, using your spellcasting ability modifier. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *Cure Wounds* | 1 charge per spell level (maximum 4 for a level 4 spell) |\n| *Lesser Restoration* | 2 |\n| *Mass Cure Wounds* | 5 |\n\n***Regaining Charges.*** The staff regains 1d6 + 4 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, the staff vanishes in a flash of light, lost forever."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        140
+      ],
+      "srd": true
+    }
+  }
+}

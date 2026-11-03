@@ -1,9 +1,9 @@
 // Text-field checks for every type (SPEC.md §5.5, §11, §6.8 "All types"):
-// the markdown subset and the blocklist.
+// the markdown subset, its pipe tables, and the blocklist.
 
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { Lexer, type Token } from 'marked';
+import { Lexer, type Token, type Tokens } from 'marked';
 import type { TermMatcher } from '../../lib/text.ts';
 
 /**
@@ -17,14 +17,56 @@ const DISALLOWED: Record<string, string> = {
   def: 'a link',
   image: 'an image',
   html: 'HTML',
-  table: 'a table',
 };
 
-/** Child tokens of a block or inline token, whatever key `marked` keeps them under. */
+/**
+ * Child tokens of a block or inline token, whatever key `marked` keeps them
+ * under. A table's cells come back as `table_cell` blocks, so each cell's
+ * words stay separate and its inline tokens are checked like any other.
+ */
 function children(token: Token): Token[] {
+  if (token.type === 'table') {
+    const table = token as Tokens.Table;
+    return [table.header, ...table.rows].flat().map((cell) => ({ type: 'table_cell', raw: cell.text, tokens: cell.tokens }) as Token);
+  }
   const t = token as Token & { tokens?: Token[]; items?: Token[] };
   return [...(t.tokens ?? []), ...(t.items ?? [])];
 }
+
+/**
+ * The cells of one table line: the leading and trailing pipe trimmed, then
+ * split on every pipe that isn't escaped (`\|` stays inside a cell).
+ */
+function cellCount(line: string): number {
+  const trimmed = line.trim().replace(/^\|/, '').replace(/(?<!\\)\|$/, '');
+  return trimmed.split(/(?<!\\)\|/).length;
+}
+
+/**
+ * Shape problems in one pipe table (SPEC.md §5.5). `marked` pads a short row
+ * and drops a long row's extra cells, so the row lengths are counted from the
+ * raw lines rather than from the parsed rows.
+ */
+function tableProblems(table: Tokens.Table): string[] {
+  const problems: string[] = [];
+  const columns = table.header.length;
+  const lines = table.raw.replace(/\n+$/, '').split('\n');
+  const rows = lines.slice(2);
+  if (table.header.some((cell) => cell.text.trim() === '')) problems.push('a table header cell is empty');
+  if (rows.length === 0) problems.push('a table has no rows under its header');
+  rows.forEach((line, i) => {
+    const count = cellCount(line);
+    if (count !== columns) problems.push(`table row ${i + 1} has ${count} ${count === 1 ? 'cell' : 'cells'}; its header has ${columns}`);
+  });
+  return problems;
+}
+
+/**
+ * A paragraph line that starts with a pipe: a table `marked` couldn't parse,
+ * usually because the delimiter row (`|---|---|`) is missing or has a
+ * different number of columns than the header.
+ */
+const BROKEN_TABLE_LINE = /^\s*\|/m;
 
 /**
  * `text` with its markdown removed: the words a reader sees, separated by
@@ -59,11 +101,30 @@ export function markdownViolations(text: string): string[] {
   return [...found];
 }
 
-/** One message per disallowed construct in the text at `path`. */
+/** Malformed pipe tables in `text`, one message per problem, in order. */
+export function tableViolations(text: string): string[] {
+  const found: string[] = [];
+  const visit = (tokens: Token[]) => {
+    for (const token of tokens) {
+      if (token.type === 'table') found.push(...tableProblems(token as Tokens.Table));
+      else if (token.type === 'paragraph' && BROKEN_TABLE_LINE.test(token.raw)) {
+        found.push('a line starts with "|" but isn\'t part of a table; a table needs a header row, then a delimiter row such as |---|---| with one cell per column');
+      } else visit(children(token));
+    }
+  };
+  visit(new Lexer().lex(text));
+  return found;
+}
+
+/** One message per disallowed construct or malformed table in the text at `path`. */
 export function checkMarkdown(path: string, text: string): string[] {
-  return markdownViolations(text).map(
-    (name) => `${path}: ${name} is not allowed; text fields use only paragraphs, **bold**, *italic*, lists, and line breaks`,
-  );
+  return [
+    ...markdownViolations(text).map(
+      (name) =>
+        `${path}: ${name} is not allowed; text fields use only paragraphs, **bold**, *italic*, lists, line breaks, and pipe tables`,
+    ),
+    ...tableViolations(text).map((problem) => `${path}: ${problem}`),
+  ];
 }
 
 export const BLOCKLIST_FILE = 'config/blocklist.json';
