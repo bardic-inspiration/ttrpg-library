@@ -10,6 +10,8 @@ export type TemplateMode = 'screen' | 'capture' | 'print';
 export interface PropertyLine {
   label: string;
   value: string;
+  /** `value` is markdown (it carries a `Text` field), rendered inline. */
+  markdown?: boolean;
 }
 
 /** Props every type template takes. Templates format these; they never compute rules values. */
