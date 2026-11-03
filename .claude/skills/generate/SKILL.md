@@ -148,7 +148,16 @@ against it before pushing.
   `{ref:creature/<id>}` if it's in the library, and leave the name as plain
   text if it isn't.
 - Everything the entry uses (spells, gear) is SRD content: a ref if it's in
-  the library, a plain string otherwise. Never create a dependency entry.
+  the library, a plain string otherwise. Never create a dependency entry. A
+  qualifier the SRD prints after a name goes in the ref's `note`
+  (`{ "ref": "spell/fireball", "note": "level 5 version" }`), or stays in the
+  plain string (`"Lightning Bolt (level 5 version)"`) (§5.7).
+- A detail the structured fields can't express goes, as printed, in the
+  nearest free-text field the schema offers (a creature's `speed.note` for
+  "40 ft. (wolf form only)"). Don't work around the template for exact
+  punctuation or layout; §5.9 "Formatting" lists what isn't matched.
+- An inline heading in rules text is bold italic: `***Regaining Charges.***`
+  (§9.5).
 - Set `meta.source.srd` to `true` (step 4).
 
 Never modify, rename, or move an existing entry. This skill only adds files.
