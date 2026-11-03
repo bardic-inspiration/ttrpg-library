@@ -104,6 +104,42 @@
     color: var(--color-text-muted);
   }
 
+  /*
+   * Pipe tables from markdown text (SPEC.md §5.5, §9.5), one style site-wide.
+   * The box scrolls on its own when the table is wider than its column, so
+   * the page never scrolls sideways.
+   */
+  .md-table {
+    max-inline-size: 100%;
+    overflow-x: auto;
+  }
+
+  .md-table table {
+    border-collapse: collapse;
+    inline-size: 100%;
+  }
+
+  .md-table th,
+  .md-table td {
+    padding: var(--table-cell-padding-block) var(--table-cell-padding-inline);
+    text-align: start;
+    vertical-align: top;
+  }
+
+  .md-table th {
+    font-family: var(--table-header-font);
+    font-weight: var(--font-weight-label);
+    border-block-end: var(--table-header-rule);
+  }
+
+  .md-table td {
+    border-block-end: var(--table-row-rule);
+  }
+
+  .md-table .md-table__cell--center { text-align: center; }
+  .md-table .md-table__cell--right { text-align: end; }
+  .md-table .md-table__cell--nowrap { white-space: nowrap; }
+
   .icon {
     display: inline-block;
     inline-size: var(--icon-size);
