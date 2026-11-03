@@ -14,6 +14,8 @@ export type Defaults = {
   ruleset: string;
   count: number;
   maxBatch: number;
+  /** The cap for an SRD import stage batch (§8.1). */
+  srdMaxBatch: number;
   tags: Tags;
   gapFill: { enabled: boolean; count: number };
   validateRetries: number;
@@ -26,12 +28,14 @@ export interface Request {
   brief?: string;
   tags?: Tags;
   ruleset?: string;
+  /** An SRD import stage batch (§8.1), capped at `srdMaxBatch` instead of `maxBatch`. */
+  srdImport?: boolean;
 }
 
 /** A request with every defaultable field filled. */
 export type ResolvedRequest = Request & { ruleset: string; count: number; tags: Tags };
 
-const KEYS = ['ruleset', 'count', 'maxBatch', 'tags', 'gapFill', 'validateRetries'] as const;
+const KEYS = ['ruleset', 'count', 'maxBatch', 'srdMaxBatch', 'tags', 'gapFill', 'validateRetries'] as const;
 const TAG_KEY = /^[a-z][a-z0-9-]*$/;
 
 const isWhole = (value: unknown, min: number, max = Infinity): value is number =>
@@ -52,12 +56,15 @@ export function checkDefaults(defaults: Record<string, unknown>, registry: Recor
     if (!(KEYS as readonly string[]).includes(key)) problems.push(`${key}: unknown key`);
   }
 
-  const { ruleset, count, maxBatch, tags, gapFill, validateRetries } = defaults;
+  const { ruleset, count, maxBatch, srdMaxBatch, tags, gapFill, validateRetries } = defaults;
   if ('ruleset' in defaults && (typeof ruleset !== 'string' || !(ruleset in registry))) {
     problems.push(`ruleset: "${String(ruleset)}" is not a ruleset in config/types.json`);
   }
   const batch = isWhole(maxBatch, 1) ? maxBatch : undefined;
   if ('maxBatch' in defaults && batch === undefined) problems.push('maxBatch: must be a whole number of at least 1');
+  if ('srdMaxBatch' in defaults && !isWhole(srdMaxBatch, batch ?? 1)) {
+    problems.push('srdMaxBatch: must be a whole number of at least maxBatch');
+  }
   if ('count' in defaults && !isWhole(count, 1, batch)) problems.push('count: must be a whole number from 1 to maxBatch');
   if ('validateRetries' in defaults && !isWhole(validateRetries, 0)) {
     problems.push('validateRetries: must be a whole number of at least 0');
@@ -95,13 +102,14 @@ export async function loadDefaults(root = PROJECT_ROOT): Promise<Defaults> {
 
 /**
  * Fills the fields a request leaves out from the defaults, merges request tags
- * over default tags, and reduces a count above `maxBatch` to `maxBatch` (§8.3).
+ * over default tags, and reduces a count above the batch cap to the cap:
+ * `srdMaxBatch` for an SRD import stage, `maxBatch` otherwise (§8.3).
  */
 export function applyDefaults(request: Request, defaults: Defaults): ResolvedRequest {
   return {
     ...request,
     ruleset: request.ruleset ?? defaults.ruleset,
-    count: Math.min(request.count ?? defaults.count, defaults.maxBatch),
+    count: Math.min(request.count ?? defaults.count, request.srdImport ? defaults.srdMaxBatch : defaults.maxBatch),
     tags: { ...defaults.tags, ...request.tags },
   };
 }

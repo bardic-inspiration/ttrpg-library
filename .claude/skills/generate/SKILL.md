@@ -30,11 +30,16 @@ One batch, from exactly one of these sources:
 - **Gap bucket.** A type and a bucket label such as `stats.cr=2..4`, chosen by
   the run (§8.2 step 5, §7.1), with a count of `defaults.gapFill.count`. The
   brief is to fill that bucket: every entry's values must fall in it.
+- **SRD import stage.** A stage issue of the full SRD import (§8.1), worked
+  in a session the owner starts. The batch is SRD entries of one type and
+  tier, picked from `npm run srd-coverage -- --type <type> --tier <tier>`.
+  It is an SRD request; don't claim the issue with `in-progress`.
 
 Resolve each request against `config/defaults.json` as
 `scripts/generate/defaults.ts` (`applyDefaults`) does: a blank field takes
 the default (`defaults.ruleset`, `defaults.count`), a count above
-`defaults.maxBatch` becomes `defaults.maxBatch`, and request tags merge over
+`defaults.maxBatch` becomes `defaults.maxBatch` (`defaults.srdMaxBatch` for an
+SRD import stage), and request tags merge over
 `defaults.tags`. A form tag line `key: a, b` is the list `["a", "b"]`; a
 line with no comma is a single string.
 
@@ -144,7 +149,7 @@ Set on every entry in the batch, including dependencies:
 - `meta.createdAt`: today's date, `YYYY-MM-DD`.
 - `meta.source.kind`: `"routine"`.
 - `meta.source.issues`: the issue numbers the entry fulfils, for an issue
-  batch. Omit it otherwise.
+  batch, or `[<stage>]` for an SRD import stage. Omit it otherwise.
 - `meta.source.gapFill`: the bucket label, for a gap-fill run. Omit it
   otherwise.
 - `meta.source.srd`: `true` on an SRD entry. Omit it on a custom entry.
@@ -172,7 +177,9 @@ Once it passes, keep every warning it prints; they go in the PR body.
    - issues: `gen/<issue-numbers>-<YYYYMMDD>`, numbers ascending and joined
      by `-` (`gen/12-14-20261102`);
    - gap fill: `gen/gap-<type>-<YYYYMMDD>` (`gen/gap-spell-20261102`);
-   - inline request: `gen/inline-<type>-<YYYYMMDD>`.
+   - inline request: `gen/inline-<type>-<YYYYMMDD>`;
+   - SRD import stage: `gen/srd-<stage>-<type>-<YYYYMMDD>`, adding `-2`,
+     `-3` for more PRs the same day.
 2. Stage only the new files under `content/`. A content PR that changes
    anything else fails the `lane` check (§12.4).
 3. Commit with the message `Add <n> <type> entries` (a mixed-type batch:
@@ -188,7 +195,8 @@ Once it passes, keep every warning it prints; they go in the PR body.
    - **Gap fill:** the bucket label, for a gap-fill run. Delete the section
      otherwise.
    - One `Closes #<n>` line per fulfilled issue. Delete the line for a
-     gap-fill or inline run.
+     gap-fill or inline run. An SRD import stage uses `Refs #<stage>`,
+     except the PR that finishes the stage, which uses `Closes #<stage>`.
 
 The `content` label is applied from the branch prefix (§12.4); don't add
 labels to the PR. Leave `in-progress` on the issues: an open linked PR is
