@@ -1,0 +1,35 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "wand-of-web",
+  "name": "Wand of Web",
+  "summary": "A wand that casts Web, filling an area with sticky webbing.",
+  "stats": {
+    "category": "wand",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true,
+      "requirement": "by a Spellcaster"
+    },
+    "charges": {
+      "max": 7,
+      "recharge": "1d6 + 1 daily at dawn",
+      "depletion": "If you expend the wand's last charge, roll 1d20. On a 1, the wand crumbles into ashes and is destroyed."
+    },
+    "spells": [
+      {
+        "spell": "Web",
+        "chargeCost": 1,
+        "saveDc": 13
+      }
+    ],
+    "effect": "This wand has 7 charges. While holding it, you can expend 1 charge to cast *Web* (save DC 13) from it."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}
