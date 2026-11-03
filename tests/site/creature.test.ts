@@ -167,3 +167,19 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(line({ spoken: [], note: 'see below' })).toBe('None (see below)');
   });
 });
+
+describe('SRD 5.2 forms found by the import pilot (#142)', () => {
+  const build = async (patch: Partial<CreatureStats>) => {
+    const s = { ...((await cinderHound()).stats as CreatureStats), ...patch };
+    return { s, d: deriveCreature(s, tables) };
+  };
+
+  it('title-cases a uses note but leaves minor words lowercase', async () => {
+    const { s, d } = await build({
+      traits: [{ name: 'Legendary Resistance', kind: 'other', uses: '4/day, or 5/day in lair', text: 'It succeeds instead.' }],
+      skills: { 'sleight-of-hand': 'proficient' },
+    });
+    expect(actionBlock(s.traits![0]!, d.traits[0], d).name).toBe('Legendary Resistance (4/Day, or 5/Day in Lair)');
+    expect(skillsLine(s, d)).toBe('Sleight of Hand +4');
+  });
+});

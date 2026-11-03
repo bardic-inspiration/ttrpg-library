@@ -32,11 +32,18 @@ export interface ActionBlock {
 const label = (text: string): string => `*${text}*`;
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-/** Capitalizes each word, splitting on spaces, hyphens, and slashes: `4/day` is `4/Day`. */
+/** Words title case leaves lowercase unless they come first (SPEC.md §6.5). */
+const MINOR_WORDS = new Set(['a', 'an', 'and', 'at', 'by', 'for', 'in', 'of', 'on', 'or', 'per', 'the', 'to', 'with']);
+
+/**
+ * Capitalizes each word but a minor one, splitting on spaces, hyphens, and
+ * slashes: `4/day, or 5/day in lair` is `4/Day, or 5/Day in Lair`, and
+ * `sleight-of-hand` is `Sleight of Hand`.
+ */
 const titleCase = (s: string): string =>
   s
     .split(/[\s-]+/)
-    .map((word) => word.split('/').map(capitalize).join('/'))
+    .map((word, i) => (i > 0 && MINOR_WORDS.has(word) ? word : word.split('/').map(capitalize).join('/')))
     .join(' ');
 
 export { formatCr };
