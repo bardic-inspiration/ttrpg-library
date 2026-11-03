@@ -299,6 +299,18 @@ describe('library checks (SPEC.md §6.8, all types)', () => {
     ]);
   });
 
+  it('skips the near-duplicate warning when both entries are SRD entries (SPEC.md §5.2)', async () => {
+    const srd = await cinderHound();
+    srd.meta.source.srd = true;
+    const near = await cinderHound();
+    Object.assign(near, { name: 'Cinder Hounds', id: 'cinder-hounds' });
+    near.meta.source.srd = true;
+    expect((await validateLibrary((await temp([srd, near])).content)).warnings).toEqual([]);
+    const custom = await cinderHound();
+    Object.assign(custom, { name: 'Cinder Hounds', id: 'cinder-hounds' });
+    expect((await validateLibrary((await temp([srd, custom])).content)).warnings).toHaveLength(1);
+  });
+
   it('normalizes names and measures edit distance', () => {
     expect(normalizeName('Frost-Lance, Élan')).toBe('frostlanceelan');
     expect(editDistance('frostlance', 'frostlances')).toBe(1);
