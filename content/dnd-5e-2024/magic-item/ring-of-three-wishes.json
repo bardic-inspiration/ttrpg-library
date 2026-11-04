@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "ring-of-three-wishes",
+  "name": "Ring of Three Wishes",
+  "summary": "A ring that casts Wish, once for each of its three charges.",
+  "stats": {
+    "category": "ring",
+    "rarity": "legendary",
+    "attunement": {
+      "required": false
+    },
+    "charges": {
+      "max": 3
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/wish"
+        },
+        "chargeCost": 1
+      }
+    ],
+    "effect": "While wearing this ring, you can expend 1 of its 3 charges to cast *{ref:spell/wish}* from it. The ring becomes nonmagical when you use the last charge."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
