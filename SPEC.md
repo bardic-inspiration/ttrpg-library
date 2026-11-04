@@ -463,7 +463,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `baseItem` | optional string | Required for `armor` and `weapon` (for example `"Longsword"`, `"any medium armor"`) |
 | `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | |
 | `attunement` | `{ required: bool, requirement?: string }` | `requirement` such as `"by a spellcaster"` |
-| `charges` | optional `{ max: int, recharge?: string, depletion?: Text }` | Reads "7; regains 1d6 + 1 daily at dawn". An item that never regains charges omits `recharge`, and the line reads "12" |
+| `charges` | optional `{ max: int or dice, recharge?: string, depletion?: Text }` | Reads "7; regains 1d6 + 1 daily at dawn". An item that never regains charges omits `recharge`, and the line reads "12". `max` is a whole number, or a rolled count as printed ("1d3", "1d8 + 1") |
 | `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, maxChargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8). A variable cost, such as spending 1 to 3 charges to cast at a higher level, sets `chargeCost` to the least and `maxChargeCost` to the most, and reads "1–3 charges" |
 | `cursed` | optional `true` | |
 | `effect` | `Text` | The rules text as printed |

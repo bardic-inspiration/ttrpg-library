@@ -71,6 +71,7 @@ describe('magic item card lines (SPEC.md §6.6)', async () => {
     const { charges, ...noCharges } = wand;
     expect(chargesLine(noCharges)).toBeUndefined();
     expect(chargesLine({ ...wand, charges: { max: 12 } })).toBe('12');
+    expect(chargesLine({ ...wand, charges: { max: '1d8 + 1' } })).toBe('1d8 + 1');
   });
 
   it('lists a spell by name with the authored numbers present, including a +0 attack bonus', () => {

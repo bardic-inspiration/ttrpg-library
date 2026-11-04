@@ -563,6 +563,19 @@ describe('spell warnings (SPEC.md §6.8)', () => {
     return (await validateLibrary(content)).errors.map((e) => e.message);
   };
 
+  it('takes a charge count as a whole number or a dice expression (#163)', async () => {
+    const wandErrors = async (max: unknown) => {
+      const wand = await wandOfFrostLances();
+      wand.stats.charges = { max };
+      const { content } = await temp([wand, await frostLance()]);
+      return (await validateLibrary(content)).errors;
+    };
+    expect(await wandErrors('1d3')).toEqual([]);
+    expect(await wandErrors('1d8 + 1')).toEqual([]);
+    expect(await wandErrors('d8')).not.toEqual([]);
+    expect(await wandErrors(0)).not.toEqual([]);
+  });
+
   it('takes a distance range in feet or in miles, but not both (#153)', async () => {
     expect(await spellErrors((s) => (s.range = { kind: 'distance', miles: 1 }))).toEqual([]);
     expect(await spellErrors((s) => (s.range = { kind: 'distance', feet: 60, miles: 1 }))).toContainEqual(
