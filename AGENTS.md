@@ -19,7 +19,7 @@ Every PR is in exactly one lane ([`SPEC.md`](SPEC.md) §12.4 "Work lanes"):
   entries go on `manual/` branches.
 - **Development:** everything else, including the spec and docs, on
   `dev/<short-description>` branches. A dev PR touches content only as a
-  deliberate migration with the `migration` label, which a human applies.
+  deliberate migration; the labeler adds the `migration` label to it.
 
 ## Rules
 
