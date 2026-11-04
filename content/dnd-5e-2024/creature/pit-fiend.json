@@ -138,13 +138,14 @@
       {
         "name": "Hellfire Spellcasting",
         "kind": "other",
-        "text": "The pit fiend casts *{ref:spell/fireball}* (level 5 version) twice, requiring no Material components and using Charisma as the spellcasting ability (spell save {dc:con}). It can replace one *{ref:spell/fireball}* with *{ref:spell/hold-monster}* (level 7 version) or *Wall of Fire.*",
+        "text": "The pit fiend casts *{ref:spell/fireball}* (level 5 version) twice, requiring no Material components and using Charisma as the spellcasting ability (spell save {dc:con}). It can replace one *{ref:spell/fireball}* with *{ref:spell/hold-monster}* (level 7 version) or *{ref:spell/wall-of-fire}.*",
         "recharge": "4-6"
       }
     ]
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

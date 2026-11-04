@@ -129,27 +129,52 @@
         {
           "ref": "spell/detect-magic"
         },
-        "Detect Thoughts",
-        "Dispel Magic",
+        {
+          "ref": "spell/detect-thoughts"
+        },
+        {
+          "ref": "spell/dispel-magic"
+        },
         {
           "ref": "spell/fireball",
           "note": "level 5 version"
         },
-        "Invisibility",
-        "Lightning Bolt (level 5 version)",
-        "Mage Hand",
-        "Prestidigitation"
+        {
+          "ref": "spell/invisibility"
+        },
+        {
+          "ref": "spell/lightning-bolt",
+          "note": "level 5 version"
+        },
+        {
+          "ref": "spell/mage-hand"
+        },
+        {
+          "ref": "spell/prestidigitation"
+        }
       ],
       "perDay": {
         "2": [
-          "Animate Dead",
-          "Dimension Door",
-          "Plane Shift"
+          {
+            "ref": "spell/animate-dead"
+          },
+          {
+            "ref": "spell/dimension-door"
+          },
+          {
+            "ref": "spell/plane-shift"
+          }
         ],
         "1": [
-          "Chain Lightning",
-          "Finger of Death",
-          "Power Word Kill",
+          {
+            "ref": "spell/chain-lightning"
+          },
+          {
+            "ref": "spell/finger-of-death"
+          },
+          {
+            "ref": "spell/power-word-kill"
+          },
           "Scrying"
         ]
       }
@@ -191,14 +216,14 @@
         {
           "name": "Frightening Gaze",
           "kind": "other",
-          "text": "The lich casts *Fear*, using the same spellcasting ability as Spellcasting. The lich can't take this action again until the start of its next turn."
+          "text": "The lich casts *{ref:spell/fear}*, using the same spellcasting ability as Spellcasting. The lich can't take this action again until the start of its next turn."
         }
       ]
     }
   },
   "meta": {
     "createdAt": "2026-11-03",
-    "updatedAt": "2026-11-03",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
