@@ -1,0 +1,57 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "staff-of-frost",
+  "name": "Staff of Frost",
+  "summary": "A staff that grants Resistance to Cold and casts Cone of Cold, Fog Cloud, Ice Storm, and Wall of Ice for charges.",
+  "stats": {
+    "category": "staff",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true,
+      "requirement": "by a Druid, Sorcerer, Warlock, or Wizard"
+    },
+    "charges": {
+      "max": 10,
+      "recharge": "1d6 + 4 daily at dawn",
+      "depletion": "If you expend the last charge, roll 1d20. On a 1, the staff turns to water and is destroyed."
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/cone-of-cold"
+        },
+        "chargeCost": 5
+      },
+      {
+        "spell": {
+          "ref": "spell/fog-cloud"
+        },
+        "chargeCost": 1
+      },
+      {
+        "spell": {
+          "ref": "spell/ice-storm"
+        },
+        "chargeCost": 4
+      },
+      {
+        "spell": {
+          "ref": "spell/wall-of-ice"
+        },
+        "chargeCost": 4
+      }
+    ],
+    "effect": "You have Resistance to Cold damage while you hold this staff.\n\n***Spells.*** The staff has 10 charges. While holding the staff, you can cast one of the spells on the following table from it, using your spell save DC. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/cone-of-cold}* | 5 |\n| *{ref:spell/fog-cloud}* | 1 |\n| *{ref:spell/ice-storm}* | 4 |\n| *{ref:spell/wall-of-ice}* | 4 |\n\n***Regaining Charges.*** The staff regains 1d6 + 4 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, the staff turns to water and is destroyed."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
