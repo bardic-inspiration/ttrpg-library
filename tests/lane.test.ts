@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkLane, isDocsPath, laneOf } from '../scripts/lane/index.ts';
+import { checkLane, isDocsPath, laneOf, needsMigrationLabel, waitForLabel } from '../scripts/lane/index.ts';
 
 describe('laneOf', () => {
   it.each([
@@ -170,5 +170,38 @@ describe('.github/labeler.yml', () => {
     const branch = /'(\^\(\?!gen\/\|revise\/\|manual\/\))'/.exec(rule)![1]!;
     expect(new RegExp(branch).test('dev/spell-header-forms')).toBe(true);
     expect(new RegExp(branch).test('gen/srd-133-spell-20261104')).toBe(false);
+  });
+});
+
+describe('waiting for the labeler (SPEC.md §12.4)', () => {
+  const noSleep = async () => {};
+
+  it('needs the migration label only for a dev PR that changes content without it', () => {
+    const content = ['content/dnd-5e-2024/spell/augury.json'];
+    expect(needsMigrationLabel({ branch: 'dev/x', paths: content, labels: [] })).toBe(true);
+    expect(needsMigrationLabel({ branch: 'dev/x', paths: content, labels: ['migration'] })).toBe(false);
+    expect(needsMigrationLabel({ branch: 'dev/x', paths: ['site/a.ts'], labels: [] })).toBe(false);
+    expect(needsMigrationLabel({ branch: 'gen/1-20261104', paths: content, labels: [] })).toBe(false);
+  });
+
+  it('returns the live labels once the labeler has added the label', async () => {
+    const seen = [[], ['dev'], ['dev', 'migration']];
+    let calls = 0;
+    const labels = await waitForLabel('migration', async () => seen[calls++]!, { attempts: 5, sleep: noSleep });
+    expect(labels).toEqual(['dev', 'migration']);
+    expect(calls).toBe(3);
+  });
+
+  it('gives up after its attempts and returns the last labels seen', async () => {
+    let calls = 0;
+    const labels = await waitForLabel('migration', async () => (calls++, ['dev']), { attempts: 4, sleep: noSleep });
+    expect(labels).toEqual(['dev']);
+    expect(calls).toBe(4);
+  });
+
+  it('waits between reads', async () => {
+    const waits: number[] = [];
+    await waitForLabel('migration', async () => [], { attempts: 3, delayMs: 5000, sleep: async (ms) => void waits.push(ms) });
+    expect(waits).toEqual([5000, 5000, 5000]);
   });
 });
