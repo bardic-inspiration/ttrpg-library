@@ -1,0 +1,104 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bandit-captain",
+  "name": "Bandit Captain",
+  "summary": "A bandit leader who fights with scimitar and pistol and parries melee blows.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 16,
+      "con": 14,
+      "int": 14,
+      "wis": 11,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "str",
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "deception": "proficient"
+    },
+    "gear": [
+      "Pistol",
+      "Scimitar",
+      "Studded Leather Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The bandit makes two attacks, using Scimitar and Pistol in any combination."
+      },
+      {
+        "name": "Scimitar",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Pistol",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 30,
+          "long": 90
+        },
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Parry",
+        "kind": "other",
+        "text": "*Trigger:* The bandit is hit by a melee attack roll while holding a weapon. *Response:* The bandit adds 2 to its AC against that attack, possibly causing it to miss."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "warrior-veteran",
+  "name": "Warrior Veteran",
+  "summary": "A seasoned soldier who fights with greatsword or heavy crossbow and parries melee attacks.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 13,
+      "con": 14,
+      "int": 10,
+      "wis": 11,
+      "cha": 10
+    },
+    "skills": {
+      "athletics": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      "Greatsword",
+      "Heavy Crossbow",
+      "Splint Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The warrior makes two Greatsword or Heavy Crossbow attacks."
+      },
+      {
+        "name": "Greatsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Heavy Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 100,
+          "long": 400
+        },
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Parry",
+        "kind": "other",
+        "text": "*Trigger:* The warrior is hit by a melee attack roll while holding a weapon. *Response:* The warrior adds 2 to its AC against that attack, possibly causing it to miss."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
