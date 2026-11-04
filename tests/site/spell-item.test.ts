@@ -27,6 +27,8 @@ describe('spell card lines (SPEC.md §6.7)', async () => {
     expect(rangeLine(base)).toBe('60 feet');
     expect(rangeLine({ ...base, range: { kind: 'self', area: { shape: 'cone', size: 15 } } })).toBe('Self (15-foot Cone)');
     expect(rangeLine({ ...base, range: { kind: 'touch' } })).toBe('Touch');
+    expect(rangeLine({ ...base, range: { kind: 'distance', miles: 1 } })).toBe('1 mile');
+    expect(rangeLine({ ...base, range: { kind: 'distance', miles: 500 } })).toBe('500 miles');
   });
 
   it('formats components, with a consumed material', () => {

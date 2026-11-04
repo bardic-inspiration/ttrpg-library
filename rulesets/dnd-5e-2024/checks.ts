@@ -180,8 +180,11 @@ export function checkSpell(stats: SpellStats): Issue[] {
     if (duration.amount === undefined) error('stats.duration', 'a timed duration needs an amount');
     if (duration.unit === undefined) error('stats.duration', 'a timed duration needs a unit');
   }
-  if (range.kind === 'distance' && range.feet === undefined) {
-    error('stats.range', 'a distance range needs feet');
+  if (range.kind === 'distance' && (range.feet === undefined) === (range.miles === undefined)) {
+    error('stats.range', 'a distance range needs feet or miles, not both');
+  }
+  if (range.kind !== 'distance' && (range.feet !== undefined || range.miles !== undefined)) {
+    error('stats.range', 'feet and miles are for a distance range');
   }
   if (stats.components.m?.consumed && stats.components.m.costGp === undefined) {
     error('stats.components.m', 'a consumed material component needs a costGp');

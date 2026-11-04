@@ -37,10 +37,11 @@ export function castingTimeLine(s: SpellStats): string {
 
 const RANGE_KINDS: Record<string, string> = { self: 'Self', touch: 'Touch', sight: 'Sight', unlimited: 'Unlimited', special: 'Special' };
 
-/** "60 feet", "Self (15-foot Cone)". */
+/** "60 feet", "1 mile", "Self (15-foot Cone)". */
 export function rangeLine(s: SpellStats): string {
-  const { kind, feet, area } = s.range;
-  const base = kind === 'distance' ? `${feet} feet` : (RANGE_KINDS[kind] ?? capitalize(kind));
+  const { kind, feet, miles, area } = s.range;
+  const distance = whenPresent(miles, (n) => plural(n, 'mile')) ?? `${feet} feet`;
+  const base = kind === 'distance' ? distance : (RANGE_KINDS[kind] ?? capitalize(kind));
   return base + (whenPresent(area, (a) => ` (${a.size}-foot ${capitalize(a.shape)})`) ?? '');
 }
 

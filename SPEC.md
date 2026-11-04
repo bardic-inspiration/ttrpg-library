@@ -478,7 +478,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `classes` | array, ≥1, of `bard`, `cleric`, `druid`, `paladin`, `ranger`, `sorcerer`, `warlock`, `wizard` | |
 | `castingTime` | `{ amount: int, unit: action|bonus-action|reaction|minute|hour, trigger?: Text }` | `trigger` required for reactions. It is `Text` so a spell name in it can be italic, as in SRD 5.2 ("targeted by the *Magic Missile* spell"); the card renders it inline after "Reaction, which you take" |
 | `ritual` | bool | |
-| `range` | `{ kind: self|touch|distance|sight|unlimited|special, feet?: int, area?: { shape: cone|cube|cylinder|emanation|line|sphere, size: int } }` | |
+| `range` | `{ kind: self|touch|distance|sight|unlimited|special, feet?: int, miles?: int, area?: { shape: cone|cube|cylinder|emanation|line|sphere, size: int } }` | A `distance` range has `feet` ("60 feet") or `miles` ("1 mile", "500 miles"), not both |
 | `components` | `{ v: bool, s: bool, m?: { text: string, costGp?: number, consumed?: true } }` | `costGp` is greater than 0 |
 | `duration` | `{ kind: instantaneous|timed|until-dispelled|special, amount?: int, unit?: round|minute|hour|day, concentration: bool }` | |
 | `effect` | `Text` | |
@@ -534,7 +534,7 @@ Spell:
 |---|---|
 | `duration.concentration` true only when `duration.kind` is `timed` | error |
 | `timed` duration has `amount` and `unit` | error |
-| `range.kind` `distance` has `feet` | error |
+| `range.kind` `distance` has `feet` or `miles`, not both; no other kind has either | error |
 | `components.m.consumed` true requires `costGp` | error |
 | `higherLevels` only on level ≥ 1; `cantripUpgrade` only on level 0 | error |
 | `castingTime.trigger` present iff unit is `reaction` | error |

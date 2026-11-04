@@ -121,7 +121,7 @@ const INVALID: Record<string, RegExp> = {
   'spell-concentration-not-timed': /^stats\.duration\.concentration: concentration needs a timed duration, not "instantaneous"/,
   'spell-timed-without-amount': /^stats\.duration: a timed duration needs an amount/,
   'spell-timed-without-unit': /^stats\.duration: a timed duration needs a unit/,
-  'spell-distance-without-feet': /^stats\.range: a distance range needs feet/,
+  'spell-distance-without-feet': /^stats\.range: a distance range needs feet or miles, not both/,
   'spell-consumed-without-cost': /^stats\.components\.m: a consumed material component needs a costGp/,
   'spell-cantrip-higher-levels': /^stats\.higherLevels: higherLevels is for leveled spells/,
   'spell-leveled-cantrip-upgrade': /^stats\.cantripUpgrade: cantripUpgrade is for cantrips/,
@@ -549,5 +549,20 @@ describe('spell warnings (SPEC.md §6.8)', () => {
     const result = await validateLibrary(content);
     expect(result.errors).toEqual([]);
     expect(result.warnings).toEqual([]);
+  });
+
+  const spellErrors = async (patch: (stats: Record<string, any>) => void) => {
+    const spell = await frostLance();
+    patch(spell.stats);
+    const { content } = await temp([spell]);
+    return (await validateLibrary(content)).errors.map((e) => e.message);
+  };
+
+  it('takes a distance range in feet or in miles, but not both (#153)', async () => {
+    expect(await spellErrors((s) => (s.range = { kind: 'distance', miles: 1 }))).toEqual([]);
+    expect(await spellErrors((s) => (s.range = { kind: 'distance', feet: 60, miles: 1 }))).toContainEqual(
+      'stats.range: a distance range needs feet or miles, not both',
+    );
+    expect(await spellErrors((s) => (s.range = { kind: 'self', miles: 1 }))).toContainEqual('stats.range: feet and miles are for a distance range');
   });
 });

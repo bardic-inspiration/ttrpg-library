@@ -35,6 +35,7 @@
       "properties": {
         "kind": { "enum": ["self", "touch", "distance", "sight", "unlimited", "special"] },
         "feet": { "type": "integer", "minimum": 1 },
+        "miles": { "type": "integer", "minimum": 1 },
         "area": {
           "type": "object",
           "additionalProperties": false,

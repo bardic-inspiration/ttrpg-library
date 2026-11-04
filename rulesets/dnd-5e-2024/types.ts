@@ -96,6 +96,7 @@ export interface SpellStats {
   range: {
     kind: 'self' | 'touch' | 'distance' | 'sight' | 'unlimited' | 'special';
     feet?: number;
+    miles?: number;
     area?: { shape: string; size: number };
   };
   components: { v: boolean; s: boolean; m?: { text: string; costGp?: number; consumed?: true } };
