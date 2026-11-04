@@ -39,6 +39,8 @@ find a task's parent with `get_parent`.
   files.
 - [`.claude/hooks/session-start.sh`](.claude/hooks/session-start.sh)
   installs dependencies when a cloud session starts.
+- [`srd-import`](.claude/skills/srd-import/SKILL.md) is the session
+  workflow for SRD import stages and upkeep of SRD entries.
 - [`ask-me`](.claude/skills/ask-me/SKILL.md) interviews the user when a goal
   is still fuzzy. [`grill-me`](.claude/skills/grill-me/SKILL.md)
   stress-tests a plan before it's built.
