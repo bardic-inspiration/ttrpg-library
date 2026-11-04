@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "robe-of-the-archmagi",
+  "name": "Robe of the Archmagi",
+  "summary": "A robe that improves your AC, spell save DC, spell attacks, and resistance to spells.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "legendary",
+    "attunement": {
+      "required": true,
+      "requirement": "by a Sorcerer, Warlock, or Wizard"
+    },
+    "effect": "This elegant garment is made from exquisite cloth and adorned with runes.\n\nYou gain these benefits while wearing the robe.\n\n***Armor.*** If you aren't wearing armor, your base Armor Class is 15 plus your Dexterity modifier.\n\n***Magic Resistance.*** You have Advantage on saving throws against spells and other magical effects.\n\n***War Mage.*** Your spell save DC and spell attack bonus each increase by 2."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

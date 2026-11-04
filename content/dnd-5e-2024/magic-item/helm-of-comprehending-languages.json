@@ -1,0 +1,32 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "helm-of-comprehending-languages",
+  "name": "Helm of Comprehending Languages",
+  "summary": "A helm that lets you cast Comprehend Languages.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/comprehend-languages"
+        }
+      }
+    ],
+    "effect": "While wearing this helm, you can cast *{ref:spell/comprehend-languages}* from it."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "wand-of-magic-detection",
+  "name": "Wand of Magic Detection",
+  "summary": "A wand that casts Detect Magic, using charges.",
+  "stats": {
+    "category": "wand",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "charges": {
+      "max": 3,
+      "recharge": "1d3 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/detect-magic"
+        },
+        "chargeCost": 1
+      }
+    ],
+    "effect": "This wand has 3 charges. While holding it, you can expend 1 charge to cast *{ref:spell/detect-magic}* from it. The wand regains 1d3 expended charges daily at dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
