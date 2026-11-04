@@ -1,0 +1,45 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "conjure-minor-elementals",
+  "name": "Conjure Minor Elementals",
+  "summary": "Surrounds you with elemental spirits that add 2d8 damage to your hits and make the ground Difficult Terrain for enemies.",
+  "stats": {
+    "level": 4,
+    "school": "conjuration",
+    "classes": [
+      "druid",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "You conjure spirits from the Elemental Planes that flit around you in a 15-foot Emanation for the duration. Until the spell ends, any attack you make deals an extra 2d8 damage when you hit a creature in the Emanation. This damage is Acid, Cold, Fire, or Lightning (your choice when you make the attack).\n\nIn addition, the ground in the Emanation is Difficult Terrain for your enemies.",
+    "higherLevels": "The damage increases by 1d8 for each spell slot level above 4."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
