@@ -6,6 +6,8 @@ import { validateLibrary } from '../scripts/validate/index.ts';
 import { editDistance, normalizeName } from '../scripts/validate/library.ts';
 import { listEntryFiles } from '../scripts/validate/walk.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
+import type { SpellStats } from '../rulesets/dnd-5e-2024/types.ts';
+import { castingTimeLine } from '../site/src/lib/spell.ts';
 
 const library = join(FIXTURES, 'library');
 const temps: string[] = [];
@@ -126,7 +128,7 @@ const INVALID: Record<string, RegExp> = {
   'spell-cantrip-higher-levels': /^stats\.higherLevels: higherLevels is for leveled spells/,
   'spell-leveled-cantrip-upgrade': /^stats\.cantripUpgrade: cantripUpgrade is for cantrips/,
   'spell-reaction-without-trigger': /^stats\.castingTime: a reaction casting time needs a trigger/,
-  'spell-trigger-without-reaction': /^stats\.castingTime\.trigger: a trigger is allowed only on a reaction/,
+  'spell-trigger-without-reaction': /^stats\.castingTime\.trigger: a trigger is allowed only on a reaction or bonus action/,
   'magic-item-unknown-category': /^stats\.category: must be one of/,
   'magic-item-unknown-rarity': /^stats\.rarity: must be one of/,
   'magic-item-missing-attunement': /^stats: missing required key "attunement"/,
@@ -564,5 +566,12 @@ describe('spell warnings (SPEC.md §6.8)', () => {
       'stats.range: a distance range needs feet or miles, not both',
     );
     expect(await spellErrors((s) => (s.range = { kind: 'self', miles: 1 }))).toContainEqual('stats.range: feet and miles are for a distance range');
+  });
+
+  it('allows a trigger on a bonus action, which the card reads after "Bonus Action" (#153)', async () => {
+    const trigger = 'immediately after hitting a target with a Melee weapon or an Unarmed Strike';
+    expect(await spellErrors((s) => (s.castingTime = { amount: 1, unit: 'bonus-action', trigger }))).toEqual([]);
+    const s = { ...((await frostLance()).stats as SpellStats), castingTime: { amount: 1, unit: 'bonus-action' as const, trigger } };
+    expect(castingTimeLine(s)).toBe(`Bonus Action, which you take ${trigger}`);
   });
 });

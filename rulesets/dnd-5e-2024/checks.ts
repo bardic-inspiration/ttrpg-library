@@ -198,8 +198,8 @@ export function checkSpell(stats: SpellStats): Issue[] {
   if (castingTime.unit === 'reaction' && castingTime.trigger === undefined) {
     error('stats.castingTime', 'a reaction casting time needs a trigger');
   }
-  if (castingTime.unit !== 'reaction' && castingTime.trigger !== undefined) {
-    error('stats.castingTime.trigger', 'a trigger is allowed only on a reaction casting time');
+  if (castingTime.unit !== 'reaction' && castingTime.unit !== 'bonus-action' && castingTime.trigger !== undefined) {
+    error('stats.castingTime.trigger', 'a trigger is allowed only on a reaction or bonus action casting time');
   }
   if (stats.level === 0 && stats.ritual) {
     issues.push({ level: 'warning', path: 'stats.ritual', message: 'a cantrip is marked ritual; confirm it' });
