@@ -268,4 +268,8 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     const { s } = await build({ immunities: { conditions: ['Charmed (except from its vampire master)'] } });
     expect(defenseLines(s)).toEqual([{ label: 'Immunities', value: 'Charmed (except from its vampire master)' }]);
   });
+  it('adds a skill adjust to the derived bonus (#166)', async () => {
+    const { s, d } = await build({ skills: { stealth: { proficiency: 'proficient', adjust: 1 } } });
+    expect(skillsLine(s, d)).toBe('Stealth +5');
+  });
 });

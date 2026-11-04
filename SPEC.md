@@ -413,7 +413,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: true, note?: string }` | Feet; multiples of 5. `walk` may be 0; an optional mode is at least 5. `note` holds, as printed, any speed the fields can't express (a form-limited or conditional speed), and prints after the others: `"40 ft. (wolf form only)"` reads "30 ft., 40 ft. (wolf form only)". A mode written in `note` is left out of the fields |
 | `abilities` | `{ str…cha: int 1–30 }` | |
 | `saveProficiencies` | optional array of `Ability` | |
-| `skills` | optional `{ <skill>: Proficiency }` | Keys from the 18 SRD skills in kebab-case |
+| `skills` | optional `{ <skill>: Proficiency or { proficiency?: Proficiency, adjust: Adjust } }` | Keys from the 18 SRD skills in kebab-case. The object form adds `adjust` to the derived bonus, for an SRD bonus no proficiency level reaches (§5.9) |
 | `vulnerabilities`, `resistances` | optional arrays of `DamageType` or string | String for qualified entries |
 | `immunities` | optional `{ damage?: [...], conditions?: [Condition or string] }` | A string is a qualified entry, printed as written: "Charmed (except from its vampire master)" |
 | `gear` | optional array of `RefOrText` | Items the creature carries |
@@ -515,7 +515,7 @@ Creature:
 | No literal derived numbers in prose (§6.4) | error |
 | Speeds are multiples of 5 | error |
 | A damage `condition` only on a rider, not on `damage[0]` | error |
-| Any `adjust`, damage `bonus`, or token adjustment (listed so the reviewer confirms the deviation) | warning |
+| Any `adjust` (including a skill's), damage `bonus`, or token adjustment (listed so the reviewer confirms the deviation) | warning |
 | Any authored DC token `{dc=<n>}` (listed so the reviewer confirms it isn't derived) | warning |
 | Derived attack bonus above +17 or save DC above 30 | warning |
 

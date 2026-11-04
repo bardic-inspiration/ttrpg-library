@@ -66,7 +66,8 @@ export interface CreatureStats {
   speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: true; note?: string };
   abilities: Record<Ability, number>;
   saveProficiencies?: Ability[];
-  skills?: Record<string, Proficiency>;
+  /** A proficiency, or `{ proficiency?, adjust }` to match a bonus that doesn't derive (SPEC.md §5.9). */
+  skills?: Record<string, Proficiency | { proficiency?: Proficiency; adjust: number }>;
   vulnerabilities?: string[];
   resistances?: string[];
   immunities?: { damage?: string[]; conditions?: string[] };

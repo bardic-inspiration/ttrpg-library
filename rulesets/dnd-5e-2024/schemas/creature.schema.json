@@ -161,7 +161,24 @@
         "enum": ["acrobatics", "animal-handling", "arcana", "athletics", "deception", "history", "insight", "intimidation", "investigation", "medicine", "nature", "perception", "performance", "persuasion", "religion", "sleight-of-hand", "stealth", "survival"]
       },
       "additionalProperties": {
-        "$ref": "common.schema.json#/$defs/Proficiency"
+        "anyOf": [
+          {
+            "$ref": "common.schema.json#/$defs/Proficiency"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["adjust"],
+            "properties": {
+              "proficiency": {
+                "$ref": "common.schema.json#/$defs/Proficiency"
+              },
+              "adjust": {
+                "$ref": "common.schema.json#/$defs/Adjust"
+              }
+            }
+          }
+        ]
       }
     },
     "vulnerabilities": {

@@ -124,10 +124,11 @@ export function deriveCreature(stats: CreatureStats, tables: Tables): DerivedCre
   ) as Record<Ability, number>;
 
   const skills: Record<string, number> = {};
-  for (const [skill, proficiency] of Object.entries(stats.skills ?? {})) {
+  for (const [skill, value] of Object.entries(stats.skills ?? {})) {
     const ability = tables.skills[skill];
     if (!ability) throw new Error(`Unknown skill "${skill}"`);
-    skills[skill] = mods[ability] + pb * proficiencyMultiplier(proficiency);
+    const { proficiency, adjust = 0 } = typeof value === 'string' ? { proficiency: value } : value;
+    skills[skill] = mods[ability] + pb * proficiencyMultiplier(proficiency) + adjust;
   }
 
   const derived: DerivedCreature = {
