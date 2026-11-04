@@ -416,7 +416,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `vulnerabilities`, `resistances` | optional arrays of `DamageType` or string | String for qualified entries |
 | `immunities` | optional `{ damage?: [...], conditions?: [Condition] }` | |
 | `gear` | optional array of `RefOrText` | Items the creature carries |
-| `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int }` | Feet, each at least 1. Passive Perception is derived, so the Senses line always displays |
+| `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int, note?: string }` | Feet, each at least 1. Passive Perception is derived, so the Senses line always displays. `note` is a qualifier printed in parentheses after the senses: "Darkvision 120 ft. (unimpeded by magical Darkness); Passive Perception 13" |
 | `languages` | `{ spoken: [string], understood?: [string], telepathy?: int, note?: string }` | `spoken` lists languages the creature speaks (and so understands), and may be empty. `understood` lists languages it understands but can't speak. `telepathy` is at least 1. Rendering is under "Display forms" below |
 | `cr` | number: `0`, `0.125`, `0.25`, `0.5`, or `1`–`30` | Displayed as fractions. XP and PB are derived |
 | `lair` | optional `true` | Adds the derived "in lair" XP |

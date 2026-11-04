@@ -205,6 +205,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'immunities.conditions', [], /^stats\.immunities\.conditions: must NOT have fewer than 1 items/],
   ['creature', 'gear', [], /^stats\.gear: must NOT have fewer than 1 items/],
   ['creature', 'senses', {}, /^stats\.senses: must NOT have fewer than 1 properties/],
+  ['creature', 'senses.note', '', /^stats\.senses\.note: must NOT have fewer than 1 characters/],
   ['creature', 'senses.darkvision', 0, /^stats\.senses\.darkvision: must be >= 1/],
   ['creature', 'languages.telepathy', 0, /^stats\.languages\.telepathy: must be >= 1/],
   ['creature', 'languages.note', '', /^stats\.languages\.note: must NOT have fewer than 1 characters/],

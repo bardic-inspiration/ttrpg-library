@@ -69,7 +69,7 @@ export interface CreatureStats {
   resistances?: string[];
   immunities?: { damage?: string[]; conditions?: string[] };
   gear?: RefOrText[];
-  senses?: { darkvision?: number; blindsight?: number; tremorsense?: number; truesight?: number };
+  senses?: { darkvision?: number; blindsight?: number; tremorsense?: number; truesight?: number; note?: string };
   languages: { spoken: string[]; understood?: string[]; telepathy?: number; note?: string };
   cr: number;
   lair?: true;

@@ -247,6 +247,11 @@
         "truesight": {
           "type": "integer",
           "minimum": 1
+        },
+        "note": {
+          "description": "A qualifier printed in parentheses after the senses, such as \"unimpeded by magical Darkness\".",
+          "type": "string",
+          "minLength": 1
         }
       }
     },

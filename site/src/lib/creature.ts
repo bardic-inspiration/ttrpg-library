@@ -112,7 +112,8 @@ export function defenseLines(s: CreatureStats): PropertyLine[] {
 export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
   // Senses are comma-separated; Passive Perception follows a semicolon (SPEC.md §6.5).
   const senses = SENSE_ORDER.flatMap((sense) => whenPresent(s.senses?.[sense], (feet) => [`${capitalize(sense)} ${feet} ft.`]) ?? []);
-  return [senses.join(', '), `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
+  const list = senses.join(', ') + (whenPresent(s.senses?.note, (note) => ` (${note})`) ?? '');
+  return [list, `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
 }
 
 export function languagesLine(s: CreatureStats): string {

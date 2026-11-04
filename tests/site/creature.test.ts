@@ -254,4 +254,8 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       '*Melee Attack Roll:* +4, reach 10 ft. *Hit:* 4 (1d4 + 2) Slashing damage plus 7 (2d6) damage of the type chosen for the Draconic Origin trait.',
     );
   });
+  it('prints a senses note before Passive Perception (#166)', async () => {
+    const { s, d } = await build({ senses: { darkvision: 120, note: 'unimpeded by magical Darkness' } });
+    expect(sensesLine(s, d)).toBe('Darkvision 120 ft. (unimpeded by magical Darkness); Passive Perception 13');
+  });
 });
