@@ -24,7 +24,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "a pinch of diamond dust worth 25+ GP",
+        "text": "a pinch of diamond dust worth 25+ GP, which the spell consumes",
         "costGp": 25,
         "consumed": true
       }

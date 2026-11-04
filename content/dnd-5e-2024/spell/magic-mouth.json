@@ -24,7 +24,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "jade dust worth 10+ GP",
+        "text": "jade dust worth 10+ GP, which the spell consumes",
         "costGp": 10,
         "consumed": true
       }

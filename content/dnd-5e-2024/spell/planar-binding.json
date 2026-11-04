@@ -27,7 +27,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "a jewel worth 1,000+ GP",
+        "text": "a jewel worth 1,000+ GP, which the spell consumes",
         "costGp": 1000,
         "consumed": true
       }
