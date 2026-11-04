@@ -19,7 +19,10 @@ const FILES = [
   'dnd-5e-2024/spell/confusion.json',
   'dnd-5e-2024/magic-item/belt-of-giant-strength.json',
   'dnd-5e-2024/magic-item/staff-of-healing.json',
-  'dnd-5e-2024/spell/cure-wounds.json', // Staff of Healing refs it
+  // Staff of Healing refs these
+  'dnd-5e-2024/spell/cure-wounds.json',
+  'dnd-5e-2024/spell/lesser-restoration.json',
+  'dnd-5e-2024/spell/mass-cure-wounds.json',
 ];
 const entries = await Promise.all(
   FILES.map(async (f) => JSON.parse(await readFile(join(PROJECT_ROOT, 'content', f), 'utf8')) as Entry),
