@@ -1,0 +1,51 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "hold-monster",
+  "name": "Hold Monster",
+  "summary": "Paralyzes a creature of any type that fails a Wisdom saving throw.",
+  "stats": {
+    "level": 5,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 90
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a straight piece of iron"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or have the Paralyzed condition for the duration. At the end of each of its turns, the target repeats the save, ending the spell on itself on a success.",
+    "higherLevels": "You can target one additional creature for each spell slot level above 5."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

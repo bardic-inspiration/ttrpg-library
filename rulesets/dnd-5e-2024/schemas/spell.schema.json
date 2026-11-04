@@ -24,7 +24,8 @@
       "properties": {
         "amount": { "type": "integer", "minimum": 1 },
         "unit": { "enum": ["action", "bonus-action", "reaction", "minute", "hour"] },
-        "trigger": { "$ref": "common.schema.json#/$defs/Text" }
+        "trigger": { "$ref": "common.schema.json#/$defs/Text" },
+        "note": { "description": "Printed as written after the unit, for a casting time the fields can't express: \"(Overgrowth) or 8 hours (Enrichment)\".", "type": "string", "minLength": 1 }
       }
     },
     "ritual": { "type": "boolean" },
@@ -35,6 +36,7 @@
       "properties": {
         "kind": { "enum": ["self", "touch", "distance", "sight", "unlimited", "special"] },
         "feet": { "type": "integer", "minimum": 1 },
+        "miles": { "type": "integer", "minimum": 1 },
         "area": {
           "type": "object",
           "additionalProperties": false,
@@ -70,9 +72,10 @@
       "additionalProperties": false,
       "required": ["kind", "concentration"],
       "properties": {
-        "kind": { "enum": ["instantaneous", "timed", "until-dispelled", "special"] },
+        "kind": { "enum": ["instantaneous", "timed", "until-dispelled", "until-dispelled-or-triggered", "special"] },
         "amount": { "type": "integer", "minimum": 1 },
         "unit": { "enum": ["round", "minute", "hour", "day"] },
+        "upTo": { "const": true },
         "concentration": { "type": "boolean" }
       }
     },

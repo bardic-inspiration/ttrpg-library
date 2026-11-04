@@ -476,11 +476,11 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `level` | int 0–9 | 0 is a cantrip |
 | `school` | `abjuration`, `conjuration`, `divination`, `enchantment`, `evocation`, `illusion`, `necromancy`, `transmutation` | |
 | `classes` | array, ≥1, of `bard`, `cleric`, `druid`, `paladin`, `ranger`, `sorcerer`, `warlock`, `wizard` | |
-| `castingTime` | `{ amount: int, unit: action|bonus-action|reaction|minute|hour, trigger?: Text }` | `trigger` required for reactions. It is `Text` so a spell name in it can be italic, as in SRD 5.2 ("targeted by the *Magic Missile* spell"); the card renders it inline after "Reaction, which you take" |
+| `castingTime` | `{ amount: int, unit: action|bonus-action|reaction|minute|hour, trigger?: Text }` | `trigger` required for reactions, and optional on a bonus action ("Bonus Action, which you take immediately after hitting a target…", the Smites). It is `Text` so a spell name in it can be italic, as in SRD 5.2 ("targeted by the *Magic Missile* spell"); the card renders it inline after "Reaction, which you take" or "Bonus Action, which you take". `note` holds, as printed, a casting time the fields can't express, after the unit: Plant Growth's `{ amount: 1, unit: action, note: "(Overgrowth) or 8 hours (Enrichment)" }` reads "Action (Overgrowth) or 8 hours (Enrichment)" |
 | `ritual` | bool | |
-| `range` | `{ kind: self|touch|distance|sight|unlimited|special, feet?: int, area?: { shape: cone|cube|cylinder|emanation|line|sphere, size: int } }` | |
-| `components` | `{ v: bool, s: bool, m?: { text: string, costGp?: number, consumed?: true } }` | `costGp` is greater than 0 |
-| `duration` | `{ kind: instantaneous|timed|until-dispelled|special, amount?: int, unit?: round|minute|hour|day, concentration: bool }` | |
+| `range` | `{ kind: self|touch|distance|sight|unlimited|special, feet?: int, miles?: int, area?: { shape: cone|cube|cylinder|emanation|line|sphere, size: int } }` | A `distance` range has `feet` ("60 feet") or `miles` ("1 mile", "500 miles"), not both |
+| `components` | `{ v: bool, s: bool, m?: { text: string, costGp?: number, consumed?: true } }` | `m.text` is the material exactly as printed, including any cost and "which the spell consumes" wording. `costGp` (greater than 0; a cost in other coins converts, so 2 CP is `0.02`) and `consumed` are data for filters and checks only, and add no words to the card |
+| `duration` | `{ kind: instantaneous|timed|until-dispelled|until-dispelled-or-triggered|special, amount?: int, unit?: round|minute|hour|day, upTo?: true, concentration: bool }` | Reads "Instantaneous", "Until dispelled", "Until dispelled or triggered", "Special", "1 hour", or "Concentration, up to 1 minute". `upTo` marks a timed duration without Concentration that the SRD prints as "Up to 8 hours" |
 | `effect` | `Text` | |
 | `higherLevels` | optional `Text` | Leveled spells only ("Using a Higher-Level Spell Slot") |
 | `cantripUpgrade` | optional `Text` | Cantrips only |
@@ -534,10 +534,11 @@ Spell:
 |---|---|
 | `duration.concentration` true only when `duration.kind` is `timed` | error |
 | `timed` duration has `amount` and `unit` | error |
-| `range.kind` `distance` has `feet` | error |
+| `duration.upTo` only on a `timed` duration without concentration | error |
+| `range.kind` `distance` has `feet` or `miles`, not both; no other kind has either | error |
 | `components.m.consumed` true requires `costGp` | error |
 | `higherLevels` only on level ≥ 1; `cantripUpgrade` only on level 0 | error |
-| `castingTime.trigger` present iff unit is `reaction` | error |
+| `castingTime.trigger` present when unit is `reaction`, and only on `reaction` or `bonus-action` | error |
 | Cantrip marked `ritual` | warning |
 
 Balance (hit points, damage per round, and save DCs for a given CR, item rarity versus power, spell damage for a given level) is judged in review against targets written in the guideline files. CI does not enforce it. The PR summary shows each creature's derived HP, AC, attack bonuses, DCs, and average damage per action, so balance review needs no arithmetic either.
