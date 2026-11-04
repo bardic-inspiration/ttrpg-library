@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "gladiator",
+  "name": "Gladiator",
+  "summary": "An arena fighter who throws and thrusts spears, bashes foes prone with a shield, and parries.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 16
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 15,
+      "con": 16,
+      "int": 10,
+      "wis": 12,
+      "cha": 15
+    },
+    "saveProficiencies": [
+      "str",
+      "dex",
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "athletics": "expertise",
+      "performance": "proficient"
+    },
+    "gear": [
+      "Shield",
+      "Spears (3)",
+      "Studded Leather Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 5,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The gladiator makes three Spear attacks. It can replace one attack with a use of Shield Bash."
+      },
+      {
+        "name": "Spear",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Shield Bash",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "str",
+          "targets": "one creature within 5 feet that the gladiator can see"
+        },
+        "damage": [
+          {
+            "dice": "2d4",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onFailure": "If the target is a Medium or smaller creature, it has the Prone condition."
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Parry",
+        "kind": "other",
+        "text": "*Trigger:* The gladiator is hit by a melee attack roll while holding a weapon. *Response:* The gladiator adds 3 to its AC against that attack, possibly causing it to miss."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
