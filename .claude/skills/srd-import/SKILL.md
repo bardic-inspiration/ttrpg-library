@@ -88,7 +88,24 @@ through the same rules. What worked:
   for the cases the vocabulary gets wrong. Never add a space after a
   line-ending "-" or "—".
 - **Styles.** Emit `*italic*`, `**bold**`, and `***bold italic***` from the
-  fonts. An inline heading is bold italic (§9.5).
+  fonts. An inline heading is bold italic (§9.5). Space characters carry a
+  font too: treat whitespace as style-neutral, and put spaces outside the
+  markers. A `.`, `,`, `;`, `:`, or `)` set tight against the character
+  before it takes that character's style. Merge adjacent runs of one style,
+  including a word split by a font change mid-word (`*Fail**ure:*`).
+- **One name per italic run.** The SRD italicizes each spell in a list
+  separately ("*Bless*, *Healing Word*"). An extraction that yields one run
+  over a comma-separated list has merged them: split it, one run per name.
+- **Stat block boundaries.** A block starts at its name followed by its
+  italic size-and-type line. The name usually appears twice (the group
+  heading, then the block heading), and the next group's heading can trail
+  the previous block: drop it. A misprinted heading is found by its type line
+  (the Knight's block is headed "Iron Golem"). The header lines (AC through
+  CR) end at the first section heading, which can be Bonus Actions,
+  Reactions, or Legendary Actions as well as Traits or Actions.
+- **Tables from the page image.** The text layer scrambles table cells, and
+  sometimes drops stat block lines. Read every table, and check every stat
+  block, against the rendered page (`pdftoppm -r 100` gives a readable image).
 - **Text clean-up.** Normalize whitespace and straight quotes in text fields.
   Keep the curly apostrophe in a `name` where the manifest has one, so the
   coverage report matches.
@@ -115,7 +132,47 @@ patterns don't match instead of guessing. Lessons from the first import:
 - **Hand-written structured fields.** Charges, spells cast, and save DCs an
   item's text states are written per entry from its text, then checked: list
   every entry whose text mentions charges or casting but has no such field.
-- **Summaries** are one plain, factual line per entry, written for it.
+- **Summaries** are one plain, factual line per entry, written for it before
+  the entry is generated. Never write a placeholder: the validator accepts
+  any 10 characters, so "TODO summary" passes CI unnoticed (stage 3 merged
+  five that way).
+- **`shortName`.** Set it when the SRD's prose calls the creature something
+  other than the last word of its name ("The priest" for the Priest Acolyte,
+  "The sphinx" for the Sphinx of Lore). The render check in step 6 finds
+  every one: the generated Spellcasting intro reads "The acolyte" instead.
+- **Action names.** A recharge or uses note in the name's parentheses goes
+  in `recharge` or `uses`; any other parenthetical ("Bite (Bear Form Only)")
+  stays in the name. A parenthetical that mixes them ("Nightmare Haunting
+  (1/Day; Requires Soul Bag)") stays whole in the name.
+- **Prose that the action fields can't hold** stays an `other` action with
+  tokens: a reaction's italic *Trigger:* and *Response:* labels, a saving
+  throw inside a trait or after lead-in text, and staged effects (*First
+  Failure:*). A save action whose effect runs on in more paragraphs keeps
+  them in its last field (`onFailure`, `onSuccess`, or
+  `onFailureOrSuccess`), separated by blank lines.
+- **Forms the formats hold** (look up each in `SPEC.md` before writing it):
+  - a table title, as a bold-only line directly above the table (§5.5);
+  - a table printed in side-by-side halves, as one table (§5.9);
+  - a footnote marker, escaped as `\*` in a header cell and the note;
+  - a hanging-indent bold run-in item, as a `***Name.***` paragraph, as
+    Folding Boat's command words are;
+  - per-variant rarities, in `rarityVariants` with `rarity: "varies"` (§6.6);
+  - an Initiative line in a stat block inside an item or spell (§6.3);
+  - a creature's Spellcasting with no save DC, with `spellcasting.noSaveDc`
+    (§5.8, §6.5);
+  - a creature with no Actions, by omitting `actions` (§6.5);
+  - damage prose that continues with a dash ("—or …"), as `onHit` text
+    starting with the dash (§6.5).
+- **Item spells.** A spell cast for 0 charges, or not for charges at all
+  (beads, a free cast), omits `chargeCost`; the table in `effect` still
+  shows the printed cost. "Regains all expended charges" is a `recharge` of
+  "all daily at dawn". A qualifier printed after a spell ("level 5 version",
+  "save DC 18") is the ref's `note`, or `saveDc` when it's a save DC.
+- **Template-owned wording.** Where the SRD misprints something the
+  template generates ("reach 5 feet", "+17 to hit", a dropped "the" in the
+  Spellcasting intro), write the structured value; the template prints its
+  standard form. List each in the PR body as a misprint.
+- **Self-mentions** of an entry's own name stay plain italics, not links.
 - **Links.** A mention of an entry already in the library, or in the same
   batch, is a `{ref:<type>/<id>}` link or a ref. Anything else stays plain
   text, and gets linked by the link pass once it's imported.
@@ -130,7 +187,16 @@ not by the JSON:
   `site/src/lib/spell.ts`, or `site/src/lib/magic-item.ts`, and compare it
   line by line with the PDF text of the same entry. Every difference is
   either fixed, a misprint recorded for the PR, or a §5.9 formatting
-  difference.
+  difference. What worked for a large batch: build the site, read each
+  detail page's text with Playwright, normalize both sides (drop markup,
+  straighten quotes, turn "−" into "-", drop the ability table, which is
+  derived), and diff them word by word. Only real differences are left to
+  read.
+- A word diff can't see markup or paragraph breaks, so also check every
+  text field: each `*`, `**`, and `***` marker closes, and no italic or bold
+  name that matches a library entry (other than the entry itself) is left
+  unlinked.
+- Search the batch for placeholder text ("TODO") in every field.
 - Run `npm run validate` and `npm run build`. Never push a failing batch.
 - Run `npm run srd-coverage -- --type <type> --tier <tier>` again: the batch's
   entries no longer show as missing.
@@ -145,6 +211,13 @@ Under **Warnings**, also list every SRD misprint kept as derived, every
 entry transcribed by hand, and every entry held for a format fix with its
 issue.
 
+To add a later batch of the same type to an open PR, first check that the PR
+is still open: a merged PR's branch takes no more work. Branch from `main`
+with the next suffix (`-2`) and open a new PR, and say in its body which PR
+it follows. A format-fix dev PR that adds entries gets the `migration` label
+from the labeler, and the `lane` job waits for it (§12.4), so it needs no
+manual label change.
+
 ## Step 8: Link pass
 
 When a stage's batches have merged, mentions written as plain text because
@@ -155,7 +228,24 @@ the `revise` skill's rules, on branch `revise/<stage>-<YYYYMMDD>`, with
 `meta.updatedAt` set, `meta.source.kind` left as-is, and one commit titled
 `Revise <n> SRD entries: link mentions of library entries`. Match names
 exactly as words, and skip a match that is ordinary prose rather than the
-entry ("a shield", "the light").
+entry ("a shield", "the light"). What the pass covers, and the traps:
+
+- **Text fields:** an italic spell or magic-item name becomes
+  `*{ref:<type>/<id>}*`, keeping a trailing period inside the italics. A bold
+  creature name becomes `**{ref:creature/<id>}**`, with any comma that sat
+  inside the bold moved after it. Match an italic run only when it starts
+  and ends with a non-space character: otherwise the ", " between two
+  italic names pairs up as a run of its own and hides the second name.
+- **Plain-string fields:** spells in a creature's `spellcasting` lists and an
+  item's `spells` become refs, with any printed qualifier in the ref's
+  `note`. Gear stays as it is: its names are mundane equipment, not entries.
+- **Left as plain text:** self-mentions, plurals the token can't render
+  ("Ioun Stones", "Ghouls"), and names that aren't an entry's exact name
+  ("Potion of Healing" for Potions of Healing). Report every replacement,
+  review each in its sentence, and say in the PR what was left and why.
+- A problem the pass turns up in the stage's entries (a placeholder
+  summary, a merged italic run) is fixed in the same PR, in a commit of its
+  own.
 
 A new link can break a dev test that loads a few entries by file and
 validates them alone (`tests/site/tables.test.ts`), and content-lane CI
