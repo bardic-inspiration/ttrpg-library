@@ -179,6 +179,8 @@ export interface MagicItemStats {
   category: string;
   baseItem?: string;
   rarity: string;
+  /** Each variant's rarity, for a `varies` item (SPEC.md §6.6). */
+  rarityVariants?: { rarity: string; variant: string }[];
   attunement: { required: boolean; requirement?: string };
   charges?: { max: number | string; recharge?: string; depletion?: string };
   spells?: MagicItemSpell[];
