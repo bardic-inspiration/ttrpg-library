@@ -240,4 +240,10 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       'Gust (Recharge after a Long Rest)',
     ]);
   });
+  it('prints flat damage without dice (#166)', async () => {
+    const { s, d } = await build({
+      actions: [{ name: 'Bite', kind: 'melee-attack', ability: 'dex', reach: 5, damage: [{ amount: 1, type: 'piercing' }] }],
+    });
+    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toBe('*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 1 Piercing damage.');
+  });
 });

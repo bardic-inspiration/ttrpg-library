@@ -67,7 +67,11 @@ export function deriveDamage(
 
 function deriveAction(action: Action, pb: number, mods: Record<Ability, number>): DerivedAction {
   const derived: DerivedAction = {
-    damage: (action.damage ?? []).map((d: Damage) => deriveDamage(d.dice, d.ability, d.bonus ?? 0, mods)),
+    damage: (action.damage ?? []).map((d: Damage) =>
+      d.dice === undefined
+        ? { modifier: 0, average: d.amount ?? 0, display: String(d.amount ?? 0) }
+        : deriveDamage(d.dice, d.ability, d.bonus ?? 0, mods),
+    ),
   };
   if (action.ability && action.kind !== 'other') {
     const base = pb + mods[action.ability] + (action.adjust ?? 0);

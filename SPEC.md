@@ -366,7 +366,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 |---|---|
 | `Ability` | `str`, `dex`, `con`, `int`, `wis`, `cha` |
 | `Dice` | String `^\d+d(4|6|8|10|12|20|100)$`, for example `2d6`. No modifier; modifiers come from `ability` and `bonus` |
-| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType, condition?: string }`. `bonus` is non-zero when present (§5.8). `condition` is when a rider applies, such as `"if the attack roll had Advantage"`, and is allowed only on a rider (§6.8) |
+| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType, condition?: string }`, or `amount: int` (at least 1) in place of `dice` for flat damage printed without dice ("1 Piercing damage"); a damage entry has one or the other. `bonus` is non-zero when present (§5.8). `condition` is when a rider applies, such as `"if the attack roll had Advantage"`, and is allowed only on a rider (§6.8) |
 | `Proficiency` | `proficient`, `expertise` |
 | `Adjust` | Non-zero integer |
 | `DamageType` | `acid`, `bludgeoning`, `cold`, `fire`, `force`, `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder` |

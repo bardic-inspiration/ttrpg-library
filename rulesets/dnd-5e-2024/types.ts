@@ -14,7 +14,10 @@ export interface Ref {
 export type RefOrText = Ref | string;
 
 export interface Damage {
-  dice: string;
+  /** The damage roll; omitted for flat damage, which sets `amount`. */
+  dice?: string;
+  /** Flat damage printed without dice ("1 Piercing damage"). */
+  amount?: number;
   ability?: Ability;
   bonus?: number;
   type: string;

@@ -562,6 +562,18 @@ describe('spell warnings (SPEC.md §6.8)', () => {
     return (await validateLibrary(content)).errors.map((e) => e.message);
   };
 
+  it('takes damage as dice or a flat amount, not both (#166)', async () => {
+    const houndErrors = async (damage: unknown) => {
+      const hound = await cinderHound();
+      hound.stats.actions[0].damage = [damage];
+      const { content } = await temp([hound]);
+      return (await validateLibrary(content)).errors;
+    };
+    expect(await houndErrors({ amount: 1, type: 'piercing' })).toEqual([]);
+    expect(await houndErrors({ dice: '1d4', amount: 1, type: 'piercing' })).not.toEqual([]);
+    expect(await houndErrors({ type: 'piercing' })).not.toEqual([]);
+  });
+
   it('takes a distance range in feet or in miles, but not both (#153)', async () => {
     expect(await spellErrors((s) => (s.range = { kind: 'distance', miles: 1 }))).toEqual([]);
     expect(await spellErrors((s) => (s.range = { kind: 'distance', feet: 60, miles: 1 }))).toContainEqual(

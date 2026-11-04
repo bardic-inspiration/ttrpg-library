@@ -9,9 +9,11 @@
     "Damage": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["dice", "type"],
+      "required": ["type"],
+      "oneOf": [{ "required": ["dice"] }, { "required": ["amount"] }],
       "properties": {
         "dice": { "$ref": "#/$defs/Dice" },
+        "amount": { "description": "Flat damage printed without dice, such as \"1 Piercing damage\".", "type": "integer", "minimum": 1 },
         "ability": { "$ref": "#/$defs/Ability" },
         "bonus": { "type": "integer", "not": { "const": 0 } },
         "type": { "$ref": "#/$defs/DamageType" },
