@@ -366,7 +366,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 |---|---|
 | `Ability` | `str`, `dex`, `con`, `int`, `wis`, `cha` |
 | `Dice` | String `^\d+d(4|6|8|10|12|20|100)$`, for example `2d6`. No modifier; modifiers come from `ability` and `bonus` |
-| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType, condition?: string }`. `bonus` is non-zero when present (§5.8). `condition` is when a rider applies, such as `"if the attack roll had Advantage"`, and is allowed only on a rider (§6.8) |
+| `Damage` | `{ dice: Dice, ability?: Ability, bonus?: int, type: DamageType, condition?: string }`, or `amount: int` (at least 1) in place of `dice` for flat damage printed without dice ("1 Piercing damage"); a damage entry has one or the other. `note` in place of `type` holds a type that isn't fixed, printed after "damage" ("7 (2d6) damage of the type chosen for the Draconic Origin trait"). `bonus` is non-zero when present (§5.8). `condition` is when a rider applies, such as `"if the attack roll had Advantage"`, and is allowed only on a rider (§6.8) |
 | `Proficiency` | `proficient`, `expertise` |
 | `Adjust` | Non-zero integer |
 | `DamageType` | `acid`, `bludgeoning`, `cold`, `fire`, `force`, `lightning`, `necrotic`, `piercing`, `poison`, `psychic`, `radiant`, `slashing`, `thunder` |
@@ -404,6 +404,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `size` | array of `tiny`…`gargantuan`, 1–2 items | Two values for "Medium or Small"; the first sets the hit die |
 | `creatureType` | enum of the 14 SRD creature types | `aberration`, `beast`, `celestial`, `construct`, `dragon`, `elemental`, `fey`, `fiend`, `giant`, `humanoid`, `monstrosity`, `ooze`, `plant`, `undead` |
 | `shortName` | optional string | What generated prose calls the creature after "The", lowercase, such as `"dragon"`. Omit it when that is the last word of `name`, lowercase (the Lich's "lich", the Adult Red Dragon's "dragon"), which is the default |
+| `swarm` | optional size enum | The size of a swarm's members. The type line reads "Medium Swarm of Tiny Beasts", with the type plural ("Undead" and "Fey" stay as they are) |
 | `descriptors` | optional array of strings | Parenthetical tags such as `"Wizard"`; must pass the blocklist |
 | `alignment` | string | Free text from the SRD alignment set, plus `"unaligned"` and `"any alignment"` |
 | `ac` | `{ value: int 1–30, note?: string }` | Authored; `note` such as `"natural armor"` |
@@ -412,11 +413,11 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `speed` | `{ walk: int, fly?, swim?, climb?, burrow?: int, hover?: true, note?: string }` | Feet; multiples of 5. `walk` may be 0; an optional mode is at least 5. `note` holds, as printed, any speed the fields can't express (a form-limited or conditional speed), and prints after the others: `"40 ft. (wolf form only)"` reads "30 ft., 40 ft. (wolf form only)". A mode written in `note` is left out of the fields |
 | `abilities` | `{ str…cha: int 1–30 }` | |
 | `saveProficiencies` | optional array of `Ability` | |
-| `skills` | optional `{ <skill>: Proficiency }` | Keys from the 18 SRD skills in kebab-case |
+| `skills` | optional `{ <skill>: Proficiency or { proficiency?: Proficiency, adjust: Adjust } }` | Keys from the 18 SRD skills in kebab-case. The object form adds `adjust` to the derived bonus, for an SRD bonus no proficiency level reaches (§5.9) |
 | `vulnerabilities`, `resistances` | optional arrays of `DamageType` or string | String for qualified entries |
-| `immunities` | optional `{ damage?: [...], conditions?: [Condition] }` | |
+| `immunities` | optional `{ damage?: [...], conditions?: [Condition or string] }` | A string is a qualified entry, printed as written: "Charmed (except from its vampire master)" |
 | `gear` | optional array of `RefOrText` | Items the creature carries |
-| `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int }` | Feet, each at least 1. Passive Perception is derived, so the Senses line always displays |
+| `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int, note?: string }` | Feet, each at least 1. Passive Perception is derived, so the Senses line always displays. `note` is a qualifier printed in parentheses after the senses: "Darkvision 120 ft. (unimpeded by magical Darkness); Passive Perception 13" |
 | `languages` | `{ spoken: [string], understood?: [string], telepathy?: int, note?: string }` | `spoken` lists languages the creature speaks (and so understands), and may be empty. `understood` lists languages it understands but can't speak. `telepathy` is at least 1. Rendering is under "Display forms" below |
 | `cr` | number: `0`, `0.125`, `0.25`, `0.5`, or `1`–`30` | Displayed as fractions. XP and PB are derived |
 | `lair` | optional `true` | Adds the derived "in lair" XP |
@@ -450,7 +451,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 
 - Negative numbers and subtractions print U+2212 (`−`), not ASCII `-`: `−1 (9)`, `INT 5 −3 −3`, `17 (5d8 − 5)`. Tokens in prose (§6.4) render the same way. This is display only: derived values, `library.json`, and the export bundles keep numbers and ASCII formula strings such as `2d6 - 2`.
 - The Speed line prints `walk`, then Burrow, Climb, Fly, and Swim in that order, then `note`. The Senses line prints Blindsight, Darkvision, Tremorsense, and Truesight in that order, separated by commas, with a semicolon before Passive Perception: `Blindsight 10 ft., Darkvision 60 ft.; Passive Perception 13`. The order is fixed, whatever the entry's key order.
-- The Languages line joins, with semicolons: the `spoken` list (comma-separated), then the `understood` clause, then telepathy, with `note` in parentheses after the whole line. The clause is "Understands … but can't speak" when nothing is spoken, and "understands … but can't speak it" (or "them" for two or more) after a spoken list. Each item is free text, so a phrase such as "Common plus one other language" is one item. With nothing spoken, understood, or telepathic, the line reads "None". Examples: `Common, Giant`; `Understands Common plus one other language but can't speak`; `Understands Infernal but can't speak; telepathy 60 ft.`; `Common; understands Giant but can't speak it`.
+- The Languages line joins, with semicolons: the `spoken` list (comma-separated), then the `understood` clause, then telepathy, with `note` in parentheses after the whole line. The `understood` list joins as an English list, as the SRD prints it ("Elvish and Sylvan", "Abyssal, Common, and Infernal"), while the `spoken` list stays comma-separated ("Common, Giant"). The clause is "Understands … but can't speak" when nothing is spoken, and "understands … but can't speak it" (or "them" for two or more) after a spoken list. Each item is free text, so a phrase such as "Common plus one other language" is one item. With nothing spoken, understood, or telepathic, the line reads "None". Examples: `Common, Giant`; `Understands Common plus one other language but can't speak`; `Understands Infernal but can't speak; telepathy 60 ft.`; `Common; understands Giant but can't speak it`.
 - The Spellcasting action puts the intro, then each spell list, then `note`, on lines of their own: "At Will:", then "3/Day Each:", "2/Day Each:", and "1/Day Each:". A level that lists one spell drops "Each" ("1/Day: Fireball").
 - Prose after damage (`onHit`, `onFailure`) that starts with a lowercase letter continues the damage sentence after a comma; prose that starts any other way follows the damage as a new sentence. `"onHit": "and the target has the Paralyzed condition…"` prints `*Hit:* 15 (3d6 + 5) Cold damage, and the target has the Paralyzed condition…`, and `"If the target is a creature, …"` prints `… Piercing damage. If the target is a creature, …`.
 - An action's `uses` is title-cased, including the word after a slash, with minor words (`a`, `an`, `and`, `at`, `by`, `for`, `in`, `of`, `on`, `or`, `per`, `the`, `to`, `with`) lowercase unless they come first: `"4/day"` prints `Loathsome Limbs (4/Day)`, and `"4/day, or 5/day in lair"` prints `(4/Day, or 5/Day in Lair)`. Skill names and the alignment follow the same rule (`Sleight of Hand`).
@@ -461,9 +462,9 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 |---|---|---|
 | `category` | `armor`, `potion`, `ring`, `rod`, `scroll`, `staff`, `wand`, `weapon`, `wondrous-item` | |
 | `baseItem` | optional string | Required for `armor` and `weapon` (for example `"Longsword"`, `"any medium armor"`) |
-| `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | |
+| `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | The subtitle reads it in title case ("Very Rare"), and `varies` as "Rarity Varies" |
 | `attunement` | `{ required: bool, requirement?: string }` | `requirement` such as `"by a spellcaster"` |
-| `charges` | optional `{ max: int, recharge: string, depletion?: Text }` | |
+| `charges` | optional `{ max: int or dice, recharge?: string, depletion?: Text }` | Reads "7; regains 1d6 + 1 daily at dawn". An item that never regains charges omits `recharge`, and the line reads "12". `max` is a whole number, or a rolled count as printed ("1d3", "1d8 + 1") |
 | `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, maxChargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8). A variable cost, such as spending 1 to 3 charges to cast at a higher level, sets `chargeCost` to the least and `maxChargeCost` to the most, and reads "1–3 charges" |
 | `cursed` | optional `true` | |
 | `effect` | `Text` | The rules text as printed |
@@ -514,7 +515,7 @@ Creature:
 | No literal derived numbers in prose (§6.4) | error |
 | Speeds are multiples of 5 | error |
 | A damage `condition` only on a rider, not on `damage[0]` | error |
-| Any `adjust`, damage `bonus`, or token adjustment (listed so the reviewer confirms the deviation) | warning |
+| Any `adjust` (including a skill's), damage `bonus`, or token adjustment (listed so the reviewer confirms the deviation) | warning |
 | Any authored DC token `{dc=<n>}` (listed so the reviewer confirms it isn't derived) | warning |
 | Derived attack bonus above +17 or save DC above 30 | warning |
 
@@ -693,7 +694,7 @@ Display and generation defaults only. Validation never reads it except to confir
 
 | Key | Purpose |
 |---|---|
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `spell-level` reads 0 as "Cantrip" and any other level as SRD 5.2 does, "Level 3". `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `rarity` reads an item rarity in title case, as SRD 5.2 prints it (`very-rare` reads "Very Rare"). `spell-level` reads 0 as "Cantrip" and any other level as SRD 5.2 does, "Level 3". `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |

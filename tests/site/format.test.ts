@@ -7,7 +7,7 @@ describe('display formatters (SPEC.md §7 `format`)', () => {
   });
 
   it('formats rarities', () => {
-    expect(formatRarity('very-rare')).toBe('Very rare');
+    expect(formatRarity('very-rare')).toBe('Very Rare');
   });
 
   it('formats enum slugs as title case', () => {
