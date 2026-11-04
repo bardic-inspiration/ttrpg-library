@@ -258,4 +258,9 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     const { s, d } = await build({ senses: { darkvision: 120, note: 'unimpeded by magical Darkness' } });
     expect(sensesLine(s, d)).toBe('Darkvision 120 ft. (unimpeded by magical Darkness); Passive Perception 13');
   });
+  it('prints a swarm type line (#166)', async () => {
+    const { s } = await build({ swarm: 'tiny', creatureType: 'beast', alignment: 'unaligned' });
+    expect(sizeTypeLine(s)).toBe('Medium Swarm of Tiny Beasts, Unaligned');
+    expect(sizeTypeLine({ ...s, creatureType: 'undead', alignment: 'neutral evil' })).toBe('Medium Swarm of Tiny Undead, Neutral Evil');
+  });
 });

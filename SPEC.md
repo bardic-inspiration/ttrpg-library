@@ -404,6 +404,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `size` | array of `tiny`…`gargantuan`, 1–2 items | Two values for "Medium or Small"; the first sets the hit die |
 | `creatureType` | enum of the 14 SRD creature types | `aberration`, `beast`, `celestial`, `construct`, `dragon`, `elemental`, `fey`, `fiend`, `giant`, `humanoid`, `monstrosity`, `ooze`, `plant`, `undead` |
 | `shortName` | optional string | What generated prose calls the creature after "The", lowercase, such as `"dragon"`. Omit it when that is the last word of `name`, lowercase (the Lich's "lich", the Adult Red Dragon's "dragon"), which is the default |
+| `swarm` | optional size enum | The size of a swarm's members. The type line reads "Medium Swarm of Tiny Beasts", with the type plural ("Undead" and "Fey" stay as they are) |
 | `descriptors` | optional array of strings | Parenthetical tags such as `"Wizard"`; must pass the blocklist |
 | `alignment` | string | Free text from the SRD alignment set, plus `"unaligned"` and `"any alignment"` |
 | `ac` | `{ value: int 1–30, note?: string }` | Authored; `note` such as `"natural armor"` |

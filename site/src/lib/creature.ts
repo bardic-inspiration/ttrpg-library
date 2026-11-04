@@ -49,9 +49,17 @@ const titleCase = (s: string): string =>
 
 export { formatCr };
 
+/** A creature type as a swarm's members: "Beasts", "Monstrosities", "Undead", "Fey". */
+const pluralType = (type: string): string => {
+  const word = capitalize(type);
+  if (type === 'undead' || type === 'fey') return word;
+  return type.endsWith('y') ? `${word.slice(0, -1)}ies` : `${word}s`;
+};
+
 export const sizeTypeLine = (s: CreatureStats): string => {
   const descriptors = whenPresent(s.descriptors, (list) => ` (${list.join(', ')})`) ?? '';
-  return `${s.size.map(capitalize).join(' or ')} ${capitalize(s.creatureType)}${descriptors}, ${titleCase(s.alignment)}`;
+  const kind = whenPresent(s.swarm, (member) => `Swarm of ${capitalize(member)} ${pluralType(s.creatureType)}`) ?? capitalize(s.creatureType);
+  return `${s.size.map(capitalize).join(' or ')} ${kind}${descriptors}, ${titleCase(s.alignment)}`;
 };
 
 export const acLine = (s: CreatureStats): string => whenPresent(s.ac.note, (note) => `${s.ac.value} (${note})`) ?? String(s.ac.value);

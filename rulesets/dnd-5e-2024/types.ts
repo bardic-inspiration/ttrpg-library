@@ -56,6 +56,8 @@ export interface CreatureStats {
   creatureType: string;
   /** What generated prose calls the creature after "The"; defaults to the name's last word, lowercase. */
   shortName?: string;
+  /** A swarm's member size: "tiny" reads "Medium Swarm of Tiny Beasts". */
+  swarm?: Size;
   descriptors?: string[];
   alignment: string;
   ac: { value: number; note?: string };
