@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "tiny-hut",
+  "name": "Tiny Hut",
+  "summary": "Creates a stationary dome of force that shelters you and your companions for 8 hours.",
+  "stats": {
+    "level": 3,
+    "school": "evocation",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "minute"
+    },
+    "ritual": true,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a crystal bead"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 8,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "A 10-foot Emanation springs into existence around you and remains stationary for the duration. The spell fails when you cast it if the Emanation isn't big enough to fully encapsulate all creatures in its area.\n\nCreatures and objects within the Emanation when you cast the spell can move through it freely. All other creatures and objects are barred from passing through it. Spells of level 3 or lower can't be cast through it, and the effects of such spells can't extend into it.\n\nThe atmosphere inside the Emanation is comfortable and dry, regardless of the weather outside. Until the spell ends, you can command the interior to have Dim Light or Darkness (no action required). The Emanation is opaque from the outside and of any color you choose, but it's transparent from the inside.\n\nThe spell ends early if you leave the Emanation or if you cast it again."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

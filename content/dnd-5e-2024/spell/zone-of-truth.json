@@ -1,0 +1,46 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "zone-of-truth",
+  "name": "Zone of Truth",
+  "summary": "Creates a 15-foot-radius Sphere where creatures can't deliberately lie.",
+  "stats": {
+    "level": 2,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "cleric",
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": false
+    },
+    "effect": "You create a magical zone that guards against deception in a 15-foot-radius Sphere centered on a point within range. Until the spell ends, a creature that enters the spell's area for the first time on a turn or starts its turn there makes a Charisma saving throw. On a failed save, a creature can't speak a deliberate lie while in the radius. You know whether a creature succeeds or fails on this save.\n\nAn affected creature is aware of the spell and can avoid answering questions to which it would normally respond with a lie. Such a creature can be evasive yet must be truthful."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

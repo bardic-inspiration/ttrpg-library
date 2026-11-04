@@ -1,0 +1,52 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "true-seeing",
+  "name": "True Seeing",
+  "summary": "Grants a willing creature Truesight out to 120 feet.",
+  "stats": {
+    "level": 6,
+    "school": "divination",
+    "classes": [
+      "bard",
+      "cleric",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "mushroom powder worth 25+ GP, which the spell consumes",
+        "costGp": 25,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "For the duration, the willing creature you touch has Truesight with a range of 120 feet."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
