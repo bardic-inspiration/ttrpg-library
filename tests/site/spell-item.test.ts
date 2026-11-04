@@ -21,6 +21,9 @@ describe('spell card lines (SPEC.md §6.7)', async () => {
     );
     expect(castingTimeLine({ ...base, castingTime: { amount: 10, unit: 'minute' }, ritual: true })).toBe('10 minutes or Ritual');
     expect(castingTimeLine({ ...base, castingTime: { amount: 1, unit: 'hour' } })).toBe('1 hour');
+    expect(castingTimeLine({ ...base, castingTime: { amount: 1, unit: 'action', note: '(Overgrowth) or 8 hours (Enrichment)' } })).toBe(
+      'Action (Overgrowth) or 8 hours (Enrichment)',
+    );
   });
 
   it('formats range with an area', () => {

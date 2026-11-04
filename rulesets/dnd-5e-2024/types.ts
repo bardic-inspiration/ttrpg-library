@@ -91,7 +91,7 @@ export interface SpellStats {
   level: number;
   school: string;
   classes: string[];
-  castingTime: { amount: number; unit: 'action' | 'bonus-action' | 'reaction' | 'minute' | 'hour'; trigger?: string };
+  castingTime: { amount: number; unit: 'action' | 'bonus-action' | 'reaction' | 'minute' | 'hour'; trigger?: string; note?: string };
   ritual: boolean;
   range: {
     kind: 'self' | 'touch' | 'distance' | 'sight' | 'unlimited' | 'special';

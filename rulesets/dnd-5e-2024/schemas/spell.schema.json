@@ -24,7 +24,8 @@
       "properties": {
         "amount": { "type": "integer", "minimum": 1 },
         "unit": { "enum": ["action", "bonus-action", "reaction", "minute", "hour"] },
-        "trigger": { "$ref": "common.schema.json#/$defs/Text" }
+        "trigger": { "$ref": "common.schema.json#/$defs/Text" },
+        "note": { "description": "Printed as written after the unit, for a casting time the fields can't express: \"(Overgrowth) or 8 hours (Enrichment)\".", "type": "string", "minLength": 1 }
       }
     },
     "ritual": { "type": "boolean" },

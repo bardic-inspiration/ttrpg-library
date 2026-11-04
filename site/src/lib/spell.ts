@@ -4,6 +4,7 @@
 
 import { present, whenPresent } from './display.ts';
 import { formatSpellLevel } from './format.ts';
+import { escapeMarkdown } from './markdown.ts';
 import type { SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -28,9 +29,11 @@ const ACTION_UNITS: Record<string, string> = { action: 'Action', 'bonus-action':
  * when `ritual` is true. Markdown, since `trigger` is a `Text` field.
  */
 export function castingTimeLine(s: SpellStats): string {
-  const { amount, unit, trigger } = s.castingTime;
+  const { amount, unit, trigger, note } = s.castingTime;
   const action = ACTION_UNITS[unit];
   let line = action ? (amount === 1 ? action : `${amount} ${action}s`) : plural(amount, unit);
+  // A casting time the fields can't express, as printed (SPEC.md §5.9, §6.7).
+  line += whenPresent(note, (n) => ` ${escapeMarkdown(n)}`) ?? '';
   line += whenPresent(trigger, (t) => `, which you take ${t}`) ?? '';
   return s.ritual ? `${line} or Ritual` : line;
 }
