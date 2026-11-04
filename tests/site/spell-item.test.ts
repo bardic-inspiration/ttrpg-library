@@ -59,7 +59,7 @@ describe('magic item card lines (SPEC.md §6.6)', async () => {
   it('formats category, base item, rarity, and attunement', () => {
     expect(subtitleLine(wand)).toBe('Wand, Uncommon (Requires Attunement by a spellcaster)');
     expect(subtitleLine({ ...wand, category: 'weapon', baseItem: 'Longsword', rarity: 'very-rare', attunement: { required: false } })).toBe(
-      'Weapon (Longsword), Very rare',
+      'Weapon (Longsword), Very Rare',
     );
     expect(subtitleLine({ ...wand, category: 'wondrous-item', rarity: 'varies', attunement: { required: true } })).toBe(
       'Wondrous Item, Rarity Varies (Requires Attunement)',
