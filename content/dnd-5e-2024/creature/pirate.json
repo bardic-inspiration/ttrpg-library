@@ -1,0 +1,91 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "pirate",
+  "name": "Pirate",
+  "summary": "A sea raider who fights with daggers and enthralling bravado.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 14
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 16,
+      "con": 12,
+      "int": 8,
+      "wis": 12,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "dex",
+      "cha"
+    ],
+    "gear": [
+      "Daggers (6)",
+      "Leather Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The pirate makes two Dagger attacks. It can replace one attack with a use of Enthralling Panache."
+      },
+      {
+        "name": "Dagger",
+        "kind": "melee-or-ranged-attack",
+        "ability": "dex",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Enthralling Panache",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature the pirate can see within 30 feet"
+        },
+        "onFailure": "The target has the Charmed condition until the start of the pirate's next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

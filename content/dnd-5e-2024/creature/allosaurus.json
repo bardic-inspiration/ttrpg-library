@@ -1,0 +1,78 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "allosaurus",
+  "name": "Allosaurus",
+  "summary": "A large predatory dinosaur that pounces on prey with its claws and bite.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "descriptors": [
+      "Dinosaur"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 60
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 13,
+      "con": 17,
+      "int": 2,
+      "wis": 12,
+      "cha": 5
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Claws",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature and the allosaurus moved 30+ feet straight toward it immediately before the hit, the target has the Prone condition, and the allosaurus can make one Bite attack against it."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

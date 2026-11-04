@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "goblin-warrior",
+  "name": "Goblin Warrior",
+  "summary": "A small fey raider armed with a scimitar and a shortbow.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 15,
+      "con": 10,
+      "int": 10,
+      "wis": 8,
+      "cha": 8
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "gear": [
+      "Leather Armor",
+      "Scimitar",
+      "Shield",
+      "Shortbow"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Scimitar",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d4",
+            "type": "slashing",
+            "condition": "if the attack roll had Advantage"
+          }
+        ]
+      },
+      {
+        "name": "Shortbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d4",
+            "type": "piercing",
+            "condition": "if the attack roll had Advantage"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Nimble Escape",
+        "kind": "other",
+        "text": "The goblin takes the Disengage or Hide action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

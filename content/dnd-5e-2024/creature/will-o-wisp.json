@@ -1,0 +1,124 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "will-o-wisp",
+  "name": "Will-o’-Wisp",
+  "summary": "A flickering undead light that shocks and feeds on fear.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 19
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 5,
+      "fly": 50,
+      "hover": true
+    },
+    "abilities": {
+      "str": 1,
+      "dex": 28,
+      "con": 10,
+      "int": 13,
+      "wis": 14,
+      "cha": 11
+    },
+    "resistances": [
+      "acid",
+      "bludgeoning",
+      "cold",
+      "fire",
+      "necrotic",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "lightning",
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Ephemeral",
+        "kind": "other",
+        "text": "The wisp can't wear or carry anything."
+      },
+      {
+        "name": "Illumination",
+        "kind": "other",
+        "text": "The wisp sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet."
+      },
+      {
+        "name": "Incorporeal Movement",
+        "kind": "other",
+        "text": "The wisp can move through other creatures and objects as if they were Difficult Terrain. It takes {dmg:1d10:force} if it ends its turn inside an object."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Shock",
+        "kind": "melee-attack",
+        "ability": "wis",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "wis",
+            "type": "lightning"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Consume Life",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "one living creature the wisp can see within 5 feet that has 0 Hit Points"
+        },
+        "onFailure": "The target dies, and the wisp regains {dmg:3d6} Hit Points."
+      },
+      {
+        "name": "Vanish",
+        "kind": "other",
+        "text": "The wisp and its light have the Invisible condition until the wisp's Concentration ends on this effect, which ends early immediately after the wisp makes an attack roll or uses Consume Life."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

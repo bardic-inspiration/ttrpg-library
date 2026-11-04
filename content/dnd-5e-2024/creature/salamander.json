@@ -1,0 +1,115 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "salamander",
+  "name": "Salamander",
+  "summary": "A serpentine elemental of fire that wields a flame spear and constricts foes.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 14,
+      "con": 15,
+      "int": 11,
+      "wis": 10,
+      "cha": 12
+    },
+    "vulnerabilities": [
+      "cold"
+    ],
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Ignan"
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Fire Aura",
+        "kind": "other",
+        "text": "At the end of each of the salamander's turns, each creature of the salamander's choice in a 5-foot Emanation originating from the salamander takes {dmg:2d6:fire}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The salamander makes two Flame Spear attacks. It can replace one attack with a use of Constrict."
+      },
+      {
+        "name": "Flame Spear",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d6",
+            "type": "fire"
+          }
+        ],
+        "onHit": "*Hit or Miss:* The spear magically returns to the salamander's hand immediately after a ranged attack."
+      },
+      {
+        "name": "Constrict",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "str",
+          "targets": "one Large or smaller creature the salamander can see within 10 feet"
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "2d6",
+            "type": "fire"
+          }
+        ],
+        "onFailure": "The target has the Grappled condition (escape {dc=14}), and it has the Restrained condition until the grapple ends."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

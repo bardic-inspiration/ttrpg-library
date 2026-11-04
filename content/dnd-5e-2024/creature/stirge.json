@@ -1,0 +1,63 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "stirge",
+  "name": "Stirge",
+  "summary": "A tiny monstrosity that drains blood through its proboscis.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 10,
+      "fly": 40
+    },
+    "abilities": {
+      "str": 4,
+      "dex": 16,
+      "con": 11,
+      "int": 2,
+      "wis": 8,
+      "cha": 6
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.125,
+    "actions": [
+      {
+        "name": "Proboscis",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the stirge attaches to the target. While attached, the stirge can't make Proboscis attacks, and the target takes {dmg:2d4:necrotic} at the start of each of the stirge's turns.\n\nThe stirge can detach itself by spending 5 feet of its movement. The target or a creature within 5 feet of it can detach the stirge as an action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

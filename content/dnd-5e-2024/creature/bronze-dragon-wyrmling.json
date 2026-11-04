@@ -1,0 +1,113 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bronze-dragon-wyrmling",
+  "name": "Bronze Dragon Wyrmling",
+  "summary": "A young bronze dragon that breathes lightning or a repelling blast.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "lawful good",
+    "ac": {
+      "value": 15
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30,
+      "fly": 60,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 10,
+      "con": 15,
+      "int": 12,
+      "wis": 11,
+      "cha": 15
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "lightning"
+      ]
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Draconic"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The dragon can breathe air and water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes two Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Lightning Breath",
+        "kind": "other",
+        "text": "**.** *Dexterity Saving Throw:* {dc:con}, each creature in a 40-foot-long, 5-foot-wide Line. *Failure:* {dmg:3d10:lightning}. *Success:* Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Repulsion Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "str",
+          "targets": "each creature in a 30-foot Cone"
+        },
+        "onFailure": "The target is pushed up to 30 feet straight away from the dragon and has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

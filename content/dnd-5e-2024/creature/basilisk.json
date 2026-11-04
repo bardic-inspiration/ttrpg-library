@@ -1,0 +1,73 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "basilisk",
+  "name": "Basilisk",
+  "summary": "A reptilian monstrosity whose gaze petrifies those who meet it.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 8,
+      "con": 15,
+      "int": 2,
+      "wis": 8,
+      "cha": 7
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d6",
+            "type": "poison"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Petrifying Gaze",
+        "kind": "other",
+        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 30-foot Cone. If the basilisk sees its reflection in the Cone, the basilisk must make this save. *First Failure:* The target has the Restrained condition and repeats the save at the end of its next turn if it is still Restrained, ending the effect on itself on a success. *Second Failure:* The target has the Petrified condition instead of the Restrained condition.",
+        "recharge": "4-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

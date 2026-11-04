@@ -1,0 +1,72 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "pteranodon",
+  "name": "Pteranodon",
+  "summary": "A flying reptile that swoops to bite.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "descriptors": [
+      "Dinosaur"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 10,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 15,
+      "con": 10,
+      "int": 2,
+      "wis": 9,
+      "cha": 5
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The pteranodon doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

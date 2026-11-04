@@ -1,0 +1,119 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "young-copper-dragon",
+  "name": "Young Copper Dragon",
+  "summary": "A large copper dragon that breathes acid or slowing gas.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "chaotic good",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 14,
+    "speed": {
+      "walk": 40,
+      "climb": 40,
+      "fly": 80
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 12,
+      "con": 17,
+      "int": 16,
+      "wis": 13,
+      "cha": 15
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "acid"
+      ]
+    },
+    "senses": {
+      "blindsight": 30,
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 7,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes three Rend attacks. It can replace one attack with a use of Slowing Breath."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Acid Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 40-foot-long, 5-foot-wide Line"
+        },
+        "damage": [
+          {
+            "dice": "9d8",
+            "type": "acid"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Slowing Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 30-foot Cone"
+        },
+        "onFailure": "The target can't take Reactions; its Speed is halved; and it can take either an action or a Bonus Action on its turn, not both. This effect lasts until the end of its next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

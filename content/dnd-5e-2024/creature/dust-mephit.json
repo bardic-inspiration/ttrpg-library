@@ -1,0 +1,105 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "dust-mephit",
+  "name": "Dust Mephit",
+  "summary": "A small elemental of dust that blinds with its breath and explodes when it dies.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30,
+      "fly": 30
+    },
+    "abilities": {
+      "str": 5,
+      "dex": 14,
+      "con": 10,
+      "int": 9,
+      "wis": 11,
+      "cha": 10
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "vulnerabilities": [
+      "fire"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Auran, Terran"
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Death Burst",
+        "kind": "other",
+        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot Emanation originating from the mephit. *Failure:* {dmg:2d4:bludgeoning}. *Success:* Half damage."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Blinding Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "onFailure": "The target has the Blinded condition until the end of the mephit's next turn.",
+        "recharge": "6"
+      },
+      {
+        "name": "Sleep",
+        "kind": "other",
+        "text": "The mephit casts the *{ref:spell/sleep}* spell, requiring no spell components and using Charisma as the spellcasting ability (spell save {dc:con}).",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

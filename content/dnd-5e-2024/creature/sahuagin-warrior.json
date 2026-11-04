@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "sahuagin-warrior",
+  "name": "Sahuagin Warrior",
+  "summary": "A fiendish aquatic raider driven into a frenzy by blood.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fiend",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 30,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 11,
+      "con": 12,
+      "int": 12,
+      "wis": 13,
+      "cha": 9
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "resistances": [
+      "acid",
+      "cold"
+    ],
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Sahuagin"
+      ]
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Blood Frenzy",
+        "kind": "other",
+        "text": "The sahuagin has Advantage on attack rolls against any creature that doesn't have all its Hit Points."
+      },
+      {
+        "name": "Limited Amphibiousness",
+        "kind": "other",
+        "text": "The sahuagin can breathe air and water, but it must be submerged at least once every 4 hours to avoid suffocating outside water."
+      },
+      {
+        "name": "Shark Telepathy",
+        "kind": "other",
+        "text": "The sahuagin can magically control sharks within 120 feet of itself, using a special telepathy."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The sahuagin makes two Claw attacks."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Aquatic Charge",
+        "kind": "other",
+        "text": "The sahuagin swims up to its Swim Speed straight toward an enemy it can see."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

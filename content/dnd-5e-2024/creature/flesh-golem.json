@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "flesh-golem",
+  "name": "Flesh Golem",
+  "summary": "A golem stitched from corpses that fears fire and may go berserk.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "construct",
+    "alignment": "neutral",
+    "ac": {
+      "value": 9
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 9,
+      "con": 18,
+      "int": 6,
+      "wis": 10,
+      "cha": 5
+    },
+    "immunities": {
+      "damage": [
+        "lightning",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "frightened",
+        "paralyzed",
+        "petrified",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Aversion to Fire",
+        "kind": "other",
+        "text": "If the golem takes Fire damage, it has Disadvantage on attack rolls and ability checks until the end of its next turn."
+      },
+      {
+        "name": "Berserk",
+        "kind": "other",
+        "text": "Whenever the golem starts its turn Bloodied, roll 1d6. On a 6, the golem goes berserk. On each of its turns while berserk, the golem attacks the nearest creature it can see. If no creature is near enough to move to and attack, the golem attacks an object. Once the golem goes berserk, it remains so until it is destroyed or it is no longer Bloodied.\n\nThe golem's creator, if within 60 feet of the berserk golem, can try to calm it by taking an action to make a {dc=15} Charisma (Persuasion) check; the golem must be able to hear its creator. If this check succeeds, the golem ceases being berserk until the start of its next turn, at which point it resumes rolling for the Berserk trait again if it is still Bloodied."
+      },
+      {
+        "name": "Immutable Form",
+        "kind": "other",
+        "text": "The golem can't shape-shift. ***Lightning Absorption***. Whenever the golem is subjected to Lightning damage, it regains a number of Hit Points equal to the Lightning damage dealt."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The golem has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The golem makes two Slam attacks."
+      },
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d8",
+            "type": "lightning"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

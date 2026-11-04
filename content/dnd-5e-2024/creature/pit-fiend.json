@@ -1,0 +1,156 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "pit-fiend",
+  "name": "Pit Fiend",
+  "summary": "A mighty devil general that bites, claws, and wields a fiery mace.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Devil"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 21
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 27,
+    "speed": {
+      "walk": 30,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 26,
+      "dex": 14,
+      "con": 24,
+      "int": 22,
+      "wis": 18,
+      "cha": 24
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "proficient",
+      "persuasion": "expertise"
+    },
+    "resistances": [
+      "cold"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "Infernal"
+      ],
+      "telepathy": 120
+    },
+    "cr": 20,
+    "traits": [
+      {
+        "name": "Diabolical Restoration",
+        "kind": "other",
+        "text": "If the pit fiend dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+      },
+      {
+        "name": "Fear Aura",
+        "kind": "other",
+        "text": "The pit fiend emanates an aura in a 20-foot Emanation while it doesn't have the Incapacitated condition. *Wisdom Saving Throw:* {dc:con}, any enemy that starts its turn in the aura. *Failure:* The target has the Frightened condition until the start of its next turn. *Success:* The target is immune to this pit fiend's aura for 24 hours."
+      },
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the pit fiend fails a saving throw, it can choose to succeed instead.",
+        "uses": "4/day"
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The pit fiend has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The pit fiend makes one Bite attack, two Devilish Claw attacks, and one Fiery Mace attack."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a creature, it must make the following saving throw. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the Poisoned condition. While Poisoned, the target can't regain Hit Points and takes {dmg:6d6:poison} at the start of each of its turns, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+      },
+      {
+        "name": "Devilish Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "4d8",
+            "ability": "str",
+            "type": "necrotic"
+          }
+        ]
+      },
+      {
+        "name": "Fiery Mace",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "4d6",
+            "ability": "str",
+            "type": "force"
+          },
+          {
+            "dice": "6d6",
+            "type": "fire"
+          }
+        ]
+      },
+      {
+        "name": "Hellfire Spellcasting",
+        "kind": "other",
+        "text": "The pit fiend casts *{ref:spell/fireball}* (level 5 version) twice, requiring no Material components and using Charisma as the spellcasting ability (spell save {dc:con}). It can replace one *{ref:spell/fireball}* with *{ref:spell/hold-monster}* (level 7 version) or *Wall of Fire.*",
+        "recharge": "4-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

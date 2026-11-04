@@ -1,0 +1,108 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "young-brass-dragon",
+  "name": "Young Brass Dragon",
+  "summary": "A large brass dragon that breathes fire or sleep gas.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "chaotic good",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 40,
+      "burrow": 20,
+      "fly": 80
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 10,
+      "con": 17,
+      "int": 12,
+      "wis": 11,
+      "cha": 15
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "persuasion": "proficient",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "senses": {
+      "blindsight": 30,
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 6,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes three Rend attacks. It can replace two attacks with a use of Sleep Breath."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Fire Breath",
+        "kind": "other",
+        "text": "**.** *Dexterity Saving Throw:* {dc:con}, each creature in a 40-foot-long, 5-foot-wide Line. *Failure:* {dmg:11d6:fire}. *Success:* Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Sleep Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 30-foot Cone"
+        },
+        "onFailure": "The target has the Incapacitated condition until the end of its next turn, at which point it repeats the save. *Second Failure:* The target has the Unconscious condition for 1 minute. This effect ends for the target if it takes damage or a creature within 5 feet of it takes an action to wake it."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "young-silver-dragon",
+  "name": "Young Silver Dragon",
+  "summary": "A large silver dragon that breathes cold or paralyzing gas.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "lawful good",
+    "ac": {
+      "value": 18
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 16,
+    "speed": {
+      "walk": 40,
+      "fly": 80
+    },
+    "abilities": {
+      "str": 23,
+      "dex": 10,
+      "con": 21,
+      "int": 14,
+      "wis": 11,
+      "cha": 19
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "history": "proficient",
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "cold"
+      ]
+    },
+    "senses": {
+      "blindsight": 30,
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 9,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes three Rend attacks. It can replace one attack with a use of Paralyzing Breath."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Cold Breath",
+        "kind": "other",
+        "text": "**.** *Constitution Saving Throw:* {dc:con}, each creature in a 30-foot Cone. *Failure:* {dmg:11d8:cold}. *Success:* Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Paralyzing Breath",
+        "kind": "other",
+        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 30-foot Cone. *First Failure:* The target has the Incapacitated condition until the end of its next turn, when it repeats the save. *Second Failure:* The target has the Paralyzed condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

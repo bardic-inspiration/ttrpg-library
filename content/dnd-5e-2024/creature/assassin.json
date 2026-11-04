@@ -1,0 +1,126 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "assassin",
+  "name": "Assassin",
+  "summary": "A deadly killer who strikes with poisoned blades and crossbow bolts from hiding.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 16
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 18,
+      "con": 14,
+      "int": 16,
+      "wis": 11,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "dex",
+      "int"
+    ],
+    "skills": {
+      "acrobatics": "proficient",
+      "perception": "expertise",
+      "stealth": "expertise"
+    },
+    "resistances": [
+      "poison"
+    ],
+    "gear": [
+      "Light Crossbow",
+      "Shortsword",
+      "Studded Leather Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Evasion",
+        "kind": "other",
+        "text": "If the assassin is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, the assassin instead takes no damage if it succeeds on the save and only half damage if it fails. It can't use this trait if it has the Incapacitated condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The assassin makes three attacks, using Shortsword or Light Crossbow in any combination."
+      },
+      {
+        "name": "Shortsword",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "5d6",
+            "type": "poison"
+          }
+        ],
+        "onHit": "and the target has the Poisoned condition until the start of the assassin's next turn."
+      },
+      {
+        "name": "Light Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "6d6",
+            "type": "poison"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Cunning Action",
+        "kind": "other",
+        "text": "The assassin takes the Dash, Disengage, or Hide action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

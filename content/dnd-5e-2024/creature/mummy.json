@@ -1,0 +1,104 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "mummy",
+  "name": "Mummy",
+  "summary": "An embalmed undead whose rotting touch curses and whose glare paralyzes with fear.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "undead",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 8,
+      "con": 15,
+      "int": 6,
+      "wis": 12,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "vulnerabilities": [
+      "fire"
+    ],
+    "immunities": {
+      "damage": [
+        "necrotic",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "frightened",
+        "paralyzed",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common plus two other languages"
+      ]
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The mummy makes two Rotting Fist attacks and uses Dreadful Glare."
+      },
+      {
+        "name": "Rotting Fist",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "3d6",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "If the target is a creature, it is cursed. While cursed, the target can't regain Hit Points, its Hit Point maximum doesn't return to normal when finishing a Long Rest, and its Hit Point maximum decreases by {dmg:3d6} every 24 hours that elapse. A creature dies and turns to dust if reduced to 0 Hit Points by this attack."
+      },
+      {
+        "name": "Dreadful Glare",
+        "kind": "save",
+        "ability": "wis",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature the mummy can see within 60 feet"
+        },
+        "onFailure": "The target has the Frightened condition until the end of the mummy's next turn.",
+        "onSuccess": "The target is immune to this mummy's Dreadful Glare for 24 hours."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "tyrannosaurus-rex",
+  "name": "Tyrannosaurus Rex",
+  "summary": "A huge predatory dinosaur with a crushing bite and a sweeping tail.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "descriptors": [
+      "Dinosaur"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 25,
+      "dex": 10,
+      "con": 19,
+      "int": 2,
+      "wis": 12,
+      "cha": 9
+    },
+    "saveProficiencies": [
+      "str",
+      "wis"
+    ],
+    "skills": {
+      "perception": "proficient"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 8,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The tyrannosaurus makes one Bite attack and one Tail attack."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "4d12",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=17}). While Grappled, the target has the Restrained condition and can't be targeted by the tyrannosaurus's Tail."
+      },
+      {
+        "name": "Tail",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 15,
+        "damage": [
+          {
+            "dice": "4d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Huge or smaller creature, it has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

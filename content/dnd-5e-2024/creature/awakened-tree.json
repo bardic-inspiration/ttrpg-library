@@ -1,0 +1,67 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "awakened-tree",
+  "name": "Awakened Tree",
+  "summary": "A tree given awareness and the ability to move, which slams enemies with its limbs.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "plant",
+    "alignment": "neutral",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 6,
+      "con": 15,
+      "int": 10,
+      "wis": 10,
+      "cha": 7
+    },
+    "vulnerabilities": [
+      "fire"
+    ],
+    "resistances": [
+      "bludgeoning",
+      "piercing"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

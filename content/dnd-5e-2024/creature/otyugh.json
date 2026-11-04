@@ -1,0 +1,106 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "otyugh",
+  "name": "Otyugh",
+  "summary": "A filth-dwelling aberration with tentacles and a diseased bite.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "aberration",
+    "alignment": "neutral",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 11,
+      "con": 19,
+      "int": 6,
+      "wis": 13,
+      "cha": 6
+    },
+    "saveProficiencies": [
+      "con"
+    ],
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Otyugh"
+      ],
+      "telepathy": 120,
+      "note": "doesn't allow the receiving creature to respond telepathically"
+    },
+    "cr": 5,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The otyugh makes one Bite attack and two Tentacle attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has the Poisoned condition. Whenever the Poisoned target finishes a Long Rest, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target's Hit Point maximum decreases by {dmg:1d10} and doesn't return to normal until the Poisoned condition ends on the target. *Success:* The Poisoned condition ends."
+      },
+      {
+        "name": "Tentacle",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=13}) from one of two tentacles."
+      },
+      {
+        "name": "Tentacle Slam",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "con",
+          "targets": "each creature Grappled by the otyugh"
+        },
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onFailure": "and the target has the Stunned condition until the start of the otyugh's next turn.",
+        "onSuccess": "Half damage only."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

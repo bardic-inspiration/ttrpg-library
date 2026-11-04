@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "centaur-trooper",
+  "name": "Centaur Trooper",
+  "summary": "A fey warrior with a horse's body that fights with pike and longbow.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "fey",
+    "alignment": "neutral good",
+    "ac": {
+      "value": 16
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 14,
+      "con": 14,
+      "int": 9,
+      "wis": 13,
+      "cha": 11
+    },
+    "skills": {
+      "athletics": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      "Breastplate",
+      "Longbow",
+      "Pike"
+    ],
+    "languages": {
+      "spoken": [
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The centaur makes two attacks, using Pike or Longbow in any combination."
+      },
+      {
+        "name": "Pike",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Longbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Trampling Charge",
+        "kind": "other",
+        "text": "The centaur moves up to its Speed without provoking Opportunity Attacks and can move through the spaces of Medium or smaller creatures. Each creature whose space the centaur enters is targeted once by the following effect. *Strength Saving Throw:* {dc:str}. *Failure:* {dmg:1d6+str:bludgeoning}, and the target has the Prone condition.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

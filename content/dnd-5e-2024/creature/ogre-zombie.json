@@ -1,0 +1,84 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ogre-zombie",
+  "name": "Ogre Zombie",
+  "summary": "The animated corpse of an ogre that is hard to destroy.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 8
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 6,
+      "con": 18,
+      "int": 3,
+      "wis": 6,
+      "cha": 5
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common",
+        "Giant"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Undead Fortitude",
+        "kind": "other",
+        "text": "If damage reduces the zombie to 0 Hit Points, it makes a Constitution saving throw ({dc=5} plus the damage taken) unless the damage is Radiant or from a Critical Hit. On a successful save, the zombie drops to 1 Hit Point instead."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

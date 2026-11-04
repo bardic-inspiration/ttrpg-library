@@ -1,0 +1,70 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-wasp",
+  "name": "Giant Wasp",
+  "summary": "A large wasp with a venomous sting.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 10,
+      "fly": 50
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 14,
+      "con": 10,
+      "int": 1,
+      "wis": 10,
+      "cha": 3
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The wasp doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Sting",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d4",
+            "type": "poison"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "archelon",
+  "name": "Archelon",
+  "summary": "A huge sea turtle that bites with crushing jaws.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "descriptors": [
+      "Dinosaur"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 17
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 20,
+      "swim": 80
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 16,
+      "con": 13,
+      "int": 4,
+      "wis": 14,
+      "cha": 6
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The archelon can breathe air and water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The archelon makes two Bite attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

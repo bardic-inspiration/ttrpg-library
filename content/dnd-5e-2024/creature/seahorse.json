@@ -1,0 +1,62 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "seahorse",
+  "name": "Seahorse",
+  "summary": "A tiny fish that darts away in a stream of bubbles.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 5,
+      "swim": 20
+    },
+    "abilities": {
+      "str": 1,
+      "dex": 12,
+      "con": 8,
+      "int": 1,
+      "wis": 10,
+      "cha": 2
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "expertise"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Water Breathing",
+        "kind": "other",
+        "text": "The seahorse can breathe only underwater."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bubble Dash",
+        "kind": "other",
+        "text": "While underwater, the seahorse moves up to its Swim Speed without provoking Opportunity Attacks."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

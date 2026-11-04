@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "brass-dragon-wyrmling",
+  "name": "Brass Dragon Wyrmling",
+  "summary": "A young brass dragon that breathes fire or sleep gas.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "chaotic good",
+    "ac": {
+      "value": 15
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 30,
+      "burrow": 15,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 10,
+      "con": 13,
+      "int": 10,
+      "wis": 11,
+      "cha": 13
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Draconic"
+      ]
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Fire Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 20-foot-long, 5-foot-wide Line"
+        },
+        "damage": [
+          {
+            "dice": "4d6",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Sleep Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "onFailure": "The target has the Incapacitated condition until the end of its next turn, at which point it repeats the save. *Second Failure:* The target has the Unconscious condition for 1 minute. This effect ends for the target if it takes damage or a creature within 5 feet of it takes an action to wake it."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

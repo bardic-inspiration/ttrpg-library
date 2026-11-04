@@ -1,0 +1,67 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "triceratops",
+  "name": "Triceratops",
+  "summary": "A huge horned dinosaur that gores.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "descriptors": [
+      "Dinosaur"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 22,
+      "dex": 9,
+      "con": 17,
+      "int": 2,
+      "wis": 11,
+      "cha": 5
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 5,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The triceratops makes two Gore attacks."
+      },
+      {
+        "name": "Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d12",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is Huge or smaller and the triceratops moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d8:piercing} and has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

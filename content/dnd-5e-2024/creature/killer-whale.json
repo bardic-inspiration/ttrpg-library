@@ -1,0 +1,73 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "killer-whale",
+  "name": "Killer Whale",
+  "summary": "A huge marine predator with a powerful bite.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 5,
+      "swim": 60
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 14,
+      "con": 13,
+      "int": 3,
+      "wis": 12,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "blindsight": 120
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Hold Breath",
+        "kind": "other",
+        "text": "The whale can hold its breath for 30 minutes."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "5d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
