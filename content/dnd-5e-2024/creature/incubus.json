@@ -1,0 +1,128 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "incubus",
+  "name": "Incubus",
+  "summary": "A fiend that charms and drains victims with its touch and nightmares, and can take a succubus form.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fiend",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 17,
+      "con": 13,
+      "int": 15,
+      "wis": 12,
+      "cha": 20
+    },
+    "skills": {
+      "deception": "expertise",
+      "insight": "expertise",
+      "perception": "expertise",
+      "persuasion": "expertise",
+      "stealth": "expertise"
+    },
+    "resistances": [
+      "cold",
+      "fire",
+      "poison",
+      "psychic"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal",
+        "Common",
+        "Infernal"
+      ],
+      "telepathy": 60
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Succubus Form",
+        "kind": "other",
+        "text": "When the incubus finishes a Long Rest, it can shape-shift into a **Succubus,** using that stat block instead of this one. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The incubus makes two Restless Touch attacks."
+      },
+      {
+        "name": "Restless Touch",
+        "kind": "melee-attack",
+        "ability": "cha",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "cha",
+            "type": "psychic"
+          }
+        ],
+        "onHit": "and the target is cursed for 24 hours or until the incubus dies. Until the curse ends, the target gains no benefit from finishing Short Rests."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/disguise-self"
+        },
+        {
+          "ref": "spell/etherealness"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/dream"
+          },
+          {
+            "ref": "spell/hypnotic-pattern"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Nightmare",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature the incubus can see within 60 feet"
+        },
+        "onFailure": "If the target has 20 Hit Points or fewer, it has the Unconscious condition for 1 hour, until it takes damage, or until a creature within 5 feet of it takes an action to wake it. Otherwise, the target takes {dmg:4d8:psychic}.",
+        "recharge": "6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

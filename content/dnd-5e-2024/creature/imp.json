@@ -1,0 +1,107 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "imp",
+  "name": "Imp",
+  "summary": "A tiny devil that stings with poison, turns invisible, and shape-shifts into small animals.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Devil"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 20,
+      "fly": 40
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 17,
+      "con": 13,
+      "int": 11,
+      "wis": 12,
+      "cha": 14
+    },
+    "skills": {
+      "deception": "proficient",
+      "insight": "proficient",
+      "stealth": "proficient"
+    },
+    "resistances": [
+      "cold"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 120,
+      "note": "unimpeded by magical Darkness"
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Infernal"
+      ]
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The imp has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Sting",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d6",
+            "type": "poison"
+          }
+        ]
+      },
+      {
+        "name": "Invisibility",
+        "kind": "other",
+        "text": "The imp casts *{ref:spell/invisibility}* on itself, requiring no spell components and using Charisma as the spellcasting ability."
+      },
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "The imp shape-shifts to resemble a rat (Speed 20 ft.), a raven (20 ft., Fly 60 ft.), or a spider (20 ft., Climb 20 ft.), or it returns to its true form. Its game statistics are the same in each form, except for its Speed. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

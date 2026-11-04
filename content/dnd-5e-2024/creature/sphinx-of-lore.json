@@ -1,0 +1,190 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "sphinx-of-lore",
+  "name": "Sphinx of Lore",
+  "summary": "A celestial sphinx that claws foes, unleashes a mind-rending roar, casts divination spells, and takes legendary actions.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "celestial",
+    "shortName": "sphinx",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 20,
+    "speed": {
+      "walk": 40,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 15,
+      "con": 16,
+      "int": 18,
+      "wis": 18,
+      "cha": 18
+    },
+    "skills": {
+      "arcana": "expertise",
+      "history": "expertise",
+      "perception": "proficient",
+      "religion": "expertise"
+    },
+    "resistances": [
+      "necrotic",
+      "radiant"
+    ],
+    "immunities": {
+      "damage": [
+        "psychic"
+      ],
+      "conditions": [
+        "charmed",
+        "frightened"
+      ]
+    },
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "Celestial",
+        "Common"
+      ]
+    },
+    "cr": 11,
+    "lair": true,
+    "traits": [
+      {
+        "name": "Inscrutable",
+        "kind": "other",
+        "text": "No magic can observe the sphinx remotely or detect its thoughts without its permission. Wisdom (Insight) checks made to ascertain its intentions or sincerity are made with Disadvantage."
+      },
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the sphinx fails a saving throw, it can choose to succeed instead.",
+        "uses": "3/day, or 4/day in lair"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The sphinx makes three Claw attacks."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Mind-Rending Roar",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "each enemy in a 300-foot Emanation originating from the sphinx"
+        },
+        "damage": [
+          {
+            "dice": "10d6",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "and the target has the Incapacitated condition until the start of the sphinx's next turn.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/identify"
+        },
+        {
+          "ref": "spell/mage-hand"
+        },
+        {
+          "ref": "spell/minor-illusion"
+        },
+        {
+          "ref": "spell/prestidigitation"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/dispel-magic"
+          },
+          {
+            "ref": "spell/legend-lore"
+          },
+          {
+            "ref": "spell/locate-object"
+          },
+          {
+            "ref": "spell/plane-shift"
+          },
+          {
+            "ref": "spell/remove-curse"
+          },
+          {
+            "ref": "spell/tongues"
+          }
+        ]
+      }
+    },
+    "legendaryActions": {
+      "uses": 3,
+      "usesInLair": 4,
+      "intro": "Immediately after another creature's turn, the sphinx can expend a use to take one of the following actions. The sphinx regains all expended uses at the start of each of its turns.",
+      "items": [
+        {
+          "name": "Arcane Prowl",
+          "kind": "other",
+          "text": "The sphinx can teleport up to 30 feet to an unoccupied space it can see, and it makes one Claw attack."
+        },
+        {
+          "name": "Weight of Years",
+          "kind": "save",
+          "ability": "cha",
+          "save": {
+            "ability": "con",
+            "targets": "one creature the sphinx can see within 120 feet"
+          },
+          "onFailure": "The target gains 1 Exhaustion level. While the target has any Exhaustion levels, it appears 3d10 years older.",
+          "onFailureOrSuccess": "The sphinx can't take this action again until the start of its next turn."
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

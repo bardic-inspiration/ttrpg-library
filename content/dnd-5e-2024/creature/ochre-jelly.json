@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ochre-jelly",
+  "name": "Ochre Jelly",
+  "summary": "An acidic ooze that climbs walls, dissolves flesh, and splits when cut or shocked.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "ooze",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 8
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 20,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 6,
+      "con": 14,
+      "int": 2,
+      "wis": 6,
+      "cha": 1
+    },
+    "resistances": [
+      "acid"
+    ],
+    "immunities": {
+      "damage": [
+        "lightning",
+        "slashing"
+      ],
+      "conditions": [
+        "charmed",
+        "deafened",
+        "exhaustion",
+        "frightened",
+        "grappled",
+        "prone",
+        "restrained"
+      ]
+    },
+    "senses": {
+      "blindsight": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Amorphous",
+        "kind": "other",
+        "text": "The jelly can move through a space as narrow as 1 inch without expending extra movement to do so."
+      },
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The jelly can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Pseudopod",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "acid"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Split",
+        "kind": "other",
+        "text": "*Trigger:* While the jelly is Large or Medium and has 10+ Hit Points, it becomes Bloodied or is subjected to Lightning or Slashing damage. *Response:* The jelly splits into two new **Ochre Jellies.** Each new jelly is one size smaller than the original jelly and acts on its Initiative. The original jelly's Hit Points are divided evenly between the new jellies (round down)."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

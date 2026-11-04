@@ -1,0 +1,166 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "vampire",
+  "name": "Vampire",
+  "summary": "An undead blood drinker that bites and charms, shifts into a bat or mist, and takes legendary actions.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "undead",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 16
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 23,
+    "speed": {
+      "walk": 40,
+      "climb": 40
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 18,
+      "con": 18,
+      "int": 17,
+      "wis": 15,
+      "cha": 18
+    },
+    "saveProficiencies": [
+      "dex",
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "resistances": [
+      "necrotic"
+    ],
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common plus two other languages"
+      ]
+    },
+    "cr": 13,
+    "lair": true,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the vampire fails a saving throw, it can choose to succeed instead.",
+        "uses": "3/day, or 4/day in lair"
+      },
+      {
+        "name": "Misty Escape",
+        "kind": "other",
+        "text": "If the vampire drops to 0 Hit Points outside its resting place, the vampire uses Shape-Shift to become mist (no action required). If it can't use Shape-Shift, it is destroyed. While it has 0 Hit Points in mist form, it can't return to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it returns to its vampire form and has the Paralyzed condition until it regains any Hit Points, and it regains 1 Hit Point after spending 1 hour there."
+      },
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The vampire can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      },
+      {
+        "name": "Vampire Weakness",
+        "kind": "other",
+        "text": "The vampire has these weaknesses:\n\n**Forbiddance.** The vampire can't enter a residence without an invitation from an occupant.\n\n**Running Water.** The vampire takes 20 Acid damage if it ends its turn in running water.\n\n**Stake to the Heart.** If a weapon that deals Piercing damage is driven into the vampire's heart while the vampire has the Incapacitated condition in its resting place, the vampire has the Paralyzed condition until the weapon is removed.\n\n**Sunlight.** The vampire takes 20 Radiant damage if it starts its turn in sunlight. While in sunlight, it has Disadvantage on attack rolls and ability checks."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack (Vampire Form Only)",
+        "kind": "other",
+        "text": "The vampire makes two Grave Strike attacks and uses Bite."
+      },
+      {
+        "name": "Grave Strike (Vampire Form Only)",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "2d6",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=14}) from one of two hands."
+      },
+      {
+        "name": "Bite (Bat or Vampire Form Only)",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "one creature within 5 feet that is willing or that has the Grappled, Incapacitated, or Restrained condition"
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "3d8",
+            "type": "necrotic"
+          }
+        ],
+        "onFailure": "The target's Hit Point maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount. A Humanoid reduced to 0 Hit Points by this damage and then buried rises the following sunset as a **{ref:creature/vampire-spawn}** under the vampire's control."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Charm",
+        "kind": "other",
+        "text": "The vampire casts *{ref:spell/charm-person}*, requiring no spell components and using Charisma as the spellcasting ability (spell save {dc:con}), and the duration is 24 hours. The Charmed target is a willing recipient of the vampire's Bite, the damage of which doesn't end the spell. When the spell ends, the target is unaware it was Charmed by the vampire.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "If the vampire isn't in sunlight or running water, it shape-shifts into a Tiny bat (Speed 5 ft., Fly Speed 30 ft.) or a Medium cloud of mist (Speed 5 ft., Fly Speed 20 ft. [hover]), or it returns to its vampire form. Anything it is wearing transforms with it. While in bat form, the vampire can't speak. Its game statistics, other than its size and Speed, are unchanged. While in mist form, the vampire can't take any actions, speak, or manipulate objects. It is weightless and can enter an enemy's space and stop there. If air can pass through a space, the mist can do so, but it can't pass through liquid. It has Resistance to all damage, except the damage it takes from sunlight."
+      }
+    ],
+    "legendaryActions": {
+      "uses": 3,
+      "usesInLair": 4,
+      "intro": "Immediately after another creature's turn, the vampire can expend a use to take one of the following actions. The vampire regains all expended uses at the start of each of its turns.",
+      "items": [
+        {
+          "name": "Beguile",
+          "kind": "other",
+          "text": "The vampire casts *{ref:spell/command}*, requiring no spell components and using Charisma as the spellcasting ability (spell save {dc:con}). The vampire can't take this action again until the start of its next turn."
+        },
+        {
+          "name": "Deathless Strike",
+          "kind": "other",
+          "text": "The vampire moves up to half its Speed, and it makes one Grave Strike attack."
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

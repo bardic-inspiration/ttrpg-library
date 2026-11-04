@@ -1,0 +1,95 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "sphinx-of-wonder",
+  "name": "Sphinx of Wonder",
+  "summary": "A tiny celestial sphinx that rends foes and grants allies bursts of ingenuity.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "celestial",
+    "shortName": "sphinx",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 20,
+      "fly": 40
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 17,
+      "con": 13,
+      "int": 15,
+      "wis": 12,
+      "cha": 11
+    },
+    "skills": {
+      "arcana": "proficient",
+      "religion": "proficient",
+      "stealth": "proficient"
+    },
+    "resistances": [
+      "necrotic",
+      "psychic",
+      "radiant"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Celestial",
+        "Common"
+      ]
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The sphinx has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d6",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Burst of Ingenuity",
+        "kind": "other",
+        "text": "*Trigger:* The sphinx or another creature within 30 feet makes an ability check or a saving throw. *Response:* The sphinx adds 2 to the roll.",
+        "uses": "2/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

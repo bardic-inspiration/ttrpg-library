@@ -1,0 +1,165 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "unicorn",
+  "name": "Unicorn",
+  "summary": "A celestial horse that strikes with hooves and a radiant horn, heals and blesses allies, and takes legendary actions.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "celestial",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 12
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 14,
+      "con": 15,
+      "int": 11,
+      "wis": 17,
+      "cha": 16
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "paralyzed",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Celestial",
+        "Elvish",
+        "Sylvan"
+      ],
+      "telepathy": 120
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the unicorn fails a saving throw, it can choose to succeed instead.",
+        "uses": "3/day"
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The unicorn has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The unicorn makes one Hooves attack and one Radiant Horn attack."
+      },
+      {
+        "name": "Hooves",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Radiant Horn",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "spell",
+      "atWill": [
+        {
+          "ref": "spell/detect-evil-and-good"
+        },
+        {
+          "ref": "spell/druidcraft"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/calm-emotions"
+          },
+          {
+            "ref": "spell/dispel-evil-and-good"
+          },
+          {
+            "ref": "spell/entangle"
+          },
+          {
+            "ref": "spell/pass-without-trace"
+          },
+          {
+            "ref": "spell/word-of-recall"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Unicorn's Blessing",
+        "kind": "other",
+        "text": "The unicorn touches another creature with its horn and casts *{ref:spell/cure-wounds}* or *{ref:spell/lesser-restoration}* on that creature, using the same spellcasting ability as Spellcasting.",
+        "uses": "3/day"
+      }
+    ],
+    "legendaryActions": {
+      "uses": 3,
+      "intro": "Immediately after another creature's turn, the unicorn can expend a use to take one of the following actions. The unicorn regains all expended uses at the start of each of its turns.",
+      "items": [
+        {
+          "name": "Charging Horn",
+          "kind": "other",
+          "text": "The unicorn moves up to half its Speed without provoking Opportunity Attacks, and it makes one Radiant Horn attack."
+        },
+        {
+          "name": "Shimmering Shield",
+          "kind": "other",
+          "text": "The unicorn targets itself or one creature it can see within 60 feet of itself. The target gains {dmg:3d6} Temporary Hit Points, and its AC increases by 2 until the end of the unicorn's next turn. The unicorn can't take this action again until the start of its next turn."
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

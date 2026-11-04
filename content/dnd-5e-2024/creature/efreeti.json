@@ -1,0 +1,153 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "efreeti",
+  "name": "Efreeti",
+  "summary": "A fire genie that fights with heated blades and hurled flame, casts fire spells, and can grant wishes.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "elemental",
+    "descriptors": [
+      "Genie"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 17
+    },
+    "hitDice": 17,
+    "speed": {
+      "walk": 40,
+      "fly": 60,
+      "hover": true
+    },
+    "abilities": {
+      "str": 22,
+      "dex": 12,
+      "con": 24,
+      "int": 16,
+      "wis": 15,
+      "cha": 19
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Ignan"
+    },
+    "cr": 11,
+    "traits": [
+      {
+        "name": "Elemental Restoration",
+        "kind": "other",
+        "text": "If the efreeti dies outside the Elemental Plane of Fire, its body dissolves into ash, and it gains a new body in 1d4 days, reviving with all its Hit Points somewhere on the Plane of Fire."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The efreeti has Advantage on saving throws against spells and other magical effects."
+      },
+      {
+        "name": "Wishes",
+        "kind": "other",
+        "text": "The efreeti has a 30 percent chance of knowing the *{ref:spell/wish}* spell. If the efreeti knows it, the efreeti can cast it only on behalf of a non-genie creature who communicates a wish in a way the efreeti can understand. If the efreeti casts the spell for the creature, the efreeti suffers none of the spell's stress. Once the efreeti has cast it three times, the efreeti can't do so again for 365 days."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The efreeti makes three attacks, using Heated Blade or Hurl Flame in any combination."
+      },
+      {
+        "name": "Heated Blade",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d12",
+            "type": "fire"
+          }
+        ]
+      },
+      {
+        "name": "Hurl Flame",
+        "kind": "ranged-attack",
+        "ability": "cha",
+        "range": {
+          "normal": 120
+        },
+        "damage": [
+          {
+            "dice": "7d6",
+            "type": "fire"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/elementalism"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/gaseous-form"
+          },
+          {
+            "ref": "spell/invisibility"
+          },
+          {
+            "ref": "spell/major-image"
+          },
+          {
+            "ref": "spell/plane-shift"
+          },
+          {
+            "ref": "spell/tongues"
+          },
+          {
+            "ref": "spell/wall-of-fire",
+            "note": "level 7 version"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

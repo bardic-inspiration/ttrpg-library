@@ -1,0 +1,119 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "wereboar",
+  "name": "Wereboar",
+  "summary": "A lycanthrope that fights as a humanoid, boar, or hybrid and spreads its curse with its bite.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "monstrosity",
+    "descriptors": [
+      "Lycanthrope"
+    ],
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 15
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 30,
+      "note": "40 ft. (boar form only)"
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 10,
+      "con": 15,
+      "int": 10,
+      "wis": 11,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "gear": [
+      "Javelins (6)"
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ],
+      "note": "can't speak in boar form"
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The wereboar makes two attacks, using Javelin or Tusk in any combination. It can replace one attack with a Gore attack."
+      },
+      {
+        "name": "Gore (Boar or Hybrid Form Only)",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Humanoid, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target is cursed. If the cursed target drops to 0 Hit Points, it instead becomes a **Wereboar** under the GM's control and has 10 Hit Points. *Success:* The target is immune to this wereboar's curse for 24 hours."
+      },
+      {
+        "name": "Javelin (Humanoid or Hybrid Form Only)",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Tusk (Boar or Hybrid Form Only)",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature and the wereboar moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d6:piercing} and has the Prone condition."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "The wereboar shape-shifts into a Medium boar-humanoid hybrid or a Small boar, or it returns to its true humanoid form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

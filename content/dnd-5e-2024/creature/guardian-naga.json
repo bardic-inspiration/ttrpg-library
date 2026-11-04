@@ -1,0 +1,152 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "guardian-naga",
+  "name": "Guardian Naga",
+  "summary": "A celestial serpent guardian that bites, spits poison, and casts divine spells.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "celestial",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 18
+    },
+    "hitDice": 16,
+    "speed": {
+      "walk": 40,
+      "climb": 40,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 18,
+      "con": 16,
+      "int": 16,
+      "wis": 19,
+      "cha": 18
+    },
+    "saveProficiencies": [
+      "dex",
+      "con",
+      "int",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "arcana": "expertise",
+      "history": "expertise",
+      "religion": "expertise"
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "paralyzed",
+        "poisoned",
+        "restrained"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Celestial",
+        "Common"
+      ]
+    },
+    "cr": 10,
+    "traits": [
+      {
+        "name": "Celestial Restoration",
+        "kind": "other",
+        "text": "If the naga dies, it returns to life in 1d6 days and regains all its Hit Points unless *{ref:spell/dispel-evil-and-good}* is cast on its remains."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The naga makes two Bite attacks. It can replace any attack with a use of Poisonous Spittle."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d12",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "4d10",
+            "type": "poison"
+          }
+        ]
+      },
+      {
+        "name": "Poisonous Spittle",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "con",
+          "targets": "one creature the naga can see within 60 feet"
+        },
+        "damage": [
+          {
+            "dice": "7d8",
+            "type": "poison"
+          }
+        ],
+        "onFailure": "and the target has the Blinded condition until the start of the naga's next turn.",
+        "onSuccess": "Half damage only."
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "noComponents": "Somatic or Material",
+      "atWill": [
+        {
+          "ref": "spell/thaumaturgy"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/clairvoyance"
+          },
+          {
+            "ref": "spell/cure-wounds",
+            "note": "level 6 version"
+          },
+          {
+            "ref": "spell/flame-strike",
+            "note": "level 6 version"
+          },
+          {
+            "ref": "spell/geas"
+          },
+          {
+            "ref": "spell/true-seeing"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

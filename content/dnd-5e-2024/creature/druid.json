@@ -1,0 +1,124 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "druid",
+  "name": "Druid",
+  "summary": "A nature spellcaster who strikes with a vine staff and verdant wisps and casts druid spells.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Druid"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 12,
+      "con": 13,
+      "int": 12,
+      "wis": 16,
+      "cha": 11
+    },
+    "skills": {
+      "medicine": "proficient",
+      "nature": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      "Studded Leather Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Druidic",
+        "Sylvan"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The druid makes two attacks, using Vine Staff or Verdant Wisp in any combination."
+      },
+      {
+        "name": "Vine Staff",
+        "kind": "melee-attack",
+        "ability": "wis",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "wis",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d4",
+            "type": "poison"
+          }
+        ]
+      },
+      {
+        "name": "Verdant Wisp",
+        "kind": "ranged-attack",
+        "ability": "wis",
+        "range": {
+          "normal": 90
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/druidcraft"
+        },
+        {
+          "ref": "spell/speak-with-animals"
+        }
+      ],
+      "perDay": {
+        "2": [
+          {
+            "ref": "spell/entangle"
+          },
+          {
+            "ref": "spell/thunderwave"
+          }
+        ],
+        "1": [
+          {
+            "ref": "spell/animal-messenger"
+          },
+          "Long-"
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

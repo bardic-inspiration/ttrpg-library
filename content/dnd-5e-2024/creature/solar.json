@@ -1,0 +1,186 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "solar",
+  "name": "Solar",
+  "summary": "A mighty angel that wields a flying sword and slaying bow, aids allies, and takes legendary actions.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "celestial",
+    "descriptors": [
+      "Angel"
+    ],
+    "alignment": "lawful good",
+    "ac": {
+      "value": 21
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 22,
+    "speed": {
+      "walk": 50,
+      "fly": 150,
+      "hover": true
+    },
+    "abilities": {
+      "str": 26,
+      "dex": 22,
+      "con": 26,
+      "int": 25,
+      "wis": 25,
+      "cha": 30
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "poison",
+        "radiant"
+      ],
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "frightened",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "All"
+      ],
+      "telepathy": 120
+    },
+    "cr": 21,
+    "traits": [
+      {
+        "name": "Divine Awareness",
+        "kind": "other",
+        "text": "The solar knows if it hears a lie."
+      },
+      {
+        "name": "Exalted Restoration",
+        "kind": "other",
+        "text": "If the solar dies outside Mount Celestia, its body disappears, and it gains a new body instantly, reviving with all its Hit Points somewhere in Mount Celestia."
+      },
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the solar fails a saving throw, it can choose to succeed instead.",
+        "uses": "4/day"
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The solar has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The solar makes two Flying Sword attacks. It can replace one attack with a use of Slaying Bow."
+      },
+      {
+        "name": "Flying Sword",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 10,
+        "range": {
+          "normal": 120
+        },
+        "damage": [
+          {
+            "dice": "4d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "8d8",
+            "type": "radiant"
+          }
+        ],
+        "onHit": "*Hit or Miss:* The sword magically returns to the solar's hand or hovers within 5 feet of the solar immediately after a ranged attack."
+      },
+      {
+        "name": "Slaying Bow",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature the solar can see within 600 feet"
+        },
+        "onFailure": "If the creature has 100 Hit Points or fewer, it dies. It otherwise takes {dmg:4d8+dex:piercing} plus {dmg:8d8:radiant}."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-evil-and-good"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/commune"
+          },
+          "Control Weather",
+          {
+            "ref": "spell/dispel-evil-and-good"
+          },
+          {
+            "ref": "spell/resurrection"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Divine Aid",
+        "kind": "other",
+        "text": "The solar casts *{ref:spell/cure-wounds}* (level 2 version), *{ref:spell/lesser-restoration}*, or *{ref:spell/remove-curse}*, using the same spellcasting ability as Spellcasting.",
+        "uses": "3/day"
+      }
+    ],
+    "legendaryActions": {
+      "uses": 3,
+      "intro": "Immediately after another creature's turn, the solar can expend a use to take one of the following actions. The solar regains all expended uses at the start of each of its turns.",
+      "items": [
+        {
+          "name": "Blinding Gaze",
+          "kind": "save",
+          "ability": "cha",
+          "save": {
+            "ability": "con",
+            "targets": "one creature the solar can see within 120 feet"
+          },
+          "onFailure": "The target has the Blinded condition for 1 minute.",
+          "onFailureOrSuccess": "The solar can't take this action again until the start of its next turn."
+        },
+        {
+          "name": "Radiant Teleport",
+          "kind": "other",
+          "text": "The solar teleports up to 60 feet to an unoccupied space it can see. *Dexterity Saving Throw:* {dc:cha}, each creature in a 10-foot Emanation originating from the solar at its destination space. *Failure:* {dmg:2d10:radiant}. *Success:* Half damage."
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
