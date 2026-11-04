@@ -26,7 +26,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "a flask of Holy Water worth 25+ GP",
+        "text": "a flask of Holy Water worth 25+ GP, which the spell consumes",
         "costGp": 25,
         "consumed": true
       }

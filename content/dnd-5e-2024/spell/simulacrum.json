@@ -22,7 +22,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "powdered ruby worth 1,500+ GP",
+        "text": "powdered ruby worth 1,500+ GP, which the spell consumes",
         "costGp": 1500,
         "consumed": true
       }
