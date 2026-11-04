@@ -1,0 +1,50 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "water-breathing",
+  "name": "Water Breathing",
+  "summary": "Lets up to ten willing creatures breathe underwater for 24 hours.",
+  "stats": {
+    "level": 3,
+    "school": "transmutation",
+    "classes": [
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": true,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a short reed"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 24,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "This spell grants up to ten willing creatures of your choice within range the ability to breathe underwater until the spell ends. Affected creatures also retain their normal mode of respiration."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

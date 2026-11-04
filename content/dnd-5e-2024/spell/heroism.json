@@ -1,0 +1,45 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "heroism",
+  "name": "Heroism",
+  "summary": "Makes a willing creature immune to fear and gives it Temporary Hit Points each turn.",
+  "stats": {
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A willing creature you touch is imbued with bravery. Until the spell ends, the creature is immune to the Frightened condition and gains Temporary Hit Points equal to your spellcasting ability modifier at the start of each of its turns.",
+    "higherLevels": "You can target one additional creature for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

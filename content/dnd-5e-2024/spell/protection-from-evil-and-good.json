@@ -1,0 +1,52 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "protection-from-evil-and-good",
+  "name": "Protection from Evil and Good",
+  "summary": "Protects a creature from attacks, charms, frights, and possession by extraplanar creatures and Undead.",
+  "stats": {
+    "level": 1,
+    "school": "abjuration",
+    "classes": [
+      "cleric",
+      "druid",
+      "paladin",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a flask of Holy Water worth 25+ GP, which the spell consumes",
+        "costGp": 25,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "Until the spell ends, one willing creature you touch is protected against creatures that are Aberrations, Celestials, Elementals, Fey, Fiends, or Undead. The protection grants several benefits. Creatures of those types have Disadvantage on attack rolls against the target. The target also can't be possessed by or gain the Charmed or Frightened conditions from them. If the target is already possessed, Charmed, or Frightened by such a creature, the target has Advantage on any new saving throw against the relevant effect."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

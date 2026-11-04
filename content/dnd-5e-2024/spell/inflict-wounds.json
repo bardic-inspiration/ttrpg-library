@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "inflict-wounds",
+  "name": "Inflict Wounds",
+  "summary": "Deals Necrotic damage to a creature you touch.",
+  "stats": {
+    "level": 1,
+    "school": "necromancy",
+    "classes": [
+      "cleric"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "A creature you touch makes a Constitution saving throw, taking 2d10 Necrotic damage on a failed save or half as much damage on a successful one.",
+    "higherLevels": "The damage increases by 1d10 for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "suggestion",
+  "name": "Suggestion",
+  "summary": "Suggests a course of activity to a creature, charming it into pursuing that activity.",
+  "stats": {
+    "level": 2,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": false,
+      "m": {
+        "text": "a drop of honey"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 8,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "You suggest a course of activity—described in no more than 25 words—to one creature you can see within range that can hear and understand you. The suggestion must sound achievable and not involve anything that would obviously deal damage to the target or its allies. For example, you could say, \"Fetch the key to the cult's treasure vault, and give the key to me.\" Or you could say, \"Stop fighting, leave this library peacefully, and don't return.\"\n\nThe target must succeed on a Wisdom saving throw or have the Charmed condition for the duration or until you or your allies deal damage to the target. The Charmed target pursues the suggestion to the best of its ability. The suggested activity can continue for the entire duration, but if the suggested activity can be completed in a shorter time, the spell ends for the target upon completing it."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
