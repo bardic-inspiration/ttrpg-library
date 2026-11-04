@@ -159,7 +159,10 @@ function damageText(action: Action, derived: DerivedAction | undefined): string 
   return whenPresent(action.damage, (list) =>
     list
       .map((damage, i) => {
-        const text = `${whenPresent(derived?.damage[i]?.display, printMinus) ?? damage.dice} ${capitalize(damage.type)} damage`;
+        const amount = whenPresent(derived?.damage[i]?.display, printMinus) ?? damage.dice ?? '';
+        const text = present(damage.type)
+          ? `${amount} ${capitalize(damage.type)} damage`
+          : `${amount} damage ${escapeMarkdown(damage.note ?? '')}`;
         if (i === 0) return text;
         return whenPresent(damage.condition, (condition) => `, plus ${text} ${escapeMarkdown(condition)}`) ?? ` plus ${text}`;
       })

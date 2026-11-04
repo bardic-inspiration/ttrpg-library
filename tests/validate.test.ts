@@ -572,6 +572,8 @@ describe('spell warnings (SPEC.md §6.8)', () => {
     expect(await houndErrors({ amount: 1, type: 'piercing' })).toEqual([]);
     expect(await houndErrors({ dice: '1d4', amount: 1, type: 'piercing' })).not.toEqual([]);
     expect(await houndErrors({ type: 'piercing' })).not.toEqual([]);
+    expect(await houndErrors({ dice: '1d4', note: 'of a chosen type' })).toEqual([]);
+    expect(await houndErrors({ dice: '1d4', type: 'fire', note: 'of a chosen type' })).not.toEqual([]);
   });
 
   it('takes a distance range in feet or in miles, but not both (#153)', async () => {

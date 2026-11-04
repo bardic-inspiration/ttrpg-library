@@ -20,7 +20,10 @@ export interface Damage {
   amount?: number;
   ability?: Ability;
   bonus?: number;
-  type: string;
+  /** The damage type; omitted when `note` says what it is. */
+  type?: string;
+  /** Printed after "damage" when the type isn't fixed: "of the type chosen for …". */
+  note?: string;
   /** When a rider applies, such as "if the attack roll had Advantage". Riders only. */
   condition?: string;
 }

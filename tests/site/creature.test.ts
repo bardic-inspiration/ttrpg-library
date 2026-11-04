@@ -246,4 +246,12 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     });
     expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toBe('*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 1 Piercing damage.');
   });
+  it('prints a rider whose type is a note (#166)', async () => {
+    const { s, d } = await build({
+      actions: [{ name: 'Claw', kind: 'melee-attack', ability: 'str', reach: 10, damage: [{ dice: '1d4', ability: 'str', type: 'slashing' }, { dice: '2d6', note: 'of the type chosen for the Draconic Origin trait' }] }],
+    });
+    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toBe(
+      '*Melee Attack Roll:* +4, reach 10 ft. *Hit:* 4 (1d4 + 2) Slashing damage plus 7 (2d6) damage of the type chosen for the Draconic Origin trait.',
+    );
+  });
 });
