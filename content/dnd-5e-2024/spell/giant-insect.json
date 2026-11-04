@@ -1,0 +1,91 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "giant-insect",
+  "name": "Giant Insect",
+  "summary": "Summons a giant centipede, spider, or wasp ally that fights for you while you concentrate.",
+  "stats": {
+    "level": 4,
+    "school": "conjuration",
+    "classes": [
+      "druid"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "You summon a giant centipede, spider, or wasp (chosen when you cast the spell). It manifests in an unoccupied space you can see within range and uses the **Giant Insect** stat block. The form you choose determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.\n\nThe creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.",
+    "higherLevels": "Use the spell slot's level for the spell's level in the stat block.",
+    "statBlocks": [
+      {
+        "name": "Giant Insect",
+        "typeLine": "Large Beast, Unaligned",
+        "ac": "11 + the spell's level",
+        "hp": "30 + 10 for each spell level above 4",
+        "speed": "40 ft., Climb 40 ft., Fly 40 ft. (Wasp only)",
+        "abilities": {
+          "str": 17,
+          "dex": 13,
+          "con": 15,
+          "int": 4,
+          "wis": 14,
+          "cha": 3
+        },
+        "senses": "Darkvision 60 ft.; Passive Perception 12",
+        "languages": "Understands the languages you know",
+        "cr": "None (XP 0; PB equals your Proficiency Bonus)",
+        "traits": [
+          {
+            "name": "Spider Climb",
+            "text": "The insect can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+          }
+        ],
+        "actions": [
+          {
+            "name": "Multiattack",
+            "text": "The insect makes a number of attacks equal to half this spell's level (round down)."
+          },
+          {
+            "name": "Poison Jab",
+            "text": "*Melee Attack Roll:* Bonus equals your spell attack modifier, reach 10 ft. *Hit:* 1d6 + 3 plus the spell's level Piercing damage plus 1d4 Poison damage."
+          },
+          {
+            "name": "Web Bolt (Spider Only)",
+            "text": "*Ranged Attack Roll:* Bonus equals your spell attack modifier, range 60 ft. *Hit:* 1d10 + 3 plus the spell's level Bludgeoning damage, and the target's Speed is reduced to 0 until the start of the insect's next turn."
+          }
+        ],
+        "bonusActions": [
+          {
+            "name": "Venomous Spew (Centipede Only)",
+            "text": "*Constitution Saving Throw:* Your spell save DC, one creature the insect can see within 10 feet. *Failure:* The target has the Poisoned condition until the start of the insect's next turn."
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
