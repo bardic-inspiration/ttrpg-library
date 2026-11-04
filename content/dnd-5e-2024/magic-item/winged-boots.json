@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "winged-boots",
+  "name": "Winged Boots",
+  "summary": "Boots that grant a Fly Speed of 30 feet for 1 hour, using charges.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 4,
+      "recharge": "1d4 daily at dawn"
+    },
+    "effect": "These boots have 4 charges and regain 1d4 expended charges daily at dawn. While wearing the boots, you can take a Magic action to expend 1 charge, gaining a Fly Speed of 30 feet for 1 hour. If you are flying when the duration expires, you descend at a rate of 30 feet per round until you land."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

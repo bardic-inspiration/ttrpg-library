@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "oil-of-etherealness",
+  "name": "Oil of Etherealness",
+  "summary": "An oil that sends the creature it coats to the Ethereal Plane for 1 hour.",
+  "stats": {
+    "category": "potion",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "One vial of this oil can cover one Medium or smaller creature, along with the equipment it's wearing and carrying (one additional vial is required for each size category above Medium). Applying the oil takes 10 minutes. The affected creature then gains the effect of the *Etherealness* spell for 1 hour.\n\nBeads of this cloudy, gray oil form on the outside of its container and quickly evaporate."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

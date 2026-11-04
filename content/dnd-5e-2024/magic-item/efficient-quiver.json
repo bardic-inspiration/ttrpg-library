@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "efficient-quiver",
+  "name": "Efficient Quiver",
+  "summary": "A quiver with extradimensional compartments that hold dozens of arrows, javelins, and other items.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "Each of the quiver's three compartments connects to an extradimensional space that allows the quiver to hold numerous items while never weighing more than 2 pounds. The shortest compartment can hold up to 60 Arrows, Bolts, or similar objects. The midsize compartment holds up to 18 Javelins or similar objects. The longest compartment holds up to 6 long objects, such as bows, Quarterstaffs, or Spears.\n\nYou can draw any item the quiver contains as if doing so from a regular quiver or scabbard."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
