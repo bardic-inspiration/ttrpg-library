@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "continual-flame",
+  "name": "Continual Flame",
+  "summary": "Creates a heatless flame on an object that sheds light until dispelled.",
+  "stats": {
+    "level": 2,
+    "school": "evocation",
+    "classes": [
+      "cleric",
+      "druid",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "ruby dust worth 50+ GP",
+        "costGp": 50,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "until-dispelled",
+      "concentration": false
+    },
+    "effect": "A flame springs from an object that you touch. The effect casts Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. It looks like a regular flame, but it creates no heat and consumes no fuel. The flame can be covered or hidden but not smothered or quenched."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
