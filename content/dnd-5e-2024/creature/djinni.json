@@ -145,7 +145,12 @@
           {
             "ref": "spell/invisibility"
           },
-          "Major"
+          {
+            "ref": "spell/major-image"
+          },
+          {
+            "ref": "spell/plane-shift"
+          }
         ]
       }
     }
