@@ -1,13 +1,20 @@
-# Design decisions
+# Design decisions: v1
 
-The decisions behind the library as built at the `v1.0.0` tag. They are
-distilled from `SPEC.md` at that tag, the milestone issues and their comments,
-the decision comments those issues link to, and the dev PR descriptions.
+A record of what v1 built and why, as of the `v1.0.0` tag. It is distilled
+from `SPEC.md` at that tag, the milestone issues and their comments, the
+decision comments those issues link to, and the dev PR descriptions.
+
+**This is history, not a set of rules.** The decision rows describe what v1
+did. Later versions may change any of them (the themes, the look, the
+gallery, the type formats) without arguing against this file. The principles
+are what carries forward: they are the reasons v1 chose as it did, and they
+remain the guide for weighing new designs. What the library does now is in the
+current docs and code.
 
 Each row states what was decided. The reason is kept high level: usually one of
 the principles below, otherwise a short note. **Source** names the PRs and
 issues where the decision was made or last changed; read them for the full
-argument. Exact rules live in the schemas, `tables.json`, `derive.ts`, the
+argument. Exact rules lived in the schemas, `tables.json`, `derive.ts`, the
 guidelines, and the skills. Only the final state of a decision is recorded; a
 reversal is noted only when it explains the reason.
 
