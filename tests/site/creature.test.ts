@@ -6,6 +6,7 @@ import {
   abilityRows,
   actionBlock,
   crLine,
+  defenseLines,
   formatCr,
   hpLine,
   initiativeLine,
@@ -158,11 +159,11 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     // Hell Hound: a single understood language.
     expect(line({ spoken: [], understood: ['Infernal'] })).toBe("Understands Infernal but can't speak");
     expect(line({ spoken: [], understood: ['Abyssal', 'Infernal'], telepathy: 60 })).toBe(
-      "Understands Abyssal, Infernal but can't speak; telepathy 60 ft.",
+      "Understands Abyssal and Infernal but can't speak; telepathy 60 ft.",
     );
     expect(line({ spoken: ['Common'], understood: ['Giant'] })).toBe("Common; understands Giant but can't speak it");
     expect(line({ spoken: ['Common'], understood: ['Giant', 'Orc'] })).toBe(
-      "Common; understands Giant, Orc but can't speak them",
+      "Common; understands Giant and Orc but can't speak them",
     );
     expect(line({ spoken: [], note: 'see below' })).toBe('None (see below)');
   });
@@ -239,5 +240,40 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       'Gust (Recharge after a Short or Long Rest)',
       'Gust (Recharge after a Long Rest)',
     ]);
+  });
+  it('prints flat damage without dice (#166)', async () => {
+    const { s, d } = await build({
+      actions: [{ name: 'Bite', kind: 'melee-attack', ability: 'dex', reach: 5, damage: [{ amount: 1, type: 'piercing' }] }],
+    });
+    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toBe('*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 1 Piercing damage.');
+  });
+  it('prints a rider whose type is a note (#166)', async () => {
+    const { s, d } = await build({
+      actions: [{ name: 'Claw', kind: 'melee-attack', ability: 'str', reach: 10, damage: [{ dice: '1d4', ability: 'str', type: 'slashing' }, { dice: '2d6', note: 'of the type chosen for the Draconic Origin trait' }] }],
+    });
+    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toBe(
+      '*Melee Attack Roll:* +4, reach 10 ft. *Hit:* 4 (1d4 + 2) Slashing damage plus 7 (2d6) damage of the type chosen for the Draconic Origin trait.',
+    );
+  });
+  it('prints a senses note before Passive Perception (#166)', async () => {
+    const { s, d } = await build({ senses: { darkvision: 120, note: 'unimpeded by magical Darkness' } });
+    expect(sensesLine(s, d)).toBe('Darkvision 120 ft. (unimpeded by magical Darkness); Passive Perception 13');
+  });
+  it('prints a swarm type line (#166)', async () => {
+    const { s } = await build({ swarm: 'tiny', creatureType: 'beast', alignment: 'unaligned' });
+    expect(sizeTypeLine(s)).toBe('Medium Swarm of Tiny Beasts, Unaligned');
+    expect(sizeTypeLine({ ...s, creatureType: 'undead', alignment: 'neutral evil' })).toBe('Medium Swarm of Tiny Undead, Neutral Evil');
+  });
+  it('prints a qualified condition immunity as written (#166)', async () => {
+    const { s } = await build({ immunities: { conditions: ['Charmed (except from its vampire master)'] } });
+    expect(defenseLines(s)).toEqual([{ label: 'Immunities', value: 'Charmed (except from its vampire master)' }]);
+  });
+  it('adds a skill adjust to the derived bonus (#166)', async () => {
+    const { s, d } = await build({ skills: { stealth: { proficiency: 'proficient', adjust: 1 } } });
+    expect(skillsLine(s, d)).toBe('Stealth +5');
+  });
+  it('joins three or more understood languages as an English list (#166)', async () => {
+    const { s } = await build({ languages: { spoken: [], understood: ['Abyssal', 'Common', 'Infernal'] } });
+    expect(languagesLine(s)).toBe("Understands Abyssal, Common, and Infernal but can't speak");
   });
 });

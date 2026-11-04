@@ -1,0 +1,43 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "divine-smite",
+  "name": "Divine Smite",
+  "summary": "Adds 2d8 Radiant damage to a melee hit, more against Fiends and Undead.",
+  "stats": {
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action",
+      "trigger": "immediately after hitting a target with a Melee weapon or an Unarmed Strike"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "The target takes an extra 2d8 Radiant damage from the attack. The damage increases by 1d8 if the target is a Fiend or an Undead.",
+    "higherLevels": "The damage increases by 1d8 for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

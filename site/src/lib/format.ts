@@ -9,11 +9,8 @@ export const formatCr = (cr: number): string => FRACTIONS[cr] ?? String(cr);
 /** A spell level as SRD 5.2 words it: 0 reads "Cantrip", 3 reads "Level 3". */
 export const formatSpellLevel = (level: number): string => (level === 0 ? 'Cantrip' : `Level ${level}`);
 
-/** An item rarity: `very-rare` reads "Very rare". */
-export const formatRarity = (rarity: string): string => {
-  const words = rarity.replace(/-/g, ' ');
-  return words.charAt(0).toUpperCase() + words.slice(1);
-};
+/** An item rarity in title case, as SRD 5.2 prints it: `very-rare` reads "Very Rare". */
+export const formatRarity = (rarity: string): string => formatTitle(rarity);
 
 /** An enum slug: `wondrous-item` reads "Wondrous Item". */
 export const formatTitle = (slug: string): string =>

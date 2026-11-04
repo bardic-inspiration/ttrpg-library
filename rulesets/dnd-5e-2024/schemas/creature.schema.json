@@ -24,6 +24,10 @@
       "type": "string",
       "minLength": 1
     },
+    "swarm": {
+      "description": "The size of a swarm's members: \"tiny\" reads \"Medium Swarm of Tiny Beasts\".",
+      "enum": ["tiny", "small", "medium", "large", "huge", "gargantuan"]
+    },
     "descriptors": {
       "type": "array",
       "minItems": 1,
@@ -157,7 +161,24 @@
         "enum": ["acrobatics", "animal-handling", "arcana", "athletics", "deception", "history", "insight", "intimidation", "investigation", "medicine", "nature", "perception", "performance", "persuasion", "religion", "sleight-of-hand", "stealth", "survival"]
       },
       "additionalProperties": {
-        "$ref": "common.schema.json#/$defs/Proficiency"
+        "anyOf": [
+          {
+            "$ref": "common.schema.json#/$defs/Proficiency"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["adjust"],
+            "properties": {
+              "proficiency": {
+                "$ref": "common.schema.json#/$defs/Proficiency"
+              },
+              "adjust": {
+                "$ref": "common.schema.json#/$defs/Adjust"
+              }
+            }
+          }
+        ]
       }
     },
     "vulnerabilities": {
@@ -215,7 +236,15 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": {
-            "$ref": "common.schema.json#/$defs/Condition"
+            "anyOf": [
+              {
+                "$ref": "common.schema.json#/$defs/Condition"
+              },
+              {
+                "type": "string",
+                "minLength": 1
+              }
+            ]
           }
         }
       }
@@ -247,6 +276,11 @@
         "truesight": {
           "type": "integer",
           "minimum": 1
+        },
+        "note": {
+          "description": "A qualifier printed in parentheses after the senses, such as \"unimpeded by magical Darkness\".",
+          "type": "string",
+          "minLength": 1
         }
       }
     },

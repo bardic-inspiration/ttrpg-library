@@ -49,9 +49,17 @@ const titleCase = (s: string): string =>
 
 export { formatCr };
 
+/** A creature type as a swarm's members: "Beasts", "Monstrosities", "Undead", "Fey". */
+const pluralType = (type: string): string => {
+  const word = capitalize(type);
+  if (type === 'undead' || type === 'fey') return word;
+  return type.endsWith('y') ? `${word.slice(0, -1)}ies` : `${word}s`;
+};
+
 export const sizeTypeLine = (s: CreatureStats): string => {
   const descriptors = whenPresent(s.descriptors, (list) => ` (${list.join(', ')})`) ?? '';
-  return `${s.size.map(capitalize).join(' or ')} ${capitalize(s.creatureType)}${descriptors}, ${titleCase(s.alignment)}`;
+  const kind = whenPresent(s.swarm, (member) => `Swarm of ${capitalize(member)} ${pluralType(s.creatureType)}`) ?? capitalize(s.creatureType);
+  return `${s.size.map(capitalize).join(' or ')} ${kind}${descriptors}, ${titleCase(s.alignment)}`;
 };
 
 export const acLine = (s: CreatureStats): string => whenPresent(s.ac.note, (note) => `${s.ac.value} (${note})`) ?? String(s.ac.value);
@@ -112,8 +120,13 @@ export function defenseLines(s: CreatureStats): PropertyLine[] {
 export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
   // Senses are comma-separated; Passive Perception follows a semicolon (SPEC.md §6.5).
   const senses = SENSE_ORDER.flatMap((sense) => whenPresent(s.senses?.[sense], (feet) => [`${capitalize(sense)} ${feet} ft.`]) ?? []);
-  return [senses.join(', '), `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
+  const list = senses.join(', ') + (whenPresent(s.senses?.note, (note) => ` (${note})`) ?? '');
+  return [list, `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
 }
+
+/** "A", "A and B", "A, B, and C", as SRD 5.2 joins understood languages. */
+const englishList = (items: string[]): string =>
+  items.length < 3 ? items.join(' and ') : `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
 
 export function languagesLine(s: CreatureStats): string {
   // `spoken` is required and may be empty; `understood` lists languages the
@@ -123,7 +136,7 @@ export function languagesLine(s: CreatureStats): string {
   const parts = spoken.length ? [spoken.join(', ')] : [];
   if (understood?.length) {
     const object = spoken.length ? (understood.length > 1 ? ' them' : ' it') : '';
-    const clause = `understands ${understood.join(', ')} but can't speak${object}`;
+    const clause = `understands ${englishList(understood)} but can't speak${object}`;
     parts.push(parts.length ? clause : capitalize(clause));
   }
   const telepathy = whenPresent(s.languages.telepathy, (feet) => `telepathy ${feet} ft.`);
@@ -159,7 +172,10 @@ function damageText(action: Action, derived: DerivedAction | undefined): string 
   return whenPresent(action.damage, (list) =>
     list
       .map((damage, i) => {
-        const text = `${whenPresent(derived?.damage[i]?.display, printMinus) ?? damage.dice} ${capitalize(damage.type)} damage`;
+        const amount = whenPresent(derived?.damage[i]?.display, printMinus) ?? damage.dice ?? '';
+        const text = present(damage.type)
+          ? `${amount} ${capitalize(damage.type)} damage`
+          : `${amount} damage ${escapeMarkdown(damage.note ?? '')}`;
         if (i === 0) return text;
         return whenPresent(damage.condition, (condition) => `, plus ${text} ${escapeMarkdown(condition)}`) ?? ` plus ${text}`;
       })

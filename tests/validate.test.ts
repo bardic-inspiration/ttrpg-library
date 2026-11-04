@@ -205,6 +205,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'immunities.conditions', [], /^stats\.immunities\.conditions: must NOT have fewer than 1 items/],
   ['creature', 'gear', [], /^stats\.gear: must NOT have fewer than 1 items/],
   ['creature', 'senses', {}, /^stats\.senses: must NOT have fewer than 1 properties/],
+  ['creature', 'senses.note', '', /^stats\.senses\.note: must NOT have fewer than 1 characters/],
   ['creature', 'senses.darkvision', 0, /^stats\.senses\.darkvision: must be >= 1/],
   ['creature', 'languages.telepathy', 0, /^stats\.languages\.telepathy: must be >= 1/],
   ['creature', 'languages.note', '', /^stats\.languages\.note: must NOT have fewer than 1 characters/],
@@ -226,6 +227,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'shortName', '', /^stats\.shortName: must NOT have fewer than 1 characters/],
   ['creature', 'spellcasting', { ability: 'wis', noComponents: '' }, /^stats\.spellcasting\.noComponents: must NOT have fewer than 1 characters/],
   ['magic-item', 'spells.0.spell.note', '', /^stats\.spells\[0\]\.spell\.note: must NOT have fewer than 1 characters/],
+  ['magic-item', 'charges.recharge', '', /^stats\.charges\.recharge: must NOT have fewer than 1 characters/],
   ['magic-item', 'cursed', false, /^stats\.cursed: must be equal to constant/],
   ['magic-item', 'spells.0.chargeCost', 0, /^stats\.spells\[0\]\.chargeCost: must be >= 1/],
   ['magic-item', 'spells.0.maxChargeCost', 1.5, /^stats\.spells\[0\]\.maxChargeCost: must be integer/],
@@ -561,6 +563,33 @@ describe('spell warnings (SPEC.md §6.8)', () => {
     const { content } = await temp([spell]);
     return (await validateLibrary(content)).errors.map((e) => e.message);
   };
+
+  it('takes damage as dice or a flat amount, not both (#166)', async () => {
+    const houndErrors = async (damage: unknown) => {
+      const hound = await cinderHound();
+      hound.stats.actions[0].damage = [damage];
+      const { content } = await temp([hound]);
+      return (await validateLibrary(content)).errors;
+    };
+    expect(await houndErrors({ amount: 1, type: 'piercing' })).toEqual([]);
+    expect(await houndErrors({ dice: '1d4', amount: 1, type: 'piercing' })).not.toEqual([]);
+    expect(await houndErrors({ type: 'piercing' })).not.toEqual([]);
+    expect(await houndErrors({ dice: '1d4', note: 'of a chosen type' })).toEqual([]);
+    expect(await houndErrors({ dice: '1d4', type: 'fire', note: 'of a chosen type' })).not.toEqual([]);
+  });
+
+  it('takes a charge count as a whole number or a dice expression (#163)', async () => {
+    const wandErrors = async (max: unknown) => {
+      const wand = await wandOfFrostLances();
+      wand.stats.charges = { max };
+      const { content } = await temp([wand, await frostLance()]);
+      return (await validateLibrary(content)).errors;
+    };
+    expect(await wandErrors('1d3')).toEqual([]);
+    expect(await wandErrors('1d8 + 1')).toEqual([]);
+    expect(await wandErrors('d8')).not.toEqual([]);
+    expect(await wandErrors(0)).not.toEqual([]);
+  });
 
   it('takes a distance range in feet or in miles, but not both (#153)', async () => {
     expect(await spellErrors((s) => (s.range = { kind: 'distance', miles: 1 }))).toEqual([]);

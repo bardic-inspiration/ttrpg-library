@@ -59,7 +59,7 @@ describe('magic item card lines (SPEC.md §6.6)', async () => {
   it('formats category, base item, rarity, and attunement', () => {
     expect(subtitleLine(wand)).toBe('Wand, Uncommon (Requires Attunement by a spellcaster)');
     expect(subtitleLine({ ...wand, category: 'weapon', baseItem: 'Longsword', rarity: 'very-rare', attunement: { required: false } })).toBe(
-      'Weapon (Longsword), Very rare',
+      'Weapon (Longsword), Very Rare',
     );
     expect(subtitleLine({ ...wand, category: 'wondrous-item', rarity: 'varies', attunement: { required: true } })).toBe(
       'Wondrous Item, Rarity Varies (Requires Attunement)',
@@ -70,6 +70,8 @@ describe('magic item card lines (SPEC.md §6.6)', async () => {
     expect(chargesLine(wand)).toBe('7; regains 1d6 + 1 daily at dawn');
     const { charges, ...noCharges } = wand;
     expect(chargesLine(noCharges)).toBeUndefined();
+    expect(chargesLine({ ...wand, charges: { max: 12 } })).toBe('12');
+    expect(chargesLine({ ...wand, charges: { max: '1d8 + 1' } })).toBe('1d8 + 1');
   });
 
   it('lists a spell by name with the authored numbers present, including a +0 attack bonus', () => {

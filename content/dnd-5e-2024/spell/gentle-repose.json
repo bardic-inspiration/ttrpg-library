@@ -1,0 +1,50 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "gentle-repose",
+  "name": "Gentle Repose",
+  "summary": "Protects a corpse from decay and from becoming Undead for 10 days.",
+  "stats": {
+    "level": 2,
+    "school": "necromancy",
+    "classes": [
+      "cleric",
+      "paladin",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": true,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "2 Copper Pieces, which the spell consumes",
+        "costGp": 0.02,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "day",
+      "concentration": false
+    },
+    "effect": "You touch a corpse or other remains. For the duration, the target is protected from decay and can't become Undead.\n\nThe spell also effectively extends the time limit on raising the target from the dead, since days spent under the influence of this spell don't count against the time limit of spells such as *{ref:spell/raise-dead}*."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

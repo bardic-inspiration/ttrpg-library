@@ -22,9 +22,12 @@ export function subtitleLine(s: MagicItemStats): string {
   return `${category}, ${rarity}${attunement}`;
 }
 
-/** "7; regains 1d6 + 1 daily at dawn", or `undefined` when the item has no charges. */
+/**
+ * "7; regains 1d6 + 1 daily at dawn", or just "12" for charges that never
+ * come back; `undefined` when the item has no charges.
+ */
 export const chargesLine = (s: MagicItemStats): string | undefined =>
-  whenPresent(s.charges, (c) => `${c.max}; regains ${c.recharge}`);
+  whenPresent(s.charges, (c) => `${c.max}${whenPresent(c.recharge, (r) => `; regains ${r}`) ?? ''}`);
 
 
 /** "1 charge", "3 charges", or a variable cost's range, "1–3 charges". */

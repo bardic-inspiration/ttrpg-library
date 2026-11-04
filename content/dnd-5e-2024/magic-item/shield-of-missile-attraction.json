@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "shield-of-missile-attraction",
+  "name": "Shield of Missile Attraction",
+  "summary": "A cursed Shield that grants Resistance to ranged weapons but draws their attacks to you.",
+  "stats": {
+    "category": "armor",
+    "baseItem": "Shield",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "cursed": true,
+    "effect": "While holding this Shield, you have Resistance to damage from attacks made with Ranged weapons.\n\n***Curse.*** This Shield is cursed. Attuning to it curses you until you are targeted by a *{ref:spell/remove-curse}* spell or similar magic. Removing the Shield fails to end the curse on you. Whenever an attack with a Ranged weapon targets a creature within 10 feet of you, the curse causes you to become the target instead."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

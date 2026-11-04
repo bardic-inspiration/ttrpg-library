@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "vicious-weapon",
+  "name": "Vicious Weapon",
+  "summary": "A weapon that deals an extra 2d6 damage of its type on a hit.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Any Simple or Martial",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "This magic weapon deals an extra 2d6 damage to any creature it hits. This extra damage is of the same type as the weapon's normal damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

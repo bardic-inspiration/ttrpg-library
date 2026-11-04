@@ -14,10 +14,16 @@ export interface Ref {
 export type RefOrText = Ref | string;
 
 export interface Damage {
-  dice: string;
+  /** The damage roll; omitted for flat damage, which sets `amount`. */
+  dice?: string;
+  /** Flat damage printed without dice ("1 Piercing damage"). */
+  amount?: number;
   ability?: Ability;
   bonus?: number;
-  type: string;
+  /** The damage type; omitted when `note` says what it is. */
+  type?: string;
+  /** Printed after "damage" when the type isn't fixed: "of the type chosen for …". */
+  note?: string;
   /** When a rider applies, such as "if the attack roll had Advantage". Riders only. */
   condition?: string;
 }
@@ -50,6 +56,8 @@ export interface CreatureStats {
   creatureType: string;
   /** What generated prose calls the creature after "The"; defaults to the name's last word, lowercase. */
   shortName?: string;
+  /** A swarm's member size: "tiny" reads "Medium Swarm of Tiny Beasts". */
+  swarm?: Size;
   descriptors?: string[];
   alignment: string;
   ac: { value: number; note?: string };
@@ -58,12 +66,13 @@ export interface CreatureStats {
   speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: true; note?: string };
   abilities: Record<Ability, number>;
   saveProficiencies?: Ability[];
-  skills?: Record<string, Proficiency>;
+  /** A proficiency, or `{ proficiency?, adjust }` to match a bonus that doesn't derive (SPEC.md §5.9). */
+  skills?: Record<string, Proficiency | { proficiency?: Proficiency; adjust: number }>;
   vulnerabilities?: string[];
   resistances?: string[];
   immunities?: { damage?: string[]; conditions?: string[] };
   gear?: RefOrText[];
-  senses?: { darkvision?: number; blindsight?: number; tremorsense?: number; truesight?: number };
+  senses?: { darkvision?: number; blindsight?: number; tremorsense?: number; truesight?: number; note?: string };
   languages: { spoken: string[]; understood?: string[]; telepathy?: number; note?: string };
   cr: number;
   lair?: true;
@@ -168,7 +177,7 @@ export interface MagicItemStats {
   baseItem?: string;
   rarity: string;
   attunement: { required: boolean; requirement?: string };
-  charges?: { max: number; recharge: string; depletion?: string };
+  charges?: { max: number | string; recharge?: string; depletion?: string };
   spells?: MagicItemSpell[];
   cursed?: true;
   effect: string;
