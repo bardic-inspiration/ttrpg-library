@@ -33,7 +33,8 @@ One batch, from exactly one of these sources:
 - **SRD import stage.** A stage issue of the full SRD import (§8.1), worked
   in a session the owner starts. The batch is SRD entries of one type and
   tier, picked from `npm run srd-coverage -- --type <type> --tier <tier>`.
-  It is an SRD request; don't claim the issue with `in-progress`.
+  It is an SRD request; don't claim the issue with `in-progress`. The
+  session around it follows `.claude/skills/srd-import/SKILL.md`.
 
 Resolve each request against `config/defaults.json` as
 `scripts/generate/defaults.ts` (`applyDefaults`) does: a blank field takes

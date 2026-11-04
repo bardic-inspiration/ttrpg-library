@@ -159,6 +159,7 @@ ttrpg-library/
 │   └── skills/
 │       ├── generate/SKILL.md               generation (issues and gap-fill)
 │       ├── revise/SKILL.md                 revisions from PR comments or a revise request
+│       ├── srd-import/SKILL.md             SRD import stages and upkeep of SRD entries (§8.1)
 │       └── ask-me/, grill-me/              dev-session interviews: form intent, stress-test a plan
 ├── .github/
 │   ├── workflows/validate.yml, deploy.yml, labeler.yml
@@ -752,7 +753,7 @@ Free-form issues with the `request` label are also accepted; the routine interpr
 
 A brief that asks for SRD content (by name, or as a description such as "ten SRD creatures of CR 1 to 3") is fulfilled with SRD entries (§5.9). Any other brief is fulfilled with custom entries.
 
-**SRD import stages.** The full SRD import (Milestone 7, §16) bypasses requests. Each stage is a sub-issue of the milestone issue, without the `request` label, so routines never take it; it is worked in sessions you start. A session runs the `generate` skill on a batch picked from `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress` claim, on branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs that day). The PR uses `content.md` and says `Refs #<stage>`; the PR that finishes the stage uses `Closes #<stage>`.
+**SRD import stages.** The full SRD import (Milestone 7, §16) bypasses requests. Each stage is a sub-issue of the milestone issue, without the `request` label, so routines never take it; it is worked in sessions you start. A session runs the `generate` skill on a batch picked from `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress` claim, on branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs that day). The PR uses `content.md` and says `Refs #<stage>`; the PR that finishes the stage uses `Closes #<stage>`. The session follows `.claude/skills/srd-import/SKILL.md`, which wraps the `generate` and `revise` skills with the import workflow: one batch per type, transcription from the SRD PDF's text layer, verification against the PDF through the templates, format-fix issues for gaps, and a link pass once a stage's batches merge (a `revise/<stage>-<YYYYMMDD>` PR turning plain-text mentions of entries now in the library into links). A test checks that every repo path and npm script the skill names exists, and that it names both skills and both branch formats.
 
 **Format fixes during the import.** An SRD entry that the model can't hold yet, such as one that prints a table, gets a format-fix issue under Milestone 7, worked as a dev PR. Until Milestone 7 is done, that PR may also add the SRD entries that motivated the fix, so the PR shows the fix working on real entries. Those entries are transcribed by the `generate` skill's SRD rules, with `meta.source.issues` set to the format-fix issue, and the PR carries the `migration` label (§12.4). The remaining entries the fix unblocks come through the import stages as usual.
 
