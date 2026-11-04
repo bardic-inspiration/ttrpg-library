@@ -1,0 +1,74 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "animate-objects",
+  "name": "Animate Objects",
+  "summary": "Brings nearby nonmagical objects to life as Constructs that fight under your command.",
+  "stats": {
+    "level": 5,
+    "school": "transmutation",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "Objects animate at your command. Choose a number of nonmagical objects within range that aren't being worn or carried, aren't fixed to a surface, and aren't Gargantuan. The maximum number of objects is equal to your spellcasting ability modifier; for this number, a Medium or smaller target counts as one object, a Large target counts as two, and a Huge target counts as three.\n\nEach target animates, sprouts legs, and becomes a Construct that uses the **Animated Object** stat block; this creature is under your control until the spell ends or until it is reduced to 0 Hit Points. Each creature you make with this spell is an ally to you and your allies. In combat, it shares your Initiative count and takes its turn immediately after yours.\n\nUntil the spell ends, you can take a Bonus Action to mentally command any creature you made with this spell if the creature is within 500 feet of you (if you control multiple creatures, you can command any of them at the same time, issuing the same command to each one). If you issue no commands, the creature takes the Dodge action and moves only to avoid harm. When the creature drops to 0 Hit Points, it reverts to its object form, and any remaining damage carries over to that form.",
+    "higherLevels": "The creature's Slam damage increases by 1d4 (Medium or smaller), 1d6 (Large), or 1d12 (Huge) for each spell slot level above 5.",
+    "statBlocks": [
+      {
+        "name": "Animated Object",
+        "typeLine": "Huge or Smaller Construct, Unaligned",
+        "ac": "15",
+        "hp": "10 (Medium or smaller), 20 (Large), 40 (Huge)",
+        "speed": "30 ft.",
+        "abilities": {
+          "str": 16,
+          "dex": 10,
+          "con": 10,
+          "int": 3,
+          "wis": 3,
+          "cha": 1
+        },
+        "immunities": "Poison, Psychic; Charmed, Exhaustion, Frightened, Paralyzed, Poisoned",
+        "senses": "Blindsight 30 ft.; Passive Perception 6",
+        "languages": "Understands the languages you know",
+        "cr": "None (XP 0; PB equals your Proficiency Bonus)",
+        "actions": [
+          {
+            "name": "Slam",
+            "text": "*Melee Attack Roll:* Bonus equals your spell attack modifier, reach 5 ft. *Hit:* Force damage equal to 1d4 + 3 (Medium or smaller), 2d6 + 3 + your spellcasting ability modifier (Large), or 2d12 + 3 + your spellcasting ability modifier (Huge)."
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
