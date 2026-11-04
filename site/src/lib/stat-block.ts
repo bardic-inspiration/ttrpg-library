@@ -17,10 +17,11 @@ const lines = (block: StatBlock, keys: [keyof StatBlock, string][]): PropertyLin
     return present(value) && typeof value === 'string' ? [{ label, value }] : [];
   });
 
-/** AC, HP, and Speed: the lines above the ability table. */
+/** AC, Initiative, HP, and Speed: the lines above the ability table. */
 export const coreLines = (block: StatBlock): PropertyLine[] =>
   lines(block, [
     ['ac', 'AC'],
+    ['initiative', 'Initiative'],
     ['hp', 'HP'],
     ['speed', 'Speed'],
   ]);

@@ -142,6 +142,7 @@ export interface StatBlock {
   ac?: string;
   hp?: string;
   speed?: string;
+  initiative?: string;
   abilities: Record<Ability, number>;
   skills?: string;
   vulnerabilities?: string;

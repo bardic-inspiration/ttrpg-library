@@ -389,7 +389,7 @@ The validator, the index builder, the site templates, and the exporters all impo
 | `Ref` | `{ ref: string, note?: string }`, `ref` matching `^(creature|magic-item|spell)/[a-z0-9-]+$`; `note` is a non-empty qualifier (§5.7) |
 | `RefOrText` | `Ref` or non-empty string |
 | `Text` | Markdown-subset string (§5.5, marked `markdownSubset: true`), which may contain tokens where the ruleset allows them (§6.4) |
-| `StatBlock` | A stat block printed inside a spell or magic item (§6.7): `{ name, typeLine, abilities: { str…cha: int 1–30 }, ac?, hp?, speed?, skills?, vulnerabilities?, resistances?, immunities?, gear?, senses?, languages?, cr?, traits?, actions?, bonusActions?, reactions? }`. `name` is the block's heading and `typeLine` its size, type, and alignment ("Large Dragon, Neutral"). Each other line is a non-empty string written as printed, displayed only when present (§5.8). The four lists are arrays, at least one item each, of `{ name, text: Text }` |
+| `StatBlock` | A stat block printed inside a spell or magic item (§6.7): `{ name, typeLine, abilities: { str…cha: int 1–30 }, ac?, initiative?, hp?, speed?, skills?, vulnerabilities?, resistances?, immunities?, gear?, senses?, languages?, cr?, traits?, actions?, bonusActions?, reactions? }`. `name` is the block's heading and `typeLine` its size, type, and alignment ("Large Dragon, Neutral"). Each other line is a non-empty string written as printed, displayed only when present (§5.8). The four lists are arrays, at least one item each, of `{ name, text: Text }` |
 
 ### 6.4 Text tokens
 
@@ -943,7 +943,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 ### 9.5 Templates
 
 - One component per type template: `creature-stat-block`, `magic-item-card`, `spell-card`, and a `generic` fallback that renders fixed keys, `stats` as a definition list, and tags.
-- A spell or item's embedded stat blocks (`statBlocks`, §6.7) render after its rules text, inside its card, with the creature stat block's parts (`EmbeddedStatBlock`): the block's name as a heading one level below the entry's, its type line, the AC, HP, and Speed lines, the ability table, the remaining lines, then its Traits, Actions, Bonus Actions, and Reactions. Lines display as written; the ability table's modifiers and saves come from the derived values.
+- A spell or item's embedded stat blocks (`statBlocks`, §6.7) render after its rules text, inside its card, with the creature stat block's parts (`EmbeddedStatBlock`): the block's name as a heading one level below the entry's, its type line, the AC, Initiative, HP, and Speed lines, the ability table, the remaining lines, then its Traits, Actions, Bonus Actions, and Reactions. Lines display as written; the ability table's modifiers and saves come from the derived values.
 - The spell card's level line words the level as SRD 5.2 does, and as the `spell-level` format does (§7), so cards and detail pages agree: "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
 - Every template shows a `stats` field by the situational-field rule (§5.8): required fields always, optional fields only when present. Templates share one helper for this (`present` and `whenPresent` in `site/src/lib/display.ts`) rather than each deciding it. Template tests render components with Astro's container API.
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.

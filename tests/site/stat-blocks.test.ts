@@ -12,6 +12,7 @@ import EntryDetail from '../../site/src/components/detail/EntryDetail.astro';
 import PrintEntry from '../../site/src/components/print/PrintEntry.astro';
 import EntryTemplate from '../../site/src/components/templates/EntryTemplate.astro';
 import { entryNames, loadLibrary, refTargets, type Entry } from '../../site/src/lib/library.ts';
+import { coreLines } from '../../site/src/lib/stat-block.ts';
 import { frostLance, tempLibrary, wandOfFrostLances } from '../helpers.ts';
 import { textOf } from './library-fixtures.ts';
 
@@ -50,7 +51,8 @@ describe('statBlocks schema (SPEC.md §6.6, §6.7)', () => {
     ['a missing ability score', (b: any) => delete b.abilities.cha, /^stats\.statBlocks\[0\]\.abilities: missing required key "cha"$/],
     ['an empty action list', (b: any) => (b.actions = []), /^stats\.statBlocks\[0\]\.actions: must NOT have fewer than 1 items/],
     ['an empty line', (b: any) => (b.hp = ''), /^stats\.statBlocks\[0\]\.hp: must NOT have fewer than 1 characters/],
-    ['an unknown key', (b: any) => (b.initiative = '+2'), /^stats\.statBlocks\[0\]\.initiative: unknown key$/],
+    ['an unknown key', (b: any) => (b.xp = '0'), /^stats\.statBlocks\[0\]\.xp: unknown key$/],
+    ['an empty initiative line', (b: any) => (b.initiative = ''), /^stats\.statBlocks\[0\]\.initiative: must NOT have fewer than 1 characters/],
     ['a link in its text', (b: any) => (b.actions[0].text = 'See [x](https://example.com).'), /^stats\.statBlocks\[0\]\.actions\[0\]\.text: a link is not allowed/],
   ])('rejects %s', async (_label, breakIt, pattern) => {
     const spell = await frostLance();
@@ -59,6 +61,16 @@ describe('statBlocks schema (SPEC.md §6.6, §6.7)', () => {
     spell.stats.statBlocks = [block];
     const { errors } = await validateLibrary(await library([spell]));
     expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(pattern));
+  });
+
+  it('prints an Initiative line after AC when the block has one, as written (SPEC.md §6.3)', () => {
+    const block = { ...sprite(), ac: '11', initiative: '+1 (11)', hp: '19 (3d10 + 3)' };
+    expect(coreLines(block)).toEqual([
+      { label: 'AC', value: '11' },
+      { label: 'Initiative', value: '+1 (11)' },
+      { label: 'HP', value: '19 (3d10 + 3)' },
+    ]);
+    expect(coreLines({ ...sprite(), ac: '11' }).map((l) => l.label)).toEqual(['AC']);
   });
 
   it('puts the block names in search text', async () => {
