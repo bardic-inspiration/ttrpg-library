@@ -26,7 +26,7 @@
     "charges": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["max", "recharge"],
+      "required": ["max"],
       "properties": {
         "max": { "type": "integer", "minimum": 1 },
         "recharge": { "type": "string", "minLength": 1 },

@@ -226,6 +226,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'shortName', '', /^stats\.shortName: must NOT have fewer than 1 characters/],
   ['creature', 'spellcasting', { ability: 'wis', noComponents: '' }, /^stats\.spellcasting\.noComponents: must NOT have fewer than 1 characters/],
   ['magic-item', 'spells.0.spell.note', '', /^stats\.spells\[0\]\.spell\.note: must NOT have fewer than 1 characters/],
+  ['magic-item', 'charges.recharge', '', /^stats\.charges\.recharge: must NOT have fewer than 1 characters/],
   ['magic-item', 'cursed', false, /^stats\.cursed: must be equal to constant/],
   ['magic-item', 'spells.0.chargeCost', 0, /^stats\.spells\[0\]\.chargeCost: must be >= 1/],
   ['magic-item', 'spells.0.maxChargeCost', 1.5, /^stats\.spells\[0\]\.maxChargeCost: must be integer/],

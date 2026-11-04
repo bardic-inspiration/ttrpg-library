@@ -70,6 +70,7 @@ describe('magic item card lines (SPEC.md §6.6)', async () => {
     expect(chargesLine(wand)).toBe('7; regains 1d6 + 1 daily at dawn');
     const { charges, ...noCharges } = wand;
     expect(chargesLine(noCharges)).toBeUndefined();
+    expect(chargesLine({ ...wand, charges: { max: 12 } })).toBe('12');
   });
 
   it('lists a spell by name with the authored numbers present, including a +0 attack bonus', () => {
