@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-owl",
+  "name": "Giant Owl",
+  "summary": "TODO summary",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "celestial",
+    "alignment": "neutral",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 5,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 15,
+      "con": 12,
+      "int": 10,
+      "wis": 14,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "stealth": "expertise"
+    },
+    "resistances": [
+      "necrotic",
+      "radiant"
+    ],
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Celestial"
+      ],
+      "understood": [
+        "Common",
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The owl doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Talons",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "noComponents": "spell",
+      "noSaveDc": true,
+      "atWill": [
+        {
+          "ref": "spell/detect-evil-and-good"
+        },
+        {
+          "ref": "spell/detect-magic"
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        180
+      ],
+      "srd": true
+    }
+  }
+}

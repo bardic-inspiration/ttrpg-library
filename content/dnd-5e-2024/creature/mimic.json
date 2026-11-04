@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "mimic",
+  "name": "Mimic",
+  "summary": "TODO summary",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "neutral",
+    "ac": {
+      "value": 12
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 12,
+      "con": 15,
+      "int": 5,
+      "wis": 13,
+      "cha": 8
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "immunities": {
+      "damage": [
+        "acid"
+      ],
+      "conditions": [
+        "prone"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Adhesive (Object Form Only)",
+        "kind": "other",
+        "text": "The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic has the Grappled condition (escape {dc=13}). Ability checks made to escape this grapple have Disadvantage."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "attackNote": "with Advantage if the target is Grappled by the mimic",
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "—or {dmg:2d8+str:piercing} if the target is Grappled by the mimic—plus {dmg:1d8:acid}."
+      },
+      {
+        "name": "Pseudopod",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d8",
+            "type": "acid"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=13}). Ability checks made to escape this grapple have Disadvantage."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "The mimic shape-shifts to resemble a Medium or Small object while retaining its game statistics, or it returns to its true blob form. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        180
+      ],
+      "srd": true
+    }
+  }
+}
