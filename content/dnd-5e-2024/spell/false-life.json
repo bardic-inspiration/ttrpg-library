@@ -1,0 +1,46 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "false-life",
+  "name": "False Life",
+  "summary": "Grants you 2d4 + 4 Temporary Hit Points.",
+  "stats": {
+    "level": 1,
+    "school": "necromancy",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a drop of alcohol"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You gain 2d4 + 4 Temporary Hit Points.",
+    "higherLevels": "You gain 5 additional Temporary Hit Points for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

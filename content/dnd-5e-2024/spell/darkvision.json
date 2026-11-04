@@ -1,0 +1,49 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "darkvision",
+  "name": "Darkvision",
+  "summary": "Grants a willing creature Darkvision out to 150 feet for 8 hours.",
+  "stats": {
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a dried carrot"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 8,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "For the duration, a willing creature you touch has Darkvision with a range of 150 feet."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

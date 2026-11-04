@@ -1,0 +1,43 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "create-food-and-water",
+  "name": "Create Food and Water",
+  "summary": "Creates 45 pounds of food and 30 gallons of fresh water.",
+  "stats": {
+    "level": 3,
+    "school": "conjuration",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You create 45 pounds of food and 30 gallons of fresh water on the ground or in containers within range—both useful in fending off the hazards of malnutrition and dehydration. The food is bland but nourishing and looks like a food of your choice, and the water is clean. The food spoils after 24 hours if uneaten."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

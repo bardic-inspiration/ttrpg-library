@@ -2,8 +2,9 @@
 // Spells have no derived values; every number here is authored and only
 // formatted. Optional fields display by presence alone (SPEC.md §5.8).
 
-import { whenPresent } from './display.ts';
+import { present, whenPresent } from './display.ts';
 import { formatSpellLevel } from './format.ts';
+import { escapeMarkdown } from './markdown.ts';
 import type { SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
@@ -28,37 +29,46 @@ const ACTION_UNITS: Record<string, string> = { action: 'Action', 'bonus-action':
  * when `ritual` is true. Markdown, since `trigger` is a `Text` field.
  */
 export function castingTimeLine(s: SpellStats): string {
-  const { amount, unit, trigger } = s.castingTime;
+  const { amount, unit, trigger, note } = s.castingTime;
   const action = ACTION_UNITS[unit];
   let line = action ? (amount === 1 ? action : `${amount} ${action}s`) : plural(amount, unit);
+  // A casting time the fields can't express, as printed (SPEC.md §5.9, §6.7).
+  line += whenPresent(note, (n) => ` ${escapeMarkdown(n)}`) ?? '';
   line += whenPresent(trigger, (t) => `, which you take ${t}`) ?? '';
   return s.ritual ? `${line} or Ritual` : line;
 }
 
 const RANGE_KINDS: Record<string, string> = { self: 'Self', touch: 'Touch', sight: 'Sight', unlimited: 'Unlimited', special: 'Special' };
 
-/** "60 feet", "Self (15-foot Cone)". */
+/** "60 feet", "1 mile", "Self (15-foot Cone)". */
 export function rangeLine(s: SpellStats): string {
-  const { kind, feet, area } = s.range;
-  const base = kind === 'distance' ? `${feet} feet` : (RANGE_KINDS[kind] ?? capitalize(kind));
+  const { kind, feet, miles, area } = s.range;
+  const distance = whenPresent(miles, (n) => plural(n, 'mile')) ?? `${feet} feet`;
+  const base = kind === 'distance' ? distance : (RANGE_KINDS[kind] ?? capitalize(kind));
   return base + (whenPresent(area, (a) => ` (${a.size}-foot ${capitalize(a.shape)})`) ?? '');
 }
 
-/** "V, S, M (a sliver of ice)"; a consumed material says so. */
+/** "V, S, M (a sliver of ice)". The material reads as printed; `costGp` and `consumed` are data only (SPEC.md §6.7). */
 export function componentsLine(s: SpellStats): string {
   const { v, s: somatic, m } = s.components;
   const parts = [v && 'V', somatic && 'S'].filter((p): p is string => Boolean(p));
-  const material = whenPresent(m, (mat) => `M (${mat.text}${mat.consumed ? ', which the spell consumes' : ''})`);
+  const material = whenPresent(m, (mat) => `M (${mat.text})`);
   if (material) parts.push(material);
   return parts.join(', ') || 'None';
 }
 
-const DURATION_KINDS: Record<string, string> = { instantaneous: 'Instantaneous', 'until-dispelled': 'Until dispelled', special: 'Special' };
+const DURATION_KINDS: Record<string, string> = {
+  instantaneous: 'Instantaneous',
+  'until-dispelled': 'Until dispelled',
+  'until-dispelled-or-triggered': 'Until dispelled or triggered',
+  special: 'Special',
+};
 
-/** "Instantaneous", "1 hour", "Concentration, up to 1 minute". */
+/** "Instantaneous", "1 hour", "Up to 8 hours", "Concentration, up to 1 minute". */
 export function durationLine(s: SpellStats): string {
-  const { kind, amount, unit, concentration } = s.duration;
+  const { kind, amount, unit, concentration, upTo } = s.duration;
   if (kind !== 'timed') return DURATION_KINDS[kind] ?? titleCase(kind);
   const span = plural(amount ?? 0, unit ?? '');
-  return concentration ? `Concentration, up to ${span}` : span;
+  if (concentration) return `Concentration, up to ${span}`;
+  return present(upTo) ? `Up to ${span}` : span;
 }

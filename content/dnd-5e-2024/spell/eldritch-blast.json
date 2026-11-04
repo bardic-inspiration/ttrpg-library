@@ -1,0 +1,43 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "eldritch-blast",
+  "name": "Eldritch Blast",
+  "summary": "A cantrip that hurls a beam of Force energy, adding beams at higher levels.",
+  "stats": {
+    "level": 0,
+    "school": "evocation",
+    "classes": [
+      "warlock"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You hurl a beam of crackling energy. Make a ranged spell attack against one creature or object in range. On a hit, the target takes 1d10 Force damage.",
+    "cantripUpgrade": "The spell creates two beams at level 5, three beams at level 11, and four beams at level 17. You can direct the beams at the same target or at different ones. Make a separate attack roll for each beam."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
