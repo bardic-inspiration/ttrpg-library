@@ -76,8 +76,19 @@
       },
       {
         "name": "Cold Breath",
-        "kind": "other",
-        "text": "**.** *Constitution Saving Throw:* {dc:con}, each creature in a 15-foot Cone. *Failure:* {dmg:4d8:cold}. *Success:* Half damage.",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "4d8",
+            "type": "cold"
+          }
+        ],
+        "onSuccess": "Half damage.",
         "recharge": "5-6"
       },
       {
@@ -89,6 +100,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

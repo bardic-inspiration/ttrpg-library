@@ -79,8 +79,19 @@
       },
       {
         "name": "Fire Breath",
-        "kind": "other",
-        "text": "**.** *Dexterity Saving Throw:* {dc:con}, each creature in a 40-foot-long, 5-foot-wide Line. *Failure:* {dmg:11d6:fire}. *Success:* Half damage.",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 40-foot-long, 5-foot-wide Line"
+        },
+        "damage": [
+          {
+            "dice": "11d6",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
         "recharge": "5-6"
       },
       {
@@ -97,6 +108,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
