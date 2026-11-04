@@ -1,0 +1,61 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "hawk",
+  "name": "Hawk",
+  "summary": "A tiny bird of prey with keen eyesight.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 10,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 5,
+      "dex": 16,
+      "con": 8,
+      "int": 2,
+      "wis": 14,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "actions": [
+      {
+        "name": "Talons",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

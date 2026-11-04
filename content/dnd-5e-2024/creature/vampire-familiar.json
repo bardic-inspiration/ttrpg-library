@@ -1,0 +1,116 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "vampire-familiar",
+  "name": "Vampire Familiar",
+  "summary": "A mortal servant of a vampire who fights with an umbral dagger.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 15
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 16,
+      "con": 15,
+      "int": 10,
+      "wis": 10,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "persuasion": "proficient",
+      "stealth": "expertise"
+    },
+    "resistances": [
+      "necrotic"
+    ],
+    "immunities": {
+      "conditions": [
+        "Charmed (except from its vampire master)"
+      ]
+    },
+    "gear": [
+      "Daggers (10)"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Vampiric Connection",
+        "kind": "other",
+        "text": "While the familiar and its vampire master are on the same plane of existence, the vampire can communicate with the familiar telepathically, and the vampire can perceive through the familiar's senses."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The familiar makes two Umbral Dagger attacks."
+      },
+      {
+        "name": "Umbral Dagger",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "3d4",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "If the target is reduced to 0 Hit Points by this attack, the target becomes Stable but has the Poisoned condition for 1 hour. While it has the Poisoned condition, the target has the Paralyzed condition."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Deathless Agility",
+        "kind": "other",
+        "text": "The familiar takes the Dash or Disengage action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

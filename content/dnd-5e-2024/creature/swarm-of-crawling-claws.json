@@ -1,0 +1,98 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "swarm-of-crawling-claws",
+  "name": "Swarm of Crawling Claws",
+  "summary": "A swarm of severed undead hands that claw and grapple.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "swarm": "tiny",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 14,
+      "con": 11,
+      "int": 5,
+      "wis": 10,
+      "cha": 4
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "necrotic",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "frightened",
+        "grappled",
+        "incapacitated",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained",
+        "stunned"
+      ]
+    },
+    "senses": {
+      "blindsight": 30
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny creature. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Swarm of Grasping Hands",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "4d8",
+            "ability": "str",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "or {dmg:2d8+str:necrotic} if the swarm is Bloodied. If the target is a Medium or smaller creature, it has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

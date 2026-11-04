@@ -1,0 +1,71 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "rat",
+  "name": "Rat",
+  "summary": "A tiny rodent with a quick bite.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 10
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 20,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 2,
+      "dex": 11,
+      "con": 9,
+      "int": 2,
+      "wis": 10,
+      "cha": 4
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "darkvision": 30
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Agile",
+        "kind": "other",
+        "text": "The rat doesn't provoke an Opportunity Attack when it moves out of an enemy's reach."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

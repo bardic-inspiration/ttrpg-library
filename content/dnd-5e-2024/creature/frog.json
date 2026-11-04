@@ -1,0 +1,77 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "frog",
+  "name": "Frog",
+  "summary": "A tiny amphibian that leaps and swims.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 20,
+      "swim": 20
+    },
+    "abilities": {
+      "str": 1,
+      "dex": 13,
+      "con": 8,
+      "int": 1,
+      "wis": 8,
+      "cha": 3
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 30
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The frog can breathe air and water."
+      },
+      {
+        "name": "Standing Leap",
+        "kind": "other",
+        "text": "The frog's Long Jump is up to 10 feet and its High Jump is up to 5 feet with or without a running start."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

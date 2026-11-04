@@ -1,0 +1,87 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "swarm-of-bats",
+  "name": "Swarm of Bats",
+  "summary": "A swarm of bats that bites anything in its space.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "swarm": "tiny",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 5,
+      "fly": 30
+    },
+    "abilities": {
+      "str": 5,
+      "dex": 15,
+      "con": 10,
+      "int": 2,
+      "wis": 12,
+      "cha": 4
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed",
+        "frightened",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "prone",
+        "restrained",
+        "stunned"
+      ]
+    },
+    "senses": {
+      "blindsight": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny bat. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bites",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d4",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "or {dmg:1d4:piercing} if the swarm is Bloodied."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

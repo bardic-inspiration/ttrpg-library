@@ -1,0 +1,68 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "goat",
+  "name": "Goat",
+  "summary": "A sure-footed beast that rams with its horns.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 10
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 40,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 10,
+      "con": 11,
+      "int": 2,
+      "wis": 10,
+      "cha": 5
+    },
+    "saveProficiencies": [
+      "str"
+    ],
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "actions": [
+      {
+        "name": "Ram",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "or {dmg:1d4:bludgeoning} if the goat moved 20+ feet straight toward the target immediately before the hit."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

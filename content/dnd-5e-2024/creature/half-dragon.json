@@ -1,0 +1,115 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "half-dragon",
+  "name": "Half-Dragon",
+  "summary": "A humanoid of draconic heritage that claws and breathes energy of its origin.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "dragon",
+    "alignment": "neutral",
+    "ac": {
+      "value": 18
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 14,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 14,
+      "con": 16,
+      "int": 10,
+      "wis": 15,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "resistances": [
+      "Damage type chosen for the Draconic Origin trait below"
+    ],
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Draconic Origin",
+        "kind": "other",
+        "text": "The half-dragon is related to a type of dragon associated with one of the following damage types (GM's choice): Acid, Cold, Fire, Lightning, or Poison. This choice affects other aspects of the stat block."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The half-dragon makes two Claw attacks."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d6",
+            "note": "of the type chosen for the Draconic Origin trait"
+          }
+        ]
+      },
+      {
+        "name": "Dragon's Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 30-foot Cone"
+        },
+        "onFailure": "{dmg:8d6} damage of the type chosen for the Draconic Origin trait.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Leap",
+        "kind": "other",
+        "text": "The half-dragon jumps up to 30 feet by spending 10 feet of movement."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

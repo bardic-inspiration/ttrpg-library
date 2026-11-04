@@ -1,0 +1,85 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "homunculus",
+  "name": "Homunculus",
+  "summary": "A tiny construct servant with a poisonous bite, bonded telepathically to its creator.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "construct",
+    "alignment": "neutral",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 20,
+      "fly": 40
+    },
+    "abilities": {
+      "str": 4,
+      "dex": 15,
+      "con": 14,
+      "int": 10,
+      "wis": 10,
+      "cha": 7
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Telepathic Bond",
+        "kind": "other",
+        "text": "While the homunculus is on the same plane of existence as its master, the two of them can communicate telepathically with each other."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the Poisoned condition until the end of the homunculus's next turn. *Failure by 5 or More:* The target has the Poisoned condition for 1 minute. While Poisoned, the target has the Unconscious condition, which ends early if the target takes any damage."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

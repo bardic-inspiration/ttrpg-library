@@ -1,0 +1,81 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "swarm-of-venomous-snakes",
+  "name": "Swarm of Venomous Snakes",
+  "summary": "A swarm of venomous snakes that bites with poison.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "swarm": "tiny",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 18,
+      "con": 11,
+      "int": 1,
+      "wis": 10,
+      "cha": 3
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed",
+        "frightened",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "prone",
+        "restrained",
+        "stunned"
+      ]
+    },
+    "senses": {
+      "blindsight": 10
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny snake. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bites",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "onHit": "{dmg:1d8+dex:piercing}—or {dmg:1d4+dex:piercing} if the swarm is Bloodied—plus {dmg:3d6:poison}."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

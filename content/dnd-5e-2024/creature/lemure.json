@@ -1,0 +1,88 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "lemure",
+  "name": "Lemure",
+  "summary": "A shapeless lowly devil that revives in the Nine Hells.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Devil"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 9
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 5,
+      "con": 11,
+      "int": 1,
+      "wis": 11,
+      "cha": 3
+    },
+    "resistances": [
+      "cold"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "frightened",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 120,
+      "note": "unimpeded by magical Darkness"
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Infernal"
+      ]
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Hellish Restoration",
+        "kind": "other",
+        "text": "If the lemure dies in the Nine Hells, it revives with all its Hit Points in 1d10 days unless it is killed by a creature under the effects of a *{ref:spell/bless}* spell or its remains are sprinkled with Holy Water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Vile Slime",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "type": "poison"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

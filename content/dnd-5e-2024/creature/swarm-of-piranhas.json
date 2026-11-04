@@ -1,0 +1,94 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "swarm-of-piranhas",
+  "name": "Swarm of Piranhas",
+  "summary": "A swarm of piranhas that shreds creatures in the water.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "swarm": "tiny",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 5,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 16,
+      "con": 9,
+      "int": 1,
+      "wis": 7,
+      "cha": 2
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed",
+        "frightened",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "prone",
+        "restrained",
+        "stunned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny piranha. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      },
+      {
+        "name": "Water Breathing",
+        "kind": "other",
+        "text": "The swarm can breathe only underwater."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bites",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "attackNote": "with Advantage if the target doesn't have all its Hit Points",
+        "damage": [
+          {
+            "dice": "2d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "or {dmg:1d4+dex:piercing} if the swarm is Bloodied."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

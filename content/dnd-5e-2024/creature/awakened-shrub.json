@@ -1,0 +1,65 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "awakened-shrub",
+  "name": "Awakened Shrub",
+  "summary": "A shrub given awareness and movement that rakes foes with its branches.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "plant",
+    "alignment": "neutral",
+    "ac": {
+      "value": 9
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 3,
+      "dex": 8,
+      "con": 11,
+      "int": 10,
+      "wis": 10,
+      "cha": 6
+    },
+    "vulnerabilities": [
+      "fire"
+    ],
+    "resistances": [
+      "piercing"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 0,
+    "actions": [
+      {
+        "name": "Rake",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

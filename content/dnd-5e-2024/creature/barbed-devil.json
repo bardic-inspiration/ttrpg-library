@@ -1,0 +1,143 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "barbed-devil",
+  "name": "Barbed Devil",
+  "summary": "A spiny devil that claws, lashes with its tail, and hurls flame.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Devil"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 17,
+      "con": 18,
+      "int": 12,
+      "wis": 14,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "str",
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "insight": "proficient",
+      "perception": "expertise"
+    },
+    "resistances": [
+      "cold"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 120,
+      "note": "unimpeded by magical Darkness"
+    },
+    "languages": {
+      "spoken": [
+        "Infernal"
+      ],
+      "telepathy": 120
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Barbed Hide",
+        "kind": "other",
+        "text": "At the start of each of its turns, the devil deals {dmg:1d10:piercing} to any creature it is grappling or any creature grappling it."
+      },
+      {
+        "name": "Diabolical Restoration",
+        "kind": "other",
+        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The devil has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The devil makes one Claws attack and one Tail attack, or it makes two Hurl Flame attacks."
+      },
+      {
+        "name": "Claws",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=13}) from both claws."
+      },
+      {
+        "name": "Tail",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Hurl Flame",
+        "kind": "ranged-attack",
+        "ability": "wis",
+        "range": {
+          "normal": 150
+        },
+        "damage": [
+          {
+            "dice": "5d6",
+            "type": "fire"
+          }
+        ],
+        "onHit": "If the target is a flammable object that isn't being worn or carried, it starts burning."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

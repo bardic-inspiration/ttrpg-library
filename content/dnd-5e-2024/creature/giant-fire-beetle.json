@@ -1,0 +1,71 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-fire-beetle",
+  "name": "Giant Fire Beetle",
+  "summary": "A small beetle whose glowing glands shed light.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 10,
+      "con": 12,
+      "int": 1,
+      "wis": 7,
+      "cha": 3
+    },
+    "resistances": [
+      "fire"
+    ],
+    "senses": {
+      "blindsight": 30
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Illumination",
+        "kind": "other",
+        "text": "The beetle sheds Bright Light in a 10-foot radius and Dim Light for an additional 10 feet."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "fire"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
