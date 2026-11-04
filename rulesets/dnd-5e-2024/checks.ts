@@ -176,12 +176,18 @@ export function checkSpell(stats: SpellStats): Issue[] {
   if (duration.concentration && duration.kind !== 'timed') {
     error('stats.duration.concentration', `concentration needs a timed duration, not "${duration.kind}"`);
   }
+  if (duration.upTo && (duration.kind !== 'timed' || duration.concentration)) {
+    error('stats.duration.upTo', 'upTo is for a timed duration without concentration, which already reads "up to"');
+  }
   if (duration.kind === 'timed') {
     if (duration.amount === undefined) error('stats.duration', 'a timed duration needs an amount');
     if (duration.unit === undefined) error('stats.duration', 'a timed duration needs a unit');
   }
-  if (range.kind === 'distance' && range.feet === undefined) {
-    error('stats.range', 'a distance range needs feet');
+  if (range.kind === 'distance' && (range.feet === undefined) === (range.miles === undefined)) {
+    error('stats.range', 'a distance range needs feet or miles, not both');
+  }
+  if (range.kind !== 'distance' && (range.feet !== undefined || range.miles !== undefined)) {
+    error('stats.range', 'feet and miles are for a distance range');
   }
   if (stats.components.m?.consumed && stats.components.m.costGp === undefined) {
     error('stats.components.m', 'a consumed material component needs a costGp');
@@ -195,8 +201,8 @@ export function checkSpell(stats: SpellStats): Issue[] {
   if (castingTime.unit === 'reaction' && castingTime.trigger === undefined) {
     error('stats.castingTime', 'a reaction casting time needs a trigger');
   }
-  if (castingTime.unit !== 'reaction' && castingTime.trigger !== undefined) {
-    error('stats.castingTime.trigger', 'a trigger is allowed only on a reaction casting time');
+  if (castingTime.unit !== 'reaction' && castingTime.unit !== 'bonus-action' && castingTime.trigger !== undefined) {
+    error('stats.castingTime.trigger', 'a trigger is allowed only on a reaction or bonus action casting time');
   }
   if (stats.level === 0 && stats.ritual) {
     issues.push({ level: 'warning', path: 'stats.ritual', message: 'a cantrip is marked ritual; confirm it' });

@@ -21,18 +21,23 @@ describe('spell card lines (SPEC.md §6.7)', async () => {
     );
     expect(castingTimeLine({ ...base, castingTime: { amount: 10, unit: 'minute' }, ritual: true })).toBe('10 minutes or Ritual');
     expect(castingTimeLine({ ...base, castingTime: { amount: 1, unit: 'hour' } })).toBe('1 hour');
+    expect(castingTimeLine({ ...base, castingTime: { amount: 1, unit: 'action', note: '(Overgrowth) or 8 hours (Enrichment)' } })).toBe(
+      'Action (Overgrowth) or 8 hours (Enrichment)',
+    );
   });
 
   it('formats range with an area', () => {
     expect(rangeLine(base)).toBe('60 feet');
     expect(rangeLine({ ...base, range: { kind: 'self', area: { shape: 'cone', size: 15 } } })).toBe('Self (15-foot Cone)');
     expect(rangeLine({ ...base, range: { kind: 'touch' } })).toBe('Touch');
+    expect(rangeLine({ ...base, range: { kind: 'distance', miles: 1 } })).toBe('1 mile');
+    expect(rangeLine({ ...base, range: { kind: 'distance', miles: 500 } })).toBe('500 miles');
   });
 
-  it('formats components, with a consumed material', () => {
+  it('formats components, with the material as printed', () => {
     expect(componentsLine(base)).toBe('V, S, M (a sliver of ice)');
     expect(componentsLine({ ...base, components: { v: true, s: false } })).toBe('V');
-    expect(componentsLine({ ...base, components: { v: false, s: true, m: { text: 'a diamond worth 300+ GP', costGp: 300, consumed: true } } })).toBe(
+    expect(componentsLine({ ...base, components: { v: false, s: true, m: { text: 'a diamond worth 300+ GP, which the spell consumes', costGp: 300, consumed: true } } })).toBe(
       'S, M (a diamond worth 300+ GP, which the spell consumes)',
     );
   });
@@ -42,6 +47,8 @@ describe('spell card lines (SPEC.md §6.7)', async () => {
     expect(durationLine({ ...base, duration: { kind: 'timed', amount: 1, unit: 'minute', concentration: true } })).toBe('Concentration, up to 1 minute');
     expect(durationLine({ ...base, duration: { kind: 'timed', amount: 8, unit: 'hour', concentration: false } })).toBe('8 hours');
     expect(durationLine({ ...base, duration: { kind: 'until-dispelled', concentration: false } })).toBe('Until dispelled');
+    expect(durationLine({ ...base, duration: { kind: 'until-dispelled-or-triggered', concentration: false } })).toBe('Until dispelled or triggered');
+    expect(durationLine({ ...base, duration: { kind: 'timed', amount: 8, unit: 'hour', upTo: true, concentration: false } })).toBe('Up to 8 hours');
   });
 });
 
