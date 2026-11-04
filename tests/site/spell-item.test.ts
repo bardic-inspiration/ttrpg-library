@@ -34,10 +34,10 @@ describe('spell card lines (SPEC.md §6.7)', async () => {
     expect(rangeLine({ ...base, range: { kind: 'distance', miles: 500 } })).toBe('500 miles');
   });
 
-  it('formats components, with a consumed material', () => {
+  it('formats components, with the material as printed', () => {
     expect(componentsLine(base)).toBe('V, S, M (a sliver of ice)');
     expect(componentsLine({ ...base, components: { v: true, s: false } })).toBe('V');
-    expect(componentsLine({ ...base, components: { v: false, s: true, m: { text: 'a diamond worth 300+ GP', costGp: 300, consumed: true } } })).toBe(
+    expect(componentsLine({ ...base, components: { v: false, s: true, m: { text: 'a diamond worth 300+ GP, which the spell consumes', costGp: 300, consumed: true } } })).toBe(
       'S, M (a diamond worth 300+ GP, which the spell consumes)',
     );
   });

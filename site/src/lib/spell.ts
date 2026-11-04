@@ -48,11 +48,11 @@ export function rangeLine(s: SpellStats): string {
   return base + (whenPresent(area, (a) => ` (${a.size}-foot ${capitalize(a.shape)})`) ?? '');
 }
 
-/** "V, S, M (a sliver of ice)"; a consumed material says so. */
+/** "V, S, M (a sliver of ice)". The material reads as printed; `costGp` and `consumed` are data only (SPEC.md §6.7). */
 export function componentsLine(s: SpellStats): string {
   const { v, s: somatic, m } = s.components;
   const parts = [v && 'V', somatic && 'S'].filter((p): p is string => Boolean(p));
-  const material = whenPresent(m, (mat) => `M (${mat.text}${mat.consumed ? ', which the spell consumes' : ''})`);
+  const material = whenPresent(m, (mat) => `M (${mat.text})`);
   if (material) parts.push(material);
   return parts.join(', ') || 'None';
 }
