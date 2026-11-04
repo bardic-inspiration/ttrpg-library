@@ -24,7 +24,7 @@
       "v": false,
       "s": true,
       "m": {
-        "text": "ink worth 10+ GP",
+        "text": "ink worth 10+ GP, which the spell consumes",
         "costGp": 10,
         "consumed": true
       }
