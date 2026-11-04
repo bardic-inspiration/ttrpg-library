@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "wand-of-fear",
+  "name": "Wand of Fear",
+  "summary": "A wand that casts Command and Fear for charges.",
+  "stats": {
+    "category": "wand",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 7,
+      "recharge": "1d6 + 1 daily at dawn",
+      "depletion": "If you expend the wand's last charge, roll 1d20. On a 1, the wand crumbles into ashes and is destroyed."
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/command",
+          "note": "\"flee\" or \"grovel\" only"
+        },
+        "chargeCost": 1,
+        "saveDc": 15
+      },
+      {
+        "spell": {
+          "ref": "spell/fear",
+          "note": "60-foot Cone"
+        },
+        "chargeCost": 3,
+        "saveDc": 15
+      }
+    ],
+    "effect": "This wand has 7 charges.\n\n***Spells.*** While holding the wand, you can cast one of the spells (save DC 15) on the following table from it. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/command}* (\"flee\" or \"grovel\" only) | 1 |\n| *{ref:spell/fear}* (60-foot Cone) | 3 |\n\n***Regaining Charges.*** The wand regains 1d6 + 1 expended charges daily at dawn. If you expend the wand's last charge, roll 1d20. On a 1, the wand crumbles into ashes and is destroyed."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

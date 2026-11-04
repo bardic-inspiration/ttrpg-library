@@ -1,0 +1,43 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "staff-of-swarming-insects",
+  "name": "Staff of Swarming Insects",
+  "summary": "A staff that fills the air with obscuring insects and casts Giant Insect and Insect Plague for charges.",
+  "stats": {
+    "category": "staff",
+    "rarity": "rare",
+    "attunement": {
+      "required": true,
+      "requirement": "by a Bard, Cleric, Druid, Sorcerer, Warlock, or Wizard"
+    },
+    "charges": {
+      "max": 10,
+      "recharge": "1d6 + 4 daily at dawn",
+      "depletion": "If you expend the last charge, roll 1d20. On a 1, a swarm of insects consumes and destroys the staff, then disperses."
+    },
+    "spells": [
+      {
+        "spell": "Giant Insect",
+        "chargeCost": 4
+      },
+      {
+        "spell": {
+          "ref": "spell/insect-plague"
+        },
+        "chargeCost": 5
+      }
+    ],
+    "effect": "This staff has 10 charges.\n\n***Insect Cloud.*** While holding the staff, you can take a Magic action and expend 1 charge to cause a swarm of harmless flying insects to fill a 30-foot Emanation originating from you. The insects remain for 10 minutes, making the area Heavily Obscured for creatures other than you. A strong wind (like that created by *{ref:spell/gust-of-wind}*) disperses the swarm and ends the effect.\n\n***Spells.*** While holding the staff, you can cast one of the spells on the following table from it, using your spell save DC and spell attack modifier. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *Giant Insect* | 4 |\n| *{ref:spell/insect-plague}* | 5 |\n\n***Regaining Charges.*** The staff regains 1d6 + 4 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, a swarm of insects consumes and destroys the staff, then disperses."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

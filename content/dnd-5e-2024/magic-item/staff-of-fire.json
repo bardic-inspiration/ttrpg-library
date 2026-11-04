@@ -1,0 +1,51 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "staff-of-fire",
+  "name": "Staff of Fire",
+  "summary": "A staff that grants Resistance to Fire and casts Burning Hands, Fireball, and Wall of Fire for charges.",
+  "stats": {
+    "category": "staff",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true,
+      "requirement": "by a Druid, Sorcerer, Warlock, or Wizard"
+    },
+    "charges": {
+      "max": 10,
+      "recharge": "1d6 + 4 daily at dawn",
+      "depletion": "If you expend the last charge, roll 1d20. On a 1, the staff crumbles into cinders and is destroyed."
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/burning-hands"
+        },
+        "chargeCost": 1
+      },
+      {
+        "spell": {
+          "ref": "spell/fireball"
+        },
+        "chargeCost": 3
+      },
+      {
+        "spell": {
+          "ref": "spell/wall-of-fire"
+        },
+        "chargeCost": 4
+      }
+    ],
+    "effect": "You have Resistance to Fire damage while you hold this staff.\n\n***Spells.*** The staff has 10 charges. While holding the staff, you can cast one of the spells on the following table from it, using your spell save DC. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/burning-hands}* | 1 |\n| *{ref:spell/fireball}* | 3 |\n| *{ref:spell/wall-of-fire}* | 4 |\n\n***Regaining Charges.*** The staff regains 1d6 + 4 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, the staff crumbles into cinders and is destroyed."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
