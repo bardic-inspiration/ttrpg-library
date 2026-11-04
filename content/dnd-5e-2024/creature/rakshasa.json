@@ -1,0 +1,157 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "rakshasa",
+  "name": "Rakshasa",
+  "summary": "A fiend highly resistant to magic that curses with its touch, issues baleful commands, and casts spells.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fiend",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 26,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 17,
+      "con": 18,
+      "int": 13,
+      "wis": 16,
+      "cha": 20
+    },
+    "skills": {
+      "deception": "proficient",
+      "insight": "proficient",
+      "perception": "proficient"
+    },
+    "vulnerabilities": [
+      "Piercing damage from weapons wielded by creatures under the effect of a Bless spell"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed",
+        "frightened"
+      ]
+    },
+    "senses": {
+      "truesight": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Infernal"
+      ]
+    },
+    "cr": 13,
+    "traits": [
+      {
+        "name": "Greater Magic Resistance",
+        "kind": "other",
+        "text": "The rakshasa automatically succeeds on saving throws against spells and other magical effects, and the attack rolls of spells automatically miss it. Without the rakshasa's permission, no spell can observe the rakshasa remotely or detect its thoughts, creature type, or alignment."
+      },
+      {
+        "name": "Fiendish Restoration",
+        "kind": "other",
+        "text": "If the rakshasa dies outside the Nine Hells, its body turns to ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The rakshasa makes three Cursed Touch attacks."
+      },
+      {
+        "name": "Cursed Touch",
+        "kind": "melee-attack",
+        "ability": "cha",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "cha",
+            "type": "slashing"
+          },
+          {
+            "dice": "3d12",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "If the target is a creature, it is cursed. While cursed, the target gains no benefit from finishing a Short or Long Rest."
+      },
+      {
+        "name": "Baleful Command",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "each enemy in a 30-foot Emanation originating from the rakshasa"
+        },
+        "damage": [
+          {
+            "dice": "8d6",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "and the target has the Frightened and Incapacitated conditions until the start of the rakshasa's next turn.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/detect-thoughts"
+        },
+        {
+          "ref": "spell/disguise-self"
+        },
+        {
+          "ref": "spell/mage-hand"
+        },
+        {
+          "ref": "spell/minor-illusion"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/fly"
+          },
+          {
+            "ref": "spell/invisibility"
+          },
+          {
+            "ref": "spell/major-image"
+          },
+          {
+            "ref": "spell/plane-shift"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "priest",
+  "name": "Priest",
+  "summary": "A cleric who strikes with a mace and radiant flame, casts divine spells, and aids allies.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Cleric"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 10,
+      "con": 12,
+      "int": 13,
+      "wis": 16,
+      "cha": 13
+    },
+    "skills": {
+      "medicine": "expertise",
+      "perception": "proficient",
+      "religion": "expertise"
+    },
+    "gear": [
+      "Chain Shirt",
+      "Holy Symbol",
+      "Mace"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The priest makes two attacks, using Mace or Radiant Flame in any combination."
+      },
+      {
+        "name": "Mace",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "2d4",
+            "type": "radiant"
+          }
+        ]
+      },
+      {
+        "name": "Radiant Flame",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "2d10",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/light"
+        },
+        {
+          "ref": "spell/thaumaturgy"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/spirit-guardians"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Divine Aid",
+        "kind": "other",
+        "text": "The priest casts *Bless, Dispel Magic, Healing Word*, or *{ref:spell/lesser-restoration}*, using the same spellcasting ability as Spellcasting.",
+        "uses": "3/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

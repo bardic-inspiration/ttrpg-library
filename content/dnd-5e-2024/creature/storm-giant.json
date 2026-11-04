@@ -1,0 +1,153 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "storm-giant",
+  "name": "Storm Giant",
+  "summary": "A huge giant that wields a storm sword, hurls thunderbolts, calls lightning storms, and casts weather spells.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "giant",
+    "alignment": "chaotic good",
+    "ac": {
+      "value": 16
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 20,
+    "speed": {
+      "walk": 50,
+      "fly": 25,
+      "hover": true,
+      "swim": 50
+    },
+    "abilities": {
+      "str": 29,
+      "dex": 14,
+      "con": 20,
+      "int": 16,
+      "wis": 20,
+      "cha": 18
+    },
+    "saveProficiencies": [
+      "str",
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "athletics": "proficient",
+      "history": "proficient",
+      "perception": "proficient"
+    },
+    "resistances": [
+      "cold"
+    ],
+    "immunities": {
+      "damage": [
+        "lightning",
+        "thunder"
+      ]
+    },
+    "senses": {
+      "darkvision": 120,
+      "truesight": 30
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Giant"
+      ]
+    },
+    "cr": 13,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The giant can breathe air and water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The giant makes two attacks, using Storm Sword or Thunderbolt in any combination."
+      },
+      {
+        "name": "Storm Sword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "4d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "3d8",
+            "type": "lightning"
+          }
+        ]
+      },
+      {
+        "name": "Thunderbolt",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 500
+        },
+        "damage": [
+          {
+            "dice": "2d12",
+            "ability": "str",
+            "type": "lightning"
+          }
+        ],
+        "onHit": "and the target has the Blinded and Deafened conditions until the start of the giant's next turn."
+      },
+      {
+        "name": "Lightning Storm",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 10-foot-radius, 40-foot-high Cylinder originating from a point the giant can see within 500 feet"
+        },
+        "damage": [
+          {
+            "dice": "10d10",
+            "type": "lightning"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/light"
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

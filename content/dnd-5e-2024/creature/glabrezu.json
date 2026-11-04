@@ -1,0 +1,156 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "glabrezu",
+  "name": "Glabrezu",
+  "summary": "A pincered demon that grapples and pummels foes and casts deceptive spells.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Demon"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 18,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 15,
+      "con": 21,
+      "int": 19,
+      "wis": 17,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "str",
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "perception": "proficient"
+    },
+    "resistances": [
+      "cold",
+      "fire",
+      "lightning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal"
+      ],
+      "telepathy": 120
+    },
+    "cr": 9,
+    "traits": [
+      {
+        "name": "Demonic Restoration",
+        "kind": "other",
+        "text": "If the glabrezu dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The glabrezu has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The glabrezu makes two Pincer attacks and uses Pummel or Spellcasting."
+      },
+      {
+        "name": "Pincer",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=15}) from one of two pincers."
+      },
+      {
+        "name": "Pummel",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature Grappled by the glabrezu"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onSuccess": "Half damage."
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/darkness"
+        },
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/dispel-magic"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/confusion"
+          },
+          {
+            "ref": "spell/fly"
+          },
+          {
+            "ref": "spell/power-word-stun"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

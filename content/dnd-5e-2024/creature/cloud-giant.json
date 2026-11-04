@@ -1,0 +1,132 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "cloud-giant",
+  "name": "Cloud Giant",
+  "summary": "A huge giant that smashes with a thunderous mace, hurls thunderclouds, and casts air magic.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "giant",
+    "alignment": "neutral",
+    "ac": {
+      "value": 14
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 16,
+    "speed": {
+      "walk": 40,
+      "fly": 20,
+      "hover": true
+    },
+    "abilities": {
+      "str": 27,
+      "dex": 10,
+      "con": 22,
+      "int": 12,
+      "wis": 16,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "insight": "proficient",
+      "perception": "expertise"
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Giant"
+      ]
+    },
+    "cr": 9,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The giant makes two attacks, using Thunderous Mace or Thundercloud in any combination. It can replace one attack with a use of Spellcasting to cast *{ref:spell/fog-cloud}*."
+      },
+      {
+        "name": "Thunderous Mace",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "2d6",
+            "type": "thunder"
+          }
+        ]
+      },
+      {
+        "name": "Thundercloud",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 240
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "thunder"
+          }
+        ],
+        "onHit": "and the target has the Incapacitated condition until the end of its next turn."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/fog-cloud"
+        },
+        {
+          "ref": "spell/light"
+        }
+      ],
+      "perDay": {
+        "1": [
+          "Control Weather",
+          {
+            "ref": "spell/gaseous-form"
+          },
+          {
+            "ref": "spell/telekinesis"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Misty Step",
+        "kind": "other",
+        "text": "The giant casts the *{ref:spell/misty-step}* spell, using the same spellcasting ability as Spellcasting."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

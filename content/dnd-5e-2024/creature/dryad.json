@@ -1,0 +1,133 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "dryad",
+  "name": "Dryad",
+  "summary": "A tree-bound fey that lashes with vines, bursts thorns, steps between trees, and casts charming spells.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "alignment": "neutral",
+    "ac": {
+      "value": 16
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 12,
+      "con": 11,
+      "int": 14,
+      "wis": 15,
+      "cha": 18
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The dryad has Advantage on saving throws against spells and other magical effects."
+      },
+      {
+        "name": "Speak with Beasts and Plants",
+        "kind": "other",
+        "text": "The dryad can communicate with Beasts and Plants as if they shared a language."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dryad makes one Vine Lash or Thorn Burst attack, and it can use Spellcasting to cast *{ref:spell/charm-monster}*."
+      },
+      {
+        "name": "Vine Lash",
+        "kind": "melee-attack",
+        "ability": "cha",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "cha",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Thorn Burst",
+        "kind": "ranged-attack",
+        "ability": "cha",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "cha",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/animal-friendship"
+        },
+        {
+          "ref": "spell/charm-monster",
+          "note": "lasts 24 hours; ends early if the dryad casts the spell again"
+        },
+        {
+          "ref": "spell/druidcraft"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/entangle"
+          },
+          {
+            "ref": "spell/pass-without-trace"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Tree Stride",
+        "kind": "other",
+        "text": "If within 5 feet of a Large or bigger tree, the dryad teleports to an unoccupied space within 5 feet of a second Large or bigger tree that is within 60 feet of the previous tree."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

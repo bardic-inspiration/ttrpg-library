@@ -1,0 +1,82 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-octopus",
+  "name": "Giant Octopus",
+  "summary": "A large octopus that grapples with tentacles and escapes behind a cloud of ink.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 10,
+      "swim": 60
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 13,
+      "con": 13,
+      "int": 5,
+      "wis": 10,
+      "cha": 4
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Water Breathing",
+        "kind": "other",
+        "text": "The octopus can breathe only underwater. It can hold its breath for 1 hour outside water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Tentacles",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=13}) from all eight tentacles. While Grappled, the target has the Restrained condition."
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Ink Cloud",
+        "kind": "other",
+        "text": "*Trigger:* The octopus takes damage while underwater. *Response:* The octopus releases ink that fills a 10-foot Cube centered on itself, and the octopus moves up to its Swim Speed. The Cube is Heavily Obscured for 1 minute or until a strong current or similar effect disperses the ink.",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "couatl",
+  "name": "Couatl",
+  "summary": "A winged serpent celestial that bites and constricts, casts divine spells, and shields its mind.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "celestial",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 19
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30,
+      "fly": 90
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 20,
+      "con": 17,
+      "int": 18,
+      "wis": 20,
+      "cha": 18
+    },
+    "saveProficiencies": [
+      "con",
+      "wis"
+    ],
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "psychic",
+        "radiant"
+      ]
+    },
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "All"
+      ],
+      "telepathy": 120
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Shielded Mind",
+        "kind": "other",
+        "text": "The couatl's thoughts can't be read by any means, and other creatures can communicate with it telepathically only if it allows them."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has the Poisoned condition until the end of the couatl's next turn."
+      },
+      {
+        "name": "Constrict",
+        "kind": "save",
+        "ability": "wis",
+        "save": {
+          "ability": "str",
+          "targets": "one Medium or smaller creature the couatl can see within 5 feet"
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "bludgeoning"
+          }
+        ],
+        "onFailure": "The target has the Grappled condition (escape {dc=13}), and it has the Restrained condition until the grapple ends."
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "noComponents": "spell",
+      "atWill": [
+        {
+          "ref": "spell/detect-evil-and-good"
+        },
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/detect-thoughts"
+        },
+        {
+          "ref": "spell/shapechange",
+          "note": "Beast or Humanoid form only, no Temporary Hit Points gained from the spell, and no Concentration or Temporary Hit Points required to maintain the spell"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/create-food-and-water"
+          },
+          {
+            "ref": "spell/dream"
+          },
+          {
+            "ref": "spell/greater-restoration"
+          },
+          {
+            "ref": "spell/scrying"
+          },
+          {
+            "ref": "spell/sleep"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Divine Aid",
+        "kind": "other",
+        "text": "The couatl casts *Bless, Lesser Restoration*, or *{ref:spell/sanctuary}*, requiring no spell components and using the same spellcasting ability as Spellcasting.",
+        "uses": "2/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

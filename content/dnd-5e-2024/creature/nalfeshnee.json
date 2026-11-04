@@ -1,0 +1,144 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "nalfeshnee",
+  "name": "Nalfeshnee",
+  "summary": "A hulking demon that rends foes, teleports, and radiates a nimbus of horror.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Demon"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 18
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 16,
+    "speed": {
+      "walk": 20,
+      "fly": 30
+    },
+    "abilities": {
+      "str": 21,
+      "dex": 10,
+      "con": 22,
+      "int": 19,
+      "wis": 12,
+      "cha": 15
+    },
+    "saveProficiencies": [
+      "con",
+      "int",
+      "wis",
+      "cha"
+    ],
+    "resistances": [
+      "cold",
+      "fire",
+      "lightning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "frightened",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal"
+      ],
+      "telepathy": 120
+    },
+    "cr": 13,
+    "traits": [
+      {
+        "name": "Demonic Restoration",
+        "kind": "other",
+        "text": "If the nalfeshnee dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The nalfeshnee has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The nalfeshnee makes three Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d10",
+            "type": "force"
+          }
+        ]
+      },
+      {
+        "name": "Teleport",
+        "kind": "other",
+        "text": "The nalfeshnee teleports up to 120 feet to an unoccupied space it can see."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Horror Nimbus",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature in a 15-foot Emanation originating from the nalfeshnee"
+        },
+        "damage": [
+          {
+            "dice": "8d6",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "and the target has the Frightened condition for 1 minute, until it takes damage, or until it ends its turn with the nalfeshnee out of line of sight.",
+        "onSuccess": "The target is immune to this nalfeshnee's Horror Nimbus for 24 hours.",
+        "recharge": "5-6"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Pursuit",
+        "kind": "other",
+        "text": "*Trigger:* Another creature the nalfeshnee can see ends its move within 120 feet of the nalfeshnee. *Response:* The nalfeshnee uses Teleport, but its destination space must be within 10 feet of the triggering creature."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "succubus",
+  "name": "Succubus",
+  "summary": "A fiend that charms and drains victims with a kiss, and can take an incubus form or other shapes.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fiend",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 17,
+      "con": 13,
+      "int": 15,
+      "wis": 12,
+      "cha": 20
+    },
+    "skills": {
+      "deception": "expertise",
+      "insight": "expertise",
+      "perception": "expertise",
+      "persuasion": "expertise",
+      "stealth": "expertise"
+    },
+    "resistances": [
+      "cold",
+      "fire",
+      "poison",
+      "psychic"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal",
+        "Common",
+        "Infernal"
+      ],
+      "telepathy": 60
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Incubus Form",
+        "kind": "other",
+        "text": "When the succubus finishes a Long Rest, it can shape-shift into an **Incubus,** using that stat block instead of this one."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The succubus makes one Fiendish Touch attack and uses Charm or Draining Kiss."
+      },
+      {
+        "name": "Fiendish Touch",
+        "kind": "melee-attack",
+        "ability": "cha",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "cha",
+            "type": "psychic"
+          }
+        ]
+      },
+      {
+        "name": "Charm",
+        "kind": "other",
+        "text": "The succubus casts *{ref:spell/dominate-person}* (level 8 version), requiring no spell components and using Charisma as the spellcasting ability (spell save {dc:cha})."
+      },
+      {
+        "name": "Draining Kiss",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "con",
+          "targets": "one creature Charmed by the succubus within 5 feet"
+        },
+        "damage": [
+          {
+            "dice": "3d8",
+            "type": "psychic"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "onFailureOrSuccess": "The target's Hit Point maximum decreases by an amount equal to the damage taken."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "The succubus shape-shifts into a Medium or Small Humanoid, or it returns to its true form. Its game statistics are the same in each form, except its Fly Speed is available only in its true form. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

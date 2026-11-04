@@ -1,0 +1,110 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "cultist-fanatic",
+  "name": "Cultist Fanatic",
+  "summary": "A zealot who strikes with a pact blade and casts spells, including a spiritual weapon.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "shortName": "cultist",
+    "alignment": "neutral",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 14,
+      "con": 12,
+      "int": 10,
+      "wis": 14,
+      "cha": 13
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "persuasion": "proficient",
+      "religion": "proficient"
+    },
+    "gear": [
+      "Holy Symbol",
+      "Leather Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Pact Blade",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d6",
+            "type": "necrotic"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "includeAttack": true,
+      "atWill": [
+        {
+          "ref": "spell/light"
+        },
+        {
+          "ref": "spell/thaumaturgy"
+        }
+      ],
+      "perDay": {
+        "2": [
+          {
+            "ref": "spell/command"
+          }
+        ],
+        "1": [
+          {
+            "ref": "spell/hold-person"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Spiritual Weapon",
+        "kind": "other",
+        "text": "The cultist casts the *{ref:spell/spiritual-weapon}* spell, using the same spellcasting ability as Spellcasting.",
+        "uses": "2/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

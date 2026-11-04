@@ -1,0 +1,123 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "green-hag",
+  "name": "Green Hag",
+  "summary": "A swamp hag that mimics voices, claws foes, casts illusions, and works coven magic.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 17
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 12,
+      "con": 16,
+      "int": 13,
+      "wis": 14,
+      "cha": 14
+    },
+    "skills": {
+      "arcana": "expertise",
+      "deception": "proficient",
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The hag can breathe air and water."
+      },
+      {
+        "name": "Coven Magic",
+        "kind": "other",
+        "text": "While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {dc:int}): *Augury, Find Familiar, Identify, Locate Object, Scrying*, or *{ref:spell/unseen-servant}*. The hag must finish a Long Rest before using this trait to cast that spell again."
+      },
+      {
+        "name": "Mimicry",
+        "kind": "other",
+        "text": "The hag can mimic animal sounds and humanoid voices. A creature that hears the sounds can tell they are imitations only with a successful {dc:str} Wisdom (Insight) check."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hag makes two Claw attacks."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "poison"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "noComponents": "Material",
+      "includeAttack": true,
+      "atWill": [
+        {
+          "ref": "spell/dancing-lights"
+        },
+        {
+          "ref": "spell/disguise-self",
+          "note": "24-hour duration"
+        },
+        {
+          "ref": "spell/invisibility",
+          "note": "self only, and the hag leaves no tracks while Invisible"
+        },
+        {
+          "ref": "spell/minor-illusion"
+        },
+        {
+          "ref": "spell/ray-of-sickness",
+          "note": "level 3 version"
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

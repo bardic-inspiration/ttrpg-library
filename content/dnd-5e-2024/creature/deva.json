@@ -1,0 +1,139 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "deva",
+  "name": "Deva",
+  "summary": "An angel that wields a holy mace, heals and aids allies, and casts divine spells.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "celestial",
+    "descriptors": [
+      "Angel"
+    ],
+    "alignment": "lawful good",
+    "ac": {
+      "value": 17
+    },
+    "hitDice": 27,
+    "speed": {
+      "walk": 30,
+      "fly": 90,
+      "hover": true
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 18,
+      "con": 18,
+      "int": 17,
+      "wis": 20,
+      "cha": 20
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "insight": "proficient",
+      "perception": "proficient"
+    },
+    "resistances": [
+      "radiant"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "frightened"
+      ]
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "All"
+      ],
+      "telepathy": 120
+    },
+    "cr": 10,
+    "traits": [
+      {
+        "name": "Exalted Restoration",
+        "kind": "other",
+        "text": "If the deva dies outside Mount Celestia, its body disappears, and it gains a new body instantly, reviving with all its Hit Points somewhere in Mount Celestia."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The deva has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The deva makes two Holy Mace attacks."
+      },
+      {
+        "name": "Holy Mace",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "4d8",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-evil-and-good"
+        },
+        {
+          "ref": "spell/shapechange",
+          "note": "Beast or Humanoid form only, no Temporary Hit Points gained from the spell, and no Concentration or Temporary Hit Points required to maintain the spell"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/commune"
+          },
+          {
+            "ref": "spell/raise-dead"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Divine Aid",
+        "kind": "other",
+        "text": "The deva casts *Cure Wounds, Lesser Restoration*, or *{ref:spell/remove-curse}*, using the same spellcasting ability as Spellcasting.",
+        "uses": "2/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
