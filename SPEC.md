@@ -461,9 +461,9 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 |---|---|---|
 | `category` | `armor`, `potion`, `ring`, `rod`, `scroll`, `staff`, `wand`, `weapon`, `wondrous-item` | |
 | `baseItem` | optional string | Required for `armor` and `weapon` (for example `"Longsword"`, `"any medium armor"`) |
-| `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | |
+| `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | The subtitle reads it in title case ("Very Rare"), and `varies` as "Rarity Varies" |
 | `attunement` | `{ required: bool, requirement?: string }` | `requirement` such as `"by a spellcaster"` |
-| `charges` | optional `{ max: int, recharge: string, depletion?: Text }` | |
+| `charges` | optional `{ max: int or dice, recharge?: string, depletion?: Text }` | Reads "7; regains 1d6 + 1 daily at dawn". An item that never regains charges omits `recharge`, and the line reads "12". `max` is a whole number, or a rolled count as printed ("1d3", "1d8 + 1") |
 | `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, maxChargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8). A variable cost, such as spending 1 to 3 charges to cast at a higher level, sets `chargeCost` to the least and `maxChargeCost` to the most, and reads "1–3 charges" |
 | `cursed` | optional `true` | |
 | `effect` | `Text` | The rules text as printed |
@@ -693,7 +693,7 @@ Display and generation defaults only. Validation never reads it except to confir
 
 | Key | Purpose |
 |---|---|
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `spell-level` reads 0 as "Cantrip" and any other level as SRD 5.2 does, "Level 3". `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts. `kind` is `range` (numbers) or `enum` (strings, string arrays, booleans). An omitted optional flag reads as `false` (§5.8). `format` is an optional display formatter (`cr`, `spell-level`, `rarity`, `title`). `rarity` reads an item rarity in title case, as SRD 5.2 prints it (`very-rare` reads "Very Rare"). `spell-level` reads 0 as "Cantrip" and any other level as SRD 5.2 does, "Level 3". `title` reads an enum slug in title case, hyphens as spaces (`wondrous-item` reads "Wondrous Item"), matching the detail templates; it suits the lowercase slug enums a schema defines. Without a `format`, a value reads as stored |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters shown expanded by default; every other facet and tag stays reachable through "Add filter" |

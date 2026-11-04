@@ -26,9 +26,15 @@
     "charges": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["max", "recharge"],
+      "required": ["max"],
       "properties": {
-        "max": { "type": "integer", "minimum": 1 },
+        "max": {
+          "description": "A whole number, or a rolled count as printed: \"1d3\", \"1d8 + 1\".",
+          "anyOf": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "string", "pattern": "^[1-9]\\d*d(2|3|4|6|8|10|12|20|100)( \\+ [1-9]\\d*)?$" }
+          ]
+        },
         "recharge": { "type": "string", "minLength": 1 },
         "depletion": { "$ref": "common.schema.json#/$defs/Text" }
       }

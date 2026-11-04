@@ -168,7 +168,7 @@ export interface MagicItemStats {
   baseItem?: string;
   rarity: string;
   attunement: { required: boolean; requirement?: string };
-  charges?: { max: number; recharge: string; depletion?: string };
+  charges?: { max: number | string; recharge?: string; depletion?: string };
   spells?: MagicItemSpell[];
   cursed?: true;
   effect: string;
