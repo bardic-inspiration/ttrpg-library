@@ -1,0 +1,45 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "shining-smite",
+  "name": "Shining Smite",
+  "summary": "Adds Radiant damage to a hit and makes the target shed light, giving attacks against it Advantage.",
+  "stats": {
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action",
+      "trigger": "immediately after hitting a creature with a Melee weapon or an Unarmed Strike"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "The target hit by the strike takes an extra 2d6 Radiant damage from the attack. Until the spell ends, the target sheds Bright Light in a 5-foot radius, attack rolls against it have Advantage, and it can't benefit from the Invisible condition.",
+    "higherLevels": "The damage increases by 1d6 for each spell slot level above 2."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
