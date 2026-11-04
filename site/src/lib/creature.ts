@@ -141,8 +141,8 @@ const RECHARGE: Record<string, string> = {
   '4-6': 'Recharge 4–6',
   '5-6': 'Recharge 5–6',
   '6': 'Recharge 6',
-  'short-or-long-rest': 'Recharges after a Short or Long Rest',
-  'long-rest': 'Recharges after a Long Rest',
+  'short-or-long-rest': 'Recharge after a Short or Long Rest',
+  'long-rest': 'Recharge after a Long Rest',
 };
 
 function actionName(action: Action): string {

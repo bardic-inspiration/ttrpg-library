@@ -236,8 +236,8 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       'Gust (Recharge 4–6)',
       'Gust (Recharge 5–6)',
       'Gust (Recharge 6)',
-      'Gust (Recharges after a Short or Long Rest)',
-      'Gust (Recharges after a Long Rest)',
+      'Gust (Recharge after a Short or Long Rest)',
+      'Gust (Recharge after a Long Rest)',
     ]);
   });
 });
