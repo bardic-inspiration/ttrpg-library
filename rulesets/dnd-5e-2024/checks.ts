@@ -142,6 +142,9 @@ export function checkMagicItem(stats: MagicItemStats): Issue[] {
   if ((stats.category === 'armor' || stats.category === 'weapon') && stats.baseItem === undefined) {
     error('stats.baseItem', `a ${stats.category} needs a baseItem, such as "Longsword" or "any medium armor"`);
   }
+  if (stats.rarityVariants !== undefined && stats.rarity !== 'varies') {
+    error('stats.rarityVariants', 'rarityVariants are allowed only when rarity is "varies"');
+  }
   if (stats.attunement.requirement !== undefined && !stats.attunement.required) {
     error('stats.attunement.requirement', 'a requirement is allowed only when attunement.required is true');
   }

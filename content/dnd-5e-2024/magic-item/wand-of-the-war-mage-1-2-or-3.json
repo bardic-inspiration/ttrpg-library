@@ -1,0 +1,40 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "wand-of-the-war-mage-1-2-or-3",
+  "name": "Wand of the War Mage, +1, +2, or +3",
+  "summary": "A wand that adds a bonus to spell attack rolls, set by its rarity, and lets spell attacks ignore Half Cover.",
+  "stats": {
+    "category": "wand",
+    "rarity": "varies",
+    "rarityVariants": [
+      {
+        "rarity": "uncommon",
+        "variant": "+1"
+      },
+      {
+        "rarity": "rare",
+        "variant": "+2"
+      },
+      {
+        "rarity": "very-rare",
+        "variant": "+3"
+      }
+    ],
+    "attunement": {
+      "required": true,
+      "requirement": "by a Spellcaster"
+    },
+    "effect": "While holding this wand, you gain a bonus to spell attack rolls determined by the wand's rarity. In addition, you ignore Half Cover when making a spell attack roll."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        178
+      ],
+      "srd": true
+    }
+  }
+}

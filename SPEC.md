@@ -480,6 +480,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `category` | `armor`, `potion`, `ring`, `rod`, `scroll`, `staff`, `wand`, `weapon`, `wondrous-item` | |
 | `baseItem` | optional string | Required for `armor` and `weapon` (for example `"Longsword"`, `"any medium armor"`) |
 | `rarity` | `common`, `uncommon`, `rare`, `very-rare`, `legendary`, `artifact`, `varies` | The subtitle reads it in title case ("Very Rare"), and `varies` as "Rarity Varies" |
+| `rarityVariants` | optional array of `{ rarity, variant: string }`, at least 2, each `rarity` one of the values above except `varies` | The rarity of each variant of a `varies` item, in print order. The subtitle prints them in place of "Rarity Varies", as an English list joined by "or": `[{ rarity: uncommon, variant: "+1" }, { rarity: rare, variant: "+2" }, { rarity: very-rare, variant: "+3" }]` reads "Uncommon (+1), Rare (+2), or Very Rare (+3)", and Horn of Valhalla's reads "Rare (Silver or Brass), Very Rare (Bronze), or Legendary (Iron)". `rarity` stays `varies`, so the gallery facet, sort, and card field treat the item as other `varies` items |
 | `attunement` | `{ required: bool, requirement?: string }` | `requirement` such as `"by a spellcaster"` |
 | `charges` | optional `{ max: int or dice, recharge?: string, depletion?: Text }` | Reads "7; regains 1d6 + 1 daily at dawn". An item that never regains charges omits `recharge`, and the line reads "12". `max` is a whole number, or a rolled count as printed ("1d3", "1d8 + 1") |
 | `spells` | optional array of `{ spell: RefOrText, chargeCost?: int, maxChargeCost?: int, saveDc?: int, attackBonus?: int }` | Authored values; rendered as a spell list by the template. `chargeCost` and `saveDc` are at least 1; `attackBonus` may be 0 (§5.8). A variable cost, such as spending 1 to 3 charges to cast at a higher level, sets `chargeCost` to the least and `maxChargeCost` to the most, and reads "1–3 charges" |
@@ -541,6 +542,7 @@ Magic item:
 | Check | Level |
 |---|---|
 | `baseItem` present for `armor` and `weapon` | error |
+| `rarityVariants` only when `rarity` is `varies` | error |
 | `attunement.requirement` only when `required` is true | error |
 | `spells[].chargeCost` only when `charges` is present | error |
 | `spells[].maxChargeCost` only with `chargeCost`, and above it | error |
