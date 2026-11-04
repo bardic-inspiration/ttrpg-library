@@ -1,0 +1,52 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "banishment",
+  "name": "Banishment",
+  "summary": "Sends a creature to a harmless demiplane, or permanently home if it is from another plane.",
+  "stats": {
+    "level": 4,
+    "school": "abjuration",
+    "classes": [
+      "cleric",
+      "paladin",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a pentacle"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "One creature that you can see within range must succeed on a Charisma saving throw or be transported to a harmless demiplane for the duration. While there, the target has the Incapacitated condition. When the spell ends, the target reappears in the space it left or in the nearest unoccupied space if that space is occupied.\n\nIf the target is an Aberration, a Celestial, an Elemental, a Fey, or a Fiend, the target doesn't return if the spell lasts for 1 minute. The target is instead transported to a random location on a plane (GM's choice) associated with its creature type.",
+    "higherLevels": "You can target one additional creature for each spell slot level above 4."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

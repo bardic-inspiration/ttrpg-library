@@ -1,0 +1,46 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "arcane-lock",
+  "name": "Arcane Lock",
+  "summary": "Magically locks a door, window, gate, container, or hatch so only you and those you choose can open it.",
+  "stats": {
+    "level": 2,
+    "school": "abjuration",
+    "classes": [
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "gold dust worth 25+ GP",
+        "costGp": 25,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "until-dispelled",
+      "concentration": false
+    },
+    "effect": "You touch a closed door, window, gate, container, or hatch and magically lock it for the duration. This lock can't be unlocked by any nonmagical means. You and any creatures you designate when you cast the spell can open and close the object despite the lock. You can also set a password that, when spoken within 5 feet of the object, unlocks it for 1 minute."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

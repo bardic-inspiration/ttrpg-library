@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "cone-of-cold",
+  "name": "Cone of Cold",
+  "summary": "Unleashes a 60-foot Cone of cold air that deals Cold damage.",
+  "stats": {
+    "level": 5,
+    "school": "evocation",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a small crystal or glass cone"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You unleash a blast of cold air. Each creature in a 60-foot Cone originating from you makes a Constitution saving throw, taking 8d8 Cold damage on a failed save or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws.",
+    "higherLevels": "The damage increases by 1d8 for each spell slot level above 5."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
