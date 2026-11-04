@@ -132,7 +132,9 @@
           {
             "ref": "spell/commune"
           },
-          "Control Weather",
+          {
+            "ref": "spell/control-weather"
+          },
           {
             "ref": "spell/dispel-evil-and-good"
           },
@@ -175,6 +177,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

@@ -47,7 +47,7 @@
       {
         "name": "Coven Magic",
         "kind": "other",
-        "text": "While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {dc:dex}): *Augury*, *{ref:spell/find-familiar}*, *{ref:spell/identify}*, *{ref:spell/locate-object}*, *Scrying*, or *{ref:spell/unseen-servant}*. The hag must finish a Long Rest before using this trait to cast that spell again."
+        "text": "While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {dc:dex}): *{ref:spell/augury}*, *{ref:spell/find-familiar}*, *{ref:spell/identify}*, *{ref:spell/locate-object}*, *{ref:spell/scrying}*, or *{ref:spell/unseen-servant}*. The hag must finish a Long Rest before using this trait to cast that spell again."
       },
       {
         "name": "Vile Appearance",
@@ -95,6 +95,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

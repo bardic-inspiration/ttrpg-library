@@ -121,13 +121,14 @@
       {
         "name": "Divine Aid",
         "kind": "other",
-        "text": "The deva casts *Cure Wounds, Lesser Restoration*, or *{ref:spell/remove-curse}*, using the same spellcasting ability as Spellcasting.",
+        "text": "The deva casts *{ref:spell/cure-wounds}*, *{ref:spell/lesser-restoration}*, or *{ref:spell/remove-curse}*, using the same spellcasting ability as Spellcasting.",
         "uses": "2/day"
       }
     ]
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

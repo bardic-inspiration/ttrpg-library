@@ -175,7 +175,9 @@
           {
             "ref": "spell/power-word-kill"
           },
-          "Scrying"
+          {
+            "ref": "spell/scrying"
+          }
         ]
       }
     },

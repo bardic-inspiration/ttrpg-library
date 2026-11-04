@@ -16,14 +16,17 @@
     },
     "spells": [
       {
-        "spell": "Teleport",
+        "spell": {
+          "ref": "spell/teleport"
+        },
         "chargeCost": 1
       }
     ],
-    "effect": "This helm has 3 charges. While wearing it, you can expend 1 charge to cast *Teleport* from it. The helm regains 1d3 expended charges daily at dawn."
+    "effect": "This helm has 3 charges. While wearing it, you can expend 1 charge to cast *{ref:spell/teleport}* from it. The helm regains 1d3 expended charges daily at dawn."
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
