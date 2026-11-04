@@ -3,7 +3,7 @@
   "type": "creature",
   "id": "adult-bronze-dragon",
   "name": "Adult Bronze Dragon",
-  "summary": "TODO summary",
+  "summary": "A huge metallic dragon that breathes lightning or a repulsion blast, casts sea and storm spells, and takes legendary actions.",
   "stats": {
     "size": [
       "huge"
@@ -194,6 +194,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

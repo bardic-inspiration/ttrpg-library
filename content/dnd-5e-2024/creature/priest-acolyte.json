@@ -3,7 +3,7 @@
   "type": "creature",
   "id": "priest-acolyte",
   "name": "Priest Acolyte",
-  "summary": "TODO summary",
+  "summary": "A junior cleric who strikes with a mace and radiant flame, casts minor divine spells, and aids allies.",
   "stats": {
     "size": [
       "medium",
