@@ -5,7 +5,7 @@
   "description": "Stored inputs only. Derived values come from derive.ts (SPEC.md §6.1).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["size", "creatureType", "alignment", "ac", "hitDice", "speed", "abilities", "languages", "cr", "actions"],
+  "required": ["size", "creatureType", "alignment", "ac", "hitDice", "speed", "abilities", "languages", "cr"],
   "properties": {
     "size": {
       "type": "array",

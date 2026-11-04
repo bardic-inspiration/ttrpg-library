@@ -77,7 +77,7 @@ export interface CreatureStats {
   cr: number;
   lair?: true;
   traits?: Action[];
-  actions: Action[];
+  actions?: Action[];
   bonusActions?: Action[];
   reactions?: Action[];
   legendaryActions?: { uses: number; usesInLair?: number; intro?: string; items: Action[] };

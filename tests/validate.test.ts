@@ -80,7 +80,7 @@ const INVALID: Record<string, RegExp> = {
   'unknown-type': /unknown type "vehicle"/,
   'unknown-stats-key': /^stats\.xp: unknown key$/,
   'derived-value-stored': /^stats\.hp: unknown key$/,
-  'missing-actions': /^stats: missing required key "actions"/,
+  'empty-actions': /^stats\.actions: must NOT have fewer than 1 items/,
   'empty-size': /^stats\.size: must NOT have fewer than 1 items/,
   'unknown-creature-type': /^stats\.creatureType: must be one of/,
   'bad-cr': /^stats\.cr: must be one of/,
