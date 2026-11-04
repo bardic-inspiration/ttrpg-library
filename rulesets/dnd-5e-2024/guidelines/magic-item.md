@@ -116,6 +116,8 @@ authored, so write them as numbers.
 - The `charges.depletion` text is its own field. Don't repeat it in `effect`.
 - Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
   pipe tables. No headings or links. Italicize spell names: *Frost Lance*.
+  A named property starts with a bold-italic inline heading:
+  `***Regaining Charges.***` (SPEC.md §9.5).
 - Don't use braces in item text except for a `{ref:<type>/<id>}` link
   (SPEC.md §5.7). The derived-number tokens are a creature feature and don't
   render here.

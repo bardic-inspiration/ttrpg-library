@@ -94,10 +94,10 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     expect(html).toContain('<em>Constitution Saving Throw:</em> DC 10. <strong>Charred</strong>');
     expect(html).toContain('Half damage. <em>Ouch.</em>');
     expect(html).toContain('<strong>+4</strong> times.');
-    expect(html).toContain('<strong>Snap.</strong> It <em>snaps</em>.');
+    expect(html).toContain('<em><strong>Snap.</strong></em> It <em>snaps</em>.');
     expect(html).toContain('It casts <em>nothing</em> else.');
     // Names and spell strings are plain text, not markdown.
-    expect(html).toContain('<strong>Bite *Hot*.</strong>');
+    expect(html).toContain('<em><strong>Bite *Hot*.</strong></em>');
     expect(html).toContain('Light *Bright*');
     expect(html).not.toMatch(/\*(dimly|Charred|snaps|nothing)\*/);
   });
