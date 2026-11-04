@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "prestidigitation",
+  "name": "Prestidigitation",
+  "summary": "A cantrip that creates minor magical tricks such as sparks, cleaning, or small illusions.",
+  "stats": {
+    "level": 0,
+    "school": "transmutation",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 10
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "upTo": true,
+      "concentration": false
+    },
+    "effect": "You create a magical effect within range. Choose the effect from the options below. If you cast this spell multiple times, you can have up to three of its non-instantaneous effects active at a time.\n\n***Sensory Effect.*** You create an instantaneous, harmless sensory effect, such as a shower of sparks, a puff of wind, faint musical notes, or an odd odor.\n\n***Fire Play.*** You instantaneously light or snuff out a candle, a torch, or a small campfire.\n\n***Clean or Soil.*** You instantaneously clean or soil an object no larger than 1 cubic foot.\n\n***Minor Sensation.*** You chill, warm, or flavor up to 1 cubic foot of nonliving material for 1 hour.\n\n***Magic Mark.*** You make a color, a small mark, or a symbol appear on an object or a surface for 1 hour.\n\n***Minor Creation.*** You create a nonmagical trinket or an illusory image that can fit in your hand. It lasts until the end of your next turn. A trinket can deal no damage and has no monetary worth."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
