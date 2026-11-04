@@ -1,0 +1,45 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "instant-summons",
+  "name": "Instant Summons",
+  "summary": "Marks an object with a sapphire so you can call it to your hand from any distance.",
+  "stats": {
+    "level": 6,
+    "school": "conjuration",
+    "classes": [
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "minute"
+    },
+    "ritual": true,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a sapphire worth 1,000+ GP",
+        "costGp": 1000
+      }
+    },
+    "duration": {
+      "kind": "until-dispelled",
+      "concentration": false
+    },
+    "effect": "You touch the sapphire used in the casting and an object weighing 10 pounds or less whose longest dimension is 6 feet or less. The spell leaves an Invisible mark on that object and invisibly inscribes the object's name on the sapphire. Each time you cast this spell, you must use a different sapphire.\n\nThereafter, you can take a Magic action to speak the object's name and crush the sapphire. The object instantly appears in your hand regardless of physical or planar distances, and the spell ends.\n\nIf another creature is holding or carrying the object, crushing the sapphire doesn't transport it, but instead you learn who that creature is and where that creature is currently located."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
