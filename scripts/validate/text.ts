@@ -4,6 +4,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { Lexer, type Token, type Tokens } from 'marked';
+import { tableTitleAt } from '../../lib/table-title.ts';
 import type { TermMatcher } from '../../lib/text.ts';
 
 /**
@@ -101,12 +102,19 @@ export function markdownViolations(text: string): string[] {
   return [...found];
 }
 
-/** Malformed pipe tables in `text`, one message per problem, in order. */
+/** A table title holds only plain words: no markup, links, or tokens, since it's also the table's label. */
+const plainTitle = (title: Tokens.Strong): boolean =>
+  title.tokens.every((t) => t.type === 'text' && !/[{}]/.test(t.raw));
+
+/** Malformed pipe tables and table titles in `text`, one message per problem, in order. */
 export function tableViolations(text: string): string[] {
   const found: string[] = [];
   const visit = (tokens: Token[]) => {
-    for (const token of tokens) {
-      if (token.type === 'table') found.push(...tableProblems(token as Tokens.Table));
+    for (const [i, token] of tokens.entries()) {
+      const title = tableTitleAt(tokens, i);
+      if (title) {
+        if (!plainTitle(title)) found.push('a table title (a **bold** line directly above a table) holds only plain text');
+      } else if (token.type === 'table') found.push(...tableProblems(token as Tokens.Table));
       else if (token.type === 'paragraph' && BROKEN_TABLE_LINE.test(token.raw)) {
         found.push('a line starts with "|" but isn\'t part of a table; a table needs a header row, then a delimiter row such as |---|---| with one cell per column');
       } else visit(children(token));

@@ -116,7 +116,7 @@ ttrpg-library/
 ├── assets/images/<ruleset>/<type>/<id>.*   optional art (none in v1)
 ├── schemas/envelope.schema.json            fixed keys, tags, meta, image (all rulesets)
 ├── rulesets/module.ts                       the contract every ruleset module meets (§6.2)
-├── lib/                                    ruleset-independent helpers shared by scripts and the site (text matching, gap bucket counts)
+├── lib/                                    ruleset-independent helpers shared by scripts and the site (text matching, gap bucket counts, table titles)
 ├── rulesets/<ruleset>/                     everything ruleset-specific (§6.2)
 │   ├── index.ts                            the ruleset module: derive and check by type
 │   ├── ruleset.json                        id, label, SRD version, types
@@ -241,7 +241,21 @@ The type of giant determines the score (see the table below).
 | Belt of Giant Strength (hill) | 21 | Rare |
 ```
 
-Cells hold only inline text: bold, italic, and tokens where the ruleset allows them. A `|` inside a cell is escaped as `\|`. The validator rejects a malformed table: a row with more or fewer cells than the header, an empty header cell, a table with no body rows, and a line that starts with `|` but doesn't parse as a table (usually a missing delimiter row, or one with a different number of columns). The site renders every table the same way (§9.5).
+A table may have a title, as SRD tables such as Augury's "Omens" do: a paragraph that is only one bold run, directly above the table, is the table's title, and the site renders it as the table's caption (§9.5). The title holds plain text only, with no italic, links, or tokens, since it also labels the table. Text that names the table ("the Omens table") stays in the paragraph before it:
+
+```text
+The GM chooses the omen from the Omens table.
+
+**Omens**
+
+| Omen | For Results That Will Be … |
+|---|---|
+| Weal | Good |
+```
+
+A bold paragraph anywhere else is an ordinary paragraph, and so is a bold run with more text on its line ("**First Roar.** …").
+
+Cells hold only inline text: bold, italic, and tokens where the ruleset allows them. A `|` inside a cell is escaped as `\|`. The validator rejects a malformed table: a row with more or fewer cells than the header, an empty header cell, a table with no body rows, a line that starts with `|` but doesn't parse as a table (usually a missing delimiter row, or one with a different number of columns), and a table title with anything but plain text in it. The site renders every table the same way (§9.5).
 
 ### 5.6 Image
 
@@ -935,7 +949,7 @@ The header carries ruleset and type navigation. The footer carries the SRD 5.2 a
 - Each template is composed of small parts with one job each, for example `StatBlockHeader`, `AbilityTable`, `PropertyLine`, `ActionList`, `ArtFrame`. Refining one part never means editing a large file.
 - Templates receive the entry and its `derived` values and render tokens through the ruleset's `tokens.ts`; they never compute rules values themselves. `EntryTemplate` picks the component from the registry's `template` name, falling back to `generic`. Each template renders the entry name as a heading at a `level` its page chooses (2 by default; the detail page's own `h1` sits above it), with section headings one level below.
 - Rules-text fields and `description` render through one sanitizing markdown helper (`site/src/lib/markdown.ts`): raw HTML is escaped, and links, images, and headings read as plain text. Tokens render first, then markdown, in every `Text` field, and markdown renders each `{ref:…}` token as its target's name linked to the target's page (§5.7), including a creature's action prose, `spellcasting.note`, `legendaryActions.intro`, and a spell's `castingTime.trigger`, which renders inline within the Casting Time line. Fields that aren't `Text`, such as action names, save targets, and plain-string spells, are plain text: they are escaped before they join generated markdown, so a `*` in them displays as typed.
-- A pipe table (§5.5) renders as a `<table>` with `scope="col"` header cells, inside a `.md-table` box that scrolls sideways on its own when the table is wider than its column. The page never does (§9.7; data tables are exempt from WCAG reflow). The box is focusable and labeled "Table: " plus its column headers, so a keyboard can scroll it. One style in `base.css` serves every template, mode, and theme: column headers in the heading font over an accent rule, thin rules between rows, no striping, and cell text that wraps, except that a one-word cell such as a die range (`9–10`) stays on one line. Its knobs are the `--table-*` component tokens, and print and capture take their size from the surrounding text.
+- A pipe table (§5.5) renders as a `<table>` with `scope="col"` header cells, inside a `.md-table` box that scrolls sideways on its own when the table is wider than its column. The page never does (§9.7; data tables are exempt from WCAG reflow). A titled table (§5.5) puts its title in a `<caption>` above the column headers, in the heading font and bold. The box is focusable and labeled "Table: " plus the table's title, or its column headers when it has none, so a keyboard can scroll it. One style in `base.css` serves every template, mode, and theme: column headers in the heading font over an accent rule, thin rules between rows, no striping, and cell text that wraps, except that a one-word cell such as a die range (`9–10`) stays on one line. Its knobs are the `--table-*` component tokens, and print and capture take their size from the surrounding text.
 - The same component renders in gallery detail, PNG capture, and print, with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing, columns, and interactive elements.
 - Markup is semantic so that styling never fights structure. The entry name is a heading, section labels (Actions, Reactions) are subheadings, property lines and ability scores are definition lists or tables, and action names are inline headings.
 - Every inline heading prints bold italic, as SRD 5.2 prints them: the ones a template adds (action and trait names, "Using a Higher-Level Spell Slot.", "Cantrip Upgrade.", and the items of an embedded stat block) and the ones rules text writes itself, which are written `***Regaining Charges.***`.

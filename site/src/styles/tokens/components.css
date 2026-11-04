@@ -40,6 +40,7 @@
     --statblock-column-gap: var(--space-l);
 
     /* Tables in rules text and lore (pipe tables, SPEC.md §5.5). */
+    --table-caption-font: var(--font-heading);
     --table-header-font: var(--font-heading);
     --table-header-rule: var(--border-width-strong) solid var(--accent);
     --table-row-rule: var(--border-width) solid var(--color-border);
