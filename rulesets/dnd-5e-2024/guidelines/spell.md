@@ -89,7 +89,10 @@ own level.
   working, such as an ongoing area, a lasting buff, or a held condition.
 - **Ritual** only for utility spells of 1st level or higher with no combat use.
 - **Material costs.** Give a `costGp` only when the component should limit how
-  often the spell is cast; set `consumed` only with a cost.
+  often the spell is cast; set `consumed` only with a cost. Write the cost and
+  any consumption into `m.text` as well ("a diamond worth 300+ GP, which the
+  spell consumes"): the card prints `m.text` as written, and `costGp` and
+  `consumed` add no words.
 
 ## Prose style
 
