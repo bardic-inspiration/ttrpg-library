@@ -1,0 +1,197 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "adult-brass-dragon",
+  "name": "Adult Brass Dragon",
+  "summary": "A huge metallic dragon that breathes fire or sleep-inducing gas and takes legendary actions.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "chaotic good",
+    "ac": {
+      "value": 18
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 40,
+      "burrow": 30,
+      "fly": 80
+    },
+    "abilities": {
+      "str": 23,
+      "dex": 10,
+      "con": 21,
+      "int": 14,
+      "wis": 13,
+      "cha": 17
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "history": "proficient",
+      "perception": "expertise",
+      "persuasion": "proficient",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "senses": {
+      "blindsight": 60,
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 13,
+    "lair": true,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the dragon fails a saving throw, it can choose to succeed instead.",
+        "uses": "3/day, or 4/day in lair"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes three Rend attacks. It can replace one attack with a use of (A) Sleep Breath or (B) Spellcasting to cast *{ref:spell/scorching-ray}*."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d8",
+            "type": "fire"
+          }
+        ]
+      },
+      {
+        "name": "Fire Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 60-foot-long, 5-foot-wide Line"
+        },
+        "damage": [
+          {
+            "dice": "10d8",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Sleep Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 60-foot Cone"
+        },
+        "onFailure": "The target has the Incapacitated condition until the end of its next turn, at which point it repeats the save. *Second Failure:* The target has the Unconscious condition for 10 minutes. This effect ends for the target if it takes damage or a creature within 5 feet of it takes an action to wake it."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/minor-illusion"
+        },
+        {
+          "ref": "spell/scorching-ray"
+        },
+        {
+          "ref": "spell/shapechange",
+          "note": "Beast or Humanoid form only, no Temporary Hit Points gained from the spell, and no Concentration or Temporary Hit Points required to maintain the spell"
+        },
+        {
+          "ref": "spell/speak-with-animals"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/detect-thoughts"
+          },
+          "Control Weather"
+        ]
+      }
+    },
+    "legendaryActions": {
+      "uses": 3,
+      "usesInLair": 4,
+      "intro": "Immediately after another creature's turn, the dragon can expend a use to take one of the following actions. The dragon regains all expended uses at the start of each of its turns.",
+      "items": [
+        {
+          "name": "Blazing Light",
+          "kind": "other",
+          "text": "The dragon uses Spellcasting to cast *{ref:spell/scorching-ray}*."
+        },
+        {
+          "name": "Pounce",
+          "kind": "other",
+          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+        },
+        {
+          "name": "Scorching Sands",
+          "kind": "save",
+          "ability": "cha",
+          "save": {
+            "ability": "dex",
+            "targets": "one creature the dragon can see within 120 feet"
+          },
+          "damage": [
+            {
+              "dice": "6d8",
+              "type": "fire"
+            }
+          ],
+          "onFailure": "and the target's Speed is halved until the end of its next turn.",
+          "onFailureOrSuccess": "The dragon can't take this action again until the start of its next turn."
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "tarrasque",
+  "name": "Tarrasque",
+  "summary": "A colossal monstrosity that bites, claws, and swallows foes, reflects spells, and takes legendary actions.",
+  "stats": {
+    "size": [
+      "gargantuan"
+    ],
+    "creatureType": "monstrosity",
+    "descriptors": [
+      "Titan"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 25
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 34,
+    "speed": {
+      "walk": 60,
+      "burrow": 40,
+      "climb": 60
+    },
+    "abilities": {
+      "str": 30,
+      "dex": 11,
+      "con": 30,
+      "int": 3,
+      "wis": 11,
+      "cha": 11
+    },
+    "saveProficiencies": [
+      "dex",
+      "int",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "perception": "proficient"
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "deafened",
+        "frightened",
+        "paralyzed",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "blindsight": 120
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 30,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the tarrasque fails a saving throw, it can choose to succeed instead.",
+        "uses": "6/day"
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The tarrasque has Advantage on saving throws against spells and other magical effects."
+      },
+      {
+        "name": "Reflective Carapace",
+        "kind": "other",
+        "text": "If the tarrasque is targeted by a *{ref:spell/magic-missile}* spell or a spell that requires a ranged attack roll, roll 1d6. On a **1–5,** the tarrasque is unaffected. On a **6,** the tarrasque is unaffected and reflects the spell, turning the caster into the target."
+      },
+      {
+        "name": "Siege Monster",
+        "kind": "other",
+        "text": "The tarrasque deals double damage to objects and structures."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The tarrasque makes one Bite attack and three other attacks, using Claw or Tail in any combination."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 15,
+        "damage": [
+          {
+            "dice": "4d12",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has the Grappled condition (escape {dc=20}). Until the grapple ends, the target has the Restrained condition and can't teleport."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 15,
+        "damage": [
+          {
+            "dice": "4d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Tail",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 30,
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Huge or smaller creature, it has the Prone condition."
+      },
+      {
+        "name": "Thunderous Bellow",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature and each object that isn't being worn or carried in a 150-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "12d12",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": "and the target has the Deafened and Frightened conditions until the end of its next turn.",
+        "onSuccess": "Half damage only.",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Swallow",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "str",
+          "targets": "one Large or smaller creature Grappled by the tarrasque (it can have up to six creatures swallowed at a time)"
+        },
+        "onFailure": "The target is swallowed, and the Grappled condition ends. A swallowed creature has the Blinded and Restrained conditions and can't teleport, it has Total Cover against attacks and other effects outside the tarrasque, and it takes {dmg:16d6:acid} at the start of each of the tarrasque's turns. If the tarrasque takes 60 damage or more on a single turn from a creature inside it, the tarrasque must succeed on a {dc=20} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 10 feet of the tarrasque and has the Prone condition. If the tarrasque dies, any swallowed creature no longer has the Restrained condition and can escape from the corpse using 20 feet of movement, exiting Prone."
+      }
+    ],
+    "legendaryActions": {
+      "uses": 3,
+      "intro": "Immediately after another creature's turn, the tarrasque can expend a use to take one of the following actions. The tarrasque regains all expended uses at the start of each of its turns.",
+      "items": [
+        {
+          "name": "Onslaught",
+          "kind": "other",
+          "text": "The tarrasque moves up to half its Speed, and it makes one Claw or Tail attack."
+        },
+        {
+          "name": "World-Shaking Movement",
+          "kind": "other",
+          "text": "The tarrasque moves up to its Speed. At the end of this movement, the tarrasque creates an instantaneous shock wave in a 60-foot Emanation originating from itself. Creatures in that area lose Concentration and, if Medium or smaller, have the Prone condition. The tarrasque can't take this action again until the start of its next turn."
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

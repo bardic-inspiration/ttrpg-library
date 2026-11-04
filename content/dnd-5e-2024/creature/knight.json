@@ -1,0 +1,110 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "knight",
+  "name": "Knight",
+  "summary": "An armored warrior who fights with greatsword or heavy crossbow, deals radiant damage, and parries.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 18
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 11,
+      "con": 14,
+      "int": 11,
+      "wis": 11,
+      "cha": 15
+    },
+    "saveProficiencies": [
+      "con",
+      "wis"
+    ],
+    "immunities": {
+      "conditions": [
+        "frightened"
+      ]
+    },
+    "gear": [
+      "Greatsword",
+      "Heavy Crossbow",
+      "Plate Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The knight makes two attacks, using Greatsword or Heavy Crossbow in any combination."
+      },
+      {
+        "name": "Greatsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d8",
+            "type": "radiant"
+          }
+        ]
+      },
+      {
+        "name": "Heavy Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 100,
+          "long": 400
+        },
+        "damage": [
+          {
+            "dice": "2d10",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d8",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Parry",
+        "kind": "other",
+        "text": "*Trigger:* The knight is hit by a melee attack roll while holding a weapon. *Response:* The knight adds 2 to its AC against that attack, possibly causing it to miss."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

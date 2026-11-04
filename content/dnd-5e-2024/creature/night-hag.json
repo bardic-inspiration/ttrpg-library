@@ -1,0 +1,145 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "night-hag",
+  "name": "Night Hag",
+  "summary": "A fiendish hag that claws foes, haunts dreams with a soul bag, shape-shifts, and works coven magic.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fiend",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 15,
+      "con": 16,
+      "int": 16,
+      "wis": 14,
+      "cha": 16
+    },
+    "skills": {
+      "deception": "proficient",
+      "insight": "proficient",
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "resistances": [
+      "cold",
+      "fire"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed"
+      ]
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal",
+        "Common",
+        "Infernal",
+        "Primordial"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Coven Magic",
+        "kind": "other",
+        "text": "While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {dc:con}): *Augury, Find Familiar, Identify, Locate Object, Scrying*, or *{ref:spell/unseen-servant}*. The hag must finish a Long Rest before using this trait to cast that spell again."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The hag has Advantage on saving throws against spells and other magical effects."
+      },
+      {
+        "name": "Soul Bag",
+        "kind": "other",
+        "text": "The hag has a soul bag. While holding or carrying the bag, the hag can use its Nightmare Haunting action. The bag has AC 15, HP 20, and Resistance to all damage. The bag turns to dust if reduced to 0 Hit Points. If the bag is destroyed, any souls the bag is holding are released. The hag can create a new bag after 7 days."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hag makes two Claw attacks."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Nightmare Haunting (1/Day; Requires Soul Bag)",
+        "kind": "other",
+        "text": "While on the Ethereal Plane, the hag casts *{ref:spell/dream}*, using the same spellcasting ability as Spellcasting. Only the hag can serve as the spell's messenger, and the target must be a creature the hag can see on the Material Plane. The spell fails and is wasted if the target is under the effect of the *{ref:spell/protection-from-evil-and-good}* spell or within a *{ref:spell/magic-circle}* spell. If the target takes damage from the *{ref:spell/dream}* spell, the target's Hit Point maximum decreases by an amount equal to that damage. If the spell kills the target, its soul is trapped in the hag's soul bag, and the target can't be raised from the dead until its soul is released."
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/etherealness"
+        },
+        {
+          "ref": "spell/magic-missile",
+          "note": "level 4 version"
+        }
+      ],
+      "perDay": {
+        "2": [
+          {
+            "ref": "spell/phantasmal-killer"
+          },
+          {
+            "ref": "spell/plane-shift",
+            "note": "self only"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "The hag shape-shifts into a Small or Medium Humanoid, or it returns to its true form. Other than its size, its game statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

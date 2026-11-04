@@ -1,0 +1,173 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "archmage",
+  "name": "Archmage",
+  "summary": "A master wizard who blasts foes with arcane bursts, casts powerful spells, and wards itself with counterspells and shields.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Wizard"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "adjust": 5
+    },
+    "hitDice": 31,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 20,
+      "wis": 15,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "expertise",
+      "history": "proficient",
+      "perception": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "psychic"
+      ],
+      "conditions": [
+        "Charmed (with Mind Blank)"
+      ]
+    },
+    "gear": [
+      "Wand"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus five other languages"
+      ]
+    },
+    "cr": 12,
+    "traits": [
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The archmage has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The archmage makes four Arcane Burst attacks."
+      },
+      {
+        "name": "Arcane Burst",
+        "kind": "melee-or-ranged-attack",
+        "ability": "int",
+        "reach": 5,
+        "range": {
+          "normal": 150
+        },
+        "damage": [
+          {
+            "dice": "4d10",
+            "ability": "int",
+            "type": "force"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/detect-thoughts"
+        },
+        {
+          "ref": "spell/disguise-self"
+        },
+        {
+          "ref": "spell/invisibility"
+        },
+        {
+          "ref": "spell/light"
+        },
+        {
+          "ref": "spell/mage-armor",
+          "note": "included in AC"
+        },
+        {
+          "ref": "spell/mage-hand"
+        },
+        {
+          "ref": "spell/prestidigitation"
+        }
+      ],
+      "perDay": {
+        "2": [
+          {
+            "ref": "spell/fly"
+          },
+          {
+            "ref": "spell/lightning-bolt",
+            "note": "level 7 version"
+          }
+        ],
+        "1": [
+          {
+            "ref": "spell/cone-of-cold",
+            "note": "level 9 version"
+          },
+          {
+            "ref": "spell/mind-blank",
+            "note": "cast before combat"
+          },
+          {
+            "ref": "spell/scrying"
+          },
+          "Teleport"
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Misty Step",
+        "kind": "other",
+        "text": "The mage casts *{ref:spell/misty-step}*, using the same spellcasting ability as Spellcasting.",
+        "uses": "3/day"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Protective Magic",
+        "kind": "other",
+        "text": "The archmage casts *{ref:spell/counterspell}* or *{ref:spell/shield}* in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "uses": "3/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

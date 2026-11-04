@@ -1,0 +1,123 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "weretiger",
+  "name": "Weretiger",
+  "summary": "A lycanthrope that fights as a humanoid, tiger, or hybrid, pounces on prey, and spreads its curse with its bite.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "monstrosity",
+    "descriptors": [
+      "Lycanthrope"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 16,
+    "speed": {
+      "walk": 30,
+      "note": "40 ft. (tiger form only)"
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 15,
+      "con": 16,
+      "int": 10,
+      "wis": 13,
+      "cha": 11
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "gear": [
+      "Longbow"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common"
+      ],
+      "note": "can't speak in tiger form"
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The weretiger makes two attacks, using Scratch or Longbow in any combination. It can replace one attack with a Bite attack."
+      },
+      {
+        "name": "Bite (Tiger or Hybrid Form Only)",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Humanoid, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target is cursed. If the cursed target drops to 0 Hit Points, it instead becomes a **Weretiger** under the GM's control and has 10 Hit Points. *Success:* The target is immune to this weretiger's curse for 24 hours."
+      },
+      {
+        "name": "Scratch",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Longbow (Humanoid or Hybrid Form Only)",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Prowl (Tiger or Hybrid Form Only)",
+        "kind": "other",
+        "text": "The weretiger moves up to its Speed without provoking Opportunity Attacks. At the end of this movement, the weretiger can take the Hide action."
+      },
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "The weretiger shape-shifts into a Large tiger-humanoid hybrid or a Large tiger, or it returns to its true humanoid form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

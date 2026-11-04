@@ -1,0 +1,195 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ancient-silver-dragon",
+  "name": "Ancient Silver Dragon",
+  "summary": "A gargantuan metallic dragon that breathes cold or paralyzing gas, casts frost spells, and takes legendary actions.",
+  "stats": {
+    "size": [
+      "gargantuan"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "lawful good",
+    "ac": {
+      "value": 22
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 24,
+    "speed": {
+      "walk": 40,
+      "fly": 80
+    },
+    "abilities": {
+      "str": 30,
+      "dex": 10,
+      "con": 29,
+      "int": 18,
+      "wis": 15,
+      "cha": 26
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "history": "proficient",
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "cold"
+      ]
+    },
+    "senses": {
+      "blindsight": 60,
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 23,
+    "lair": true,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the dragon fails a saving throw, it can choose to succeed instead.",
+        "uses": "4/day, or 5/day in lair"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes three Rend attacks. It can replace one attack with a use of (A) Paralyzing Breath or (B) Spellcasting to cast *{ref:spell/ice-knife}* (level 2 version)."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 15,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d8",
+            "type": "cold"
+          }
+        ]
+      },
+      {
+        "name": "Cold Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 90-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "15d8",
+            "type": "cold"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Paralyzing Breath",
+        "kind": "other",
+        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 90-foot Cone. *First Failure:* The target has the Incapacitated condition until the end of its next turn, when it repeats the save. *Second Failure:* The target has the Paralyzed condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "includeAttack": true,
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/hold-monster"
+        },
+        {
+          "ref": "spell/ice-knife",
+          "note": "level 2 version"
+        },
+        {
+          "ref": "spell/shapechange",
+          "note": "Beast or Humanoid form only, no Temporary Hit Points gained from the spell, and no Concentration or Temporary Hit Points required to maintain the spell"
+        }
+      ],
+      "perDay": {
+        "1": [
+          "Control Weather",
+          {
+            "ref": "spell/ice-storm",
+            "note": "level 7 version"
+          },
+          "Teleport",
+          {
+            "ref": "spell/zone-of-truth"
+          }
+        ]
+      }
+    },
+    "legendaryActions": {
+      "uses": 3,
+      "usesInLair": 4,
+      "intro": "Immediately after another creature's turn, the dragon can expend a use to take one of the following actions. The dragon regains all expended uses at the start of each of its turns.",
+      "items": [
+        {
+          "name": "Chill",
+          "kind": "other",
+          "text": "The dragon uses Spellcasting to cast *{ref:spell/hold-monster}*. The dragon can't take this action again until the start of its next turn."
+        },
+        {
+          "name": "Cold Gale",
+          "kind": "save",
+          "ability": "cha",
+          "save": {
+            "ability": "dex",
+            "targets": "each creature in a 60-foot-long, 10-foot-wide Line"
+          },
+          "damage": [
+            {
+              "dice": "4d6",
+              "type": "cold"
+            }
+          ],
+          "onFailure": "and the target is pushed up to 30 feet straight away from the dragon.",
+          "onSuccess": "Half damage only.",
+          "onFailureOrSuccess": "The dragon can't take this action again until the start of its next turn."
+        },
+        {
+          "name": "Pounce",
+          "kind": "other",
+          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+        }
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

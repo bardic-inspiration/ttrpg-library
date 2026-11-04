@@ -1,0 +1,106 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "stone-giant",
+  "name": "Stone Giant",
+  "summary": "A huge giant that smashes with a stone club, hurls boulders, and deflects missiles.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "giant",
+    "alignment": "neutral",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 23,
+      "dex": 15,
+      "con": 20,
+      "int": 10,
+      "wis": 12,
+      "cha": 9
+    },
+    "saveProficiencies": [
+      "dex",
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "athletics": "expertise",
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Giant"
+      ]
+    },
+    "cr": 7,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The giant makes two attacks, using Stone Club or Boulder in any combination."
+      },
+      {
+        "name": "Stone Club",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 15,
+        "damage": [
+          {
+            "dice": "3d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Boulder",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 60,
+          "long": 240
+        },
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Deflect Missile",
+        "kind": "other",
+        "text": "*Trigger:* The giant is hit by a ranged attack roll and takes Bludgeoning, Piercing, or Slashing damage from it. *Response:* The giant reduces the damage it takes from the attack by {dmg:1d10+str}, and if that damage is reduced to 0, the giant can redirect some of the attack's force. *Dexterity Saving Throw:* {dc:str}, one creature the giant can see within 60 feet. *Failure:* {dmg:1d10+str:force}.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

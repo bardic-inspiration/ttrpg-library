@@ -1,0 +1,164 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "planetar",
+  "name": "Planetar",
+  "summary": "An angel that wields a radiant sword, unleashes holy bursts, aids allies, and casts divine spells.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "celestial",
+    "descriptors": [
+      "Angel"
+    ],
+    "alignment": "lawful good",
+    "ac": {
+      "value": 19
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 21,
+    "speed": {
+      "walk": 40,
+      "fly": 120,
+      "hover": true
+    },
+    "abilities": {
+      "str": 24,
+      "dex": 20,
+      "con": 24,
+      "int": 19,
+      "wis": 22,
+      "cha": 25
+    },
+    "saveProficiencies": [
+      "str",
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "perception": "proficient"
+    },
+    "resistances": [
+      "radiant"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "frightened"
+      ]
+    },
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "All"
+      ],
+      "telepathy": 120
+    },
+    "cr": 16,
+    "traits": [
+      {
+        "name": "Divine Awareness",
+        "kind": "other",
+        "text": "The planetar knows if it hears a lie."
+      },
+      {
+        "name": "Exalted Restoration",
+        "kind": "other",
+        "text": "If the planetar dies outside Mount Celestia, its body disappears, and it gains a new body instantly, reviving with all its Hit Points somewhere in Mount Celestia."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The planetar has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The planetar makes three Radiant Sword attacks or uses Holy Burst twice."
+      },
+      {
+        "name": "Radiant Sword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "4d8",
+            "type": "radiant"
+          }
+        ]
+      },
+      {
+        "name": "Holy Burst",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each enemy in a 20-foot-radius Sphere centered on a point the planetar can see within 120 feet"
+        },
+        "damage": [
+          {
+            "dice": "7d6",
+            "type": "radiant"
+          }
+        ],
+        "onSuccess": "Half damage."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-evil-and-good"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/commune"
+          },
+          "Control Weather",
+          {
+            "ref": "spell/dispel-evil-and-good"
+          },
+          {
+            "ref": "spell/raise-dead"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Divine Aid",
+        "kind": "other",
+        "text": "The planetar casts *Cure Wounds, Invisibility, Lesser Restoration*, or *{ref:spell/remove-curse}*, using the same spellcasting ability as Spellcasting.",
+        "uses": "2/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

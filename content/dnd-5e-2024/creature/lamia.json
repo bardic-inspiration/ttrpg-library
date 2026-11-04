@@ -1,0 +1,127 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "lamia",
+  "name": "Lamia",
+  "summary": "A fiend that claws and corrupts with its touch, leaps on prey, and casts illusion spells.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "fiend",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 13,
+      "con": 15,
+      "int": 14,
+      "wis": 15,
+      "cha": 16
+    },
+    "skills": {
+      "deception": "expertise",
+      "insight": "proficient",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal",
+        "Common"
+      ]
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The lamia makes two Claw attacks. It can replace one attack with a use of Corrupting Touch."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d6",
+            "type": "psychic"
+          }
+        ]
+      },
+      {
+        "name": "Corrupting Touch",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature the lamia can see within 5 feet"
+        },
+        "damage": [
+          {
+            "dice": "3d8",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "and the target is cursed for 1 hour. Until the curse ends, the target has the Charmed and Poisoned conditions."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/disguise-self",
+          "note": "can appear as a Large or Medium biped"
+        },
+        {
+          "ref": "spell/minor-illusion"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/geas"
+          },
+          {
+            "ref": "spell/major-image"
+          },
+          {
+            "ref": "spell/scrying"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Leap",
+        "kind": "other",
+        "text": "The lamia jumps up to 30 feet by spending 10 feet of movement."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

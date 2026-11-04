@@ -1,0 +1,145 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "spirit-naga",
+  "name": "Spirit Naga",
+  "summary": "A fiendish serpent that bites, fires necrotic rays, and casts spells, and returns after it is destroyed.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "fiend",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 17
+    },
+    "hitDice": 18,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 17,
+      "con": 14,
+      "int": 16,
+      "wis": 15,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "dex",
+      "con",
+      "wis",
+      "cha"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal",
+        "Common"
+      ]
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Fiendish Restoration",
+        "kind": "other",
+        "text": "If it dies, the naga returns to life in 1d6 days and regains all its Hit Points. Only a *{ref:spell/wish}* spell can prevent this trait from functioning."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The naga makes three attacks, using Bite or Necrotic Ray in any combination."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "4d6",
+            "type": "poison"
+          }
+        ]
+      },
+      {
+        "name": "Necrotic Ray",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "6d6",
+            "type": "necrotic"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "noComponents": "Somatic or Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-magic"
+        },
+        {
+          "ref": "spell/mage-hand"
+        },
+        {
+          "ref": "spell/minor-illusion"
+        },
+        {
+          "ref": "spell/water-breathing"
+        }
+      ],
+      "perDay": {
+        "2": [
+          {
+            "ref": "spell/detect-thoughts"
+          },
+          {
+            "ref": "spell/dimension-door"
+          },
+          {
+            "ref": "spell/hold-person",
+            "note": "level 3 version"
+          },
+          {
+            "ref": "spell/lightning-bolt",
+            "note": "level 4 version"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

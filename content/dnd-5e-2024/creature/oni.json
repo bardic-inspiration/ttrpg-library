@@ -1,0 +1,145 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "oni",
+  "name": "Oni",
+  "summary": "A shape-shifting fiend that claws and fires nightmare rays, regenerates, and casts trickery spells.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "fiend",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 17
+    },
+    "hitDice": 14,
+    "speed": {
+      "walk": 30,
+      "fly": 30,
+      "hover": true
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 11,
+      "con": 16,
+      "int": 14,
+      "wis": 12,
+      "cha": 15
+    },
+    "saveProficiencies": [
+      "dex",
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "deception": "expertise",
+      "perception": "proficient"
+    },
+    "resistances": [
+      "cold"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Giant"
+      ]
+    },
+    "cr": 7,
+    "traits": [
+      {
+        "name": "Regeneration",
+        "kind": "other",
+        "text": "The oni regains 10 Hit Points at the start of each of its turns if it has at least 1 Hit Point."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The oni makes two Claw or Nightmare Ray attacks. It can replace one attack with a use of Spellcasting."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d8",
+            "type": "necrotic"
+          }
+        ]
+      },
+      {
+        "name": "Nightmare Ray",
+        "kind": "ranged-attack",
+        "ability": "int",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "int",
+            "type": "psychic"
+          }
+        ],
+        "onHit": "and the target has the Frightened condition until the start of the oni's next turn."
+      },
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "The oni shape-shifts into a Small or Medium Humanoid or a Large Giant, or it returns to its true form. Other than its size, its game statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/charm-person",
+            "note": "level 2 version"
+          },
+          {
+            "ref": "spell/darkness"
+          },
+          {
+            "ref": "spell/gaseous-form"
+          },
+          {
+            "ref": "spell/sleep"
+          }
+        ]
+      }
+    },
+    "bonusActions": [
+      {
+        "name": "Invisibility",
+        "kind": "other",
+        "text": "The oni casts *{ref:spell/invisibility}* on itself, requiring no spell components and using the same spellcasting ability as Spellcasting."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

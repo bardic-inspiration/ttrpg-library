@@ -1,0 +1,101 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "doppelganger",
+  "name": "Doppelganger",
+  "summary": "A shape-shifting monstrosity that reads thoughts, imitates humanoids, and unsettles foes with its true face.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "neutral",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 18,
+      "con": 14,
+      "int": 11,
+      "wis": 12,
+      "cha": 14
+    },
+    "skills": {
+      "deception": "expertise",
+      "insight": "proficient"
+    },
+    "immunities": {
+      "conditions": [
+        "charmed"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common plus three other languages"
+      ]
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The doppelganger makes two Slam attacks and uses Unsettling Visage if available."
+      },
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "attackNote": "with Advantage during the first round of each combat",
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "dex",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Read Thoughts",
+        "kind": "other",
+        "text": "The doppelganger casts *{ref:spell/detect-thoughts}*, requiring no spell components and using Charisma as the spellcasting ability (spell save {dc:con})."
+      },
+      {
+        "name": "Unsettling Visage",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature in a 15-foot Emanation originating from the doppelganger that can see the doppelganger"
+        },
+        "onFailure": "The target has the Frightened condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.",
+        "recharge": "6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Shape-Shift",
+        "kind": "other",
+        "text": "The doppelganger shape-shifts into a Medium or Small Humanoid, or it returns to its true form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
