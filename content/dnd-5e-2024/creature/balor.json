@@ -1,0 +1,151 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "balor",
+  "name": "Balor",
+  "summary": "A towering demon of flame that lashes with a flaming whip and explodes when it dies.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Demon"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 19
+    },
+    "initiative": {
+      "proficiency": "expertise"
+    },
+    "hitDice": 23,
+    "speed": {
+      "walk": 40,
+      "fly": 80
+    },
+    "abilities": {
+      "str": 26,
+      "dex": 15,
+      "con": 22,
+      "int": 20,
+      "wis": 16,
+      "cha": 22
+    },
+    "saveProficiencies": [
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "perception": "proficient"
+    },
+    "resistances": [
+      "cold",
+      "lightning"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "frightened",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "truesight": 120
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal"
+      ],
+      "telepathy": 120
+    },
+    "cr": 19,
+    "traits": [
+      {
+        "name": "Death Throes",
+        "kind": "other",
+        "text": "The balor explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 30-foot Emanation originating from the balor. *Failure:* {dmg:9d6:fire} plus {dmg:9d6:force}. *Success:* Half damage. *Failure or Success:* If the balor dies outside the Abyss, it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+      },
+      {
+        "name": "Fire Aura",
+        "kind": "other",
+        "text": "At the end of each of the balor's turns, each creature in a 5-foot Emanation originating from the balor takes {dmg:3d8:fire}."
+      },
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the balor fails a saving throw, it can choose to succeed instead.",
+        "uses": "3/day"
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The balor has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The balor makes one Flame Whip attack and one Lightning Blade attack."
+      },
+      {
+        "name": "Flame Whip",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 30,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "force"
+          },
+          {
+            "dice": "5d6",
+            "type": "fire"
+          }
+        ],
+        "onHit": "If the target is a Huge or smaller creature, the balor pulls the target up to 25 feet straight toward itself, and the target has the Prone condition."
+      },
+      {
+        "name": "Lightning Blade",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "str",
+            "type": "force"
+          },
+          {
+            "dice": "4d10",
+            "type": "lightning"
+          }
+        ],
+        "onHit": "and the target can't take Reactions until the start of the balor's next turn."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Teleport",
+        "kind": "other",
+        "text": "The balor teleports itself or a willing demon within 10 feet of itself up to 60 feet to an unoccupied space the balor can see."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

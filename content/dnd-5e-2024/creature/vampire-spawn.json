@@ -1,0 +1,121 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "vampire-spawn",
+  "name": "Vampire Spawn",
+  "summary": "An undead servant of a vampire that claws and drains blood.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 16
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 16,
+      "con": 16,
+      "int": 11,
+      "wis": 10,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "resistances": [
+      "necrotic"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The vampire can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      },
+      {
+        "name": "Vampire Weakness",
+        "kind": "other",
+        "text": "The vampire has these weaknesses:\n\n**Forbiddance.** The vampire can't enter a residence without an invitation from an occupant.\n\n**Running Water.** The vampire takes 20 Acid damage if it ends its turn in running water.\n\n**Stake to the Heart.** The vampire is destroyed if a weapon that deals Piercing damage is driven into the vampire's heart while the vampire has the Incapacitated condition.\n\n**Sunlight.** The vampire takes 20 Radiant damage if it starts its turn in sunlight. While in sunlight, it has Disadvantage on attack rolls and ability checks."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The vampire makes two Claw attacks and uses Bite."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d4",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=13}) from one of two claws."
+      },
+      {
+        "name": "Bite",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "one creature within 5 feet that is willing or that has the Grappled, Incapacitated, or Restrained condition"
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "con",
+            "type": "piercing"
+          },
+          {
+            "dice": "3d6",
+            "type": "necrotic"
+          }
+        ],
+        "onFailure": "The target's Hit Point maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Deathless Agility",
+        "kind": "other",
+        "text": "The vampire takes the Dash or Disengage action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

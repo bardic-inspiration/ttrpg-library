@@ -1,0 +1,74 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "hippogriff",
+  "name": "Hippogriff",
+  "summary": "A monstrosity with an eagle's front and a horse's hind body.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 40,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 13,
+      "con": 13,
+      "int": 2,
+      "wis": 12,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The hippogriff doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hippogriff makes two Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

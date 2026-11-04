@@ -1,0 +1,80 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "animated-rug-of-smothering",
+  "name": "Animated Rug of Smothering",
+  "summary": "An animated rug that wraps around a creature and smothers it.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "construct",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 10
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 14,
+      "con": 10,
+      "int": 1,
+      "wis": 3,
+      "cha": 1
+    },
+    "immunities": {
+      "damage": [
+        "poison",
+        "psychic"
+      ],
+      "conditions": [
+        "charmed",
+        "deafened",
+        "exhaustion",
+        "frightened",
+        "paralyzed",
+        "petrified",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "blindsight": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Smother",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, the rug can give it the Grappled condition (escape {dc=13}) instead of dealing damage. Until the grapple ends, the target has the Blinded and Restrained conditions, is suffocating, and takes {dmg:2d6+str:bludgeoning} at the start of each of its turns. The rug can smother only one creature at a time.\n\nWhile grappling the target, the rug can't take this action, the rug halves the damage it takes (round down), and the target takes the same amount of damage."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

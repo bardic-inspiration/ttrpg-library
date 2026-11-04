@@ -1,0 +1,92 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "dretch",
+  "name": "Dretch",
+  "summary": "A lowly demon that rends with its claws and releases a fetid cloud.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Demon"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 11,
+      "con": 12,
+      "int": 5,
+      "wis": 8,
+      "cha": 3
+    },
+    "resistances": [
+      "cold",
+      "fire",
+      "lightning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal"
+      ],
+      "telepathy": 60,
+      "note": "works only with creatures that understand Abyssal"
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Fetid Cloud",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 10-foot Emanation originating from the dretch"
+        },
+        "onFailure": "The target has the Poisoned condition until the end of its next turn. While Poisoned, the creature can take either an action or a Bonus Action on its turn, not both, and it can't take Reactions.",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

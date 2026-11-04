@@ -1,0 +1,62 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-bat",
+  "name": "Giant Bat",
+  "summary": "A large bat that hunts by blindsight.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 10,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 16,
+      "con": 11,
+      "int": 2,
+      "wis": 12,
+      "cha": 6
+    },
+    "senses": {
+      "blindsight": 120
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

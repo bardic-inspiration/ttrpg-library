@@ -1,0 +1,114 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "earth-elemental",
+  "name": "Earth Elemental",
+  "summary": "An elemental of living stone that glides through earth and batters structures.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral",
+    "ac": {
+      "value": 17
+    },
+    "hitDice": 14,
+    "speed": {
+      "walk": 30,
+      "burrow": 30
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 8,
+      "con": 20,
+      "int": 5,
+      "wis": 10,
+      "cha": 5
+    },
+    "vulnerabilities": [
+      "thunder"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 60,
+      "tremorsense": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Terran"
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Earth Glide",
+        "kind": "other",
+        "text": "The elemental can burrow through nonmagical, unworked earth and stone. While doing so, the elemental doesn't disturb the material it moves through."
+      },
+      {
+        "name": "Siege Monster",
+        "kind": "other",
+        "text": "The elemental deals double damage to objects and structures."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The elemental makes two attacks, using Slam or Rock Launch in any combination."
+      },
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Rock Launch",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

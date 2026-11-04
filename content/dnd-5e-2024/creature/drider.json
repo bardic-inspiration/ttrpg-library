@@ -1,0 +1,114 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "drider",
+  "name": "Drider",
+  "summary": "A drow-spider monstrosity that strikes with its forelegs and venom.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 19
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 19,
+      "con": 18,
+      "int": 13,
+      "wis": 16,
+      "cha": 12
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Elvish",
+        "Undercommon"
+      ]
+    },
+    "cr": 6,
+    "traits": [
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The drider can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      },
+      {
+        "name": "Sunlight Sensitivity",
+        "kind": "other",
+        "text": "While in sunlight, the drider has Disadvantage on ability checks and attack rolls."
+      },
+      {
+        "name": "Web Walker",
+        "kind": "other",
+        "text": "The drider ignores movement restrictions caused by webs, and the drider knows the location of any other creature in contact with the same web."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The drider makes three attacks, using Foreleg or Poison Burst in any combination."
+      },
+      {
+        "name": "Foreleg",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Poison Burst",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 120
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "poison"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Magic of the Spider Queen",
+        "kind": "other",
+        "text": "The drider casts *{ref:spell/darkness}*, *{ref:spell/faerie-fire}*, or *{ref:spell/web}*, requiring no Material components and using Wisdom as the spellcasting ability (spell save {dc:str}).",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

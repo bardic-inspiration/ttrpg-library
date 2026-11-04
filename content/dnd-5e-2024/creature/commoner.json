@@ -1,0 +1,70 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "commoner",
+  "name": "Commoner",
+  "summary": "An ordinary person who fights with a club if pressed.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 10
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 10,
+      "con": 10,
+      "int": 10,
+      "wis": 10,
+      "cha": 10
+    },
+    "gear": [
+      "Club"
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Training",
+        "kind": "other",
+        "text": "The commoner has proficiency in one skill of the GM's choice and has Advantage whenever it makes an ability check using that skill."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Club",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

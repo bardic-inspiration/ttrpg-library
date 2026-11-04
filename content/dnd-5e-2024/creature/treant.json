@@ -1,0 +1,106 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "treant",
+  "name": "Treant",
+  "summary": "A huge tree creature that animates other trees and pelts foes with bark.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "plant",
+    "alignment": "chaotic good",
+    "ac": {
+      "value": 16
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 23,
+      "dex": 8,
+      "con": 21,
+      "int": 12,
+      "wis": 16,
+      "cha": 12
+    },
+    "vulnerabilities": [
+      "fire"
+    ],
+    "resistances": [
+      "bludgeoning",
+      "piercing"
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Druidic",
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 9,
+    "traits": [
+      {
+        "name": "Siege Monster",
+        "kind": "other",
+        "text": "The treant deals double damage to objects and structures."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The treant makes two Slam attacks."
+      },
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Hail of Bark",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 180
+        },
+        "damage": [
+          {
+            "dice": "4d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Animate Trees",
+        "kind": "other",
+        "text": "The treant magically animates up to two trees it can see within 60 feet of itself. Each tree uses the **Treant** stat block, except it has Intelligence and Charisma scores of 1, it can't speak, and it lacks this action. The tree takes its turn immediately after the treant on the same Initiative count, and it obeys the treant. A tree remains animate for 1 day or until it dies, the treant dies, or it is more than 120 feet from the treant. The tree then takes root if possible.",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

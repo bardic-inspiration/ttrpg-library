@@ -1,0 +1,68 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "cockatrice",
+  "name": "Cockatrice",
+  "summary": "A small monstrosity whose bite slowly turns creatures to stone.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 20,
+      "fly": 40
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 12,
+      "con": 12,
+      "int": 2,
+      "wis": 13,
+      "cha": 5
+    },
+    "immunities": {
+      "conditions": [
+        "petrified"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.5,
+    "actions": [
+      {
+        "name": "Petrifying Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a creature, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *First Failure:* The target has the Restrained condition. The target repeats the save at the end of its next turn if it is still Restrained, ending the effect on itself on a success. *Second Failure:* The target has the Petrified condition, instead of the Restrained condition, for 24 hours."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

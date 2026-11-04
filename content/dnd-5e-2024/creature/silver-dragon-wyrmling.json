@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "silver-dragon-wyrmling",
+  "name": "Silver Dragon Wyrmling",
+  "summary": "A young silver dragon that breathes cold or paralyzing gas.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "lawful good",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 10,
+      "con": 17,
+      "int": 12,
+      "wis": 11,
+      "cha": 15
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "cold"
+      ]
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Draconic"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes two Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Cold Breath",
+        "kind": "other",
+        "text": "**.** *Constitution Saving Throw:* {dc:con}, each creature in a 15-foot Cone. *Failure:* {dmg:4d8:cold}. *Success:* Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Paralyzing Breath",
+        "kind": "other",
+        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 15-foot Cone. *First Failure:* The target has the Incapacitated condition until the end of its next turn, when it repeats the save. *Second Failure:* The target has the Paralyzed condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

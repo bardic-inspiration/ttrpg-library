@@ -1,0 +1,121 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "cloaker",
+  "name": "Cloaker",
+  "summary": "An aberration resembling a cloak that wraps around and attaches to its prey.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "aberration",
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 14
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 14,
+    "speed": {
+      "walk": 10,
+      "fly": 40
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 15,
+      "con": 12,
+      "int": 13,
+      "wis": 14,
+      "cha": 7
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "conditions": [
+        "frightened"
+      ]
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Deep Speech",
+        "Undercommon"
+      ]
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Light Sensitivity",
+        "kind": "other",
+        "text": "While in Bright Light, the cloaker has Disadvantage on attack rolls."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The cloaker makes one Attach attack and two Tail attacks."
+      },
+      {
+        "name": "Attach",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, the cloaker attaches to it. While the cloaker is attached, the target has the Blinded condition, and the cloaker can't make Attach attacks against other targets. In addition, the cloaker halves the damage it takes (round down), and the target takes the same amount of damage.\n\nThe cloaker can detach itself by spending 5 feet of movement. The target or a creature within 5 feet of it can take an action to try to detach the cloaker, doing so by succeeding on a {dc=14} Strength (Athletics) check."
+      },
+      {
+        "name": "Tail",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Moan",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature in a 60-foot Emanation originating from the cloaker"
+        },
+        "onFailure": "The target has the Frightened condition until the end of the cloaker's next turn.",
+        "onSuccess": "The target is immune to this cloaker's Moan for the next 24 hours."
+      },
+      {
+        "name": "Phantasms",
+        "kind": "other",
+        "text": "The cloaker casts the *{ref:spell/mirror-image}* spell, requiring no spell components and using Wisdom as the spellcasting ability. The spell ends early if the cloaker starts or ends its turn in Bright Light.",
+        "recharge": "short-or-long-rest"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

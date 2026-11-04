@@ -1,0 +1,119 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "white-dragon-wyrmling",
+  "name": "White Dragon Wyrmling",
+  "summary": "A young white dragon that rends with its claws and breathes cold.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Chromatic"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 16
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30,
+      "burrow": 15,
+      "fly": 60,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 10,
+      "con": 14,
+      "int": 5,
+      "wis": 10,
+      "cha": 11
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "cold"
+      ]
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Draconic"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Ice Walk",
+        "kind": "other",
+        "text": "The dragon can move across and climb icy surfaces without needing to make an ability check. Additionally, Difficult Terrain composed of ice or snow doesn't cost it extra movement."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes two Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d4",
+            "type": "cold"
+          }
+        ]
+      },
+      {
+        "name": "Cold Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "5d8",
+            "type": "cold"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

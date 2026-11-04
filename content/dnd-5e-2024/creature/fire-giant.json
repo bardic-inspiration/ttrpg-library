@@ -1,0 +1,107 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "fire-giant",
+  "name": "Fire Giant",
+  "summary": "A huge giant of the forge that wields a flaming sword and hurls hammers.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "giant",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 18
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 25,
+      "dex": 9,
+      "con": 23,
+      "int": 10,
+      "wis": 14,
+      "cha": 13
+    },
+    "saveProficiencies": [
+      "dex",
+      "con",
+      "cha"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "perception": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "languages": {
+      "spoken": [
+        "Giant"
+      ]
+    },
+    "cr": 9,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The giant makes two attacks, using Flame Sword or Hammer Throw in any combination."
+      },
+      {
+        "name": "Flame Sword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "4d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "3d6",
+            "type": "fire"
+          }
+        ]
+      },
+      {
+        "name": "Hammer Throw",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 60,
+          "long": 240
+        },
+        "damage": [
+          {
+            "dice": "3d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d8",
+            "type": "fire"
+          }
+        ],
+        "onHit": "and the target is pushed up to 15 feet straight away from the giant and has Disadvantage on the next attack roll it makes before the end of its next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

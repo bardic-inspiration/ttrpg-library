@@ -1,0 +1,89 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "azer-sentinel",
+  "name": "Azer Sentinel",
+  "summary": "A dwarflike creature of living fire that guards with a burning hammer.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "elemental",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 17
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 12,
+      "con": 15,
+      "int": 12,
+      "wis": 13,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "con"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "poisoned"
+      ]
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Ignan"
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Fire Aura",
+        "kind": "other",
+        "text": "At the end of each of the azer's turns, each creature of the azer's choice in a 5-foot Emanation originating from the azer takes {dmg:1d10:fire} unless the azer has the Incapacitated condition."
+      },
+      {
+        "name": "Illumination",
+        "kind": "other",
+        "text": "The azer sheds Bright Light in a 10-foot radius and Dim Light for an additional 10 feet."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Burning Hammer",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d6",
+            "type": "fire"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

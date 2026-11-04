@@ -1,0 +1,72 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-hyena",
+  "name": "Giant Hyena",
+  "summary": "A large hyena with a savage bite.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 14,
+      "con": 14,
+      "int": 2,
+      "wis": 12,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Rampage",
+        "kind": "other",
+        "text": "Immediately after dealing damage to a creature that was already Bloodied, the hyena can move up to half its Speed, and it makes one Bite attack.",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

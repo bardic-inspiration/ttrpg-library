@@ -1,0 +1,110 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ghast",
+  "name": "Ghast",
+  "summary": "A ghoulish undead whose stench sickens and whose claws paralyze.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 17,
+      "con": 10,
+      "int": 11,
+      "wis": 10,
+      "cha": 8
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "resistances": [
+      "necrotic"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Stench",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "any creature that starts its turn in a 5-foot Emanation originating from the ghast"
+        },
+        "onFailure": "The target has the Poisoned condition until the start of its next turn.",
+        "onSuccess": "The target is immune to this ghast's Stench for 24 hours."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d8",
+            "type": "necrotic"
+          }
+        ]
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a non-Undead creature, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the Paralyzed condition until the end of its next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

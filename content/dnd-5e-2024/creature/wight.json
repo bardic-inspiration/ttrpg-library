@@ -1,0 +1,138 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "wight",
+  "name": "Wight",
+  "summary": "An undead warrior that drains life and fights with necrotic blades.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 14
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 16,
+      "int": 10,
+      "wis": 13,
+      "cha": 15
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "resistances": [
+      "necrotic"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "gear": [
+      "Studded Leather Armor"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Sunlight Sensitivity",
+        "kind": "other",
+        "text": "While in sunlight, the wight has Disadvantage on ability checks and attack rolls."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The wight makes two attacks, using Necrotic Sword or Necrotic Bow in any combination. It can replace one attack with a use of Life Drain."
+      },
+      {
+        "name": "Necrotic Sword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d8",
+            "type": "necrotic"
+          }
+        ]
+      },
+      {
+        "name": "Necrotic Bow",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d8",
+            "type": "necrotic"
+          }
+        ]
+      },
+      {
+        "name": "Life Drain",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "one creature within 5 feet"
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "necrotic"
+          }
+        ],
+        "onFailure": "and the target's Hit Point maximum decreases by an amount equal to the damage taken.\n\nA Humanoid slain by this attack rises 24 hours later as a **{ref:creature/zombie}** under the wight's control, unless the Humanoid is restored to life or its body is destroyed. The wight can have no more than twelve zombies under its control at a time."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

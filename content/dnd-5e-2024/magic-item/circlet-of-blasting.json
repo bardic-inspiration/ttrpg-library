@@ -1,0 +1,33 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "circlet-of-blasting",
+  "name": "Circlet of Blasting",
+  "summary": "A circlet that casts Scorching Ray once a day.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/scorching-ray"
+        },
+        "attackBonus": 5
+      }
+    ],
+    "effect": "While wearing this circlet, you can cast *{ref:spell/scorching-ray}* with it (+5 to hit). The circlet can't cast this spell again until the next dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

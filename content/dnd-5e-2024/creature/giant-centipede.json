@@ -1,0 +1,63 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-centipede",
+  "name": "Giant Centipede",
+  "summary": "A large centipede with a poisonous bite.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 5,
+      "dex": 14,
+      "con": 12,
+      "int": 1,
+      "wis": 7,
+      "cha": 3
+    },
+    "senses": {
+      "blindsight": 30
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has the Poisoned condition until the start of the centipede's next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

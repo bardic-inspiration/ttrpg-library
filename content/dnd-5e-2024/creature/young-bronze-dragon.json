@@ -1,0 +1,115 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "young-bronze-dragon",
+  "name": "Young Bronze Dragon",
+  "summary": "A large bronze dragon that breathes lightning or a repelling blast.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "lawful good",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 40,
+      "fly": 80,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 21,
+      "dex": 10,
+      "con": 19,
+      "int": 14,
+      "wis": 13,
+      "cha": 17
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "insight": "proficient",
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "lightning"
+      ]
+    },
+    "senses": {
+      "blindsight": 30,
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The dragon can breathe air and water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes three Rend attacks. It can replace one attack with a use of Repulsion Breath."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Lightning Breath",
+        "kind": "other",
+        "text": "**.** *Dexterity Saving Throw:* {dc:con}, each creature in a 60-foot-long, 5-foot-wide Line. *Failure:* {dmg:9d10:lightning}. *Success:* Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Repulsion Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "str",
+          "targets": "each creature in a 30-foot Cone"
+        },
+        "onFailure": "The target is pushed up to 40 feet straight away from the dragon and has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "manticore",
+  "name": "Manticore",
+  "summary": "A monstrosity with a lion's body and a tail that flings spikes.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30,
+      "fly": 50
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 16,
+      "con": 17,
+      "int": 7,
+      "wis": 12,
+      "cha": 8
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The manticore makes three attacks, using Rend or Tail Spike in any combination."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Tail Spike",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 100,
+          "long": 200
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

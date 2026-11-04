@@ -1,0 +1,128 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "invisible-stalker",
+  "name": "Invisible Stalker",
+  "summary": "An invisible elemental of air bound to hunt a target.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral",
+    "ac": {
+      "value": 14
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 50,
+      "fly": 50,
+      "hover": true
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 19,
+      "con": 14,
+      "int": 10,
+      "wis": 15,
+      "cha": 11
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "expertise"
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Primordial"
+      ],
+      "note": "Auran"
+    },
+    "cr": 6,
+    "traits": [
+      {
+        "name": "Air Form",
+        "kind": "other",
+        "text": "The stalker can enter an enemy's space and stop there. It can move through a space as narrow as 1 inch without expending extra movement to do so."
+      },
+      {
+        "name": "Invisibility",
+        "kind": "other",
+        "text": "The stalker has the Invisible condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The stalker makes three Wind Swipe attacks. It can replace one attack with a use of Vortex."
+      },
+      {
+        "name": "Wind Swipe",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "dex",
+            "type": "force"
+          }
+        ]
+      },
+      {
+        "name": "Vortex",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "con",
+          "targets": "one Large or smaller creature in the stalker's space"
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": "and the target has the Grappled condition (escape {dc=13}). Until the grapple ends, the target can't cast spells with a Verbal component and takes {dmg:2d6:thunder} at the start of each of the stalker's turns."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

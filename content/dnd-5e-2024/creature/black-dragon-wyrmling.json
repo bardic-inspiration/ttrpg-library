@@ -1,0 +1,118 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "black-dragon-wyrmling",
+  "name": "Black Dragon Wyrmling",
+  "summary": "A young black dragon that rends with its claws and breathes acid.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Chromatic"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30,
+      "fly": 60,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 13,
+      "int": 10,
+      "wis": 11,
+      "cha": 13
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "acid"
+      ]
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Draconic"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The dragon can breathe air and water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dragon makes two Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d4",
+            "type": "acid"
+          }
+        ]
+      },
+      {
+        "name": "Acid Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 15-foot-long, 5-foot-wide Line"
+        },
+        "damage": [
+          {
+            "dice": "5d8",
+            "type": "acid"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
