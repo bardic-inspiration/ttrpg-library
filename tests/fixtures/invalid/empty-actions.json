@@ -49,7 +49,8 @@
         "kind": "other",
         "text": "A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes {dmg:1d4:fire}."
       }
-    ]
+    ],
+    "actions": []
   },
   "tags": {
     "theme": "fire",

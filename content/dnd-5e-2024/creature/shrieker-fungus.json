@@ -1,0 +1,61 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "shrieker-fungus",
+  "name": "Shrieker Fungus",
+  "summary": "TODO summary",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "plant",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 5
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 5
+    },
+    "abilities": {
+      "str": 1,
+      "dex": 1,
+      "con": 10,
+      "int": 1,
+      "wis": 3,
+      "cha": 1
+    },
+    "immunities": {
+      "conditions": [
+        "blinded",
+        "charmed",
+        "deafened",
+        "frightened"
+      ]
+    },
+    "senses": {
+      "blindsight": 30
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "reactions": [
+      {
+        "name": "Shriek",
+        "kind": "other",
+        "text": "*Trigger:* A creature or a source of Bright Light moves within 30 feet of the shrieker. *Response:* The shrieker emits a shriek audible within 300 feet of itself for 1 minute or until the shrieker dies."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        180
+      ],
+      "srd": true
+    }
+  }
+}

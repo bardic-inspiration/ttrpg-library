@@ -77,7 +77,7 @@ export interface CreatureStats {
   cr: number;
   lair?: true;
   traits?: Action[];
-  actions: Action[];
+  actions?: Action[];
   bonusActions?: Action[];
   reactions?: Action[];
   legendaryActions?: { uses: number; usesInLair?: number; intro?: string; items: Action[] };
@@ -85,6 +85,8 @@ export interface CreatureStats {
     ability: Ability;
     /** "Material" reads "requiring no Material components and using …". */
     noComponents?: string;
+    /** The intro prints no spell save DC (SPEC.md §5.8). */
+    noSaveDc?: true;
     adjust?: number;
     includeAttack?: true;
     atWill?: RefOrText[];
@@ -142,6 +144,7 @@ export interface StatBlock {
   ac?: string;
   hp?: string;
   speed?: string;
+  initiative?: string;
   abilities: Record<Ability, number>;
   skills?: string;
   vulnerabilities?: string;

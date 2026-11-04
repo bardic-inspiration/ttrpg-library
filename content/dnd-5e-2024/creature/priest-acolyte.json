@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "priest-acolyte",
+  "name": "Priest Acolyte",
+  "summary": "TODO summary",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "shortName": "priest",
+    "descriptors": [
+      "Cleric"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 10,
+      "con": 12,
+      "int": 10,
+      "wis": 14,
+      "cha": 11
+    },
+    "skills": {
+      "medicine": "proficient",
+      "religion": "proficient"
+    },
+    "gear": [
+      "Chain Shirt",
+      "Holy Symbol",
+      "Mace"
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Mace",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d4",
+            "type": "radiant"
+          }
+        ]
+      },
+      {
+        "name": "Radiant Flame",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "noSaveDc": true,
+      "atWill": [
+        {
+          "ref": "spell/light"
+        },
+        {
+          "ref": "spell/thaumaturgy"
+        }
+      ]
+    },
+    "bonusActions": [
+      {
+        "name": "Divine Aid",
+        "kind": "other",
+        "text": "The priest casts *Bless, Healing Word*, or *{ref:spell/sanctuary}*, using the same spellcasting ability as Spellcasting.",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        180
+      ],
+      "srd": true
+    }
+  }
+}
