@@ -159,11 +159,11 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     // Hell Hound: a single understood language.
     expect(line({ spoken: [], understood: ['Infernal'] })).toBe("Understands Infernal but can't speak");
     expect(line({ spoken: [], understood: ['Abyssal', 'Infernal'], telepathy: 60 })).toBe(
-      "Understands Abyssal, Infernal but can't speak; telepathy 60 ft.",
+      "Understands Abyssal and Infernal but can't speak; telepathy 60 ft.",
     );
     expect(line({ spoken: ['Common'], understood: ['Giant'] })).toBe("Common; understands Giant but can't speak it");
     expect(line({ spoken: ['Common'], understood: ['Giant', 'Orc'] })).toBe(
-      "Common; understands Giant, Orc but can't speak them",
+      "Common; understands Giant and Orc but can't speak them",
     );
     expect(line({ spoken: [], note: 'see below' })).toBe('None (see below)');
   });
@@ -271,5 +271,9 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
   it('adds a skill adjust to the derived bonus (#166)', async () => {
     const { s, d } = await build({ skills: { stealth: { proficiency: 'proficient', adjust: 1 } } });
     expect(skillsLine(s, d)).toBe('Stealth +5');
+  });
+  it('joins three or more understood languages as an English list (#166)', async () => {
+    const { s } = await build({ languages: { spoken: [], understood: ['Abyssal', 'Common', 'Infernal'] } });
+    expect(languagesLine(s)).toBe("Understands Abyssal, Common, and Infernal but can't speak");
   });
 });

@@ -124,6 +124,10 @@ export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
   return [list, `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
 }
 
+/** "A", "A and B", "A, B, and C", as SRD 5.2 joins understood languages. */
+const englishList = (items: string[]): string =>
+  items.length < 3 ? items.join(' and ') : `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
+
 export function languagesLine(s: CreatureStats): string {
   // `spoken` is required and may be empty; `understood` lists languages the
   // creature understands but can't speak. With neither, the line reads "None"
@@ -132,7 +136,7 @@ export function languagesLine(s: CreatureStats): string {
   const parts = spoken.length ? [spoken.join(', ')] : [];
   if (understood?.length) {
     const object = spoken.length ? (understood.length > 1 ? ' them' : ' it') : '';
-    const clause = `understands ${understood.join(', ')} but can't speak${object}`;
+    const clause = `understands ${englishList(understood)} but can't speak${object}`;
     parts.push(parts.length ? clause : capitalize(clause));
   }
   const telepathy = whenPresent(s.languages.telepathy, (feet) => `telepathy ${feet} ft.`);
