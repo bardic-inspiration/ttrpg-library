@@ -12,7 +12,9 @@
     },
     "spells": [
       {
-        "spell": "Scrying",
+        "spell": {
+          "ref": "spell/scrying"
+        },
         "saveDc": 17
       },
       {
@@ -22,10 +24,11 @@
         "saveDc": 17
       }
     ],
-    "effect": "While touching this crystal orb, you can cast *Scrying* (save DC 17) with it. In addition, you can communicate telepathically with creatures you can see within 30 feet of the spell's sensor. You can also cast *{ref:spell/suggestion}* (save DC 17) through the sensor on one of those creatures. You don't need to concentrate on this *{ref:spell/suggestion}* to maintain it during its duration, but it ends if *Scrying* ends. You can't cast *{ref:spell/suggestion}* in this way again until the next dawn."
+    "effect": "While touching this crystal orb, you can cast *{ref:spell/scrying}* (save DC 17) with it. In addition, you can communicate telepathically with creatures you can see within 30 feet of the spell's sensor. You can also cast *{ref:spell/suggestion}* (save DC 17) through the sensor on one of those creatures. You don't need to concentrate on this *{ref:spell/suggestion}* to maintain it during its duration, but it ends if *{ref:spell/scrying}* ends. You can't cast *{ref:spell/suggestion}* in this way again until the next dawn."
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

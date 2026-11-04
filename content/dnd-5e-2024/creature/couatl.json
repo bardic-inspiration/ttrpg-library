@@ -133,13 +133,14 @@
       {
         "name": "Divine Aid",
         "kind": "other",
-        "text": "The couatl casts *Bless, Lesser Restoration*, or *{ref:spell/sanctuary}*, requiring no spell components and using the same spellcasting ability as Spellcasting.",
+        "text": "The couatl casts *{ref:spell/bless}*, *{ref:spell/lesser-restoration}*, or *{ref:spell/sanctuary}*, requiring no spell components and using the same spellcasting ability as Spellcasting.",
         "uses": "2/day"
       }
     ]
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

@@ -143,7 +143,9 @@
       ],
       "perDay": {
         "1": [
-          "Control Weather",
+          {
+            "ref": "spell/control-weather"
+          },
           {
             "ref": "spell/detect-thoughts"
           }
@@ -187,6 +189,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
