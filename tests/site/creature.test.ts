@@ -229,4 +229,15 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     expect(speedLine(s)).toBe('40 ft., Burrow 20 ft., Climb 40 ft., Fly 80 ft., Swim 30 ft.');
     expect(sensesLine(s, d)).toBe('Blindsight 60 ft., Darkvision 120 ft., Tremorsense 10 ft., Truesight 30 ft.; Passive Perception 13');
   });
+  it('prints every recharge value in the action name', async () => {
+    const values = ['4-6', '5-6', '6', 'short-or-long-rest', 'long-rest'];
+    const { s, d } = await build({ traits: values.map((recharge) => ({ name: 'Gust', kind: 'other' as const, recharge, text: 'Wind.' })) });
+    expect(s.traits!.map((t, i) => actionBlock(t, d.traits[i], d).name)).toEqual([
+      'Gust (Recharge 4–6)',
+      'Gust (Recharge 5–6)',
+      'Gust (Recharge 6)',
+      'Gust (Recharges after a Short or Long Rest)',
+      'Gust (Recharges after a Long Rest)',
+    ]);
+  });
 });

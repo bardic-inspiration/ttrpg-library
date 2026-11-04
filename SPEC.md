@@ -441,7 +441,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `onFailure`, `onSuccess` | optional `Text` | save | Prose after the failure damage, and the success line |
 | `onFailureOrSuccess` | optional `Text` | save | The "*Failure or Success:*" line after the success line, for what happens either way |
 | `text` | `Text` | other (required); not allowed on attack and save | Full prose; derived values only through tokens |
-| `recharge` | optional enum | all | One of `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"` |
+| `recharge` | optional enum | all | One of `"4-6"`, `"5-6"`, `"6"`, `"short-or-long-rest"`, `"long-rest"`, printed in the name's parentheses as "Recharge 4–6", "Recharge 5–6", "Recharge 6", "Recharges after a Short or Long Rest", "Recharges after a Long Rest" |
 | `uses` | optional string | all | `"3/day"` |
 
 Attack and save lines are generated in 5.2 form from the structured fields. Example output: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.` and `*Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.` With an `attackNote` and a conditional rider: `*Melee or Ranged Attack Roll:* +4 (with Advantage if the target is Grappled by the bugbear), reach 10 ft. or range 20/60 ft.` and `*Hit:* 5 (1d6 + 2) Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage.` Kind-specific requirements (`ability` and `reach` for melee attacks, `save` for saves, `text` only on `other`, `attackNote` only on attacks) are enforced in the schema with `if`/`then`.
