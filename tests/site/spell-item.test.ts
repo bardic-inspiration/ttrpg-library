@@ -66,6 +66,16 @@ describe('magic item card lines (SPEC.md §6.6)', async () => {
     );
   });
 
+  it('prints the rarity of each variant in place of "Rarity Varies" (SPEC.md §6.6)', () => {
+    const variants = (rarities: [string, string][]) => rarities.map(([rarity, variant]) => ({ rarity, variant }));
+    expect(
+      subtitleLine({ ...wand, category: 'weapon', baseItem: 'Any Ammunition', rarity: 'varies', attunement: { required: false }, rarityVariants: variants([['uncommon', '+1'], ['rare', '+2'], ['very-rare', '+3']]) }),
+    ).toBe('Weapon (Any Ammunition), Uncommon (+1), Rare (+2), or Very Rare (+3)');
+    expect(
+      subtitleLine({ ...wand, category: 'wondrous-item', rarity: 'varies', attunement: { required: false }, rarityVariants: variants([['rare', 'Silver or Brass'], ['legendary', 'Iron']]) }),
+    ).toBe('Wondrous Item, Rare (Silver or Brass) or Legendary (Iron)');
+  });
+
   it('shows charges only when present', () => {
     expect(chargesLine(wand)).toBe('7; regains 1d6 + 1 daily at dawn');
     const { charges, ...noCharges } = wand;

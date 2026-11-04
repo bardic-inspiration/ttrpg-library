@@ -80,10 +80,43 @@ export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
         `A content-lane PR may change only content/** and assets/images/**. Outside those:\n${list(outside)}`,
       );
     }
-  } else if (contentChanged && !labels.includes('migration')) {
+  } else if (needsMigrationLabel({ branch, paths, labels })) {
     errors.push(
       `A dev-lane PR may change content only with the migration label, which the labeler adds. Content paths:\n${list(paths.filter(isContentPath))}`,
     );
   }
   return { lane, contentChanged, docsOnly, errors };
+}
+
+/** Whether a PR is a dev PR that changes content without the `migration` label the labeler adds. */
+export const needsMigrationLabel = ({ branch, paths, labels }: LaneInput): boolean =>
+  laneOf(branch) === 'dev' && paths.some(isContentPath) && !labels.includes('migration');
+
+export interface WaitOptions {
+  /** How many times to read the labels (default 12). */
+  attempts?: number;
+  /** The pause before each read (default 5 seconds). */
+  delayMs?: number;
+  sleep?: (ms: number) => Promise<void>;
+}
+
+/**
+ * Reads a PR's current labels until `label` appears, for up to `attempts`
+ * reads, and returns the last labels read (SPEC.md §12.4). The labeler adds
+ * `migration` a few seconds after a PR opens or changes, with the workflow's
+ * token, and GitHub starts no new run for that label event, so the lane job
+ * waits for it instead of reading only the labels in its event payload.
+ */
+export async function waitForLabel(
+  label: string,
+  fetchLabels: () => Promise<string[]>,
+  { attempts = 12, delayMs = 5000, sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)) }: WaitOptions = {},
+): Promise<string[]> {
+  let labels: string[] = [];
+  for (let i = 0; i < attempts; i++) {
+    await sleep(delayMs);
+    labels = await fetchLabels();
+    if (labels.includes(label)) break;
+  }
+  return labels;
 }

@@ -40,10 +40,12 @@ const d = derived as unknown as DerivedCreature;
 const blocks = (list: 'traits' | 'actions' | 'bonusActions' | 'reactions'): ActionBlock[] | undefined =>
   whenPresent(s[list], (actions) => actions.map((action, i) => actionBlock(action, d[list][i], d)));
 const spellcasting = spellcastingBlock(s, d, names, entry.name);
-// `actions` is required, so its section always displays; the others only when present.
+// Actions gathers two optional sources, so an empty result means no section.
+const whenNonEmpty = (items: ActionBlock[]): ActionBlock[] | undefined => (items.length > 0 ? items : undefined);
+// Each section displays only when it has items; Actions also holds Spellcasting.
 const sections = [
   { title: 'Traits', items: blocks('traits') },
-  { title: 'Actions', items: [...(blocks('actions') ?? []), ...(present(spellcasting) ? [spellcasting] : [])] },
+  { title: 'Actions', items: whenNonEmpty([...(blocks('actions') ?? []), ...(present(spellcasting) ? [spellcasting] : [])]) },
   { title: 'Bonus Actions', items: blocks('bonusActions') },
   { title: 'Reactions', items: blocks('reactions') },
 ].filter((section): section is { title: string; items: ActionBlock[] } => present(section.items));

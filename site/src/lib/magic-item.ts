@@ -12,10 +12,23 @@ import type { MagicItemSpell, MagicItemStats } from '../../../rulesets/dnd-5e-20
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(' ');
 
+/** "Uncommon (+1), Rare (+2), or Very Rare (+3)": each variant's rarity, as an English list joined by "or". */
+function variantRarities(variants: NonNullable<MagicItemStats['rarityVariants']>): string {
+  const items = variants.map(({ rarity, variant }) => `${formatRarity(rarity)} (${variant})`);
+  if (items.length === 2) return `${items[0]} or ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, or ${items.at(-1)}`;
+}
+
+/** The rarity as SRD 5.2 prints it: "Very Rare", "Rarity Varies", or each variant's rarity. */
+function rarityText(s: MagicItemStats): string {
+  if (present(s.rarityVariants)) return variantRarities(s.rarityVariants);
+  return s.rarity === 'varies' ? 'Rarity Varies' : formatRarity(s.rarity);
+}
+
 /** "Wand, Uncommon (Requires Attunement by a Spellcaster)", "Weapon (Longsword), Rare". */
 export function subtitleLine(s: MagicItemStats): string {
   const category = titleCase(s.category) + (whenPresent(s.baseItem, (base) => ` (${base})`) ?? '');
-  const rarity = s.rarity === 'varies' ? 'Rarity Varies' : formatRarity(s.rarity);
+  const rarity = rarityText(s);
   const attunement = s.attunement.required
     ? ` (Requires Attunement${whenPresent(s.attunement.requirement, (r) => ` ${r}`) ?? ''})`
     : '';

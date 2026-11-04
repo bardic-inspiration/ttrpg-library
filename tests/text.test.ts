@@ -61,6 +61,21 @@ describe('pipe tables (SPEC.md §5.5)', () => {
     expect(tableViolations(text)).toEqual(problems);
   });
 
+  it('allows a table title: a bold line directly above a table', () => {
+    const text = 'Consult the Omens table.\n\n**Omens**\n\n| Omen | Result |\n|---|---|\n| Weal | Good |';
+    expect(tableViolations(text)).toEqual([]);
+    expect(markdownViolations(text)).toEqual([]);
+  });
+
+  it.each([
+    ['italic', '**The *Omens* Table**'],
+    ['a link token', '**{ref:spell/augury} Results**'],
+  ])('rejects a table title with %s in it', (_label, title) => {
+    expect(tableViolations(`${title}\n\n| a | b |\n|---|---|\n| 1 | 2 |`)).toEqual([
+      'a table title (a **bold** line directly above a table) holds only plain text',
+    ]);
+  });
+
   it('reports a malformed table with the field path', () => {
     expect(checkMarkdown('stats.effect', '| a | b |\n|---|---|\n| 1 |')).toEqual([
       'stats.effect: table row 1 has 1 cell; its header has 2',

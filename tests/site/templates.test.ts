@@ -33,6 +33,18 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     }
   });
 
+  it('renders a creature with only a Reaction with no Actions section (SPEC.md §6.5)', async () => {
+    const { entry } = lib.byId('cinder-hound');
+    const { actions: _actions, traits: _traits, ...rest } = entry.stats as Record<string, unknown>;
+    const stats = { ...rest, reactions: [{ name: 'Shriek', kind: 'other', text: 'The hound shrieks.' }] };
+    const { deriveCreature } = await import('../../rulesets/dnd-5e-2024/derive.ts');
+    const { tables } = await import('../../rulesets/dnd-5e-2024/index.ts');
+    const derived = deriveCreature(stats as never, tables) as unknown as Record<string, unknown>;
+    const html = await render({ ...entry, stats }, derived);
+    expect(html).not.toMatch(/>Actions</);
+    expect(textOf(html)).toContain('Reactions Shriek. The hound shrieks.');
+  });
+
   it('renders Frost Lance as a spell card', async () => {
     const { entry, derived } = lib.byId('frost-lance');
     const html = await render(entry, derived);

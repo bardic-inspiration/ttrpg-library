@@ -1,8 +1,9 @@
 # SPEC.md §12.1: lane rules, then checks by lane. `validate` is the single
 # required status check, so branch protection never depends on which jobs a
-# lane runs. Label events re-run the lane rules, so adding `migration`
-# unblocks a dev PR without a new push. A docs-only PR runs only the lane
-# rules.
+# lane runs. A dev PR that changes content needs the `migration` label, which
+# the labeler adds; its label event starts no new run (it uses GITHUB_TOKEN),
+# so the lane job reads the PR's live labels and waits for it. Label events
+# from people re-run the lane rules. A docs-only PR runs only the lane rules.
 name: validate
 
 on:
@@ -12,6 +13,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: validate-${{ github.event.pull_request.number }}
@@ -41,6 +43,8 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
 
   content-checks:
     needs: lane

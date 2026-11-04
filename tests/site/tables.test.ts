@@ -68,6 +68,42 @@ describe('table rendering (SPEC.md §9.5)', () => {
     expect(html).toContain('aria-label="Table: &lt;b&gt;a&lt;/b&gt;"');
   });
 
+  describe('table titles (SPEC.md §5.5)', () => {
+    const titled = 'The GM chooses the omen from the Omens table.\n\n**Omens**\n\n| Omen | For Results That Will Be … |\n|---|---|\n| Weal | Good |';
+
+    it('renders a bold line directly above a table as its caption, not as a paragraph', () => {
+      const html = renderMarkdown(titled);
+      expect(html).toContain('<p>The GM chooses the omen from the Omens table.</p>');
+      expect(html).not.toContain('<strong>Omens</strong>');
+      expect(html).toContain('<div class="md-table" role="region" tabindex="0" aria-label="Table: Omens"><table><caption>Omens</caption><thead>');
+    });
+
+    it('captions each of several titled tables in one text', () => {
+      const html = renderMarkdown('**Wind**\n\n| Stage | Condition |\n|---|---|\n| 1 | Calm |\n\n**Temperature**\n\n| Stage | Condition |\n|---|---|\n| 1 | Heat wave |');
+      expect(html.match(/<caption>([^<]*)<\/caption>/g)).toEqual(['<caption>Wind</caption>', '<caption>Temperature</caption>']);
+    });
+
+    it.each([
+      ['not followed by a table', '**Omens**\n\nThe GM chooses.'],
+      ['followed by more text on its line', '**First Roar.** A roar.\n\n| a | b |\n|---|---|\n| 1 | 2 |'],
+      ['italic rather than bold', '*Omens*\n\n| a | b |\n|---|---|\n| 1 | 2 |'],
+    ])('leaves a line %s as a paragraph', (_label, text) => {
+      const html = renderMarkdown(text);
+      expect(html).not.toContain('<caption>');
+      expect(html).toMatch(/<p>/);
+    });
+
+    it('keeps the column headers as the label of an untitled table', () => {
+      expect(renderMarkdown('| a | b |\n|---|---|\n| 1 | 2 |')).toContain('aria-label="Table: a, b"><table><thead>');
+    });
+
+    it('escapes HTML in a title', () => {
+      const html = renderMarkdown('**<b>Omens</b>**\n\n| a |\n|---|\n| 1 |');
+      expect(html).not.toMatch(/<b>/);
+      expect(html).toContain('<caption>&lt;b&gt;Omens&lt;/b&gt;</caption>');
+    });
+  });
+
   const cases: [string, string[], string[]][] = [
     ['confusion', ['1d10', 'Behavior for the Turn'], ['1', expect.stringContaining("The target doesn't take an action") as unknown as string]],
     ['belt-of-giant-strength', ['Belt', 'Str.', 'Rarity'], ['Belt of Giant Strength (hill)', '21', 'Rare']],

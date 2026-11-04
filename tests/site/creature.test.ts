@@ -37,10 +37,10 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(plain(actionBlock(s.traits![0]!, d.traits[0], d))).toBe(
       'Smoldering Hide. A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes 2 (1d4) Fire damage.',
     );
-    expect(plain(actionBlock(s.actions[0]!, d.actions[0], d))).toBe(
+    expect(plain(actionBlock(s.actions![0]!, d.actions[0], d))).toBe(
       'Bite. *Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage.',
     );
-    expect(plain(actionBlock(s.actions[1]!, d.actions[1], d))).toBe(
+    expect(plain(actionBlock(s.actions![1]!, d.actions[1], d))).toBe(
       'Ember Breath (Recharge 5–6). *Dexterity Saving Throw:* DC 12, each creature in a 15-foot Cone. *Failure:* 10 (3d6) Fire damage. *Success:* Half damage.',
     );
   });
@@ -58,7 +58,7 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     const d = deriveCreature(s, tables);
     expect(speedLine(s)).toBe('30 ft., Fly 60 ft. (hover)');
     expect(crLine(s, d)).toBe('2 (XP 450, or 700 in lair; PB +2)');
-    expect(plain(actionBlock(s.actions[0]!, d.actions[0], d))).toBe(
+    expect(plain(actionBlock(s.actions![0]!, d.actions[0], d))).toBe(
       'Spit. *Ranged Attack Roll:* +4, range 30/120 ft. *Hit:* 5 (1d6 + 2) Acid damage.',
     );
     const names = new Map([['spell/frost-lance', 'Frost Lance']]);
@@ -115,13 +115,13 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(plain(actionBlock(s.traits![0]!, d.traits[0], d))).toBe(
       'Undead Fortitude. If damage reduces the zombie to 0 Hit Points, it makes a Constitution saving throw (DC 5 plus the damage taken) unless the damage is Radiant or from a Critical Hit. On a successful save, the zombie drops to 1 Hit Point instead.',
     );
-    expect(plain(actionBlock(s.actions[0]!, d.actions[0], d))).toBe(
+    expect(plain(actionBlock(s.actions![0]!, d.actions[0], d))).toBe(
       'Scimitar. *Melee Attack Roll:* +4, reach 5 ft. *Hit:* 5 (1d6 + 2) Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage.',
     );
-    expect(plain(actionBlock(s.actions[1]!, d.actions[1], d))).toBe(
+    expect(plain(actionBlock(s.actions![1]!, d.actions[1], d))).toBe(
       'Light Hammer. *Melee or Ranged Attack Roll:* +4 (with Advantage if the target is Grappled by the bugbear), reach 10 ft. or range 20/60 ft. *Hit:* 9 (3d4 + 2) Bludgeoning damage.',
     );
-    expect(plain(actionBlock(s.actions[2]!, d.actions[2], d))).toBe(
+    expect(plain(actionBlock(s.actions![2]!, d.actions[2], d))).toBe(
       'Gore. *Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2) Piercing damage plus 3 (1d6) Fire damage, plus 7 (2d6) Fire damage if the target is Prone.',
     );
   });
@@ -141,7 +141,7 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(initiativeLine(d)).toBe('\u22121 (9)');
     expect(hpLine(d)).toBe('17 (5d8 \u2212 5)');
     expect(abilityRows(s, d).find((row) => row.ability === 'INT')).toEqual({ ability: 'INT', score: 5, mod: '\u22123', save: '\u22123' });
-    expect(plain(actionBlock(s.actions[0]!, d.actions[0], d))).toBe(
+    expect(plain(actionBlock(s.actions![0]!, d.actions[0], d))).toBe(
       'Slam. *Melee Attack Roll:* \u22121, reach 5 ft. *Hit:* 6 (2d8 \u2212 3) Bludgeoning damage.',
     );
     // Display only: the derived values keep ASCII hyphens (SPEC.md §6.5).
@@ -191,7 +191,7 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
         { name: 'Wail', kind: 'save', ability: 'con', save: { ability: 'wis', targets: 'one creature' }, damage: [{ dice: '8d6', type: 'psychic' }], onFailure: 'and the target has the Frightened condition.' },
       ],
     });
-    const body = (i: number) => actionBlock(s.actions[i]!, d.actions[i], d).body;
+    const body = (i: number) => actionBlock(s.actions![i]!, d.actions[i], d).body;
     expect(body(0)).toContain('*Hit:* 12 (3d6 + 2) Cold damage, and the target has the Paralyzed condition.');
     expect(body(1)).toContain('*Hit:* 3 (1d6) Piercing damage. If the target is a creature, it is cursed.');
     expect(body(2)).toContain('*Failure:* 28 (8d6) Psychic damage, and the target has the Frightened condition.');
@@ -205,6 +205,31 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     );
     expect(intro({ ...s, shortName: 'bandit' }, 'Bandit Captain')).toMatch(/^The bandit casts/);
   });
+  it('leaves the save DC out of the Spellcasting intro when noSaveDc is set (SPEC.md §5.8)', async () => {
+    const intro = async (spellcasting: CreatureStats['spellcasting']) => {
+      const { s, d } = await build({ spellcasting });
+      return spellcastingBlock(s, d, new Map(), 'Priest Acolyte')!.body.split('\\\n')[0];
+    };
+    expect(await intro({ ability: 'wis', noSaveDc: true, atWill: ['Light'] })).toBe(
+      'The acolyte casts one of the following spells, using Wisdom as the spellcasting ability:',
+    );
+    expect(await intro({ ability: 'wis', noSaveDc: true, includeAttack: true, atWill: ['Light'] })).toBe(
+      'The acolyte casts one of the following spells, using Wisdom as the spellcasting ability (+3 to hit with spell attacks):',
+    );
+  });
+  it('joins prose that starts with a dash straight onto the damage (SPEC.md §6.5)', async () => {
+    const { s, d } = await build({
+      actions: [{ name: 'Bite', kind: 'melee-attack', ability: 'str', reach: 5, damage: [{ dice: '1d8', ability: 'str', type: 'piercing' }], onHit: '—or {dmg:2d8+str:piercing} if the target is Grappled—plus {dmg:1d8:acid}.' }],
+    });
+    expect(actionBlock(s.actions![0]!, d.actions[0], d).body).toContain(
+      '*Hit:* 6 (1d8 + 2) Piercing damage—or 11 (2d8 + 2) Piercing damage if the target is Grappled—plus 4 (1d8) Acid damage.',
+    );
+  });
+  it('derives a creature with no actions, such as one with only a Reaction', async () => {
+    const { d } = await build({ actions: undefined, reactions: [{ name: 'Shriek', kind: 'other', text: 'The hound shrieks.' }] });
+    expect(d.actions).toEqual([]);
+    expect(d.reactions).toHaveLength(1);
+  });
   it('puts each spell list on its own line, with "Each" only for more than one spell', async () => {
     const { s, d } = await build({ spellcasting: { ability: 'int', atWill: ['Light'], perDay: { '2': ['Fly', 'Invisibility'], '1': ['Fireball'] } } });
     expect(spellcastingBlock(s, d, new Map(), 'Mage')!.body.split('\\\n').slice(1)).toEqual([
@@ -217,7 +242,7 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     const { s, d } = await build({
       actions: [{ name: 'Disrupt Life', kind: 'save', ability: 'con', save: { ability: 'con', targets: 'each creature in a 20-foot Emanation' }, damage: [{ dice: '9d6', type: 'necrotic' }], onSuccess: 'Half damage.', onFailureOrSuccess: 'The hound can\'t take this action again until the start of its next turn.' }],
     });
-    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toMatch(
+    expect(actionBlock(s.actions![0]!, d.actions[0], d).body).toMatch(
       /\*Failure:\* 31 \(9d6\) Necrotic damage\. \*Success:\* Half damage\. \*Failure or Success:\* The hound can't take this action again until the start of its next turn\.$/,
     );
   });
@@ -245,13 +270,13 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     const { s, d } = await build({
       actions: [{ name: 'Bite', kind: 'melee-attack', ability: 'dex', reach: 5, damage: [{ amount: 1, type: 'piercing' }] }],
     });
-    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toBe('*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 1 Piercing damage.');
+    expect(actionBlock(s.actions![0]!, d.actions[0], d).body).toBe('*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 1 Piercing damage.');
   });
   it('prints a rider whose type is a note (#166)', async () => {
     const { s, d } = await build({
       actions: [{ name: 'Claw', kind: 'melee-attack', ability: 'str', reach: 10, damage: [{ dice: '1d4', ability: 'str', type: 'slashing' }, { dice: '2d6', note: 'of the type chosen for the Draconic Origin trait' }] }],
     });
-    expect(actionBlock(s.actions[0]!, d.actions[0], d).body).toBe(
+    expect(actionBlock(s.actions![0]!, d.actions[0], d).body).toBe(
       '*Melee Attack Roll:* +4, reach 10 ft. *Hit:* 4 (1d4 + 2) Slashing damage plus 7 (2d6) damage of the type chosen for the Draconic Origin trait.',
     );
   });

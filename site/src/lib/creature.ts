@@ -197,12 +197,16 @@ const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
 /**
  * The damage, then the prose after it (`onHit`, `onFailure`). Prose that
  * starts lowercase continues the damage sentence after a comma ("Cold damage,
- * and the target…"); otherwise the damage ends its sentence (SPEC.md §6.5).
+ * and the target…"), prose that starts with a dash joins it directly
+ * ("Piercing damage—or …"); otherwise the damage ends its sentence (SPEC.md §6.5).
  */
 function afterDamage(damage: string | undefined, prose: string | undefined): string {
   if (!present(damage)) return prose ?? '';
   if (!present(prose)) return sentence(damage);
-  return /^[a-z]/.test(prose) ? `${damage}, ${prose}` : `${sentence(damage)} ${prose}`;
+  if (/^[a-z]/.test(prose)) return `${damage}, ${prose}`;
+  // A dash continues the sentence with no punctuation: "Piercing damage—or …".
+  if (/^[—–]/.test(prose)) return `${damage}${prose}`;
+  return `${sentence(damage)} ${prose}`;
 }
 
 /** One action, trait, or reaction as SRD 5.2 prose. */
@@ -254,10 +258,15 @@ export const shortName = (s: CreatureStats, name: string): string =>
 export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>, name: string): ActionBlock | undefined {
   const sc = s.spellcasting;
   if (!sc || !d.spellcasting) return undefined;
-  const attack = present(sc.includeAttack) ? `, ${signed(d.spellcasting.attackBonus)} to hit with spell attacks` : '';
+  // The parenthetical holds the save DC (unless noSaveDc) and the attack bonus (with includeAttack), and is left out when empty (§5.8).
+  const numbers = [
+    ...(present(sc.noSaveDc) ? [] : [`spell save DC ${d.spellcasting.dc}`]),
+    ...(present(sc.includeAttack) ? [`${signed(d.spellcasting.attackBonus)} to hit with spell attacks`] : []),
+  ];
+  const parenthetical = numbers.length > 0 ? ` (${numbers.join(', ')})` : '';
   const components = whenPresent(sc.noComponents, (c) => `requiring no ${escapeMarkdown(c)} components and `) ?? '';
   const parts = [
-    `The ${escapeMarkdown(shortName(s, name))} casts one of the following spells, ${components}using ${tables.abilityNames[sc.ability]} as the spellcasting ability (spell save DC ${d.spellcasting.dc}${attack}):`,
+    `The ${escapeMarkdown(shortName(s, name))} casts one of the following spells, ${components}using ${tables.abilityNames[sc.ability]} as the spellcasting ability${parenthetical}:`,
   ];
   const list = (name: string, spells: RefOrText[] | undefined) => {
     if (!present(spells)) return;
