@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "pseudodragon",
+  "name": "Pseudodragon",
+  "summary": "A tiny dragon with a sedating sting.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "dragon",
+    "alignment": "neutral good",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 15,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 15,
+      "con": 13,
+      "int": 10,
+      "wis": 12,
+      "cha": 10
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The pseudodragon has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The pseudodragon makes two Bite attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Sting",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "con",
+          "targets": "one creature the pseudodragon can see within 5 feet"
+        },
+        "damage": [
+          {
+            "dice": "2d4",
+            "type": "poison"
+          }
+        ],
+        "onFailure": "and the target has the Poisoned condition for 1 hour. *Failure by 5 or More:* While Poisoned, the target also has the Unconscious condition, which ends early if the target takes damage or a creature within 5 feet of it takes an action to wake it."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

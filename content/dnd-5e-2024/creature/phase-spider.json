@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "phase-spider",
+  "name": "Phase Spider",
+  "summary": "A spider monstrosity that shifts in and out of the Ethereal Plane.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 16,
+      "con": 12,
+      "int": 6,
+      "wis": 10,
+      "cha": 6
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Ethereal Sight",
+        "kind": "other",
+        "text": "The spider can see 60 feet into the Ethereal Plane while on the Material Plane and vice versa."
+      },
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The spider can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      },
+      {
+        "name": "Web Walker",
+        "kind": "other",
+        "text": "The spider ignores movement restrictions caused by webs, and the spider knows the location of any other creature in contact with the same web."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The spider makes two Bite attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d8",
+            "type": "poison"
+          }
+        ],
+        "onHit": "If this damage reduces the target to 0 Hit Points, the target becomes Stable, and it has the Poisoned condition for 1 hour. While Poisoned, the target also has the Paralyzed condition."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Ethereal Jaunt",
+        "kind": "other",
+        "text": "The spider teleports from the Material Plane to the Ethereal Plane or vice versa."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

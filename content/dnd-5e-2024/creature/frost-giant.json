@@ -1,0 +1,115 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "frost-giant",
+  "name": "Frost Giant",
+  "summary": "A huge giant of the frozen north that wields a frost axe and a great bow.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "giant",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 15
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 23,
+      "dex": 9,
+      "con": 21,
+      "int": 9,
+      "wis": 10,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "perception": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "cold"
+      ]
+    },
+    "languages": {
+      "spoken": [
+        "Giant"
+      ]
+    },
+    "cr": 8,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The giant makes two attacks, using Frost Axe or Great Bow in any combination."
+      },
+      {
+        "name": "Frost Axe",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d12",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d8",
+            "type": "cold"
+          }
+        ]
+      },
+      {
+        "name": "Great Bow",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d6",
+            "type": "cold"
+          }
+        ],
+        "onHit": "and the target's Speed decreases by 10 feet until the end of its next turn."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "War Cry",
+        "kind": "other",
+        "text": "The giant or one creature of its choice that can see or hear it gains {dmg:2d10+con} Temporary Hit Points and has Advantage on attack rolls until the start of the giant's next turn.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

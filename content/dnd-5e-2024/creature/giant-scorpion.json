@@ -1,0 +1,84 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-scorpion",
+  "name": "Giant Scorpion",
+  "summary": "A large scorpion with crushing claws and a venomous sting.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 13,
+      "con": 15,
+      "int": 1,
+      "wis": 9,
+      "cha": 3
+    },
+    "senses": {
+      "blindsight": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The scorpion makes two Claw attacks and one Sting attack."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=13}) from one of two claws."
+      },
+      {
+        "name": "Sting",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d10",
+            "type": "poison"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "shadow",
+  "name": "Shadow",
+  "summary": "An undead shadow that drains Strength with its touch.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 14,
+      "con": 13,
+      "int": 6,
+      "wis": 10,
+      "cha": 8
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "vulnerabilities": [
+      "radiant"
+    ],
+    "resistances": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "thunder"
+    ],
+    "immunities": {
+      "damage": [
+        "necrotic",
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "frightened",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Amorphous",
+        "kind": "other",
+        "text": "The shadow can move through a space as narrow as 1 inch without expending extra movement to do so."
+      },
+      {
+        "name": "Sunlight Weakness",
+        "kind": "other",
+        "text": "While in sunlight, the shadow has Disadvantage on D20 Tests."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Draining Swipe",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "and the target's Strength score decreases by 1d4. The target dies if this reduces that score to 0. If a Humanoid is slain by this attack, a **Shadow** rises from the corpse 1d4 hours later."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Shadow Stealth",
+        "kind": "other",
+        "text": "While in Dim Light or Darkness, the shadow takes the Hide action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

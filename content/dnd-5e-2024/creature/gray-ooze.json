@@ -1,0 +1,95 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "gray-ooze",
+  "name": "Gray Ooze",
+  "summary": "An ooze that looks like wet stone and corrodes metal and flesh.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "ooze",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 9
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 10,
+      "climb": 10
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 6,
+      "con": 16,
+      "int": 1,
+      "wis": 6,
+      "cha": 2
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "resistances": [
+      "acid",
+      "cold",
+      "fire"
+    ],
+    "immunities": {
+      "conditions": [
+        "blinded",
+        "charmed",
+        "deafened",
+        "exhaustion",
+        "frightened",
+        "grappled",
+        "prone",
+        "restrained"
+      ]
+    },
+    "senses": {
+      "blindsight": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Amorphous",
+        "kind": "other",
+        "text": "The ooze can move through a space as narrow as 1 inch without expending extra movement to do so."
+      },
+      {
+        "name": "Corrosive Form",
+        "kind": "other",
+        "text": "Nonmagical ammunition is destroyed immediately after hitting the ooze and dealing any damage. Any nonmagical weapon takes a cumulative −1 penalty to attack rolls immediately after dealing damage to the ooze and coming into contact with it. The weapon is destroyed if the penalty reaches −5. The penalty can be removed by casting the *{ref:spell/mending}* spell on the weapon.\n\nThe ooze can eat through 2-inch-thick, nonmagical metal or wood in 1 round."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Pseudopod",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "acid"
+          }
+        ],
+        "onHit": "Nonmagical armor worn by the target takes a −1 penalty to the AC it offers. The armor is destroyed if the penalty reduces its AC to 10. The penalty can be removed by casting the *{ref:spell/mending}* spell on the armor."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

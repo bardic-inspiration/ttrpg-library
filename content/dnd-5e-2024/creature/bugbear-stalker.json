@@ -1,0 +1,122 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bugbear-stalker",
+  "name": "Bugbear Stalker",
+  "summary": "A stealthy fey ambusher that drags victims away to finish them.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 14,
+      "con": 14,
+      "int": 11,
+      "wis": 12,
+      "cha": 11
+    },
+    "saveProficiencies": [
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "stealth": "expertise",
+      "survival": "proficient"
+    },
+    "gear": [
+      "Chain Shirt",
+      "Javelins (6)",
+      "Morningstar"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Abduct",
+        "kind": "other",
+        "text": "The bugbear needn't spend extra movement to move a creature it is grappling."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The bugbear makes two Javelin or Morningstar attacks."
+      },
+      {
+        "name": "Javelin",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 10,
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Morningstar",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "attackNote": "with Advantage if the target is Grappled by the bugbear",
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Quick Grapple",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "one Medium or smaller creature the bugbear can see within 10 feet"
+        },
+        "onFailure": "The target has the Grappled condition (escape {dc=13})."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "vrock",
+  "name": "Vrock",
+  "summary": "A vulture-like demon that shreds foes, releases spores, and screeches.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Demon"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 16,
+    "speed": {
+      "walk": 40,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 15,
+      "con": 18,
+      "int": 8,
+      "wis": 13,
+      "cha": 8
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis",
+      "cha"
+    ],
+    "resistances": [
+      "cold",
+      "fire",
+      "lightning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal"
+      ],
+      "telepathy": 120
+    },
+    "cr": 6,
+    "traits": [
+      {
+        "name": "Demonic Restoration",
+        "kind": "other",
+        "text": "If the vrock dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+      },
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The vrock has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The vrock makes two Shred attacks."
+      },
+      {
+        "name": "Shred",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "3d6",
+            "type": "poison"
+          }
+        ]
+      },
+      {
+        "name": "Spores",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 20-foot Emanation originating from the vrock"
+        },
+        "onFailure": "The target has the Poisoned condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. While Poisoned, the target takes {dmg:1d10:poison} at the start of each of its turns. Emptying a flask of Holy Water on the target ends the effect early.",
+        "recharge": "6"
+      },
+      {
+        "name": "Stunning Screech",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 20-foot Emanation originating from the vrock (demons succeed automatically)"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": "and the target has the Stunned condition until the end of the vrock's next turn.",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "eagle",
+  "name": "Eagle",
+  "summary": "A bird of prey that strikes with its talons.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 10,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 15,
+      "con": 12,
+      "int": 2,
+      "wis": 14,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "actions": [
+      {
+        "name": "Talons",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

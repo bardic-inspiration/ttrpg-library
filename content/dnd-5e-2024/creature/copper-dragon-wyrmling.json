@@ -1,0 +1,101 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "copper-dragon-wyrmling",
+  "name": "Copper Dragon Wyrmling",
+  "summary": "A young copper dragon that breathes acid or slowing gas.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Metallic"
+    ],
+    "alignment": "chaotic good",
+    "ac": {
+      "value": 16
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 30,
+      "climb": 30,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 12,
+      "con": 13,
+      "int": 14,
+      "wis": 11,
+      "cha": 13
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "acid"
+      ]
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Draconic"
+      ]
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Acid Breath",
+        "kind": "other",
+        "text": "**.** *Dexterity Saving Throw:* {dc:con}, each creature in a 20-foot-long, 5-foot-wide Line. *Failure:* {dmg:4d8:acid}. *Success:* Half damage.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Slowing Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "onFailure": "The target can't take Reactions; its Speed is halved; and it can take either an action or a Bonus Action on its turn, not both. This effect lasts until the end of its next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

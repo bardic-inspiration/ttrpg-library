@@ -1,0 +1,87 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-constrictor-snake",
+  "name": "Giant Constrictor Snake",
+  "summary": "A huge snake that bites and crushes prey in its coils.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 14,
+      "con": 12,
+      "int": 1,
+      "wis": 10,
+      "cha": 3
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "blindsight": 10
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The snake makes one Bite attack and uses Constrict."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Constrict",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "str",
+          "targets": "one Large or smaller creature the snake can see within 10 feet"
+        },
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onFailure": "and the target has the Grappled condition (escape {dc=14})."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "gorgon",
+  "name": "Gorgon",
+  "summary": "A bull-like construct of iron that gores and breathes petrifying gas.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "construct",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 19
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 11,
+      "con": 18,
+      "int": 2,
+      "wis": 12,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "immunities": {
+      "conditions": [
+        "exhaustion",
+        "petrified"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 5,
+    "actions": [
+      {
+        "name": "Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d12",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature and the gorgon moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition."
+      },
+      {
+        "name": "Petrifying Breath",
+        "kind": "other",
+        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 30-foot Cone. *First* *Failure:* The target has the Restrained condition and repeats the save at the end of its next turn if it is still Restrained, ending the effect on itself on a success. *Second* *Failure:* The target has the Petrified condition instead of the Restrained condition.",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Trample",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature within 5 feet that has the Prone condition"
+        },
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onSuccess": "Half damage."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

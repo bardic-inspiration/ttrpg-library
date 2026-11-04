@@ -1,0 +1,101 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bugbear-warrior",
+  "name": "Bugbear Warrior",
+  "summary": "A hulking fey brute that grabs foes and abducts them.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 13,
+      "int": 8,
+      "wis": 11,
+      "cha": 9
+    },
+    "skills": {
+      "stealth": "expertise",
+      "survival": "proficient"
+    },
+    "gear": [
+      "Hide Armor",
+      "Light Hammers (3)"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Abduct",
+        "kind": "other",
+        "text": "The bugbear needn't spend extra movement to move a creature it is grappling."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Grab",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=12})."
+      },
+      {
+        "name": "Light Hammer",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 10,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "attackNote": "with Advantage if the target is Grappled by the bugbear",
+        "damage": [
+          {
+            "dice": "3d4",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

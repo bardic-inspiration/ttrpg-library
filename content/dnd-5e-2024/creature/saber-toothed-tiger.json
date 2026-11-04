@@ -1,0 +1,88 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "saber-toothed-tiger",
+  "name": "Saber-Toothed Tiger",
+  "summary": "A large cat with long fangs that leaps onto prey.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 17,
+      "con": 15,
+      "int": 3,
+      "wis": 12,
+      "cha": 8
+    },
+    "saveProficiencies": [
+      "str",
+      "dex"
+    ],
+    "skills": {
+      "perception": "expertise",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Running Leap",
+        "kind": "other",
+        "text": "With a 10-foot running start, the tiger can Long Jump up to 25 feet."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The tiger makes two Rend attacks."
+      },
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Nimble Escape",
+        "kind": "other",
+        "text": "The tiger takes the Disengage or Hide action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

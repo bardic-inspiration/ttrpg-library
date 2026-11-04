@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ettin",
+  "name": "Ettin",
+  "summary": "A two-headed giant that fights with a battleaxe and a morningstar.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "giant",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 21,
+      "dex": 8,
+      "con": 17,
+      "int": 6,
+      "wis": 10,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "immunities": {
+      "conditions": [
+        "blinded",
+        "charmed",
+        "deafened",
+        "frightened",
+        "stunned",
+        "unconscious"
+      ]
+    },
+    "gear": [
+      "Battleaxe",
+      "Morningstar"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Giant"
+      ]
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The ettin makes one Battleaxe attack and one Morningstar attack."
+      },
+      {
+        "name": "Battleaxe",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+      },
+      {
+        "name": "Morningstar",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has Disadvantage on the next attack roll it makes before the end of its next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

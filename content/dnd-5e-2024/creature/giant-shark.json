@@ -1,0 +1,81 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-shark",
+  "name": "Giant Shark",
+  "summary": "A huge shark that bites with rows of teeth.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 5,
+      "swim": 60
+    },
+    "abilities": {
+      "str": 23,
+      "dex": 11,
+      "con": 21,
+      "int": 1,
+      "wis": 10,
+      "cha": 5
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "blindsight": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Water Breathing",
+        "kind": "other",
+        "text": "The shark can breathe only underwater."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The shark makes two Bite attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "attackNote": "with Advantage if the target doesn't have all its Hit Points",
+        "damage": [
+          {
+            "dice": "3d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

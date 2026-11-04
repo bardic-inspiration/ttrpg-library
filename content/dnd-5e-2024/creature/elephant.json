@@ -1,0 +1,74 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "elephant",
+  "name": "Elephant",
+  "summary": "A huge beast that gores and tramples its foes.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 22,
+      "dex": 9,
+      "con": 17,
+      "int": 3,
+      "wis": 11,
+      "cha": 6
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The elephant makes two Gore attacks."
+      },
+      {
+        "name": "Gore",
+        "kind": "other",
+        "text": "**.** *Melee Attack Roll:* +8, reach 5 ft. *Hit:* {dmg:2d8+str:piercing}. If the target is a Huge or smaller creature and the elephant moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Trample",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature within 5 feet that has the Prone condition"
+        },
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onSuccess": "Half damage."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

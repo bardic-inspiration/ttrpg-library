@@ -1,0 +1,74 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "warhorse-skeleton",
+  "name": "Warhorse Skeleton",
+  "summary": "The animated skeleton of a warhorse.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "undead",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 60
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 12,
+      "con": 15,
+      "int": 2,
+      "wis": 8,
+      "cha": 5
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.5,
+    "actions": [
+      {
+        "name": "Hooves",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature and the skeleton moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

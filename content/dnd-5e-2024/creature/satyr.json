@@ -1,0 +1,91 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "satyr",
+  "name": "Satyr",
+  "summary": "A goat-legged fey that kicks foes and mocks them.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 16,
+      "con": 11,
+      "int": 12,
+      "wis": 10,
+      "cha": 14
+    },
+    "skills": {
+      "perception": "proficient",
+      "performance": "expertise",
+      "stealth": "proficient"
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The satyr has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Hooves",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, the satyr pushes the target up to 10 feet straight away from itself."
+      },
+      {
+        "name": "Mockery",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature the satyr can see within 90 feet"
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "cha",
+            "type": "psychic"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

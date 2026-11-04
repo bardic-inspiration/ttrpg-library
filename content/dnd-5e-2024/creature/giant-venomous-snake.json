@@ -1,0 +1,69 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-venomous-snake",
+  "name": "Giant Venomous Snake",
+  "summary": "A large snake with a venomous bite.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 40,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 18,
+      "con": 13,
+      "int": 2,
+      "wis": 10,
+      "cha": 3
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "blindsight": 10
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d8",
+            "type": "poison"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

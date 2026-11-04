@@ -1,0 +1,61 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "pony",
+  "name": "Pony",
+  "summary": "A small horse.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 10
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 10,
+      "con": 13,
+      "int": 2,
+      "wis": 11,
+      "cha": 7
+    },
+    "saveProficiencies": [
+      "str"
+    ],
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.125,
+    "actions": [
+      {
+        "name": "Hooves",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

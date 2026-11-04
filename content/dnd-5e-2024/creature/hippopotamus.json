@@ -1,0 +1,77 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "hippopotamus",
+  "name": "Hippopotamus",
+  "summary": "A large river beast with a crushing bite.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 21,
+      "dex": 7,
+      "con": 15,
+      "int": 2,
+      "wis": 12,
+      "cha": 4
+    },
+    "saveProficiencies": [
+      "str"
+    ],
+    "skills": {
+      "perception": "proficient"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Hold Breath",
+        "kind": "other",
+        "text": "The hippopotamus can hold its breath for 10 minutes."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hippopotamus makes two Bite attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

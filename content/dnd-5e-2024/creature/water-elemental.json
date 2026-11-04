@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "water-elemental",
+  "name": "Water Elemental",
+  "summary": "An elemental of living water that freezes and engulfs foes.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30,
+      "swim": 90
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 14,
+      "con": 18,
+      "int": 5,
+      "wis": 10,
+      "cha": 8
+    },
+    "resistances": [
+      "acid",
+      "fire"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Aquan"
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Freeze",
+        "kind": "other",
+        "text": "If the elemental takes Cold damage, its Speed decreases by 20 feet until the end of its next turn."
+      },
+      {
+        "name": "Water Form",
+        "kind": "other",
+        "text": "The elemental can enter an enemy's space and stop there. It can move through a space as narrow as 1 inch without expending extra movement to do so."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The elemental makes two Slam attacks."
+      },
+      {
+        "name": "Slam",
+        "kind": "other",
+        "text": "*Melee* *Attack Roll:* +7, reach 5 ft. *Hit:* {dmg:2d8+str:bludgeoning}. If the target is a Medium or smaller creature, it has the Prone condition."
+      },
+      {
+        "name": "Whelm",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "str",
+          "targets": "each creature in the elemental's space"
+        },
+        "damage": [
+          {
+            "dice": "4d8",
+            "ability": "con",
+            "type": "bludgeoning"
+          }
+        ],
+        "onFailure": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=14}). Until the grapple ends, the target has the Restrained condition, is suffocating unless it can breathe water, and takes {dmg:2d8:bludgeoning} at the start of each of the elemental's turns. The elemental can grapple one Large creature or up to two Medium or smaller creatures at a time with Whelm. As an action, a creature within 5 feet of the elemental can pull a creature out of it by succeeding on a {dc=14} Strength (Athletics) check.",
+        "onSuccess": "Half damage only.",
+        "recharge": "4-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

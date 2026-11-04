@@ -1,0 +1,84 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "grick",
+  "name": "Grick",
+  "summary": "A wormlike aberration with a beak and grasping tentacles.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "aberration",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 14,
+      "con": 11,
+      "int": 3,
+      "wis": 14,
+      "cha": 5
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The grick makes one Beak attack and one Tentacles attack."
+      },
+      {
+        "name": "Beak",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Tentacles",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=12}) from all four tentacles."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

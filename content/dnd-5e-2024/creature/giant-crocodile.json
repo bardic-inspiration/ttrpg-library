@@ -1,0 +1,89 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-crocodile",
+  "name": "Giant Crocodile",
+  "summary": "A huge crocodile that bites and sweeps with its tail.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30,
+      "swim": 50
+    },
+    "abilities": {
+      "str": 21,
+      "dex": 9,
+      "con": 17,
+      "int": 2,
+      "wis": 10,
+      "cha": 7
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Hold Breath",
+        "kind": "other",
+        "text": "The crocodile can hold its breath for 1 hour."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The crocodile makes one Bite attack and one Tail attack."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=15}). While Grappled, the target has the Restrained condition and can't be targeted by the crocodile's Tail."
+      },
+      {
+        "name": "Tail",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "gargoyle",
+  "name": "Gargoyle",
+  "summary": "A stony elemental that perches motionless and swoops to claw intruders.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "elemental",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 15
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 11,
+      "con": 16,
+      "int": 6,
+      "wis": 11,
+      "cha": 7
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "petrified",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Terran"
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The gargoyle doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The gargoyle makes two Claw attacks."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d4",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

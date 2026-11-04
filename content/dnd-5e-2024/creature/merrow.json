@@ -1,0 +1,110 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "merrow",
+  "name": "Merrow",
+  "summary": "A monstrous aquatic giant that harpoons prey.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 10,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 15,
+      "con": 15,
+      "int": 8,
+      "wis": 10,
+      "cha": 9
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Abyssal",
+        "Primordial"
+      ],
+      "note": "Aquan"
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The merrow can breathe air and water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The merrow makes two attacks, using Bite, Claw, or Harpoon in any combination."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has the Poisoned condition until the end of the merrow's next turn."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d4",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Harpoon",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, the merrow pulls the target up to 15 feet straight toward itself."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

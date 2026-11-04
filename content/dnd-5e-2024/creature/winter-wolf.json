@@ -1,0 +1,95 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "winter-wolf",
+  "name": "Winter Wolf",
+  "summary": "A large arctic wolf that breathes cold.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 13,
+      "con": 14,
+      "int": 7,
+      "wis": 12,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "expertise"
+    },
+    "immunities": {
+      "damage": [
+        "cold"
+      ]
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Giant"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The wolf has Advantage on an attack roll against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+      },
+      {
+        "name": "Cold Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "4d8",
+            "type": "cold"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
