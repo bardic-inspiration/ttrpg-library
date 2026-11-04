@@ -26,7 +26,7 @@
       "v": true,
       "s": false,
       "m": {
-        "text": "rare inks worth 50+ GP",
+        "text": "rare inks worth 50+ GP, which the spell consumes",
         "costGp": 50,
         "consumed": true
       }

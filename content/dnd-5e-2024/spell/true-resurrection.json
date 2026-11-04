@@ -23,7 +23,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "diamonds worth 25,000+ GP",
+        "text": "diamonds worth 25,000+ GP, which the spell consumes",
         "costGp": 25000,
         "consumed": true
       }
