@@ -156,22 +156,40 @@ export function stringsIn(value: unknown, path: string): { path: string; text: s
   return [];
 }
 
+type TextEntry = { name: string; summary: string; description?: string; stats: unknown };
+
+/** `name`, `summary`, `description`, and every string in `stats` (which holds `descriptors`), with their paths. */
+const textFields = (entry: TextEntry): { path: string; text: string }[] => [
+  { path: 'name', text: entry.name },
+  { path: 'summary', text: entry.summary },
+  ...(entry.description === undefined ? [] : [{ path: 'description', text: entry.description }]),
+  ...stringsIn(entry.stats, 'stats'),
+];
+
+/**
+ * Placeholder markers (SPEC.md §6.8): the all-caps ones as whole words and in
+ * capitals only, so "to do" and "tbd" in prose pass, and "lorem ipsum" in any case.
+ */
+const PLACEHOLDER = /\b(?:TODO|TBD|FIXME|XXX)\b|\blorem ipsum\b/gi;
+const isPlaceholder = (match: string): boolean => /^lorem ipsum$/i.test(match) || match === match.toUpperCase();
+
+/** Placeholder text in any text-bearing field, one message per match (SPEC.md §6.8). */
+export function checkPlaceholders(entry: TextEntry): string[] {
+  return textFields(entry).flatMap(({ path, text }) =>
+    [...text.matchAll(PLACEHOLDER)]
+      .map((m) => m[0])
+      .filter(isPlaceholder)
+      .map((match) => `${path}: "${match}" is placeholder text; write the entry's own text`),
+  );
+}
+
 /**
  * The §11 blocklist over `name`, `summary`, `description`, and every string in
  * `stats` (which holds `descriptors`). `matches` is a `termMatcher` over the
  * blocklist. One message per match.
  */
-export function checkBlocklist(
-  entry: { name: string; summary: string; description?: string; stats: unknown },
-  matches: TermMatcher,
-): string[] {
-  const fields = [
-    { path: 'name', text: entry.name },
-    { path: 'summary', text: entry.summary },
-    ...(entry.description === undefined ? [] : [{ path: 'description', text: entry.description }]),
-    ...stringsIn(entry.stats, 'stats'),
-  ];
-  return fields.flatMap(({ path, text }) =>
+export function checkBlocklist(entry: TextEntry, matches: TermMatcher): string[] {
+  return textFields(entry).flatMap(({ path, text }) =>
     matches(text).map((match) => `${path}: "${match}" is on the blocklist (${BLOCKLIST_FILE}); use an SRD or original name`),
   );
 }

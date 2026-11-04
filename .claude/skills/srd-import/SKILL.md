@@ -133,9 +133,8 @@ patterns don't match instead of guessing. Lessons from the first import:
   item's text states are written per entry from its text, then checked: list
   every entry whose text mentions charges or casting but has no such field.
 - **Summaries** are one plain, factual line per entry, written for it before
-  the entry is generated. Never write a placeholder: the validator accepts
-  any 10 characters, so "TODO summary" passes CI unnoticed (stage 3 merged
-  five that way).
+  the entry is generated. Never write a placeholder: the validator rejects
+  `TODO`-style markers (§6.8), but not every stand-in a script can produce.
 - **`shortName`.** Set it when the SRD's prose calls the creature something
   other than the last word of its name ("The priest" for the Priest Acolyte,
   "The sphinx" for the Sphinx of Lore). The render check in step 6 finds
@@ -196,7 +195,6 @@ not by the JSON:
   text field: each `*`, `**`, and `***` marker closes, and no italic or bold
   name that matches a library entry (other than the entry itself) is left
   unlinked.
-- Search the batch for placeholder text ("TODO") in every field.
 - Run `npm run validate` and `npm run build`. Never push a failing batch.
 - Run `npm run srd-coverage -- --type <type> --tier <tier>` again: the batch's
   entries no longer show as missing.

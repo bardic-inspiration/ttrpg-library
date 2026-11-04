@@ -142,6 +142,8 @@ const INVALID: Record<string, RegExp> = {
   'magic-item-ref-missing-target': /^stats\.spells\[0\]\.spell: ref "spell\/frost-lances-of-doom" does not resolve: no spell has id "frost-lances-of-doom"$/,
   'magic-item-ref-type-mismatch': /^stats\.spells\[0\]\.spell: ref "creature\/frost-lance" does not resolve: no creature has id "frost-lance"; "frost-lance" is a spell$/,
   'blocklist-in-name': /^name: "Beholder" is on the blocklist \(config\/blocklist\.json\); use an SRD or original name$/,
+  'placeholder-in-summary': /^summary: "TODO" is placeholder text/,
+  'placeholder-in-stats-text': /^stats\.traits\[0\]\.text: "TBD" is placeholder text/,
   'blocklist-in-summary': /^summary: "mind flayer" is on the blocklist/,
   'blocklist-in-description': /^description: "Faerûn" is on the blocklist/,
   'blocklist-in-descriptors': /^stats\.descriptors\[0\]: "Githyanki" is on the blocklist/,

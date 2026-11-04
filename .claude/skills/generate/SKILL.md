@@ -190,10 +190,6 @@ If it still fails:
 - For a gap-fill run or an inline request there is no issue: report the
   errors in the run's output and stop.
 
-Then search the batch for placeholder text ("TODO", "TBD") in every field,
-`summary` included. The validator accepts any summary of 10 characters or
-more, so a placeholder passes CI.
-
 Once it passes, keep every warning it prints; they go in the PR body.
 
 ## Step 6: Branch, commit, and open the PR
