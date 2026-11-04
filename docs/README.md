@@ -19,7 +19,7 @@ under "Coming with the migration" and moves them into the index.
 
 | File | Covers |
 |---|---|
-| `architecture.md` | Pipeline overview, technology choices, repo layout |
+| `architecture.md` | Pipeline overview, technology choices, repo layout, and the shared terms (entry, type, ruleset, facet, tag, ref, token, derived value) every doc and the stage spec use as defined |
 | `content-model.md` | Envelope, IDs, tags, meta, text fields, refs, situational fields, SRD vs custom entries, validation |
 | `rulesets.md` | The ruleset module contract, derivation, tokens, notes per type for `dnd-5e-2024` |
 | `generation.md` | Requests, routines, skills, defaults, gap fill, revision, SRD import |
@@ -39,8 +39,8 @@ Each rule is stated once, in the place its reader already looks:
   and dev sessions.
 - **Skills and guidelines**: rules that routines follow. A routine reads only
   these and `docs/`, never the stage spec.
-- **The stage spec**: design that isn't built yet. Its shape is decided in
-  #197.
+- **The stage spec** ([`spec/v2/`](../spec/v2/README.md)): design that
+  isn't built yet.
 - **Code, schemas, and data files**: the exact rules. A doc explains them and
   links to them; it doesn't restate them. A field's meaning goes in its
   schema's `description` keyword, not in a table in a doc.
@@ -76,8 +76,8 @@ until the project has human newcomers.
 
 `decisions.md` records what each version did and why. It is history, not a
 set of rules: later versions may change any decision. Each version adds its
-own section. The principles carry forward as the guide for weighing new
-designs.
+own section, and a PR that makes a decision adds its row (`AGENTS.md`
+"Rules"). The principles carry forward as the guide for weighing new designs.
 
 ### Keeping docs current
 
