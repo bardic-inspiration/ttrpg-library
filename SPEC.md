@@ -740,7 +740,7 @@ An entry belongs to a bucket when its value on every axis falls in that bucket's
 | Field | Kind | Required |
 |---|---|---|
 | Type | dropdown: creature, magic-item, spell | yes |
-| Count | dropdown: 1–10 (issue forms have no number field) | no (defaults) |
+| Count | dropdown: 1–10 (issue forms have no number field); a free-form request may ask for more | no (defaults) |
 | Brief | textarea: theme, constraints, CR/level/rarity range, anything else | yes |
 | Tags | textarea, one `key: value` per line (comma-separated for lists) | no |
 | Ruleset | text | no (defaults) |
@@ -774,12 +774,12 @@ Every run, scheduled or manual, follows the same sequence so that review feedbac
 1. **Sync.** Fetch `main`; run `npm ci` and `npm run build:index` to get the current library.
 2. **Revisions first.** For each open PR on a `gen/` or `revise/` branch, find owner comments not yet handled (§8.5) and invoke the `revise` skill. Push, reply, continue.
 3. **Revise requests.** Take open `revise` issues without `in-progress` or `needs-info`, oldest first, claim each as in step 4, and invoke the `revise` skill on each; each becomes a small PR.
-4. **Content requests.** Pick open `request` issues without `in-progress` or `needs-info`, `priority:high` first, then oldest. Group issues into one batch while the total count is ≤ `maxBatch`. Claim each with the `in-progress` label and a short comment.
+4. **Content requests.** Pick open `request` issues without `in-progress` or `needs-info`, `priority:high` first, then oldest. Group them all into one batch; there is no batch size limit. Claim each with the `in-progress` label and a short comment.
 5. **Gap-fill.** If no requests were picked and `gapFill.enabled`, choose the type and bucket with the fewest entries (ties go to the type with the fewest entries overall, then to the type listed first in `config/types.json`; ties within a type go to the first bucket in `gapBuckets` order, first axis outermost) and generate `gapFill.count` entries for it. `npm run gap-fill` (`scripts/generate/gap.ts`, counting with `lib/buckets.ts`) makes this choice among the types of `defaults.ruleset`: it reads `site/public/library.json` and `config/types.json`, and prints the type and the bucket label (§7.1), as in `spell stats.level=0..0&stats.school=abjuration`.
 6. **Ambiguity.** If a request cannot be fulfilled as written (contradictory constraints, unknown type), comment a single question on the issue, add `needs-info`, remove `in-progress`, and move on.
 7. **Stale claims.** An `in-progress` issue with no open linked PR after 24 hours is treated as unclaimed.
 
-A manual run may name specific issues, or pass an inline request (type, count, brief, tags) that is handled as if it were an issue but without one. Such a run still does steps 1–3, but step 4 takes only what it was given. Named issues must be open `request` issues without `needs-info`; any other is reported and left alone, and named issues whose total count exceeds `maxBatch` are taken in the order named while they fit, with the rest reported for a later run. It never gap-fills (step 5). An inline request that is ambiguous (step 6) has no issue to ask on, so the run reports the question instead.
+A manual run may name specific issues, or pass an inline request (type, count, brief, tags) that is handled as if it were an issue but without one. Such a run still does steps 1–3, but step 4 takes only what it was given. Named issues must be open `request` issues without `needs-info`; any other is reported and left alone. It never gap-fills (step 5). An inline request that is ambiguous (step 6) has no issue to ask on, so the run reports the question instead.
 
 ### 8.3 Defaults (`config/defaults.json`)
 
@@ -787,8 +787,6 @@ A manual run may name specific issues, or pass an inline request (type, count, b
 {
   "ruleset": "dnd-5e-2024",
   "count": 5,
-  "maxBatch": 10,
-  "srdMaxBatch": 50,
   "tags": {},
   "gapFill": { "enabled": true, "count": 3 },
   "validateRetries": 3
@@ -797,7 +795,7 @@ A manual run may name specific issues, or pass an inline request (type, count, b
 
 Defaults are applied only to fields the request leaves unspecified. Request tags are merged over default tags.
 
-`count` and `gapFill.count` in the file are whole numbers from 1 to `maxBatch`, matching the form's 1–10 range. A request that asks for more than `maxBatch` entries gets `maxBatch`; the count is otherwise taken on trust. An SRD import stage batch (§8.1) is capped at `srdMaxBatch` instead, a whole number of at least `maxBatch`; stages of `complex` entries use small batches, the bulk `simple` stage 30–50. `scripts/generate/defaults.ts` loads and checks the file, and applies it to a request.
+`count` and `gapFill.count` in the file are whole numbers of at least 1. A request's count is taken on trust, and no batch has a size limit: a run takes every request it picks, and an SRD import stage batch (§8.1) is as large as the session chooses. `scripts/generate/defaults.ts` loads and checks the file, and applies it to a request.
 
 ### 8.4 The `generate` skill
 
@@ -846,7 +844,7 @@ Each topic is one `##` section, in this order and with exactly these headings: `
 
 Recorded in `docs/routines.md` along with the canonical routine prompts:
 
-- **Scheduled routine:** weekly, Monday morning local time, one run. Default batch 5, never above `maxBatch` (10).
+- **Scheduled routine:** weekly, Monday morning local time, one run. A request without a count gets 5.
 - **On-demand routine:** same prompt, with optional issue numbers or an inline request.
 
 The prompts tell the run to follow the run order written out in `docs/routines.md`, read from `main`, so a change to the run order is a reviewed dev PR to that file rather than an edit to the routine's settings. Steps that depend on a skill or script not yet built are marked there as unavailable and skipped. A test checks that every repo path, npm script, and `config/defaults.json` key the file names exists, that it lists the §8.2 steps in order, and that the on-demand prompts are the scheduled prompt with inputs added.
@@ -1257,7 +1255,7 @@ Each milestone ends with something you can verify.
 | 4 | **Exports.** JSON (entry and set), PNG, print view with all four sizes, multi-entry print | A Letter print of a long creature paginates cleanly with selectable text; a PNG posts legibly to Discord |
 | 5 | **Generation.** Issue forms, labels, defaults, `generate` skill, guidelines for three types, routine prompts in `docs/routines.md` | One run turns an issue into a passing PR that closes the issue on merge |
 | 6 | **Revision and schedule.** `revise` skill, comment sweep, revise issues, gap-filler, weekly schedule | A review comment on a routine PR is addressed by the next run; a week with no open issues produces a gap-fill PR |
-| 7 | **Full SRD import.** SRD manifest and coverage script, SRD batch limit, then import stages (§8.1): a pilot of `complex` entries, the `simple` entries in bulk, then the remaining `complex` entries | `npm run srd-coverage` reports no missing entries, and every format-fix issue filed during the import is closed |
+| 7 | **Full SRD import.** SRD manifest and coverage script, then import stages (§8.1): a pilot of `complex` entries, the `simple` entries in bulk, then the remaining `complex` entries | `npm run srd-coverage` reports no missing entries, and every format-fix issue filed during the import is closed |
 
 v1 is complete when all seven milestones are done, the library holds at least five entries of each type merged through the routine flow, and a UI refinement pass has been made through `ui` PRs. Refinement runs alongside milestones 4–6 rather than after them.
 
