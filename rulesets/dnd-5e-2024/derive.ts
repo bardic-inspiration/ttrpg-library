@@ -141,7 +141,7 @@ export function deriveCreature(stats: CreatureStats, tables: Tables): DerivedCre
     skills,
     passivePerception: 10 + (skills.perception ?? mods.wis),
     traits: (stats.traits ?? []).map((a) => deriveAction(a, pb, mods)),
-    actions: stats.actions.map((a) => deriveAction(a, pb, mods)),
+    actions: (stats.actions ?? []).map((a) => deriveAction(a, pb, mods)),
     bonusActions: (stats.bonusActions ?? []).map((a) => deriveAction(a, pb, mods)),
     reactions: (stats.reactions ?? []).map((a) => deriveAction(a, pb, mods)),
     legendaryActions: { items: (stats.legendaryActions?.items ?? []).map((a) => deriveAction(a, pb, mods)) },

@@ -62,6 +62,7 @@
         "name": { "type": "string", "minLength": 1 },
         "typeLine": { "$ref": "#/$defs/Line" },
         "ac": { "$ref": "#/$defs/Line" },
+        "initiative": { "$ref": "#/$defs/Line" },
         "hp": { "$ref": "#/$defs/Line" },
         "speed": { "$ref": "#/$defs/Line" },
         "abilities": {
