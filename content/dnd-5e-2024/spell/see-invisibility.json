@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "see-invisibility",
+  "name": "See Invisibility",
+  "summary": "Lets you see Invisible creatures and objects and into the Ethereal Plane.",
+  "stats": {
+    "level": 2,
+    "school": "divination",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a pinch of talc"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "For the duration, you see creatures and objects that have the Invisible condition as if they were visible, and you can see into the Ethereal Plane. Creatures and objects there appear ghostly."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

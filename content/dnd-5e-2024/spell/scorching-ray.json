@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "scorching-ray",
+  "name": "Scorching Ray",
+  "summary": "Hurls three fiery rays that each deal Fire damage on a hit.",
+  "stats": {
+    "level": 2,
+    "school": "evocation",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You hurl three fiery rays. You can hurl them at one target within range or at several. Make a ranged spell attack for each ray. On a hit, the target takes 2d6 Fire damage.",
+    "higherLevels": "You create one additional ray for each spell slot level above 2."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

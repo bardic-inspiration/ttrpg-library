@@ -1,0 +1,46 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "protection-from-poison",
+  "name": "Protection from Poison",
+  "summary": "Ends the Poisoned condition on a creature and grants it Advantage and Resistance against poison.",
+  "stats": {
+    "level": 2,
+    "school": "abjuration",
+    "classes": [
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "You touch a creature and end the Poisoned condition on it. For the duration, the target has Advantage on saving throws to avoid or end the Poisoned condition, and it has Resistance to Poison damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

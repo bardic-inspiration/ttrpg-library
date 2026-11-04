@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "prayer-of-healing",
+  "name": "Prayer of Healing",
+  "summary": "Gives up to five creatures the benefits of a Short Rest and restores Hit Points to them.",
+  "stats": {
+    "level": 2,
+    "school": "abjuration",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 10,
+      "unit": "minute"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Up to five creatures of your choice who remain within range for the spell's entire casting gain the benefits of a Short Rest and also regain 2d8 Hit Points. A creature can't be affected by this spell again until that creature finishes a Long Rest.",
+    "higherLevels": "The healing increases by 1d8 for each spell slot level above 2."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

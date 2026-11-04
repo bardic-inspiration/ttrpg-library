@@ -1,0 +1,46 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "sending",
+  "name": "Sending",
+  "summary": "Sends a short message to a creature you know of, anywhere, which can reply.",
+  "stats": {
+    "level": 3,
+    "school": "divination",
+    "classes": [
+      "bard",
+      "cleric",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "unlimited"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a copper wire"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You send a short message of 25 words or fewer to a creature you have met or a creature described to you by someone who has met it. The target hears the message in its mind, recognizes you as the sender if it knows you, and can answer in a like manner immediately. The spell enables targets to understand the meaning of your message.\n\nYou can send the message across any distance and even to other planes of existence, but if the target is on a different plane than you, there is a 5 percent chance that the message doesn't arrive. You know if the delivery fails.\n\nUpon receiving your message, a creature can block your ability to reach it again with this spell for 8 hours. If you try to send another message during that time, you learn that you are blocked, and the spell fails."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

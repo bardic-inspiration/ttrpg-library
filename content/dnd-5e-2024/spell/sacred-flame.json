@@ -1,0 +1,43 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "sacred-flame",
+  "name": "Sacred Flame",
+  "summary": "A cantrip that calls down flame-like radiance for Radiant damage, ignoring cover.",
+  "stats": {
+    "level": 0,
+    "school": "evocation",
+    "classes": [
+      "cleric"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take 1d8 Radiant damage. The target gains no benefit from Half Cover or Three-Quarters Cover for this save.",
+    "cantripUpgrade": "The damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8)."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

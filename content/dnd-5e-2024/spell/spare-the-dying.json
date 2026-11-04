@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "spare-the-dying",
+  "name": "Spare the Dying",
+  "summary": "A cantrip that stabilizes a creature at 0 Hit Points.",
+  "stats": {
+    "level": 0,
+    "school": "necromancy",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 15
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Choose a creature within range that has 0 Hit Points and isn't dead. The creature becomes Stable.",
+    "cantripUpgrade": "The range doubles when you reach levels 5 (30 feet), 11 (60 feet), and 17 (120 feet)."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

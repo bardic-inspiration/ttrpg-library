@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "shield-of-faith",
+  "name": "Shield of Faith",
+  "summary": "Grants a creature a +2 bonus to AC.",
+  "stats": {
+    "level": 1,
+    "school": "abjuration",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a prayer scroll"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A shimmering field surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
