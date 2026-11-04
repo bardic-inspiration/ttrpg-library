@@ -197,12 +197,16 @@ const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
 /**
  * The damage, then the prose after it (`onHit`, `onFailure`). Prose that
  * starts lowercase continues the damage sentence after a comma ("Cold damage,
- * and the target…"); otherwise the damage ends its sentence (SPEC.md §6.5).
+ * and the target…"), prose that starts with a dash joins it directly
+ * ("Piercing damage—or …"); otherwise the damage ends its sentence (SPEC.md §6.5).
  */
 function afterDamage(damage: string | undefined, prose: string | undefined): string {
   if (!present(damage)) return prose ?? '';
   if (!present(prose)) return sentence(damage);
-  return /^[a-z]/.test(prose) ? `${damage}, ${prose}` : `${sentence(damage)} ${prose}`;
+  if (/^[a-z]/.test(prose)) return `${damage}, ${prose}`;
+  // A dash continues the sentence with no punctuation: "Piercing damage—or …".
+  if (/^[—–]/.test(prose)) return `${damage}${prose}`;
+  return `${sentence(damage)} ${prose}`;
 }
 
 /** One action, trait, or reaction as SRD 5.2 prose. */

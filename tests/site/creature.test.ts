@@ -217,6 +217,14 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       'The acolyte casts one of the following spells, using Wisdom as the spellcasting ability (+3 to hit with spell attacks):',
     );
   });
+  it('joins prose that starts with a dash straight onto the damage (SPEC.md §6.5)', async () => {
+    const { s, d } = await build({
+      actions: [{ name: 'Bite', kind: 'melee-attack', ability: 'str', reach: 5, damage: [{ dice: '1d8', ability: 'str', type: 'piercing' }], onHit: '—or {dmg:2d8+str:piercing} if the target is Grappled—plus {dmg:1d8:acid}.' }],
+    });
+    expect(actionBlock(s.actions![0]!, d.actions[0], d).body).toContain(
+      '*Hit:* 6 (1d8 + 2) Piercing damage—or 11 (2d8 + 2) Piercing damage if the target is Grappled—plus 4 (1d8) Acid damage.',
+    );
+  });
   it('derives a creature with no actions, such as one with only a Reaction', async () => {
     const { d } = await build({ actions: undefined, reactions: [{ name: 'Shriek', kind: 'other', text: 'The hound shrieks.' }] });
     expect(d.actions).toEqual([]);
