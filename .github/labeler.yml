@@ -1,5 +1,6 @@
 # Lane and area labels (SPEC.md §12.4), applied by workflows/labeler.yml.
-# `migration` is never applied here: it is a deliberate, manual decision.
+# `migration` goes on a dev-lane PR that changes content, so a migration needs
+# no manual step and stays visible in review.
 
 content:
   - head-branch: ['^gen/', '^revise/', '^manual/']
@@ -36,3 +37,9 @@ ci:
       - head-branch: ['^(?!gen/|revise/|manual/|spike/)']
       - changed-files:
           - any-glob-to-any-file: '.github/**'
+
+migration:
+  - all:
+      - head-branch: ['^(?!gen/|revise/|manual/)']
+      - changed-files:
+          - any-glob-to-any-file: ['content/**', 'assets/images/**']

@@ -158,3 +158,17 @@ describe('checkLane docsOnly', () => {
     expect(result.errors).toHaveLength(1);
   });
 });
+
+describe('.github/labeler.yml', () => {
+  it('adds migration to a non-content branch that changes content (SPEC.md §12.4)', async () => {
+    const { readFile } = await import('node:fs/promises');
+    const yml = await readFile(new URL('../.github/labeler.yml', import.meta.url), 'utf8');
+    const rule = yml.slice(yml.indexOf('\nmigration:'));
+    expect(rule).toContain("head-branch: ['^(?!gen/|revise/|manual/)']");
+    expect(rule).toContain("any-glob-to-any-file: ['content/**', 'assets/images/**']");
+    // The branch regex matches dev branches and rejects content ones.
+    const branch = /'(\^\(\?!gen\/\|revise\/\|manual\/\))'/.exec(rule)![1]!;
+    expect(new RegExp(branch).test('dev/spell-header-forms')).toBe(true);
+    expect(new RegExp(branch).test('gen/srd-133-spell-20261104')).toBe(false);
+  });
+});

@@ -82,7 +82,7 @@ export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
     }
   } else if (contentChanged && !labels.includes('migration')) {
     errors.push(
-      `A dev-lane PR may change content only with the migration label, applied by hand. Content paths:\n${list(paths.filter(isContentPath))}`,
+      `A dev-lane PR may change content only with the migration label, which the labeler adds. Content paths:\n${list(paths.filter(isContentPath))}`,
     );
   }
   return { lane, contentChanged, docsOnly, errors };
