@@ -11,6 +11,12 @@ behavior changed, SPEC.md is updated in this PR. -->
 
 Closes #
 
+## Decisions
+
+<!-- Choices this PR makes that the spec or an issue didn't settle, each with
+its reason (AGENTS.md "Rules"). Add each to docs/decisions.md in this PR.
+Delete if there are none. -->
+
 ## Testing
 
 <!-- Tests added or changed, and anything checked by hand. -->

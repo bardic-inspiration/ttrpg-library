@@ -24,9 +24,19 @@ Every PR is in exactly one lane ([`SPEC.md`](SPEC.md) §12.4 "Work lanes"):
 ## Rules
 
 - **Never push to `main`.** Every change is a PR.
-- **Don't invent behavior.** If the spec is silent, ambiguous, or wrong, ask
-  (the user, or on the issue) and fix the spec before writing code that
-  depends on it.
+- **Don't invent behavior.** When the spec is silent, ambiguous, or wrong,
+  ask whether a different reasonable choice would change behavior that
+  something else depends on.
+  - If it wouldn't, decide by the principles in
+    [`docs/decisions.md`](docs/decisions.md) and record the choice in the
+    PR's "Decisions" section. The owner's merge confirms it.
+  - If it would, stop that item and ask (the user, or on the issue). Fix the
+    spec before writing code that depends on it. For v2 design, the question
+    goes into the area's "Open questions" in [`spec/v2/`](spec/v2/README.md)
+    through a small PR. Carry on with the items that are clear.
+- **Record decisions where they're made.** A PR that makes a decision lists
+  it under "Decisions" and adds its row to
+  [`docs/decisions.md`](docs/decisions.md) in the same PR.
 - **A dev PR that changes behavior updates `SPEC.md` in the same PR.**
 - **One issue per PR.** Out-of-scope work becomes an issue, not a `TODO`
   or a drive-by change. An issue that lists several items gets one PR, not
@@ -93,6 +103,13 @@ waiting on a spec decision doesn't hold up the rest: open the PR with the
 items that are ready, and add the others as commits once they're decided, or
 in a follow-up PR if the first has merged. Split an item into its own
 sub-issue and PR only when it's too large to review alongside the others.
+
+### Stage spec
+
+The v2 design lives in [`spec/v2/`](spec/v2/README.md), one file per design
+area. An approved design can be amended at any time by a small PR to it that
+the owner merges. Each build milestone starts with a pilot task on its area's
+hardest cases, which is expected to turn up amendments.
 
 ### Testing backlog
 
