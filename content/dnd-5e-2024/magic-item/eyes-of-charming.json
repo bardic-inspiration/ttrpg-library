@@ -1,0 +1,39 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "eyes-of-charming",
+  "name": "Eyes of Charming",
+  "summary": "Crystal lenses that cast Charm Person, spending more charges for a higher level.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 3,
+      "recharge": "all daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/charm-person"
+        },
+        "chargeCost": 1,
+        "maxChargeCost": 3,
+        "saveDc": 13
+      }
+    ],
+    "effect": "These crystal lenses fit over the eyes. They have 3 charges. While wearing them, you can expend 1 or more charges to cast *{ref:spell/charm-person}* (save DC 13). For 1 charge, you cast the level 1 version of the spell. You increase the spell's level by one for each additional charge you expend. The lenses regain all expended charges daily at dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
