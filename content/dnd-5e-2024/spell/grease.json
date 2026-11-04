@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "grease",
+  "name": "Grease",
+  "summary": "Covers a 10-foot square in slippery grease that knocks creatures Prone.",
+  "stats": {
+    "level": 1,
+    "school": "conjuration",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a bit of pork rind or butter"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": false
+    },
+    "effect": "Nonflammable grease covers the ground in a 10-foot square centered on a point within range and turns it into Difficult Terrain for the duration.\n\nWhen the grease appears, each creature standing in its area must succeed on a Dexterity saving throw or have the Prone condition. A creature that enters the area or ends its turn there must also succeed on that save or fall Prone."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

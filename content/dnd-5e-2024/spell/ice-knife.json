@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "ice-knife",
+  "name": "Ice Knife",
+  "summary": "Flings a shard of ice that deals Piercing damage and explodes for Cold damage around the target.",
+  "stats": {
+    "level": 1,
+    "school": "conjuration",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": false,
+      "s": true,
+      "m": {
+        "text": "a drop of water or a piece of ice"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You create a shard of ice and fling it at one creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 Piercing damage. Hit or miss, the shard then explodes. The target and each creature within 5 feet of it must succeed on a Dexterity saving throw or take 2d6 Cold damage.",
+    "higherLevels": "The Cold damage increases by 1d6 for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

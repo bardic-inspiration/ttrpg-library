@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "holy-aura",
+  "name": "Holy Aura",
+  "summary": "Surrounds you with an aura that grants Advantage on saving throws and blinds Fiends and Undead that strike your allies.",
+  "stats": {
+    "level": 8,
+    "school": "abjuration",
+    "classes": [
+      "cleric"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a reliquary worth 1,000+ GP",
+        "costGp": 1000
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "For the duration, you emit an aura in a 30-foot Emanation. While in the aura, creatures of your choice have Advantage on all saving throws, and other creatures have Disadvantage on attack rolls against them. In addition, when a Fiend or an Undead hits an affected creature with a melee attack roll, the attacker must succeed on a Constitution saving throw or have the Blinded condition until the end of its next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

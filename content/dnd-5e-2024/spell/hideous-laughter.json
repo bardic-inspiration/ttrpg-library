@@ -1,0 +1,50 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "hideous-laughter",
+  "name": "Hideous Laughter",
+  "summary": "Leaves a creature Prone and Incapacitated with uncontrollable laughter.",
+  "stats": {
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a tart and a feather"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "One creature of your choice that you can see within range makes a Wisdom saving throw. On a failed save, it has the Prone and Incapacitated conditions for the duration. During that time, it laughs uncontrollably if it's capable of laughter, and it can't end the Prone condition on itself.\n\nAt the end of each of its turns and each time it takes damage, it makes another Wisdom saving throw. The target has Advantage on the save if the save is triggered by damage. On a successful save, the spell ends.",
+    "higherLevels": "You can target one additional creature for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
