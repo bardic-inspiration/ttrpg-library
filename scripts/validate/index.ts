@@ -4,7 +4,7 @@ import { checkImage, checkPath, checkUniqueness, type EntryHead, type FileIssue 
 import { entryKey, linkEntries, REF_TOKEN, type Link, type RefEntry } from './refs.ts';
 import { PROJECT_ROOT, formatErrors, loadEnvelopeValidator, loadRegistry, loadRuleset, validateWithText, type LoadedRuleset } from './schema.ts';
 import { termMatcher } from '../../lib/text.ts';
-import { checkBlocklist, checkMarkdown, loadBlocklist, stringsIn } from './text.ts';
+import { checkBlocklist, checkMarkdown, checkPlaceholders, loadBlocklist, stringsIn } from './text.ts';
 import { listEntryFiles } from './walk.ts';
 
 export interface ValidationError {
@@ -71,6 +71,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     const entry = data as ValidEntry['entry'];
     for (const { path, text } of envelopeResult.texts) for (const message of checkMarkdown(path, text)) error(file, message);
     for (const message of checkBlocklist(entry, blocklist)) error(file, message);
+    for (const message of checkPlaceholders(entry)) error(file, message);
     const srd = (entry.meta as { source?: { srd?: true } }).source?.srd === true;
     heads.push({
       file,

@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { PROJECT_ROOT } from '../scripts/validate/schema.ts';
 import { termMatcher } from '../lib/text.ts';
-import { checkBlocklist, checkMarkdown, loadBlocklist, markdownViolations, stringsIn, tableViolations } from '../scripts/validate/text.ts';
+import { checkBlocklist, checkMarkdown, checkPlaceholders, loadBlocklist, markdownViolations, stringsIn, tableViolations } from '../scripts/validate/text.ts';
 
 describe('markdown subset (SPEC.md §5.5)', () => {
   it('allows paragraphs, bold, italic, lists, line breaks, and tokens', () => {
@@ -80,6 +80,37 @@ describe('pipe tables (SPEC.md §5.5)', () => {
     expect(checkMarkdown('stats.effect', '| a | b |\n|---|---|\n| 1 |')).toEqual([
       'stats.effect: table row 1 has 1 cell; its header has 2',
     ]);
+  });
+});
+
+describe('placeholder text (SPEC.md §6.8)', () => {
+  const entry = (patch: Record<string, unknown>) => ({ name: 'Cinder Hound', summary: 'A soot-black hound.', stats: {}, ...patch });
+
+  it('flags each placeholder marker in name, summary, description, and stats text, naming the field', () => {
+    expect(
+      checkPlaceholders(
+        entry({
+          summary: 'TODO summary',
+          description: 'Lorem ipsum dolor sit amet.',
+          stats: { actions: [{ text: 'Bite. TBD.' }, { text: 'FIXME: damage' }], traits: [{ text: 'XXX' }] },
+        }),
+      ),
+    ).toEqual([
+      'summary: "TODO" is placeholder text; write the entry\'s own text',
+      'description: "Lorem ipsum" is placeholder text; write the entry\'s own text',
+      'stats.actions[0].text: "TBD" is placeholder text; write the entry\'s own text',
+      'stats.actions[1].text: "FIXME" is placeholder text; write the entry\'s own text',
+      'stats.traits[0].text: "XXX" is placeholder text; write the entry\'s own text',
+    ]);
+  });
+
+  it('leaves ordinary words alone', () => {
+    const ordinary = entry({
+      name: 'Toddler Mimic',
+      summary: 'A to-do list of chores, tbd by the GM, that hides in a xxxl crate.',
+      stats: { actions: [{ text: 'To do so, the mimic takes the Dodge action. Its lorem-like runes glow.' }] },
+    });
+    expect(checkPlaceholders(ordinary)).toEqual([]);
   });
 });
 
