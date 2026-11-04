@@ -22,7 +22,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "gold dust worth 25+ GP",
+        "text": "gold dust worth 25+ GP, which the spell consumes",
         "costGp": 25,
         "consumed": true
       }
