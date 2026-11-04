@@ -156,6 +156,8 @@ against it before pushing.
   nearest free-text field the schema offers (a creature's `speed.note` for
   "40 ft. (wolf form only)"). Don't work around the template for exact
   punctuation or layout; §5.9 "Formatting" lists what isn't matched.
+- An inline heading in rules text is bold italic: `***Regaining Charges.***`
+  (§9.5).
 - Set `meta.source.srd` to `true` (step 4).
 
 Never modify, rename, or move an existing entry. This skill only adds files.
