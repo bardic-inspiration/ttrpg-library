@@ -415,7 +415,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `saveProficiencies` | optional array of `Ability` | |
 | `skills` | optional `{ <skill>: Proficiency }` | Keys from the 18 SRD skills in kebab-case |
 | `vulnerabilities`, `resistances` | optional arrays of `DamageType` or string | String for qualified entries |
-| `immunities` | optional `{ damage?: [...], conditions?: [Condition] }` | |
+| `immunities` | optional `{ damage?: [...], conditions?: [Condition or string] }` | A string is a qualified entry, printed as written: "Charmed (except from its vampire master)" |
 | `gear` | optional array of `RefOrText` | Items the creature carries |
 | `senses` | optional `{ darkvision?, blindsight?, tremorsense?, truesight?: int, note?: string }` | Feet, each at least 1. Passive Perception is derived, so the Senses line always displays. `note` is a qualifier printed in parentheses after the senses: "Darkvision 120 ft. (unimpeded by magical Darkness); Passive Perception 13" |
 | `languages` | `{ spoken: [string], understood?: [string], telepathy?: int, note?: string }` | `spoken` lists languages the creature speaks (and so understands), and may be empty. `understood` lists languages it understands but can't speak. `telepathy` is at least 1. Rendering is under "Display forms" below |

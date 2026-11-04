@@ -6,6 +6,7 @@ import {
   abilityRows,
   actionBlock,
   crLine,
+  defenseLines,
   formatCr,
   hpLine,
   initiativeLine,
@@ -262,5 +263,9 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     const { s } = await build({ swarm: 'tiny', creatureType: 'beast', alignment: 'unaligned' });
     expect(sizeTypeLine(s)).toBe('Medium Swarm of Tiny Beasts, Unaligned');
     expect(sizeTypeLine({ ...s, creatureType: 'undead', alignment: 'neutral evil' })).toBe('Medium Swarm of Tiny Undead, Neutral Evil');
+  });
+  it('prints a qualified condition immunity as written (#166)', async () => {
+    const { s } = await build({ immunities: { conditions: ['Charmed (except from its vampire master)'] } });
+    expect(defenseLines(s)).toEqual([{ label: 'Immunities', value: 'Charmed (except from its vampire master)' }]);
   });
 });

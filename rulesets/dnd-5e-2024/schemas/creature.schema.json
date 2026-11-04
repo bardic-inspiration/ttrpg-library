@@ -219,7 +219,15 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": {
-            "$ref": "common.schema.json#/$defs/Condition"
+            "anyOf": [
+              {
+                "$ref": "common.schema.json#/$defs/Condition"
+              },
+              {
+                "type": "string",
+                "minLength": 1
+              }
+            ]
           }
         }
       }
