@@ -1,0 +1,50 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "freedom-of-movement",
+  "name": "Freedom of Movement",
+  "summary": "Frees a creature from Difficult Terrain, slowing magic, and being Grappled or Restrained.",
+  "stats": {
+    "level": 4,
+    "school": "abjuration",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "ranger"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a leather strap"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "You touch a willing creature. For the duration, the target's movement is unaffected by Difficult Terrain, and spells and other magical effects can neither reduce the target's Speed nor cause the target to have the Paralyzed or Restrained conditions. The target also has a Swim Speed equal to its Speed.\n\nIn addition, the target can spend 5 feet of movement to automatically escape from nonmagical restraints, such as manacles or a creature imposing the Grappled condition on it.",
+    "higherLevels": "You can target one additional creature for each spell slot level above 4."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

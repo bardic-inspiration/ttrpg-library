@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "detect-evil-and-good",
+  "name": "Detect Evil and Good",
+  "summary": "Senses Aberrations, Celestials, Elementals, Fey, Fiends, and Undead within 30 feet of you.",
+  "stats": {
+    "level": 1,
+    "school": "divination",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "For the duration, you sense the location of any Aberration, Celestial, Elemental, Fey, Fiend, or Undead within 30 feet of yourself. You also sense whether the *Hallow* spell is active there and, if so, where.\n\nThe spell is blocked by 1 foot of stone, dirt, or wood; 1 inch of metal; or a thin sheet of lead."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

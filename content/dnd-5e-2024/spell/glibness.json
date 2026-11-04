@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "glibness",
+  "name": "Glibness",
+  "summary": "Lets you replace your Charisma check rolls with a 15 and fools magic that detects lies.",
+  "stats": {
+    "level": 8,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "warlock"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "Until the spell ends, when you make a Charisma check, you can replace the number you roll with a 15. Additionally, no matter what you say, magic that would determine if you are telling the truth indicates that you are being truthful."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

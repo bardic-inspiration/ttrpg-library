@@ -1,0 +1,49 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "charm-person",
+  "name": "Charm Person",
+  "summary": "Charms a Humanoid that fails a Wisdom saving throw.",
+  "stats": {
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "druid",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "One Humanoid you can see within range makes a Wisdom saving throw. It does so with Advantage if you or your allies are fighting it. On a failed save, the target has the Charmed condition until the spell ends or until you or your allies damage it. The Charmed creature is Friendly to you. When the spell ends, the target knows it was Charmed by you.",
+    "higherLevels": "You can target one additional creature for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

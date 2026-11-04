@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "dragons-breath",
+  "name": "Dragon’s Breath",
+  "summary": "Lets a willing creature exhale a 15-foot Cone of acid, cold, fire, lightning, or poison.",
+  "stats": {
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a hot pepper"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "You touch one willing creature, and choose Acid, Cold, Fire, Lightning, or Poison. Until the spell ends, the target can take a Magic action to exhale a 15-foot Cone. Each creature in that area makes a Dexterity saving throw, taking 3d6 damage of the chosen type on a failed save or half as much damage on a successful one.",
+    "higherLevels": "The damage increases by 1d6 for each spell slot level above 2."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

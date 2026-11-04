@@ -1,0 +1,43 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "divine-favor",
+  "name": "Divine Favor",
+  "summary": "Makes your weapon attacks deal an extra 1d4 Radiant damage.",
+  "stats": {
+    "level": 1,
+    "school": "transmutation",
+    "classes": [
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": false
+    },
+    "effect": "Until the spell ends, your attacks with weapons deal an extra 1d4 Radiant damage on a hit."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

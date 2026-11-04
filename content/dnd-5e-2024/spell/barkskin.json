@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "barkskin",
+  "name": "Barkskin",
+  "summary": "Hardens a willing creature's skin so its Armor Class is at least 17.",
+  "stats": {
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a handful of bark"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "You touch a willing creature. Until the spell ends, the target's skin assumes a bark-like appearance, and the target has an Armor Class of 17 if its AC is lower than that."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

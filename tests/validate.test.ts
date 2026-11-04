@@ -6,6 +6,8 @@ import { validateLibrary } from '../scripts/validate/index.ts';
 import { editDistance, normalizeName } from '../scripts/validate/library.ts';
 import { listEntryFiles } from '../scripts/validate/walk.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
+import type { SpellStats } from '../rulesets/dnd-5e-2024/types.ts';
+import { castingTimeLine } from '../site/src/lib/spell.ts';
 
 const library = join(FIXTURES, 'library');
 const temps: string[] = [];
@@ -121,12 +123,12 @@ const INVALID: Record<string, RegExp> = {
   'spell-concentration-not-timed': /^stats\.duration\.concentration: concentration needs a timed duration, not "instantaneous"/,
   'spell-timed-without-amount': /^stats\.duration: a timed duration needs an amount/,
   'spell-timed-without-unit': /^stats\.duration: a timed duration needs a unit/,
-  'spell-distance-without-feet': /^stats\.range: a distance range needs feet/,
+  'spell-distance-without-feet': /^stats\.range: a distance range needs feet or miles, not both/,
   'spell-consumed-without-cost': /^stats\.components\.m: a consumed material component needs a costGp/,
   'spell-cantrip-higher-levels': /^stats\.higherLevels: higherLevels is for leveled spells/,
   'spell-leveled-cantrip-upgrade': /^stats\.cantripUpgrade: cantripUpgrade is for cantrips/,
   'spell-reaction-without-trigger': /^stats\.castingTime: a reaction casting time needs a trigger/,
-  'spell-trigger-without-reaction': /^stats\.castingTime\.trigger: a trigger is allowed only on a reaction/,
+  'spell-trigger-without-reaction': /^stats\.castingTime\.trigger: a trigger is allowed only on a reaction or bonus action/,
   'magic-item-unknown-category': /^stats\.category: must be one of/,
   'magic-item-unknown-rarity': /^stats\.rarity: must be one of/,
   'magic-item-missing-attunement': /^stats: missing required key "attunement"/,
@@ -217,6 +219,8 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'actions.0.damage.0.bonus', 0, /^stats\.actions\[0\]\.damage\[0\]\.bonus: must NOT be valid/],
   ['creature', 'spellcasting', { ability: 'wis', includeAttack: false }, /^stats\.spellcasting\.includeAttack: must be equal to constant/],
   ['spell', 'components.m.consumed', false, /^stats\.components\.m\.consumed: must be equal to constant/],
+  ['spell', 'castingTime.note', '', /^stats\.castingTime\.note: must NOT have fewer than 1 characters/],
+  ['spell', 'duration.upTo', false, /^stats\.duration\.upTo: must be equal to constant/],
   ['spell', 'components.m.costGp', 0, /^stats\.components\.m\.costGp: must be > 0/],
   ['creature', 'actions.1.onFailureOrSuccess', '', /^stats\.actions\[1\]\.onFailureOrSuccess: must NOT have fewer than 1 characters/],
   ['creature', 'shortName', '', /^stats\.shortName: must NOT have fewer than 1 characters/],
@@ -549,5 +553,34 @@ describe('spell warnings (SPEC.md §6.8)', () => {
     const result = await validateLibrary(content);
     expect(result.errors).toEqual([]);
     expect(result.warnings).toEqual([]);
+  });
+
+  const spellErrors = async (patch: (stats: Record<string, any>) => void) => {
+    const spell = await frostLance();
+    patch(spell.stats);
+    const { content } = await temp([spell]);
+    return (await validateLibrary(content)).errors.map((e) => e.message);
+  };
+
+  it('takes a distance range in feet or in miles, but not both (#153)', async () => {
+    expect(await spellErrors((s) => (s.range = { kind: 'distance', miles: 1 }))).toEqual([]);
+    expect(await spellErrors((s) => (s.range = { kind: 'distance', feet: 60, miles: 1 }))).toContainEqual(
+      'stats.range: a distance range needs feet or miles, not both',
+    );
+    expect(await spellErrors((s) => (s.range = { kind: 'self', miles: 1 }))).toContainEqual('stats.range: feet and miles are for a distance range');
+  });
+
+  it('allows upTo only on a timed duration without concentration (#153)', async () => {
+    expect(await spellErrors((s) => (s.duration = { kind: 'timed', amount: 1, unit: 'hour', upTo: true, concentration: false }))).toEqual([]);
+    expect(await spellErrors((s) => (s.duration = { kind: 'timed', amount: 1, unit: 'hour', upTo: true, concentration: true }))).toContainEqual(
+      'stats.duration.upTo: upTo is for a timed duration without concentration, which already reads "up to"',
+    );
+  });
+
+  it('allows a trigger on a bonus action, which the card reads after "Bonus Action" (#153)', async () => {
+    const trigger = 'immediately after hitting a target with a Melee weapon or an Unarmed Strike';
+    expect(await spellErrors((s) => (s.castingTime = { amount: 1, unit: 'bonus-action', trigger }))).toEqual([]);
+    const s = { ...((await frostLance()).stats as SpellStats), castingTime: { amount: 1, unit: 'bonus-action' as const, trigger } };
+    expect(castingTimeLine(s)).toBe(`Bonus Action, which you take ${trigger}`);
   });
 });

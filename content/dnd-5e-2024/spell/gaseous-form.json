@@ -1,0 +1,49 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "gaseous-form",
+  "name": "Gaseous Form",
+  "summary": "Turns a willing creature into a misty cloud that can fly slowly and slip through cracks.",
+  "stats": {
+    "level": 3,
+    "school": "transmutation",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a bit of gauze"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "A willing creature you touch shape-shifts, along with everything it's wearing and carrying, into a misty cloud for the duration. The spell ends on the target if it drops to 0 Hit Points or if it takes a Magic action to end the spell on itself.\n\nWhile in this form, the target's only method of movement is a Fly Speed of 10 feet, and it can hover. The target can enter and occupy the space of another creature. The target has Resistance to Bludgeoning, Piercing, and Slashing damage; it has Immunity to the Prone condition; and it has Advantage on Strength, Dexterity, and Constitution saving throws. The target can pass through narrow openings, but it treats liquids as though they were solid surfaces.\n\nThe target can't talk or manipulate objects, and any objects it was carrying or holding can't be dropped, used, or otherwise interacted with. Finally, the target can't attack or cast spells.",
+    "higherLevels": "You can target one additional creature for each spell slot level above 3."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
