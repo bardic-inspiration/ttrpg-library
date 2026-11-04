@@ -26,7 +26,7 @@ describe(DOC, () => {
     expect(schedule).toMatch(/weekly/i);
     expect(schedule).toMatch(/Monday morning/);
     expect(schedule).toContain('`defaults.count`');
-    expect(schedule).toContain('`defaults.maxBatch`');
+    expect(schedule).not.toContain('maxBatch');
   });
 
   it('has one canonical prompt each for the scheduled and on-demand routines', () => {

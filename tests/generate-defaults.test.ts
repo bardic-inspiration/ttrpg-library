@@ -10,8 +10,6 @@ const ROOT = join(import.meta.dirname, '..');
 const base = (): Defaults => ({
   ruleset: 'dnd-5e-2024',
   count: 5,
-  maxBatch: 10,
-  srdMaxBatch: 50,
   tags: {},
   gapFill: { enabled: true, count: 3 },
   validateRetries: 3,
@@ -46,16 +44,15 @@ describe('checkDefaults', () => {
     expect(checkDefaults({ ...base(), ruleset: 'nope' }, registry)).toContainEqual(expect.stringMatching(/ruleset/));
   });
 
-  it('requires whole-number counts within maxBatch', () => {
+  it('requires whole-number counts of at least 1, with no upper limit', () => {
     expect(checkDefaults({ ...base(), count: 0 }, registry)).toContainEqual(expect.stringMatching(/^count/));
-    expect(checkDefaults({ ...base(), count: 11 }, registry)).toContainEqual(expect.stringMatching(/^count/));
     expect(checkDefaults({ ...base(), count: 2.5 }, registry)).toContainEqual(expect.stringMatching(/^count/));
-    expect(checkDefaults({ ...base(), srdMaxBatch: 9 }, registry)).toContainEqual(expect.stringMatching(/^srdMaxBatch/));
-    expect(checkDefaults({ ...base(), srdMaxBatch: 10 }, registry)).toEqual([]);
-    expect(checkDefaults({ ...base(), maxBatch: 0 }, registry)).toContainEqual(expect.stringMatching(/^maxBatch/));
-    expect(checkDefaults({ ...base(), gapFill: { enabled: true, count: 11 } }, registry)).toContainEqual(
+    expect(checkDefaults({ ...base(), count: 500 }, registry)).toEqual([]);
+    expect(checkDefaults({ ...base(), gapFill: { enabled: true, count: 0 } }, registry)).toContainEqual(
       expect.stringMatching(/^gapFill\.count/),
     );
+    expect(checkDefaults({ ...base(), gapFill: { enabled: true, count: 50 } }, registry)).toEqual([]);
+    expect(checkDefaults({ ...base(), maxBatch: 10 }, registry)).toContainEqual('maxBatch: unknown key');
     expect(checkDefaults({ ...base(), validateRetries: -1 }, registry)).toContainEqual(
       expect.stringMatching(/^validateRetries/),
     );
@@ -100,16 +97,8 @@ describe('applyDefaults', () => {
     expect(defaults.tags).toEqual({ world: 'Aldmere', author: 'routine' });
   });
 
-  it('reduces a count above maxBatch to maxBatch', () => {
-    expect(applyDefaults({ type: 'creature', count: 10 }, base()).count).toBe(10);
-    expect(applyDefaults({ type: 'creature', count: 11 }, base()).count).toBe(10);
-    expect(applyDefaults({ type: 'creature', count: 10_000_000_000 }, base()).count).toBe(10);
-  });
-
-  it('caps an SRD import stage batch at srdMaxBatch, and only that batch (issue #131)', () => {
-    expect(applyDefaults({ type: 'spell', count: 50, srdImport: true }, base()).count).toBe(50);
-    expect(applyDefaults({ type: 'spell', count: 51, srdImport: true }, base()).count).toBe(50);
-    expect(applyDefaults({ type: 'spell', count: 50 }, base()).count).toBe(10);
-    expect(applyDefaults({ type: 'spell', count: 50, srdImport: false }, base()).count).toBe(10);
+  it('takes any count as given, with no batch size limit', () => {
+    expect(applyDefaults({ type: 'creature', count: 11 }, base()).count).toBe(11);
+    expect(applyDefaults({ type: 'spell', count: 300 }, base()).count).toBe(300);
   });
 });
