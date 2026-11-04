@@ -97,7 +97,7 @@
       {
         "name": "Etherealness",
         "kind": "other",
-        "text": "The ghost casts the *Etherealness* spell, requiring no spell components and using Charisma as the spellcasting ability. The ghost is visible on the Material Plane while on the Border Ethereal and vice versa, but it can't affect or be affected by anything on the other plane."
+        "text": "The ghost casts the *{ref:spell/etherealness}* spell, requiring no spell components and using Charisma as the spellcasting ability. The ghost is visible on the Material Plane while on the Border Ethereal and vice versa, but it can't affect or be affected by anything on the other plane."
       },
       {
         "name": "Horrific Visage",
@@ -132,6 +132,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

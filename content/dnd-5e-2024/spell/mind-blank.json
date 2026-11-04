@@ -29,10 +29,11 @@
       "unit": "hour",
       "concentration": false
     },
-    "effect": "Until the spell ends, one willing creature you touch has Immunity to Psychic damage and the Charmed condition. The target is also unaffected by anything that would sense its emotions or alignment, read its thoughts, or magically detect its location, and no spell—not even *Wish*—can gather information about the target, observe it remotely, or control its mind."
+    "effect": "Until the spell ends, one willing creature you touch has Immunity to Psychic damage and the Charmed condition. The target is also unaffected by anything that would sense its emotions or alignment, read its thoughts, or magically detect its location, and no spell—not even *{ref:spell/wish}*—can gather information about the target, observe it remotely, or control its mind."
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
