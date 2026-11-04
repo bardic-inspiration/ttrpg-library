@@ -119,6 +119,15 @@
     inline-size: 100%;
   }
 
+  /* A table's title (a bold line above it in the text) prints above the table. */
+  .md-table caption {
+    caption-side: top;
+    font-family: var(--table-caption-font);
+    font-weight: var(--font-weight-strong);
+    text-align: start;
+    padding-block-end: var(--table-cell-padding-block);
+  }
+
   .md-table th,
   .md-table td {
     padding: var(--table-cell-padding-block) var(--table-cell-padding-inline);

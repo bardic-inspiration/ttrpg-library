@@ -4,11 +4,13 @@
 // through reads as its plain text, never as markup: raw HTML is escaped,
 // links and images keep only their text, and headings read as paragraphs.
 // Pipe tables render as one site-wide table (SPEC.md §9.5), inside a box that
-// scrolls on its own when the table is wider than the text column. A
+// scrolls on its own when the table is wider than the text column; a bold
+// line directly above a table is its title, rendered as the caption. A
 // `{ref:<type>/<id>}` token renders as the target's current name, linked to
 // its detail page (SPEC.md §5.7): the only link text can carry.
 
 import { Marked, type Token, type TokenizerAndRendererExtension, type Tokens } from 'marked';
+import { tableTitleAt } from '../../../lib/table-title.ts';
 import { url } from './url.ts';
 
 const escapeHtml = (text: string): string =>
@@ -80,18 +82,20 @@ const marked = new Marked({
     heading({ tokens }: Tokens.Heading) {
       return `<p>${this.parser.parseInline(tokens)}</p>\n`;
     },
-    table({ header, rows }: Tokens.Table) {
+    table({ header, rows, title }: Tokens.Table & { title?: Tokens.Strong }) {
       const cell = (c: Tokens.TableCell, tag: 'th' | 'td') => {
         // A one-word cell, such as a die range "9–10", never breaks at its dash.
         const classes = [c.align && `md-table__cell--${c.align}`, !/\s/.test(c.text.trim()) && 'md-table__cell--nowrap'].filter(Boolean);
         const attrs = (tag === 'th' ? ' scope="col"' : '') + (classes.length ? ` class="${classes.join(' ')}"` : '');
         return `<${tag}${attrs}>${this.parser.parseInline(c.tokens)}</${tag}>`;
       };
-      const label = header.map((c) => plain(c.tokens)).join(', ');
+      // A titled table is labeled by its title; an untitled one by its column headers.
+      const label = title ? plain(title.tokens) : header.map((c) => plain(c.tokens)).join(', ');
+      const caption = title ? `<caption>${this.parser.parseInline(title.tokens)}</caption>` : '';
       const head = `<thead><tr>${header.map((c) => cell(c, 'th')).join('')}</tr></thead>`;
       const body = `<tbody>${rows.map((row) => `<tr>${row.map((c) => cell(c, 'td')).join('')}</tr>`).join('')}</tbody>`;
       // Focusable and labeled, so a keyboard can scroll it when it overflows.
-      return `<div class="md-table" role="region" tabindex="0" aria-label="Table: ${escapeHtml(label)}"><table>${head}${body}</table></div>\n`;
+      return `<div class="md-table" role="region" tabindex="0" aria-label="Table: ${escapeHtml(label)}"><table>${caption}${head}${body}</table></div>\n`;
     },
   },
 });
@@ -118,5 +122,19 @@ function withRefs(refs: TextRefs | undefined, render: () => string): string {
 export const renderInlineMarkdown = (text: string, refs?: TextRefs): string =>
   withRefs(refs, () => marked.parseInline(text, { async: false }));
 
+/** Moves each table title (SPEC.md §5.5) from its paragraph onto the table it titles. */
+function attachTableTitles(tokens: Token[]): Token[] {
+  return tokens.flatMap((token, i) => {
+    const title = tableTitleAt(tokens, i);
+    if (title) {
+      const table = tokens.slice(i + 1).find((t) => t.type === 'table') as Tokens.Table & { title?: Tokens.Strong };
+      table.title = title;
+      return [];
+    }
+    return [token];
+  });
+}
+
 /** HTML for a markdown-subset text field. `refs` turns `{ref:…}` tokens into links. */
-export const renderMarkdown = (text: string, refs?: TextRefs): string => withRefs(refs, () => marked.parse(text, { async: false }));
+export const renderMarkdown = (text: string, refs?: TextRefs): string =>
+  withRefs(refs, () => marked.parser(attachTableTitles(marked.lexer(text))));
