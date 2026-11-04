@@ -91,18 +91,21 @@ export interface SpellStats {
   level: number;
   school: string;
   classes: string[];
-  castingTime: { amount: number; unit: 'action' | 'bonus-action' | 'reaction' | 'minute' | 'hour'; trigger?: string };
+  castingTime: { amount: number; unit: 'action' | 'bonus-action' | 'reaction' | 'minute' | 'hour'; trigger?: string; note?: string };
   ritual: boolean;
   range: {
     kind: 'self' | 'touch' | 'distance' | 'sight' | 'unlimited' | 'special';
     feet?: number;
+    miles?: number;
     area?: { shape: string; size: number };
   };
   components: { v: boolean; s: boolean; m?: { text: string; costGp?: number; consumed?: true } };
   duration: {
-    kind: 'instantaneous' | 'timed' | 'until-dispelled' | 'special';
+    kind: 'instantaneous' | 'timed' | 'until-dispelled' | 'until-dispelled-or-triggered' | 'special';
     amount?: number;
     unit?: 'round' | 'minute' | 'hour' | 'day';
+    /** A timed duration without Concentration that reads "Up to 8 hours". */
+    upTo?: true;
     concentration: boolean;
   };
   effect: string;
