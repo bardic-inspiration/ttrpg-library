@@ -84,8 +84,19 @@
       },
       {
         "name": "Lightning Breath",
-        "kind": "other",
-        "text": "**.** *Dexterity Saving Throw:* {dc:con}, each creature in a 40-foot-long, 5-foot-wide Line. *Failure:* {dmg:3d10:lightning}. *Success:* Half damage.",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 40-foot-long, 5-foot-wide Line"
+        },
+        "damage": [
+          {
+            "dice": "3d10",
+            "type": "lightning"
+          }
+        ],
+        "onSuccess": "Half damage.",
         "recharge": "5-6"
       },
       {
@@ -102,6 +113,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

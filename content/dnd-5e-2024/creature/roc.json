@@ -61,8 +61,17 @@
       },
       {
         "name": "Talons",
-        "kind": "other",
-        "text": "*Melee Attack Roll:* +13, reach 5 ft. Hit: {dmg:4d6+str:slashing}. If the target is a Huge or smaller creature, it has the Grappled condition (escape {dc=19}) from both talons, and it has the Restrained condition until the grapple ends."
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "4d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a Huge or smaller creature, it has the Grappled condition (escape {dc=19}) from both talons, and it has the Restrained condition until the grapple ends."
       }
     ],
     "bonusActions": [
@@ -76,6 +85,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [

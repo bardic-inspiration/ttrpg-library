@@ -84,7 +84,14 @@
         {
           "ref": "spell/detect-magic"
         }
-      ]
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/clairvoyance"
+          }
+        ]
+      }
     }
   },
   "meta": {
