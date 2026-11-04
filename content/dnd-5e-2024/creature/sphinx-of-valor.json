@@ -126,7 +126,9 @@
           {
             "ref": "spell/greater-restoration"
           },
-          "Heroes' Feast",
+          {
+            "ref": "spell/heroes-feast"
+          },
           {
             "ref": "spell/zone-of-truth"
           }
@@ -160,6 +162,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
