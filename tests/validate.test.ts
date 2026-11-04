@@ -219,6 +219,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'actions.0.damage.0.bonus', 0, /^stats\.actions\[0\]\.damage\[0\]\.bonus: must NOT be valid/],
   ['creature', 'spellcasting', { ability: 'wis', includeAttack: false }, /^stats\.spellcasting\.includeAttack: must be equal to constant/],
   ['spell', 'components.m.consumed', false, /^stats\.components\.m\.consumed: must be equal to constant/],
+  ['spell', 'duration.upTo', false, /^stats\.duration\.upTo: must be equal to constant/],
   ['spell', 'components.m.costGp', 0, /^stats\.components\.m\.costGp: must be > 0/],
   ['creature', 'actions.1.onFailureOrSuccess', '', /^stats\.actions\[1\]\.onFailureOrSuccess: must NOT have fewer than 1 characters/],
   ['creature', 'shortName', '', /^stats\.shortName: must NOT have fewer than 1 characters/],
@@ -566,6 +567,13 @@ describe('spell warnings (SPEC.md §6.8)', () => {
       'stats.range: a distance range needs feet or miles, not both',
     );
     expect(await spellErrors((s) => (s.range = { kind: 'self', miles: 1 }))).toContainEqual('stats.range: feet and miles are for a distance range');
+  });
+
+  it('allows upTo only on a timed duration without concentration (#153)', async () => {
+    expect(await spellErrors((s) => (s.duration = { kind: 'timed', amount: 1, unit: 'hour', upTo: true, concentration: false }))).toEqual([]);
+    expect(await spellErrors((s) => (s.duration = { kind: 'timed', amount: 1, unit: 'hour', upTo: true, concentration: true }))).toContainEqual(
+      'stats.duration.upTo: upTo is for a timed duration without concentration, which already reads "up to"',
+    );
   });
 
   it('allows a trigger on a bonus action, which the card reads after "Bonus Action" (#153)', async () => {

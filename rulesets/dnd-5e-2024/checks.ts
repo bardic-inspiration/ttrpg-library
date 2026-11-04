@@ -176,6 +176,9 @@ export function checkSpell(stats: SpellStats): Issue[] {
   if (duration.concentration && duration.kind !== 'timed') {
     error('stats.duration.concentration', `concentration needs a timed duration, not "${duration.kind}"`);
   }
+  if (duration.upTo && (duration.kind !== 'timed' || duration.concentration)) {
+    error('stats.duration.upTo', 'upTo is for a timed duration without concentration, which already reads "up to"');
+  }
   if (duration.kind === 'timed') {
     if (duration.amount === undefined) error('stats.duration', 'a timed duration needs an amount');
     if (duration.unit === undefined) error('stats.duration', 'a timed duration needs a unit');

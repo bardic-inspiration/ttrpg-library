@@ -101,9 +101,11 @@ export interface SpellStats {
   };
   components: { v: boolean; s: boolean; m?: { text: string; costGp?: number; consumed?: true } };
   duration: {
-    kind: 'instantaneous' | 'timed' | 'until-dispelled' | 'special';
+    kind: 'instantaneous' | 'timed' | 'until-dispelled' | 'until-dispelled-or-triggered' | 'special';
     amount?: number;
     unit?: 'round' | 'minute' | 'hour' | 'day';
+    /** A timed duration without Concentration that reads "Up to 8 hours". */
+    upTo?: true;
     concentration: boolean;
   };
   effect: string;

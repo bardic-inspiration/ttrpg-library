@@ -44,6 +44,8 @@ describe('spell card lines (SPEC.md §6.7)', async () => {
     expect(durationLine({ ...base, duration: { kind: 'timed', amount: 1, unit: 'minute', concentration: true } })).toBe('Concentration, up to 1 minute');
     expect(durationLine({ ...base, duration: { kind: 'timed', amount: 8, unit: 'hour', concentration: false } })).toBe('8 hours');
     expect(durationLine({ ...base, duration: { kind: 'until-dispelled', concentration: false } })).toBe('Until dispelled');
+    expect(durationLine({ ...base, duration: { kind: 'until-dispelled-or-triggered', concentration: false } })).toBe('Until dispelled or triggered');
+    expect(durationLine({ ...base, duration: { kind: 'timed', amount: 8, unit: 'hour', upTo: true, concentration: false } })).toBe('Up to 8 hours');
   });
 });
 

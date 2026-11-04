@@ -480,7 +480,7 @@ Attack and save lines are generated in 5.2 form from the structured fields. Exam
 | `ritual` | bool | |
 | `range` | `{ kind: self|touch|distance|sight|unlimited|special, feet?: int, miles?: int, area?: { shape: cone|cube|cylinder|emanation|line|sphere, size: int } }` | A `distance` range has `feet` ("60 feet") or `miles` ("1 mile", "500 miles"), not both |
 | `components` | `{ v: bool, s: bool, m?: { text: string, costGp?: number, consumed?: true } }` | `costGp` is greater than 0 |
-| `duration` | `{ kind: instantaneous|timed|until-dispelled|special, amount?: int, unit?: round|minute|hour|day, concentration: bool }` | |
+| `duration` | `{ kind: instantaneous|timed|until-dispelled|until-dispelled-or-triggered|special, amount?: int, unit?: round|minute|hour|day, upTo?: true, concentration: bool }` | Reads "Instantaneous", "Until dispelled", "Until dispelled or triggered", "Special", "1 hour", or "Concentration, up to 1 minute". `upTo` marks a timed duration without Concentration that the SRD prints as "Up to 8 hours" |
 | `effect` | `Text` | |
 | `higherLevels` | optional `Text` | Leveled spells only ("Using a Higher-Level Spell Slot") |
 | `cantripUpgrade` | optional `Text` | Cantrips only |
@@ -534,6 +534,7 @@ Spell:
 |---|---|
 | `duration.concentration` true only when `duration.kind` is `timed` | error |
 | `timed` duration has `amount` and `unit` | error |
+| `duration.upTo` only on a `timed` duration without concentration | error |
 | `range.kind` `distance` has `feet` or `miles`, not both; no other kind has either | error |
 | `components.m.consumed` true requires `costGp` | error |
 | `higherLevels` only on level ≥ 1; `cantripUpgrade` only on level 0 | error |

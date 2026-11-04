@@ -2,7 +2,7 @@
 // Spells have no derived values; every number here is authored and only
 // formatted. Optional fields display by presence alone (SPEC.md §5.8).
 
-import { whenPresent } from './display.ts';
+import { present, whenPresent } from './display.ts';
 import { formatSpellLevel } from './format.ts';
 import type { SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
@@ -54,12 +54,18 @@ export function componentsLine(s: SpellStats): string {
   return parts.join(', ') || 'None';
 }
 
-const DURATION_KINDS: Record<string, string> = { instantaneous: 'Instantaneous', 'until-dispelled': 'Until dispelled', special: 'Special' };
+const DURATION_KINDS: Record<string, string> = {
+  instantaneous: 'Instantaneous',
+  'until-dispelled': 'Until dispelled',
+  'until-dispelled-or-triggered': 'Until dispelled or triggered',
+  special: 'Special',
+};
 
-/** "Instantaneous", "1 hour", "Concentration, up to 1 minute". */
+/** "Instantaneous", "1 hour", "Up to 8 hours", "Concentration, up to 1 minute". */
 export function durationLine(s: SpellStats): string {
-  const { kind, amount, unit, concentration } = s.duration;
+  const { kind, amount, unit, concentration, upTo } = s.duration;
   if (kind !== 'timed') return DURATION_KINDS[kind] ?? titleCase(kind);
   const span = plural(amount ?? 0, unit ?? '');
-  return concentration ? `Concentration, up to ${span}` : span;
+  if (concentration) return `Concentration, up to ${span}`;
+  return present(upTo) ? `Up to ${span}` : span;
 }

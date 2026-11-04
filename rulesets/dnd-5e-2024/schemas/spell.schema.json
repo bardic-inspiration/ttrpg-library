@@ -71,9 +71,10 @@
       "additionalProperties": false,
       "required": ["kind", "concentration"],
       "properties": {
-        "kind": { "enum": ["instantaneous", "timed", "until-dispelled", "special"] },
+        "kind": { "enum": ["instantaneous", "timed", "until-dispelled", "until-dispelled-or-triggered", "special"] },
         "amount": { "type": "integer", "minimum": 1 },
         "unit": { "enum": ["round", "minute", "hour", "day"] },
+        "upTo": { "const": true },
         "concentration": { "type": "boolean" }
       }
     },
