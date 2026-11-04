@@ -1,11 +1,12 @@
-# Design decisions: v1
+# Design decisions
 
-A record of what v1 built and why, as of the `v1.0.0` tag. It is distilled
-from `SPEC.md` at that tag, the milestone issues and their comments, the
-decision comments those issues link to, and the dev PR descriptions.
+A record of what each version decided and why. The v1 section is distilled
+from `SPEC.md` at the `v1.0.0` tag, the milestone issues and their comments,
+the decision comments those issues link to, and the dev PR descriptions. From
+v2 on, the PR that makes a decision adds its row (`AGENTS.md` "Rules").
 
-**This is history, not a set of rules.** The decision rows describe what v1
-did. Later versions may change any of them (the themes, the look, the
+**This is history, not a set of rules.** The decision rows describe what a
+version did. Later versions may change any of them (the themes, the look, the
 gallery, the type formats) without arguing against this file. The principles
 are what carries forward: they are the reasons v1 chose as it did, and they
 remain the guide for weighing new designs. What the library does now is in the
@@ -35,7 +36,11 @@ reversal is noted only when it explains the reason.
 | P11 | Weight follows the selection | Pages load a lean index; full data is fetched only for what the reader picks. |
 | P12 | A durable record | Sessions have no memory, so decisions live in the repo, issues, and PRs, and every merge leaves `main` consistent. |
 
-## Scope
+## v1
+
+The library as built at the `v1.0.0` tag.
+
+### Scope
 
 | Decision | Why | Source |
 |---|---|---|
@@ -45,7 +50,7 @@ reversal is noted only when it explains the reason.
 | No backend, database, accounts, user submissions, or in-browser editing. Every change is a PR. | P1, P7 | #1 |
 | v1 is a prototype; v2 a complete product for one user; v3 and later explore multiple users and a public site. | | #95 |
 
-## Entry model
+### Entry model
 
 | Decision | Why | Source |
 |---|---|---|
@@ -68,7 +73,7 @@ reversal is noted only when it explains the reason.
 | A DC displays only when there is one: an authored DC is omitted, and a derived DC is switched off by a flag. | One rule for every type | #183 |
 | Art is an optional repo-relative `image`. With no art there is no container or placeholder. | | #1, #100 |
 
-## Rulesets and derived values
+### Rulesets and derived values
 
 | Decision | Why | Source |
 |---|---|---|
@@ -79,7 +84,7 @@ reversal is noted only when it explains the reason.
 | Creature prose shows derived numbers only through tokens. A literal number that looks derived fails; `{dc=<n>}` marks an authored DC. Spell and item text is exempt, since its numbers are authored. | P3 | #21, #99 |
 | Display forms such as the U+2212 minus are display only; data and exports keep plain numbers and ASCII formulas. | Exports carry the data | #94 |
 
-## SRD and custom entries
+### SRD and custom entries
 
 | Decision | Why | Source |
 |---|---|---|
@@ -96,7 +101,7 @@ reversal is noted only when it explains the reason.
 | A checked-in SRD manifest, tiered `complex` or `simple`, and a coverage script define when the import is complete. | A measurable finish line | #128, #137 |
 | SRD import stages bypass routines: sub-issues worked in owner-started sessions with the `srd-import` skill wrapping `generate` and `revise`. A format-fix PR may add the SRD entries that motivated it. | The fix is shown working on real entries | #129, #137, #145, #177 |
 
-## Type formats
+### Type formats
 
 All three types render in SRD 5.2 form (P6). The fields below were added during
 the SRD import to hold printed forms, following the nearest-field rule.
@@ -113,7 +118,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A stat block printed only inside a spell or item is embedded (`statBlocks`): authored as printed, with only modifiers and saves derived, and not an entry. One that is its own SRD creature is linked instead. | Its numbers scale with the spell or caster | #146 |
 | Every inline heading prints bold italic, both template labels and headings written in text. | SRD 5.2 typography | #152 |
 
-## Validation
+### Validation
 
 | Decision | Why | Source |
 |---|---|---|
@@ -122,7 +127,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Checks that apply to every type: path, uniqueness, refs, markdown subset, blocklist, placeholder text, image path and size. Type checks cover cross-field rules a schema can't express. | P8 | #30, #39, #191 |
 | Balance isn't enforced by CI. It is judged in review against guideline targets, and the PR summary shows the derived numbers. | P7 | #1 |
 
-## Registry and gallery
+### Registry and gallery
 
 | Decision | Why | Source |
 |---|---|---|
@@ -137,7 +142,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Every data fetch revalidates with the server, through one helper. | A deploy shows on the next load | #89 |
 | Navigation is built from the registry. The SRD statement is in every page footer. | P4, P9 | #48 |
 
-## Templates and styling
+### Templates and styling
 
 | Decision | Why | Source |
 |---|---|---|
@@ -153,7 +158,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | WCAG 2.2 AA: token contrast tests, axe on built pages in both themes, color never the only signal, motion off under reduced motion. | P8, P10 | #45, #48 |
 | Tables have one site-wide style and scroll inside their own box; the page never scrolls sideways. | WCAG reflow | #145 |
 
-## Export
+### Export
 
 | Decision | Why | Source |
 |---|---|---|
@@ -166,7 +171,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Every printed page carries the short attribution and the entry name; the full statement prints after the last entry. Print has no art. | The full statement doesn't fit a 4×6 margin | #56 |
 | A failed export does nothing and says so in a status region. | | #54, #58 |
 
-## Generation and revision
+### Generation and revision
 
 | Decision | Why | Source |
 |---|---|---|
@@ -180,7 +185,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Gap buckets are a list of axes (numeric bins or listed values), labeled as gallery queries. A script picks the bucket, with fixed tie-breaks. | Scheduled runs need direction without a human | #57, #75 |
 | Guidelines, skills, defaults, and routine prompts are development, not content. | They change every future run | #1 |
 
-## Repository, lanes, and CI
+### Repository, lanes, and CI
 
 | Decision | Why | Source |
 |---|---|---|
@@ -195,7 +200,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | CI uses the latest Node 22 patch; cloud sessions install with `npm ci`. | Reproducible installs | #17, #44 |
 | Code is MIT; content is CC-BY-4.0. The SRD statement appears in `ATTRIBUTION.md`, the footer, `/about/`, and print. | P9 | #1, #45, #56 |
 
-## Working process
+### Working process
 
 | Decision | Why | Source |
 |---|---|---|
@@ -206,3 +211,18 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | No triage routine: the session that files an issue places it. | | #95 |
 | `SPEC.md` becomes reference docs for what's built plus a stage spec for what isn't; citations use file and heading; docs defer to code for exact rules. In progress under #108. | P3, P12: a routine must not act on unbuilt design | #95, #108 |
 | v2 starts with a design-only phase, one owner-led session per area. | Unknowns are worked out before they meet the dev rules | #95, #110 |
+
+## v2
+
+### Working process
+
+| Decision | Why | Source |
+|---|---|---|
+| Docs-as-code with a light subset of common practice: reference and explanation docs only, one decision record per version instead of numbered ADRs, the stage spec as the design-doc step, and field meanings in schema `description`s. No arc42, C4, docs site generator, or wiki. | Complete and agent-readable without overkill; P3 | #196 |
+| `docs/README.md` indexes the docs. Topic files are flat, one per subsystem, with the same four sections, and are cited by heading. | An agent finds one focused file and reads it; P3 | #196 |
+| The stage spec is a folder, `spec/v2/`, with one file per design area, kept outside `docs/` so routines never read it. | Built parts are easy to delete, and the stage ends when the folder is empty | #197 |
+| No status table: design, build, and built status come from the design issues, the build milestone issues, and the file tree. Front matter holds only an area's issue and dependencies. | P3: a table would copy state GitHub already holds | #197 |
+| Every area file follows one template (Goal, Current, Design, Cases, Migration, Done when, Open questions, Out of scope). A test checks the front matter, the sections, and that cited cases are real entries. | Seven sessions write seven files of the same shape; designs are checked against the real library; P8 | #197 |
+| A gap found while building is decided by the session and recorded in the PR if a different choice wouldn't change behavior other work depends on. Otherwise it stops and goes to the owner, as an open question for v2 design. | v1 handled gaps inconsistently, sometimes stopping and sometimes guessing | #197 |
+| A PR that makes a decision lists it under "Decisions" and adds its row here. | v1's decisions were spread across comments, interviews, PRs, and spec edits; P12 | #197 |
+| Each build milestone starts with a pilot on its hardest cases, and an approved design can be amended by a small spec PR at any time. | v1's pilot, fix, bulk sequence turned discoveries into planned work | #197 |
