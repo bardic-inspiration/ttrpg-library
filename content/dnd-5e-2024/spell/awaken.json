@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "awaken",
+  "name": "Awaken",
+  "summary": "Gives a Beast or plant an Intelligence of 10 and speech, leaving it Charmed by you for 30 days.",
+  "stats": {
+    "level": 5,
+    "school": "transmutation",
+    "classes": [
+      "bard",
+      "druid"
+    ],
+    "castingTime": {
+      "amount": 8,
+      "unit": "hour"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "an agate worth 1,000+ GP, which the spell consumes",
+        "costGp": 1000,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You spend the casting time tracing magical pathways within a precious gemstone, and then touch the target. The target must be either a Beast or Plant creature with an Intelligence of 3 or less or a natural plant that isn't a creature. The target gains an Intelligence of 10 and the ability to speak one language you know. If the target is a natural plant, it becomes a Plant creature and gains the ability to move its limbs, roots, vines, creepers, and so forth, and it gains senses similar to a human's. The GM chooses statistics appropriate for the awakened Plant, such as the statistics for the **Awakened Shrub** or **Awakened Tree** in \"Monsters.\"\n\nThe awakened target has the Charmed condition for 30 days or until you or your allies deal damage to it. When that condition ends, the awakened creature chooses its attitude toward you."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "call-lightning",
+  "name": "Call Lightning",
+  "summary": "Summons a storm cloud that calls down bolts of lightning each turn.",
+  "stats": {
+    "level": 3,
+    "school": "conjuration",
+    "classes": [
+      "druid"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A storm cloud appears at a point within range that you can see above yourself. It takes the shape of a Cylinder that is 10 feet tall with a 60-foot radius.\n\nWhen you cast the spell, choose a point you can see under the cloud. A lightning bolt shoots from the cloud to that point. Each creature within 5 feet of that point makes a Dexterity saving throw, taking 3d10 Lightning damage on a failed save or half as much damage on a successful one.\n\nUntil the spell ends, you can take a Magic action to call down lightning in that way again, targeting the same point or a different one.\n\nIf you're outdoors in a storm when you cast this spell, the spell gives you control over that storm instead of creating a new one. Under such conditions, the spell's damage increases by 1d10.",
+    "higherLevels": "The damage increases by 1d10 for each spell slot level above 3."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "comprehend-languages",
+  "name": "Comprehend Languages",
+  "summary": "Lets you understand any spoken, signed, or written language.",
+  "stats": {
+    "level": 1,
+    "school": "divination",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": true,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a pinch of soot and salt"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "For the duration, you understand the literal meaning of any language that you hear or see signed. You also understand any written language that you see, but you must be touching the surface on which the words are written. It takes about 1 minute to read one page of text. This spell doesn't decode symbols or secret messages."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

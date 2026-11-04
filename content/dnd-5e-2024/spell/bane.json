@@ -1,0 +1,50 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "bane",
+  "name": "Bane",
+  "summary": "Curses up to three creatures to subtract 1d4 from their attack rolls and saving throws.",
+  "stats": {
+    "level": 1,
+    "school": "enchantment",
+    "classes": [
+      "bard",
+      "cleric",
+      "warlock"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a drop of blood"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "Up to three creatures of your choice that you can see within range must each make a Charisma saving throw. Whenever a target that fails this save makes an attack roll or a saving throw before the spell ends, the target must subtract 1d4 from the attack roll or save.",
+    "higherLevels": "You can target one additional creature for each spell slot level above 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
