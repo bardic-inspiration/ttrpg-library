@@ -116,7 +116,8 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
 - **Text.** Rules text and `description` use the markdown subset only (§5.5).
   A mention of a library entry in text is a `{ref:<type>/<id>}` link token
   (§5.7), wrapped in `*…*` for a spell name; SRD content not in the library is
-  plain text.
+  plain text. An entry's mention of its own name stays plain text, never a
+  link to itself.
   No non-SRD proper nouns anywhere (§11).
 - **Situational fields.** Omit an optional field that doesn't apply; never
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` (§5.8).
@@ -188,6 +189,10 @@ If it still fails:
   push and don't open a PR.
 - For a gap-fill run or an inline request there is no issue: report the
   errors in the run's output and stop.
+
+Then search the batch for placeholder text ("TODO", "TBD") in every field,
+`summary` included. The validator accepts any summary of 10 characters or
+more, so a placeholder passes CI.
 
 Once it passes, keep every warning it prints; they go in the PR body.
 
