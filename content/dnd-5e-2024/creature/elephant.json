@@ -37,8 +37,17 @@
       },
       {
         "name": "Gore",
-        "kind": "other",
-        "text": "**.** *Melee Attack Roll:* +8, reach 5 ft. *Hit:* {dmg:2d8+str:piercing}. If the target is a Huge or smaller creature and the elephant moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition."
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Huge or smaller creature and the elephant moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition."
       }
     ],
     "bonusActions": [
@@ -63,6 +72,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
