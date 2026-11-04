@@ -37,9 +37,8 @@ One batch, from exactly one of these sources:
 
 Resolve each request against `config/defaults.json` as
 `scripts/generate/defaults.ts` (`applyDefaults`) does: a blank field takes
-the default (`defaults.ruleset`, `defaults.count`), a count above
-`defaults.maxBatch` becomes `defaults.maxBatch` (`defaults.srdMaxBatch` for an
-SRD import stage), and request tags merge over
+the default (`defaults.ruleset`, `defaults.count`), a request's count is
+taken as given (no batch has a size limit, §8.3), and request tags merge over
 `defaults.tags`. A form tag line `key: a, b` is the list `["a", "b"]`; a
 line with no comma is a single string.
 

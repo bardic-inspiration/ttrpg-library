@@ -51,7 +51,7 @@ These were settled in the spec review and override the preliminary design wherev
 | 10 | Art | No art in v1. Schema field `image` holds a repo-relative path; the UI shows no art when it is absent. |
 | 11 | Derived values | Values the ruleset defines by formula or table (XP, PB, HP, attack bonuses, DCs, damage averages, save and skill bonuses, passive Perception) are never stored in entries. The ruleset module computes them; deviations are explicit `adjust` fields. |
 | 12 | Styling | Plain CSS with layered design tokens, so most UI refinement is a tokens edit. Light and dark themes with a System/Light/Dark toggle. WCAG 2.2 AA, checked in CI. A style guide page for refinement (§9.6–9.8). |
-| 13 | Work lanes | One repo with two enforced lanes. Content (`content/`, `assets/images/`, opened by routines) and development (everything else). Separated by branch prefix, auto-applied labels, templates, and a CI scope check; a `migration` label is required for dev changes to content (§12.4). |
+| 13 | Work lanes | One repo with two enforced lanes. Content (`content/`, `assets/images/`, opened by routines) and development (everything else). Separated by branch prefix, auto-applied labels, templates, and a CI scope check; a `migration` label, applied automatically, marks dev changes to content (§12.4). |
 
 ### 2.1 Changes from the preliminary design
 
@@ -740,7 +740,7 @@ An entry belongs to a bucket when its value on every axis falls in that bucket's
 | Field | Kind | Required |
 |---|---|---|
 | Type | dropdown: creature, magic-item, spell | yes |
-| Count | dropdown: 1–10 (issue forms have no number field) | no (defaults) |
+| Count | dropdown: 1–10 (issue forms have no number field); a free-form request may ask for more | no (defaults) |
 | Brief | textarea: theme, constraints, CR/level/rarity range, anything else | yes |
 | Tags | textarea, one `key: value` per line (comma-separated for lists) | no |
 | Ruleset | text | no (defaults) |
@@ -774,12 +774,12 @@ Every run, scheduled or manual, follows the same sequence so that review feedbac
 1. **Sync.** Fetch `main`; run `npm ci` and `npm run build:index` to get the current library.
 2. **Revisions first.** For each open PR on a `gen/` or `revise/` branch, find owner comments not yet handled (§8.5) and invoke the `revise` skill. Push, reply, continue.
 3. **Revise requests.** Take open `revise` issues without `in-progress` or `needs-info`, oldest first, claim each as in step 4, and invoke the `revise` skill on each; each becomes a small PR.
-4. **Content requests.** Pick open `request` issues without `in-progress` or `needs-info`, `priority:high` first, then oldest. Group issues into one batch while the total count is ≤ `maxBatch`. Claim each with the `in-progress` label and a short comment.
+4. **Content requests.** Pick open `request` issues without `in-progress` or `needs-info`, `priority:high` first, then oldest. Group them all into one batch; there is no batch size limit. Claim each with the `in-progress` label and a short comment.
 5. **Gap-fill.** If no requests were picked and `gapFill.enabled`, choose the type and bucket with the fewest entries (ties go to the type with the fewest entries overall, then to the type listed first in `config/types.json`; ties within a type go to the first bucket in `gapBuckets` order, first axis outermost) and generate `gapFill.count` entries for it. `npm run gap-fill` (`scripts/generate/gap.ts`, counting with `lib/buckets.ts`) makes this choice among the types of `defaults.ruleset`: it reads `site/public/library.json` and `config/types.json`, and prints the type and the bucket label (§7.1), as in `spell stats.level=0..0&stats.school=abjuration`.
 6. **Ambiguity.** If a request cannot be fulfilled as written (contradictory constraints, unknown type), comment a single question on the issue, add `needs-info`, remove `in-progress`, and move on.
 7. **Stale claims.** An `in-progress` issue with no open linked PR after 24 hours is treated as unclaimed.
 
-A manual run may name specific issues, or pass an inline request (type, count, brief, tags) that is handled as if it were an issue but without one. Such a run still does steps 1–3, but step 4 takes only what it was given. Named issues must be open `request` issues without `needs-info`; any other is reported and left alone, and named issues whose total count exceeds `maxBatch` are taken in the order named while they fit, with the rest reported for a later run. It never gap-fills (step 5). An inline request that is ambiguous (step 6) has no issue to ask on, so the run reports the question instead.
+A manual run may name specific issues, or pass an inline request (type, count, brief, tags) that is handled as if it were an issue but without one. Such a run still does steps 1–3, but step 4 takes only what it was given. Named issues must be open `request` issues without `needs-info`; any other is reported and left alone. It never gap-fills (step 5). An inline request that is ambiguous (step 6) has no issue to ask on, so the run reports the question instead.
 
 ### 8.3 Defaults (`config/defaults.json`)
 
@@ -787,8 +787,6 @@ A manual run may name specific issues, or pass an inline request (type, count, b
 {
   "ruleset": "dnd-5e-2024",
   "count": 5,
-  "maxBatch": 10,
-  "srdMaxBatch": 50,
   "tags": {},
   "gapFill": { "enabled": true, "count": 3 },
   "validateRetries": 3
@@ -797,7 +795,7 @@ A manual run may name specific issues, or pass an inline request (type, count, b
 
 Defaults are applied only to fields the request leaves unspecified. Request tags are merged over default tags.
 
-`count` and `gapFill.count` in the file are whole numbers from 1 to `maxBatch`, matching the form's 1–10 range. A request that asks for more than `maxBatch` entries gets `maxBatch`; the count is otherwise taken on trust. An SRD import stage batch (§8.1) is capped at `srdMaxBatch` instead, a whole number of at least `maxBatch`; stages of `complex` entries use small batches, the bulk `simple` stage 30–50. `scripts/generate/defaults.ts` loads and checks the file, and applies it to a request.
+`count` and `gapFill.count` in the file are whole numbers of at least 1. A request's count is taken on trust, and no batch has a size limit: a run takes every request it picks, and an SRD import stage batch (§8.1) is as large as the session chooses. `scripts/generate/defaults.ts` loads and checks the file, and applies it to a request.
 
 ### 8.4 The `generate` skill
 
@@ -846,7 +844,7 @@ Each topic is one `##` section, in this order and with exactly these headings: `
 
 Recorded in `docs/routines.md` along with the canonical routine prompts:
 
-- **Scheduled routine:** weekly, Monday morning local time, one run. Default batch 5, never above `maxBatch` (10).
+- **Scheduled routine:** weekly, Monday morning local time, one run. A request without a count gets 5.
 - **On-demand routine:** same prompt, with optional issue numbers or an inline request.
 
 The prompts tell the run to follow the run order written out in `docs/routines.md`, read from `main`, so a change to the run order is a reviewed dev PR to that file rather than an edit to the routine's settings. Steps that depend on a skill or script not yet built are marked there as unavailable and skipped. A test checks that every repo path, npm script, and `config/defaults.json` key the file names exists, that it lists the §8.2 steps in order, and that the on-demand prompts are the scheduled prompt with inputs added.
@@ -1163,11 +1161,11 @@ One repository holds two kinds of work. **Content** is entries and art, produced
 | | Content lane | Dev lane |
 |---|---|---|
 | Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, spec |
-| Paths it may change | `content/**`, `assets/images/**` | Everything else; content paths only with the `migration` label |
+| Paths it may change | `content/**`, `assets/images/**` | Everything else; content paths with the `migration` label, which the labeler adds |
 | Branch prefixes | `gen/`, `revise/` (routines), `manual/` (hand-made entries) | `dev/`, `dependabot/`, or none of the content prefixes (for example a GitHub web-editor `<user>-patch-1`) |
 | Opened by | Routines (or you, for `manual/`; a session you start, for SRD import stages, §8.1) | You, or a Claude session you start for development |
 | Lane label (auto) | `content` | `dev` |
-| Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`) |
+| Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`), `migration` (`content/**`, `assets/images/**`) |
 | Issue templates and labels | Content request (`request`), revise request (`revise`) (§8.1) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
 | PR template | `content.md`: generated by the routine (§8.4) | `dev.md`: what and why, spec sections touched, screenshots for `ui`, migration notes |
 | PR title | `Add <n> <type> entries`, `Revise <ids>: <reason>` | `<area>: <summary>`, for example `ui: tighten stat-block spacing` |
@@ -1178,16 +1176,16 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 
 **Lane rules (enforced by the `lane` job in `validate.yml`)**
 
-- A PR's lane comes from its branch prefix: `gen/`, `revise/`, and `manual/` are content; every other branch is dev, so a quick edit from the GitHub web editor needs no branch rename. `spike/` branches get no lane and fail, so a spike can't merge. A dev PR still can't change content without the `migration` label, so content stays protected.
+- A PR's lane comes from its branch prefix: `gen/`, `revise/`, and `manual/` are content; every other branch is dev, so a quick edit from the GitHub web editor needs no branch rename. `spike/` branches get no lane and fail, so a spike can't merge. A dev PR that changes content is labeled `migration` automatically, so every content change made by code is visible.
 - A content-lane PR fails if it changes any path outside `content/**` and `assets/images/**`. Routines therefore cannot alter schemas, guidelines, config, or the site, even by accident.
-- A dev-lane PR fails if it changes `content/**` or `assets/images/**` without the `migration` label. The label is applied by hand, never automatically, so every bulk content change made by code is a deliberate, visible decision. A migration PR's body must state what changed in the entries and why. Until Milestone 7 is done, a format-fix PR may use the label to add the SRD entries that motivated it (§8.1).
-- The job re-runs when labels change (`pull_request` types `opened`, `synchronize`, `reopened`, `labeled`, `unlabeled`), so adding `migration` unblocks the PR without a new push.
+- A dev-lane PR that changes `content/**` or `assets/images/**` gets the `migration` label from the labeler, and fails without it. The label is applied automatically, so a dev PR that migrates entries needs no manual step, and the label keeps every content change made by code visible in review. A migration PR's body must state what changed in the entries and why. Until Milestone 7 is done, a format-fix PR may use the label to add the SRD entries that motivated it (§8.1).
+- The job re-runs when labels change (`pull_request` types `opened`, `synchronize`, `reopened`, `labeled`, `unlabeled`), so when the labeler adds `migration` after the first run, the job passes without a new push.
 
 **Guidelines count as development.** A guideline edit changes every future generation run, so it is reviewed as behavior (`generation` label), not as content. The same applies to the generation and revision skills, the defaults file, and the routine prompts.
 
 **Routines work only the content lane.** They pick up only `request` and `revise` issues and push only to `gen/` and `revise/` branches. Dev-lane issues (bugs, features, UI refinement) are worked in Claude sessions you start, on `dev/` branches. SRD import stages are content work done in sessions you start, not by routines (§8.1).
 
-**Labeling** is done by `actions/labeler` in a `labeler.yml` workflow on `pull_request_target`, configured by `.github/labeler.yml` using branch prefixes for lane labels and changed paths for area labels. The labeler only reads PR metadata and changed paths; it never checks out or runs PR code.
+**Labeling** is done by `actions/labeler` in a `labeler.yml` workflow on `pull_request_target`, configured by `.github/labeler.yml` using branch prefixes for lane labels and changed paths for area labels. `migration` combines the two: it goes on a PR whose branch has no content prefix (`gen/`, `revise/`, `manual/`) and that changes `content/**` or `assets/images/**`. The labeler only reads PR metadata and changed paths; it never checks out or runs PR code.
 
 **Dependencies.** Dependabot opens grouped, monthly npm and GitHub Actions updates on `dependabot/` branches. They go through the dev lane and get the full checks.
 
@@ -1217,7 +1215,7 @@ Because merges are squashed with the PR title as the message, `git log` on `main
 The repo's `CLAUDE.md` imports `AGENTS.md`, the canonical working guide for any agent, which instructs every session working in the repo:
 
 - Content is generated and revised through the `generate` and `revise` skills; follow them exactly.
-- Never push to `main`. Work in exactly one lane per PR (§12.4): content tasks on `gen/`, `revise/`, or `manual/` branches touching only `content/` and `assets/images/`; development tasks on `dev/` branches, touching content only in a deliberate migration (ask for the `migration` label).
+- Never push to `main`. Work in exactly one lane per PR (§12.4): content tasks on `gen/`, `revise/`, or `manual/` branches touching only `content/` and `assets/images/`; development tasks on `dev/` branches, touching content only in a deliberate migration (the labeler adds the `migration` label).
 - Routines take only `request` and `revise` issues; dev-lane issues are for development sessions.
 - Never change an entry's `id` or move its file.
 - Never write a value the ruleset derives. Write inputs, use tokens for derived numbers in prose, and use `adjust` only for deliberate deviations.
@@ -1251,13 +1249,13 @@ Each milestone ends with something you can verify.
 
 | # | Milestone | Done when |
 |---|---|---|
-| 1 | **Skeleton.** Astro project, envelope schema, `dnd-5e-2024` ruleset module with the creature schema, tables, derivations, and tokens, validator (schema stage and creature checks), one hand-written creature, workflows with the lane job, labeler, issue and PR templates, branch protection, Pages live | A merged PR changes the live page; a PR with a broken entry is blocked; a `gen/` PR touching `site/` is blocked; a `dev/` PR touching `content/` is blocked until labeled `migration` |
+| 1 | **Skeleton.** Astro project, envelope schema, `dnd-5e-2024` ruleset module with the creature schema, tables, derivations, and tokens, validator (schema stage and creature checks), one hand-written creature, workflows with the lane job, labeler, issue and PR templates, branch protection, Pages live | A merged PR changes the live page; a PR with a broken entry is blocked; a `gen/` PR touching `site/` is blocked; a `dev/` PR touching `content/` is labeled `migration` |
 | 2 | **Full model.** Magic-item and spell schemas and checks, refs and back-refs, blocklist, markdown-subset check, test fixtures for every error | Fixture suite covers each check and each derivation; the three example entries in §6.9 validate, link to each other, and render the numbers shown there |
 | 3 | **Gallery.** Registry, index builder, token files and global layers, light/dark themes and toggle, card grid, facets, tags, "Add filter," sort, search, URL state, detail pages, placeholder art, about page, style guide page, contrast tests, axe checks in CI | Example entries can be found by name, tag, and facet; a copied URL reproduces the view; changing one semantic token visibly restyles every surface on the style guide; CI passes axe and contrast checks |
 | 4 | **Exports.** JSON (entry and set), PNG, print view with all four sizes, multi-entry print | A Letter print of a long creature paginates cleanly with selectable text; a PNG posts legibly to Discord |
 | 5 | **Generation.** Issue forms, labels, defaults, `generate` skill, guidelines for three types, routine prompts in `docs/routines.md` | One run turns an issue into a passing PR that closes the issue on merge |
 | 6 | **Revision and schedule.** `revise` skill, comment sweep, revise issues, gap-filler, weekly schedule | A review comment on a routine PR is addressed by the next run; a week with no open issues produces a gap-fill PR |
-| 7 | **Full SRD import.** SRD manifest and coverage script, SRD batch limit, then import stages (§8.1): a pilot of `complex` entries, the `simple` entries in bulk, then the remaining `complex` entries | `npm run srd-coverage` reports no missing entries, and every format-fix issue filed during the import is closed |
+| 7 | **Full SRD import.** SRD manifest and coverage script, then import stages (§8.1): a pilot of `complex` entries, the `simple` entries in bulk, then the remaining `complex` entries | `npm run srd-coverage` reports no missing entries, and every format-fix issue filed during the import is closed |
 
 v1 is complete when all seven milestones are done, the library holds at least five entries of each type merged through the routine flow, and a UI refinement pass has been made through `ui` PRs. Refinement runs alongside milestones 4–6 rather than after them.
 

@@ -16,7 +16,7 @@ editing the routine's settings.
 
 | Routine | When | Batch |
 |---|---|---|
-| Scheduled | Weekly, Monday morning local time, one run | `defaults.count` (5) per request, never above `defaults.maxBatch` (10) in total |
+| Scheduled | Weekly, Monday morning local time, one run | `defaults.count` (5) per request without a count, and every request picked; no size limit |
 | On-demand | Whenever you start it | Same, for the issues or inline request you name |
 
 Both routines use the same prompt (§8.7). The on-demand routine adds its
@@ -114,13 +114,11 @@ Pick the batch:
   without `needs-info`, and without `in-progress` unless the claim is stale
   (step 7). Take `priority:high` issues first, then oldest first. Resolve
   each issue's count as the `generate` skill says (`defaults.count` when
-  blank, at most `defaults.maxBatch`), and add issues to the batch while the
-  total count stays at or below `defaults.maxBatch`.
+  blank), and add every picked issue to the batch: there is no batch size
+  limit.
 - **On-demand with named issues:** only the named issues. Each must be an
   open `request` issue without `needs-info`; report any other and leave it
-  alone. If their total count is above `defaults.maxBatch`, take them in the
-  order named while the total fits, and report the rest as left for a later
-  run.
+  alone.
 - **On-demand with an inline request:** the inline request alone, as if it
   were an issue but without one.
 
