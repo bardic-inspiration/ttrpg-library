@@ -112,7 +112,7 @@ describe('isDocsPath (SPEC.md §12.1 "Docs-only PRs")', () => {
     'CLAUDE.md',
     'README.md',
     'ATTRIBUTION.md',
-    'docs/notes.md',
+    'docs/decisions.md',
     'docs/SRD_CC_v5.2.pdf',
     '.github/ISSUE_TEMPLATE/bug-report.md',
     '.github/PULL_REQUEST_TEMPLATE/dev.md',

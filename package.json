@@ -14,7 +14,8 @@
     "srd-coverage": "tsx scripts/srd-coverage/cli.ts",
     "build": "npm run build:index && astro build --root site",
     "dev": "astro dev --root site",
-    "check": "tsc --noEmit && astro check --root site && stylelint \"site/src/**/*.{css,astro}\"",
+    "check": "tsc --noEmit && astro check --root site && stylelint \"site/src/**/*.{css,astro}\" && npm run links",
+    "links": "node scripts/links/cli.ts",
     "test": "vitest run",
     "a11y": "tsx scripts/a11y/cli.ts",
     "snapshots": "tsx scripts/snapshots/cli.ts"

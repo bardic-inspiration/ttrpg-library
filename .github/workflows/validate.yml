@@ -45,6 +45,8 @@ jobs:
           LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
           GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+      # Every cited doc file and heading must exist, on docs-only PRs too.
+      - run: node scripts/links/cli.ts
 
   content-checks:
     needs: lane
