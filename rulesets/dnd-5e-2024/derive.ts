@@ -67,7 +67,11 @@ export function deriveDamage(
 
 function deriveAction(action: Action, pb: number, mods: Record<Ability, number>): DerivedAction {
   const derived: DerivedAction = {
-    damage: (action.damage ?? []).map((d: Damage) => deriveDamage(d.dice, d.ability, d.bonus ?? 0, mods)),
+    damage: (action.damage ?? []).map((d: Damage) =>
+      d.dice === undefined
+        ? { modifier: 0, average: d.amount ?? 0, display: String(d.amount ?? 0) }
+        : deriveDamage(d.dice, d.ability, d.bonus ?? 0, mods),
+    ),
   };
   if (action.ability && action.kind !== 'other') {
     const base = pb + mods[action.ability] + (action.adjust ?? 0);
@@ -120,10 +124,11 @@ export function deriveCreature(stats: CreatureStats, tables: Tables): DerivedCre
   ) as Record<Ability, number>;
 
   const skills: Record<string, number> = {};
-  for (const [skill, proficiency] of Object.entries(stats.skills ?? {})) {
+  for (const [skill, value] of Object.entries(stats.skills ?? {})) {
     const ability = tables.skills[skill];
     if (!ability) throw new Error(`Unknown skill "${skill}"`);
-    skills[skill] = mods[ability] + pb * proficiencyMultiplier(proficiency);
+    const { proficiency, adjust = 0 } = typeof value === 'string' ? { proficiency: value } : value;
+    skills[skill] = mods[ability] + pb * proficiencyMultiplier(proficiency) + adjust;
   }
 
   const derived: DerivedCreature = {

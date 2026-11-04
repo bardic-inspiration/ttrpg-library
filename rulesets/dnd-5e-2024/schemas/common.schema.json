@@ -9,13 +9,18 @@
     "Damage": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["dice", "type"],
+      "allOf": [
+        { "oneOf": [{ "required": ["dice"] }, { "required": ["amount"] }] },
+        { "oneOf": [{ "required": ["type"] }, { "required": ["note"] }] }
+      ],
       "properties": {
         "dice": { "$ref": "#/$defs/Dice" },
+        "amount": { "description": "Flat damage printed without dice, such as \"1 Piercing damage\".", "type": "integer", "minimum": 1 },
         "ability": { "$ref": "#/$defs/Ability" },
         "bonus": { "type": "integer", "not": { "const": 0 } },
         "type": { "$ref": "#/$defs/DamageType" },
-        "condition": { "type": "string", "minLength": 1 }
+        "condition": { "type": "string", "minLength": 1 },
+        "note": { "description": "Printed after \"damage\" in place of a type, for damage whose type isn't fixed: \"of the type chosen for the Draconic Origin trait\".", "type": "string", "minLength": 1 }
       }
     },
     "Proficiency": { "enum": ["proficient", "expertise"] },

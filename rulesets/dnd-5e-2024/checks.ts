@@ -93,6 +93,9 @@ export function checkCreature(stats: CreatureStats, tables: Tables): Issue[] {
     }
   }
 
+  for (const [skill, value] of Object.entries(stats.skills ?? {})) {
+    if (typeof value !== 'string') warning(`stats.skills.${skill}.adjust`, `${skill} adjusted by ${value.adjust}; confirm the deviation`);
+  }
   if (stats.initiative?.adjust !== undefined) {
     warning('stats.initiative.adjust', `initiative adjusted by ${stats.initiative.adjust}; confirm the deviation`);
   }

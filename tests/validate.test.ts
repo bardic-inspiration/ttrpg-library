@@ -205,6 +205,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'immunities.conditions', [], /^stats\.immunities\.conditions: must NOT have fewer than 1 items/],
   ['creature', 'gear', [], /^stats\.gear: must NOT have fewer than 1 items/],
   ['creature', 'senses', {}, /^stats\.senses: must NOT have fewer than 1 properties/],
+  ['creature', 'senses.note', '', /^stats\.senses\.note: must NOT have fewer than 1 characters/],
   ['creature', 'senses.darkvision', 0, /^stats\.senses\.darkvision: must be >= 1/],
   ['creature', 'languages.telepathy', 0, /^stats\.languages\.telepathy: must be >= 1/],
   ['creature', 'languages.note', '', /^stats\.languages\.note: must NOT have fewer than 1 characters/],
@@ -562,6 +563,20 @@ describe('spell warnings (SPEC.md §6.8)', () => {
     const { content } = await temp([spell]);
     return (await validateLibrary(content)).errors.map((e) => e.message);
   };
+
+  it('takes damage as dice or a flat amount, not both (#166)', async () => {
+    const houndErrors = async (damage: unknown) => {
+      const hound = await cinderHound();
+      hound.stats.actions[0].damage = [damage];
+      const { content } = await temp([hound]);
+      return (await validateLibrary(content)).errors;
+    };
+    expect(await houndErrors({ amount: 1, type: 'piercing' })).toEqual([]);
+    expect(await houndErrors({ dice: '1d4', amount: 1, type: 'piercing' })).not.toEqual([]);
+    expect(await houndErrors({ type: 'piercing' })).not.toEqual([]);
+    expect(await houndErrors({ dice: '1d4', note: 'of a chosen type' })).toEqual([]);
+    expect(await houndErrors({ dice: '1d4', type: 'fire', note: 'of a chosen type' })).not.toEqual([]);
+  });
 
   it('takes a charge count as a whole number or a dice expression (#163)', async () => {
     const wandErrors = async (max: unknown) => {
