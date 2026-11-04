@@ -1,0 +1,116 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ice-mephit",
+  "name": "Ice Mephit",
+  "summary": "A small elemental of ice that breathes frost and explodes when it dies.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30,
+      "fly": 30
+    },
+    "abilities": {
+      "str": 7,
+      "dex": 13,
+      "con": 10,
+      "int": 9,
+      "wis": 11,
+      "cha": 12
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "vulnerabilities": [
+      "fire"
+    ],
+    "immunities": {
+      "damage": [
+        "cold",
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Aquan, Auran"
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Death Burst",
+        "kind": "other",
+        "text": "The mephit explodes when it dies. *Constitution Saving Throw:* {dc:con}, each creature in a 5-foot Emanation originating from the mephit. *Failure:* {dmg:2d4:cold}. *Success:* Half damage."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d4",
+            "type": "cold"
+          }
+        ]
+      },
+      {
+        "name": "Fog Cloud",
+        "kind": "other",
+        "text": "The mephit casts *{ref:spell/fog-cloud}*, requiring no spell components and using Charisma as the spellcasting ability.",
+        "uses": "1/day"
+      },
+      {
+        "name": "Frost Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "3d4",
+            "type": "cold"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

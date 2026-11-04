@@ -1,0 +1,70 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ankylosaurus",
+  "name": "Ankylosaurus",
+  "summary": "An armored dinosaur that swings its clubbed tail.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "descriptors": [
+      "Dinosaur"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 11,
+      "con": 15,
+      "int": 2,
+      "wis": 12,
+      "cha": 5
+    },
+    "saveProficiencies": [
+      "str"
+    ],
+    "languages": {
+      "spoken": []
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The ankylosaurus makes two Tail attacks."
+      },
+      {
+        "name": "Tail",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Huge or smaller creature, it has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

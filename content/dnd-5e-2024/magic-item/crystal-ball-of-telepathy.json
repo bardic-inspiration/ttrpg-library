@@ -1,0 +1,37 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "crystal-ball-of-telepathy",
+  "name": "Crystal Ball of Telepathy",
+  "summary": "A crystal orb that casts Scrying and lets you speak telepathically through its sensor.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "legendary",
+    "attunement": {
+      "required": true
+    },
+    "spells": [
+      {
+        "spell": "Scrying",
+        "saveDc": 17
+      },
+      {
+        "spell": {
+          "ref": "spell/suggestion"
+        },
+        "saveDc": 17
+      }
+    ],
+    "effect": "While touching this crystal orb, you can cast *Scrying* (save DC 17) with it. In addition, you can communicate telepathically with creatures you can see within 30 feet of the spell's sensor. You can also cast *{ref:spell/suggestion}* (save DC 17) through the sensor on one of those creatures. You don't need to concentrate on this *{ref:spell/suggestion}* to maintain it during its duration, but it ends if *Scrying* ends. You can't cast *{ref:spell/suggestion}* in this way again until the next dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

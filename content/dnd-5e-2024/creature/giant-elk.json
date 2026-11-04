@@ -1,0 +1,87 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-elk",
+  "name": "Giant Elk",
+  "summary": "A huge celestial elk that rams with its antlers.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "celestial",
+    "alignment": "neutral good",
+    "ac": {
+      "value": 14
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 60
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 18,
+      "con": 14,
+      "int": 7,
+      "wis": 14,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "str",
+      "dex"
+    ],
+    "skills": {
+      "perception": "proficient"
+    },
+    "resistances": [
+      "necrotic",
+      "radiant"
+    ],
+    "senses": {
+      "darkvision": 90
+    },
+    "languages": {
+      "spoken": [
+        "Celestial"
+      ],
+      "understood": [
+        "Common",
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Ram",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "2d4",
+            "type": "radiant"
+          }
+        ],
+        "onHit": "If the target is a Huge or smaller creature and the elk moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d4:bludgeoning} and has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

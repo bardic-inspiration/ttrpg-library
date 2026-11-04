@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "wraith",
+  "name": "Wraith",
+  "summary": "An incorporeal undead that drains life and raises specters.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 5,
+      "fly": 60,
+      "hover": true
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 16,
+      "con": 16,
+      "int": 12,
+      "wis": 14,
+      "cha": 15
+    },
+    "resistances": [
+      "acid",
+      "bludgeoning",
+      "cold",
+      "fire",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "necrotic",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common plus two other languages"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Incorporeal Movement",
+        "kind": "other",
+        "text": "The wraith can move through other creatures and objects as if they were Difficult Terrain. It takes {dmg:1d10:force} if it ends its turn inside an object."
+      },
+      {
+        "name": "Sunlight Sensitivity",
+        "kind": "other",
+        "text": "While in sunlight, the wraith has Disadvantage on ability checks and attack rolls."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Life Drain",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "4d8",
+            "ability": "dex",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "If the target is a creature, its Hit Point maximum decreases by an amount equal to the damage taken."
+      },
+      {
+        "name": "Create Specter",
+        "kind": "other",
+        "text": "The wraith targets a Humanoid corpse within 10 feet of itself that has been dead for no longer than 1 minute. The target's spirit rises as a **{ref:creature/specter}** in the space of its corpse or in the nearest unoccupied space. The specter is under the wraith's control. The wraith can have no more than seven specters under its control at a time."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

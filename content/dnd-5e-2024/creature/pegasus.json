@@ -1,0 +1,78 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "pegasus",
+  "name": "Pegasus",
+  "summary": "A winged celestial horse.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "celestial",
+    "alignment": "chaotic good",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 60,
+      "fly": 90
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 15,
+      "con": 16,
+      "int": 10,
+      "wis": 15,
+      "cha": 13
+    },
+    "saveProficiencies": [
+      "dex",
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "perception": "expertise"
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Celestial",
+        "Common",
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Hooves",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "2d4",
+            "type": "radiant"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

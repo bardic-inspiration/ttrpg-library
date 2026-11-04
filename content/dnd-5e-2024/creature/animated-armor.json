@@ -1,0 +1,84 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "animated-armor",
+  "name": "Animated Armor",
+  "summary": "An empty suit of armor animated by magic that pummels intruders.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "construct",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 18
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 25
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 11,
+      "con": 13,
+      "int": 1,
+      "wis": 3,
+      "cha": 1
+    },
+    "immunities": {
+      "damage": [
+        "poison",
+        "psychic"
+      ],
+      "conditions": [
+        "charmed",
+        "deafened",
+        "exhaustion",
+        "frightened",
+        "paralyzed",
+        "petrified",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "blindsight": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The armor makes two Slam attacks."
+      },
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

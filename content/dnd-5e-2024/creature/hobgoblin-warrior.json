@@ -1,0 +1,103 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "hobgoblin-warrior",
+  "name": "Hobgoblin Warrior",
+  "summary": "A disciplined fey soldier armed with longsword and longbow.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 18
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 12,
+      "con": 12,
+      "int": 10,
+      "wis": 10,
+      "cha": 9
+    },
+    "gear": [
+      "Half Plate Armor",
+      "Longbow",
+      "Longsword",
+      "Shield"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The hobgoblin has Advantage on an attack roll against a creature if at least one of the hobgoblin's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Longbow",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "3d4",
+            "type": "poison"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

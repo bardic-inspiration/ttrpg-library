@@ -1,0 +1,83 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "kobold-warrior",
+  "name": "Kobold Warrior",
+  "summary": "A small draconic warrior that fights in packs and shuns sunlight.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "dragon",
+    "alignment": "neutral",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 7,
+      "dex": 15,
+      "con": 9,
+      "int": 8,
+      "wis": 7,
+      "cha": 8
+    },
+    "gear": [
+      "Daggers (3)"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 0.125,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The kobold has Advantage on an attack roll against a creature if at least one of the kobold's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+      },
+      {
+        "name": "Sunlight Sensitivity",
+        "kind": "other",
+        "text": "While in sunlight, the kobold has Disadvantage on ability checks and attack rolls."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-or-ranged-attack",
+        "ability": "dex",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

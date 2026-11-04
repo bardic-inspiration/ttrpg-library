@@ -1,0 +1,31 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "crystal-ball",
+  "name": "Crystal Ball",
+  "summary": "A crystal orb that lets you cast Scrying.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true
+    },
+    "spells": [
+      {
+        "spell": "Scrying",
+        "saveDc": 17
+      }
+    ],
+    "effect": "While touching this crystal orb, you can cast *Scrying* (save DC 17) with it."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

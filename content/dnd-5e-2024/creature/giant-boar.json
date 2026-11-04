@@ -1,0 +1,69 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-boar",
+  "name": "Giant Boar",
+  "summary": "A huge wild pig that gores and fights hardest when Bloodied.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 10,
+      "con": 16,
+      "int": 2,
+      "wis": 7,
+      "cha": 5
+    },
+    "saveProficiencies": [
+      "str"
+    ],
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Bloodied Fury",
+        "kind": "other",
+        "text": "The boar has Advantage on melee attack rolls while it is Bloodied."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature and the boar moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d6:piercing} and has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

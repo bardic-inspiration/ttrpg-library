@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "steam-mephit",
+  "name": "Steam Mephit",
+  "summary": "A small elemental of steam that scalds with its breath and explodes when it dies.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 10
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30,
+      "fly": 30
+    },
+    "abilities": {
+      "str": 5,
+      "dex": 11,
+      "con": 10,
+      "int": 11,
+      "wis": 10,
+      "cha": 12
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Aquan, Ignan"
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Blurred Form",
+        "kind": "other",
+        "text": "Attack rolls against the mephit are made with Disadvantage unless the mephit has the Incapacitated condition."
+      },
+      {
+        "name": "Death Burst",
+        "kind": "other",
+        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot Emanation originating from the mephit. *Failure:* {dmg:2d4:fire}. *Success:* Half damage."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d4",
+            "type": "fire"
+          }
+        ]
+      },
+      {
+        "name": "Steam Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "2d4",
+            "type": "fire"
+          }
+        ],
+        "onFailure": "and the target's Speed decreases by 10 feet until the end of the mephit's next turn.",
+        "onSuccess": "Half damage only.",
+        "onFailureOrSuccess": "Being underwater doesn't grant Resistance to this Fire damage.",
+        "recharge": "6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

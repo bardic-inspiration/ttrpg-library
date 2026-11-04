@@ -1,0 +1,106 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "sea-hag",
+  "name": "Sea Hag",
+  "summary": "A hideous fey whose appearance and glare terrify.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 30,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 13,
+      "con": 16,
+      "int": 12,
+      "wis": 12,
+      "cha": 13
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Giant",
+        "Primordial"
+      ],
+      "note": "Aquan"
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The hag can breathe air and water."
+      },
+      {
+        "name": "Coven Magic",
+        "kind": "other",
+        "text": "While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {dc:dex}): *Augury*, *{ref:spell/find-familiar}*, *{ref:spell/identify}*, *{ref:spell/locate-object}*, *Scrying*, or *{ref:spell/unseen-servant}*. The hag must finish a Long Rest before using this trait to cast that spell again."
+      },
+      {
+        "name": "Vile Appearance",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "wis",
+          "targets": "any Beast or Humanoid that starts its turn within 30 feet of the hag and can see the hag's true form"
+        },
+        "onFailure": "The target has the Frightened condition until the start of its next turn.",
+        "onSuccess": "The target is immune to this hag's Vile Appearance for 24 hours."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Death Glare",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "wis",
+          "targets": "one Frightened creature the hag can see within 30 feet"
+        },
+        "onFailure": "If the target has 20 Hit Points or fewer, it drops to 0 Hit Points. Otherwise, the target takes {dmg:3d8:psychic}.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Illusory Appearance",
+        "kind": "other",
+        "text": "The hag casts *{ref:spell/disguise-self}*, using Constitution as the spellcasting ability (spell save {dc:con}). The spell's duration is 24 hours."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

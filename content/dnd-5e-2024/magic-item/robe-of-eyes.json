@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "robe-of-eyes",
+  "name": "Robe of Eyes",
+  "summary": "A robe that grants all-around vision, Darkvision, and Truesight, but bright light can blind you.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "This robe is adorned with eyelike patterns. While you wear the robe, you gain the following benefits:\n\n***All-Around Vision.*** The robe gives you Advantage on Wisdom (Perception) checks that rely on sight.\n\n***Special Senses.*** You have Darkvision and Truesight, both with a range of 120 feet.\n\n***Drawbacks.*** A *{ref:spell/light}* spell cast on the robe or a *{ref:spell/daylight}* spell cast within 5 feet of the robe gives you the Blinded condition for 1 minute. At the end of each of your turns, you make a Constitution saving throw (DC 11 for *{ref:spell/light}* or DC 15 for *{ref:spell/daylight}*), ending the condition on yourself on a success."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

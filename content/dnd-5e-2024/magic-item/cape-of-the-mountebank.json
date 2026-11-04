@@ -1,0 +1,32 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "cape-of-the-mountebank",
+  "name": "Cape of the Mountebank",
+  "summary": "A cape that lets you cast Dimension Door once a day, leaving a puff of smoke.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/dimension-door"
+        }
+      }
+    ],
+    "effect": "This cape smells faintly of brimstone. While wearing it, you can use it to cast *{ref:spell/dimension-door}* as a Magic action. This property can't be used again until the next dawn.\n\nWhen you teleport with that spell, you leave behind a cloud of smoke. The space you left is Lightly Obscured by that smoke until the end of your next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

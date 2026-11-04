@@ -1,0 +1,96 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "remorhaz",
+  "name": "Remorhaz",
+  "summary": "A huge burrowing monstrosity that radiates intense heat.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 17,
+    "speed": {
+      "walk": 40,
+      "burrow": 30
+    },
+    "abilities": {
+      "str": 24,
+      "dex": 13,
+      "con": 21,
+      "int": 4,
+      "wis": 10,
+      "cha": 5
+    },
+    "immunities": {
+      "damage": [
+        "cold",
+        "fire"
+      ]
+    },
+    "senses": {
+      "darkvision": 60,
+      "tremorsense": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 11,
+    "traits": [
+      {
+        "name": "Heat Aura",
+        "kind": "other",
+        "text": "At the end of each of the remorhaz's turns, each creature in a 5-foot Emanation originating from the remorhaz takes {dmg:3d10:fire}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "4d6",
+            "type": "fire"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=17}), and it has the Restrained condition until the grapple ends."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Swallow",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "str",
+          "targets": "one Large or smaller creature Grappled by the remorhaz (it can have up to two creatures swallowed at a time)"
+        },
+        "onFailure": "The target is swallowed by the remorhaz, and the Grappled condition ends. A swallowed creature has the Blinded and Restrained conditions, it has Total Cover against attacks and other effects outside the remorhaz, and it takes {dmg:3d6:acid} plus {dmg:3d6:fire} at the start of each of the remorhaz's turns.\n\nIf the remorhaz takes 30 damage or more on a single turn from a creature inside it, the remorhaz must succeed on a {dc=15} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 5 feet of the remorhaz and has the Prone condition. If the remorhaz dies, any swallowed creature no longer has the Restrained condition and can escape from the corpse by using 15 feet of movement, exiting Prone."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

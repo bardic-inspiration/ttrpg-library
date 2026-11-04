@@ -1,0 +1,105 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "specter",
+  "name": "Specter",
+  "summary": "An incorporeal undead that drains life with its touch.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30,
+      "fly": 50,
+      "hover": true
+    },
+    "abilities": {
+      "str": 1,
+      "dex": 14,
+      "con": 11,
+      "int": 10,
+      "wis": 10,
+      "cha": 11
+    },
+    "resistances": [
+      "acid",
+      "bludgeoning",
+      "cold",
+      "fire",
+      "lightning",
+      "piercing",
+      "slashing",
+      "thunder"
+    ],
+    "immunities": {
+      "damage": [
+        "necrotic",
+        "poison"
+      ],
+      "conditions": [
+        "charmed",
+        "exhaustion",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Incorporeal Movement",
+        "kind": "other",
+        "text": "The specter can move through other creatures and objects as if they were Difficult Terrain. It takes {dmg:1d10:force} if it ends its turn inside an object."
+      },
+      {
+        "name": "Sunlight Sensitivity",
+        "kind": "other",
+        "text": "While in sunlight, the specter has Disadvantage on ability checks and attack rolls."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Life Drain",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "If the target is a creature, its Hit Point maximum decreases by an amount equal to the damage taken."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

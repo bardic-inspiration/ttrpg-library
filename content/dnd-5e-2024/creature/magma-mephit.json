@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "magma-mephit",
+  "name": "Magma Mephit",
+  "summary": "A small elemental of magma that breathes fire and explodes when it dies.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 30,
+      "fly": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 12,
+      "con": 12,
+      "int": 7,
+      "wis": 10,
+      "cha": 10
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "vulnerabilities": [
+      "cold"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "exhaustion",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Ignan, Terran"
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Death Burst",
+        "kind": "other",
+        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot Emanation originating from the mephit. *Failure:* {dmg:2d6:fire}. *Success:* Half damage."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "fire"
+          }
+        ]
+      },
+      {
+        "name": "Fire Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "mammoth",
+  "name": "Mammoth",
+  "summary": "A huge woolly elephant that gores and tramples.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 24,
+      "dex": 9,
+      "con": 21,
+      "int": 3,
+      "wis": 11,
+      "cha": 6
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "languages": {
+      "spoken": []
+    },
+    "cr": 6,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The mammoth makes two Gore attacks."
+      },
+      {
+        "name": "Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Huge or smaller creature and the mammoth moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Trample",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature within 5 feet that has the Prone condition"
+        },
+        "damage": [
+          {
+            "dice": "4d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onSuccess": "Half damage."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

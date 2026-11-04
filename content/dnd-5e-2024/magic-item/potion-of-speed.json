@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "potion-of-speed",
+  "name": "Potion of Speed",
+  "summary": "A potion that grants the effect of Haste without its lethargy.",
+  "stats": {
+    "category": "potion",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, you gain the effect of the *{ref:spell/haste}* spell for 1 minute (no Concentration required) without suffering the wave of lethargy that typically occurs when the effect ends.\n\nThis potion's yellow fluid is streaked with black and swirls on its own."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

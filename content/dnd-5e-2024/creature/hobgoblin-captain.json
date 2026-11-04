@@ -1,0 +1,111 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "hobgoblin-captain",
+  "name": "Hobgoblin Captain",
+  "summary": "A disciplined fey commander whose aura of authority bolsters its troops.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 17
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 14,
+      "int": 12,
+      "wis": 10,
+      "cha": 13
+    },
+    "gear": [
+      "Greatsword",
+      "Half Plate Armor",
+      "Longbow"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Aura of Authority",
+        "kind": "other",
+        "text": "While in a 10-foot Emanation originating from the hobgoblin, the hobgoblin and its allies have Advantage on attack rolls and saving throws, provided the hobgoblin doesn't have the Incapacitated condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hobgoblin makes two attacks, using Greatsword or Longbow in any combination."
+      },
+      {
+        "name": "Greatsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "poison"
+          }
+        ]
+      },
+      {
+        "name": "Longbow",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d4",
+            "type": "poison"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

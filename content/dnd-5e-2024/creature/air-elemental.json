@@ -1,0 +1,119 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "air-elemental",
+  "name": "Air Elemental",
+  "summary": "A whirling elemental of living wind that slams foes and sweeps them up in a whirlwind.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "elemental",
+    "alignment": "neutral",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 10,
+      "fly": 90,
+      "hover": true
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 20,
+      "con": 14,
+      "int": 6,
+      "wis": 10,
+      "cha": 6
+    },
+    "resistances": [
+      "bludgeoning",
+      "lightning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "poison",
+        "thunder"
+      ],
+      "conditions": [
+        "exhaustion",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "poisoned",
+        "prone",
+        "restrained",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Auran"
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Air Form",
+        "kind": "other",
+        "text": "The elemental can enter a creature's space and stop there. It can move through a space as narrow as 1 inch without expending extra movement to do so."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The elemental makes two Thunderous Slam attacks."
+      },
+      {
+        "name": "Thunderous Slam",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "dex",
+            "type": "thunder"
+          }
+        ]
+      },
+      {
+        "name": "Whirlwind",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "str",
+          "targets": "one Medium or smaller creature in the elemental's space"
+        },
+        "damage": [
+          {
+            "dice": "4d10",
+            "ability": "con",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": "and the target is pushed up to 20 feet straight away from the elemental and has the Prone condition.",
+        "onSuccess": "Half damage only.",
+        "recharge": "4-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

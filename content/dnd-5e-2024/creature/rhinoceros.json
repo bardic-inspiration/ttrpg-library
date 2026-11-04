@@ -1,0 +1,59 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "rhinoceros",
+  "name": "Rhinoceros",
+  "summary": "A large beast that charges and gores.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 21,
+      "dex": 8,
+      "con": 15,
+      "int": 2,
+      "wis": 12,
+      "cha": 6
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If target is a Large or smaller creature and the rhinoceros moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d8:piercing} and has the Prone condition."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

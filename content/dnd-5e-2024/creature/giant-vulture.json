@@ -1,0 +1,79 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-vulture",
+  "name": "Giant Vulture",
+  "summary": "A large carrion bird that gouges prey and hunts in groups.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 10
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 10,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 10,
+      "con": 16,
+      "int": 6,
+      "wis": 12,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "resistances": [
+      "necrotic"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common"
+      ]
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The vulture has Advantage on an attack roll against a creature if at least one of the vulture's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Gouge",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has the Poisoned condition until the end of its next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ettercap",
+  "name": "Ettercap",
+  "summary": "A spiderlike humanoid that spins webs and bites with venom.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 15,
+      "con": 13,
+      "int": 7,
+      "wis": 12,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient",
+      "survival": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The ettercap can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      },
+      {
+        "name": "Web Walker",
+        "kind": "other",
+        "text": "The ettercap ignores movement restrictions caused by webs, and the ettercap knows the location of any other creature in contact with the same web."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The ettercap makes one Bite attack and one Claw attack."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d4",
+            "type": "poison"
+          }
+        ],
+        "onHit": "and the target has the Poisoned condition until the start of the ettercap's next turn."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d4",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Web Strand",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "one Large or smaller creature the ettercap can see within 30 feet"
+        },
+        "onFailure": "The target has the Restrained condition until the web is destroyed (AC 10; HP 5; Vulnerability to Fire damage; Immunity to Bludgeoning, Poison, and Psychic damage).",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Reel",
+        "kind": "other",
+        "text": "The ettercap pulls one creature within 30 feet of itself that is Restrained by its Web Strand up to 25 feet straight toward itself."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

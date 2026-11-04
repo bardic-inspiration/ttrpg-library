@@ -1,0 +1,79 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "blink-dog",
+  "name": "Blink Dog",
+  "summary": "A fey canine that teleports in and out of combat.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fey",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 17,
+      "con": 12,
+      "int": 10,
+      "wis": 13,
+      "cha": 11
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Blink Dog"
+      ],
+      "understood": [
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Teleport",
+        "kind": "other",
+        "text": "The dog teleports up to 40 feet to an unoccupied space it can see.",
+        "recharge": "4-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

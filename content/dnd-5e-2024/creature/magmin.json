@@ -1,0 +1,84 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "magmin",
+  "name": "Magmin",
+  "summary": "A small elemental of fire whose touch sets things burning.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "elemental",
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 14
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 7,
+      "dex": 15,
+      "con": 12,
+      "int": 8,
+      "wis": 11,
+      "cha": 10
+    },
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Primordial"
+      ],
+      "note": "Ignan"
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Death Burst",
+        "kind": "other",
+        "text": "The magmin explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 10-foot Emanation originating from the magmin. *Failure*: {dmg:2d6:fire}. *Success:* Half damage."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Touch",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d4",
+            "ability": "dex",
+            "type": "fire"
+          }
+        ],
+        "onHit": "If the target is a creature or a flammable object that isn't being worn or carried, it starts burning."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Ignited Illumination",
+        "kind": "other",
+        "text": "The magmin sets itself ablaze or extinguishes its flames. While ablaze, the magmin sheds Bright Light in a 10-foot radius and Dim Light for an additional 10 feet."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "hydra",
+  "name": "Hydra",
+  "summary": "A many-headed reptilian monstrosity that grows new heads when one is cut off.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "monstrosity",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15
+    },
+    "initiative": {
+      "proficiency": "proficient"
+    },
+    "hitDice": 16,
+    "speed": {
+      "walk": 40,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 12,
+      "con": 20,
+      "int": 2,
+      "wis": 10,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "immunities": {
+      "conditions": [
+        "blinded",
+        "charmed",
+        "deafened",
+        "frightened",
+        "stunned",
+        "unconscious"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Hold Breath",
+        "kind": "other",
+        "text": "The hydra can hold its breath for 1 hour."
+      },
+      {
+        "name": "Multiple Heads",
+        "kind": "other",
+        "text": "The hydra has five heads. Whenever the hydra takes 25 damage or more on a single turn, one of its heads dies. The hydra dies if all its heads are dead. At the end of each of its turns when it has at least one living head, the hydra grows two heads for each of its heads that died since its last turn, unless it has taken Fire damage since its last turn. The hydra regains 20 Hit Points when it grows new heads."
+      },
+      {
+        "name": "Reactive Heads",
+        "kind": "other",
+        "text": "For each head the hydra has beyond one, it gets an extra Reaction that can be used only for Opportunity Attacks."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hydra makes as many Bite attacks as it has heads."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

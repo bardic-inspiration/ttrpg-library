@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "tough-boss",
+  "name": "Tough Boss",
+  "summary": "A seasoned leader of thugs armed with a warhammer and a heavy crossbow.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 16
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 14,
+      "con": 16,
+      "int": 11,
+      "wis": 10,
+      "cha": 11
+    },
+    "saveProficiencies": [
+      "str",
+      "con",
+      "cha"
+    ],
+    "gear": [
+      "Chain Mail",
+      "Heavy Crossbow",
+      "Warhammer"
+    ],
+    "languages": {
+      "spoken": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The tough has Advantage on an attack roll against a creature if at least one of the tough's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The tough makes two attacks, using Warhammer or Heavy Crossbow in any combination."
+      },
+      {
+        "name": "Warhammer",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, the tough pushes the target up to 10 feet straight away from itself."
+      },
+      {
+        "name": "Heavy Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 100,
+          "long": 400
+        },
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

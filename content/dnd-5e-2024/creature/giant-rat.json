@@ -1,0 +1,75 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "giant-rat",
+  "name": "Giant Rat",
+  "summary": "A dog-sized rat that fights in packs.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 7,
+      "dex": 16,
+      "con": 11,
+      "int": 2,
+      "wis": 10,
+      "cha": 4
+    },
+    "saveProficiencies": [
+      "dex"
+    ],
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.125,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The rat has Advantage on an attack roll against a creature if at least one of the rat's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

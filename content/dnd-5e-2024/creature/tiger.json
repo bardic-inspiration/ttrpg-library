@@ -1,0 +1,73 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "tiger",
+  "name": "Tiger",
+  "summary": "A large striped cat that rends prey.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 16,
+      "con": 14,
+      "int": 3,
+      "wis": 12,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Rend",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Nimble Escape",
+        "kind": "other",
+        "text": "The tiger takes the Disengage or Hide action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

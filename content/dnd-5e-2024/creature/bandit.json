@@ -1,0 +1,83 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bandit",
+  "name": "Bandit",
+  "summary": "A low-level outlaw armed with a scimitar and a light crossbow.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 12,
+      "con": 12,
+      "int": 10,
+      "wis": 10,
+      "cha": 10
+    },
+    "gear": [
+      "Leather Armor",
+      "Light Crossbow",
+      "Scimitar"
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 0.125,
+    "actions": [
+      {
+        "name": "Scimitar",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Light Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

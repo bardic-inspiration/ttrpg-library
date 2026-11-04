@@ -1,0 +1,72 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "berserker",
+  "name": "Berserker",
+  "summary": "A warrior who fights in a frenzy, growing fiercer when Bloodied.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 12,
+      "con": 17,
+      "int": 9,
+      "wis": 11,
+      "cha": 9
+    },
+    "gear": [
+      "Greataxe",
+      "Hide Armor"
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Bloodied Frenzy",
+        "kind": "other",
+        "text": "While Bloodied, the berserker has Advantage on attack rolls and saving throws."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Greataxe",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

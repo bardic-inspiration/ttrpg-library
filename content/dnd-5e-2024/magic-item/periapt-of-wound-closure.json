@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "periapt-of-wound-closure",
+  "name": "Periapt of Wound Closure",
+  "summary": "A pendant that turns low Death Saving Throw rolls into successes and doubles Hit Point Dice healing.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true
+    },
+    "effect": "While wearing this pendant, you gain the following benefits.\n\n***Life Preservation.*** Whenever you make a Death Saving Throw, you can change a roll of 9 or lower to a 10, turning a failed save into a successful one.\n\n***Natural Healing Boost.*** Whenever you roll a Hit Point Die to regain Hit Points, double the number of Hit Points it restores."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
