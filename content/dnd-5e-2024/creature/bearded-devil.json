@@ -1,0 +1,113 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bearded-devil",
+  "name": "Bearded Devil",
+  "summary": "A devil with a writhing beard that wounds with a glaive and a poisonous beard.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "fiend",
+    "descriptors": [
+      "Devil"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 15,
+      "con": 15,
+      "int": 9,
+      "wis": 11,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "str",
+      "con",
+      "cha"
+    ],
+    "resistances": [
+      "cold"
+    ],
+    "immunities": {
+      "damage": [
+        "fire",
+        "poison"
+      ],
+      "conditions": [
+        "frightened",
+        "poisoned"
+      ]
+    },
+    "senses": {
+      "darkvision": 120,
+      "note": "unimpeded by magical Darkness"
+    },
+    "languages": {
+      "spoken": [
+        "Infernal"
+      ],
+      "telepathy": 120
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Magic Resistance",
+        "kind": "other",
+        "text": "The devil has Advantage on saving throws against spells and other magical effects."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The devil makes one Beard attack and one Infernal Glaive attack."
+      },
+      {
+        "name": "Beard",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has the Poisoned condition until the start of the devil's next turn. Until this poison ends, the target can't regain Hit Points."
+      },
+      {
+        "name": "Infernal Glaive",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a creature and doesn't already have an infernal wound, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target receives an infernal wound. While wounded, the target loses {dmg:1d10} Hit Points at the start of each of its turns. The wound closes after 1 minute, after a spell restores Hit Points to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a {dc=12} Wisdom (Medicine) check."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

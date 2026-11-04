@@ -1,0 +1,90 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "swarm-of-rats",
+  "name": "Swarm of Rats",
+  "summary": "A swarm of rats that bites anything in its space.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "swarm": "tiny",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 10
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 11,
+      "con": 9,
+      "int": 2,
+      "wis": 10,
+      "cha": 3
+    },
+    "saveProficiencies": [
+      "dex"
+    ],
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed",
+        "frightened",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "prone",
+        "restrained",
+        "stunned"
+      ]
+    },
+    "senses": {
+      "darkvision": 30
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny rat. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bites",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d4",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "or {dmg:1d4:piercing} if the swarm is Bloodied."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "scorpion",
+  "name": "Scorpion",
+  "summary": "A tiny arachnid with a venomous sting.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 10
+    },
+    "abilities": {
+      "str": 2,
+      "dex": 11,
+      "con": 8,
+      "int": 1,
+      "wis": 8,
+      "cha": 2
+    },
+    "senses": {
+      "blindsight": 10
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "actions": [
+      {
+        "name": "Sting",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "poison"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

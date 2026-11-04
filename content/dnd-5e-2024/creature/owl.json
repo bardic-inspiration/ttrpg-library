@@ -1,0 +1,72 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "owl",
+  "name": "Owl",
+  "summary": "A tiny nocturnal bird that hunts silently.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 5,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 3,
+      "dex": 13,
+      "con": 8,
+      "int": 2,
+      "wis": 12,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The owl doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Talons",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

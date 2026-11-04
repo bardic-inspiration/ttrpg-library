@@ -1,0 +1,76 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "cultist",
+  "name": "Cultist",
+  "summary": "A devoted servant of a dark power armed with a ritual sickle.",
+  "stats": {
+    "size": [
+      "medium",
+      "small"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 12,
+      "con": 10,
+      "int": 10,
+      "wis": 11,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "religion": "proficient"
+    },
+    "gear": [
+      "Leather Armor",
+      "Sickle"
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 0.125,
+    "actions": [
+      {
+        "name": "Ritual Sickle",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "amount": 1,
+            "type": "necrotic"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

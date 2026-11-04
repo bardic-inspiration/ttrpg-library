@@ -1,0 +1,69 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "piranha",
+  "name": "Piranha",
+  "summary": "A tiny fish that strikes in frenzied swarms.",
+  "stats": {
+    "size": [
+      "tiny"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 5,
+      "swim": 40
+    },
+    "abilities": {
+      "str": 2,
+      "dex": 16,
+      "con": 9,
+      "int": 1,
+      "wis": 7,
+      "cha": 2
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Water Breathing",
+        "kind": "other",
+        "text": "The piranha can breathe only underwater."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "attackNote": "with Advantage if the target doesn't have all its Hit Points",
+        "damage": [
+          {
+            "amount": 1,
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

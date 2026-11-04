@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "swarm-of-ravens",
+  "name": "Swarm of Ravens",
+  "summary": "A swarm of ravens that pecks and claws.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "beast",
+    "swarm": "tiny",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 10,
+      "fly": 50
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 14,
+      "con": 12,
+      "int": 5,
+      "wis": 12,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "expertise"
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "conditions": [
+        "charmed",
+        "frightened",
+        "grappled",
+        "paralyzed",
+        "petrified",
+        "prone",
+        "restrained",
+        "stunned"
+      ]
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny raven. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Beaks",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "or {dmg:1d4:piercing} if the swarm is Bloodied."
+      },
+      {
+        "name": "Cacophony",
+        "kind": "save",
+        "ability": "con",
+        "adjust": -1,
+        "save": {
+          "ability": "wis",
+          "targets": "one creature in the swarm's space"
+        },
+        "onFailure": "The target has the Deafened condition until the start of the swarm's next turn. While Deafened, the target also has Disadvantage on ability checks and attack rolls.",
+        "recharge": "6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

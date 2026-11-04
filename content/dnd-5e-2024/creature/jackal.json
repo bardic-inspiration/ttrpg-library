@@ -1,0 +1,65 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "jackal",
+  "name": "Jackal",
+  "summary": "A small wild dog that hunts in packs.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "beast",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 15,
+      "con": 11,
+      "int": 3,
+      "wis": 12,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 90
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0,
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
