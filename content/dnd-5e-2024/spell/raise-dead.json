@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "raise-dead",
+  "name": "Raise Dead",
+  "summary": "Revives a creature that has been dead no longer than 10 days.",
+  "stats": {
+    "level": 5,
+    "school": "necromancy",
+    "classes": [
+      "bard",
+      "cleric",
+      "paladin"
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "hour"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a diamond worth 500+ GP",
+        "costGp": 500,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "With a touch, you revive a dead creature if it has been dead no longer than 10 days and it wasn't Undead when it died.\n\nThe creature returns to life with 1 Hit Point. This spell also neutralizes any poisons that affected the creature at the time of death.\n\nThis spell closes all mortal wounds, but it doesn't restore missing body parts. If the creature is lacking body parts or organs integral for its survival—its head, for instance—the spell automatically fails.\n\nComing back from the dead is an ordeal. The target takes a −4 penalty to D20 Tests. Every time the target finishes a Long Rest, the penalty is reduced by 1 until it becomes 0."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}
