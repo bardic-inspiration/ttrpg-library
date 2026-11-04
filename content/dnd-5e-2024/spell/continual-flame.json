@@ -24,7 +24,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "ruby dust worth 50+ GP",
+        "text": "ruby dust worth 50+ GP, which the spell consumes",
         "costGp": 50,
         "consumed": true
       }

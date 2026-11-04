@@ -23,7 +23,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "burning incense worth 10+ GP",
+        "text": "burning incense worth 10+ GP, which the spell consumes",
         "costGp": 10,
         "consumed": true
       }

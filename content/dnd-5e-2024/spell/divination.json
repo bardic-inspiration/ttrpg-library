@@ -24,7 +24,7 @@
       "v": true,
       "s": true,
       "m": {
-        "text": "incense worth 25+ GP",
+        "text": "incense worth 25+ GP, which the spell consumes",
         "costGp": 25,
         "consumed": true
       }
