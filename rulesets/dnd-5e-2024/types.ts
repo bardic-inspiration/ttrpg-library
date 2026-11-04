@@ -85,6 +85,8 @@ export interface CreatureStats {
     ability: Ability;
     /** "Material" reads "requiring no Material components and using …". */
     noComponents?: string;
+    /** The intro prints no spell save DC (SPEC.md §5.8). */
+    noSaveDc?: true;
     adjust?: number;
     includeAttack?: true;
     atWill?: RefOrText[];

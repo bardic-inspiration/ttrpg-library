@@ -381,6 +381,10 @@
         "ability": {
           "$ref": "common.schema.json#/$defs/Ability"
         },
+        "noSaveDc": {
+          "description": "The intro prints no spell save DC, for a creature whose spells need none (SPEC.md §5.8): \"…using Wisdom as the spellcasting ability:\".",
+          "const": true
+        },
         "noComponents": {
           "description": "The components the creature's spells don't require, as in \"requiring no Material components\": \"Material\", \"Somatic or Material\", or \"spell\".",
           "type": "string",

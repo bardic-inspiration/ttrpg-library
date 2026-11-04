@@ -297,6 +297,8 @@ Many `stats` fields apply to some entries and not others: a spell's material cos
 
 An optional number whose `0` is a real value, such as a magic item's `attackBonus` of +0, keeps `0` valid and displays it when present. A facet on an optional boolean flag (§7) reads an omitted key as `false`. A derived value always exists, so a line that shows one displays even when its optional inputs are omitted: the Senses line still shows Passive Perception, and the Initiative line still shows the DEX-based bonus.
 
+**DCs.** A DC displays only when there is one, by one rule for every type. An authored DC, such as a magic item's `spells[].saveDc`, is omitted when there is none; `0` is never a stand-in for "no DC". A derived DC, which always exists, is turned off by an optional flag on the input that derives it: a creature's `spellcasting.noSaveDc` leaves "(spell save DC …)" out of the Spellcasting intro, for SRD casters whose spells need none (§6.5).
+
 Because the schema is the source of the rule, it needs no display annotation. A template, including the generic fallback (§9.5), decides whether an optional field displays from presence alone, never by testing its value against `0`, `false`, or emptiness. The `stats` tables in §6.5–§6.7 mark optional fields with "optional" or a `?` key.
 
 ### 5.9 SRD and custom entries
@@ -438,7 +440,7 @@ Field names are the JSON keys under `stats`. Unless marked optional, a field is 
 | `lair` | optional `true` | Adds the derived "in lair" XP |
 | `traits`, `actions`, `bonusActions`, `reactions` | arrays of `Action` (`actions` required, others optional) | |
 | `legendaryActions` | optional `{ uses: int, usesInLair?: int, intro?: Text, items: [Action] }` | Opens with one paragraph: the italic uses line, then `intro`: "*Legendary Action Uses: 3 (4 in Lair).* Immediately after another creature's turn, …" |
-| `spellcasting` | optional `{ ability: Ability, noComponents?: string, adjust?: Adjust, includeAttack?: true, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action: "The <shortName> casts one of the following spells, using <Ability> as the spellcasting ability (spell save DC <n>):". `noComponents` names the components the spells skip, as printed (`"Material"`, `"Somatic or Material"`, `"spell"`), and adds "requiring no <noComponents> components and " before "using". `includeAttack` shows the derived spell attack bonus |
+| `spellcasting` | optional `{ ability: Ability, noComponents?: string, adjust?: Adjust, includeAttack?: true, noSaveDc?: true, atWill?: [RefOrText], perDay?: { "1"…"3": [RefOrText] }, note?: Text }` | Rendered as the 5.2 "Spellcasting" action: "The <shortName> casts one of the following spells, using <Ability> as the spellcasting ability (spell save DC <n>):". `noComponents` names the components the spells skip, as printed (`"Material"`, `"Somatic or Material"`, `"spell"`), and adds "requiring no <noComponents> components and " before "using". `includeAttack` shows the derived spell attack bonus. `noSaveDc` leaves the save DC out (§5.8); the parenthetical then holds only the attack bonus, or is left out with the colon following "ability" directly: "using Wisdom as the spellcasting ability:" |
 
 **Action**
 

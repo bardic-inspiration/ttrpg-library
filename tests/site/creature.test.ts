@@ -205,6 +205,18 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     );
     expect(intro({ ...s, shortName: 'bandit' }, 'Bandit Captain')).toMatch(/^The bandit casts/);
   });
+  it('leaves the save DC out of the Spellcasting intro when noSaveDc is set (SPEC.md §5.8)', async () => {
+    const intro = async (spellcasting: CreatureStats['spellcasting']) => {
+      const { s, d } = await build({ spellcasting });
+      return spellcastingBlock(s, d, new Map(), 'Priest Acolyte')!.body.split('\\\n')[0];
+    };
+    expect(await intro({ ability: 'wis', noSaveDc: true, atWill: ['Light'] })).toBe(
+      'The acolyte casts one of the following spells, using Wisdom as the spellcasting ability:',
+    );
+    expect(await intro({ ability: 'wis', noSaveDc: true, includeAttack: true, atWill: ['Light'] })).toBe(
+      'The acolyte casts one of the following spells, using Wisdom as the spellcasting ability (+3 to hit with spell attacks):',
+    );
+  });
   it('puts each spell list on its own line, with "Each" only for more than one spell', async () => {
     const { s, d } = await build({ spellcasting: { ability: 'int', atWill: ['Light'], perDay: { '2': ['Fly', 'Invisibility'], '1': ['Fireball'] } } });
     expect(spellcastingBlock(s, d, new Map(), 'Mage')!.body.split('\\\n').slice(1)).toEqual([
