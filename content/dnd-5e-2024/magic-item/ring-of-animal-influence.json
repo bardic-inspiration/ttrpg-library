@@ -1,0 +1,53 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "magic-item",
+  "id": "ring-of-animal-influence",
+  "name": "Ring of Animal Influence",
+  "summary": "A ring that casts Animal Friendship, Fear on Beasts, or Speak with Animals for charges.",
+  "stats": {
+    "category": "ring",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "charges": {
+      "max": 3,
+      "recharge": "1d3 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/animal-friendship"
+        },
+        "chargeCost": 1,
+        "saveDc": 13
+      },
+      {
+        "spell": {
+          "ref": "spell/fear",
+          "note": "affects Beasts only"
+        },
+        "chargeCost": 1,
+        "saveDc": 13
+      },
+      {
+        "spell": {
+          "ref": "spell/speak-with-animals"
+        },
+        "chargeCost": 1,
+        "saveDc": 13
+      }
+    ],
+    "effect": "This ring has 3 charges, and it regains 1d3 expended charges daily at dawn. While wearing the ring, you can expend 1 charge to cast one of the following spells (save DC 13) from it:\n\n- *{ref:spell/animal-friendship}*\n- *{ref:spell/fear}* (affects Beasts only)\n- *{ref:spell/speak-with-animals}*"
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}
