@@ -1,6 +1,6 @@
-// Text for the dnd-5e-2024 spell card in SRD 5.2 form (SPEC.md §6.7, §9.5).
+// Text for the dnd-5e-2024 spell card in SRD 5.2 form (docs/rulesets.md#spells, docs/site.md#templates).
 // Spells have no derived values; every number here is authored and only
-// formatted. Optional fields display by presence alone (SPEC.md §5.8).
+// formatted. Optional fields display by presence alone (docs/content-model.md#situational-fields).
 
 import { present, whenPresent } from './display.ts';
 import { formatSpellLevel } from './format.ts';
@@ -32,7 +32,7 @@ export function castingTimeLine(s: SpellStats): string {
   const { amount, unit, trigger, note } = s.castingTime;
   const action = ACTION_UNITS[unit];
   let line = action ? (amount === 1 ? action : `${amount} ${action}s`) : plural(amount, unit);
-  // A casting time the fields can't express, as printed (SPEC.md §5.9, §6.7).
+  // A casting time the fields can't express, as printed (docs/content-model.md#srd-and-custom-entries, docs/rulesets.md#spells).
   line += whenPresent(note, (n) => ` ${escapeMarkdown(n)}`) ?? '';
   line += whenPresent(trigger, (t) => `, which you take ${t}`) ?? '';
   return s.ritual ? `${line} or Ritual` : line;
@@ -48,7 +48,7 @@ export function rangeLine(s: SpellStats): string {
   return base + (whenPresent(area, (a) => ` (${a.size}-foot ${capitalize(a.shape)})`) ?? '');
 }
 
-/** "V, S, M (a sliver of ice)". The material reads as printed; `costGp` and `consumed` are data only (SPEC.md §6.7). */
+/** "V, S, M (a sliver of ice)". The material reads as printed; `costGp` and `consumed` are data only (docs/rulesets.md#spells). */
 export function componentsLine(s: SpellStats): string {
   const { v, s: somatic, m } = s.components;
   const parts = [v && 'V', somatic && 'S'].filter((p): p is string => Boolean(p));

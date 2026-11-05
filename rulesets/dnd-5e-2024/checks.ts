@@ -1,4 +1,4 @@
-// Consistency checks a JSON schema can't express (SPEC.md §6.8). They run
+// Consistency checks a JSON schema can't express (docs/rulesets.md#consistency-checks). They run
 // after the schema stage, so `stats` already has the shape in types.ts.
 
 import { deriveCreature } from './derive.ts';
@@ -10,7 +10,7 @@ import type { Issue } from '../module.ts';
 const MAX_ATTACK_BONUS = 17;
 const MAX_SAVE_DC = 30;
 
-/** Literal numbers in creature prose that look derived, and the token to use instead (§6.4). */
+/** Literal numbers in creature prose that look derived, and the token to use instead (docs/rulesets.md#text-tokens). */
 const LITERALS: { pattern: RegExp; token: string }[] = [
   { pattern: /\bDC\s*\d+/i, token: '{dc:<ability>}' },
   { pattern: /\+\s*\d+\s+to\s+hit\b/i, token: '{atk:<ability>}' },
@@ -134,7 +134,7 @@ export function checkCreature(stats: CreatureStats, tables: Tables): Issue[] {
   return issues;
 }
 
-/** Magic-item checks (SPEC.md §6.8 "Magic item"). */
+/** Magic-item checks (docs/rulesets.md#consistency-checks "Magic item"). */
 export function checkMagicItem(stats: MagicItemStats): Issue[] {
   const issues: Issue[] = [];
   const error = (path: string, message: string) => issues.push({ level: 'error', path, message });
@@ -159,7 +159,7 @@ export function checkMagicItem(stats: MagicItemStats): Issue[] {
         error(`${path}.maxChargeCost`, `maxChargeCost must be above chargeCost (${spell.chargeCost}); omit it for a fixed cost`);
       }
     }
-    // The template renders these from the structured fields (SPEC.md §6.4).
+    // The template renders these from the structured fields (docs/rulesets.md#text-tokens).
     if (spell.saveDc !== undefined) {
       const literal = new RegExp(`\\bDC\\s*${spell.saveDc}(?!\\d)`, 'i').exec(stats.effect);
       if (literal) issues.push({ level: 'warning', path: 'stats.effect', message: `"${literal[0]}" restates ${path}.saveDc; the template renders it` });
@@ -173,7 +173,7 @@ export function checkMagicItem(stats: MagicItemStats): Issue[] {
   return issues;
 }
 
-/** Spell checks (SPEC.md §6.8 "Spell"). */
+/** Spell checks (docs/rulesets.md#consistency-checks "Spell"). */
 export function checkSpell(stats: SpellStats): Issue[] {
   const issues: Issue[] = [];
   const error = (path: string, message: string) => issues.push({ level: 'error', path, message });

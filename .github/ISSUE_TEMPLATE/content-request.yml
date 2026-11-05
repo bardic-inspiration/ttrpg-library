@@ -1,4 +1,4 @@
-# Content lane (SPEC.md §8.1). A routine picks this up; you review the PR.
+# Content lane (docs/generation.md#requests). A routine picks this up; you review the PR.
 name: Content request
 description: Ask a routine to generate new entries.
 labels: [request]

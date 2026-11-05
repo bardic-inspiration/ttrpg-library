@@ -1,6 +1,6 @@
-// `stats` as labeled lines for the generic template (SPEC.md §9.5), for a
+// `stats` as labeled lines for the generic template (docs/site.md#templates), for a
 // type with no template of its own. It formats stored values only, by
-// presence alone (§5.8): an omitted key has no line, and a present one
+// presence alone (docs/content-model.md#situational-fields): an omitted key has no line, and a present one
 // always does, even at 0 or false.
 
 import { isRef } from '../../../scripts/validate/refs.ts';

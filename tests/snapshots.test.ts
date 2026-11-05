@@ -10,7 +10,7 @@ const record = (ruleset: string, type: string, id: string) => ({
   facets: {},
 });
 
-describe('snapshotPages (SPEC.md §9.8)', () => {
+describe('snapshotPages (docs/styling.md#refinement-workflow)', () => {
   it('captures home, the style guide, and the first detail page of each type', () => {
     const pages = snapshotPages([
       record('dnd-5e-2024', 'creature', 'cinder-hound'),

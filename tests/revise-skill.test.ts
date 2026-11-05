@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { read, repo, unresolved } from './repo-names.ts';
 
-// SPEC.md §8.5 (The revise skill); issue #71. The skill may name only repo
+// docs/generation.md#revisions (The revise skill); issue #71. The skill may name only repo
 // paths, npm scripts, and config/defaults.json keys that exist.
 const SKILL = '.claude/skills/revise/SKILL.md';
 
@@ -22,7 +22,7 @@ describe(SKILL, () => {
     expect(skill).toContain('`defaults.validateRetries`');
   });
 
-  it('uses the §8.5 handled marker, commands, and naming', () => {
+  it('uses the docs/generation.md#revisions handled marker, commands, and naming', () => {
     expect(skill).toContain('`<!-- routine:handled -->`');
     expect(skill).toContain('`drop <id>`');
     expect(skill).toContain('`regenerate <id>`');

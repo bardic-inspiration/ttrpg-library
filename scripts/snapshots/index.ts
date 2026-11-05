@@ -1,4 +1,4 @@
-// Which pages `npm run snapshots` captures (SPEC.md §9.8), read from the built
+// Which pages `npm run snapshots` captures (docs/styling.md#refinement-workflow), read from the built
 // library.json: the home page, the style guide, and the first detail page of
 // each type that has an entry. Also the rules for the output folder's label.
 

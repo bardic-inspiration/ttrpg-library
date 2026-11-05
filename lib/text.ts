@@ -1,5 +1,5 @@
 // Ruleset-independent text helpers shared by the validator, the build, and the
-// site (SPEC.md §4). No dependencies.
+// site (docs/architecture.md#repository-layout). No dependencies.
 
 /** `text` with diacritics removed: "Faerûn" → "Faerun", "Élan" → "Elan". */
 export function foldDiacritics(text: string): string {

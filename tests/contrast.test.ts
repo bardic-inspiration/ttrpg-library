@@ -1,4 +1,4 @@
-// Contrast checks (SPEC.md §9.7) on the design tokens (§9.6). Changing a
+// Contrast checks (docs/styling.md#accessibility) on the design tokens (docs/styling.md#tokens). Changing a
 // color in semantic.css, content.css, or primitives.css to a value that fails
 // a pair fails this suite.
 import { readFileSync } from 'node:fs';
@@ -39,10 +39,10 @@ describe('contrast ratio', () => {
   });
 });
 
-describe.each<Theme>(['light', 'dark'])('%s theme contrast (SPEC.md §9.7)', (theme) => {
+describe.each<Theme>(['light', 'dark'])('%s theme contrast (docs/styling.md#accessibility)', (theme) => {
   const tokens = themeTokens(all, theme);
 
-  it('declares every type and rarity color from §9.6', () => {
+  it('declares every type and rarity color from docs/styling.md#styling-system', () => {
     for (const name of ['--accent-creature', '--accent-magic-item', '--accent-spell', '--rarity-common', '--rarity-uncommon', '--rarity-rare', '--rarity-very-rare', '--rarity-legendary', '--rarity-artifact']) {
       expect(contentColors).toContain(name);
     }
@@ -58,7 +58,7 @@ describe.each<Theme>(['light', 'dark'])('%s theme contrast (SPEC.md §9.7)', (th
   }
 });
 
-describe('theme blocks (SPEC.md §9.6 "Themes")', () => {
+describe('theme blocks (docs/styling.md#themes)', () => {
   it.each([['semantic.css', semantic], ['content.css', content]] as const)(
     '%s: the system-dark block declares exactly the explicit dark tokens',
     (_, decls) => {
@@ -74,7 +74,7 @@ describe('theme blocks (SPEC.md §9.6 "Themes")', () => {
   );
 });
 
-describe('reduced motion (SPEC.md §9.7)', () => {
+describe('reduced motion (docs/styling.md#accessibility)', () => {
   it('sets every duration primitive to 0ms under prefers-reduced-motion', () => {
     const durations = [...tokensIn(primitives, 'base').keys()].filter((n) => n.startsWith('--duration-'));
     expect(durations.length).toBeGreaterThan(0);

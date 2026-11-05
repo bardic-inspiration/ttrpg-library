@@ -1,4 +1,4 @@
-# SPEC.md §12.4 "Dependencies": grouped monthly updates on dependabot/
+# docs/workflow.md#dependencies: grouped monthly updates on dependabot/
 # branches, which run in the dev lane with the full checks.
 version: 2
 updates:

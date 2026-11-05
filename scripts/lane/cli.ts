@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import { checkLane, needsMigrationLabel, waitForLabel } from './index.ts';
 
-// The `lane` job in validate.yml (SPEC.md §12.1). The workflow passes the PR's
+// The `lane` job in validate.yml (docs/workflow.md#ci-checks). The workflow passes the PR's
 // branch, base and head commits, and labels as environment variables, and the
 // repository, PR number, and a read token for checking the PR's live labels.
 const env = (name: string): string => {
@@ -19,7 +19,7 @@ let labels = JSON.parse(env('LABELS')) as string[];
 
 // The event payload's labels are from when the run started. The labeler adds
 // `migration` a few seconds later, and its label event starts no new run, so
-// wait for it by reading the PR's current labels (SPEC.md §12.4).
+// wait for it by reading the PR's current labels (docs/workflow.md#labeling).
 const { GITHUB_TOKEN: token, GITHUB_REPOSITORY: repo, PR_NUMBER: pr } = process.env;
 if (needsMigrationLabel({ branch: env('BRANCH'), paths, labels }) && token && repo && pr) {
   console.log('The migration label is not in the event payload yet; waiting for the labeler.');

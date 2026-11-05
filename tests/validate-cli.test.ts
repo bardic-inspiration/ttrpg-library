@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { cinderHound, tempLibrary } from './helpers.ts';
 
-// SPEC.md §16 milestone 1: "a PR with a broken entry is blocked". The
+// docs/workflow.md#ci-checks: a PR with a broken entry is blocked. The
 // `validate` check blocks the PR because `npm run validate` exits non-zero.
 const cli = join(import.meta.dirname, '..', 'scripts', 'validate', 'cli.ts');
 const run = (root: string) =>

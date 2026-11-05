@@ -1,4 +1,4 @@
-// The exporter interface, registry, config, and JSON export (SPEC.md §10.1, §10.2, §10.5).
+// The exporter interface, registry, config, and JSON export (docs/export.md#exporter-interface, docs/export.md#json, docs/export.md#export-config).
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -39,7 +39,7 @@ const raw = (id: string) => `{\n  "id": "${id}",\n  "note": "byte-for-byte"\n}\n
 const served = (...ids: string[]) =>
   Object.fromEntries(ids.map((id) => [rawFileUrl(BASE, lib.byId(id).entry), raw(id)]));
 
-describe('config/export.json (SPEC.md §10.5)', () => {
+describe('config/export.json (docs/export.md#export-config)', () => {
   it('has the four page sizes with exactly one default', () => {
     expect(config.pageSizes.map((s) => s.id)).toEqual(['letter', 'a4', 'half-letter', 'card-4x6']);
     expect(config.pageSizes.filter((s) => 'default' in s && s.default).map((s) => s.id)).toEqual(['letter']);
@@ -59,7 +59,7 @@ describe('config/export.json (SPEC.md §10.5)', () => {
   });
 });
 
-describe('exporter registry (SPEC.md §10.1)', () => {
+describe('exporter registry (docs/export.md#exporter-interface)', () => {
   it('keeps config order and filters by scope', () => {
     expect(configuredExporters().map((e) => e.id)).toEqual(config.exporters);
     expect(configuredExporters('entry').every((e) => e.scopes.includes('entry'))).toBe(true);
@@ -77,7 +77,7 @@ describe('exporter registry (SPEC.md §10.1)', () => {
   });
 });
 
-describe('JSON export (SPEC.md §10.2)', () => {
+describe('JSON export (docs/export.md#json)', () => {
   it('builds raw file URLs as build:index copies them', () => {
     expect(rawFileUrl(BASE, lib.byId('cinder-hound').entry)).toBe('/ttrpg-library/data/dnd-5e-2024/creature/cinder-hound.json');
   });

@@ -1,4 +1,4 @@
-// The browser side of PNG export (SPEC.md §10.3): clones the detail page's
+// The browser side of PNG export (docs/export.md#png): clones the detail page's
 // capture source (components/detail/CaptureSource.astro) into an off-screen
 // host at the requested CSS width, waits for fonts and art, and captures it
 // with html-to-image, which embeds the self-hosted fonts it uses.

@@ -1,4 +1,4 @@
-// Gallery filtering, search, sort, and chips (SPEC.md §9.3).
+// Gallery filtering, search, sort, and chips (docs/site.md#gallery).
 import { beforeAll, describe, expect, it } from 'vitest';
 import { galleryConfig, sortChoices, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';

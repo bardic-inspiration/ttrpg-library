@@ -1,4 +1,4 @@
-// Detail-page labels for references (SPEC.md §5.7, §6.2).
+// Detail-page labels for references (docs/content-model.md#references, docs/rulesets.md#the-ruleset-module).
 
 import type { RefLabels } from '../module.ts';
 

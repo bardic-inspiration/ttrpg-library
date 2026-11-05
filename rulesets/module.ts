@@ -1,4 +1,4 @@
-// The contract every ruleset folder's index.ts meets (SPEC.md §6.2). The
+// The contract every ruleset folder's index.ts meets (docs/rulesets.md#the-ruleset-module). The
 // validator, index builder, and site load a ruleset through it, so each
 // derived value is computed in exactly one place.
 
@@ -27,8 +27,8 @@ export interface RulesetModule {
   definition: RulesetDefinition;
   /** Derived values for one entry's schema-valid `stats`; `{}` for a type with no formulas. */
   derive(type: string, stats: unknown): Record<string, unknown>;
-  /** Consistency checks for one entry's schema-valid `stats` (§6.8). */
+  /** Consistency checks for one entry's schema-valid `stats` (docs/rulesets.md#consistency-checks). */
   check(type: string, stats: unknown): Issue[];
-  /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (§5.7). */
+  /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (docs/content-model.md#references). */
   refLabels(type: string, path: string): RefLabels;
 }

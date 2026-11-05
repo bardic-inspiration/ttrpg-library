@@ -1,5 +1,5 @@
-// What a gallery route offers (SPEC.md §9.2, §9.3): its records, the filters
-// and sorts available, and the defaults, all read from the registry (§7).
+// What a gallery route offers (docs/site.md#pages-and-navigation, docs/site.md#gallery): its records, the filters
+// and sorts available, and the defaults, all read from the registry (docs/site.md#type-registry).
 
 import type { Facet, LibraryRecord, Registry, TypeConfig } from '../../../../scripts/build-index/index.ts';
 
@@ -38,14 +38,14 @@ export interface GalleryConfig {
   types: Map<string, { label: string; cardFields: FilterDef[] }>;
 }
 
-/** The pseudo-paths every record has besides its facets (§9.3 "Sort"). */
+/** The pseudo-paths every record has besides its facets (docs/site.md#gallery "Sort"). */
 export const NAME = 'name';
 export const CREATED = 'createdAt';
 export const TYPE = 'type';
 
 /**
  * Every route without a single type sorts by name and offers a type filter
- * (§9.2, §9.3).
+ * (docs/site.md#pages-and-navigation, docs/site.md#gallery).
  */
 const ALL_TYPES_SORT: SortKey = { path: NAME, dir: 'asc' };
 
@@ -103,7 +103,7 @@ export const inScope = (records: LibraryRecord[], scope: GalleryScope): LibraryR
 
 const TAG_KEY = /^[a-z][a-z0-9-]*$/;
 
-/** A `tags.<key>` path for a valid tag key (§5.3), or undefined. */
+/** A `tags.<key>` path for a valid tag key (docs/content-model.md#tags), or undefined. */
 export const tagKey = (path: string): string | undefined => {
   const key = path.startsWith('tags.') ? path.slice('tags.'.length) : undefined;
   return key !== undefined && TAG_KEY.test(key) ? key : undefined;
@@ -117,7 +117,7 @@ export function filterDef(config: GalleryConfig, path: string): FilterDef | unde
   return key === undefined ? undefined : { path, label: key.replace(/-/g, ' '), kind: 'enum' };
 }
 
-/** Sort choices: name, date added, then every facet on the route (§9.3). */
+/** Sort choices: name, date added, then every facet on the route (docs/site.md#gallery). */
 export function sortChoices(config: GalleryConfig): { path: string; label: string }[] {
   return [
     { path: NAME, label: 'Name' },

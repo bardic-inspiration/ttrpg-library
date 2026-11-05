@@ -1,4 +1,4 @@
-// Links and lines for the detail page (SPEC.md §9.4) that aren't the type
+// Links and lines for the detail page (docs/site.md#detail-page) that aren't the type
 // template: tag chips into the filtered type gallery, and provenance.
 
 import { REPO_URL } from '../../../lib/site.ts';
@@ -7,7 +7,7 @@ import type { Entry } from './library.ts';
 export interface TagChip {
   key: string;
   value: string;
-  /** Path under the site base: the type gallery filtered by this tag (§9.3 URL state). */
+  /** Path under the site base: the type gallery filtered by this tag (docs/site.md#gallery URL state). */
   path: string;
 }
 

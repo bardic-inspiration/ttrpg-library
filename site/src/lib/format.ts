@@ -1,4 +1,4 @@
-// Display formatters shared by templates and the gallery (SPEC.md §7 `format`).
+// Display formatters shared by templates and the gallery (docs/site.md#type-registry `format`).
 // They only change how a stored value reads; they never compute a rules value.
 
 const FRACTIONS: Record<number, string> = { 0.125: '1/8', 0.25: '1/4', 0.5: '1/2' };

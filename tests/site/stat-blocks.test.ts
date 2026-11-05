@@ -1,4 +1,4 @@
-// Stat blocks embedded in spells and magic items (SPEC.md §6.6, §6.7, §9.5):
+// Stat blocks embedded in spells and magic items (docs/rulesets.md#embedded-stat-blocks, docs/rulesets.md#embedded-stat-blocks, docs/site.md#templates):
 // the authored shape validates, derives only ability modifiers and saves, and
 // renders inside the card on every surface. Summon Dragon is the SRD case.
 import { readFile, rm } from 'node:fs/promises';
@@ -34,7 +34,7 @@ const sprite = () => ({
   actions: [{ name: 'Chill', text: '*Melee Attack Roll:* Bonus equals your spell attack modifier, reach 5 feet.' }],
 });
 
-describe('statBlocks schema (SPEC.md §6.6, §6.7)', () => {
+describe('statBlocks schema (docs/rulesets.md#embedded-stat-blocks, docs/rulesets.md#embedded-stat-blocks)', () => {
   it('accepts an authored block on a spell and on a magic item, and derives only modifiers and saves', async () => {
     const spell = await frostLance();
     spell.stats.statBlocks = [sprite()];
@@ -63,7 +63,7 @@ describe('statBlocks schema (SPEC.md §6.6, §6.7)', () => {
     expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(pattern));
   });
 
-  it('prints an Initiative line after AC when the block has one, as written (SPEC.md §6.3)', () => {
+  it('prints an Initiative line after AC when the block has one, as written (docs/rulesets.md#shared-definitions)', () => {
     const block = { ...sprite(), ac: '11', initiative: '+1 (11)', hp: '19 (3d10 + 3)' };
     expect(coreLines(block)).toEqual([
       { label: 'AC', value: '11' },
@@ -82,7 +82,7 @@ describe('statBlocks schema (SPEC.md §6.6, §6.7)', () => {
   });
 });
 
-describe('Summon Dragon (SPEC.md §5.9, §9.5)', async () => {
+describe('Summon Dragon (docs/content-model.md#srd-and-custom-entries, docs/site.md#templates)', async () => {
   const entry = JSON.parse(await readFile(join(PROJECT_ROOT, 'content/dnd-5e-2024/spell/summon-dragon.json'), 'utf8')) as Entry;
   const all = loadLibrary([entry]);
   const loaded = all[0]!;

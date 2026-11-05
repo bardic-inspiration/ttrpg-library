@@ -1,5 +1,5 @@
 /*
- * Print and capture sizing per page size (SPEC.md §9.6, §10.4). Edit this
+ * Print and capture sizing per page size (docs/styling.md#styling-system, docs/export.md#print). Edit this
  * file to change print density. The page dimensions and margins themselves
  * live in config/export.json. `--print-columns` sets the stat block in two
  * columns on Letter and A4 and one on the smaller sizes.

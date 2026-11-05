@@ -1,4 +1,4 @@
-// What a gallery set action runs on (SPEC.md §9.3 "Selection", §10.1): the
+// What a gallery set action runs on (docs/site.md#gallery "Selection", docs/export.md#exporter-interface): the
 // selection when anything is selected, otherwise the whole filtered set.
 // Selection lives in the page as record URLs, not in the query string.
 import type { LibraryRecord } from './config.ts';

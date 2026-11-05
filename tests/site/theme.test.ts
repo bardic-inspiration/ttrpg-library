@@ -1,4 +1,4 @@
-// Theme toggle logic (SPEC.md §9.6 "Themes").
+// Theme toggle logic (docs/styling.md#themes).
 import { describe, expect, it } from 'vitest';
 import {
   applyThemeChoice,

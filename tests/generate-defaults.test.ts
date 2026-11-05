@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { applyDefaults, checkDefaults, loadDefaults, type Defaults } from '../scripts/generate/defaults.ts';
 import { loadRegistry } from '../scripts/validate/schema.ts';
 
-// SPEC.md §8.3 (Defaults); issue #61.
+// docs/generation.md#defaults (Defaults); issue #61.
 const ROOT = join(import.meta.dirname, '..');
 
 const base = (): Defaults => ({
@@ -16,7 +16,7 @@ const base = (): Defaults => ({
 });
 
 describe('config/defaults.json', () => {
-  it('matches the §8.3 example', async () => {
+  it('matches the docs/generation.md#defaults example', async () => {
     const file = JSON.parse(await readFile(join(ROOT, 'config/defaults.json'), 'utf8'));
     expect(file).toEqual(base());
   });
@@ -64,7 +64,7 @@ describe('checkDefaults', () => {
     );
   });
 
-  it('applies the §5.3 tag rules to default tags', () => {
+  it('applies the docs/content-model.md#tags tag rules to default tags', () => {
     expect(checkDefaults({ ...base(), tags: { world: 'Aldmere', themes: ['frost'] } }, registry)).toEqual([]);
     expect(checkDefaults({ ...base(), tags: { World: 'x' } }, registry)).toContainEqual(expect.stringMatching(/tags/));
     expect(checkDefaults({ ...base(), tags: { world: { a: 1 } } }, registry)).toContainEqual(

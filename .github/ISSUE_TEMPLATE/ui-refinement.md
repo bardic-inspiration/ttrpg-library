@@ -13,5 +13,5 @@ capture, print), page size, theme. A screenshot helps. -->
 
 ## Desired result
 
-<!-- What it should look like or do instead. SPEC.md §9.8 "Where to change
-what" says which file usually holds it. -->
+<!-- What it should look like or do instead. "Extending" in
+docs/styling.md says which file usually holds it. -->

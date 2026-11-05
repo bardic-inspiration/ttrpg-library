@@ -1,4 +1,4 @@
-/* Styles for the print view island (SPEC.md §9.6: a Preact island's styles
+/* Styles for the print view island (docs/styling.md#styling-system: a Preact island's styles
    sit in one stylesheet beside its components). */
 @layer components {
   .print-view {

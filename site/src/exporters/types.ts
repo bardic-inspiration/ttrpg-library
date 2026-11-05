@@ -1,4 +1,4 @@
-// The exporter interface (SPEC.md §10.1). Each exporter is a module in this
+// The exporter interface (docs/export.md#exporter-interface). Each exporter is a module in this
 // folder, listed by id in config/export.json; the detail page and the gallery
 // build their export controls from that list, so adding an exporter needs no
 // gallery code.
@@ -18,7 +18,7 @@ export interface ExportFile {
   data: string | Blob;
 }
 
-/** An entry's capture source to render as an image (SPEC.md §10.3). */
+/** An entry's capture source to render as an image (docs/export.md#png). */
 export interface CaptureRequest {
   /** The entry `id`, naming the detail page's capture source. */
   id: string;

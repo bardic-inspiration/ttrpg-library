@@ -1,4 +1,4 @@
-// Shared frame for the inlined Lucide icons (SPEC.md §9.6 "Icons"; ISC
+// Shared frame for the inlined Lucide icons (docs/styling.md#styling-system "Icons"; ISC
 // license, credited in ATTRIBUTION.md). Icons are decorative: they inherit
 // the text color through currentColor, size to the --icon-size token through
 // the .icon class, and are hidden from assistive technology, so the control

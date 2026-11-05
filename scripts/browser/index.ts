@@ -1,5 +1,5 @@
-// Launches Chromium for `npm run a11y` and `npm run snapshots` (SPEC.md §9.7,
-// §9.8). Cloud sessions ship a preinstalled Chromium whose build can differ
+// Launches Chromium for `npm run a11y` and `npm run snapshots` (docs/styling.md#accessibility,
+// docs/styling.md#refinement-workflow). Cloud sessions ship a preinstalled Chromium whose build can differ
 // from the one the installed Playwright expects, so a failed launch is retried
 // with that browser when it exists.
 

@@ -1,5 +1,5 @@
 /*
- * Gallery styles (SPEC.md §9.3, §9.6): the controls, filter panel, card grid,
+ * Gallery styles (docs/site.md#gallery, docs/styling.md#styling-system): the controls, filter panel, card grid,
  * cards, and set actions. Preact islands can't carry a scoped <style>
  * block, so the gallery's components share this file, imported by
  * Gallery.tsx. Tokens only; knobs live in tokens/components.css.
@@ -74,7 +74,7 @@
     font-weight: var(--font-weight-label);
   }
 
-  /* Set actions (§9.3 "Selection"): export the selection or the filtered set. */
+  /* Set actions (docs/site.md#gallery "Selection"): export the selection or the filtered set. */
   .set-actions {
     display: grid;
     gap: var(--space-3xs);

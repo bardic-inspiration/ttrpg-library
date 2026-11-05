@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/envelope.schema.json",
-  "title": "Entry envelope (SPEC.md §5.1)",
+  "title": "Entry envelope (docs/content-model.md#entry-envelope)",
   "description": "Fixed keys, tags, meta, and image for every entry in every ruleset. `stats` is validated by the ruleset's type schema.",
   "type": "object",
   "additionalProperties": false,

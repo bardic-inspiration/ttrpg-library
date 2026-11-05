@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { read, repo, unresolved } from './repo-names.ts';
 
-// SPEC.md §8.7 (Schedule), §8.2 (Routine run order); issue #65.
+// docs/generation.md#schedule (Schedule), docs/generation.md#run-order (Routine run order); issue #65.
 const DOC = 'docs/routines.md';
 const doc = read(DOC);
 
@@ -21,7 +21,7 @@ describe(DOC, () => {
     expect(unresolved(doc, repo)).toEqual([]);
   });
 
-  it('records the §8.7 schedule', () => {
+  it('records the docs/generation.md#schedule schedule', () => {
     const schedule = section('Schedule');
     expect(schedule).toMatch(/weekly/i);
     expect(schedule).toMatch(/Monday morning/);
@@ -34,11 +34,11 @@ describe(DOC, () => {
     const onDemand = fences(section('On-demand prompt'));
     expect(scheduled).toHaveLength(1);
     expect(onDemand.length).toBeGreaterThanOrEqual(1);
-    // The on-demand routine is the same prompt (§8.7), with its inputs added.
+    // The on-demand routine is the same prompt (docs/generation.md#schedule), with its inputs added.
     for (const prompt of onDemand) expect(prompt.startsWith(scheduled[0]!.trimEnd())).toBe(true);
   });
 
-  it('lists the seven §8.2 steps in order', () => {
+  it('lists the seven docs/generation.md#run-order steps in order', () => {
     const steps = [...section('Run order').matchAll(/^### (\d)\. (.+)$/gm)].map((m) => `${m[1]}. ${m[2]}`);
     expect(steps).toEqual([
       '1. Sync',

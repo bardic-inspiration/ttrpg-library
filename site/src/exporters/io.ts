@@ -33,17 +33,17 @@ export function resolveIO(options: ExportOptions): ExportIO {
   };
 }
 
-/** The URL of an entry's raw file, copied by build:index (§9.1 step 2). */
+/** The URL of an entry's raw file, copied by build:index (docs/site.md#index-build step 2). */
 export const rawFileUrl = (base: string, entry: { ruleset: string; type: string; id: string }): string =>
   `${base}data/${entry.ruleset}/${entry.type}/${entry.id}.json`;
 
-/** The URL of an entry's export bundle, `{ entry, derived }`, written by build:index (§9.1 step 2). */
+/** The URL of an entry's export bundle, `{ entry, derived }`, written by build:index (docs/site.md#index-build step 2). */
 export const bundleUrl = (base: string, entry: { ruleset: string; type: string; id: string }): string =>
   `${base}data/${entry.ruleset}/${entry.type}/${entry.id}.export.json`;
 
 /**
  * Fetches the export bundles for these entries, in order, so a set action can
- * hand exporters real items (§10.1). Rejects if any bundle fails to load, so
+ * hand exporters real items (docs/export.md#exporter-interface). Rejects if any bundle fails to load, so
  * the action runs on all of them or none.
  */
 export async function loadExportItems(

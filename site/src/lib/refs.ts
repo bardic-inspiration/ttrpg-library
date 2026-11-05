@@ -1,11 +1,11 @@
 // Groups an entry's forward refs and back-refs under the labels its ruleset
-// gives them, for the detail page (SPEC.md §5.7, §9.4).
+// gives them, for the detail page (docs/content-model.md#references, docs/site.md#detail-page).
 
 import type { Link } from '../../../scripts/validate/refs.ts';
 import type { RefLabels } from '../../../rulesets/module.ts';
 
 /**
- * How a stored `RefOrText` value reads (SPEC.md §5.7): a plain string as
+ * How a stored `RefOrText` value reads (docs/content-model.md#references): a plain string as
  * written, a ref as its target's name, with its `note` in parentheses after.
  */
 export function refOrTextName(value: string | { ref: string; note?: string }, names: Map<string, string>): string {

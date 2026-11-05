@@ -1,4 +1,4 @@
-// The gallery island (SPEC.md §9.2, §9.3) for `/`, `/<ruleset>/`, and
+// The gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery) for `/`, `/<ruleset>/`, and
 // `/<ruleset>/<type>/`. It loads library.json once, then filters, searches,
 // and sorts in memory, keeping the view in the query string. The logic lives
 // in lib/gallery/; this file is the view.
@@ -19,7 +19,7 @@ import './gallery.css';
 export interface GalleryProps extends GalleryScope {
   /** Where library.json is served, under the site base. */
   indexUrl: string;
-  /** The site base, for art paths (§5.6). */
+  /** The site base, for art paths (docs/content-model.md#images). */
   base: string;
   /** Records to show without fetching, for the style guide and tests. */
   records?: LibraryRecord[];

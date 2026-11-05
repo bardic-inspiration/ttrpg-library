@@ -1,4 +1,4 @@
-// Text tokens that show derived values inside creature prose (SPEC.md §6.4).
+// Text tokens that show derived values inside creature prose (docs/rulesets.md#text-tokens).
 // The validator parses them; templates render them from the same derivations
 // as the stat block.
 
@@ -9,7 +9,7 @@ export type Token =
   | { kind: 'mod'; ability: Ability }
   | { kind: 'pb' }
   | { kind: 'atk' | 'dc'; ability: Ability; adjust: number }
-  /** A DC the rules leave to the author, such as an ability check's (§6.4). */
+  /** A DC the rules leave to the author, such as an ability check's (docs/rulesets.md#text-tokens). */
   | { kind: 'authored-dc'; value: number }
   | { kind: 'dmg'; dice: string; ability?: Ability; damageType?: string };
 
@@ -84,7 +84,7 @@ export function parseToken(body: string, tables: Tables): { token?: Token; error
 }
 
 /**
- * A `{ref:…}` link token belongs to the core, not the ruleset (SPEC.md §5.7):
+ * A `{ref:…}` link token belongs to the core, not the ruleset (docs/content-model.md#references):
  * the validator checks it with the other refs, and the site renders it as a
  * link after the ruleset's tokens.
  */

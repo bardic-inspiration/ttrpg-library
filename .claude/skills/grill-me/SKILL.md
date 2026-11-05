@@ -39,9 +39,9 @@ whether it survives contact with reality, use this skill.
 ## Process
 
 1. **Read the plan and its context first.** Understand exactly what is being
-   proposed, and read the parts of `SPEC.md` and `AGENTS.md` it touches —
-   especially the design principles and governing decisions (`SPEC.md`) and
-   the rules (`AGENTS.md`) — before attacking it. A challenge that ignores an already-stated constraint just
+   proposed, and read the parts of `docs/`, `spec/v2/`, and `AGENTS.md` it touches —
+   especially the principles (`docs/decisions.md`) and the rules
+   (`AGENTS.md`) — before attacking it. A challenge that ignores an already-stated constraint just
    wastes the user's time.
 
 2. **Ask one hard question at a time.**

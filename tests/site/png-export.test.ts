@@ -1,4 +1,4 @@
-// PNG export (SPEC.md §10.3, §10.5): capture width, filename, and scope.
+// PNG export (docs/export.md#png, docs/export.md#export-config): capture width, filename, and scope.
 import { describe, expect, it } from 'vitest';
 import config from '../../config/export.json' with { type: 'json' };
 import { captureWidth, isWide, png } from '../../site/src/exporters/png.ts';
@@ -38,7 +38,7 @@ function fakeIO() {
 
 const BASE = '/ttrpg-library/';
 
-describe('PNG capture width (SPEC.md §10.5)', () => {
+describe('PNG capture width (docs/export.md#export-config)', () => {
   it('uses the normal width for a creature with six or fewer actions and no legendary actions', () => {
     expect(isWide(hound)).toBe(false);
     expect(isWide(withStats(hound, { actions: actions(6) }))).toBe(false);
@@ -68,7 +68,7 @@ describe('PNG capture width (SPEC.md §10.5)', () => {
   });
 });
 
-describe('PNG export (SPEC.md §10.3)', () => {
+describe('PNG export (docs/export.md#png)', () => {
   it('captures the entry at its width and the configured scale and downloads <id>.png', async () => {
     const fake = fakeIO();
     await png.run([item('cinder-hound')], { scope: 'entry', base: BASE, io: fake.io });
@@ -98,7 +98,7 @@ describe('PNG export (SPEC.md §10.3)', () => {
   });
 });
 
-describe('PNG capture source (SPEC.md §10.3, §9.6)', () => {
+describe('PNG capture source (docs/export.md#png, docs/styling.md#styling-system)', () => {
   async function render(loaded: ReturnType<typeof lib.byId>): Promise<string> {
     const { experimental_AstroContainer: AstroContainer } = await import('astro/container');
     const { default: CaptureSource } = await import('../../site/src/components/detail/CaptureSource.astro');

@@ -3,7 +3,7 @@ import { buildIndex, loadRegistryFile } from '../../../scripts/build-index/index
 import type { LibraryRecord, Registry } from '../../../site/src/lib/gallery/config.ts';
 import { FIXTURES } from '../../helpers.ts';
 
-/** The §6.9 fixtures as library.json records: Cinder Hound, Frost Lance, Wand of Frost Lances. */
+/** The example fixtures as library.json records: Cinder Hound, Frost Lance, Wand of Frost Lances. */
 export async function fixtureRecords(): Promise<LibraryRecord[]> {
   const { errors, records } = await buildIndex(join(FIXTURES, 'library/valid'));
   if (errors.length > 0) throw new Error(errors.map((e) => e.message).join('\n'));

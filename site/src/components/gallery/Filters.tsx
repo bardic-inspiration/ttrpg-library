@@ -1,4 +1,4 @@
-// Filter controls (SPEC.md §9.3 "Filters", §9.7): enum facets and tags as
+// Filter controls (docs/site.md#gallery "Filters", docs/styling.md#accessibility): enum facets and tags as
 // multi-select chips with counts, range facets as min and max inputs, each
 // group a fieldset with a legend, and "Add filter" for everything else.
 import { useEffect, useRef, useState } from 'preact/hooks';
@@ -127,7 +127,7 @@ function FilterLegend({ def, onRemove }: GroupProps) {
 
 /**
  * The "Add filter" menu: a disclosure button and a list of filters. Escape
- * closes it and returns focus to the button (§9.7).
+ * closes it and returns focus to the button (docs/styling.md#accessibility).
  */
 export function AddFilter({ options, onAdd }: { options: FilterDef[]; onAdd: (path: string) => void }) {
   const [open, setOpen] = useState(false);

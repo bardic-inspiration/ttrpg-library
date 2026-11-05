@@ -1,4 +1,4 @@
-// `{ref:<type>/<id>}` links in text (SPEC.md §5.7): validated like any ref,
+// `{ref:<type>/<id>}` links in text (docs/content-model.md#references): validated like any ref,
 // counted in refs and refBy, read as the target's name in search, and
 // rendered as the target's name linked to its page.
 import { rm } from 'node:fs/promises';
@@ -19,7 +19,7 @@ const library = async (entries: Record<string, any>[]) => {
   return lib.content;
 };
 
-/** The three §6.9 examples, with Frost Lance's effect and the hound's description changed. */
+/** The three example entries, with Frost Lance's effect and the hound's description changed. */
 async function examples(effect: string, description?: string) {
   const spell = await frostLance();
   spell.stats.effect = effect;
@@ -28,7 +28,7 @@ async function examples(effect: string, description?: string) {
   return [spell, hound, await wandOfFrostLances()];
 }
 
-describe('{ref:…} tokens in text (SPEC.md §5.7)', () => {
+describe('{ref:…} tokens in text (docs/content-model.md#references)', () => {
   it('resolve, and link both ways with the text field as the path', async () => {
     const entries = await examples(
       'The lance summons a {ref:creature/cinder-hound} that fights beside you.',
@@ -76,7 +76,7 @@ describe('{ref:…} tokens in text (SPEC.md §5.7)', () => {
   });
 });
 
-describe('rendering {ref:…} (SPEC.md §5.7, §9.5)', () => {
+describe('rendering {ref:…} (docs/content-model.md#references, docs/site.md#templates)', () => {
   const refs = { names: new Map([['creature/zombie', 'Zombie'], ['spell/cure-wounds', 'Cure Wounds']]), ruleset: 'dnd-5e-2024' };
 
   it('shows the target name linked to its page, inside any inline markup', () => {
@@ -96,7 +96,7 @@ describe('rendering {ref:…} (SPEC.md §5.7, §9.5)', () => {
   });
 });
 
-describe('a ref with a note (SPEC.md §5.7)', () => {
+describe('a ref with a note (docs/content-model.md#references)', () => {
   it('resolves like any ref and reads as the name with the note in parentheses', async () => {
     const wand = await wandOfFrostLances();
     wand.stats.spells[0].spell = { ref: 'spell/frost-lance', note: 'level 3 version' };

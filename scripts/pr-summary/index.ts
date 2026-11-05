@@ -31,7 +31,7 @@ const cell = (value: unknown): string =>
   typeof value === 'string' ? value.replaceAll('|', '\\|').replaceAll('\n', ' ') : '';
 
 /**
- * The job summary for changed entries (SPEC.md §12.1). An entry that can't be
+ * The job summary for changed entries (docs/workflow.md#ci-checks). An entry that can't be
  * read falls back to the id and type its path gives. The type's summaryField
  * value, creature derived values, and warnings join once the type registry
  * and ruleset module exist (#6, #9).

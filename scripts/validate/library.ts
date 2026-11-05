@@ -1,4 +1,4 @@
-// Ruleset-independent checks across the library (SPEC.md §5.2, §5.6, §6.8 "All types").
+// Ruleset-independent checks across the library (docs/content-model.md#ids-and-names, docs/content-model.md#images, docs/content-model.md#validation "All types").
 
 import { stat } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -11,7 +11,7 @@ export interface EntryHead {
   id: string;
   name: string;
   image?: string;
-  /** `meta.source.srd` is true (§5.9). */
+  /** `meta.source.srd` is true (docs/content-model.md#srd-and-custom-entries). */
   srd?: boolean;
 }
 
@@ -53,7 +53,7 @@ export function editDistance(a: string, b: string): number {
 
 /**
  * Unique IDs and names within a type (errors), and near-duplicate names within
- * a type (warnings) (§5.2). A spell and a creature may share a name. Two SRD
+ * a type (warnings) (docs/content-model.md#ids-and-names). A spell and a creature may share a name. Two SRD
  * entries are never warned about, since neither name can change.
  */
 export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
@@ -82,7 +82,7 @@ export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
   return issues;
 }
 
-/** `image` names this entry's art and the file exists within the size limits (§5.6). */
+/** `image` names this entry's art and the file exists within the size limits (docs/content-model.md#images). */
 export async function checkImage(entry: EntryHead, assetsRoot: string): Promise<FileIssue[]> {
   if (entry.image === undefined) return [];
   const pattern = new RegExp(`^assets/images/${entry.ruleset}/${entry.type}/${entry.id}\\.(png|jpg|webp)$`);

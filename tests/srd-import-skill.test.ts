@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { read, repo, unresolved } from './repo-names.ts';
 
-// SPEC.md §8.1 (SRD import stages). The skill may name only repo paths, npm
+// docs/generation.md#srd-import (SRD import stages). The skill may name only repo paths, npm
 // scripts, and config/defaults.json keys that exist.
 const SKILL = '.claude/skills/srd-import/SKILL.md';
 

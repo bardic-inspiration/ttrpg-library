@@ -1,4 +1,4 @@
-// The index builder (SPEC.md §9.1): validates every entry, then writes
+// The index builder (docs/site.md#index-build): validates every entry, then writes
 // library.json, a raw copy of each entry, and each entry's export bundle. Derived values, refs,
 // and back-refs come from the validator, which computes them with the ruleset
 // module and scripts/validate/refs.ts, so nothing here recomputes a rule.
@@ -12,7 +12,7 @@ import { PROJECT_ROOT } from '../validate/schema.ts';
 import { plainText } from '../validate/text.ts';
 import { isFlag, refOrTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
 
-/** One facet in config/types.json (§7). */
+/** One facet in config/types.json (docs/site.md#type-registry). */
 export interface Facet {
   path: string;
   label: string;
@@ -29,10 +29,10 @@ export interface TypeConfig {
   [key: string]: unknown;
 }
 
-/** config/types.json (§7). */
+/** config/types.json (docs/site.md#type-registry). */
 export type Registry = Record<string, { label: string; attribution: string; types: Record<string, TypeConfig> }>;
 
-/** One record of library.json, in the §9.1 shape and key order. */
+/** One record of library.json, in the docs/site.md#index-build shape and key order. */
 export interface LibraryRecord {
   id: string;
   ruleset: string;
@@ -56,11 +56,11 @@ export interface BuildResult {
   records: LibraryRecord[];
   /** Each entry's file under the content root, such as `dnd-5e-2024/creature/cinder-hound.json`, in record order. */
   files: string[];
-  /** Each entry's export bundle (§9.1 step 2), in record order. */
+  /** Each entry's export bundle (docs/site.md#index-build step 2), in record order. */
   bundles: ExportBundle[];
 }
 
-/** `data/<ruleset>/<type>/<id>.export.json`: the entry and its derived values, as an exporter receives them (§10.1). */
+/** `data/<ruleset>/<type>/<id>.export.json`: the entry and its derived values, as an exporter receives them (docs/export.md#exporter-interface). */
 export interface ExportBundle {
   entry: ValidEntry['entry'];
   derived: Record<string, unknown>;
@@ -94,8 +94,8 @@ function at(value: unknown, path: string): unknown {
 }
 
 /**
- * The registry's facets for one entry, in registry order (§7). A missing value
- * is left out, except an omitted optional flag, which reads as `false` (§5.8).
+ * The registry's facets for one entry, in registry order (docs/site.md#type-registry). A missing value
+ * is left out, except an omitted optional flag, which reads as `false` (docs/content-model.md#situational-fields).
  */
 function facetValues(item: ValidEntry, facets: Facet[], schemas: SchemaSet): Record<string, unknown> {
   const source = { stats: item.entry.stats, derived: item.derived };
@@ -115,11 +115,11 @@ function names(value: unknown): string[] {
   return Object.entries(value).flatMap(([key, child]) => (key === 'name' && typeof child === 'string' ? [child] : names(child)));
 }
 
-/** A ruleset text token such as `{dmg:1d4:fire}` (§6.4): markup, not words. */
+/** A ruleset text token such as `{dmg:1d4:fire}` (docs/rulesets.md#text-tokens): markup, not words. */
 const TOKEN = /\{[^{}]*\}/g;
 
 /**
- * The §9.1 `search` text: action, trait, and spell names (a ref names its
+ * The docs/site.md#index-build `search` text: action, trait, and spell names (a ref names its
  * target), then `description` and the rules text, with markup stripped and
  * each `{ref:…}` link read as its target's name.
  */
@@ -191,7 +191,7 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
 /**
  * Writes `<out>/library.json`, copies each entry's raw file to
  * `<out>/data/<ruleset>/<type>/<id>.json`, and writes its export bundle beside
- * it as `<id>.export.json` (§9.1 step 2). `data/` is cleared first, so a
+ * it as `<id>.export.json` (docs/site.md#index-build step 2). `data/` is cleared first, so a
  * deleted entry leaves no stale file behind.
  */
 export async function writeIndex(root: string, out: string, result: BuildResult): Promise<void> {

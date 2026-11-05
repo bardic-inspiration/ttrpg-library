@@ -1,5 +1,5 @@
-// Display lines for a stat block embedded in a spell or magic item (SPEC.md
-// §6.6, §6.7, §9.5). Its lines are authored as printed, so they display as
+// Display lines for a stat block embedded in a spell or magic item
+// (docs/rulesets.md#embedded-stat-blocks, docs/site.md#templates). Its lines are authored as printed, so they display as
 // written; only the ability modifiers and saves come from the ruleset module.
 
 import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
@@ -10,7 +10,7 @@ import type { PropertyLine } from './template.ts';
 
 const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
 
-/** The labeled lines of `keys` that the block has, in order (§5.8). */
+/** The labeled lines of `keys` that the block has, in order (docs/content-model.md#situational-fields). */
 const lines = (block: StatBlock, keys: [keyof StatBlock, string][]): PropertyLine[] =>
   keys.flatMap(([key, label]) => {
     const value = block[key];

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/common.schema.json",
-  "title": "dnd-5e-2024 shared definitions (SPEC.md §6.3)",
+  "title": "dnd-5e-2024 shared definitions (docs/rulesets.md#shared-definitions)",
   "description": "Enums here mirror tables.json; tests/rulesets/dnd-5e-2024/schemas.test.ts keeps them in step.",
   "$defs": {
     "Ability": { "description": "An ability, by its three-letter key.", "enum": ["str", "dex", "con", "int", "wis", "cha"] },
@@ -59,7 +59,7 @@
     },
     "StatBlockItems": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/StatBlockItem" } },
     "StatBlock": {
-      "description": "A stat block printed inside a spell or magic item (SPEC.md §6.6, §6.7). Authored as printed: only the ability modifiers and saves are derived.",
+      "description": "A stat block printed inside a spell or magic item (docs/rulesets.md#embedded-stat-blocks, docs/rulesets.md#embedded-stat-blocks). Authored as printed: only the ability modifiers and saves are derived.",
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "typeLine", "abilities"],

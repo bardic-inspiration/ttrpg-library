@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/spell.schema.json",
-  "title": "dnd-5e-2024 spell stats (SPEC.md §6.7)",
-  "description": "Stored inputs only; spells derive nothing in v1 except an embedded stat block's ability modifiers and saves (SPEC.md §6.2). Cross-field rules are checks in checks.ts (SPEC.md §6.8).",
+  "title": "dnd-5e-2024 spell stats (docs/rulesets.md#spells)",
+  "description": "Stored inputs only; spells derive nothing in v1 except an embedded stat block's ability modifiers and saves (docs/rulesets.md#the-ruleset-module). Cross-field rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
   "type": "object",
   "additionalProperties": false,
   "required": ["level", "school", "classes", "castingTime", "ritual", "range", "components", "duration", "effect"],

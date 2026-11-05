@@ -1,6 +1,6 @@
-// Which pages `npm run a11y` checks (SPEC.md §9.7), read from the built
+// Which pages `npm run a11y` checks (docs/styling.md#accessibility), read from the built
 // library.json: the home page, a type gallery with a filter applied, one
-// detail page per type that has an entry, and the print view (§10.4) showing
+// detail page per type that has an entry, and the print view (docs/export.md#print) showing
 // those same entries. A type with no entries has no detail page to check yet.
 
 export interface IndexRecord {
@@ -22,7 +22,7 @@ export interface A11yPage {
 
 const SITE_PATH = /^\/[^/]+\//; // the site base, which `url` in library.json starts with
 
-/** A gallery filter that matches `record`, from its first facet value, in §9.3 URL form. */
+/** A gallery filter that matches `record`, from its first facet value, in docs/site.md#gallery URL form. */
 function filterFor(record: IndexRecord): string | undefined {
   for (const [path, value] of Object.entries(record.facets)) {
     const first = Array.isArray(value) ? value[0] : value;

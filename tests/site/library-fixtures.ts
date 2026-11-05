@@ -1,4 +1,4 @@
-// The §6.9 fixture library, derived and linked as the site loads content.
+// The example fixture library, derived and linked as the site loads content.
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { entryNames, loadLibrary, refTargets, type Entry, type LoadedEntry } from '../../site/src/lib/library.ts';

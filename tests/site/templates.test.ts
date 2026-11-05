@@ -12,8 +12,8 @@ async function render(entry: Entry, derived: Record<string, unknown>, extra: Rec
   return container.renderToString(EntryTemplate, { props: { entry, derived, names: lib.names, ...extra } });
 }
 
-describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
-  it('renders the cinder hound with the numbers §6.9 shows', async () => {
+describe('type templates render the example entries (docs/site.md#templates)', () => {
+  it('renders the cinder hound with its derived numbers', async () => {
     const { entry, derived } = lib.byId('cinder-hound');
     const text = textOf(await render(entry, derived));
     for (const line of [
@@ -33,7 +33,7 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     }
   });
 
-  it('renders a creature with only a Reaction with no Actions section (SPEC.md §6.5)', async () => {
+  it('renders a creature with only a Reaction with no Actions section (docs/rulesets.md#creatures)', async () => {
     const { entry } = lib.byId('cinder-hound');
     const { actions: _actions, traits: _traits, ...rest } = entry.stats as Record<string, unknown>;
     const stats = { ...rest, reactions: [{ name: 'Shriek', kind: 'other', text: 'The hound shrieks.' }] };
@@ -63,7 +63,7 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     }
   });
 
-  it('renders a reaction trigger as markdown (SPEC.md §6.7)', async () => {
+  it('renders a reaction trigger as markdown (docs/rulesets.md#spells)', async () => {
     const { entry, derived } = lib.byId('frost-lance');
     const stats = { ...(entry.stats as Record<string, unknown>), castingTime: { amount: 1, unit: 'reaction', trigger: 'when targeted by the *Magic Missile* spell' } };
     const html = await render({ ...entry, stats }, derived);
@@ -87,7 +87,7 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
     }
   });
 
-  it('renders markdown in every creature text field, after tokens, and plain fields as plain text (SPEC.md §5.5)', async () => {
+  it('renders markdown in every creature text field, after tokens, and plain fields as plain text (docs/content-model.md#text-fields)', async () => {
     const { entry, derived } = lib.byId('cinder-hound');
     const e = structuredClone(entry) as Entry & { stats: Record<string, any> };
     const d = structuredClone(derived) as Record<string, any>;
@@ -140,7 +140,7 @@ describe('type templates render the §6.9 examples (SPEC.md §9.5)', () => {
   });
 });
 
-describe('templates compute no rules values (SPEC.md §6.1, §9.5)', () => {
+describe('templates compute no rules values (docs/rulesets.md#inputs-and-derived-values, docs/site.md#templates)', () => {
   it('shows whatever the derived values say, so every number comes from the ruleset module', async () => {
     const { entry, derived } = lib.byId('cinder-hound');
     const d = structuredClone(derived) as Record<string, any>;
@@ -158,7 +158,7 @@ describe('templates compute no rules values (SPEC.md §6.1, §9.5)', () => {
   });
 });
 
-describe('generic template (SPEC.md §9.5)', () => {
+describe('generic template (docs/site.md#templates)', () => {
   it('falls back for a template name with no component', () => {
     expect(templateFor('spell-card')).toBe('spell-card');
     expect(templateFor('npc-sheet')).toBe('generic');

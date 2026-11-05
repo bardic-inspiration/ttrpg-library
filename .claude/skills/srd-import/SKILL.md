@@ -1,12 +1,12 @@
 ---
 name: srd-import
-description: Import SRD 5.2 entries into the library for an SRD import stage (SPEC.md §8.1), and manage SRD entries already imported, such as a link pass, a correction, or the QA/QC review. Covers picking batches, transcribing from the SRD PDF, verifying against it, filing format gaps, and the PRs. Use in a session the owner starts for a Milestone 7 stage or for SRD entry upkeep. Entry rules come from the generate and revise skills; this skill is the session workflow around them.
+description: Import SRD 5.2 entries into the library for an SRD import stage (docs/generation.md#srd-import), and manage SRD entries already imported, such as a link pass, a correction, or the QA/QC review. Covers picking batches, transcribing from the SRD PDF, verifying against it, filing format gaps, and the PRs. Use in a session the owner starts for an import stage or for SRD entry upkeep. Entry rules come from the generate and revise skills; this skill is the session workflow around them.
 ---
 
 # SRD import
 
-How a session imports SRD content and keeps it right. `SPEC.md` §5.9 and
-§8.1 are the source of truth. The `generate` skill
+How a session imports SRD content and keeps it right. [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) and
+[Requests](../../../docs/generation.md#requests) are the source of truth. The `generate` skill
 (`.claude/skills/generate/SKILL.md`, "SRD entries") holds the rules for
 writing each entry, and the `revise` skill
 (`.claude/skills/revise/SKILL.md`) holds the rules for changing one. Follow
@@ -17,19 +17,19 @@ consistent.
 matching. If matching a detail of the SRD would take a per-entry workaround
 because of how the templates render, don't add one: the detail goes in the
 nearest free-text field as printed, or, if the templates own it, it's listed
-under §5.9 "Formatting" as not matched. When a new kind of detail comes up,
-update §5.9 in a dev PR rather than working around it.
+under [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) "Formatting" as not matched. When a new kind of detail comes up,
+update [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) in a dev PR rather than working around it.
 
 ## Inputs
 
-- **A stage issue** under Milestone 7 (§16), without the `request` label.
+- **A stage issue** under the import's milestone issue, without the `request` label.
   Don't claim it with `in-progress`.
 - **Upkeep** of imported entries: a link pass, a `revise` issue about an SRD
   entry, or the QA/QC review issue.
 
 ## Step 1: Read
 
-- The stage issue and its comments, and `SPEC.md` §5.9, §6, and §8.1.
+- The stage issue and its comments, and [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries), [Rulesets](../../../docs/rulesets.md), and [SRD import](../../../docs/generation.md#srd-import).
 - `rulesets/dnd-5e-2024/srd-manifest.json`: every SRD entry with its type and
   tier.
 - For each type in the stage: its schema in
@@ -44,7 +44,7 @@ update §5.9 in a dev PR rather than working around it.
 
 Run `npm run srd-coverage -- --type <type> --tier <tier>` for the stage's
 tier. One batch is every missing entry of one type: batches are separated by
-type, never by count, and have no size limit (§8.3). Work the types in
+type, never by count, and have no size limit ([Defaults](../../../docs/generation.md#defaults)). Work the types in
 dependency order: spells first, then magic items and creatures, which refer
 to spells.
 
@@ -57,8 +57,8 @@ defines. List each form the schema or the template can't hold.
 
 - A gap that recurs with a fixed shape is a **format fix**: file a dev issue
   under Milestone 7, placed before the stage (`AGENTS.md` "Dev Queue"), and
-  fix it in a dev PR that may add the entries that motivated it (§8.1).
-- A one-off detail goes in the nearest free-text field as printed (§5.9); it
+  fix it in a dev PR that may add the entries that motivated it ([Requests](../../../docs/generation.md#requests)).
+- A one-off detail goes in the nearest free-text field as printed ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)); it
   isn't a gap.
 - Entries blocked on a format fix wait for it. Import the rest of the batch
   now; the blocked ones come in with the fix or the next batch of that type.
@@ -88,7 +88,7 @@ through the same rules. What worked:
   for the cases the vocabulary gets wrong. Never add a space after a
   line-ending "-" or "—".
 - **Styles.** Emit `*italic*`, `**bold**`, and `***bold italic***` from the
-  fonts. An inline heading is bold italic (§9.5). Space characters carry a
+  fonts. An inline heading is bold italic ([Templates](../../../docs/site.md#templates)). Space characters carry a
   font too: treat whitespace as style-neutral, and put spaces outside the
   markers. A `.`, `,`, `;`, `:`, or `)` set tight against the character
   before it takes that character's style. Merge adjacent runs of one style,
@@ -118,7 +118,7 @@ Write entries by the `generate` skill's SRD rules. Parse each header field
 into its structured field with strict patterns, and stop on any form the
 patterns don't match instead of guessing. Lessons from the first import:
 
-- **Inputs from printed numbers.** Store inputs, never derived values (§6.1).
+- **Inputs from printed numbers.** Store inputs, never derived values ([Inputs and derived values](../../../docs/rulesets.md#inputs-and-derived-values)).
   A creature's proficiency bonus is a printed skill or save bonus minus its
   ability modifier; its Hit Dice come from the HP formula; an attack's
   ability is the one whose modifier matches both the to-hit and the damage
@@ -134,7 +134,7 @@ patterns don't match instead of guessing. Lessons from the first import:
   every entry whose text mentions charges or casting but has no such field.
 - **Summaries** are one plain, factual line per entry, written for it before
   the entry is generated. Never write a placeholder: the validator rejects
-  `TODO`-style markers (§6.8), but not every stand-in a script can produce.
+  `TODO`-style markers ([Consistency checks](../../../docs/rulesets.md#consistency-checks)), but not every stand-in a script can produce.
 - **`shortName`.** Set it when the SRD's prose calls the creature something
   other than the last word of its name ("The priest" for the Priest Acolyte,
   "The sphinx" for the Sphinx of Lore). The render check in step 6 finds
@@ -149,19 +149,19 @@ patterns don't match instead of guessing. Lessons from the first import:
   Failure:*). A save action whose effect runs on in more paragraphs keeps
   them in its last field (`onFailure`, `onSuccess`, or
   `onFailureOrSuccess`), separated by blank lines.
-- **Forms the formats hold** (look up each in `SPEC.md` before writing it):
-  - a table title, as a bold-only line directly above the table (§5.5);
-  - a table printed in side-by-side halves, as one table (§5.9);
+- **Forms the formats hold** (look up each in `docs/rulesets.md` and the schema before writing it):
+  - a table title, as a bold-only line directly above the table ([Tables in text](../../../docs/content-model.md#tables-in-text));
+  - a table printed in side-by-side halves, as one table ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries));
   - a footnote marker, escaped as `\*` in a header cell and the note;
   - a hanging-indent bold run-in item, as a `***Name.***` paragraph, as
     Folding Boat's command words are;
-  - per-variant rarities, in `rarityVariants` with `rarity: "varies"` (§6.6);
-  - an Initiative line in a stat block inside an item or spell (§6.3);
+  - per-variant rarities, in `rarityVariants` with `rarity: "varies"` ([Magic items](../../../docs/rulesets.md#magic-items));
+  - an Initiative line in a stat block inside an item or spell ([Shared definitions](../../../docs/rulesets.md#shared-definitions));
   - a creature's Spellcasting with no save DC, with `spellcasting.noSaveDc`
-    (§5.8, §6.5);
-  - a creature with no Actions, by omitting `actions` (§6.5);
+    ([Situational fields](../../../docs/content-model.md#situational-fields), [Creatures](../../../docs/rulesets.md#creatures));
+  - a creature with no Actions, by omitting `actions` ([Creatures](../../../docs/rulesets.md#creatures));
   - damage prose that continues with a dash ("—or …"), as `onHit` text
-    starting with the dash (§6.5).
+    starting with the dash ([Creatures](../../../docs/rulesets.md#creatures)).
 - **Item spells.** A spell cast for 0 charges, or not for charges at all
   (beads, a free cast), omits `chargeCost`; the table in `effect` still
   shows the printed cost. "Regains all expended charges" is a `recharge` of
@@ -185,7 +185,7 @@ not by the JSON:
 - Render each entry through the template code in `site/src/lib/creature.ts`,
   `site/src/lib/spell.ts`, or `site/src/lib/magic-item.ts`, and compare it
   line by line with the PDF text of the same entry. Every difference is
-  either fixed, a misprint recorded for the PR, or a §5.9 formatting
+  either fixed, a misprint recorded for the PR, or a [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) formatting
   difference. What worked for a large batch: build the site, read each
   detail page's text with Playwright, normalize both sides (drop markup,
   straighten quotes, turn "−" into "-", drop the ability table, which is
@@ -213,7 +213,7 @@ To add a later batch of the same type to an open PR, first check that the PR
 is still open: a merged PR's branch takes no more work. Branch from `main`
 with the next suffix (`-2`) and open a new PR, and say in its body which PR
 it follows. A format-fix dev PR that adds entries gets the `migration` label
-from the labeler, and the `lane` job waits for it (§12.4), so it needs no
+from the labeler, and the `lane` job waits for it ([Lane rules](../../../docs/workflow.md#lane-rules)), so it needs no
 manual label change.
 
 ## Step 8: Link pass
@@ -221,7 +221,7 @@ manual label change.
 When a stage's batches have merged, mentions written as plain text because
 the target wasn't in the library yet can now be links. Find every SRD entry
 whose text or plain-string fields name an entry now in the library, and turn
-each into a `{ref:<type>/<id>}` link or a ref (§5.7). This is a revision: by
+each into a `{ref:<type>/<id>}` link or a ref ([References](../../../docs/content-model.md#references)). This is a revision: by
 the `revise` skill's rules, on branch `revise/<stage>-<YYYYMMDD>`, with
 `meta.updatedAt` set, `meta.source.kind` left as-is, and one commit titled
 `Revise <n> SRD entries: link mentions of library entries`. Match names
@@ -253,12 +253,12 @@ rather than skipping the link.
 
 ## Managing SRD entries
 
-- **Corrections** only bring an entry closer to the SRD (§8.5). An
+- **Corrections** only bring an entry closer to the SRD ([Revisions](../../../docs/generation.md#revisions)). An
   instruction to change an SRD entry otherwise isn't applied; suggest a
   custom variant instead. Never change an `id` or move a file.
 - **A format fix that changes how existing entries are stored** migrates
   them in its dev PR, which gets the `migration` label automatically
-  (§12.4).
+  ([Work lanes](../../../docs/workflow.md#work-lanes)).
 - **The QA/QC review** of Milestone 7 rechecks every SRD entry: Step 6
   across the whole library, plus a look at the built site. Each problem it
   finds goes in one PR per type, one commit per kind of problem.

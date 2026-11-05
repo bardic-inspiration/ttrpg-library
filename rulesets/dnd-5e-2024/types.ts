@@ -1,4 +1,4 @@
-// Shapes of dnd-5e-2024 creature stats (SPEC.md §6.3, §6.5). These mirror
+// Shapes of dnd-5e-2024 creature stats (docs/rulesets.md#shared-definitions, docs/rulesets.md#creatures). These mirror
 // schemas/creature.schema.json; the schema stage runs first, so code that
 // takes these types can trust them.
 
@@ -66,7 +66,7 @@ export interface CreatureStats {
   speed: { walk: number; fly?: number; swim?: number; climb?: number; burrow?: number; hover?: true; note?: string };
   abilities: Record<Ability, number>;
   saveProficiencies?: Ability[];
-  /** A proficiency, or `{ proficiency?, adjust }` to match a bonus that doesn't derive (SPEC.md §5.9). */
+  /** A proficiency, or `{ proficiency?, adjust }` to match a bonus that doesn't derive (docs/content-model.md#srd-and-custom-entries). */
   skills?: Record<string, Proficiency | { proficiency?: Proficiency; adjust: number }>;
   vulnerabilities?: string[];
   resistances?: string[];
@@ -85,7 +85,7 @@ export interface CreatureStats {
     ability: Ability;
     /** "Material" reads "requiring no Material components and using …". */
     noComponents?: string;
-    /** The intro prints no spell save DC (SPEC.md §5.8). */
+    /** The intro prints no spell save DC (docs/content-model.md#situational-fields). */
     noSaveDc?: true;
     adjust?: number;
     includeAttack?: true;
@@ -95,7 +95,7 @@ export interface CreatureStats {
   };
 }
 
-// Shapes of dnd-5e-2024 spell and magic-item stats (SPEC.md §6.6, §6.7),
+// Shapes of dnd-5e-2024 spell and magic-item stats (docs/rulesets.md#magic-items, docs/rulesets.md#spells),
 // mirroring schemas/spell.schema.json and schemas/magic-item.schema.json.
 
 export interface SpellStats {
@@ -128,12 +128,12 @@ export interface SpellStats {
 /** A named block of text in an embedded stat block: a trait or an action. */
 export interface StatBlockItem {
   name: string;
-  /** Markdown-subset text (SPEC.md §5.5), written as printed. */
+  /** Markdown-subset text (docs/content-model.md#text-fields), written as printed. */
   text: string;
 }
 
 /**
- * A stat block printed inside a spell or magic item (SPEC.md §6.6, §6.7):
+ * A stat block printed inside a spell or magic item (docs/rulesets.md#embedded-stat-blocks, docs/rulesets.md#embedded-stat-blocks):
  * authored as printed, since its numbers often depend on the caster. Only the
  * ability modifiers and saves are derived.
  */
@@ -179,7 +179,7 @@ export interface MagicItemStats {
   category: string;
   baseItem?: string;
   rarity: string;
-  /** Each variant's rarity, for a `varies` item (SPEC.md §6.6). */
+  /** Each variant's rarity, for a `varies` item (docs/rulesets.md#magic-items). */
   rarityVariants?: { rarity: string; variant: string }[];
   attunement: { required: boolean; requirement?: string };
   charges?: { max: number | string; recharge?: string; depletion?: string };
@@ -239,5 +239,5 @@ export interface DerivedCreature {
   spellcasting?: { dc: number; attackBonus: number };
 }
 
-/** The action lists `<actionList>` in SPEC.md §6.2. */
+/** The action lists `<actionList>` in docs/rulesets.md#the-ruleset-module. */
 export const ACTION_LISTS = ['traits', 'actions', 'bonusActions', 'reactions'] as const;

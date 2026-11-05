@@ -1,13 +1,13 @@
-// Renders the §5.5 markdown subset to HTML (SPEC.md §5.5, §9.4). The
+// Renders the docs/content-model.md#text-fields markdown subset to HTML (docs/content-model.md#text-fields, docs/site.md#detail-page). The
 // validator already rejects everything outside the subset with the same
 // `marked` lexer; rendering is sanitized anyway, so a construct that slipped
 // through reads as its plain text, never as markup: raw HTML is escaped,
 // links and images keep only their text, and headings read as paragraphs.
-// Pipe tables render as one site-wide table (SPEC.md §9.5), inside a box that
+// Pipe tables render as one site-wide table (docs/site.md#templates), inside a box that
 // scrolls on its own when the table is wider than the text column; a bold
 // line directly above a table is its title, rendered as the caption. A
 // `{ref:<type>/<id>}` token renders as the target's current name, linked to
-// its detail page (SPEC.md §5.7): the only link text can carry.
+// its detail page (docs/content-model.md#references): the only link text can carry.
 
 import { Marked, type Token, type TokenizerAndRendererExtension, type Tokens } from 'marked';
 import { tableTitleAt } from '../../../lib/table-title.ts';
@@ -122,7 +122,7 @@ function withRefs(refs: TextRefs | undefined, render: () => string): string {
 export const renderInlineMarkdown = (text: string, refs?: TextRefs): string =>
   withRefs(refs, () => marked.parseInline(text, { async: false }));
 
-/** Moves each table title (SPEC.md §5.5) from its paragraph onto the table it titles. */
+/** Moves each table title (docs/content-model.md#tables-in-text) from its paragraph onto the table it titles. */
 function attachTableTitles(tokens: Token[]): Token[] {
   return tokens.flatMap((token, i) => {
     const title = tableTitleAt(tokens, i);

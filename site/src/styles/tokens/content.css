@@ -1,5 +1,5 @@
 /*
- * Content tokens (SPEC.md §9.6): one accent per entry type and per item
+ * Content tokens (docs/styling.md#tokens): one accent per entry type and per item
  * rarity, per theme. Edit this file to change type and rarity colors.
  *
  * Cards and stat blocks carry data-type (and data-rarity for items); the

@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/creature.schema.json",
-  "title": "dnd-5e-2024 creature stats (SPEC.md §6.5)",
-  "description": "Stored inputs only. Derived values come from derive.ts (SPEC.md §6.1).",
+  "title": "dnd-5e-2024 creature stats (docs/rulesets.md#creatures)",
+  "description": "Stored inputs only. Derived values come from derive.ts (docs/rulesets.md#inputs-and-derived-values).",
   "type": "object",
   "additionalProperties": false,
   "required": ["size", "creatureType", "alignment", "ac", "hitDice", "speed", "abilities", "languages", "cr"],
@@ -416,7 +416,7 @@
           "$ref": "common.schema.json#/$defs/Ability"
         },
         "noSaveDc": {
-          "description": "The intro prints no spell save DC, for a creature whose spells need none (SPEC.md §5.8): \"…using Wisdom as the spellcasting ability:\".",
+          "description": "The intro prints no spell save DC, for a creature whose spells need none (docs/content-model.md#situational-fields): \"…using Wisdom as the spellcasting ability:\".",
           "const": true
         },
         "noComponents": {

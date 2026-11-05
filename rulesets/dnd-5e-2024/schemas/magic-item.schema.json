@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/magic-item.schema.json",
-  "title": "dnd-5e-2024 magic item stats (SPEC.md §6.6)",
-  "description": "Stored inputs only; magic items derive nothing in v1 except an embedded stat block's ability modifiers and saves (SPEC.md §6.2). saveDc and attackBonus are authored. Cross-field rules are checks in checks.ts (SPEC.md §6.8).",
+  "title": "dnd-5e-2024 magic item stats (docs/rulesets.md#magic-items)",
+  "description": "Stored inputs only; magic items derive nothing in v1 except an embedded stat block's ability modifiers and saves (docs/rulesets.md#the-ruleset-module). saveDc and attackBonus are authored. Cross-field rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
   "type": "object",
   "additionalProperties": false,
   "required": ["category", "rarity", "attunement", "effect"],
@@ -17,7 +17,7 @@
       "enum": ["common", "uncommon", "rare", "very-rare", "legendary", "artifact", "varies"]
     },
     "rarityVariants": {
-      "description": "The rarity of each variant of an item whose rarity is \"varies\", printed in place of \"Rarity Varies\": \"Uncommon (+1), Rare (+2), or Very Rare (+3)\" (SPEC.md §6.6).",
+      "description": "The rarity of each variant of an item whose rarity is \"varies\", printed in place of \"Rarity Varies\": \"Uncommon (+1), Rare (+2), or Very Rare (+3)\" (docs/rulesets.md#magic-items).",
       "type": "array",
       "minItems": 2,
       "items": {

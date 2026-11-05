@@ -4,17 +4,17 @@ import { dirname, join } from 'node:path';
 
 export const FIXTURES = join(import.meta.dirname, 'fixtures');
 
-/** A fresh copy of the §6.9 cinder hound. */
+/** A fresh copy of the example cinder hound. */
 export async function cinderHound(): Promise<Record<string, any>> {
   return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/creature/cinder-hound.json'), 'utf8'));
 }
 
-/** A fresh copy of the §6.9 Frost Lance. */
+/** A fresh copy of the example Frost Lance. */
 export async function frostLance(): Promise<Record<string, any>> {
   return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/spell/frost-lance.json'), 'utf8'));
 }
 
-/** A fresh copy of the §6.9 Wand of Frost Lances. */
+/** A fresh copy of the example Wand of Frost Lances. */
 export async function wandOfFrostLances(): Promise<Record<string, any>> {
   return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/magic-item/wand-of-frost-lances.json'), 'utf8'));
 }

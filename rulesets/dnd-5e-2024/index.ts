@@ -1,4 +1,4 @@
-// The dnd-5e-2024 ruleset module (SPEC.md §6.2).
+// The dnd-5e-2024 ruleset module (docs/rulesets.md#the-ruleset-module).
 
 import type { RulesetModule } from '../module.ts';
 import { checkCreature, checkMagicItem, checkSpell } from './checks.ts';

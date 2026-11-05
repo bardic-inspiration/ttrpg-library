@@ -1,4 +1,4 @@
-// PNG export (SPEC.md §10.3, §10.5). Captures the detail page's capture
+// PNG export (docs/export.md#png, docs/export.md#export-config). Captures the detail page's capture
 // source (the type template in `capture` mode, with the light tokens) at a
 // fixed CSS width from config/export.json and the configured scale, and
 // downloads it as `<id>.png`. Entry scope only.

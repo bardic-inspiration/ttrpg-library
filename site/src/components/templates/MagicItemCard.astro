@@ -1,8 +1,8 @@
 ---
 // The dnd-5e-2024 magic item card (registry template `magic-item-card`,
-// SPEC.md §6.6, §9.5): name, category, rarity and attunement, the rules text,
+// docs/rulesets.md#magic-items, docs/site.md#templates): name, category, rarity and attunement, the rules text,
 // then charges, the spells the item casts, and any stat blocks it prints. The accent follows the rarity.
-// Optional fields display only when present (§5.8).
+// Optional fields display only when present (docs/content-model.md#situational-fields).
 import type { MagicItemStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { present, whenPresent } from '../../lib/display';
 import { chargesLine, spellLine, subtitleLine } from '../../lib/magic-item';

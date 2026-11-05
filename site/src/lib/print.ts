@@ -1,4 +1,4 @@
-// The print view's URLs and page rules (SPEC.md §10.4): the query a `/print/`
+// The print view's URLs and page rules (docs/export.md#print): the query a `/print/`
 // URL carries, the page size it asks for, where each entry's print fragment is
 // served, and the `@page` rules injected at runtime. Pure functions, light
 // enough for the export controls; lib/print-run.ts resolves and loads entries.
@@ -17,7 +17,7 @@ export interface PageSize {
 
 export const pageSizes: PageSize[] = config.pageSizes;
 
-/** The short SRD attribution (§11) each printed page carries in its footer. */
+/** The short SRD attribution (docs/licensing.md#srd-attribution) each printed page carries in its footer. */
 export const SHORT_ATTRIBUTION = 'Includes SRD 5.2 material, CC-BY-4.0';
 
 /** The page size with this id, or the configured default for a missing or unknown id. */

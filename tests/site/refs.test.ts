@@ -9,7 +9,7 @@ const targets = new Map<string, RefTarget>([
 ]);
 const labels = ruleset.refLabels.bind(ruleset);
 
-describe('dnd-5e-2024 ref labels (SPEC.md §5.7)', () => {
+describe('dnd-5e-2024 ref labels (docs/content-model.md#references)', () => {
   it('labels spell lists "Casts" and gear "Gear"', () => {
     expect(labels('magic-item', 'stats.spells[0].spell')).toEqual({ forward: 'Casts', back: 'Cast by' });
     expect(labels('creature', 'stats.spellcasting.perDay.1[0]')).toEqual({ forward: 'Casts', back: 'Cast by' });
@@ -18,7 +18,7 @@ describe('dnd-5e-2024 ref labels (SPEC.md §5.7)', () => {
   });
 });
 
-describe('groupRefs (SPEC.md §9.4)', () => {
+describe('groupRefs (docs/site.md#detail-page)', () => {
   it('shows the wand casting Frost Lance, and Frost Lance cast by the wand and a creature', () => {
     expect(groupRefs('magic-item', [{ path: 'stats.spells[0].spell', key: 'spell/frost-lance' }], [], targets, labels)).toEqual({
       forward: [{ label: 'Casts', targets: [targets.get('spell/frost-lance')] }],

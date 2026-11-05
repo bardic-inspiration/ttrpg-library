@@ -10,7 +10,7 @@ import {
 } from '../scripts/srd-coverage/coverage.ts';
 import { loadRegistry, PROJECT_ROOT } from '../scripts/validate/schema.ts';
 
-// SPEC.md §5.9 (SRD manifest and coverage); issue #130.
+// docs/content-model.md#srd-manifest-and-coverage (SRD manifest and coverage); issue #130.
 const R = 'dnd-5e-2024';
 const TYPES = ['creature', 'magic-item', 'spell'];
 

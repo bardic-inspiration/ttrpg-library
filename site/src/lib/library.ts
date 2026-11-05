@@ -1,5 +1,5 @@
 // Reads every entry under content/ at build time, derives its values with its
-// ruleset module, and links its refs (SPEC.md §5.7, §9.1 step 3). Validation
+// ruleset module, and links its refs (docs/content-model.md#references, docs/site.md#index-build step 3). Validation
 // has already run in build:index, so entries here are known good.
 
 import type { RulesetModule } from '../../../rulesets/module.ts';

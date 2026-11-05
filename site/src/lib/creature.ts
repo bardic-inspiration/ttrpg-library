@@ -1,8 +1,8 @@
-// Text for the dnd-5e-2024 creature stat block in SRD 5.2 form (SPEC.md §6.5),
+// Text for the dnd-5e-2024 creature stat block in SRD 5.2 form (docs/rulesets.md#creatures),
 // built from stored inputs and derived values. Styling arrives with the
 // templates in milestone 3; this is the content. Optional fields display by
-// presence alone (SPEC.md §5.8), through ./display.ts. Action bodies are
-// markdown: stored text fields (`Text`, SPEC.md §5.5) go in as written after
+// presence alone (docs/content-model.md#situational-fields), through ./display.ts. Action bodies are
+// markdown: stored text fields (`Text`, docs/content-model.md#text-fields) go in as written after
 // tokens render, plain fields are escaped, and labels such as "Hit:" are
 // italic. Templates render them through ./markdown.ts.
 
@@ -25,7 +25,7 @@ import type {
 export interface ActionBlock {
   /** Plain text. */
   name: string;
-  /** Markdown-subset text (SPEC.md §5.5). */
+  /** Markdown-subset text (docs/content-model.md#text-fields). */
   body: string;
 }
 
@@ -33,7 +33,7 @@ export interface ActionBlock {
 const label = (text: string): string => `*${text}*`;
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-/** Words title case leaves lowercase unless they come first (SPEC.md §6.5). */
+/** Words title case leaves lowercase unless they come first (docs/rulesets.md#creature-display-forms). */
 const MINOR_WORDS = new Set(['a', 'an', 'and', 'at', 'by', 'for', 'in', 'of', 'on', 'or', 'per', 'the', 'to', 'with']);
 
 /**
@@ -68,7 +68,7 @@ export const initiativeLine = (d: DerivedCreature): string => `${signed(d.initia
 
 export const hpLine = (d: DerivedCreature): string => `${d.hp.average} (${printMinus(d.hp.formula)})`;
 
-/** Speed modes and senses print in this fixed order, whatever the entry's key order (SPEC.md §6.5). */
+/** Speed modes and senses print in this fixed order, whatever the entry's key order (docs/rulesets.md#creatures). */
 const SPEED_ORDER = ['burrow', 'climb', 'fly', 'swim'] as const;
 const SENSE_ORDER = ['blindsight', 'darkvision', 'tremorsense', 'truesight'] as const;
 
@@ -79,7 +79,7 @@ export function speedLine(s: CreatureStats): string {
     const feet = s.speed[mode];
     if (present(feet)) parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
   }
-  // A speed the fields can't express, such as a form-limited one, as written (SPEC.md §6.5).
+  // A speed the fields can't express, such as a form-limited one, as written (docs/rulesets.md#creatures).
   if (present(note)) parts.push(note);
   return parts.join(', ');
 }
@@ -93,7 +93,7 @@ export function abilityRows(s: CreatureStats, d: DerivedCreature) {
   }));
 }
 
-/** The Skills line, or `undefined` when the creature has no `skills` (SPEC.md §5.8). */
+/** The Skills line, or `undefined` when the creature has no `skills` (docs/content-model.md#situational-fields). */
 export const skillsLine = (s: CreatureStats, d: DerivedCreature): string | undefined =>
   whenPresent(s.skills, () =>
     Object.entries(d.skills)
@@ -104,7 +104,7 @@ export const skillsLine = (s: CreatureStats, d: DerivedCreature): string | undef
 const damageList = (list: string[]): string => list.map(capitalize).join(', ');
 
 
-/** Vulnerabilities, Resistances, and Immunities, each only when present (SPEC.md §5.8). */
+/** Vulnerabilities, Resistances, and Immunities, each only when present (docs/content-model.md#situational-fields). */
 export function defenseLines(s: CreatureStats): PropertyLine[] {
   const immunities = whenPresent(s.immunities, (i) =>
     [whenPresent(i.damage, damageList), whenPresent(i.conditions, damageList)].filter(present).join('; '),
@@ -118,7 +118,7 @@ export function defenseLines(s: CreatureStats): PropertyLine[] {
 }
 
 export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
-  // Senses are comma-separated; Passive Perception follows a semicolon (SPEC.md §6.5).
+  // Senses are comma-separated; Passive Perception follows a semicolon (docs/rulesets.md#creatures).
   const senses = SENSE_ORDER.flatMap((sense) => whenPresent(s.senses?.[sense], (feet) => [`${capitalize(sense)} ${feet} ft.`]) ?? []);
   const list = senses.join(', ') + (whenPresent(s.senses?.note, (note) => ` (${note})`) ?? '');
   return [list, `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
@@ -131,7 +131,7 @@ const englishList = (items: string[]): string =>
 export function languagesLine(s: CreatureStats): string {
   // `spoken` is required and may be empty; `understood` lists languages the
   // creature understands but can't speak. With neither, the line reads "None"
-  // (SPEC.md §6.5).
+  // (docs/rulesets.md#creatures).
   const { spoken, understood } = s.languages;
   const parts = spoken.length ? [spoken.join(', ')] : [];
   if (understood?.length) {
@@ -165,7 +165,7 @@ function actionName(action: Action): string {
 
 /**
  * The damage list: riders join with "plus", and a conditional rider takes a
- * comma before "plus" and its condition after (SPEC.md §6.5): "5 (1d6 + 2)
+ * comma before "plus" and its condition after (docs/rulesets.md#creatures): "5 (1d6 + 2)
  * Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage".
  */
 function damageText(action: Action, derived: DerivedAction | undefined): string | undefined {
@@ -198,7 +198,7 @@ const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
  * The damage, then the prose after it (`onHit`, `onFailure`). Prose that
  * starts lowercase continues the damage sentence after a comma ("Cold damage,
  * and the target…"), prose that starts with a dash joins it directly
- * ("Piercing damage—or …"); otherwise the damage ends its sentence (SPEC.md §6.5).
+ * ("Piercing damage—or …"); otherwise the damage ends its sentence (docs/rulesets.md#creatures).
  */
 function afterDamage(damage: string | undefined, prose: string | undefined): string {
   if (!present(damage)) return prose ?? '';
@@ -237,7 +237,7 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
 const refOrText = (value: RefOrText, names: Map<string, string>): string => escapeMarkdown(refOrTextName(value, names));
 
 /**
- * The Legendary Actions paragraph before the actions (SPEC.md §6.5): the
+ * The Legendary Actions paragraph before the actions (docs/rulesets.md#creatures): the
  * italic uses line, then the intro, as one paragraph: "*Legendary Action Uses:
  * 3 (4 in Lair).* Immediately after another creature's turn, …".
  */
@@ -247,18 +247,18 @@ export function legendaryIntro(legendary: NonNullable<CreatureStats['legendaryAc
   return whenPresent(legendary.intro, (intro) => `${uses} ${renderTokens(intro, d, tables)}`) ?? uses;
 }
 
-/** What generated prose calls the creature after "The": `shortName`, or the name's last word, lowercase (SPEC.md §6.5). */
+/** What generated prose calls the creature after "The": `shortName`, or the name's last word, lowercase (docs/rulesets.md#creatures). */
 export const shortName = (s: CreatureStats, name: string): string =>
   s.shortName ?? (name.trim().split(/\s+/).at(-1) ?? name).toLowerCase();
 
 /**
- * The 5.2 "Spellcasting" action (SPEC.md §6.5). `name` is the entry's name,
+ * The 5.2 "Spellcasting" action (docs/rulesets.md#creatures). `name` is the entry's name,
  * and `names` maps `<type>/<id>` to entry names.
  */
 export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>, name: string): ActionBlock | undefined {
   const sc = s.spellcasting;
   if (!sc || !d.spellcasting) return undefined;
-  // The parenthetical holds the save DC (unless noSaveDc) and the attack bonus (with includeAttack), and is left out when empty (§5.8).
+  // The parenthetical holds the save DC (unless noSaveDc) and the attack bonus (with includeAttack), and is left out when empty (docs/content-model.md#situational-fields).
   const numbers = [
     ...(present(sc.noSaveDc) ? [] : [`spell save DC ${d.spellcasting.dc}`]),
     ...(present(sc.includeAttack) ? [`${signed(d.spellcasting.attackBonus)} to hit with spell attacks`] : []),

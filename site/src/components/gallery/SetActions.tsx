@@ -1,4 +1,4 @@
-// The gallery's set actions (SPEC.md §9.3 "Selection", §10.1): one button per
+// The gallery's set actions (docs/site.md#gallery "Selection", docs/export.md#exporter-interface): one button per
 // configured exporter that offers set scope, with a page size selector beside
 // any exporter that takes one (Print). Each runs on the selection, or on the
 // whole filtered set when nothing is selected. The entries' export bundles are

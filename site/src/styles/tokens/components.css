@@ -1,5 +1,5 @@
 /*
- * Component tokens (SPEC.md §9.6): per-component knobs that default to
+ * Component tokens (docs/styling.md#tokens): per-component knobs that default to
  * semantic tokens. Edit one to change a component's look without touching its
  * code. Layout values (card width, gaps, columns) live here too.
  *
@@ -39,7 +39,7 @@
     --statblock-gap: var(--space-xs);
     --statblock-column-gap: var(--space-l);
 
-    /* Tables in rules text and lore (pipe tables, SPEC.md §5.5). */
+    /* Tables in rules text and lore (pipe tables, docs/content-model.md#tables-in-text). */
     --table-caption-font: var(--font-heading);
     --table-header-font: var(--font-heading);
     --table-header-rule: var(--border-width-strong) solid var(--accent);

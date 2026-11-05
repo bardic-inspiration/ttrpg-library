@@ -38,8 +38,8 @@ use this skill.
 ## Process
 
 1. **Read what's already there first.** Skim the request, any linked issue,
-   and the docs it touches (`AGENTS.md`, plus the `SPEC.md` sections the
-   issue cites) before asking anything — never ask a question the existing
+   and the docs it touches (`AGENTS.md`, plus the docs sections the
+   issue cites, and `spec/v2/` for unbuilt design) before asking anything — never ask a question the existing
    material already answers.
 
 2. **Ask one question at a time.**

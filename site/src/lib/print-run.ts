@@ -1,4 +1,4 @@
-// Loading a print run (SPEC.md §10.4): resolves a `/print/` query's entries
+// Loading a print run (docs/export.md#print): resolves a `/print/` query's entries
 // against library.json, reusing the gallery's filtering for the gallery-query
 // form, and fetches each entry's print fragment.
 
@@ -17,7 +17,7 @@ export interface PrintSelection {
 /**
  * The entries a print query names. The `ids` form keeps the given order. The
  * gallery-query form reads the rest of the query as the home gallery's (`/`,
- * §9.3), so `f.type` narrows by type, and prints its results in its order.
+ * docs/site.md#gallery), so `f.type` narrows by type, and prints its results in its order.
  */
 export function selectEntries(query: PrintQuery, records: LibraryRecord[], registry: Registry): PrintSelection {
   if (query.ids) {

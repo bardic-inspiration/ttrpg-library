@@ -1,4 +1,4 @@
-// Filtering, search, sort, and chip counts (SPEC.md §9.3). Pure functions
+// Filtering, search, sort, and chip counts (docs/site.md#gallery). Pure functions
 // over library.json records, so the island stays a thin view.
 
 import MiniSearch from 'minisearch';
@@ -20,7 +20,7 @@ export function matches(record: LibraryRecord, path: string, value: FilterValue)
 export const applyFilters = (records: LibraryRecord[], filters: Map<string, FilterValue>, except?: string): LibraryRecord[] =>
   records.filter((record) => [...filters].every(([path, value]) => path === except || !isActive(value) || matches(record, path, value)));
 
-/** The search index (§9.3): name ×3, summary ×2, tag values ×1.5, search text ×1, with prefix and light fuzzy matching. */
+/** The search index (docs/site.md#gallery): name ×3, summary ×2, tag values ×1.5, search text ×1, with prefix and light fuzzy matching. */
 export function searchIndex(records: LibraryRecord[]): MiniSearch<LibraryRecord> {
   const index = new MiniSearch<LibraryRecord>({
     idField: 'url',
@@ -82,7 +82,7 @@ export function sortRecords(records: LibraryRecord[], key: SortKey, config: Gall
 
 export interface Chip {
   key: string;
-  /** The stored form, shown as stored (§5.3). */
+  /** The stored form, shown as stored (docs/content-model.md#tags). */
   stored: string | number | boolean;
   count: number;
 }
@@ -122,7 +122,7 @@ export const hasValues = (path: string, scoped: LibraryRecord[]): boolean =>
   scoped.some((r) => enumValues(valueAt(r, path)).length > 0);
 
 /**
- * Filters offered by "Add filter" (§9.3): every facet of the current types,
+ * Filters offered by "Add filter" (docs/site.md#gallery): every facet of the current types,
  * then every tag key present in the current results. The current types are
  * the type filter's values when one is set, otherwise every type on the route.
  */

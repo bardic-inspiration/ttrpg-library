@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { formatRarity, formatSpellLevel, formatTitle, formatValue } from '../../site/src/lib/format.ts';
 
-describe('display formatters (SPEC.md §7 `format`)', () => {
+describe('display formatters (docs/site.md#type-registry `format`)', () => {
   it('formats spell levels', () => {
     expect([0, 1, 2, 3, 4, 9].map(formatSpellLevel)).toEqual(['Cantrip', 'Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 9']);
   });

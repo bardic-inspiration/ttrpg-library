@@ -4,7 +4,7 @@ import { chargesLine, spellLine, subtitleLine } from '../../site/src/lib/magic-i
 import { castingTimeLine, componentsLine, durationLine, levelLine, rangeLine } from '../../site/src/lib/spell.ts';
 import { frostLance, wandOfFrostLances } from '../helpers.ts';
 
-describe('spell card lines (SPEC.md §6.7)', async () => {
+describe('spell card lines (docs/rulesets.md#spells)', async () => {
   const base = (await frostLance()).stats as SpellStats;
 
   it('reads a cantrip as "<School> Cantrip"', () => {
@@ -52,7 +52,7 @@ describe('spell card lines (SPEC.md §6.7)', async () => {
   });
 });
 
-describe('magic item card lines (SPEC.md §6.6)', async () => {
+describe('magic item card lines (docs/rulesets.md#magic-items)', async () => {
   const wand = (await wandOfFrostLances()).stats as MagicItemStats;
   const names = new Map([['spell/frost-lance', 'Frost Lance']]);
 
@@ -66,7 +66,7 @@ describe('magic item card lines (SPEC.md §6.6)', async () => {
     );
   });
 
-  it('prints the rarity of each variant in place of "Rarity Varies" (SPEC.md §6.6)', () => {
+  it('prints the rarity of each variant in place of "Rarity Varies" (docs/rulesets.md#magic-items)', () => {
     const variants = (rarities: [string, string][]) => rarities.map(([rarity, variant]) => ({ rarity, variant }));
     expect(
       subtitleLine({ ...wand, category: 'weapon', baseItem: 'Any Ammunition', rarity: 'varies', attunement: { required: false }, rarityVariants: variants([['uncommon', '+1'], ['rare', '+2'], ['very-rare', '+3']]) }),

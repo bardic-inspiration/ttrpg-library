@@ -1,4 +1,4 @@
-// The exporter registry (SPEC.md §10.1, §10.5): config/export.json lists the
+// The exporter registry (docs/export.md#exporter-interface, docs/export.md#export-config): config/export.json lists the
 // exporters, in button order, by id.
 import config from '../../../config/export.json' with { type: 'json' };
 import { json } from './json.ts';

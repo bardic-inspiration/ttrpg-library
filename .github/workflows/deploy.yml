@@ -1,4 +1,4 @@
-# SPEC.md §12.2: build and publish the site to GitHub Pages on every push to
+# docs/workflow.md#deploy: build and publish the site to GitHub Pages on every push to
 # main. The Pages source must be set to GitHub Actions.
 name: deploy
 

@@ -1,4 +1,4 @@
-// Print export (SPEC.md §10.4). Opens the print view for the entries at the
+// Print export (docs/export.md#print). Opens the print view for the entries at the
 // chosen page size; the print view loads them, injects the `@page` rules, and
 // opens the browser's print dialog, where the reader can save a PDF. Entry
 // and set scope.

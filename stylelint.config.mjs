@@ -1,4 +1,4 @@
-// Stylelint (SPEC.md §9.6, run by `npm run check`). Outside
+// Stylelint (docs/styling.md#tokens, run by `npm run check`). Outside
 // site/src/styles/tokens/, a color, font, size, spacing, radius, shadow, or
 // duration must come from a token: literal values fail. Percentages, viewport
 // units, 0, auto, and keywords stay allowed.

@@ -1,4 +1,4 @@
-// Theme choice (SPEC.md §9.6 "Themes"): System, Light, or Dark, stored in
+// Theme choice (docs/styling.md#themes): System, Light, or Dark, stored in
 // localStorage. Every storage read and write is wrapped in try/catch, so a
 // browser that blocks storage degrades to System instead of breaking.
 

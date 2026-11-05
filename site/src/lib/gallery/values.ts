@@ -1,4 +1,4 @@
-// Reading a filter or sort path off a library.json record (SPEC.md §9.1, §9.3).
+// Reading a filter or sort path off a library.json record (docs/site.md#index-build, docs/site.md#gallery).
 
 import { formatValue } from '../format.ts';
 import { CREATED, NAME, TYPE, tagKey, type FilterDef, type LibraryRecord } from './config.ts';
@@ -15,7 +15,7 @@ export function valueAt(record: LibraryRecord, path: string): unknown {
 
 /**
  * The values an enum filter matches on, as case-folded keys mapped to the
- * stored form for display (§5.3: comparisons ignore case, display keeps it).
+ * stored form for display (docs/content-model.md#tags: comparisons ignore case, display keeps it).
  * Arrays give one value per item; booleans and numbers read as text.
  */
 export function enumValues(value: unknown): { key: string; stored: string | number | boolean }[] {

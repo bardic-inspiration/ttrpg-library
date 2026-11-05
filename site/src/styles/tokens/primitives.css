@@ -1,5 +1,5 @@
 /*
- * Primitives (SPEC.md §9.6): raw values only. Components never read these;
+ * Primitives (docs/styling.md#tokens): raw values only. Components never read these;
  * semantic.css, components.css, content.css, and print.css map them to roles.
  * Edit this file to change the palette or the scales themselves.
  */
@@ -33,7 +33,7 @@
     --blue-700: #1d4ed8;
     --blue-300: #93b4ff;
 
-    /* Font families: the Alegreya superfamily, self-hosted (§3.1). */
+    /* Font families: the Alegreya superfamily, self-hosted (docs/architecture.md#technology). */
     --family-serif: 'Alegreya', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
     --family-serif-sc: 'Alegreya SC', 'Alegreya', Georgia, serif;
     --family-sans: 'Alegreya Sans', 'Segoe UI', system-ui, sans-serif;
@@ -92,7 +92,7 @@
     --shadow-1: 0 1px 2px rgb(31 26 20 / 0.12);
     --shadow-2: 0 2px 8px rgb(31 26 20 / 0.16);
 
-    /* Durations. Every one becomes 0ms under reduced motion (§9.7). */
+    /* Durations. Every one becomes 0ms under reduced motion (docs/styling.md#accessibility). */
     --duration-fast: 120ms;
     --duration-normal: 200ms;
     --duration-slow: 320ms;

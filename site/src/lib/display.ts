@@ -1,4 +1,4 @@
-// The situational-field rule (SPEC.md §5.8), shared by every template.
+// The situational-field rule (docs/content-model.md#situational-fields), shared by every template.
 //
 // Required `stats` fields always display, including `0` and `false`. Optional
 // fields display only when present: the schema rejects every "none" value

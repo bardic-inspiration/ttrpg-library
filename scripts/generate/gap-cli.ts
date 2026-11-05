@@ -1,4 +1,4 @@
-// `npm run gap-fill` (SPEC.md §8.2 step 5): reads site/public/library.json and
+// `npm run gap-fill` (docs/generation.md#run-order step 5): reads site/public/library.json and
 // config/types.json, and prints the type and bucket label a gap-fill run
 // generates for, in the ruleset config/defaults.json names.
 

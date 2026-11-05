@@ -1,4 +1,4 @@
-// Gallery view state and its query string (SPEC.md §9.3 "URL state"):
+// Gallery view state and its query string (docs/site.md#gallery "URL state"):
 // `?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8`.
 
 import { filterDef, parseSortKey, sortChoices, type GalleryConfig, type SortKey } from './config.ts';

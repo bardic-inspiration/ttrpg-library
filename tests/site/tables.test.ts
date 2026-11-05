@@ -1,4 +1,4 @@
-// Pipe tables in text fields (SPEC.md §5.5, §9.5): the SRD entries that print
+// Pipe tables in text fields (docs/content-model.md#tables-in-text, docs/site.md#templates): the SRD entries that print
 // a table validate with it, and it renders as one site-wide table on the
 // card, the detail page, the print view, and the PNG capture.
 import { readFile } from 'node:fs/promises';
@@ -40,7 +40,7 @@ function firstTable(html: string): { header: string[]; firstRow: string[] } {
   return { header: cells(rows[0] ?? '', 'th'), firstRow: cells(rows[1] ?? '', 'td') };
 }
 
-describe('SRD entries with tables (SPEC.md §5.5, §5.9)', () => {
+describe('SRD entries with tables (docs/content-model.md#tables-in-text, docs/content-model.md#srd-and-custom-entries)', () => {
   it('validate with their tables', async () => {
     const { content } = await tempLibrary(entries);
     const { errors } = await validateLibrary(content);
@@ -48,7 +48,7 @@ describe('SRD entries with tables (SPEC.md §5.5, §5.9)', () => {
   });
 });
 
-describe('table rendering (SPEC.md §9.5)', () => {
+describe('table rendering (docs/site.md#templates)', () => {
   it('renders a table with column headers, inline markup, and alignment', () => {
     const html = renderMarkdown('Intro.\n\n| Spell | Cost |\n|---|--:|\n| *Cure Wounds* | **1** |');
     expect(html).toContain('<p>Intro.</p>');
@@ -68,7 +68,7 @@ describe('table rendering (SPEC.md §9.5)', () => {
     expect(html).toContain('aria-label="Table: &lt;b&gt;a&lt;/b&gt;"');
   });
 
-  describe('table titles (SPEC.md §5.5)', () => {
+  describe('table titles (docs/content-model.md#tables-in-text)', () => {
     const titled = 'The GM chooses the omen from the Omens table.\n\n**Omens**\n\n| Omen | For Results That Will Be … |\n|---|---|\n| Weal | Good |';
 
     it('renders a bold line directly above a table as its caption, not as a paragraph', () => {

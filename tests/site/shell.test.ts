@@ -26,8 +26,8 @@ async function renderBase(props: Record<string, unknown>): Promise<string> {
   return container.renderToString(Base, { props, request: new Request('https://bardic-inspiration.github.io/ttrpg-library/about/') });
 }
 
-describe('site shell (SPEC.md §9.2, §11)', () => {
-  it('every page renders in the Base layout, except the print fragments (§10.4)', async () => {
+describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', () => {
+  it('every page renders in the Base layout, except the print fragments (docs/export.md#print)', async () => {
     const pages = (await readdir(PAGES, { recursive: true })).filter((f) => f.endsWith('.astro'));
     expect(pages).toContain('about.astro');
     const partials: string[] = [];

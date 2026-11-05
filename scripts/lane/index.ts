@@ -1,6 +1,6 @@
 export type Lane = 'content' | 'dev';
 
-/** Branch prefixes per lane (SPEC.md §12.4 "Work lanes"). */
+/** Branch prefixes per lane (docs/workflow.md#work-lanes). */
 export const LANE_PREFIXES: Record<Lane, readonly string[]> = {
   content: ['gen/', 'revise/', 'manual/'],
   dev: ['dev/', 'dependabot/'],
@@ -11,7 +11,7 @@ const CONTENT_PATHS = ['content/', 'assets/images/'];
 
 /**
  * Paths no code or test reads, so a PR that changes only these skips the
- * content and dev checks (SPEC.md §12.1 "Docs-only PRs"): Markdown at the repo
+ * content and dev checks (docs/workflow.md#docs-only-prs): Markdown at the repo
  * root, `docs/**`, and the issue and dev PR templates. A file that a test or
  * script reads (`docs/routines.md`, the content PR template) stays code.
  */
@@ -61,7 +61,7 @@ export function isContentPath(path: string): boolean {
   return CONTENT_PATHS.some((prefix) => path.startsWith(prefix));
 }
 
-/** Applies the lane rules (SPEC.md §12.4) to a PR. */
+/** Applies the lane rules (docs/workflow.md#lane-rules) to a PR. */
 export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
   const lane = laneOf(branch);
   const contentChanged = paths.some(isContentPath);
@@ -102,7 +102,7 @@ export interface WaitOptions {
 
 /**
  * Reads a PR's current labels until `label` appears, for up to `attempts`
- * reads, and returns the last labels read (SPEC.md §12.4). The labeler adds
+ * reads, and returns the last labels read (docs/workflow.md#labeling). The labeler adds
  * `migration` a few seconds after a PR opens or changes, with the workflow's
  * token, and GitHub starts no new run for that label event, so the lane job
  * waits for it instead of reading only the labels in its event payload.
