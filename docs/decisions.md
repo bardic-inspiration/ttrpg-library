@@ -231,3 +231,12 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Markdown files cite docs with relative links titled by the heading; code cites `docs/<file>.md#<heading>` as plain text. | Readable in both places, and both forms are checked | #108 |
 | v1's allowance for a format-fix PR to add the SRD entries that motivated it isn't carried over: it was scoped to the SRD import milestone, which is done. | | #108 |
 | Gap fill is off until v2 is built; routines take `request` issues only. | Entries made in the v1 shape would only add to v2's schema migrations | #95, #109 |
+
+### Linking
+
+| Decision | Why | Source |
+|---|---|---|
+| v1's ref standard carries into v2 unchanged: ref objects at `RefOrText` fields and `{ref:…}` tokens in text, keyed by `<type>/<id>`, with relations typed by field, labels in the ruleset's `refs.ts`, and back-references computed. Existing entries need no migration. | It works in practice and already covers what new types need; P3 | #111 |
+| A new type links through `RefOrText` fields it declares, with a label pair in `refs.ts` for a relation that needs its own wording, rather than a new link mechanism. Each type's fields and labels are set in the type extension design. | P4: a new link is a schema and label addition | #111, #112 |
+| Linking is part of authoring: an entry links every library entry it mentions or uses, and a link pass links mentions written before their target existed. | Already the `generate` and `srd-import` rules; the owner confirmed them as the standard | #111 |
+| An area with no build of its own (`linking.md`) is deleted by the first build PR that exercises it. | Keeps the stage spec's "emptied by building it" rule | #111 |
