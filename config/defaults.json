@@ -2,6 +2,6 @@
   "ruleset": "dnd-5e-2024",
   "count": 5,
   "tags": {},
-  "gapFill": { "enabled": true, "count": 3 },
+  "gapFill": { "enabled": false, "count": 3 },
   "validateRetries": 3
 }

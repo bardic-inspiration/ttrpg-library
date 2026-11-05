@@ -230,3 +230,4 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A link check runs in the `lane` job, so docs-only PRs get it, and in `npm run check`. It fails on a cited file or heading that doesn't exist, a broken relative Markdown link, and any section-number citation. | A renamed heading is most likely in a docs-only PR; P8 | #108 |
 | Markdown files cite docs with relative links titled by the heading; code cites `docs/<file>.md#<heading>` as plain text. | Readable in both places, and both forms are checked | #108 |
 | v1's allowance for a format-fix PR to add the SRD entries that motivated it isn't carried over: it was scoped to the SRD import milestone, which is done. | | #108 |
+| Gap fill is off until v2 is built; routines take `request` issues only. | Entries made in the v1 shape would only add to v2's schema migrations | #95, #109 |

@@ -88,6 +88,10 @@ leaves out, and request tags merge over default tags. `count` and
 trust, and no batch has a size limit. `scripts/generate/defaults.ts` loads and
 checks the file and applies it to a request.
 
+**Gap fill is off** (`gapFill.enabled: false`) until v2 is built, so routines
+take `request` issues only. Every entry generated in the v1 shape is one more
+for v2's schema changes to migrate. Run-order step 5 skips while it's off.
+
 ### The generate skill
 
 `.claude/skills/generate/SKILL.md` is generic across types and rulesets. Its
