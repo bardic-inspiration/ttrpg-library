@@ -75,14 +75,19 @@ Every content session, routine or not, follows these:
 2. **Branch** from `main` as `dev/<short-description>`.
 3. **Write tests first** for new behavior, using Vitest suites and fixtures
    in `tests/`. Bug fixes come with a test that fails before the fix.
-4. **Run the dev-lane checks** (below) before every push.
-5. **Open a PR** from the [`dev.md`](.github/PULL_REQUEST_TEMPLATE/dev.md)
+4. **Update the docs as you go.** In the same PR, update the `docs/` files
+   that describe what changed, delete the part you built from the stage spec,
+   and add a row to `docs/decisions.md` for each decision the PR makes (see
+   "Rules"). A renamed heading means updating its citations; the link check
+   catches any you miss.
+5. **Run the dev-lane checks** (below) before every push.
+6. **Open a PR** from the [`dev.md`](.github/PULL_REQUEST_TEMPLATE/dev.md)
    template, titled `<area>: <summary>`. Use the area label as `<area>`
    (`ui`, `ruleset`, `generation`, `ci`), or `docs`, `spec`, `scripts`, or
    `config` where none fits. PRs are squash-merged with the title as the
    commit message, so `git log` on `main` reads one line per change. Link
    the issue with `Closes #N`.
-6. **Watch it to green.** Fix red CI and conflicts on the same branch, and
+7. **Watch it to green.** Fix red CI and conflicts on the same branch, and
    answer review comments.
 
 Docs-only changes skip step 3. To explore an idea without committing to it,
