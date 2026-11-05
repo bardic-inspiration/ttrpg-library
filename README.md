@@ -11,8 +11,9 @@ https://bardic-inspiration.github.io/ttrpg-library/
 
 ## Status
 
-Being built toward v1. The delivery plan is [`SPEC.md`](SPEC.md) §16; each
-milestone is tracked as a GitHub issue.
+v1 is complete (tagged `v1.0.0`) and v2 is in design. The v2 design is in
+[`spec/v2/`](spec/v2/README.md). Each milestone is a tracking issue with its
+tasks as ordered sub-issues.
 
 ## How this repo is built
 
@@ -21,7 +22,8 @@ running on a schedule — in small, verifiable steps:
 
 - **The task is the prompt, the PR is the response, review is the evaluation,
   and the squash commit on `main` is the record.**
-- [`SPEC.md`](SPEC.md) is the source of truth for what to build.
+- [`docs/`](docs/README.md) describes what is built, and
+  [`spec/v2/`](spec/v2/README.md) holds the design that isn't built yet.
 - Work runs in two lanes: **content** (entries, opened by routines) and
   **development** (everything else, opened by sessions you start). CI keeps
   them apart.
@@ -46,4 +48,4 @@ The rest of the commands, and how work is done here, are in
 ## License
 
 Code is MIT; content is CC-BY-4.0; the library includes SRD 5.2 material
-under CC-BY-4.0 ([`SPEC.md`](SPEC.md) §11).
+under CC-BY-4.0 ([`docs/licensing.md`](docs/licensing.md)).
