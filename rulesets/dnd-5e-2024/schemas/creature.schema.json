@@ -8,6 +8,7 @@
   "required": ["size", "creatureType", "alignment", "ac", "hitDice", "speed", "abilities", "languages", "cr"],
   "properties": {
     "size": {
+      "description": "One size, or two for \"Medium or Small\". The first sets the hit die.",
       "type": "array",
       "minItems": 1,
       "maxItems": 2,
@@ -17,6 +18,7 @@
       }
     },
     "creatureType": {
+      "description": "The SRD creature type.",
       "enum": ["aberration", "beast", "celestial", "construct", "dragon", "elemental", "fey", "fiend", "giant", "humanoid", "monstrosity", "ooze", "plant", "undead"]
     },
     "shortName": {
@@ -29,6 +31,7 @@
       "enum": ["tiny", "small", "medium", "large", "huge", "gargantuan"]
     },
     "descriptors": {
+      "description": "Parenthetical tags after the type, such as \"Wizard\".",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -37,10 +40,12 @@
       }
     },
     "alignment": {
+      "description": "Free text from the SRD alignment set, plus \"unaligned\" and \"any alignment\".",
       "type": "string",
       "minLength": 1
     },
     "ac": {
+      "description": "Armor Class, authored.",
       "type": "object",
       "additionalProperties": false,
       "required": ["value"],
@@ -51,12 +56,14 @@
           "maximum": 30
         },
         "note": {
+          "description": "Printed after the value, such as \"natural armor\".",
           "type": "string",
           "minLength": 1
         }
       }
     },
     "initiative": {
+      "description": "Omit for a plain DEX-based initiative.",
       "type": "object",
       "additionalProperties": false,
       "minProperties": 1,
@@ -70,11 +77,13 @@
       }
     },
     "hitDice": {
+      "description": "The number of hit dice. The die, modifier, formula, and average are derived.",
       "type": "integer",
       "minimum": 1,
       "maximum": 99
     },
     "speed": {
+      "description": "Speeds in feet, multiples of 5. walk may be 0; another mode is at least 5. A mode written in note is left out of the fields.",
       "type": "object",
       "additionalProperties": false,
       "required": ["walk"],
@@ -110,6 +119,7 @@
       }
     },
     "abilities": {
+      "description": "Ability scores.",
       "type": "object",
       "additionalProperties": false,
       "required": ["str", "dex", "con", "int", "wis", "cha"],
@@ -147,6 +157,7 @@
       }
     },
     "saveProficiencies": {
+      "description": "Abilities whose saves add the proficiency bonus.",
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
@@ -155,6 +166,7 @@
       }
     },
     "skills": {
+      "description": "Skills, keyed by the SRD skill in kebab-case: a proficiency level, or { proficiency?, adjust } for an SRD bonus no level reaches.",
       "type": "object",
       "minProperties": 1,
       "propertyNames": {
@@ -182,6 +194,7 @@
       }
     },
     "vulnerabilities": {
+      "description": "Damage types, or a string for a qualified entry, printed as written.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -197,6 +210,7 @@
       }
     },
     "resistances": {
+      "description": "Damage types, or a string for a qualified entry, printed as written.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -212,6 +226,7 @@
       }
     },
     "immunities": {
+      "description": "Damage and condition immunities. A string is a qualified entry, printed as written: \"Charmed (except from its vampire master)\".",
       "type": "object",
       "additionalProperties": false,
       "minProperties": 1,
@@ -250,6 +265,7 @@
       }
     },
     "gear": {
+      "description": "Items the creature carries.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -257,6 +273,7 @@
       }
     },
     "senses": {
+      "description": "Senses in feet. Passive Perception is derived, so the Senses line always displays.",
       "type": "object",
       "additionalProperties": false,
       "minProperties": 1,
@@ -285,11 +302,13 @@
       }
     },
     "languages": {
+      "description": "What the creature speaks and understands. Each item is free text, so \"Common plus one other language\" is one item.",
       "type": "object",
       "additionalProperties": false,
       "required": ["spoken"],
       "properties": {
         "spoken": {
+          "description": "Languages the creature speaks, and so understands. May be empty.",
           "type": "array",
           "items": {
             "type": "string",
@@ -297,6 +316,7 @@
           }
         },
         "understood": {
+          "description": "Languages it understands but can't speak.",
           "type": "array",
           "minItems": 1,
           "items": {
@@ -305,22 +325,27 @@
           }
         },
         "telepathy": {
+          "description": "Telepathy range in feet.",
           "type": "integer",
           "minimum": 1
         },
         "note": {
+          "description": "Printed in parentheses after the whole line.",
           "type": "string",
           "minLength": 1
         }
       }
     },
     "cr": {
+      "description": "Challenge rating: 0, 0.125, 0.25, 0.5, or 1 to 30, displayed as fractions. XP and PB are derived.",
       "enum": [0, 0.125, 0.25, 0.5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
     },
     "lair": {
+      "description": "Adds the derived in-lair XP.",
       "const": true
     },
     "traits": {
+      "description": "Traits.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -328,6 +353,7 @@
       }
     },
     "actions": {
+      "description": "Actions. Omitted for a creature with only a Reaction; Spellcasting, when present, displays under Actions.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -335,6 +361,7 @@
       }
     },
     "bonusActions": {
+      "description": "Bonus actions.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -342,6 +369,7 @@
       }
     },
     "reactions": {
+      "description": "Reactions.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -349,19 +377,23 @@
       }
     },
     "legendaryActions": {
+      "description": "Legendary actions, opened by the italic uses line and then intro.",
       "type": "object",
       "additionalProperties": false,
       "required": ["uses", "items"],
       "properties": {
         "uses": {
+          "description": "Legendary Action Uses.",
           "type": "integer",
           "minimum": 1
         },
         "usesInLair": {
+          "description": "Uses in the creature's lair, printed \"(4 in Lair)\".",
           "type": "integer",
           "minimum": 1
         },
         "intro": {
+          "description": "The text after the uses line.",
           "$ref": "common.schema.json#/$defs/Text"
         },
         "items": {
@@ -374,11 +406,13 @@
       }
     },
     "spellcasting": {
+      "description": "The 5.2 Spellcasting action: an intro naming the creature and its spellcasting ability, then the spell lists.",
       "type": "object",
       "additionalProperties": false,
       "required": ["ability"],
       "properties": {
         "ability": {
+          "description": "The spellcasting ability.",
           "$ref": "common.schema.json#/$defs/Ability"
         },
         "noSaveDc": {
@@ -391,12 +425,15 @@
           "minLength": 1
         },
         "adjust": {
+          "description": "Applied to the derived spell save DC and attack bonus.",
           "$ref": "common.schema.json#/$defs/Adjust"
         },
         "includeAttack": {
+          "description": "Shows the derived spell attack bonus in the intro.",
           "const": true
         },
         "atWill": {
+          "description": "Spells cast at will.",
           "type": "array",
           "minItems": 1,
           "items": {
@@ -404,6 +441,7 @@
           }
         },
         "perDay": {
+          "description": "Spells by uses per day.",
           "type": "object",
           "additionalProperties": false,
           "minProperties": 1,
@@ -432,6 +470,7 @@
           }
         },
         "note": {
+          "description": "Text after the spell lists.",
           "$ref": "common.schema.json#/$defs/Text"
         }
       }
@@ -439,6 +478,7 @@
   },
   "$defs": {
     "Action": {
+      "description": "A trait or action. Attack and save lines are generated from its fields in 5.2 form.",
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "kind"],
@@ -448,19 +488,24 @@
           "minLength": 1
         },
         "kind": {
+          "description": "The kind decides which fields apply: ability and reach for melee attacks, range for ranged ones, save for saves, text only on other.",
           "enum": ["melee-attack", "ranged-attack", "melee-or-ranged-attack", "save", "other"]
         },
         "ability": {
+          "description": "The attack ability, or the ability the save DC is based on.",
           "$ref": "common.schema.json#/$defs/Ability"
         },
         "adjust": {
+          "description": "Applied to the derived attack bonus or DC.",
           "$ref": "common.schema.json#/$defs/Adjust"
         },
         "reach": {
+          "description": "Reach in feet, for melee attacks.",
           "type": "integer",
           "minimum": 5
         },
         "range": {
+          "description": "Range in feet, for ranged attacks.",
           "type": "object",
           "additionalProperties": false,
           "required": ["normal"],
@@ -476,10 +521,12 @@
           }
         },
         "attackNote": {
+          "description": "A parenthetical after the attack bonus, such as \"with Advantage if the target is Grappled by the bugbear\".",
           "type": "string",
           "minLength": 1
         },
         "save": {
+          "description": "The save, with what it targets, such as \"each creature in a 15-foot Cone\".",
           "type": "object",
           "additionalProperties": false,
           "required": ["ability", "targets"],
@@ -494,6 +541,7 @@
           }
         },
         "damage": {
+          "description": "Damage, the first primary and the rest riders.",
           "type": "array",
           "minItems": 1,
           "items": {
@@ -501,24 +549,31 @@
           }
         },
         "onHit": {
+          "description": "Prose after an attack's damage.",
           "$ref": "common.schema.json#/$defs/Text"
         },
         "onFailure": {
+          "description": "Prose after a save's failure damage.",
           "$ref": "common.schema.json#/$defs/Text"
         },
         "onSuccess": {
+          "description": "The success line.",
           "$ref": "common.schema.json#/$defs/Text"
         },
         "onFailureOrSuccess": {
+          "description": "The \"Failure or Success:\" line after the success line, for what happens either way.",
           "$ref": "common.schema.json#/$defs/Text"
         },
         "text": {
+          "description": "Full prose for a trait or other action. Derived values only through tokens.",
           "$ref": "common.schema.json#/$defs/Text"
         },
         "recharge": {
+          "description": "Printed in the name's parentheses as SRD 5.2 prints it, such as \"Recharge 5–6\" or \"Recharge after a Long Rest\".",
           "enum": ["4-6", "5-6", "6", "short-or-long-rest", "long-rest"]
         },
         "uses": {
+          "description": "Limited uses, such as \"3/day\", printed title-cased: \"(3/Day)\".",
           "type": "string",
           "minLength": 1
         }
