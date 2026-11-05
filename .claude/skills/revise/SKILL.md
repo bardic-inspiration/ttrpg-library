@@ -1,17 +1,17 @@
 ---
 name: revise
-description: Revise library entries from owner review comments on an open routine PR (gen/ or revise/ branch), or from a `revise` issue about merged entries, validate them, and push. Generic across types and rulesets. Use from a routine run (SPEC.md §8.2 steps 2 and 3) or when asked to address review comments on a content PR or fulfil a `revise` issue. Not for new entries; those use the generate skill.
+description: Revise library entries from owner review comments on an open routine PR (gen/ or revise/ branch), or from a `revise` issue about merged entries, validate them, and push. Generic across types and rulesets. Use from a routine run (docs/generation.md#run-order steps 2 and 3) or when asked to address review comments on a content PR or fulfil a `revise` issue. Not for new entries; those use the generate skill.
 ---
 
 # Revise
 
 Changes existing entries in response to the owner, then validates and pushes
-them. `SPEC.md` §8.5 is the source of truth; this skill is how to carry it
+them. [Revisions](../../../docs/generation.md#revisions) is the source of truth; this skill is how to carry it
 out. Follow it exactly, in order. Never skip validation, and never push a
 failing change.
 
 The routine run that calls this skill has already synced `main` and chosen
-what to revise (§8.2 steps 1 to 3). This skill starts after that.
+what to revise ([Run order](../../../docs/generation.md#run-order) steps 1 to 3). This skill starts after that.
 
 `defaults.<key>` below means that key of `config/defaults.json`.
 
@@ -25,14 +25,14 @@ Exactly one of:
 - **A `revise` issue.** One open issue with the `revise` label, for entries
   already on `main`. A revise-request form body has a `### Entry IDs` heading
   (one entry per line, as `<type>/<id>`, or a bare `id` when only one type
-  has it; §5.2) and an `### Instruction` heading. A free-form `revise`
+  has it; [IDs and names](../../../docs/content-model.md#ids-and-names)) and an `### Instruction` heading. A free-form `revise`
   issue is read for the same two things in its prose. Read the issue's
   comments too. Work on a new branch (step 5).
 
 If a revise issue can't be fulfilled as written (an ID that isn't in the
 library, a bare ID that more than one type has, an instruction that contradicts itself), don't edit anything:
 comment one question on the issue, add `needs-info`, remove `in-progress` if
-it has it, and stop (§8.2 step 6).
+it has it, and stop ([Run order](../../../docs/generation.md#run-order) step 6).
 
 ## Pending comments
 
@@ -76,7 +76,7 @@ Then read every entry file the revision may touch, under `content/`.
   entry's `meta.source.issues`, or the bucket in `meta.source.gapFill`.
 
 An entry with `meta.source.srd` is an SRD entry, reproduced unmodified from
-SRD 5.2 (§5.9). Change it only to bring it closer to the SRD, such as a
+SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)). Change it only to bring it closer to the SRD, such as a
 transcription fix. Don't apply any other change: reply (or, for a revise
 issue, ask on the issue with `needs-info`) that SRD entries stay as the SRD
 has them, and suggest requesting a custom variant. `regenerate <id>` on an SRD
@@ -93,12 +93,12 @@ Edit only the affected files.
 
 - **Free text.** Change what the comment asks and nothing else. Write the
   same way the `generate` skill's step 3 says: inputs only, never a value the
-  ruleset derives (§6.1); derived numbers in prose as tokens (§6.4); `adjust`
+  ruleset derives ([Inputs and derived values](../../../docs/rulesets.md#inputs-and-derived-values)); derived numbers in prose as tokens ([Text tokens](../../../docs/rulesets.md#text-tokens)); `adjust`
   only for a deliberate deviation, with a reason for the reply and PR body;
-  the markdown subset (§5.5); no non-SRD proper nouns (§11); no "none"
-  stand-ins (§5.8).
+  the markdown subset ([Text fields](../../../docs/content-model.md#text-fields)); no non-SRD proper nouns ([Blocklist](../../../docs/licensing.md#blocklist)); no "none"
+  stand-ins ([Situational fields](../../../docs/content-model.md#situational-fields)).
 - **Never change an entry's `id` or move its file.** A rename changes `name`
-  only and keeps the old `id` (§5.2).
+  only and keeps the old `id` ([IDs and names](../../../docs/content-model.md#ids-and-names)).
 - **`drop <id>`.** Delete the entry's file. If other entries reference it,
   validation fails on the dangling ref (step 4). Then don't push: restore the
   file, and reply asking how to proceed (keep the entry, drop the
@@ -134,7 +134,7 @@ body.
 ## Step 5: Commit and push
 
 Stage only the changed files under `content/`. A content PR that changes
-anything else fails the `lane` check (§12.4). Commit once for the round, with
+anything else fails the `lane` check ([Lane rules](../../../docs/workflow.md#lane-rules)). Commit once for the round, with
 the message `Revise <ids>: <short reason>`, where `<ids>` lists every entry
 the round changed, dropped, or regenerated, comma-separated.
 
@@ -151,7 +151,7 @@ the round changed, dropped, or regenerated, comma-separated.
   - Delete the **Gap fill** section.
   - `Closes #<issue>`.
 
-The `content` label is applied from the branch prefix (§12.4); don't add
+The `content` label is applied from the branch prefix ([Lane rules](../../../docs/workflow.md#lane-rules)); don't add
 labels to the PR.
 
 ## Step 6: Reply
@@ -171,4 +171,4 @@ For review comments, after the push:
 
 For a revise issue, the PR's `Closes` line is the reply. Leave `in-progress`
 on the issue if it has it: an open linked PR is what keeps the claim alive
-(§8.2 step 7), and merging closes the issue.
+([Run order](../../../docs/generation.md#run-order) step 7), and merging closes the issue.

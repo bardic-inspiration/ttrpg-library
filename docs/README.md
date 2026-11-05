@@ -1,33 +1,26 @@
 # Docs
 
 The index of `docs/` and the conventions every doc follows. The approach was
-decided in #196.
-
-Until the `SPEC.md` migration (#108) lands, `SPEC.md` remains the source of
-truth for what the library does. The migration writes the topic files listed
-under "Coming with the migration" and moves them into the index.
+decided in #196. These docs describe what is built; design not yet built is in
+the stage spec, [`spec/v2/`](../spec/v2/README.md). The v1 spec is kept at the
+`v1.0.0` tag.
 
 ## Index
 
 | File | Covers | Read it when |
 |---|---|---|
+| [`architecture.md`](architecture.md) | What the library is, the pipeline, technology, repo layout, npm scripts, and the shared terms | Starting out, or looking for where something lives |
+| [`content-model.md`](content-model.md) | Entries in every ruleset: envelope, IDs, tags, meta, text, tables, images, refs, situational fields, SRD vs custom entries, validation | Writing or validating any entry, or changing what an entry is |
+| [`rulesets.md`](rulesets.md) | The ruleset module, derived values, tokens, and how creatures, magic items, and spells print | Working on `rulesets/`, a type's schema, or a stat block's wording |
+| [`generation.md`](generation.md) | Requests, labels, the run order, defaults, the `generate` and `revise` skills, guidelines, schedule, gap buckets, SRD import | Changing how routines or skills work |
+| [`site.md`](site.md) | The type registry, index build, pages, gallery, detail page, templates | Working on `site/`, `config/types.json`, or the index builder |
+| [`styling.md`](styling.md) | The styling system, tokens, themes, visual direction, accessibility, refinement workflow | Changing how anything looks, or checking accessibility |
+| [`export.md`](export.md) | Exporters, JSON, PNG, print, `config/export.json` | Working on exports or adding a translator |
+| [`workflow.md`](workflow.md) | Lanes, labeling, CI, docs-only PRs, the link check, deploy, repo settings, review | Changing CI or lanes, or asking why a check failed |
+| [`licensing.md`](licensing.md) | Licenses, SRD attribution, the blocklist, new rulesets | Adding content sources, art, or a ruleset |
 | [`decisions.md`](decisions.md) | What each version decided and why, and the principles that carry forward | Weighing a design, or asking why something is the way it is |
 | [`routines.md`](routines.md) | Routine prompts, schedule, and run order | Setting up or changing a routine; a routine reads it on every run |
 | [`SRD_CC_v5.2.pdf`](SRD_CC_v5.2.pdf) | The SRD 5.2 reference copy | Transcribing or checking an SRD entry |
-
-### Coming with the migration
-
-| File | Covers |
-|---|---|
-| `architecture.md` | Pipeline overview, technology choices, repo layout, and the shared terms (entry, type, ruleset, facet, tag, ref, token, derived value) every doc and the stage spec use as defined |
-| `content-model.md` | Envelope, IDs, tags, meta, text fields, refs, situational fields, SRD vs custom entries, validation |
-| `rulesets.md` | The ruleset module contract, derivation, tokens, notes per type for `dnd-5e-2024` |
-| `generation.md` | Requests, routines, skills, defaults, gap fill, revision, SRD import |
-| `site.md` | Index build, gallery, detail pages, templates |
-| `styling.md` | Tokens, themes, accessibility, refinement workflow |
-| `export.md` | Exporters, JSON, PNG, print |
-| `workflow.md` | Lanes, CI, labels, repo settings, review, issue tracking |
-| `licensing.md` | Licenses, attribution, blocklist, review for a new ruleset |
 
 ## Conventions
 
@@ -70,7 +63,8 @@ until the project has human newcomers.
 - Cite a doc as `docs/<file>.md#<heading>`, using GitHub's anchor for the
   heading. No section numbers.
 - Renaming a heading breaks its citations. Update them in the same PR. The
-  link check (#108) catches any that are missed.
+  link check ([workflow.md](workflow.md#link-check)) catches any that are
+  missed.
 
 ### Decisions
 

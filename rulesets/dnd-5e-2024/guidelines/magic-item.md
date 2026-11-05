@@ -1,12 +1,12 @@
 # Magic item guideline (dnd-5e-2024)
 
 How to write a `magic-item` entry. The schema is
-`schemas/magic-item.schema.json` and SPEC.md §6.6 lists every field. This file
+`schemas/magic-item.schema.json` and [Magic items](../../../docs/rulesets.md#magic-items) lists every field. This file
 covers what the schema can't: voice, names, balance, prose, and when an item
 needs a dependency entry.
 
 These rules are for custom entries, original to this library. An SRD entry is
-reproduced from SRD 5.2 unmodified (SPEC.md §5.9): its name, numbers, and
+reproduced from SRD 5.2 unmodified ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)): its name, numbers, and
 rules text are the SRD's, so tone, naming, and balance targets don't apply to
 it. It still follows the token rules in prose style and the dependencies
 section below.
@@ -60,7 +60,7 @@ Exemplar (summary, description, and effect):
 ## Balance targets
 
 These are this library's own targets, not SRD tables. CI doesn't enforce them;
-review does (SPEC.md §6.8). Choose `rarity` from what the item does, not the
+review does ([Consistency checks](../../../docs/rulesets.md#consistency-checks)). Choose `rarity` from what the item does, not the
 other way round.
 
 | Rarity | Flat bonus (attack, damage, AC, saves) | Spells it casts (highest level) | Spell save DC / spell attack bonus | Extra damage per hit | Charges |
@@ -114,12 +114,12 @@ authored, so write them as numbers.
   to cast *Frost Lance* from it") without repeating the DC or attack bonus; a
   repeated value is a validator warning.
 - The `charges.depletion` text is its own field. Don't repeat it in `effect`.
-- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
+- Markdown subset only ([Text fields](../../../docs/content-model.md#text-fields)): paragraphs, bold, italic, lists, and
   pipe tables. No headings or links. Italicize spell names: *Frost Lance*.
   A named property starts with a bold-italic inline heading:
-  `***Regaining Charges.***` (SPEC.md §9.5).
+  `***Regaining Charges.***` ([Templates](../../../docs/site.md#templates)).
 - Don't use braces in item text except for a `{ref:<type>/<id>}` link
-  (SPEC.md §5.7). The derived-number tokens are a creature feature and don't
+  ([References](../../../docs/content-model.md#references)). The derived-number tokens are a creature feature and don't
   render here.
 
 ## Dependencies and SRD references
@@ -132,7 +132,7 @@ string.
 - **Use a plain string** for an SRD 5.2 spell that isn't in the library,
   spelled exactly as the SRD names it ("Fireball", "Cure Wounds"). Don't add
   an SRD spell to the library just to ref it; SRD entries are added only when
-  a request asks for them (SPEC.md §5.9).
+  a request asks for them ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
 - An SRD item never gets a dependency entry: the spells it casts are SRD
   spells, reffed if they're in the library and plain strings otherwise.
 - **Create a spell entry** in the same batch when the item's power is a new
@@ -142,14 +142,14 @@ string.
   and isn't a spell anyone would learn.
 - **Mentioning a library entry** in `effect` links it with a token instead of
   writing its name: `*{ref:spell/frost-lance}*` for a spell, which keeps the
-  italics. The site shows the entry's name, linked (SPEC.md §5.7).
+  italics. The site shows the entry's name, linked ([References](../../../docs/content-model.md#references)).
 - `baseItem` and any item named in `effect` use SRD names. The blocklist applies
   to every plain string.
 
 ### Stat blocks the item prints
 
 Some items bring a creature into play. Decide where its stat block lives
-(SPEC.md §6.7):
+([Spells](../../../docs/rulesets.md#spells)):
 
 - **A creature that stands on its own** is its own creature entry. Link it
   from `effect` with `{ref:creature/<id>}`. If it's new, write it to

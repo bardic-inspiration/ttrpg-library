@@ -1,4 +1,4 @@
-// The detail page's export controls (SPEC.md §9.4, §10.1): one button per
+// The detail page's export controls (docs/site.md#detail-page, docs/export.md#exporter-interface): one button per
 // configured exporter that offers entry scope, with a page size selector
 // beside any exporter that takes one (Print). The controls need JavaScript,
 // so they render only once the island hydrates; without it the page shows

@@ -1,7 +1,7 @@
-// Text for the dnd-5e-2024 magic item card in SRD 5.2 form (SPEC.md §6.6,
-// §9.5). Items have no derived values: charge costs, save DCs, and attack
+// Text for the dnd-5e-2024 magic item card in SRD 5.2 form (docs/rulesets.md#magic-items,
+// docs/site.md#templates). Items have no derived values: charge costs, save DCs, and attack
 // bonuses are authored, and are only formatted here. Optional fields display
-// by presence alone (SPEC.md §5.8).
+// by presence alone (docs/content-model.md#situational-fields).
 
 import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { present, whenPresent } from './display.ts';

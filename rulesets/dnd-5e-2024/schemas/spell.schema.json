@@ -1,35 +1,39 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/spell.schema.json",
-  "title": "dnd-5e-2024 spell stats (SPEC.md §6.7)",
-  "description": "Stored inputs only; spells derive nothing in v1 except an embedded stat block's ability modifiers and saves (SPEC.md §6.2). Cross-field rules are checks in checks.ts (SPEC.md §6.8).",
+  "title": "dnd-5e-2024 spell stats (docs/rulesets.md#spells)",
+  "description": "Stored inputs only; spells derive nothing in v1 except an embedded stat block's ability modifiers and saves (docs/rulesets.md#the-ruleset-module). Cross-field rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
   "type": "object",
   "additionalProperties": false,
   "required": ["level", "school", "classes", "castingTime", "ritual", "range", "components", "duration", "effect"],
   "properties": {
-    "level": { "type": "integer", "minimum": 0, "maximum": 9 },
+    "level": { "description": "Spell level; 0 is a cantrip.", "type": "integer", "minimum": 0, "maximum": 9 },
     "school": {
+      "description": "The school of magic.",
       "enum": ["abjuration", "conjuration", "divination", "enchantment", "evocation", "illusion", "necromancy", "transmutation"]
     },
     "classes": {
+      "description": "The classes whose lists include the spell.",
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
       "items": { "enum": ["bard", "cleric", "druid", "paladin", "ranger", "sorcerer", "warlock", "wizard"] }
     },
     "castingTime": {
+      "description": "Casting time.",
       "type": "object",
       "additionalProperties": false,
       "required": ["amount", "unit"],
       "properties": {
         "amount": { "type": "integer", "minimum": 1 },
         "unit": { "enum": ["action", "bonus-action", "reaction", "minute", "hour"] },
-        "trigger": { "$ref": "common.schema.json#/$defs/Text" },
+        "trigger": { "description": "What a reaction or triggered bonus action responds to, rendered inline after \"Reaction, which you take\". Rules text, so a spell name can be italic.", "$ref": "common.schema.json#/$defs/Text" },
         "note": { "description": "Printed as written after the unit, for a casting time the fields can't express: \"(Overgrowth) or 8 hours (Enrichment)\".", "type": "string", "minLength": 1 }
       }
     },
-    "ritual": { "type": "boolean" },
+    "ritual": { "description": "The spell can be cast as a ritual.", "type": "boolean" },
     "range": {
+      "description": "Range. A distance range has feet or miles, not both.",
       "type": "object",
       "additionalProperties": false,
       "required": ["kind"],
@@ -38,6 +42,7 @@
         "feet": { "type": "integer", "minimum": 1 },
         "miles": { "type": "integer", "minimum": 1 },
         "area": {
+          "description": "The area of effect.",
           "type": "object",
           "additionalProperties": false,
           "required": ["shape", "size"],
@@ -49,6 +54,7 @@
       }
     },
     "components": {
+      "description": "Components.",
       "type": "object",
       "additionalProperties": false,
       "required": ["v", "s"],
@@ -56,18 +62,20 @@
         "v": { "type": "boolean" },
         "s": { "type": "boolean" },
         "m": {
+          "description": "The material component.",
           "type": "object",
           "additionalProperties": false,
           "required": ["text"],
           "properties": {
-            "text": { "type": "string", "minLength": 1 },
-            "costGp": { "type": "number", "exclusiveMinimum": 0 },
-            "consumed": { "const": true }
+            "text": { "description": "The material exactly as printed, including any cost and \"which the spell consumes\" wording.", "type": "string", "minLength": 1 },
+            "costGp": { "description": "The cost in GP, for filters and checks only; a cost in other coins converts (2 CP is 0.02). Adds no words to the card.", "type": "number", "exclusiveMinimum": 0 },
+            "consumed": { "description": "The spell consumes the material. Data only; adds no words to the card.", "const": true }
           }
         }
       }
     },
     "duration": {
+      "description": "Duration, read \"Instantaneous\", \"1 hour\", \"Concentration, up to 1 minute\", and so on.",
       "type": "object",
       "additionalProperties": false,
       "required": ["kind", "concentration"],
@@ -75,13 +83,13 @@
         "kind": { "enum": ["instantaneous", "timed", "until-dispelled", "until-dispelled-or-triggered", "special"] },
         "amount": { "type": "integer", "minimum": 1 },
         "unit": { "enum": ["round", "minute", "hour", "day"] },
-        "upTo": { "const": true },
+        "upTo": { "description": "A timed duration without Concentration that the SRD prints as \"Up to 8 hours\".", "const": true },
         "concentration": { "type": "boolean" }
       }
     },
-    "effect": { "$ref": "common.schema.json#/$defs/Text" },
-    "higherLevels": { "$ref": "common.schema.json#/$defs/Text" },
-    "cantripUpgrade": { "$ref": "common.schema.json#/$defs/Text" },
-    "statBlocks": { "$ref": "common.schema.json#/$defs/StatBlocks" }
+    "effect": { "description": "The rules text.", "$ref": "common.schema.json#/$defs/Text" },
+    "higherLevels": { "description": "\"Using a Higher-Level Spell Slot\". Leveled spells only.", "$ref": "common.schema.json#/$defs/Text" },
+    "cantripUpgrade": { "description": "\"Cantrip Upgrade\". Cantrips only.", "$ref": "common.schema.json#/$defs/Text" },
+    "statBlocks": { "description": "Stat blocks printed only inside this spell, such as Summon Dragon's Draconic Spirit.", "$ref": "common.schema.json#/$defs/StatBlocks" }
   }
 }

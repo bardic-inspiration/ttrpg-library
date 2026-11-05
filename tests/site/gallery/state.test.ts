@@ -1,4 +1,4 @@
-// Gallery URL state (SPEC.md §9.3 "URL state").
+// Gallery URL state (docs/site.md#gallery "URL state").
 import { beforeAll, describe, expect, it } from 'vitest';
 import { galleryConfig, type GalleryConfig } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery, toQuery } from '../../../site/src/lib/gallery/state.ts';
@@ -26,7 +26,7 @@ describe('route defaults', () => {
 });
 
 describe('parseQuery and toQuery', () => {
-  it('reads the §9.3 example and writes the same view back, filters in registry order', () => {
+  it('reads the docs/site.md#gallery example and writes the same view back, filters in registry order', () => {
     const query = '?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8&f.tags.theme=fire';
     const state = parseQuery(query, creature);
     expect(state.q).toBe('frost');

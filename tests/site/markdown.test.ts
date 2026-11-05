@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { renderMarkdown } from '../../site/src/lib/markdown.ts';
 
-describe('renderMarkdown (SPEC.md §5.5)', () => {
+describe('renderMarkdown (docs/content-model.md#text-fields)', () => {
   it('renders the subset: paragraphs, bold, italic, and lists', () => {
     const html = renderMarkdown('One **two** *three*.\n\n- a\n- b\n\n1. c');
     expect(html).toContain('<p>One <strong>two</strong> <em>three</em>.</p>');

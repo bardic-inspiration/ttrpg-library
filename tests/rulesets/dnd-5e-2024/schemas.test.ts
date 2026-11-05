@@ -6,7 +6,7 @@ import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 const dir = join(import.meta.dirname, '../../../rulesets/dnd-5e-2024/schemas');
 const read = async (file: string) => JSON.parse(await readFile(join(dir, file), 'utf8'));
 
-// The schemas and tables.json both list the shared enums (SPEC.md §6.2);
+// The schemas and tables.json both list the shared enums (docs/rulesets.md#the-ruleset-module);
 // these tests keep the two in step.
 describe('dnd-5e-2024 schemas match tables.json', () => {
   it('shares abilities, damage types, and conditions', async () => {

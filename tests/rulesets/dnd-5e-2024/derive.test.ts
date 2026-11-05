@@ -9,7 +9,7 @@ const stats = async (patch: Partial<CreatureStats> = {}): Promise<CreatureStats>
   ...patch,
 });
 
-describe('cinder hound (SPEC.md §6.9)', () => {
+describe('the example cinder hound', () => {
   it('derives exactly the values the spec renders', async () => {
     const d = deriveCreature(await stats(), tables);
     expect(d.initiative).toEqual({ bonus: 2, score: 12 });

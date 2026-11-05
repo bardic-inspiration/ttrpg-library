@@ -1,20 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/envelope.schema.json",
-  "title": "Entry envelope (SPEC.md §5.1)",
+  "title": "Entry envelope (docs/content-model.md#entry-envelope)",
   "description": "Fixed keys, tags, meta, and image for every entry in every ruleset. `stats` is validated by the ruleset's type schema.",
   "type": "object",
   "additionalProperties": false,
   "required": ["ruleset", "type", "id", "name", "summary", "stats", "meta"],
   "properties": {
-    "ruleset": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
-    "type": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
-    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 3, "maxLength": 64 },
-    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
-    "summary": { "type": "string", "minLength": 10, "maxLength": 160 },
-    "description": { "type": "string", "minLength": 1, "markdownSubset": true },
-    "stats": { "type": "object" },
+    "ruleset": { "description": "The ruleset: a folder in rulesets/ and a key in config/types.json, such as \"dnd-5e-2024\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "type": { "description": "The entry's type, listed in the ruleset's ruleset.json, such as \"creature\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "id": { "description": "The slug of the name at creation. Unique within the type, equal to the file name, and never changed after merge.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 3, "maxLength": 64 },
+    "name": { "description": "Display name, unique within the type ignoring case. For an SRD entry, the SRD name exactly.", "type": "string", "minLength": 1, "maxLength": 80 },
+    "summary": { "description": "One plain-text line, used on cards, in PR bodies, and in link previews.", "type": "string", "minLength": 10, "maxLength": 160 },
+    "description": { "description": "Lore and flavor in the markdown subset; not rules text. Omitted on SRD entries.", "type": "string", "minLength": 1, "markdownSubset": true },
+    "stats": { "description": "Rules data, validated by the ruleset's schema for the type. Inputs only, never a derived value.", "type": "object" },
     "tags": {
+      "description": "Open, flat organization; every key is a gallery filter. Conventional keys: world, campaign, theme, environment, author.",
       "type": "object",
       "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
       "additionalProperties": {
@@ -26,23 +27,25 @@
         ]
       }
     },
-    "image": { "type": "string", "pattern": "^assets/images/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+\\.(png|jpg|webp)$" },
+    "image": { "description": "Path to the entry's art, which must exist. Omitted when there is none.", "type": "string", "pattern": "^assets/images/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+\\.(png|jpg|webp)$" },
     "meta": {
+      "description": "Provenance, shown on the detail page.",
       "type": "object",
       "additionalProperties": false,
       "required": ["createdAt", "source"],
       "properties": {
-        "createdAt": { "type": "string", "format": "date" },
-        "updatedAt": { "type": "string", "format": "date" },
+        "createdAt": { "description": "The date the entry was created.", "type": "string", "format": "date" },
+        "updatedAt": { "description": "The date of the latest revision.", "type": "string", "format": "date" },
         "source": {
+          "description": "Where the entry came from.",
           "type": "object",
           "additionalProperties": false,
           "required": ["kind"],
           "properties": {
-            "kind": { "enum": ["routine", "revise", "manual"] },
-            "issues": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
-            "gapFill": { "type": "string", "minLength": 1 },
-            "srd": { "const": true }
+            "kind": { "description": "\"routine\" for a generated entry, \"revise\" for a revision, \"manual\" for a hand-made entry.", "enum": ["routine", "revise", "manual"] },
+            "issues": { "description": "The issues the entry fulfilled.", "type": "array", "items": { "type": "integer", "minimum": 1 } },
+            "gapFill": { "description": "The gap bucket's label, when gap fill created the entry.", "type": "string", "minLength": 1 },
+            "srd": { "description": "Set on an SRD entry, reproduced unmodified from SRD 5.2; omitted on a custom entry.", "const": true }
           }
         }
       }

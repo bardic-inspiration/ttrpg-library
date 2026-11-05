@@ -1,4 +1,4 @@
-// `npm run a11y` (SPEC.md §9.7): runs axe-core through Playwright against the
+// `npm run a11y` (docs/styling.md#accessibility): runs axe-core through Playwright against the
 // built site (site/dist) on the pages a11yPages picks, in the light and dark
 // themes, and exits non-zero on any serious or critical violation. Run
 // `npm run build` first.

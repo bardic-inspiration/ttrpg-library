@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { countBuckets, type GapAxis, type GapRecord } from '../../lib/buckets.ts';
 
-// SPEC.md §7.1 (Gap buckets); issue #72.
+// docs/generation.md#gap-buckets (Gap buckets); issue #72.
 const R = 'dnd-5e-2024';
 
 const rec = (type: string, facets: Record<string, unknown>, ruleset = R): GapRecord => ({ ruleset, type, facets });

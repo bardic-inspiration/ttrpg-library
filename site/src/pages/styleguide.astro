@@ -1,11 +1,11 @@
 ---
-// The style guide (SPEC.md §9.8): every token, the type scale and typefaces,
+// The style guide (docs/styling.md#refinement-workflow): every token, the type scale and typefaces,
 // controls, badges, and templates, in both themes side by side. Not linked
 // in navigation and kept out of search indexes. Edit a token under
 // `npm run dev` and every surface here updates at once.
 //
-// Gallery cards, filter controls, and templates come from the §6.9 test
-// fixtures (§9.8). Print previews at each page size join with the exports.
+// Gallery cards, filter controls, and templates come from the example test
+// fixtures (docs/styling.md#refinement-workflow). Print previews at each page size join with the exports.
 import Base from '../layouts/Base.astro';
 import EntryTemplate from '../components/templates/EntryTemplate.astro';
 import PrintEntry from '../components/print/PrintEntry.astro';
@@ -62,7 +62,7 @@ const icons = [
   ['Download', DownloadIcon], ['Print', PrintIcon], ['Close', CloseIcon],
 ] as const;
 
-// Cards, filters, and templates render the §6.9 fixtures, which have one entry per type.
+// Cards, filters, and templates render the example fixtures, which have one entry per type.
 const fixtures = await buildIndex(`${PROJECT_ROOT}/tests/fixtures/library/valid`);
 const fixtureEntries = loadLibrary(
   fixtures.files.map((file) => JSON.parse(readFileSync(`${PROJECT_ROOT}/tests/fixtures/library/valid/${file}`, 'utf8')) as Entry),
@@ -84,7 +84,7 @@ const modes = ['screen', 'capture'] as const;
   <p class="measure">
     Every token and rendered state on one page. The header toggle switches the
     whole page; the samples below also show both themes side by side. To change
-    what you see, edit <code>site/src/styles/tokens/</code> (SPEC.md §9.8).
+    what you see, edit <code>site/src/styles/tokens/</code> (docs/styling.md#refinement-workflow).
   </p>
 
   <section class="sg-section" aria-labelledby="sg-colors">

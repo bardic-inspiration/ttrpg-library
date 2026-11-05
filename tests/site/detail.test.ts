@@ -11,7 +11,7 @@ async function render(id: string): Promise<string> {
   return container.renderToString(EntryDetail, { props: { loaded: lib.byId(id), names: lib.names, targets: lib.targets } });
 }
 
-describe('detail page (SPEC.md §9.4)', () => {
+describe('detail page (docs/site.md#detail-page)', () => {
   it('links Frost Lance to the wand that casts it, and the wand to Frost Lance', async () => {
     const spell = await render('frost-lance');
     expect(textOf(spell)).toContain('Cast by Wand of Frost Lances');
@@ -64,7 +64,7 @@ describe('detail page (SPEC.md §9.4)', () => {
   });
 });
 
-describe('detail helpers (SPEC.md §9.3, §9.4)', () => {
+describe('detail helpers (docs/site.md#gallery, docs/site.md#detail-page)', () => {
   it('encodes tag values in gallery URL form', () => {
     const { entry } = lib.byId('cinder-hound');
     const chips = tagChips({ ...entry, tags: { world: 'Ash, Ember', lair: true } });

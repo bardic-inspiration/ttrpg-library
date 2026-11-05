@@ -1,4 +1,4 @@
-# SPEC.md §12.1: lane rules, then checks by lane. `validate` is the single
+# docs/workflow.md#ci-checks: lane rules, then checks by lane. `validate` is the single
 # required status check, so branch protection never depends on which jobs a
 # lane runs. A dev PR that changes content needs the `migration` label, which
 # the labeler adds; its label event starts no new run (it uses GITHUB_TOKEN),
@@ -45,6 +45,8 @@ jobs:
           LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
           GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+      # Every cited doc file and heading must exist, on docs-only PRs too.
+      - run: node scripts/links/cli.ts
 
   content-checks:
     needs: lane
@@ -87,7 +89,7 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm test
-      # Accessibility checks run against the site content-checks built (SPEC.md §9.7).
+      # Accessibility checks run against the site content-checks built (docs/styling.md#accessibility).
       - uses: actions/download-artifact@v8
         with:
           name: site

@@ -1,5 +1,5 @@
 // Reads a type's raw `stats` schema alongside an entry, for the two things the
-// index needs the schema for (SPEC.md §5.7, §5.8, §9.1): which values sit at
+// index needs the schema for (docs/content-model.md#references, docs/content-model.md#situational-fields, docs/site.md#index-build): which values sit at
 // `RefOrText` fields, and whether an omitted facet is an optional flag.
 
 export type Schema = { [key: string]: unknown };
@@ -63,7 +63,7 @@ function childNodes(nodes: Node[], key: string | number): Node[] {
 }
 
 /**
- * Every value in schema-valid `stats` that sits at a `RefOrText` field (§5.7):
+ * Every value in schema-valid `stats` that sits at a `RefOrText` field (docs/content-model.md#references):
  * a ref object or a plain string, in document order.
  */
 export function refOrTextValues(stats: unknown, set: SchemaSet): unknown[] {
@@ -84,7 +84,7 @@ export function refOrTextValues(stats: unknown, set: SchemaSet): unknown[] {
 /**
  * Whether `path` (below `stats`, such as `cursed` or `attunement.required`)
  * is an optional boolean flag: a field whose only valid value is `true`
- * (§5.8). An omitted flag reads as `false`.
+ * (docs/content-model.md#situational-fields). An omitted flag reads as `false`.
  */
 export function isFlag(path: string, set: SchemaSet): boolean {
   let nodes: Node[] = [{ schema: set.root, doc: set.root }];

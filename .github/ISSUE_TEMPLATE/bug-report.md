@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Something doesn't work the way SPEC.md says it should.
+about: Something doesn't work the way the docs say it should.
 title: ""
 labels: bug
 assignees: ""
@@ -13,7 +13,7 @@ validation bug: the entry and the validator output. -->
 
 ## Expected
 
-<!-- What should happen, and the SPEC.md section that says so. -->
+<!-- What should happen, and the docs section that says so. -->
 
 ## Steps to reproduce
 

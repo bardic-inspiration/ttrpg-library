@@ -1,4 +1,4 @@
-// `npm run build:index` (SPEC.md §9.1 steps 1–2): validates content/, then
+// `npm run build:index` (docs/site.md#index-build steps 1–2): validates content/, then
 // writes site/public/library.json and site/public/data/. Fails, writing
 // nothing, if validation fails. Usage: build-index [content root] [out dir].
 

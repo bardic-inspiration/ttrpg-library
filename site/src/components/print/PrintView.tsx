@@ -1,4 +1,4 @@
-// The print view island (SPEC.md §10.4) on `/print/`. It loads the entries
+// The print view island (docs/export.md#print) on `/print/`. It loads the entries
 // the URL names as print fragments, injects the `@page` rules for the chosen
 // size, and opens the print dialog once fonts load. A page-size selector and
 // a "continuous" toggle let the reader adjust and print again. Any entry that

@@ -1,4 +1,4 @@
-// The print view and print export (SPEC.md §10.4, §10.1): query parsing, page
+// The print view and print export (docs/export.md#print, docs/export.md#exporter-interface): query parsing, page
 // size resolution, entry selection, the injected `@page` rules, loading a run,
 // the print fragment, and the print exporter.
 import { describe, expect, it } from 'vitest';
@@ -25,7 +25,7 @@ const reg = await registry();
 const lib = await fixtureLibrary();
 const size = (id: string) => resolveSize(id);
 
-describe('page sizes (SPEC.md §10.4, §10.5)', () => {
+describe('page sizes (docs/export.md#print, docs/export.md#export-config)', () => {
   it('come from config/export.json', () => {
     expect(pageSizes).toEqual(config.pageSizes);
   });
@@ -70,7 +70,7 @@ describe('selectEntries', () => {
     expect(selection.missing).toEqual(['spell/nope']);
   });
 
-  it('tells apart entries of different types that share an id (SPEC.md §5.2)', () => {
+  it('tells apart entries of different types that share an id (docs/content-model.md#ids-and-names)', () => {
     const twin = { ...records.find((r) => r.id === 'frost-lance')!, type: 'creature', name: 'Frost Lance', url: '/ttrpg-library/dnd-5e-2024/creature/frost-lance/' };
     const selection = selectEntries(parsePrintQuery('?ids=creature/frost-lance'), [...records, twin], reg);
     expect(selection.records.map((r) => `${r.type}/${r.id}`)).toEqual(['creature/frost-lance']);
@@ -174,7 +174,7 @@ describe('loadPrintRun', () => {
   });
 });
 
-describe('print fragment (SPEC.md §10.4)', () => {
+describe('print fragment (docs/export.md#print)', () => {
   it('renders the template in print mode, with no page shell', async () => {
     const { experimental_AstroContainer: AstroContainer } = await import('astro/container');
     const { default: PrintEntry } = await import('../../site/src/components/print/PrintEntry.astro');
@@ -187,7 +187,7 @@ describe('print fragment (SPEC.md §10.4)', () => {
   });
 });
 
-describe('print exporter (SPEC.md §10.1, §10.4)', () => {
+describe('print exporter (docs/export.md#exporter-interface, docs/export.md#print)', () => {
   const item = (id: string): ExportItem => {
     const { entry, derived } = lib.byId(id);
     return { entry, derived };

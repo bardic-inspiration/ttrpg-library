@@ -17,11 +17,11 @@ export interface ValidEntry {
   file: string;
   entry: EntryHead & { summary: string; stats: unknown; [key: string]: unknown };
   derived: Record<string, unknown>;
-  /** Resolved refs out of this entry, in document order (SPEC.md §5.7). */
+  /** Resolved refs out of this entry, in document order (docs/content-model.md#references). */
   refs: Link[];
   /** Resolved refs into this entry from other entries. */
   refBy: Link[];
-  /** Every markdown-subset string in the entry (§5.5), `description` first, then `stats` in document order. */
+  /** Every markdown-subset string in the entry (docs/content-model.md#text-fields), `description` first, then `stats` in document order. */
   texts: { path: string; text: string }[];
 }
 
@@ -38,7 +38,7 @@ export interface ValidateOptions {
 }
 
 /**
- * Validates every entry under `root` (SPEC.md §6.8): JSON, the envelope and
+ * Validates every entry under `root` (docs/rulesets.md#consistency-checks): JSON, the envelope and
  * `stats` schemas, a known ruleset and type, then the ruleset-independent and
  * ruleset consistency checks. Errors fail; warnings are reported only.
  */
@@ -108,7 +108,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       continue;
     }
     for (const { path, text } of statsResult.texts) for (const message of checkMarkdown(path, text)) error(file, message);
-    // A {ref:…} token renders only in text fields (§5.7); anywhere else it would show as typed.
+    // A {ref:…} token renders only in text fields (docs/content-model.md#references); anywhere else it would show as typed.
     const textPaths = new Set(statsResult.texts.map((t) => t.path));
     const plain = [
       { path: 'name', text: entry.name },
@@ -118,7 +118,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     for (const { path } of plain.filter(({ text }) => new RegExp(REF_TOKEN.source).test(text))) {
       error(file, `${path}: a {ref:…} token works only in text fields (rules text and description)`);
     }
-    // An SRD entry is literal (SPEC.md §5.9): its deviations and authored
+    // An SRD entry is literal (docs/content-model.md#srd-and-custom-entries): its deviations and authored
     // numbers match the SRD, so the ruleset's review warnings are skipped.
     for (const issue of ruleset.module.check(entry.type, entry.stats)) {
       if (srd && issue.level === 'warning') continue;

@@ -1,4 +1,4 @@
-/* Styles for the detail page's export controls island (SPEC.md §9.6: a Preact
+/* Styles for the detail page's export controls island (docs/styling.md#styling-system: a Preact
    island's styles sit in one stylesheet beside its components). */
 @layer components {
   .export-controls {

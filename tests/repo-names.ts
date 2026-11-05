@@ -1,13 +1,13 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-// SPEC.md §8.4 and §8.7: the generate skill and docs/routines.md may name only
+// docs/generation.md#the-generate-skill and docs/generation.md#schedule: the generate skill and docs/routines.md may name only
 // repo paths, npm scripts, and config/defaults.json keys that exist.
 export const ROOT = join(import.meta.dirname, '..');
 export const read = (path: string) => readFileSync(join(ROOT, path), 'utf8');
 
 export const ENTRY_PATH = 'content/<ruleset>/<type>/<id>.json';
-/** Built by `npm run build:index` and git-ignored (§4), so absent from a clean checkout. */
+/** Built by `npm run build:index` and git-ignored (docs/architecture.md#repository-layout), so absent from a clean checkout. */
 export const GENERATED = new Set(['site/public/library.json']);
 
 /** Top-level directories and files a code span must start with to count as a repo path. */
@@ -57,7 +57,7 @@ export function unresolved(markdown: string, repo: Repo): string[] {
       continue;
     }
     if (!PATH.test(span)) continue;
-    if (span === ENTRY_PATH) continue; // where new entries are written (§5.1)
+    if (span === ENTRY_PATH) continue; // where new entries are written (docs/content-model.md#entry-envelope)
     if (GENERATED.has(span)) continue;
     for (const path of expand(span, repo.registry)) {
       if (/<[^>]+>/.test(path)) problems.push(`${span}: unknown placeholder`);

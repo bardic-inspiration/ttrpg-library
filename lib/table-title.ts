@@ -1,4 +1,4 @@
-// Table titles in markdown text (SPEC.md §5.5): a paragraph that is only one
+// Table titles in markdown text (docs/content-model.md#tables-in-text): a paragraph that is only one
 // **bold** run, directly above a pipe table, is that table's title. The site
 // renders it as the table's caption; the validator checks it's plain text.
 // One definition, so the reader and the validator see the same titles.

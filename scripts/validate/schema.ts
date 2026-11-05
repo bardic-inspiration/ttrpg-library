@@ -1,4 +1,4 @@
-// The schema stage (SPEC.md §5.1, §6.2): Ajv with JSON Schema draft 2020-12.
+// The schema stage (docs/content-model.md#entry-envelope, docs/rulesets.md#the-ruleset-module): Ajv with JSON Schema draft 2020-12.
 
 import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
@@ -33,9 +33,9 @@ let markdownTexts: Map<string, string> | undefined;
 function newAjv(): Ajv2020 {
   const ajv = new Ajv2020({ allErrors: true, strict: true, strictRequired: false, allowUnionTypes: true });
   addFormats(ajv, ['date']);
-  // `"markdownSubset": true` marks a string as markdown-subset text (§5.5). It
+  // `"markdownSubset": true` marks a string as markdown-subset text (docs/content-model.md#text-fields). It
   // never fails; it records where those strings are so the text check can run
-  // after the schema stage passes (§6.8).
+  // after the schema stage passes (docs/rulesets.md#consistency-checks).
   ajv.addKeyword({
     keyword: 'markdownSubset',
     schemaType: 'boolean',
@@ -143,7 +143,7 @@ export async function loadRuleset(id: string): Promise<LoadedRuleset | undefined
   return { module: ruleset, stats };
 }
 
-/** config/types.json: which rulesets and types the registry knows (SPEC.md §7). */
+/** config/types.json: which rulesets and types the registry knows (docs/site.md#type-registry). */
 export async function loadRegistry(): Promise<Record<string, { types: Record<string, unknown> }>> {
   return (await readJson(join(PROJECT_ROOT, 'config/types.json'))) as Record<string, { types: Record<string, unknown> }>;
 }

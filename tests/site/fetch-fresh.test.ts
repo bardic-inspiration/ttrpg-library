@@ -1,5 +1,5 @@
 // Data fetches revalidate with the server, so a deploy shows up on the next
-// load instead of after the browser's cached copy expires (SPEC.md §9.1).
+// load instead of after the browser's cached copy expires (docs/site.md#index-build).
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';

@@ -1,4 +1,4 @@
-/* A handful of utilities (SPEC.md §9.6). */
+/* A handful of utilities (docs/styling.md#styling-system). */
 @layer utilities {
   .visually-hidden:not(:focus, :active) {
     position: absolute;

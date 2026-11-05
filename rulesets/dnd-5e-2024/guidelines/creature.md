@@ -1,11 +1,11 @@
 # Creature guideline (dnd-5e-2024)
 
 How to write a `creature` entry. The schema is `schemas/creature.schema.json`
-and SPEC.md §6.5 lists every field. This file covers what the schema can't:
+and [Creatures](../../../docs/rulesets.md#creatures) lists every field. This file covers what the schema can't:
 voice, names, balance, prose, and when a creature needs a dependency entry.
 
 These rules are for custom entries, original to this library. An SRD entry is
-reproduced from SRD 5.2 unmodified (SPEC.md §5.9): its name, numbers, and
+reproduced from SRD 5.2 unmodified ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)): its name, numbers, and
 rules text are the SRD's, so tone, naming, and balance targets don't apply to
 it. It still follows the token rules in prose style and the dependencies
 section below.
@@ -47,7 +47,7 @@ Exemplar (summary, description, and one trait):
   by the validator, but it is a floor, not the whole rule; a name that would
   only be recognized from a non-SRD book is out even if it isn't listed.
 - Don't reuse an SRD entry's exact name or an SRD proper noun, whether or not
-  the SRD entry is in the library (SPEC.md §5.9). Building on common words
+  the SRD entry is in the library ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)). Building on common words
   from SRD names is fine: "Fire Zombie" and "Ice Troll" are new creatures, not
   copies of the SRD's Zombie and Troll. The creature itself must still be a
   new concept, not an SRD stat block under a new name.
@@ -59,7 +59,7 @@ Exemplar (summary, description, and one trait):
 ## Balance targets
 
 These are this library's own targets, not SRD tables. CI doesn't enforce them;
-review does (SPEC.md §6.8). Aim for the row of the entry's `cr`. Missing one
+review does ([Consistency checks](../../../docs/rulesets.md#consistency-checks)). Aim for the row of the entry's `cr`. Missing one
 column is fine when another makes up for it: a high AC with HP at the bottom of
 the range, or a strong save effect with damage per round below the range.
 
@@ -102,7 +102,7 @@ the range, or a strong save effect with damage per round below the range.
 
 **Meet the targets by choosing inputs.** Only AC is written as a number
 (`ac.value`, an authored value). Everything else in the table is derived by
-the ruleset (SPEC.md §6.1), so never write it; pick the inputs it follows from:
+the ruleset ([Inputs and derived values](../../../docs/rulesets.md#inputs-and-derived-values)), so never write it; pick the inputs it follows from:
 
 - **Attack bonus and save DC** follow from `cr` (which sets the proficiency
   bonus) and the action's `ability` score. A save DC is always the attack
@@ -126,7 +126,7 @@ the validator warns.
 
 ## Prose style
 
-Attack and save lines are generated from the structured fields (SPEC.md §6.5),
+Attack and save lines are generated from the structured fields ([Creatures](../../../docs/rulesets.md#creatures)),
 so never write them as prose. An attack action sets `kind`, `ability`, `reach`
 or `range`, and `damage`; a save action sets `ability`, `save`, and `damage`.
 The template renders "*Melee Attack Roll:* +4, reach 5 ft. *Hit:* …" and
@@ -172,7 +172,7 @@ Rules for all of these:
   "Bloodied" for "at half its hit points or fewer".
 - **Every derived number is a token.** A literal "DC 13", "+5 to hit", or
   "7 (2d6)" in creature prose fails validation. The tokens, from `tokens.ts`
-  (SPEC.md §6.4):
+  ([Text tokens](../../../docs/rulesets.md#text-tokens)):
 
   | You mean | Write | Renders like |
   |---|---|---|
@@ -197,12 +197,12 @@ Rules for all of these:
   durations ("until the end of its next turn"), counts ("two Bite attacks"),
   and recharge or uses, which go in `recharge` and `uses`, not in the name or
   the text.
-- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
+- Markdown subset only ([Text fields](../../../docs/content-model.md#text-fields)): paragraphs, bold, italic, lists, and
   pipe tables. No headings or links in entry text. Italicize spell names: *Frost
   Lance*.
 - Every brace in entry text starts a token. Don't use braces for anything else.
 - To mention a library entry in prose, link it with `{ref:<type>/<id>}`
-  instead of writing its name: `*{ref:spell/frost-lance}*` (SPEC.md §5.7). The
+  instead of writing its name: `*{ref:spell/frost-lance}*` ([References](../../../docs/content-model.md#references)). The
   site shows the entry's name, linked.
 
 ## Dependencies and SRD references
@@ -215,7 +215,7 @@ A creature mentions spells (`spellcasting`) and gear (`gear`) through
 - **Use a plain string** for SRD 5.2 content that isn't in the library, spelled
   exactly as the SRD names it ("Fireball", "Longsword", "Chain Mail"). Don't
   add an SRD spell or item to the library just to ref it; SRD entries are
-  added only when a request asks for them (SPEC.md §5.9).
+  added only when a request asks for them ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
 - **Create a dependency entry** in the same batch when the brief or the
   creature's concept calls for something new: a signature spell no SRD spell
   covers, or a named magic item the creature carries. Write it to its own

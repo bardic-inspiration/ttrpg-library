@@ -7,7 +7,7 @@ import { cinderHound } from '../../helpers.ts';
 
 const derived = async () => deriveCreature((await cinderHound()).stats as CreatureStats, tables);
 
-describe('renderTokens (SPEC.md §6.4)', () => {
+describe('renderTokens (docs/rulesets.md#text-tokens)', () => {
   it('renders the cinder hound trait as the spec shows it', async () => {
     const text = 'A creature that touches the hound or hits it with a melee attack while within 5 feet of it takes {dmg:1d4:fire}.';
     expect(renderTokens(text, await derived(), tables)).toBe(

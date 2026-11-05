@@ -1,14 +1,14 @@
-// Gap buckets (SPEC.md §7.1): counts library records per bucket of a type's
+// Gap buckets (docs/generation.md#gap-buckets): counts library records per bucket of a type's
 // `gapBuckets` axes and builds each bucket's label. Ruleset-independent, with
 // no dependencies, so the gap-fill picker and any future analytics share it.
 
-/** One axis of a type's `gapBuckets` (§7.1). */
+/** One axis of a type's `gapBuckets` (docs/generation.md#gap-buckets). */
 export type GapAxis = { path: string; bins: [number, number][] } | { path: string; enum: string[] };
 
 /** One value of an axis: a numeric bin or a categorical value. */
 type AxisValue = { bin: [number, number] } | { value: string };
 
-/** The parts of a library.json record (§9.1) bucket counting reads. */
+/** The parts of a library.json record (docs/site.md#index-build) bucket counting reads. */
 export interface GapRecord {
   ruleset: string;
   type: string;
@@ -16,7 +16,7 @@ export interface GapRecord {
 }
 
 export interface Bucket {
-  /** The §7.1 label, such as `stats.level=1..3&stats.school=evocation`. */
+  /** The docs/generation.md#gap-buckets label, such as `stats.level=1..3&stats.school=evocation`. */
   label: string;
   count: number;
 }
@@ -38,7 +38,7 @@ function matches(facet: unknown, value: AxisValue): boolean {
   return String(facet) === value.value;
 }
 
-/** Every combination of one value per axis, first axis outermost (§7.1). */
+/** Every combination of one value per axis, first axis outermost (docs/generation.md#gap-buckets). */
 function combinations(axes: GapAxis[]): { path: string; value: AxisValue }[][] {
   return axes.reduce<{ path: string; value: AxisValue }[][]>(
     (combos, axis) => combos.flatMap((combo) => axisValues(axis).map((value) => [...combo, { path: axis.path, value }])),

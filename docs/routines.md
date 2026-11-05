@@ -3,7 +3,7 @@
 Routines are scheduled or on-demand Claude Code sessions that work the
 content lane: they turn `request` and `revise` issues into content PRs and
 answer review comments on them. This file holds the canonical prompts, the
-schedule, and the run order every run follows. `SPEC.md` §8 is the source of
+schedule, and the run order every run follows. [Generation](generation.md) is the source of
 truth; where this file and the spec disagree, the spec wins and this file is
 fixed.
 
@@ -19,7 +19,7 @@ editing the routine's settings.
 | Scheduled | Weekly, Monday morning local time, one run | `defaults.count` (5) per request without a count, and every request picked; no size limit |
 | On-demand | Whenever you start it | Same, for the issues or inline request you name |
 
-Both routines use the same prompt (§8.7). The on-demand routine adds its
+Both routines use the same prompt ([Schedule](generation.md#schedule)). The on-demand routine adds its
 inputs after it.
 
 ## Setup
@@ -38,7 +38,7 @@ Create each routine as a scheduled task in Claude Code on the web (see the
   on-demand run, the [on-demand prompt](#on-demand-prompt) with its inputs
   filled in.
 
-Routines work only the content lane (§12.4). They take only `request` and
+Routines work only the content lane ([Work lanes](workflow.md#work-lanes)). They take only `request` and
 `revise` issues, never dev-lane issues (bugs, features, UI refinement). They
 push only to `gen/` and `revise/` branches, named as the `generate` and
 `revise` skills say. A cloud session is assigned a branch of its own; a
@@ -71,12 +71,12 @@ Run the content routine for this repository. Read docs/routines.md on main and f
 Inline request: type: spell; count: 3; brief: frost-themed utility spells for levels 1 to 3; tags: theme: winter
 ```
 
-An inline request takes the content-request fields (§8.1): type, count,
+An inline request takes the content-request fields ([Requests](generation.md#requests)): type, count,
 brief, tags, and ruleset. Type and brief are required; the others default.
 
 ## Run order
 
-Every run, scheduled or on-demand, follows these steps in order (§8.2), so
+Every run, scheduled or on-demand, follows these steps in order ([Run order](generation.md#run-order)), so
 review feedback is never starved by new work.
 
 `defaults.<key>` below means that key of `config/defaults.json`.
@@ -104,7 +104,7 @@ add the `in-progress` label and comment that this run has picked it up. Then
 run the `revise` skill (`.claude/skills/revise/SKILL.md`) on each issue in
 turn. Each becomes its own small PR on a `revise/` branch, or a question on
 the issue if it can't be fulfilled as written. An on-demand run takes these
-too, whatever its inputs (§8.2).
+too, whatever its inputs ([Run order](generation.md#run-order)).
 
 ### 4. Content requests
 
@@ -135,8 +135,8 @@ gap-fills.
 
 Run `npm run gap-fill`. It reads `site/public/library.json` (built in step
 1) and `config/types.json`, and prints the type and gap bucket with the
-fewest entries among the types of `defaults.ruleset`, breaking ties as §8.2
-step 5 says, as one line: the type, a space, and the bucket label (§7.1),
+fewest entries among the types of `defaults.ruleset`, breaking ties as [Run order](generation.md#run-order)
+step 5 says, as one line: the type, a space, and the bucket label ([Gap buckets](generation.md#gap-buckets)),
 as in `spell stats.level=0..0&stats.school=abjuration`. Use that choice
 as printed; don't pick a bucket by eye. If it exits with an error, skip
 gap-fill and report its message.

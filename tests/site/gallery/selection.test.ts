@@ -1,4 +1,4 @@
-// Gallery set actions (SPEC.md §9.3 "Selection", §10.1): which entries a set
+// Gallery set actions (docs/site.md#gallery "Selection", docs/export.md#exporter-interface): which entries a set
 // action receives, and the export bundles it loads for them.
 import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';

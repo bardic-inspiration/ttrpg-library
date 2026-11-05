@@ -1,4 +1,4 @@
-/* Element reset (SPEC.md §9.6): remove browser inconsistencies, nothing more. */
+/* Element reset (docs/styling.md#styling-system): remove browser inconsistencies, nothing more. */
 @layer reset {
   *,
   *::before,

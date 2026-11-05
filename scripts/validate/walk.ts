@@ -3,7 +3,7 @@ import { join, relative, sep } from 'node:path';
 
 /**
  * Lists every entry file under `root` (content/<ruleset>/<type>/<id>.json,
- * SPEC.md §4), as sorted paths relative to `root` with `/` separators. A
+ * docs/architecture.md#repository-layout), as sorted paths relative to `root` with `/` separators. A
  * missing `root` is an empty library.
  */
 export async function listEntryFiles(root: string): Promise<string[]> {

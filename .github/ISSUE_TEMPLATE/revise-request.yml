@@ -1,4 +1,4 @@
-# Content lane (SPEC.md §8.1). A routine turns this into a small revise PR.
+# Content lane (docs/generation.md#requests). A routine turns this into a small revise PR.
 name: Revise request
 description: Ask a routine to change entries that are already merged.
 labels: [revise]

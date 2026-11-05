@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import { type EntrySummary, parseNameStatus, renderSummary } from './index.ts';
 
-// Writes the content-checks job summary (SPEC.md §12.1). The workflow passes
+// Writes the content-checks job summary (docs/workflow.md#ci-checks). The workflow passes
 // the PR's base and head commits as environment variables.
 const base = process.env.BASE_SHA;
 const head = process.env.HEAD_SHA;

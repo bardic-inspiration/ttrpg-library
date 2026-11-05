@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 
-// SPEC.md §8.1 (Requests as GitHub Issues), §12.4; issue #62.
+// docs/generation.md#requests (Requests as GitHub Issues), docs/workflow.md#work-lanes; issue #62.
 const ROOT = join(import.meta.dirname, '..');
 const DIR = join(ROOT, '.github/ISSUE_TEMPLATE');
 
@@ -36,7 +36,7 @@ describe('content-request.yml', () => {
     expect(form.labels).toEqual(['request']);
   });
 
-  it('has the §8.1 fields, kinds, and required flags', async () => {
+  it('has the docs/generation.md#requests fields, kinds, and required flags', async () => {
     const form = await load('content-request.yml');
     const shape = inputs(form).map((f) => [f.attributes.label, f.type, f.validations?.required ?? false]);
     expect(shape).toEqual([

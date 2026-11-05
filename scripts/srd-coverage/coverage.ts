@@ -1,4 +1,4 @@
-// SRD coverage (SPEC.md §5.9): which records of a ruleset's SRD manifest have
+// SRD coverage (docs/content-model.md#srd-manifest-and-coverage): which records of a ruleset's SRD manifest have
 // no SRD entry in the library yet, and which SRD entries the manifest lacks.
 
 import { readFile } from 'node:fs/promises';

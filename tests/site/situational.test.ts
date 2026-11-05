@@ -7,7 +7,7 @@ import CreatureStatBlock from '../../site/src/components/templates/CreatureStatB
 import { present, whenPresent } from '../../site/src/lib/display.ts';
 import { cinderHound } from '../helpers.ts';
 
-describe('display helpers (SPEC.md §5.8)', () => {
+describe('display helpers (docs/content-model.md#situational-fields)', () => {
   it('decides from presence alone, so 0, false, and "" are present', () => {
     expect([0, false, '', undefined].map(present)).toEqual([true, true, true, false]);
     expect(whenPresent(0, (n) => `+${n}`)).toBe('+0');
@@ -28,7 +28,7 @@ async function render(stats: CreatureStats): Promise<string> {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
 }
 
-describe('creature stat block situational fields (SPEC.md §5.8, §9.5)', () => {
+describe('creature stat block situational fields (docs/content-model.md#situational-fields, docs/site.md#templates)', () => {
   it('omits every optional field that is absent', async () => {
     const { skills, immunities, senses, traits, ac, ...required } = (await cinderHound()).stats as CreatureStats;
     const text = await render({ ...required, ac: { value: ac.value } });

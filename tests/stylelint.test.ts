@@ -1,4 +1,4 @@
-// The literal-value lint (SPEC.md §9.6 "Rules that keep editing easy"), run
+// The literal-value lint (docs/styling.md#tokens "Rules that keep editing easy"), run
 // by `npm run check`.
 import stylelint from 'stylelint';
 import { describe, expect, it } from 'vitest';

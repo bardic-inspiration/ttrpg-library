@@ -1,4 +1,4 @@
-// One gallery card (SPEC.md §9.3 "Card grid"): art when the entry has it,
+// One gallery card (docs/site.md#gallery "Card grid"): art when the entry has it,
 // name, type badge, the type's card fields, and the summary, with a selection
 // checkbox. Accents come from data-type (and data-rarity), never per-type CSS.
 import type { FilterDef, LibraryRecord } from '../../lib/gallery/config.ts';
@@ -23,7 +23,7 @@ interface Badge {
  * Splits card fields into lines and badges. Boolean fields read as badges when
  * true (concentration, ritual, attunement) and are left out when false. A
  * rarity reads as a badge carrying data-rarity, so it takes the rarity accent;
- * its text label means color is never the only signal (§9.7).
+ * its text label means color is never the only signal (docs/styling.md#accessibility).
  */
 function fields(record: LibraryRecord, cardFields: FilterDef[]) {
   const lines: { label: string; value: string }[] = [];

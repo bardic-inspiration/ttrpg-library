@@ -1,5 +1,5 @@
 /*
- * Semantic tokens (SPEC.md §9.6): what each role looks like, per theme.
+ * Semantic tokens (docs/styling.md#themes): what each role looks like, per theme.
  * Components read these, never the primitives. Edit this file to change what a
  * role looks like in light or dark.
  *
@@ -9,7 +9,7 @@
  * prefers-color-scheme block follows the system. The dark blocks apply on
  * screen only, so print always renders with the light tokens.
  *
- * tests/contrast.test.ts checks the §9.7 contrast pairs in both themes, and
+ * tests/contrast.test.ts checks the docs/styling.md#accessibility contrast pairs in both themes, and
  * that the system-dark block matches the explicit dark block.
  */
 @layer tokens {

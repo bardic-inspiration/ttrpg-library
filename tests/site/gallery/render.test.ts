@@ -1,4 +1,4 @@
-// The gallery island's markup (SPEC.md §9.3, §9.7), rendered to a string.
+// The gallery island's markup (docs/site.md#gallery, docs/styling.md#accessibility), rendered to a string.
 import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import { beforeAll, describe, expect, it } from 'vitest';

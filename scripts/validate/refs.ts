@@ -1,4 +1,4 @@
-// References between entries (SPEC.md §5.7, §6.8 "Every ref resolves"):
+// References between entries (docs/content-model.md#references, docs/rulesets.md#consistency-checks "Every ref resolves"):
 // `{ "ref": "<type>/<id>" }` objects at `RefOrText` fields, and `{ref:<type>/<id>}`
 // tokens in text. Pure functions with no Node imports, so the validator, the
 // index builder, and the site all link entries the same way.
@@ -43,7 +43,7 @@ export interface RefIssue {
 
 export const entryKey = (entry: { type: string; id: string }): string => `${entry.type}/${entry.id}`;
 
-/** The keys a `Ref` object may have (§5.7): `ref`, and an optional `note`. */
+/** The keys a `Ref` object may have (docs/content-model.md#references): `ref`, and an optional `note`. */
 const REF_KEYS = new Set(['ref', 'note']);
 
 export const isRef = (value: unknown): value is { ref: string; note?: string } =>
@@ -54,7 +54,7 @@ export const isRef = (value: unknown): value is { ref: string; note?: string } =
   typeof (value as { ref?: unknown }).ref === 'string';
 
 /**
- * A link written in text (§5.7): `{ref:<type>/<id>}`. It renders as the
+ * A link written in text (docs/content-model.md#references): `{ref:<type>/<id>}`. It renders as the
  * target's current name, linked to its page. The validator allows it only in
  * markdown-subset fields.
  */
@@ -104,7 +104,7 @@ export function collectRefs(stats: unknown, path = 'stats', malformed: Malformed
 /**
  * Resolves every ref against the library and computes back-references. A ref
  * fails when no entry of its type has its id (IDs are unique per type,
- * §5.2), or when the target is in another ruleset (not allowed in v1). Links
+ * docs/content-model.md#ids-and-names), or when the target is in another ruleset (not allowed in v1). Links
  * are keyed by `<type>/<id>`; only resolved refs become links.
  */
 export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; issues: RefIssue[] } {

@@ -22,7 +22,7 @@ import { cinderHound } from '../helpers.ts';
 
 const plain = (block: ActionBlock) => `${block.name}. ${block.body}`;
 
-describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
+describe('creature stat block text (docs/rulesets.md#creatures)', () => {
   it('renders the cinder hound as the spec shows it', async () => {
     const s = (await cinderHound()).stats as CreatureStats;
     const d = deriveCreature(s, tables);
@@ -144,7 +144,7 @@ describe('creature stat block text (SPEC.md §6.5, §6.9)', () => {
     expect(plain(actionBlock(s.actions![0]!, d.actions[0], d))).toBe(
       'Slam. *Melee Attack Roll:* \u22121, reach 5 ft. *Hit:* 6 (2d8 \u2212 3) Bludgeoning damage.',
     );
-    // Display only: the derived values keep ASCII hyphens (SPEC.md §6.5).
+    // Display only: the derived values keep ASCII hyphens (docs/rulesets.md#creatures).
     expect(d.hp.formula).toBe('5d8 - 5');
     expect(d.actions[0]!.damage[0]!.display).toBe('6 (2d8 - 3)');
   });
@@ -205,7 +205,7 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     );
     expect(intro({ ...s, shortName: 'bandit' }, 'Bandit Captain')).toMatch(/^The bandit casts/);
   });
-  it('leaves the save DC out of the Spellcasting intro when noSaveDc is set (SPEC.md §5.8)', async () => {
+  it('leaves the save DC out of the Spellcasting intro when noSaveDc is set (docs/content-model.md#situational-fields)', async () => {
     const intro = async (spellcasting: CreatureStats['spellcasting']) => {
       const { s, d } = await build({ spellcasting });
       return spellcastingBlock(s, d, new Map(), 'Priest Acolyte')!.body.split('\\\n')[0];
@@ -217,7 +217,7 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
       'The acolyte casts one of the following spells, using Wisdom as the spellcasting ability (+3 to hit with spell attacks):',
     );
   });
-  it('joins prose that starts with a dash straight onto the damage (SPEC.md §6.5)', async () => {
+  it('joins prose that starts with a dash straight onto the damage (docs/rulesets.md#creatures)', async () => {
     const { s, d } = await build({
       actions: [{ name: 'Bite', kind: 'melee-attack', ability: 'str', reach: 5, damage: [{ dice: '1d8', ability: 'str', type: 'piercing' }], onHit: '—or {dmg:2d8+str:piercing} if the target is Grappled—plus {dmg:1d8:acid}.' }],
     });

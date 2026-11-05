@@ -6,8 +6,9 @@ don't apply, and this comment.
 
 ## What and why
 
-<!-- What this changes and why, and the SPEC.md sections it touches. If
-behavior changed, SPEC.md is updated in this PR. -->
+<!-- What this changes and why, and the docs and stage spec sections it
+touches. If behavior changed, the docs are updated in this PR, and the part
+built is deleted from the stage spec. -->
 
 Closes #
 

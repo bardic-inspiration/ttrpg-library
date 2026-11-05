@@ -1,15 +1,15 @@
-// Generation defaults (SPEC.md §8.3): config/defaults.json, its checks, and
+// Generation defaults (docs/generation.md#defaults): config/defaults.json, its checks, and
 // how a request takes them.
 
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { PROJECT_ROOT } from '../validate/schema.ts';
 
-/** A tag value (§5.3). */
+/** A tag value (docs/content-model.md#tags). */
 export type TagValue = string | number | boolean | string[];
 export type Tags = Record<string, TagValue>;
 
-/** config/defaults.json (§8.3). */
+/** config/defaults.json (docs/generation.md#defaults). */
 export type Defaults = {
   ruleset: string;
   count: number;
@@ -18,7 +18,7 @@ export type Defaults = {
   validateRetries: number;
 };
 
-/** A content request as parsed from an issue or an inline request (§8.1, §8.2). */
+/** A content request as parsed from an issue or an inline request (docs/generation.md#requests, docs/generation.md#run-order). */
 export interface Request {
   type?: string;
   count?: number;
@@ -72,8 +72,8 @@ export function checkDefaults(defaults: Record<string, unknown>, registry: Recor
       problems.push('tags: must be a flat map');
     } else {
       for (const [key, value] of Object.entries(tags)) {
-        if (!TAG_KEY.test(key)) problems.push(`tags.${key}: keys must match ${TAG_KEY.source} (§5.3)`);
-        if (!isTagValue(value)) problems.push(`tags.${key}: must be a string, number, boolean, or array of strings (§5.3)`);
+        if (!TAG_KEY.test(key)) problems.push(`tags.${key}: keys must match ${TAG_KEY.source} (docs/content-model.md#tags)`);
+        if (!isTagValue(value)) problems.push(`tags.${key}: must be a string, number, boolean, or array of strings (docs/content-model.md#tags)`);
       }
     }
   }
@@ -92,7 +92,7 @@ export async function loadDefaults(root = PROJECT_ROOT): Promise<Defaults> {
 /**
  * Fills the fields a request leaves out from the defaults and merges request
  * tags over default tags. A request's count is taken as given: no batch has a
- * size limit (§8.3).
+ * size limit (docs/generation.md#defaults).
  */
 export function applyDefaults(request: Request, defaults: Defaults): ResolvedRequest {
   return {

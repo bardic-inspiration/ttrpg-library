@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { read, repo, unresolved } from './repo-names.ts';
 
-// SPEC.md §8.4 (The generate skill); issue #64. The skill may name only repo
+// docs/generation.md#the-generate-skill (The generate skill); issue #64. The skill may name only repo
 // paths, npm scripts, and config/defaults.json keys that exist.
 const SKILL = '.claude/skills/generate/SKILL.md';
 
@@ -28,7 +28,7 @@ describe(SKILL, () => {
 describe('.github/PULL_REQUEST_TEMPLATE/content.md', () => {
   const template = read('.github/PULL_REQUEST_TEMPLATE/content.md');
 
-  it('has every body section §8.4 asks for', () => {
+  it('has every body section docs/generation.md#the-generate-skill asks for', () => {
     expect(template).toMatch(/^## Entries$/m);
     expect(template).toMatch(/^\| Name \| Type \| Summary field \| Summary \|$/m);
     expect(template).toMatch(/^## Warnings$/m);

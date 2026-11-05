@@ -1,4 +1,4 @@
-// What every type template shares (SPEC.md §9.5): the props it takes, its
+// What every type template shares (docs/site.md#templates): the props it takes, its
 // render modes, and which component the registry's `template` name selects.
 
 import type { Entry } from './library.ts';
@@ -17,7 +17,7 @@ export interface PropertyLine {
 /** Props every type template takes. Templates format these; they never compute rules values. */
 export interface TemplateProps {
   entry: Entry;
-  /** The ruleset module's derived values for `entry` (§6.1). */
+  /** The ruleset module's derived values for `entry` (docs/rulesets.md#inputs-and-derived-values). */
   derived: Record<string, unknown>;
   /** `<type>/<id>` → entry name, for rendering refs as names. */
   names: Map<string, string>;

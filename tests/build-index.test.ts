@@ -9,7 +9,7 @@ import { plainText } from '../scripts/validate/text.ts';
 import { ruleset } from '../rulesets/dnd-5e-2024/index.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
 
-// SPEC.md §9.1 (Build) and §7 (Type registry); issue #9.
+// docs/site.md#index-build (Build) and docs/site.md#type-registry (Type registry); issue #9.
 const ROOT = join(import.meta.dirname, '..');
 const valid = join(FIXTURES, 'library/valid');
 const temps: string[] = [];
@@ -35,7 +35,7 @@ const schemaSet = async (type: string) => ({
 });
 
 describe('library.json records', () => {
-  it('have exactly the §9.1 keys, in order', async () => {
+  it('have exactly the docs/site.md#index-build keys, in order', async () => {
     const { errors, records } = await buildIndex(valid);
     expect(errors).toEqual([]);
     expect(records).toHaveLength(3);
@@ -46,7 +46,7 @@ describe('library.json records', () => {
     }
   });
 
-  it('match the §9.1 example for the cinder hound', async () => {
+  it('match the docs/site.md#index-build example for the cinder hound', async () => {
     const { records } = await buildIndex(valid);
     const hound = records.find((r) => r.id === 'cinder-hound');
     expect(hound).toMatchObject({
@@ -220,7 +220,7 @@ describe('the build', () => {
 });
 
 describe('the type registry', () => {
-  it('registers every type the ruleset defines, with the §7 keys', async () => {
+  it('registers every type the ruleset defines, with the docs/site.md#type-registry keys', async () => {
     const registry = await loadRegistryFile();
     expect(Object.keys(registry['dnd-5e-2024']!.types).sort()).toEqual([...ruleset.definition.types].sort());
     for (const config of Object.values(registry['dnd-5e-2024']!.types)) {
@@ -245,7 +245,7 @@ describe('the type registry', () => {
     expect(types['magic-item']!.facets.find((f) => f.path === 'stats.rarity')?.order).toEqual(rarities);
   });
 
-  // §7.1: every axis is a facet of its type; bins sit on range facets, ascending
+  // docs/generation.md#gap-buckets: every axis is a facet of its type; bins sit on range facets, ascending
   // and disjoint; categorical values sit on enum facets and are values the schema allows.
   it('gives every type gap buckets whose axes are its facets', async () => {
     const registry = await loadRegistryFile();

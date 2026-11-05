@@ -1,11 +1,11 @@
 # Spell guideline (dnd-5e-2024)
 
 How to write a `spell` entry. The schema is `schemas/spell.schema.json` and
-SPEC.md §6.7 lists every field. This file covers what the schema can't: voice,
+[Spells](../../../docs/rulesets.md#spells) lists every field. This file covers what the schema can't: voice,
 names, balance, prose, and when a spell needs a dependency entry.
 
 These rules are for custom entries, original to this library. An SRD entry is
-reproduced from SRD 5.2 unmodified (SPEC.md §5.9): its name, numbers, and
+reproduced from SRD 5.2 unmodified ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)): its name, numbers, and
 rules text are the SRD's, so tone, naming, and balance targets don't apply to
 it. It still follows the token rules in prose style and the dependencies
 section below.
@@ -56,7 +56,7 @@ Exemplar (summary, description, and effect):
 ## Balance targets
 
 These are this library's own targets, not SRD tables. CI doesn't enforce them;
-review does (SPEC.md §6.8). Damage is the average of the dice at the spell's
+review does ([Consistency checks](../../../docs/rulesets.md#consistency-checks)). Damage is the average of the dice at the spell's
 own level.
 
 | Level | One target, attack or save | Area, save for half | Typical area |
@@ -116,12 +116,12 @@ no tokens: its numbers are authored, so write them as numbers.
 - `higherLevels`: "The damage increases by 1d8 for each spell slot level
   above 1." `cantripUpgrade`: "The damage increases by 1d10 when you reach
   levels 5 (2d10), 11 (3d10), and 17 (4d10)."
-- Markdown subset only (SPEC.md §5.5): paragraphs, bold, italic, lists, and
+- Markdown subset only ([Text fields](../../../docs/content-model.md#text-fields)): paragraphs, bold, italic, lists, and
   pipe tables. No headings or links. Italicize spell names: *Frost Lance*.
   A named part of the effect starts with a bold-italic inline heading:
-  `***Hailstones.***` (SPEC.md §9.5).
+  `***Hailstones.***` ([Templates](../../../docs/site.md#templates)).
 - Don't use braces in spell text except for a `{ref:<type>/<id>}` link
-  (SPEC.md §5.7). The derived-number tokens are a creature feature and don't
+  ([References](../../../docs/content-model.md#references)). The derived-number tokens are a creature feature and don't
   render here.
 
 ## Dependencies and SRD references
@@ -138,14 +138,14 @@ itself the most common dependency.
 - **Mentioning a library entry** in prose links it with a token instead of
   writing its name: `*{ref:spell/frost-lance}*` for a spell, which keeps the
   italics, or `{ref:creature/cinder-hound}` for a creature. The site shows the
-  entry's name, linked (SPEC.md §5.7). Check `library.json` for the `id`.
+  entry's name, linked ([References](../../../docs/content-model.md#references)). Check `library.json` for the `id`.
 - A spell that would duplicate an existing library or SRD spell isn't written.
   Point the requesting entry at the existing spell instead.
 
 ### Stat blocks the spell prints
 
 Some spells bring a creature into play. Decide where its stat block lives
-(SPEC.md §6.7):
+([Spells](../../../docs/rulesets.md#spells)):
 
 - **A creature that stands on its own** is its own creature entry. Link it
   from `effect` with `{ref:creature/<id>}`. If it's new, write it to

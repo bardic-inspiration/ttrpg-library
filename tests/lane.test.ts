@@ -105,14 +105,14 @@ describe('checkLane', () => {
   });
 });
 
-describe('isDocsPath (SPEC.md §12.1 "Docs-only PRs")', () => {
+describe('isDocsPath (docs/workflow.md#docs-only-prs)', () => {
   it.each([
     'SPEC.md',
     'AGENTS.md',
     'CLAUDE.md',
     'README.md',
     'ATTRIBUTION.md',
-    'docs/notes.md',
+    'docs/decisions.md',
     'docs/SRD_CC_v5.2.pdf',
     '.github/ISSUE_TEMPLATE/bug-report.md',
     '.github/PULL_REQUEST_TEMPLATE/dev.md',
@@ -160,7 +160,7 @@ describe('checkLane docsOnly', () => {
 });
 
 describe('.github/labeler.yml', () => {
-  it('adds migration to a non-content branch that changes content (SPEC.md §12.4)', async () => {
+  it('adds migration to a non-content branch that changes content (docs/workflow.md#lane-rules)', async () => {
     const { readFile } = await import('node:fs/promises');
     const yml = await readFile(new URL('../.github/labeler.yml', import.meta.url), 'utf8');
     const rule = yml.slice(yml.indexOf('\nmigration:'));
@@ -173,7 +173,7 @@ describe('.github/labeler.yml', () => {
   });
 });
 
-describe('waiting for the labeler (SPEC.md §12.4)', () => {
+describe('waiting for the labeler (docs/workflow.md#labeling)', () => {
   const noSleep = async () => {};
 
   it('needs the migration label only for a dev PR that changes content without it', () => {

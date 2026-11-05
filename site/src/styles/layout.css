@@ -1,5 +1,5 @@
 /*
- * Page shell (SPEC.md §9.6): header, main column, footer. Widths and gutters
+ * Page shell (docs/styling.md#styling-system): header, main column, footer. Widths and gutters
  * come from components.css.
  */
 @layer layout {

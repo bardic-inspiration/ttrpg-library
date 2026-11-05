@@ -1,12 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/common.schema.json",
-  "title": "dnd-5e-2024 shared definitions (SPEC.md §6.3)",
+  "title": "dnd-5e-2024 shared definitions (docs/rulesets.md#shared-definitions)",
   "description": "Enums here mirror tables.json; tests/rulesets/dnd-5e-2024/schemas.test.ts keeps them in step.",
   "$defs": {
-    "Ability": { "enum": ["str", "dex", "con", "int", "wis", "cha"] },
-    "Dice": { "type": "string", "pattern": "^[1-9]\\d*d(4|6|8|10|12|20|100)$" },
+    "Ability": { "description": "An ability, by its three-letter key.", "enum": ["str", "dex", "con", "int", "wis", "cha"] },
+    "Dice": { "description": "Dice with no modifier, such as \"2d6\". Modifiers come from an ability and a bonus.", "type": "string", "pattern": "^[1-9]\\d*d(4|6|8|10|12|20|100)$" },
     "Damage": {
+      "description": "One damage roll. In a list, the first is the primary damage and the rest render as \"plus\" riders.",
       "type": "object",
       "additionalProperties": false,
       "allOf": [
@@ -14,36 +15,40 @@
         { "oneOf": [{ "required": ["type"] }, { "required": ["note"] }] }
       ],
       "properties": {
-        "dice": { "$ref": "#/$defs/Dice" },
+        "dice": { "description": "The damage dice. A damage entry has dice or a flat amount.", "$ref": "#/$defs/Dice" },
         "amount": { "description": "Flat damage printed without dice, such as \"1 Piercing damage\".", "type": "integer", "minimum": 1 },
-        "ability": { "$ref": "#/$defs/Ability" },
-        "bonus": { "type": "integer", "not": { "const": 0 } },
-        "type": { "$ref": "#/$defs/DamageType" },
-        "condition": { "type": "string", "minLength": 1 },
+        "ability": { "description": "Adds this ability's modifier.", "$ref": "#/$defs/Ability" },
+        "bonus": { "description": "A flat addition to the modifier: a deliberate deviation, listed as a warning.", "type": "integer", "not": { "const": 0 } },
+        "type": { "description": "The damage type. A damage entry has a type or a note.", "$ref": "#/$defs/DamageType" },
+        "condition": { "description": "When a rider applies, printed after it: \"if the attack roll had Advantage\". Only on a rider, never the first damage.", "type": "string", "minLength": 1 },
         "note": { "description": "Printed after \"damage\" in place of a type, for damage whose type isn't fixed: \"of the type chosen for the Draconic Origin trait\".", "type": "string", "minLength": 1 }
       }
     },
-    "Proficiency": { "enum": ["proficient", "expertise"] },
-    "Adjust": { "type": "integer", "not": { "const": 0 } },
+    "Proficiency": { "description": "Proficient adds the proficiency bonus; expertise adds twice it.", "enum": ["proficient", "expertise"] },
+    "Adjust": { "description": "A deliberate deviation from a derived value, listed as a warning for the reviewer.", "type": "integer", "not": { "const": 0 } },
     "DamageType": {
+      "description": "The SRD damage types.",
       "enum": ["acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"]
     },
     "Condition": {
+      "description": "The SRD conditions.",
       "enum": ["blinded", "charmed", "deafened", "exhaustion", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious"]
     },
     "Ref": {
+      "description": "A link to a library entry. It renders the target's current name, linked to its page.",
       "type": "object",
       "additionalProperties": false,
       "required": ["ref"],
       "properties": {
-        "ref": { "type": "string", "pattern": "^(creature|magic-item|spell)/[a-z0-9-]+$" },
+        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|magic-item|spell)/[a-z0-9-]+$" },
         "note": { "description": "A qualifier printed in parentheses after the target's name, such as \"level 5 version\".", "type": "string", "minLength": 1 }
       }
     },
-    "RefOrText": { "anyOf": [{ "$ref": "#/$defs/Ref" }, { "type": "string", "minLength": 1 }] },
-    "Text": { "type": "string", "minLength": 1, "markdownSubset": true },
-    "Line": { "type": "string", "minLength": 1 },
+    "RefOrText": { "description": "A ref to a library entry, or a plain string for SRD content not in the library.", "anyOf": [{ "$ref": "#/$defs/Ref" }, { "type": "string", "minLength": 1 }] },
+    "Text": { "description": "Rules text in the markdown subset, with tokens where the ruleset allows them.", "type": "string", "minLength": 1, "markdownSubset": true },
+    "Line": { "description": "A stat block line, written as printed.", "type": "string", "minLength": 1 },
     "StatBlockItem": {
+      "description": "A named trait or action of an embedded stat block.",
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "text"],
@@ -54,18 +59,19 @@
     },
     "StatBlockItems": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/StatBlockItem" } },
     "StatBlock": {
-      "description": "A stat block printed inside a spell or magic item (SPEC.md §6.6, §6.7). Authored as printed: only the ability modifiers and saves are derived.",
+      "description": "A stat block printed inside a spell or magic item (docs/rulesets.md#embedded-stat-blocks, docs/rulesets.md#embedded-stat-blocks). Authored as printed: only the ability modifiers and saves are derived.",
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "typeLine", "abilities"],
       "properties": {
-        "name": { "type": "string", "minLength": 1 },
-        "typeLine": { "$ref": "#/$defs/Line" },
+        "name": { "description": "The block's heading.", "type": "string", "minLength": 1 },
+        "typeLine": { "description": "Size, type, and alignment, such as \"Large Dragon, Neutral\".", "$ref": "#/$defs/Line" },
         "ac": { "$ref": "#/$defs/Line" },
         "initiative": { "$ref": "#/$defs/Line" },
         "hp": { "$ref": "#/$defs/Line" },
         "speed": { "$ref": "#/$defs/Line" },
         "abilities": {
+          "description": "Ability scores. The modifiers and saves are derived.",
           "type": "object",
           "additionalProperties": false,
           "required": ["str", "dex", "con", "int", "wis", "cha"],

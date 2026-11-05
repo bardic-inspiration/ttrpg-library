@@ -1,4 +1,4 @@
-// `npm run srd-coverage` (SPEC.md §5.9): lists the SRD manifest records with no
+// `npm run srd-coverage` (docs/content-model.md#srd-manifest-and-coverage): lists the SRD manifest records with no
 // SRD entry in the library, by type and tier, and SRD entries the manifest
 // lacks. `--type <type>` and `--tier <complex|simple>` narrow the report;
 // `--ruleset <id>` picks a ruleset other than config/defaults.json's.

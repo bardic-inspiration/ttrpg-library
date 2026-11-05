@@ -1,4 +1,4 @@
-// Text-field checks for every type (SPEC.md §5.5, §11, §6.8 "All types"):
+// Text-field checks for every type (docs/content-model.md#text-fields, docs/licensing.md, docs/content-model.md#validation "All types"):
 // the markdown subset, its pipe tables, and the blocklist.
 
 import { readFile } from 'node:fs/promises';
@@ -8,7 +8,7 @@ import { tableTitleAt } from '../../lib/table-title.ts';
 import type { TermMatcher } from '../../lib/text.ts';
 
 /**
- * Constructs outside the §5.5 subset, by `marked` token type. The site renders
+ * Constructs outside the docs/content-model.md#text-fields subset, by `marked` token type. The site renders
  * text with `marked` too, so the check sees the same structure as the reader.
  * `def` is a reference-link definition (`[x]: https://...`).
  */
@@ -44,7 +44,7 @@ function cellCount(line: string): number {
 }
 
 /**
- * Shape problems in one pipe table (SPEC.md §5.5). `marked` pads a short row
+ * Shape problems in one pipe table (docs/content-model.md#tables-in-text). `marked` pads a short row
  * and drops a long row's extra cells, so the row lengths are counted from the
  * raw lines rather than from the parsed rows.
  */
@@ -71,7 +71,7 @@ const BROKEN_TABLE_LINE = /^\s*\|/m;
 
 /**
  * `text` with its markdown removed: the words a reader sees, separated by
- * single spaces. Used for the index's `search` text (SPEC.md §9.1).
+ * single spaces. Used for the index's `search` text (docs/site.md#index-build).
  */
 export function plainText(text: string): string {
   const flatten = (tokens: Token[]): string =>
@@ -167,13 +167,13 @@ const textFields = (entry: TextEntry): { path: string; text: string }[] => [
 ];
 
 /**
- * Placeholder markers (SPEC.md §6.8): the all-caps ones as whole words and in
+ * Placeholder markers (docs/content-model.md#validation): the all-caps ones as whole words and in
  * capitals only, so "to do" and "tbd" in prose pass, and "lorem ipsum" in any case.
  */
 const PLACEHOLDER = /\b(?:TODO|TBD|FIXME|XXX)\b|\blorem ipsum\b/gi;
 const isPlaceholder = (match: string): boolean => /^lorem ipsum$/i.test(match) || match === match.toUpperCase();
 
-/** Placeholder text in any text-bearing field, one message per match (SPEC.md §6.8). */
+/** Placeholder text in any text-bearing field, one message per match (docs/content-model.md#validation). */
 export function checkPlaceholders(entry: TextEntry): string[] {
   return textFields(entry).flatMap(({ path, text }) =>
     [...text.matchAll(PLACEHOLDER)]
@@ -184,7 +184,7 @@ export function checkPlaceholders(entry: TextEntry): string[] {
 }
 
 /**
- * The §11 blocklist over `name`, `summary`, `description`, and every string in
+ * The docs/licensing.md#blocklist blocklist over `name`, `summary`, `description`, and every string in
  * `stats` (which holds `descriptors`). `matches` is a `termMatcher` over the
  * blocklist. One message per match.
  */

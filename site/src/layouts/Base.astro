@@ -1,5 +1,5 @@
 ---
-// Page shell (SPEC.md §9.2, §9.6). Loads the fonts and the global styles in
+// Page shell (docs/site.md#pages-and-navigation, docs/styling.md#styling-system). Loads the fonts and the global styles in
 // cascade-layer order, applies a stored theme before first paint, and wraps
 // every page in the header, main column, and footer.
 import '@fontsource/alegreya/400.css';
@@ -31,9 +31,9 @@ import { url } from '../lib/url';
 
 interface Props {
   title: string;
-  /** Keep the page out of search indexes (the style guide, §9.8). */
+  /** Keep the page out of search indexes (the style guide, docs/styling.md#refinement-workflow). */
   noindex?: boolean;
-  /** Open Graph tags for link previews (§9.4). `image` is a path under the site base. */
+  /** Open Graph tags for link previews (docs/site.md#detail-page). `image` is a path under the site base. */
   og?: { title: string; description: string; image?: string; type?: 'website' | 'article' };
 }
 

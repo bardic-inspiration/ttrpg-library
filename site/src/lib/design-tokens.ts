@@ -1,5 +1,5 @@
-// Reads the design-token files (SPEC.md §9.6) so the contrast tests (§9.7)
-// and the style guide (§9.8) see exactly what the browser sees. Each custom
+// Reads the design-token files (docs/styling.md#tokens) so the contrast tests (docs/styling.md#accessibility)
+// and the style guide (docs/styling.md#refinement-workflow) see exactly what the browser sees. Each custom
 // property is classified by the theme block it sits in, and var() references
 // resolve through the primitives to a literal value.
 

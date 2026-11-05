@@ -1,4 +1,4 @@
-// JSON export (SPEC.md §10.2). Entry scope downloads the entry's raw file
+// JSON export (docs/export.md#json). Entry scope downloads the entry's raw file
 // unchanged as `<id>.json`: the native format, inputs only, no derived values.
 // Set scope fetches each raw file and downloads one array as
 // `library-<YYYYMMDD>.json`, dated by the reader's local clock.

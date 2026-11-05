@@ -1,4 +1,4 @@
-// `npm run snapshots [label]` (SPEC.md §9.8): serves the built site
+// `npm run snapshots [label]` (docs/styling.md#refinement-workflow): serves the built site
 // (site/dist) under the site base and captures full-page screenshots of the
 // pages snapshotPages picks, in the light and dark themes, into the
 // git-ignored snapshots/<label>/ folder. Not a CI gate. Run `npm run build`

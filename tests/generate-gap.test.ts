@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import type { GapAxis, GapRecord } from '../lib/buckets.ts';
 import { pickGap, type GapRegistry } from '../scripts/generate/gap.ts';
 
-// SPEC.md §8.2 step 5 (the gap-fill picker); issue #72. Bucket counting is in tests/lib/buckets.test.ts.
+// docs/generation.md#run-order step 5 (the gap-fill picker); issue #72. Bucket counting is in tests/lib/buckets.test.ts.
 const ROOT = join(import.meta.dirname, '..');
 const R = 'dnd-5e-2024';
 

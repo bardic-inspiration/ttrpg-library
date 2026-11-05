@@ -1,4 +1,4 @@
-# SPEC.md §12.4 "Labeling": lane labels from the branch prefix, area labels
+# docs/workflow.md#labeling: lane labels from the branch prefix, area labels
 # from changed paths, using the rules in .github/labeler.yml. Runs on
 # pull_request_target so it can write labels; it only reads PR metadata and
 # changed paths, and never checks out or runs PR code.

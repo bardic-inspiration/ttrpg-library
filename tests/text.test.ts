@@ -5,7 +5,7 @@ import { PROJECT_ROOT } from '../scripts/validate/schema.ts';
 import { termMatcher } from '../lib/text.ts';
 import { checkBlocklist, checkMarkdown, checkPlaceholders, loadBlocklist, markdownViolations, stringsIn, tableViolations } from '../scripts/validate/text.ts';
 
-describe('markdown subset (SPEC.md §5.5)', () => {
+describe('markdown subset (docs/content-model.md#text-fields)', () => {
   it('allows paragraphs, bold, italic, lists, line breaks, and tokens', () => {
     const text = [
       'A **bold** and *italic* paragraph with a token {dmg:2d6+str:fire}.',
@@ -49,7 +49,7 @@ describe('markdown subset (SPEC.md §5.5)', () => {
   });
 });
 
-describe('pipe tables (SPEC.md §5.5)', () => {
+describe('pipe tables (docs/content-model.md#tables-in-text)', () => {
   it.each([
     ['a short row', '| a | b |\n|---|---|\n| 1 |', ['table row 1 has 1 cell; its header has 2']],
     ['a long row', '| a | b |\n|---|---|\n| 1 | 2 |\n| 1 | 2 | 3 |', ['table row 2 has 3 cells; its header has 2']],
@@ -83,7 +83,7 @@ describe('pipe tables (SPEC.md §5.5)', () => {
   });
 });
 
-describe('placeholder text (SPEC.md §6.8)', () => {
+describe('placeholder text (docs/content-model.md#validation)', () => {
   const entry = (patch: Record<string, unknown>) => ({ name: 'Cinder Hound', summary: 'A soot-black hound.', stats: {}, ...patch });
 
   it('flags each placeholder marker in name, summary, description, and stats text, naming the field', () => {
@@ -114,7 +114,7 @@ describe('placeholder text (SPEC.md §6.8)', () => {
   });
 });
 
-describe('blocklist (SPEC.md §11)', () => {
+describe('blocklist (docs/licensing.md#blocklist)', () => {
   const matches = termMatcher(['Beholder', 'Mind Flayer', 'Faerûn', 'Tasha']);
 
   it('checks name, summary, description, and every string in stats', () => {
@@ -140,7 +140,7 @@ describe('blocklist (SPEC.md §11)', () => {
     ]);
   });
 
-  it('loads config/blocklist.json with the §11 examples', async () => {
+  it('loads config/blocklist.json with the docs/licensing.md#blocklist examples', async () => {
     const terms = await loadBlocklist(PROJECT_ROOT);
     for (const term of ['Beholder', 'Mind Flayer', 'Illithid', 'Displacer Beast', 'Githyanki', 'Forgotten Realms', 'Faerûn', 'Greyhawk', 'Eberron', 'Waterdeep', 'Mordenkainen', 'Bigby', 'Tasha']) {
       expect(terms).toContain(term);

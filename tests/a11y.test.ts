@@ -11,7 +11,7 @@ const record = (type: string, id: string, facets: Record<string, unknown>) => ({
   facets,
 });
 
-describe('a11yPages (SPEC.md §9.7)', () => {
+describe('a11yPages (docs/styling.md#accessibility)', () => {
   it('checks home, a filtered type gallery, one detail page per type with entries, and the print view', () => {
     const pages = a11yPages([
       record('creature', 'cinder-hound', { 'stats.cr': 2, 'stats.size': ['medium'] }),

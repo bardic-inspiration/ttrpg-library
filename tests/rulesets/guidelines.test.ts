@@ -5,7 +5,7 @@ import { termMatcher } from '../../lib/text.ts';
 import { tables } from '../../rulesets/dnd-5e-2024/index.ts';
 import { findTokens } from '../../rulesets/dnd-5e-2024/tokens.ts';
 
-// SPEC.md §8.6 (Guidelines), §6.4, §11; issue #63.
+// docs/generation.md#guidelines (Guidelines), docs/rulesets.md#text-tokens, docs/licensing.md; issue #63.
 const ROOT = join(import.meta.dirname, '../..');
 const read = (path: string) => readFileSync(join(ROOT, path), 'utf8');
 
@@ -31,7 +31,7 @@ describe.each(types)('guideline for $ruleset/$type', ({ ruleset, type, guideline
     expect(existsSync(join(ROOT, guideline!))).toBe(true);
   });
 
-  it('has the five §8.6 sections, in order', () => {
+  it('has the five docs/generation.md#guidelines sections, in order', () => {
     const headings = read(guideline!)
       .split('\n')
       .filter((line) => line.startsWith('## '))

@@ -41,13 +41,13 @@ describe('validateLibrary', () => {
     expect(await validateLibrary(empty)).toEqual({ files: [], errors: [], warnings: [], entries: [] });
   });
 
-  it('passes the §6.9 examples with no warnings, and returns their derived values', async () => {
+  it('passes the example entries with no warnings, and returns their derived values', async () => {
     const result = await validateLibrary(join(library, 'valid'));
     expect(result.errors).toEqual([]);
     expect(result.warnings).toEqual([]);
     const derived = Object.fromEntries(result.entries.map((e) => [e.entry.id, e.derived]));
     expect(derived['cinder-hound']).toMatchObject({ xp: 450, hp: { average: 32 } });
-    // Magic items and spells derive nothing in v1 without an embedded stat block (SPEC.md §6.2).
+    // Magic items and spells derive nothing in v1 without an embedded stat block (docs/rulesets.md#the-ruleset-module).
     expect(derived['frost-lance']).toEqual({});
     expect(derived['wand-of-frost-lances']).toEqual({});
   });
@@ -61,7 +61,7 @@ describe('validateLibrary', () => {
 });
 
 /**
- * One fixture per error in tests/fixtures/invalid/: a §6.9 example with one
+ * One fixture per error in tests/fixtures/invalid/: an example entry with one
  * thing broken (the cinder hound, or Frost Lance for `spell-*` and the wand
  * for `magic-item-*`). It replaces that example in a copy of the valid
  * library, so refs to the other examples resolve. Each must fail with a
@@ -185,9 +185,9 @@ describe('invalid fixtures', () => {
 });
 
 /**
- * Omission is the only way to say an optional field doesn't apply (SPEC.md
- * §5.8): each case sets one optional field to a "none" value on a §6.9
- * example, which the schema must reject.
+ * Omission is the only way to say an optional field doesn't apply
+ * (docs/content-model.md#situational-fields): each case sets one optional field
+ * to a "none" value on an example, which the schema must reject.
  */
 type Example = 'creature' | 'spell' | 'magic-item';
 const NONE_VALUES: [Example, string, unknown, RegExp][] = [
@@ -248,7 +248,7 @@ function setStat(stats: Record<string, any>, path: string, value: unknown) {
   parent[last] = value;
 }
 
-describe('situational fields (SPEC.md §5.8)', () => {
+describe('situational fields (docs/content-model.md#situational-fields)', () => {
   it.each(NONE_VALUES)('rejects a "none" value on %s stats.%s', async (type, path, value, pattern) => {
     const entry = await EXAMPLES[type]();
     setStat(entry.stats, path, value);
@@ -264,7 +264,7 @@ describe('situational fields (SPEC.md §5.8)', () => {
     expect((await validateLibrary(content)).errors).toEqual([]);
   });
 
-  it('accepts the SRD marker meta.source.srd as true and rejects false (SPEC.md §5.4)', async () => {
+  it('accepts the SRD marker meta.source.srd as true and rejects false (docs/content-model.md#meta)', async () => {
     const srd = await cinderHound();
     srd.meta.source.srd = true;
     expect((await validateLibrary((await temp([srd])).content)).errors).toEqual([]);
@@ -285,7 +285,7 @@ describe('situational fields (SPEC.md §5.8)', () => {
   });
 });
 
-describe('library checks (SPEC.md §6.8, all types)', () => {
+describe('library checks (docs/content-model.md#validation, all types)', () => {
   it('fails when the file path does not match ruleset, type, and id', async () => {
     const { content } = await temp([{ path: 'dnd-5e-2024/creature/hound.json', entry: await cinderHound() }]);
     const { errors } = await validateLibrary(content);
@@ -316,7 +316,7 @@ describe('library checks (SPEC.md §6.8, all types)', () => {
     ]);
   });
 
-  it('allows the same id and name in different types, and warns on near names only within a type (SPEC.md §5.2)', async () => {
+  it('allows the same id and name in different types, and warns on near names only within a type (docs/content-model.md#ids-and-names)', async () => {
     const spell = await frostLance();
     const creature = { ...(await cinderHound()), name: 'Frost Lance', id: 'frost-lance' };
     const nearCreature = { ...(await cinderHound()), name: 'Frost Lances', id: 'frost-lances' };
@@ -327,7 +327,7 @@ describe('library checks (SPEC.md §6.8, all types)', () => {
     expect(near.warnings.map((w) => w.file)).toEqual(['dnd-5e-2024/creature/frost-lances.json']);
   });
 
-  it('skips the near-duplicate warning when both entries are SRD entries (SPEC.md §5.2)', async () => {
+  it('skips the near-duplicate warning when both entries are SRD entries (docs/content-model.md#ids-and-names)', async () => {
     const srd = await cinderHound();
     srd.meta.source.srd = true;
     const near = await cinderHound();
@@ -381,8 +381,8 @@ describe('library checks (SPEC.md §6.8, all types)', () => {
   });
 });
 
-describe('references (SPEC.md §5.7)', () => {
-  it('resolves the §6.9 examples together and computes back-references', async () => {
+describe('references (docs/content-model.md#references)', () => {
+  it('resolves the example entries together and computes back-references', async () => {
     const result = await validateLibrary(join(library, 'valid'));
     expect(result.errors).toEqual([]);
     const byId = Object.fromEntries(result.entries.map((e) => [e.entry.id, e]));
@@ -446,7 +446,7 @@ describe('references (SPEC.md §5.7)', () => {
   });
 });
 
-describe('creature warnings (SPEC.md §6.8)', () => {
+describe('creature warnings (docs/rulesets.md#consistency-checks)', () => {
   it('lists every adjustment and high derived values for the reviewer', async () => {
     const entry = await cinderHound();
     entry.stats.initiative = { adjust: 1 };
@@ -472,7 +472,7 @@ describe('creature warnings (SPEC.md §6.8)', () => {
   });
 });
 
-describe('authored DCs (SPEC.md §6.4, #88)', () => {
+describe('authored DCs (docs/rulesets.md#text-tokens, #88)', () => {
   it('accepts an authored DC token, lists it for the reviewer, and still rejects a literal DC', async () => {
     const entry = await cinderHound();
     entry.stats.traits[0].text = 'It escapes with a {dc=12} Strength (Athletics) check, or a ({dc=5} plus the damage taken) save.';
@@ -487,7 +487,7 @@ describe('authored DCs (SPEC.md §6.4, #88)', () => {
     expect(literal.errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/"DC 12" writes a derived number/));
   });
 
-  it('skips ruleset warnings on an SRD entry, which is literal, but keeps its errors (SPEC.md §5.9)', async () => {
+  it('skips ruleset warnings on an SRD entry, which is literal, but keeps its errors (docs/content-model.md#srd-and-custom-entries)', async () => {
     const entry = await cinderHound();
     entry.meta.source.srd = true;
     entry.stats.actions[0].adjust = 1;
@@ -511,7 +511,7 @@ describe('authored DCs (SPEC.md §6.4, #88)', () => {
   });
 });
 
-describe('magic-item warnings (SPEC.md §6.8)', () => {
+describe('magic-item warnings (docs/rulesets.md#consistency-checks)', () => {
   it('warns when the effect restates an authored save DC or attack bonus', async () => {
     const wand = await wandOfFrostLances();
     wand.stats.spells = [
@@ -539,7 +539,7 @@ describe('magic-item warnings (SPEC.md §6.8)', () => {
   });
 });
 
-describe('spell warnings (SPEC.md §6.8)', () => {
+describe('spell warnings (docs/rulesets.md#consistency-checks)', () => {
   it('warns on a cantrip marked ritual', async () => {
     const spell = await frostLance();
     spell.stats.level = 0;

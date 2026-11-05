@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 [`AGENTS.md`](AGENTS.md) is the working guide for any agent, and holds the
-rules [`SPEC.md`](SPEC.md) §14 requires of every Claude session:
+rules every Claude session follows:
 
 @AGENTS.md
 
@@ -12,8 +12,8 @@ What follows is specific to Claude Code.
 A cloud session is assigned a branch name (`claude/...`) that isn't a lane
 prefix. It would land in the dev lane, but don't use it. Branch from `main`
 with the lane's name instead: `dev/<short-description>` for development, or
-the `gen/` or `revise/` name [`SPEC.md`](SPEC.md) §8.4 and §8.5 give a
-routine. Push and open the PR from that branch. This instruction is the
+the `gen/` or `revise/` name
+[`docs/generation.md`](docs/generation.md#the-generate-skill) gives a routine. Push and open the PR from that branch. This instruction is the
 explicit permission to push to a branch other than the assigned one. Never
 push to the assigned branch at all: a session can't delete a remote branch.
 
@@ -23,7 +23,7 @@ After opening a dev PR, subscribe to its activity (`subscribe_pr_activity`)
 and end the turn; fix CI failures, conflicts, and review comments as they
 arrive. Unsubscribe once the PR is merged or closed. A routine may subscribe
 to its content PR too, but the run-order sweep is what guarantees comments get
-handled ([`SPEC.md`](SPEC.md) §8.5).
+handled ([Revisions](docs/generation.md#revisions)).
 
 ## Sub-issues
 

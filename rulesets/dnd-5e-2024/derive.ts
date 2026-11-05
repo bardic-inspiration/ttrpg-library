@@ -1,4 +1,4 @@
-// Derived values for dnd-5e-2024 (SPEC.md §6.1, §6.2). Pure functions of the
+// Derived values for dnd-5e-2024 (docs/rulesets.md#inputs-and-derived-values, docs/rulesets.md#the-ruleset-module). Pure functions of the
 // stored inputs and the rules tables; nothing here is ever written to an entry.
 
 import type {
@@ -22,7 +22,7 @@ export const abilityMod = (score: number): number => Math.floor((score - 10) / 2
 const proficiencyMultiplier = (proficiency: Proficiency | undefined): number =>
   proficiency === 'expertise' ? 2 : proficiency === 'proficient' ? 1 : 0;
 
-/** U+2212, the minus sign SRD 5.2 prints (SPEC.md §6.5). */
+/** U+2212, the minus sign SRD 5.2 prints (docs/rulesets.md#creature-display-forms). */
 export const MINUS = '\u2212';
 
 /** `+2`, `+0`, `−1`, with U+2212 for negatives. Display only. */
@@ -53,7 +53,7 @@ export function diceAverage(dice: string): number {
   return Math.floor((count * (sides + 1)) / 2);
 }
 
-/** Average and display of one damage roll (SPEC.md §6.2). */
+/** Average and display of one damage roll (docs/rulesets.md#the-ruleset-module). */
 export function deriveDamage(
   dice: string,
   ability: Ability | undefined,
@@ -156,7 +156,7 @@ export function deriveCreature(stats: CreatureStats, tables: Tables): DerivedCre
 
 /**
  * The ability modifiers and saves of each stat block embedded in a spell or
- * magic item (SPEC.md §6.6, §6.7). Everything else in one is authored as
+ * magic item (docs/rulesets.md#magic-items, docs/rulesets.md#spells). Everything else in one is authored as
  * printed. These blocks have no save proficiencies, so a save is the modifier.
  */
 export function deriveStatBlocks(blocks: StatBlock[] | undefined, tables: Tables): { statBlocks?: DerivedStatBlock[] } {

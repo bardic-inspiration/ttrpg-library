@@ -1,6 +1,6 @@
-// Serves the built site (site/dist) under the site base (SPEC.md §3.1), so
+// Serves the built site (site/dist) under the site base (docs/architecture.md#technology), so
 // browser checks load pages at the same paths as GitHub Pages. Used by
-// `npm run a11y` (§9.7).
+// `npm run a11y` (docs/styling.md#accessibility).
 
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
