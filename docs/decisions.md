@@ -300,3 +300,13 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Every type and item rarity has its own art-glass accent. | Types stay distinct as v2 adds them | #114 |
 | Art is late-1800s and early-1900s public domain or CC book illustration and architectural drawing, lightly processed to monochrome or a tint. | Matches the style with art that is actually available | #114 |
 | Wright and the Wasmuth portfolio are inspiration only, never named on the site. | P9: an original look | #114 |
+
+### Art
+
+| Decision | Why | Source |
+|---|---|---|
+| Images stay in the repo under `assets/images/`; no external hosting. | Processed line art is small; P1 and PR review stay intact | #117 |
+| Art is lightly processed: cropped, monochrome, and tinted by CSS at display time. | One file serves every accent, and files stay small | #117 |
+| Art is used if its source marks it public domain, CC0, or CC-BY, or if the skill judges it public domain from creator and date (US publication before 1931, or a creator dead over 70 years), with the reasoning recorded. A denylist of protected collections and estates is never retrieved from. | Most wanted art predates 1931; some collections are protected regardless of age | #117 |
+| An `art` skill retrieves, checks, processes, and posts candidates. It is tuned on a `spike/` branch through a private claude.ai review page where the owner rates each candidate Good, OK, or Rejected with a note, and the next session updates the skill from the ratings. | Iteration narrows in on the right images without downloading or typing lists | #117 |
+| For the v2 build, the tuned skill opens a content PR with the Good-rated images. Later, art comes with content or is added afterwards; when content passes but its art is denied, the two are split and the request issue gets a comment. | Art has its own review criteria; P7 | #117 |
