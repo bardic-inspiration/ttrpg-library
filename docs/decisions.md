@@ -241,3 +241,16 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Linking is part of authoring: an entry links every library entry it mentions or uses, and a link pass links mentions written before their target existed. | Already the `generate` and `srd-import` rules; the owner confirmed them as the standard | #111 |
 | An area with no build of its own (`linking.md`) is deleted by the first build PR that exercises it. | Keeps the stage spec's "emptied by building it" rule | #111 |
 | Ruleset primitives (SRD conditions, equipment items and groups, glossary terms) and hidden components are link targets with `<type>/<id>` keys, rendered as links to their anchors. An extension shares its type's keys. | One link form whatever the target; P3 | #111, #112 |
+
+### Types
+
+| Decision | Why | Source |
+|---|---|---|
+| v2 covers every SRD 5.2 component: glossary terms, conditions, equipment, feats, backgrounds, species, classes, and subclasses, alongside spells, items, and creatures. | Ruleset completeness: user content builds on the full SRD | #112 |
+| The ruleset splits into rules (glossary terms, conditions, equipment) and content (everything else). | Separates the ruleset's definitions from the authorable library | #112 |
+| Ruleset primitives are ruleset data shown as one combined page per rules type, with an anchor per primitive. Ruleset extensions are authored entries shown as cards, listed on an Extensions page beside the rules pages and at the bottom of each rules page. | The line falls between the basis and the custom additions, and applies to every rules type | #112 |
+| In v2, only conditions and equipment take extensions. Glossary terms aren't authorable, and abilities, damage types, skills, creature types, and sizes stay closed lists. | Covers the simple house rules; P2 for the rest | #112 |
+| v2 extension only adds. Modifying or replacing a rule, or adding a mechanic, waits for v3's house rules system. | Additive extensions are simple; rule changes need their own design | #112 |
+| Equipment is one rules type with categories and nested sub-classifications, each group a linkable section. | Matches the SRD's grouping, and lets a base item name a group | #112 |
+| Content types are cards (spells, items, creatures, feats, backgrounds) or pages (classes, subclasses, species). A page type is assembled from components: hidden, linked sub-entries viewed only through the parent's page. | A hierarchy by complexity; v3's encounters and dungeons extend it | #112 |
+| `magic-item` is renamed `item`, through a migration that keeps every `id` and redirects the old URLs. | Magic items are items built on equipment; P9 | #112 |
