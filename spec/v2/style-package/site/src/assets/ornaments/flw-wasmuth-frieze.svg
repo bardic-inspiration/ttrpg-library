@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 24" preserveAspectRatio="none">
+  <!-- Frank Lloyd Wright Wasmuth & Taliesin Stepped Frieze Divider -->
+  <line x1="0" y1="3" x2="1200" y2="3" stroke="#241b15" stroke-width="1.5" />
+  <line x1="0" y1="8" x2="1200" y2="8" stroke="#c91d16" stroke-width="1.5" />
+  <rect x="0" y="12" width="360" height="8" fill="#c91d16" />
+  <rect x="372" y="12" width="24" height="8" fill="#241b15" />
+  <rect x="404" y="12" width="24" height="8" fill="#7422de" />
+  <rect x="436" y="12" width="24" height="8" fill="#006b82" />
+  <rect x="468" y="12" width="24" height="8" fill="#0b7a3e" />
+  <rect x="500" y="12" width="24" height="8" fill="#a84d00" />
+  <line x1="536" y1="16" x2="1200" y2="16" stroke="#7a6552" stroke-width="2" stroke-dasharray="12 6" />
+</svg>

@@ -1,0 +1,101 @@
+/*
+ * Semantic tokens (docs/styling.md#themes): what each role looks like, per theme.
+ * Components read these, never the primitives.
+ *
+ * Theme: Frank Lloyd Wright — 1910 Wasmuth Portfolio (Cotton-Rag & Art-Glass Jewels)
+ */
+@layer tokens {
+  :root,
+  [data-theme='light'] {
+    color-scheme: light;
+    --color-bg: var(--parchment-100);
+    --color-surface: var(--parchment-50);
+    --color-text: var(--ink-900);
+    --color-text-muted: var(--ink-600);
+    --color-accent: var(--red-700);
+    --color-border: var(--parchment-400);
+    --color-control-border: var(--ink-400);
+    --color-focus: var(--blue-700);
+  }
+
+  @media screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      color-scheme: dark;
+      --color-bg: var(--night-900);
+      --color-surface: var(--night-800);
+      --color-text: var(--bone-100);
+      --color-text-muted: var(--bone-400);
+      --color-accent: var(--red-300);
+      --color-border: var(--night-600);
+      --color-control-border: var(--night-400);
+      --color-focus: var(--blue-300);
+    }
+  }
+
+  @media screen {
+    [data-theme='dark'] {
+      color-scheme: dark;
+      --color-bg: var(--night-900);
+      --color-surface: var(--night-800);
+      --color-text: var(--bone-100);
+      --color-text-muted: var(--bone-400);
+      --color-accent: var(--red-300);
+      --color-border: var(--night-600);
+      --color-control-border: var(--night-400);
+      --color-focus: var(--blue-300);
+    }
+  }
+
+  :root,
+  [data-theme] {
+    --font-body: var(--family-serif);
+    --font-heading: var(--family-serif-sc);
+    --font-label: var(--family-sans);
+    --font-code: var(--family-mono);
+
+    --text-small: var(--font-size--1);
+    --text-body: var(--font-size-0);
+    --text-h3: var(--font-size-1);
+    --text-h2: var(--font-size-2);
+    --text-h1: var(--font-size-3);
+    --text-title: var(--font-size-4);
+
+    --font-weight-body: 400;
+    --font-weight-label: 700;
+
+    --leading-heading: var(--leading-tight);
+    --leading-body: var(--leading-normal);
+
+    --space-xxs: var(--size-1);
+    --space-xs: var(--size-2);
+    --space-s: var(--size-3);
+    --space-m: var(--size-4);
+    --space-l: var(--size-5);
+    --space-xl: var(--size-6);
+    --space-2xl: var(--size-7);
+    --space-3xl: var(--size-8);
+
+    --space-card: var(--space-m);
+
+    --content-width: var(--size-content);
+    --measure-prose: var(--size-measure);
+
+    --border-width: var(--stroke-thin);
+    --border-width-strong: var(--stroke-medium);
+
+    --radius-card: var(--radius-2);
+    --radius-control: var(--radius-2);
+    --radius-badge: var(--radius-pill);
+
+    --shadow-card: var(--shadow-1);
+    --shadow-overlay: var(--shadow-2);
+
+    --duration-quick: var(--duration-fast);
+    --duration-base: var(--duration-normal);
+    --duration-gentle: var(--duration-slow);
+
+    --focus-ring-width: var(--stroke-medium);
+    --focus-ring-offset: var(--stroke-medium);
+    --focus-ring: var(--focus-ring-width) solid var(--color-focus);
+  }
+}

@@ -1,0 +1,184 @@
+/*
+ * Frank Lloyd Wright — 1910 Wasmuth Portfolio (Refined Cotton-Rag & Art-Glass Jewels)
+ * Drop into: site/src/styles/overrides.css
+ *
+ * Includes:
+ * 1. Less-yellow Cotton-Rag Alabaster (#f2ede4) & Warm Ivory (#faf8f3) surfaces
+ * 2. High-vibrancy Art-Glass Entry Type & Rarity palette (WCAG AA compliant in light & dark)
+ * 3. Larkin Building 8x8px Poché Structural Corner Piers (pigmented per entry --accent)
+ * 4. Wasmuth Double-Frame Lithograph Page Border & Architectural Callout Badges
+ */
+@layer overrides {
+  /* ==========================================================================
+   * 1. Semantic & Content Token Overrides (Light & Dark)
+   * ========================================================================== */
+  :root,
+  [data-theme='light'] {
+    color-scheme: light;
+    --color-bg: #f2ede4;
+    --color-surface: #faf8f3;
+    --color-text: #241b15;
+    --color-text-muted: #574639;
+    --color-accent: #c91d16;
+    --color-border: #7a6552;
+    --color-control-border: #665242;
+    --color-focus: #0055b3;
+
+    /* Vibrant Art-Glass Entry Type Accents */
+    --accent-creature: #c91d16;
+    --accent-magic-item: #7422de;
+    --accent-spell: #006b82;
+
+    /* Vibrant Stained-Glass Rarity Accents */
+    --rarity-common: #574639;
+    --rarity-uncommon: #0b7a3e;
+    --rarity-rare: #0055b3;
+    --rarity-very-rare: #7422de;
+    --rarity-legendary: #a84d00;
+    --rarity-artifact: #c70f37;
+  }
+
+  @media screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      color-scheme: dark;
+      --color-bg: #181412;
+      --color-surface: #231e1b;
+      --color-text: #f5f1ea;
+      --color-text-muted: #c2b4a3;
+      --color-accent: #ff6e63;
+      --color-border: #6e5a49;
+      --color-control-border: #8c7560;
+      --color-focus: #6eb5ff;
+
+      --accent-creature: #ff6e63;
+      --accent-magic-item: #c88aff;
+      --accent-spell: #3dd9f5;
+
+      --rarity-common: #c2b4a3;
+      --rarity-uncommon: #42e68c;
+      --rarity-rare: #6eb5ff;
+      --rarity-very-rare: #c88aff;
+      --rarity-legendary: #ffb838;
+      --rarity-artifact: #ff5c82;
+    }
+  }
+
+  @media screen {
+    [data-theme='dark'] {
+      color-scheme: dark;
+      --color-bg: #181412;
+      --color-surface: #231e1b;
+      --color-text: #f5f1ea;
+      --color-text-muted: #c2b4a3;
+      --color-accent: #ff6e63;
+      --color-border: #6e5a49;
+      --color-control-border: #8c7560;
+      --color-focus: #6eb5ff;
+
+      --accent-creature: #ff6e63;
+      --accent-magic-item: #c88aff;
+      --accent-spell: #3dd9f5;
+
+      --rarity-common: #c2b4a3;
+      --rarity-uncommon: #42e68c;
+      --rarity-rare: #6eb5ff;
+      --rarity-very-rare: #c88aff;
+      --rarity-legendary: #ffb838;
+      --rarity-artifact: #ff5c82;
+    }
+  }
+
+  :root,
+  [data-theme] {
+    --font-heading: 'Tenor Sans', 'Alegreya SC', Georgia, serif;
+    --font-body: 'Crimson Pro', 'Alegreya', Georgia, serif;
+    --font-label: 'Josefin Sans', 'Alegreya Sans', system-ui, sans-serif;
+
+    --radius-card: 0px;
+    --radius-control: 0px;
+    --radius-badge: 0px;
+  }
+
+  /* ==========================================================================
+   * 2. Wasmuth Lithograph Page Frame & Header Rules
+   * ========================================================================== */
+  body {
+    box-shadow:
+      inset 0 0 0 10px var(--color-bg),
+      inset 0 0 0 11.5px var(--color-border),
+      inset 0 0 0 15px var(--color-bg),
+      inset 0 0 0 16px color-mix(in srgb, var(--color-border) 55%, transparent);
+  }
+
+  .site-header {
+    border-block-end: 3px double var(--color-border);
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ==========================================================================
+   * 3. Larkin Poché Corner Piers on Entry Cards & Statblocks
+   * ========================================================================== */
+  [data-type],
+  .card,
+  .statblock {
+    border: 1.5px solid color-mix(in srgb, var(--accent) 55%, var(--color-border));
+    border-block-start: 3.5px solid var(--accent);
+    outline: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+    outline-offset: -6px;
+    border-radius: 0;
+    box-shadow: 0 3px 10px rgb(36 27 21 / 0.09);
+    /* 4 solid 8x8px structural poché corner piers pigmented with --accent */
+    background-image:
+      linear-gradient(var(--accent), var(--accent)),
+      linear-gradient(var(--accent), var(--accent)),
+      linear-gradient(var(--accent), var(--accent)),
+      linear-gradient(var(--accent), var(--accent));
+    background-repeat: no-repeat;
+    background-size: 8px 8px;
+    background-position:
+      top 4px left 4px,
+      top 4px right 4px,
+      bottom 4px left 4px,
+      bottom 4px right 4px;
+    transition:
+      transform var(--duration-fast) ease,
+      box-shadow var(--duration-fast) ease,
+      border-color var(--duration-fast) ease;
+  }
+
+  .card:hover {
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 0 var(--accent);
+    transform: translate(-2px, -2px);
+  }
+
+  /* ==========================================================================
+   * 4. Art-Glass Badges & Architectural Callout Chips
+   * ========================================================================== */
+  .badge {
+    border-radius: 0;
+    background: color-mix(in srgb, var(--accent) 14%, var(--color-surface));
+    border: 1.5px solid var(--accent);
+    border-inline-start: 5px solid var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+    box-shadow: 2px 2px 0 color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  .badge[data-rarity] {
+    background: var(--accent);
+    border-color: var(--color-text);
+    border-inline-start: 5px solid var(--color-text);
+    color: var(--color-surface);
+    box-shadow: 2px 2px 0 var(--color-text);
+  }
+}

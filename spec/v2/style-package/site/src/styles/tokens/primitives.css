@@ -1,0 +1,116 @@
+/*
+ * Primitives (docs/styling.md#tokens): raw values only. Components never read these;
+ * semantic.css, components.css, content.css, and print.css map them to roles.
+ *
+ * Theme: Frank Lloyd Wright — 1910 Wasmuth Portfolio (Cotton-Rag & Art-Glass Jewels)
+ */
+@layer tokens {
+  :root {
+    /* Light Surfaces: Cotton-rag alabaster & warm ivory vellum (less yellow, crisp archival rag) */
+    --parchment-50: #faf8f3;
+    --parchment-100: #f2ede4;
+    --parchment-400: #7a6552;
+
+    /* Light Ink: Deep espresso-sepia & architectural bronze */
+    --ink-400: #665242;
+    --ink-600: #574639;
+    --ink-900: #241b15;
+
+    /* Dark Surfaces: Roasted walnut & midnight umber */
+    --night-400: #8c7560;
+    --night-600: #6e5a49;
+    --night-800: #231e1b;
+    --night-900: #181412;
+    --bone-100: #f5f1ea;
+    --bone-400: #c2b4a3;
+
+    /* High-Vibrancy Frank Lloyd Wright Art-Glass Hues:
+     * -700 reads with ≥4.5:1 contrast on light cotton-rag surfaces (#faf8f3 / #f2ede4),
+     * -300 reads with ≥4.5:1 contrast on dark walnut surfaces (#231e1b / #181412).
+     */
+    --red-700: #c91d16;      /* Cherokee Stained-Glass Vermilion */
+    --red-300: #ff6e63;
+    --violet-700: #7422de;   /* Imperial Art-Glass Amethyst */
+    --violet-300: #c88aff;
+    --sea-700: #006b82;      /* Taliesin Peacock Cobalt-Teal */
+    --sea-300: #3dd9f5;
+    --green-700: #0b7a3e;    /*Leaded Emerald Glass */
+    --green-300: #42e68c;
+    --amber-700: #a84d00;    /* Burnished Amber Art-Glass */
+    --amber-300: #ffb838;
+    --blue-700: #0055b3;     /* Cobalt Cathedral Glass */
+    --blue-300: #6eb5ff;
+    --crimson-700: #c70f37;  /* Ruby Artifact Glass */
+    --crimson-300: #ff5c82;
+
+    /* Font families: Wasmuth Portfolio & Architectural Forum inspired superfamily */
+    --family-serif: 'Crimson Pro', 'Alegreya', 'Iowan Old Style', Georgia, serif;
+    --family-serif-sc: 'Tenor Sans', 'Alegreya SC', Georgia, serif;
+    --family-sans: 'Josefin Sans', 'Alegreya Sans', system-ui, sans-serif;
+    --family-mono: 'JetBrains Mono', 'Alegreya Sans Code', ui-monospace, monospace;
+
+    /* Typography scale: Minor Third ratio, fluid across 320px–1280px (docs/styling.md#visual-direction). */
+    --font-size--2: clamp(0.6944rem, 0.6724rem + 0.1102vw, 0.7813rem);
+    --font-size--1: clamp(0.8333rem, 0.7986rem + 0.1736vw, 0.9375rem);
+    --font-size-0: clamp(1rem, 0.9583rem + 0.2083vw, 1.125rem);
+    --font-size-1: clamp(1.2rem, 1.15rem + 0.25vw, 1.35rem);
+    --font-size-2: clamp(1.44rem, 1.38rem + 0.3vw, 1.62rem);
+    --font-size-3: clamp(1.728rem, 1.656rem + 0.36vw, 1.944rem);
+    --font-size-4: clamp(2.0736rem, 1.9872rem + 0.432vw, 2.3328rem);
+    --font-size-5: clamp(2.4883rem, 2.3846rem + 0.5184vw, 2.7994rem);
+
+    /* Line heights. */
+    --leading-tight: 1.15;
+    --leading-snug: 1.3;
+    --leading-normal: 1.5;
+
+    /* Spacing scale. */
+    --size-1: 0.25rem;
+    --size-2: 0.5rem;
+    --size-3: 0.75rem;
+    --size-4: 1rem;
+    --size-5: 1.5rem;
+    --size-6: 2rem;
+    --size-7: 3rem;
+    --size-8: 4rem;
+
+    /* Measures and widths. */
+    --size-measure: 70ch;
+    --size-content: 80rem;
+    --size-card-min: 16rem;
+    --size-filters: 16rem;
+    --size-icon: 1.25em;
+
+    /* Line widths. */
+    --stroke-thin: 1px;
+    --stroke-medium: 2px;
+    --stroke-thick: 3px;
+
+    /* Radii: Crisp 0px architectural corners for Wasmuth / Prairie School precision. */
+    --radius-1: 0px;
+    --radius-2: 0px;
+    --radius-3: 2px;
+    --radius-pill: 0px;
+
+    /* Shadows. */
+    --shadow-1: 0 2px 8px rgb(36 27 21 / 0.08);
+    --shadow-2: 4px 4px 0px rgb(36 27 21 / 0.22);
+
+    /* Durations. Every one becomes 0ms under reduced motion (docs/styling.md#accessibility). */
+    --duration-fast: 120ms;
+    --duration-normal: 200ms;
+    --duration-slow: 320ms;
+
+    /* Aspect ratios. */
+    --ratio-art: 4 / 3;
+    --ratio-square: 1 / 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --duration-fast: 0ms;
+      --duration-normal: 0ms;
+      --duration-slow: 0ms;
+    }
+  }
+}
