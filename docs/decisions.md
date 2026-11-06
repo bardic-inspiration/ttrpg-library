@@ -279,3 +279,14 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Print layout adapts to the paper chosen in the print dialog, replacing the page size choice. | The size dropdown is gone | #115 |
 | Download opens a small format menu (PNG, JSON, translators), offering only the formats for its scope. | A save dialog's file-type list works only in Chromium | #115 |
 | Page types and rules pages get Print, not Download; printing one expands every section. | Download is for card entries | #115 |
+
+### Translators
+
+| Decision | Why | Source |
+|---|---|---|
+| Translators cover open sources only, in order: Open5e, Foundry VTT's dnd5e system, and the 5e.tools homebrew format (schema only). No licensed content is imported. | P5; closed formats can't be targeted | #116 |
+| Each translator is a two-way module: export to the target format, import from it. | One module per format keeps both directions consistent | #116 |
+| Import runs from a file attached to an issue: a routine runs the translator as a script within the `generate` workflow and opens a content PR. | P7: every import is reviewed; authors publishing comes later | #116 |
+| What doesn't translate is skipped and reported: in the content PR on import, and on the site after the download on export. | Never guess a mapping | #116 |
+| Translators are tested by an export-then-import round trip over the library and by each target's published schema in CI; real importers are checked by hand in the Testing backlog. | P8 | #116 |
+| The translator and export areas can be combined. | Translators are exporters behind Download | #115, #116 |

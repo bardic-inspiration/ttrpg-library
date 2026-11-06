@@ -17,6 +17,9 @@ three places they go:
 It serves the UI's "export is easy" criterion ([`ui.md`](ui.md)), P1 (no
 runtime services), and P11 (weight follows the selection).
 
+This area and format translators ([`translators.md`](translators.md), #116)
+can be combined.
+
 ## Current
 
 - [Exporter interface](../../docs/export.md#exporter-interface): exporters,
