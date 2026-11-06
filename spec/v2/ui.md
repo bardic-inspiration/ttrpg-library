@@ -69,7 +69,8 @@ style redesign's (#114).
 - **Export** is one Download button and one Print button. Each acts on the
   selection, or on the filtered results when nothing is selected, and opens
   the device's own save or print dialog. v1's page size dropdown goes. The
-  export flows themselves are designed in `export.md` (#115).
+  export flows themselves, including what Download offers and how print
+  picks its layout, are designed in `export.md` (#115).
 
 ### Entries and pages
 
@@ -119,14 +120,6 @@ without splitting an action or trait.
 - The site has one set of color tokens, with no theme attribute or switch.
 - CI no longer runs the accessibility checks, and the docs describe the
   milestone review.
-
-## Open questions
-
-- **Print layout without a size choice:** v1 picks the two-column or
-  one-column layout from the chosen page size. With the size dropdown gone,
-  what sets the layout? For `export.md` (#115) to settle.
-- **What Download saves:** v1 has JSON and PNG exporters. Which formats does
-  the one Download button offer? For `export.md` (#115).
 
 ## Out of scope
 
