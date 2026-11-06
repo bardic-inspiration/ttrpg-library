@@ -254,3 +254,16 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Equipment is one rules type with categories and nested sub-classifications, each group a linkable section. | Matches the SRD's grouping, and lets a base item name a group | #112 |
 | Content types are cards (spells, items, creatures, feats, backgrounds) or pages (classes, subclasses, species). A page type is assembled from components: hidden, linked sub-entries viewed only through the parent's page. | A hierarchy by complexity; v3's encounters and dungeons extend it | #112 |
 | `magic-item` is renamed `item`, through a migration that keeps every `id` and redirects the old URLs. | Magic items are items built on equipment; P9 | #112 |
+
+### UI
+
+| Decision | Why | Source |
+|---|---|---|
+| The design criteria: one place for all content, fast lookup, easy export, and equal support for phones, tablets, and laptops. | The site is a DM's resource for lookup and session prep | #113 |
+| The top bar is Library, Rulesets, About, Contribute. The Library is one gallery whose filters do the navigating; Rulesets holds the rules pages and the Extensions page. | Filters already navigate; rules and content are the big split | #113 |
+| The old per-ruleset and per-type gallery URLs redirect to the Library with their filter. | P9: stable URLs | #113 |
+| Filters are a nested accordion checkbox tree following the schema, in a sidebar on desktop and a collapsible container on phones and tablets, with search on top. | v1's filter pills took too much space on everything but desktop | #113 |
+| Export is one Download and one Print button, each opening the device's own dialog. | Easy export; fewer controls | #113 |
+| Card entries keep their own detail pages with back-navigation. Long pages use accordion sections with a jump-to table of contents, and a link opens its section. | Compartmentalized pages; fast lookup within long pages | #113 |
+| Print stacks entries by default; the one-entry-per-page mode is removed. | Fewer pages for session prep | #113 |
+| Every UI PR shows screenshots at 390, 820, and 1440px. Accessibility moves from per-PR CI to one WCAG 2.2 AA review at the end of each milestone. | Layout is the per-PR risk; a per-PR accessibility run isn't needed. Changes how P10 is checked | #113 |
