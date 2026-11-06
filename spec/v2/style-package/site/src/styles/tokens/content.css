@@ -1,0 +1,60 @@
+/*
+ * Content tokens (docs/styling.md#tokens): vibrant Frank Lloyd Wright art-glass
+ * accents per entry type and item rarity, per theme.
+ */
+@layer tokens {
+  :root,
+  [data-theme='light'] {
+    --accent-creature: var(--red-700);       /* #c91d16 Cherokee Vermilion */
+    --accent-magic-item: var(--violet-700);  /* #7422de Imperial Amethyst */
+    --accent-spell: var(--sea-700);          /* #006b82 Taliesin Peacock Teal */
+
+    --rarity-common: var(--ink-600);         /* #574639 Architectural Bronze */
+    --rarity-uncommon: var(--green-700);     /* #0b7a3e Leaded Emerald Glass */
+    --rarity-rare: var(--blue-700);          /* #0055b3 Cobalt Cathedral Glass */
+    --rarity-very-rare: var(--violet-700);   /* #7422de Royal Violet Glass */
+    --rarity-legendary: var(--amber-700);    /* #a84d00 Burnished Amber Gold */
+    --rarity-artifact: var(--crimson-700);   /* #c70f37 Ruby Artifact Glass */
+  }
+
+  @media screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --accent-creature: var(--red-300);      /* #ff6e63 */
+      --accent-magic-item: var(--violet-300); /* #c88aff */
+      --accent-spell: var(--sea-300);         /* #3dd9f5 */
+
+      --rarity-common: var(--bone-400);       /* #c2b4a3 */
+      --rarity-uncommon: var(--green-300);    /* #42e68c */
+      --rarity-rare: var(--blue-300);         /* #6eb5ff */
+      --rarity-very-rare: var(--violet-300);  /* #c88aff */
+      --rarity-legendary: var(--amber-300);   /* #ffb838 */
+      --rarity-artifact: var(--crimson-300);  /* #ff5c82 */
+    }
+  }
+
+  @media screen {
+    [data-theme='dark'] {
+      --accent-creature: var(--red-300);      /* #ff6e63 */
+      --accent-magic-item: var(--violet-300); /* #c88aff */
+      --accent-spell: var(--sea-300);         /* #3dd9f5 */
+
+      --rarity-common: var(--bone-400);       /* #c2b4a3 */
+      --rarity-uncommon: var(--green-300);    /* #42e68c */
+      --rarity-rare: var(--blue-300);         /* #6eb5ff */
+      --rarity-very-rare: var(--violet-300);  /* #c88aff */
+      --rarity-legendary: var(--amber-300);   /* #ffb838 */
+      --rarity-artifact: var(--crimson-300);  /* #ff5c82 */
+    }
+  }
+
+  [data-type='creature'] { --accent: var(--accent-creature); }
+  [data-type='magic-item'] { --accent: var(--accent-magic-item); }
+  [data-type='spell'] { --accent: var(--accent-spell); }
+
+  [data-rarity='common'] { --accent: var(--rarity-common); }
+  [data-rarity='uncommon'] { --accent: var(--rarity-uncommon); }
+  [data-rarity='rare'] { --accent: var(--rarity-rare); }
+  [data-rarity='very-rare'] { --accent: var(--rarity-very-rare); }
+  [data-rarity='legendary'] { --accent: var(--rarity-legendary); }
+  [data-rarity='artifact'] { --accent: var(--rarity-artifact); }
+}

@@ -290,3 +290,13 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | What doesn't translate is skipped and reported: in the content PR on import, and on the site after the download on export. | Never guess a mapping | #116 |
 | Translators are tested by an export-then-import round trip over the library and by each target's published schema in CI; real importers are checked by hand in the Testing backlog. | P8 | #116 |
 | The translator and export areas can be combined. | Translators are exporters behind Download | #115, #116 |
+
+### Style
+
+| Decision | Why | Source |
+|---|---|---|
+| The style feels like an early-20th-century architectural print, inspired by Frank Lloyd Wright's Wasmuth portfolio: early modern, innovative, and romantic. | An unconventional take on a fantasy sourcebook | #114 |
+| The owner's style package is the starting point: its light palette, Tenor Sans, Crimson Pro, and Josefin Sans (self-hosted), square corners, corner piers, the double page frame, and two ornaments. Its dark palette isn't used. | One palette (#113); self-hosting keeps captures faithful | #114 |
+| Every type and item rarity has its own art-glass accent. | Types stay distinct as v2 adds them | #114 |
+| Art is late-1800s and early-1900s public domain or CC book illustration and architectural drawing, lightly processed to monochrome or a tint. | Matches the style with art that is actually available | #114 |
+| Wright and the Wasmuth portfolio are inspiration only, never named on the site. | P9: an original look | #114 |

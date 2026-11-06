@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- Wasmuth Portfolio Larkin Floor Plan Poché Corner Medallion -->
+  <rect x="2" y="2" width="44" height="44" fill="none" stroke="#7a6552" stroke-width="1.5"/>
+  <rect x="7" y="7" width="34" height="34" fill="none" stroke="#c91d16" stroke-width="1"/>
+  <rect x="5" y="5" width="10" height="10" fill="#c91d16"/>
+  <rect x="33" y="5" width="10" height="10" fill="#241b15"/>
+  <rect x="5" y="33" width="10" height="10" fill="#241b15"/>
+  <rect x="19" y="19" width="10" height="10" fill="none" stroke="#241b15" stroke-width="1.5"/>
+</svg>
