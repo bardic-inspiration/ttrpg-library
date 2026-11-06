@@ -49,7 +49,9 @@ The top bar is **Library | Rulesets | About | Contribute**.
 - **About** is v1's About page.
 - **Contribute** links to the repository for now.
 
-The theme switch (System, Light, Dark) stays, outside the top bar.
+**One palette for the whole site.** v1's light and dark themes and the
+theme switch (System, Light, Dark) are removed. The palette itself is the
+style redesign's (#114).
 
 ### Library
 
@@ -114,6 +116,7 @@ without splitting an action or trait.
 - Rules pages and page types render as accordion sections with a table of
   contents, and an anchor link opens its section.
 - Print has no per-page mode.
+- The site has one set of color tokens, with no theme attribute or switch.
 - CI no longer runs the accessibility checks, and the docs describe the
   milestone review.
 

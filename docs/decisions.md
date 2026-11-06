@@ -267,3 +267,4 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Card entries keep their own detail pages with back-navigation. Long pages use accordion sections with a jump-to table of contents, and a link opens its section. | Compartmentalized pages; fast lookup within long pages | #113 |
 | Print stacks entries by default; the one-entry-per-page mode is removed. | Fewer pages for session prep | #113 |
 | Every UI PR shows screenshots at 390, 820, and 1440px. Accessibility moves from per-PR CI to one WCAG 2.2 AA review at the end of each milestone. | Layout is the per-PR risk; a per-PR accessibility run isn't needed. Changes how P10 is checked | #113 |
+| One palette for the whole site: no light and dark themes, and no theme switch. | One look to design, check, and print | #113 |
