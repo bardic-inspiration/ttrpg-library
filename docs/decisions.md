@@ -254,3 +254,39 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Equipment is one rules type with categories and nested sub-classifications, each group a linkable section. | Matches the SRD's grouping, and lets a base item name a group | #112 |
 | Content types are cards (spells, items, creatures, feats, backgrounds) or pages (classes, subclasses, species). A page type is assembled from components: hidden, linked sub-entries viewed only through the parent's page. | A hierarchy by complexity; v3's encounters and dungeons extend it | #112 |
 | `magic-item` is renamed `item`, through a migration that keeps every `id` and redirects the old URLs. | Magic items are items built on equipment; P9 | #112 |
+
+### UI
+
+| Decision | Why | Source |
+|---|---|---|
+| The design criteria: one place for all content, fast lookup, easy export, and equal support for phones, tablets, and laptops. | The site is a DM's resource for lookup and session prep | #113 |
+| The top bar is Library, Rulesets, About, Contribute. The Library is one gallery whose filters do the navigating; Rulesets holds the rules pages and the Extensions page. | Filters already navigate; rules and content are the big split | #113 |
+| The old per-ruleset and per-type gallery URLs redirect to the Library with their filter. | P9: stable URLs | #113 |
+| Filters are a nested accordion checkbox tree following the schema, in a sidebar on desktop and a collapsible container on phones and tablets, with search on top. | v1's filter pills took too much space on everything but desktop | #113 |
+| Export is one Download and one Print button, each opening the device's own dialog. | Easy export; fewer controls | #113 |
+| Card entries keep their own detail pages with back-navigation. Long pages use accordion sections with a jump-to table of contents, and a link opens its section. | Compartmentalized pages; fast lookup within long pages | #113 |
+| Print stacks entries by default; the one-entry-per-page mode is removed. | Fewer pages for session prep | #113 |
+| Every UI PR shows screenshots at 390, 820, and 1440px. Accessibility moves from per-PR CI to one WCAG 2.2 AA review at the end of each milestone. | Layout is the per-PR risk; a per-PR accessibility run isn't needed. Changes how P10 is checked | #113 |
+| One palette for the whole site: no light and dark themes, and no theme switch. | One look to design, check, and print | #113 |
+
+### Export
+
+| Decision | Why | Source |
+|---|---|---|
+| Export serves three lanes: data for other software, digital files for chat, and paper for the table. Print and PNG carry over from v1. | Already cover the file and paper lanes | #115 |
+| No dynamic API in v2. The data lane is file downloads, with translators for VTT and site formats; the static entry files and `library.json` stay as an informal read-only feed. | Targets import files; P1 | #115 |
+| One-click PDF is dropped; Print uses the device's print dialog. | Same number of steps in practice; fewer controls | #115 |
+| Print layout adapts to the paper chosen in the print dialog, replacing the page size choice. | The size dropdown is gone | #115 |
+| Download opens a small format menu (PNG, JSON, translators), offering only the formats for its scope. | A save dialog's file-type list works only in Chromium | #115 |
+| Page types and rules pages get Print, not Download; printing one expands every section. | Download is for card entries | #115 |
+
+### Translators
+
+| Decision | Why | Source |
+|---|---|---|
+| Translators cover open sources only, in order: Open5e, Foundry VTT's dnd5e system, and the 5e.tools homebrew format (schema only). No licensed content is imported. | P5; closed formats can't be targeted | #116 |
+| Each translator is a two-way module: export to the target format, import from it. | One module per format keeps both directions consistent | #116 |
+| Import runs from a file attached to an issue: a routine runs the translator as a script within the `generate` workflow and opens a content PR. | P7: every import is reviewed; authors publishing comes later | #116 |
+| What doesn't translate is skipped and reported: in the content PR on import, and on the site after the download on export. | Never guess a mapping | #116 |
+| Translators are tested by an export-then-import round trip over the library and by each target's published schema in CI; real importers are checked by hand in the Testing backlog. | P8 | #116 |
+| The translator and export areas can be combined. | Translators are exporters behind Download | #115, #116 |
