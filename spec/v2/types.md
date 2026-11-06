@@ -45,8 +45,9 @@ Within the rules, the line falls between the basis and the custom additions:
   primitive, so any of them is easy to reference and link.
 - **Ruleset extensions** are custom rules, authored like any content entry
   (a request, the `generate` skill, a content PR). They display as
-  **cards**. Extensions appear in the library on an Extensions page, and in
-  a simple, searchable list at the bottom of each rules page.
+  **cards**. Extensions appear on an Extensions page beside the ruleset's
+  rules pages (`ui.md`, #113), and in a simple, searchable list at the
+  bottom of each rules page.
 
 | Rules type | Primitives | Extensions in v2 | Rules page |
 |---|---|---|---|
