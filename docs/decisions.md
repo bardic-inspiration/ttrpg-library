@@ -268,3 +268,14 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Print stacks entries by default; the one-entry-per-page mode is removed. | Fewer pages for session prep | #113 |
 | Every UI PR shows screenshots at 390, 820, and 1440px. Accessibility moves from per-PR CI to one WCAG 2.2 AA review at the end of each milestone. | Layout is the per-PR risk; a per-PR accessibility run isn't needed. Changes how P10 is checked | #113 |
 | One palette for the whole site: no light and dark themes, and no theme switch. | One look to design, check, and print | #113 |
+
+### Export
+
+| Decision | Why | Source |
+|---|---|---|
+| Export serves three lanes: data for other software, digital files for chat, and paper for the table. Print and PNG carry over from v1. | Already cover the file and paper lanes | #115 |
+| No dynamic API in v2. The data lane is file downloads, with translators for VTT and site formats; the static entry files and `library.json` stay as an informal read-only feed. | Targets import files; P1 | #115 |
+| One-click PDF is dropped; Print uses the device's print dialog. | Same number of steps in practice; fewer controls | #115 |
+| Print layout adapts to the paper chosen in the print dialog, replacing the page size choice. | The size dropdown is gone | #115 |
+| Download opens a small format menu (PNG, JSON, translators), offering only the formats for its scope. | A save dialog's file-type list works only in Chromium | #115 |
+| Page types and rules pages get Print, not Download; printing one expands every section. | Download is for card entries | #115 |
