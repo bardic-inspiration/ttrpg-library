@@ -255,6 +255,19 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Equipment is one rules type with categories and nested sub-classifications, each group a linkable section. | Matches the SRD's grouping, and lets a base item name a group | #112 |
 | Content types are cards (spells, items, creatures, feats, backgrounds) or pages (classes, subclasses, species). A page type is assembled from components: hidden, linked sub-entries viewed only through the parent's page. | A hierarchy by complexity; v3's encounters and dungeons extend it | #112 |
 | `magic-item` is renamed `item`, through a migration that keeps every `id` and redirects the old URLs. | Magic items are items built on equipment; P9 | #112 |
+| A ruleset primitive is one file under `rulesets/<ruleset>/rules/<type>/` holding `type`, `id`, `name`, and `stats`, validated like an entry. An extension's `stats` use the same schema, and keys and names are unique across a type's primitives, groups, and extensions. | P1, P3: one schema per type; P2 | #222 |
+| Primitives and equipment groups are in the SRD manifest, so coverage proves the rules data complete. | P2 | #222 |
+| Weapon properties and mastery properties are primitive-only rules types with keys of their own. | The Ammunition property and the Ammunition gear would collide in one key space | #222 |
+| Rules pages are listed in `rules/pages.json`, with SRD chapter prose that isn't a primitive kept as page sections. The rest of the Equipment chapter (coins, lifestyle, food and lodging, hirelings, spellcasting services, using magic items, crafting) is an Equipment rules page, not primitives or glossary terms. | P4, P5: the whole chapter is in the library without inventing types for tables | #222 |
+| Conditions are stored once, as condition primitives; the Glossary page lists each at its alphabetical place as a link to the Conditions page. | P3 | #222 |
+| Equipment groups are a closed, ordered list in the ruleset; a primitive names its leaf group, and its category is derived from it. Melee Weapons and Ranged Weapons are union groups. | P3; Simple/Martial and Melee/Ranged cross | #222 |
+| Equipment that comes in forms sharing one description is one primitive with `variants`; a variant isn't a link target. | Variants carry only cost and weight, and only a few mentions name one | #222 |
+| A base item is structured links (`any` with optional `except`, or `oneOf`) worded by the template, using each group's qualifier. | P3, P6, and it reproduces every SRD base item word for word | #222 |
+| A field that links to one rules type takes a typed ref whose key pattern allows only that type. | P2: a wrong-type link fails the schema | #222 |
+| A condition's opening sentence is worded by the template from its name; only its titled effects are stored. | P6: all 15 SRD conditions share the sentence | #222 |
+| Creature gear refs may target equipment and carry a `count`, printed as a plural with an added "s". | P5: "Javelins (6)" reads as printed | #222 |
+| A mention links only where the target's name reproduces the text exactly. Conditions and equipment link at every mention; a glossary term at its first mention in each text field. | P5; readable rules text | #222 |
+| Gap fill never adds a rules extension, so condition and equipment have no gap buckets. | Custom rules are deliberate additions, made by request | #222 |
 
 ### UI
 
