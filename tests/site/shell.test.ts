@@ -52,7 +52,7 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     for (const [label, path] of <[string, string][]>[
       ['D&amp;D 5e (SRD 5.2)', 'dnd-5e-2024/'],
       ['Creatures', 'dnd-5e-2024/creature/'],
-      ['Magic items', 'dnd-5e-2024/magic-item/'],
+      ['Items', 'dnd-5e-2024/item/'],
       ['Spells', 'dnd-5e-2024/spell/'],
       ['About', 'about/'],
     ]) {
@@ -67,5 +67,15 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     expect(html).toContain('<meta property="og:type" content="article">');
     expect(html).toContain('<meta property="og:image" content="https://bardic-inspiration.github.io/ttrpg-library/art.png">');
     expect(await renderBase({ title: 'Test' })).not.toContain('og:title');
+  });
+
+  it('sends a moved page on, keeping its query and fragment (docs/site.md#redirects)', async () => {
+    const to = '/ttrpg-library/dnd-5e-2024/item/wand-of-wonder/';
+    const html = await renderBase({ title: 'Test', redirect: to });
+    expect(html).toContain(`<meta http-equiv="refresh" content="0; url=${to}">`);
+    expect(html).toContain(`<link rel="canonical" href="https://bardic-inspiration.github.io${to}">`);
+    expect(html).toContain(`location.replace("${to}" + location.search + location.hash);`);
+    expect(html).toContain('<meta name="robots" content="noindex">');
+    expect(await renderBase({ title: 'Test' })).not.toContain('http-equiv="refresh"');
   });
 });

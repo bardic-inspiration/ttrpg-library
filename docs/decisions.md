@@ -268,6 +268,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Creature gear refs may target equipment and carry a `count`, printed as a plural with an added "s". | P5: "Javelins (6)" reads as printed | #222 |
 | A mention links only where the target's name reproduces the text exactly. Conditions and equipment link at every mention; a glossary term at its first mention in each text field. | P5; readable rules text | #222 |
 | Gap fill never adds a rules extension, so condition and equipment have no gap buckets. | Custom rules are deliberate additions, made by request | #222 |
+| A renamed type lists its earlier keys under `formerly` in the registry. The site builds redirect pages for the old gallery and detail URLs (keeping the query and fragment), and print and gallery queries read an old key as the current one. Entries and refs use only current keys. | P4, P9: one registry key covers every old URL | #223 |
+| The `item` type's display names are "Item" and "Items". | Match the key; items are still the SRD's magic items | #223 |
+| The decision record keeps `magic-item` in rows that describe what was decided under that name. | It is history, not a description of the current library | #223 |
 
 ### UI
 

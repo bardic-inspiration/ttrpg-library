@@ -16,7 +16,7 @@ export async function frostLance(): Promise<Record<string, any>> {
 
 /** A fresh copy of the example Wand of Frost Lances. */
 export async function wandOfFrostLances(): Promise<Record<string, any>> {
-  return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/magic-item/wand-of-frost-lances.json'), 'utf8'));
+  return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/item/wand-of-frost-lances.json'), 'utf8'));
 }
 
 /**

@@ -78,7 +78,7 @@ What one side can't represent is skipped and reported, never guessed:
 
 ## Cases
 
-- `creature/lich`, `spell/fireball`, and `magic-item/boots-of-levitation`:
+- `creature/lich`, `spell/fireball`, and `item/boots-of-levitation`:
   each round-trips through every translator, with links and derived values
   as the cases to watch.
 

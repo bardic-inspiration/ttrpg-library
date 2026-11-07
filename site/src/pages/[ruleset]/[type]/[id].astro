@@ -1,41 +1,62 @@
 ---
 // Detail page for one entry (docs/site.md#pages-and-navigation, docs/site.md#detail-page), with Open Graph tags from
 // the entry's name, summary, and art, its export controls, and the PNG
-// exporter's capture source (docs/export.md).
+// exporter's capture source (docs/export.md). A renamed type's old detail URLs
+// redirect here (docs/site.md#redirects).
 import type { GetStaticPaths } from 'astro';
 import Base from '../../../layouts/Base.astro';
 import CaptureSource from '../../../components/detail/CaptureSource.astro';
 import EntryDetail from '../../../components/detail/EntryDetail.astro';
 import ExportControls from '../../../components/detail/ExportControls';
 import { entryNames, loadEntries, refTargets, type LoadedEntry } from '../../../lib/library';
+import { formerTypes } from '../../../lib/redirects';
 import type { RefTarget } from '../../../lib/refs';
 import { url } from '../../../lib/url';
+import type { Registry } from '../../../lib/gallery/config';
+import registry from '../../../../../config/types.json';
+
+type Props =
+  | { loaded: LoadedEntry; names: Map<string, string>; targets: Map<string, RefTarget>; moved?: undefined }
+  | { moved: { name: string; to: string } };
 
 export const getStaticPaths = (() => {
   const all = loadEntries();
   const names = entryNames(all);
   const targets = refTargets(all);
-  return all.map((loaded) => ({
+  const pages = all.map((loaded) => ({
     params: { ruleset: loaded.entry.ruleset, type: loaded.entry.type, id: loaded.entry.id },
-    props: { loaded, names, targets },
+    props: { loaded, names, targets } as Props,
   }));
+  const moved = formerTypes(registry as unknown as Registry).flatMap((former) =>
+    all
+      .filter(({ entry }) => entry.ruleset === former.ruleset && entry.type === former.to)
+      .map(({ entry }) => ({
+        params: { ruleset: entry.ruleset, type: former.from, id: entry.id },
+        props: { moved: { name: entry.name, to: url(`${entry.ruleset}/${entry.type}/${entry.id}/`) } } as Props,
+      })),
+  );
+  return [...pages, ...moved];
 }) satisfies GetStaticPaths;
 
-interface Props {
-  loaded: LoadedEntry;
-  names: Map<string, string>;
-  targets: Map<string, RefTarget>;
-}
-
-const { loaded, names, targets } = Astro.props;
-const { entry, derived } = loaded;
+const props = Astro.props;
 ---
-<Base
-  title={`${entry.name} · TTRPG Content Library`}
-  og={{ title: entry.name, description: entry.summary, image: entry.image ? url(entry.image) : undefined, type: 'article' }}
->
-  <EntryDetail loaded={loaded} names={names} targets={targets}>
-    <ExportControls slot="export" client:load item={{ entry, derived }} base={url()} />
-  </EntryDetail>
-  <CaptureSource loaded={loaded} names={names} />
-</Base>
+{props.moved ? (
+  <Base title={`${props.moved.name} · TTRPG Content Library`} redirect={props.moved.to}>
+    <p>{props.moved.name} has moved to <a href={props.moved.to}>{props.moved.to}</a>.</p>
+  </Base>
+) : (
+  <Base
+    title={`${props.loaded.entry.name} · TTRPG Content Library`}
+    og={{
+      title: props.loaded.entry.name,
+      description: props.loaded.entry.summary,
+      image: props.loaded.entry.image ? url(props.loaded.entry.image) : undefined,
+      type: 'article',
+    }}
+  >
+    <EntryDetail loaded={props.loaded} names={props.names} targets={props.targets}>
+      <ExportControls slot="export" client:load item={{ entry: props.loaded.entry, derived: props.loaded.derived }} base={url()} />
+    </EntryDetail>
+    <CaptureSource loaded={props.loaded} names={props.names} />
+  </Base>
+)}

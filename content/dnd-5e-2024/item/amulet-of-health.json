@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "amulet-of-health",
+  "name": "Amulet of Health",
+  "summary": "An amulet that sets your Constitution to 19.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "Your Constitution is 19 while you wear this amulet. It has no effect on you if your Constitution is 19 or higher without it."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

@@ -26,7 +26,7 @@
 
     /* Vibrant Art-Glass Entry Type Accents */
     --accent-creature: #c91d16;
-    --accent-magic-item: #7422de;
+    --accent-item: #7422de;
     --accent-spell: #006b82;
 
     /* Vibrant Stained-Glass Rarity Accents */
@@ -51,7 +51,7 @@
       --color-focus: #6eb5ff;
 
       --accent-creature: #ff6e63;
-      --accent-magic-item: #c88aff;
+      --accent-item: #c88aff;
       --accent-spell: #3dd9f5;
 
       --rarity-common: #c2b4a3;
@@ -76,7 +76,7 @@
       --color-focus: #6eb5ff;
 
       --accent-creature: #ff6e63;
-      --accent-magic-item: #c88aff;
+      --accent-item: #c88aff;
       --accent-spell: #3dd9f5;
 
       --rarity-common: #c2b4a3;

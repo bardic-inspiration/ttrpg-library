@@ -6,7 +6,7 @@
   :root,
   [data-theme='light'] {
     --accent-creature: var(--red-700);       /* #c91d16 Cherokee Vermilion */
-    --accent-magic-item: var(--violet-700);  /* #7422de Imperial Amethyst */
+    --accent-item: var(--violet-700);  /* #7422de Imperial Amethyst */
     --accent-spell: var(--sea-700);          /* #006b82 Taliesin Peacock Teal */
 
     --rarity-common: var(--ink-600);         /* #574639 Architectural Bronze */
@@ -20,7 +20,7 @@
   @media screen and (prefers-color-scheme: dark) {
     :root:not([data-theme='light']) {
       --accent-creature: var(--red-300);      /* #ff6e63 */
-      --accent-magic-item: var(--violet-300); /* #c88aff */
+      --accent-item: var(--violet-300); /* #c88aff */
       --accent-spell: var(--sea-300);         /* #3dd9f5 */
 
       --rarity-common: var(--bone-400);       /* #c2b4a3 */
@@ -35,7 +35,7 @@
   @media screen {
     [data-theme='dark'] {
       --accent-creature: var(--red-300);      /* #ff6e63 */
-      --accent-magic-item: var(--violet-300); /* #c88aff */
+      --accent-item: var(--violet-300); /* #c88aff */
       --accent-spell: var(--sea-300);         /* #3dd9f5 */
 
       --rarity-common: var(--bone-400);       /* #c2b4a3 */
@@ -48,7 +48,7 @@
   }
 
   [data-type='creature'] { --accent: var(--accent-creature); }
-  [data-type='magic-item'] { --accent: var(--accent-magic-item); }
+  [data-type='item'] { --accent: var(--accent-item); }
   [data-type='spell'] { --accent: var(--accent-spell); }
 
   [data-rarity='common'] { --accent: var(--rarity-common); }

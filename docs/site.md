@@ -30,6 +30,7 @@ Per type:
 | `defaultFilters` | Filters expanded by default; every other facet and tag stays reachable through "Add filter" |
 | `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level) |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
+| `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
 
 A facet's `kind` is `range` (numbers) or `enum` (strings, string arrays,
 booleans); an omitted optional flag reads as `false`. Ordered enums (rarity,
@@ -104,6 +105,25 @@ The header carries ruleset and type navigation, built from the registry. The
 footer carries the SRD 5.2 attribution statement on every page. The site is
 served under the base `/ttrpg-library/`
 ([architecture.md](architecture.md#technology)).
+
+### Redirects
+
+A renamed type keeps its old URLs working (P9). The registry lists its
+earlier keys under `formerly`, such as `item`'s `["magic-item"]`, and from
+them:
+
+- **The old gallery and detail pages** are built as redirect pages:
+  `/<ruleset>/<old>/` and `/<ruleset>/<old>/<id>/` send the reader to the
+  same page under the current key, keeping the query and fragment, with a
+  `noindex` tag, a canonical link to the new page, and a meta refresh for
+  readers without JavaScript.
+- **Print and gallery queries** read an old key as the current one: an
+  `ids` key such as `magic-item/wand-of-wonder`, and an old value of the
+  `type` filter (`f.type=magic-item`).
+
+Entries, refs, and `library.json` use only current keys; the validator
+rejects an old type like any unknown one. `site/src/lib/redirects.ts` reads
+the registry's former keys for the pages, print, and the gallery.
 
 ### Gallery
 
@@ -201,7 +221,7 @@ indexes.
 
 ### Templates
 
-- One component per type template, `creature-stat-block`, `magic-item-card`,
+- One component per type template, `creature-stat-block`, `item-card`,
   and `spell-card`, plus a `generic` fallback that renders the fixed keys,
   `stats` as a definition list, and tags. `EntryTemplate` picks the component
   from the registry's `template`, falling back to `generic`.

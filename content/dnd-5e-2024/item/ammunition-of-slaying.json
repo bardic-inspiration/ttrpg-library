@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "ammunition-of-slaying",
+  "name": "Ammunition of Slaying",
+  "summary": "Magic ammunition that deals heavy extra Force damage to one type of creature, then becomes nonmagical.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Any Ammunition",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "This magic ammunition is meant to slay creatures of a particular type, which the GM chooses or determines randomly by rolling on the table below. If a creature of that type takes damage from the ammunition, the creature makes a DC 17 Constitution saving throw, taking an extra 6d10 Force damage on a failed save or half as much extra damage on a successful one.\n\nAfter dealing its extra damage to a creature, the ammunition becomes nonmagical.\n\n| 1d100 | Creature Type |\n|---|---|\n| 01–10 | Aberrations |\n| 11–15 | Beasts |\n| 16–20 | Celestials |\n| 21–25 | Constructs |\n| 26–35 | Dragons |\n| 36–45 | Elementals |\n| 46–50 | Humanoids |\n| 51–60 | Fey |\n| 61–70 | Fiends |\n| 71–75 | Giants |\n| 76–80 | Monstrosities |\n| 81–85 | Oozes |\n| 86–90 | Plants |\n| 91–00 | Undead |"
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        134
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { MagicItemStats, SpellStats } from '../../rulesets/dnd-5e-2024/types.ts';
-import { chargesLine, spellLine, subtitleLine } from '../../site/src/lib/magic-item.ts';
+import type { ItemStats, SpellStats } from '../../rulesets/dnd-5e-2024/types.ts';
+import { chargesLine, spellLine, subtitleLine } from '../../site/src/lib/item.ts';
 import { castingTimeLine, componentsLine, durationLine, levelLine, rangeLine } from '../../site/src/lib/spell.ts';
 import { frostLance, wandOfFrostLances } from '../helpers.ts';
 
@@ -52,8 +52,8 @@ describe('spell card lines (docs/rulesets.md#spells)', async () => {
   });
 });
 
-describe('magic item card lines (docs/rulesets.md#magic-items)', async () => {
-  const wand = (await wandOfFrostLances()).stats as MagicItemStats;
+describe('magic item card lines (docs/rulesets.md#items)', async () => {
+  const wand = (await wandOfFrostLances()).stats as ItemStats;
   const names = new Map([['spell/frost-lance', 'Frost Lance']]);
 
   it('formats category, base item, rarity, and attunement', () => {
@@ -66,7 +66,7 @@ describe('magic item card lines (docs/rulesets.md#magic-items)', async () => {
     );
   });
 
-  it('prints the rarity of each variant in place of "Rarity Varies" (docs/rulesets.md#magic-items)', () => {
+  it('prints the rarity of each variant in place of "Rarity Varies" (docs/rulesets.md#items)', () => {
     const variants = (rarities: [string, string][]) => rarities.map(([rarity, variant]) => ({ rarity, variant }));
     expect(
       subtitleLine({ ...wand, category: 'weapon', baseItem: 'Any Ammunition', rarity: 'varies', attunement: { required: false }, rarityVariants: variants([['uncommon', '+1'], ['rare', '+2'], ['very-rare', '+3']]) }),

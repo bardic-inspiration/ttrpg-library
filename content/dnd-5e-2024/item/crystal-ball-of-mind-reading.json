@@ -1,0 +1,40 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "crystal-ball-of-mind-reading",
+  "name": "Crystal Ball of Mind Reading",
+  "summary": "A crystal orb that casts Scrying and reads the thoughts of creatures near its sensor.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "legendary",
+    "attunement": {
+      "required": true
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/scrying"
+        },
+        "saveDc": 17
+      },
+      {
+        "spell": {
+          "ref": "spell/detect-thoughts"
+        },
+        "saveDc": 17
+      }
+    ],
+    "effect": "While touching this crystal orb, you can cast *{ref:spell/scrying}* (save DC 17) with it. In addition, you can cast *{ref:spell/detect-thoughts}* (save DC 17) targeting creatures you can see within 30 feet of the spell's sensor. You don't need to concentrate on this *{ref:spell/detect-thoughts}* spell to maintain it during its duration, but it ends if the *{ref:spell/scrying}* spell ends."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

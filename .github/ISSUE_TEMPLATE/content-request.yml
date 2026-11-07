@@ -15,7 +15,7 @@ body:
       description: The kind of entry to generate.
       options:
         - creature
-        - magic-item
+        - item
         - spell
     validations:
       required: true

@@ -1,0 +1,37 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "wand-of-magic-missiles",
+  "name": "Wand of Magic Missiles",
+  "summary": "A wand that casts Magic Missile, spending more charges for more darts.",
+  "stats": {
+    "category": "wand",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "charges": {
+      "max": 7,
+      "recharge": "1d6 + 1 daily at dawn",
+      "depletion": "If you expend the wand's last charge, roll 1d20. On a 1, the wand crumbles into ashes and is destroyed."
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/magic-missile"
+        },
+        "chargeCost": 1,
+        "maxChargeCost": 3
+      }
+    ],
+    "effect": "This wand has 7 charges. While holding it, you can expend no more than 3 charges to cast *{ref:spell/magic-missile}* from it. For 1 charge, you cast the level 1 version of the spell. You can increase the spell's level by 1 for each additional charge you expend.\n\n***Regaining Charges.*** The wand regains 1d6 + 1 expended charges daily at dawn. If you expend the wand's last charge, roll 1d20. On a 1, the wand crumbles into ashes and is destroyed."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "updatedAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}

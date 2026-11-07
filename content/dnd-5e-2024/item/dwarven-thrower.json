@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "dwarven-thrower",
+  "name": "Dwarven Thrower",
+  "summary": "A +3 warhammer that returns when thrown and deals extra damage to Giants.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Warhammer",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true,
+      "requirement": "by a Dwarf or a Creature Attuned to a Belt of Dwarvenkind"
+    },
+    "effect": "You gain a +3 bonus to attack rolls and damage rolls made with this magic weapon. It has the Thrown property with a normal range of 20 feet and a long range of 60 feet. When you hit with a ranged attack using this weapon, it deals an extra 1d8 Force damage, or an extra 2d8 Force damage if the target is a Giant. Immediately after hitting or missing, the weapon flies back to your hand."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

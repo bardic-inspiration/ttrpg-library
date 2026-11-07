@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "eversmoking-bottle",
+  "name": "Eversmoking Bottle",
+  "summary": "A bottle that pours out a spreading cloud of thick smoke.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can open or close this bottle.\n\nOpening the bottle causes thick smoke to billow out, forming a cloud that fills a 60-foot Emanation originating from the bottle. The area within the smoke is Heavily Obscured.\n\nEach minute the bottle remains open, the size of the Emanation increases by 10 feet until it reaches its maximum size of 120 feet.\n\nClosing the bottle causes the cloud to become fixed in place until it disperses after 10 minutes. A strong wind (such as that created by the *{ref:spell/gust-of-wind}* spell) disperses the cloud after 1 minute."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

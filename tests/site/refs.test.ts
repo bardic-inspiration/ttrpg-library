@@ -4,14 +4,14 @@ import { groupRefs, type RefTarget } from '../../site/src/lib/refs.ts';
 
 const targets = new Map<string, RefTarget>([
   ['spell/frost-lance', { type: 'spell', name: 'Frost Lance', path: 'dnd-5e-2024/spell/frost-lance/' }],
-  ['magic-item/wand-of-frost-lances', { type: 'magic-item', name: 'Wand of Frost Lances', path: 'dnd-5e-2024/magic-item/wand-of-frost-lances/' }],
+  ['item/wand-of-frost-lances', { type: 'item', name: 'Wand of Frost Lances', path: 'dnd-5e-2024/item/wand-of-frost-lances/' }],
   ['creature/cinder-witch', { type: 'creature', name: 'Cinder Witch', path: 'dnd-5e-2024/creature/cinder-witch/' }],
 ]);
 const labels = ruleset.refLabels.bind(ruleset);
 
 describe('dnd-5e-2024 ref labels (docs/content-model.md#references)', () => {
   it('labels spell lists "Casts" and gear "Gear"', () => {
-    expect(labels('magic-item', 'stats.spells[0].spell')).toEqual({ forward: 'Casts', back: 'Cast by' });
+    expect(labels('item', 'stats.spells[0].spell')).toEqual({ forward: 'Casts', back: 'Cast by' });
     expect(labels('creature', 'stats.spellcasting.perDay.1[0]')).toEqual({ forward: 'Casts', back: 'Cast by' });
     expect(labels('creature', 'stats.gear[2]')).toEqual({ forward: 'Gear', back: 'Carried by' });
     expect(labels('spell', 'stats.somethingElse')).toEqual({ forward: 'References', back: 'Referenced by' });
@@ -20,7 +20,7 @@ describe('dnd-5e-2024 ref labels (docs/content-model.md#references)', () => {
 
 describe('groupRefs (docs/site.md#detail-page)', () => {
   it('shows the wand casting Frost Lance, and Frost Lance cast by the wand and a creature', () => {
-    expect(groupRefs('magic-item', [{ path: 'stats.spells[0].spell', key: 'spell/frost-lance' }], [], targets, labels)).toEqual({
+    expect(groupRefs('item', [{ path: 'stats.spells[0].spell', key: 'spell/frost-lance' }], [], targets, labels)).toEqual({
       forward: [{ label: 'Casts', targets: [targets.get('spell/frost-lance')] }],
       back: [],
     });
@@ -30,17 +30,17 @@ describe('groupRefs (docs/site.md#detail-page)', () => {
       [
         { path: 'stats.spellcasting.atWill[0]', key: 'creature/cinder-witch' },
         { path: 'stats.spellcasting.perDay.1[0]', key: 'creature/cinder-witch' },
-        { path: 'stats.spells[0].spell', key: 'magic-item/wand-of-frost-lances' },
+        { path: 'stats.spells[0].spell', key: 'item/wand-of-frost-lances' },
       ],
       targets,
       labels,
     );
     expect(back.back).toEqual([
-      { label: 'Cast by', targets: [targets.get('creature/cinder-witch'), targets.get('magic-item/wand-of-frost-lances')] },
+      { label: 'Cast by', targets: [targets.get('creature/cinder-witch'), targets.get('item/wand-of-frost-lances')] },
     ]);
   });
 
   it('skips a link whose target is unknown', () => {
-    expect(groupRefs('magic-item', [{ path: 'stats.spells[0].spell', key: 'spell/gone' }], [], targets, labels).forward).toEqual([]);
+    expect(groupRefs('item', [{ path: 'stats.spells[0].spell', key: 'spell/gone' }], [], targets, labels).forward).toEqual([]);
   });
 });

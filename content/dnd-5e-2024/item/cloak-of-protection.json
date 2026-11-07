@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "cloak-of-protection",
+  "name": "Cloak of Protection",
+  "summary": "A cloak that improves your Armor Class and saving throws while you wear it.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You gain a +1 bonus to Armor Class and saving throws while you wear this cloak."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}

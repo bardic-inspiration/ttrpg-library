@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "weapon-of-warning",
+  "name": "Weapon of Warning",
+  "summary": "A weapon that warns you of danger, wakes you and allies, and grants Advantage on Initiative.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Any Simple or Martial",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true
+    },
+    "effect": "As long as this weapon is within your reach and you are attuned to it, you and allies within 30 feet of you gain the following benefits.\n\n***Alarm.*** The weapon magically awakens each subject who is sleeping naturally when combat begins. This benefit doesn't wake a subject from magically induced sleep.\n\n***Supernatural Readiness.*** Each subject has Advantage on its Initiative rolls."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

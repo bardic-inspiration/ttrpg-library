@@ -10,6 +10,6 @@ const OTHER: RefLabels = { forward: 'References', back: 'Referenced by' };
 export function refLabels(type: string, path: string): RefLabels {
   if (type === 'creature' && path.startsWith('stats.spellcasting.')) return CASTS;
   if (type === 'creature' && path.startsWith('stats.gear[')) return GEAR;
-  if (type === 'magic-item' && /^stats\.spells\[\d+\]\.spell$/.test(path)) return CASTS;
+  if (type === 'item' && /^stats\.spells\[\d+\]\.spell$/.test(path)) return CASTS;
   return OTHER;
 }

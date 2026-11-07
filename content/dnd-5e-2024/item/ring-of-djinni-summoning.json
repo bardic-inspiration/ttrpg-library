@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "ring-of-djinni-summoning",
+  "name": "Ring of Djinni Summoning",
+  "summary": "A ring that summons a Djinni to serve you.",
+  "stats": {
+    "category": "ring",
+    "rarity": "legendary",
+    "attunement": {
+      "required": true
+    },
+    "effect": "While wearing this ring, you can take a Magic action to summon a particular **{ref:creature/djinni}** from the Elemental Plane of Air. The djinni appears in an unoccupied space you choose within 120 feet of yourself. It remains as long as you maintain Concentration, to a maximum of 1 hour, or until it drops to 0 Hit Points.\n\nWhile summoned, the djinni is Friendly to you and your allies, and it obeys your commands. If you fail to command it, the djinni defends itself against attackers but takes no other actions.\n\nAfter the djinni departs, it can't be summoned again for 24 hours, and the ring becomes nonmagical if the djinni dies.\n\n*Rings of Djinni Summoning* are often created by the djinn they summon and given to mortals as gifts of friendship or tokens of esteem."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "updatedAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

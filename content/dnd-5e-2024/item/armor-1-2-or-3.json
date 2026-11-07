@@ -1,0 +1,40 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "armor-1-2-or-3",
+  "name": "Armor, +1, +2, or +3",
+  "summary": "Magic armor that grants a bonus to Armor Class set by its rarity.",
+  "stats": {
+    "category": "armor",
+    "baseItem": "Any Light, Medium, or Heavy",
+    "rarity": "varies",
+    "rarityVariants": [
+      {
+        "rarity": "rare",
+        "variant": "+1"
+      },
+      {
+        "rarity": "very-rare",
+        "variant": "+2"
+      },
+      {
+        "rarity": "legendary",
+        "variant": "+3"
+      }
+    ],
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a bonus to Armor Class while wearing this armor. The bonus is determined by its rarity."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        178
+      ],
+      "srd": true
+    }
+  }
+}

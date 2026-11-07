@@ -17,8 +17,8 @@ import { textOf } from './library-fixtures.ts';
 
 const FILES = [
   'dnd-5e-2024/spell/confusion.json',
-  'dnd-5e-2024/magic-item/belt-of-giant-strength.json',
-  'dnd-5e-2024/magic-item/staff-of-healing.json',
+  'dnd-5e-2024/item/belt-of-giant-strength.json',
+  'dnd-5e-2024/item/staff-of-healing.json',
   // Staff of Healing refs these
   'dnd-5e-2024/spell/cure-wounds.json',
   'dnd-5e-2024/spell/lesser-restoration.json',

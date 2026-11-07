@@ -43,7 +43,7 @@ describe.each<Theme>(['light', 'dark'])('%s theme contrast (docs/styling.md#acce
   const tokens = themeTokens(all, theme);
 
   it('declares every type and rarity color from docs/styling.md#styling-system', () => {
-    for (const name of ['--accent-creature', '--accent-magic-item', '--accent-spell', '--rarity-common', '--rarity-uncommon', '--rarity-rare', '--rarity-very-rare', '--rarity-legendary', '--rarity-artifact']) {
+    for (const name of ['--accent-creature', '--accent-item', '--accent-spell', '--rarity-common', '--rarity-uncommon', '--rarity-rare', '--rarity-very-rare', '--rarity-legendary', '--rarity-artifact']) {
       expect(contentColors).toContain(name);
     }
   });

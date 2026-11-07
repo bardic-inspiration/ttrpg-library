@@ -11,7 +11,7 @@
   :root,
   [data-theme='light'] {
     --accent-creature: var(--red-700);
-    --accent-magic-item: var(--violet-700);
+    --accent-item: var(--violet-700);
     --accent-spell: var(--sea-700);
     --rarity-common: var(--ink-600);
     --rarity-uncommon: var(--green-700);
@@ -24,7 +24,7 @@
   @media screen and (prefers-color-scheme: dark) {
     :root:not([data-theme='light']) {
       --accent-creature: var(--red-300);
-      --accent-magic-item: var(--violet-300);
+      --accent-item: var(--violet-300);
       --accent-spell: var(--sea-300);
       --rarity-common: var(--bone-400);
       --rarity-uncommon: var(--green-300);
@@ -38,7 +38,7 @@
   @media screen {
     [data-theme='dark'] {
       --accent-creature: var(--red-300);
-      --accent-magic-item: var(--violet-300);
+      --accent-item: var(--violet-300);
       --accent-spell: var(--sea-300);
       --rarity-common: var(--bone-400);
       --rarity-uncommon: var(--green-300);
@@ -58,7 +58,7 @@
   }
 
   [data-type='creature'] { --accent: var(--accent-creature); }
-  [data-type='magic-item'] { --accent: var(--accent-magic-item); }
+  [data-type='item'] { --accent: var(--accent-item); }
   [data-type='spell'] { --accent: var(--accent-spell); }
 
   [data-rarity='common'] { --accent: var(--rarity-common); }

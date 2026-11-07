@@ -155,7 +155,7 @@ patterns don't match instead of guessing. Lessons from the first import:
   - a footnote marker, escaped as `\*` in a header cell and the note;
   - a hanging-indent bold run-in item, as a `***Name.***` paragraph, as
     Folding Boat's command words are;
-  - per-variant rarities, in `rarityVariants` with `rarity: "varies"` ([Magic items](../../../docs/rulesets.md#magic-items));
+  - per-variant rarities, in `rarityVariants` with `rarity: "varies"` ([Items](../../../docs/rulesets.md#items));
   - an Initiative line in a stat block inside an item or spell ([Shared definitions](../../../docs/rulesets.md#shared-definitions));
   - a creature's Spellcasting with no save DC, with `spellcasting.noSaveDc`
     ([Situational fields](../../../docs/content-model.md#situational-fields), [Creatures](../../../docs/rulesets.md#creatures));
@@ -183,7 +183,7 @@ Before pushing, check every entry against the PDF by what the site renders,
 not by the JSON:
 
 - Render each entry through the template code in `site/src/lib/creature.ts`,
-  `site/src/lib/spell.ts`, or `site/src/lib/magic-item.ts`, and compare it
+  `site/src/lib/spell.ts`, or `site/src/lib/item.ts`, and compare it
   line by line with the PDF text of the same entry. Every difference is
   either fixed, a misprint recorded for the PR, or a [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) formatting
   difference. What worked for a large batch: build the site, read each
@@ -228,7 +228,7 @@ the `revise` skill's rules, on branch `revise/<stage>-<YYYYMMDD>`, with
 exactly as words, and skip a match that is ordinary prose rather than the
 entry ("a shield", "the light"). What the pass covers, and the traps:
 
-- **Text fields:** an italic spell or magic-item name becomes
+- **Text fields:** an italic spell or item name becomes
   `*{ref:<type>/<id>}*`, keeping a trailing period inside the italics. A bold
   creature name becomes `**{ref:creature/<id>}**`, with any comma that sat
   inside the bold moved after it. Match an italic run only when it starts

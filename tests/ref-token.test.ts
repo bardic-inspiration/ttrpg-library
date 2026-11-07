@@ -32,13 +32,13 @@ describe('{ref:…} tokens in text (docs/content-model.md#references)', () => {
   it('resolve, and link both ways with the text field as the path', async () => {
     const entries = await examples(
       'The lance summons a {ref:creature/cinder-hound} that fights beside you.',
-      'Hunters carry a *{ref:magic-item/wand-of-frost-lances}* against them.',
+      'Hunters carry a *{ref:item/wand-of-frost-lances}* against them.',
     );
     const { errors, entries: valid } = await validateLibrary(await library(entries));
     expect(errors).toEqual([]);
     const byId = new Map(valid.map((e) => [e.entry.id, e]));
     expect(byId.get('frost-lance')!.refs).toEqual([{ path: 'stats.effect', key: 'creature/cinder-hound' }]);
-    expect(byId.get('cinder-hound')!.refs).toEqual([{ path: 'description', key: 'magic-item/wand-of-frost-lances' }]);
+    expect(byId.get('cinder-hound')!.refs).toEqual([{ path: 'description', key: 'item/wand-of-frost-lances' }]);
     expect(byId.get('cinder-hound')!.refBy).toEqual([{ path: 'stats.effect', key: 'spell/frost-lance' }]);
   });
 

@@ -22,7 +22,7 @@ describe('countBuckets', () => {
   });
 
   it('counts a categorical axis, ignoring values it does not list', () => {
-    const records = ['rare', 'rare', 'artifact'].map((r) => rec('magic-item', { 'stats.rarity': r }));
+    const records = ['rare', 'rare', 'artifact'].map((r) => rec('item', { 'stats.rarity': r }));
     expect(countBuckets([RARITY], records)).toEqual([
       { label: 'stats.rarity=common', count: 0 },
       { label: 'stats.rarity=rare', count: 2 },
@@ -50,7 +50,7 @@ describe('countBuckets', () => {
   });
 
   it('counts an array value in each bucket it holds', () => {
-    const records = [rec('magic-item', { 'stats.rarity': ['common', 'rare'] })];
+    const records = [rec('item', { 'stats.rarity': ['common', 'rare'] })];
     expect(countBuckets([RARITY], records).map((b) => b.count)).toEqual([1, 1]);
   });
 

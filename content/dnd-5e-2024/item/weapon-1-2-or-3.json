@@ -1,0 +1,40 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "weapon-1-2-or-3",
+  "name": "Weapon, +1, +2, or +3",
+  "summary": "A magic weapon with a bonus to attack and damage rolls set by its rarity.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Any Simple or Martial",
+    "rarity": "varies",
+    "rarityVariants": [
+      {
+        "rarity": "uncommon",
+        "variant": "+1"
+      },
+      {
+        "rarity": "rare",
+        "variant": "+2"
+      },
+      {
+        "rarity": "very-rare",
+        "variant": "+3"
+      }
+    ],
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a bonus to attack rolls and damage rolls made with this magic weapon. The bonus is determined by the weapon's rarity."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        178
+      ],
+      "srd": true
+    }
+  }
+}

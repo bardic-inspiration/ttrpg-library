@@ -122,7 +122,7 @@ describe('blocklist (docs/licensing.md#blocklist)', () => {
       name: 'Beholder Hound',
       summary: 'Hunts the mind flayer.',
       description: 'From Faerûn.',
-      stats: { descriptors: ['Tasha'], gear: [{ ref: 'magic-item/x' }], actions: [{ text: 'Two beholders gaze.' }] },
+      stats: { descriptors: ['Tasha'], gear: [{ ref: 'item/x' }], actions: [{ text: 'Two beholders gaze.' }] },
     };
     expect(checkBlocklist(entry, matches).map((m) => m.split(':')[0])).toEqual([
       'name',
