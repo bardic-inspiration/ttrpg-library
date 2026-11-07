@@ -338,9 +338,13 @@ words them:
   is a group, the category's noun follows: "Any Melee Weapon". `except`
   adds ", Except" and its names, joined by "and".
 
-This reproduces every base item in the SRD word for word: "Any Simple or
-Martial", "Any Light, Medium, or Heavy", "Any Medium or Heavy, Except Hide
-Armor", "Any Melee Weapon", "Any Ammunition", and every list of items.
+Each qualifier and name is a link to its target; "Any", "or", and "Except"
+are plain words. "Any Medium or Heavy, Except Hide Armor" reads with
+"Medium", "Heavy", and "Hide Armor" linked to the Medium Armor, Heavy Armor,
+and Hide Armor sections. This reproduces every base item in the SRD word
+for word: "Any Simple or Martial", "Any Light, Medium, or Heavy", "Any
+Medium or Heavy, Except Hide Armor", "Any Melee Weapon", "Any Ammunition",
+and every list of items.
 
 - **Checks** (errors): exactly one of `any` and `oneOf`; `any` targets are
   groups or items with `variants`; `oneOf` targets are items; each `except`
