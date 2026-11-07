@@ -11,7 +11,7 @@ Move content between this library and the open TTRPG formats, in both
 directions: export entries for VTTs and other content sites, and import
 openly licensed content from them. Only open sources are covered; no
 licensed content is imported. It serves the data lane of the export design
-([`export.md`](export.md)), P5 (licensing), and P7 (every import is a
+([`export.md`](export.md)), P5 and P9 (licensing), and P7 (every import is a
 reviewed PR).
 
 This area and export (#115) can be combined.

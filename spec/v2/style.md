@@ -90,8 +90,9 @@ desktop widths.
 
 - The token files hold the palette, typefaces, and accents, with one set of
   colors and no theme selectors, and the Stylelint token rule passes.
-- Every v2 type and item rarity has an accent that meets the contrast bar on
-  the palette's surfaces.
+- Every v2 type and item rarity has an accent token. Its contrast on the
+  palette's surfaces is checked in the milestone's accessibility review, since
+  the contrast test leaves CI ([`ui.md`](ui.md)).
 - No page names Frank Lloyd Wright or the Wasmuth portfolio.
 
 ## Out of scope

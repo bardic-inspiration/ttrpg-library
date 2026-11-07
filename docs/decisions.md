@@ -239,7 +239,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | v1's ref standard carries into v2 unchanged: ref objects at `RefOrText` fields and `{ref:…}` tokens in text, keyed by `<type>/<id>`, with relations typed by field, labels in the ruleset's `refs.ts`, and back-references computed. Existing entries need no migration. | It works in practice and already covers what new types need; P3 | #111 |
 | A new type links through `RefOrText` fields it declares, with a label pair in `refs.ts` for a relation that needs its own wording, rather than a new link mechanism. Each type's fields and labels are set in the type extension design. | P4: a new link is a schema and label addition | #111, #112 |
 | Linking is part of authoring: an entry links every library entry it mentions or uses, and a link pass links mentions written before their target existed. | Already the `generate` and `srd-import` rules; the owner confirmed them as the standard | #111 |
-| An area with no build of its own (`linking.md`) is deleted by the first build PR that exercises it. | Keeps the stage spec's "emptied by building it" rule | #111 |
+| An area with no build of its own (`linking.md`) is deleted part by part, each by the first build PR that exercises it. | Keeps the stage spec's "emptied by building it" rule | #111 |
 | Ruleset primitives (SRD conditions, equipment items and groups, glossary terms) and hidden components are link targets with `<type>/<id>` keys, rendered as links to their anchors. An extension shares its type's keys. | One link form whatever the target; P3 | #111, #112 |
 
 ### Types
