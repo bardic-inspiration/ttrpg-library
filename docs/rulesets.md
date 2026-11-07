@@ -5,7 +5,7 @@
 Everything specific to a ruleset: its schemas, rules tables, derived values,
 text tokens, consistency checks, and how its types print. The one ruleset is
 `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0), with three types: `creature`,
-`magic-item`, and `spell`. What every entry shares is in
+`item`, and `spell`. What every entry shares is in
 [content-model.md](content-model.md).
 
 ## Behavior
@@ -30,7 +30,7 @@ is visible in the diff, and every adjustment is listed as a warning in the job
 summary for the reviewer to confirm.
 
 **Authored values stay stored.** Numbers the rules leave to the author are
-inputs: a creature's AC, a spell's damage dice, a magic item's stated spell
+inputs: a creature's AC, a spell's damage dice, an item's stated spell
 save DC.
 
 ### The ruleset module
@@ -69,7 +69,7 @@ CR 0 when any trait or action deals damage, else 0), in-lair XP (the next CR
 row's), Initiative bonus and score, the hit die from size and HP from hit dice,
 saves, skills, passive Perception, each action's attack bonus, save DC, and
 damage (average, modifier, and display), and the Spellcasting DC and attack
-bonus. Magic items and spells derive nothing, except the ability modifiers and
+bonus. Items and spells derive nothing, except the ability modifiers and
 saves of an embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)).
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
 `tables.json`, which cites the SRD section it comes from.
@@ -109,7 +109,7 @@ stat block.
   warning for the reviewer.
 - `{ref:…}` is not a ruleset token; the token parser leaves it alone
   ([content-model.md](content-model.md#references)).
-- Spell and magic-item text is exempt, because its numbers are authored. A
+- Spell and item text is exempt, because its numbers are authored. A
   custom item's text must still not restate `saveDc` or `attackBonus`, since
   the template renders them (warning). An SRD item's text is verbatim and may.
 
@@ -181,9 +181,9 @@ SRD 5.2:
   "Recharge 5–6", "Recharge 6", "Recharge after a Short or Long Rest",
   "Recharge after a Long Rest".
 
-### Magic items
+### Items
 
-`schemas/magic-item.schema.json` describes each field. How the card reads:
+`schemas/item.schema.json` describes each field. How the card reads:
 
 - The subtitle reads the category, then the rarity in title case ("Very
   Rare"), with `varies` as "Rarity Varies". An item with `rarityVariants`
@@ -245,12 +245,12 @@ warnings below on an SRD entry.
 | Creature | Any `adjust`, damage `bonus`, or token adjustment | warning |
 | Creature | Any authored DC token `{dc=<n>}` | warning |
 | Creature | Derived attack bonus above +17 or save DC above 30 | warning |
-| Magic item | `baseItem` present for `armor` and `weapon` | error |
-| Magic item | `rarityVariants` only when `rarity` is `varies` | error |
-| Magic item | `attunement.requirement` only when `required` is true | error |
-| Magic item | `spells[].chargeCost` only when `charges` is present | error |
-| Magic item | `spells[].maxChargeCost` only with `chargeCost`, and above it | error |
-| Magic item | `effect` restates a `saveDc` or `attackBonus` value | warning |
+| Item | `baseItem` present for `armor` and `weapon` | error |
+| Item | `rarityVariants` only when `rarity` is `varies` | error |
+| Item | `attunement.requirement` only when `required` is true | error |
+| Item | `spells[].chargeCost` only when `charges` is present | error |
+| Item | `spells[].maxChargeCost` only with `chargeCost`, and above it | error |
+| Item | `effect` restates a `saveDc` or `attackBonus` value | warning |
 | Spell | `duration.concentration` only on a `timed` duration | error |
 | Spell | A `timed` duration has `amount` and `unit` | error |
 | Spell | `duration.upTo` only on a `timed` duration without concentration | error |
@@ -267,7 +267,7 @@ Balance isn't checked by CI; it's judged in review
 
 - `rulesets/module.ts`: the contract every ruleset module meets.
 - `rulesets/dnd-5e-2024/`: the files in the table above.
-- `site/src/lib/creature.ts`, `spell.ts`, `magic-item.ts`, `stat-block.ts`:
+- `site/src/lib/creature.ts`, `spell.ts`, `item.ts`, `stat-block.ts`:
   how each type's lines are worded.
 - `tests/fixtures/library/valid/dnd-5e-2024/`: example entries, including the
   Cinder Hound, Frost Lance, and Wand of Frost Lances, with their rendered

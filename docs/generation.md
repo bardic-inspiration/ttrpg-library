@@ -15,7 +15,7 @@ GitHub issues are the request queue. Issue templates set blank issues off, so
 every issue starts in a lane.
 
 - **Content request** (`.github/ISSUE_TEMPLATE/content-request.yml`, label
-  `request`): type (creature, magic-item, or spell), count (a 1–10 dropdown,
+  `request`): type (creature, item, or spell), count (a 1–10 dropdown,
   since issue forms have no number field; a free-form request may ask for
   more), brief, tags (one `key: value` per line, comma-separated for lists),
   and ruleset. Blank fields take the values in `config/defaults.json`.

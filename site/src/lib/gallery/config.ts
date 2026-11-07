@@ -2,6 +2,7 @@
 // and sorts available, and the defaults, all read from the registry (docs/site.md#type-registry).
 
 import type { Facet, LibraryRecord, Registry, TypeConfig } from '../../../../scripts/build-index/index.ts';
+import { typeAliases } from '../redirects.ts';
 
 export type { Facet, LibraryRecord, Registry };
 
@@ -14,6 +15,8 @@ export interface FilterDef {
   order?: string[];
   /** Display labels for stored values, such as type ids to type labels. */
   labels?: Record<string, string>;
+  /** Former values read as current ones, such as a renamed type's old key (docs/site.md#redirects). */
+  aliases?: Record<string, string>;
 }
 
 export interface SortKey {
@@ -87,7 +90,15 @@ export function galleryConfig(registry: Registry, scope: GalleryScope): GalleryC
       types,
     };
   }
-  const typeFilter: FilterDef = { path: TYPE, label: 'Type', kind: 'enum', order: Object.keys(typeLabels), labels: typeLabels };
+  const aliases = typeAliases(registry, scope.ruleset);
+  const typeFilter: FilterDef = {
+    path: TYPE,
+    label: 'Type',
+    kind: 'enum',
+    order: Object.keys(typeLabels),
+    labels: typeLabels,
+    ...(Object.keys(aliases).length > 0 && { aliases }),
+  };
   return {
     scope,
     filters: [typeFilter, ...filters.values()],

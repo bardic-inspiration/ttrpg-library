@@ -180,7 +180,7 @@ error, as is a malformed one such as `{ref:zombie}`.
 ### Situational fields
 
 Many `stats` fields apply to some entries and not others: a spell's material
-cost, a magic item's `cursed` flag, a creature's `lair`. One rule decides
+cost, an item's `cursed` flag, a creature's `lair`. One rule decides
 whether a field displays, and it lives in the type's schema, not in templates
 or the registry:
 
@@ -201,14 +201,14 @@ or the registry:
 | Array | `minItems: 1` | `[]` |
 | Object | `minProperties: 1`, or required keys | `{}` |
 
-An optional number whose `0` is a real value, such as a magic item's
+An optional number whose `0` is a real value, such as an item's
 `attackBonus` of +0, keeps `0` valid and displays it when present. A facet on
 an optional flag reads an omitted key as `false`. A derived value always
 exists, so a line that shows one displays even when its optional inputs are
 omitted: the Senses line still shows Passive Perception.
 
 **DCs.** A DC displays only when there is one, by one rule for every type. An
-authored DC, such as a magic item's `spells[].saveDc`, is omitted when there is
+authored DC, such as an item's `spells[].saveDc`, is omitted when there is
 none; `0` is never a stand-in. A derived DC, which always exists, is switched
 off by an optional flag on the input that derives it, such as a creature's
 `spellcasting.noSaveDc`.
@@ -288,7 +288,7 @@ Where the PDF misprints a heading, the manifest uses the entry's correct name
 
 - creature: legendary actions, a lair, a Spellcasting action, reactions, or a
   Shape-Shift action;
-- magic item: a table, a stat block, variants under one name ("+1, +2, or +3",
+- item: a table, a stat block, variants under one name ("+1, +2, or +3",
   a rarity of "Varies", or versions such as giant types), several spells cast
   for charges, or a variable charge cost;
 - spell: a table, a stat block, or a Reaction casting time with a trigger.

@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "sword-of-sharpness",
+  "name": "Sword of Sharpness",
+  "summary": "A sword that maximizes damage against objects and can sever limbs on a 20.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Glaive, Greatsword, Longsword, or Scimitar",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "When you attack an object with this magic weapon and hit, maximize your weapon damage dice against the target.\n\nWhen you attack a creature with this weapon and roll a 20 on the d20 for the attack roll, that target takes an extra 14 Slashing damage and gains 1 Exhaustion level."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

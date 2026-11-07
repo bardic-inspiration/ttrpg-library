@@ -81,9 +81,9 @@ describe('filter logic', () => {
 describe('sorting', () => {
   it('sorts ordered enums by their declared order, not alphabetically', () => {
     const items = ['legendary', 'common', 'very-rare', 'rare'].map((rarity) =>
-      record({ id: rarity, type: 'magic-item', facets: { 'stats.rarity': rarity } }),
+      record({ id: rarity, type: 'item', facets: { 'stats.rarity': rarity } }),
     );
-    const config = galleryConfig(reg, { ruleset: 'dnd-5e-2024', type: 'magic-item' });
+    const config = galleryConfig(reg, { ruleset: 'dnd-5e-2024', type: 'item' });
     expect(sortRecords(items, { path: 'stats.rarity', dir: 'asc' }, config).map((r) => r.id)).toEqual(['common', 'rare', 'very-rare', 'legendary']);
     expect(sortRecords(items, { path: 'stats.rarity', dir: 'desc' }, config).map((r) => r.id)).toEqual(['legendary', 'very-rare', 'rare', 'common']);
   });
@@ -122,7 +122,7 @@ describe('default sort on routes that span types', () => {
     record({ id: 'zephyr', name: 'Zephyr Drake', createdAt: '2026-11-02', facets: { 'stats.cr': 3 } }),
     record({ id: 'arcane-bolt', name: 'Arcane Bolt', type: 'spell', createdAt: '2026-10-31' }),
     record({ id: 'mire-imp', name: 'Mire Imp', createdAt: '2026-11-02', facets: { 'stats.cr': 0.5 } }),
-    record({ id: 'bone-ring', name: 'Bone Ring', type: 'magic-item', createdAt: '2026-11-01' }),
+    record({ id: 'bone-ring', name: 'Bone Ring', type: 'item', createdAt: '2026-11-01' }),
   ];
 
   it('lists `/` and `/<ruleset>/` alphabetically, whatever the library.json order', () => {

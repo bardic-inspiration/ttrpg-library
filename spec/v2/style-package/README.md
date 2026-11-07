@@ -25,7 +25,7 @@ All `-700` light-mode tokens and `-300` dark-mode tokens are calibrated so they 
 | Content Role | Token | Light Mode Hex (`-700`) | Dark Mode Hex (`-300`) | Art-Glass Inspiration |
 | :--- | :--- | :--- | :--- | :--- |
 | **Creature** | `--accent-creature` | `#c91d16` | `#ff6e63` | Cherokee Stained-Glass Vermilion |
-| **Magic Item** | `--accent-magic-item` | `#7422de` | `#c88aff` | Imperial Art-Glass Amethyst |
+| **Item** | `--accent-item` | `#7422de` | `#c88aff` | Imperial Art-Glass Amethyst |
 | **Spell** | `--accent-spell` | `#006b82` | `#3dd9f5` | Taliesin Peacock Cobalt-Teal |
 | **Common Rarity** | `--rarity-common` | `#574639` | `#c2b4a3` | Architectural Bronze |
 | **Uncommon Rarity** | `--rarity-uncommon` | `#0b7a3e` | `#42e68c` | Leaded Emerald Art-Glass |
@@ -105,7 +105,7 @@ Paste the contents below directly into `site/src/styles/overrides.css` to activa
 
     /* Vibrant Art-Glass Entry Type Accents */
     --accent-creature: #c91d16;
-    --accent-magic-item: #7422de;
+    --accent-item: #7422de;
     --accent-spell: #006b82;
 
     /* Vibrant Stained-Glass Rarity Accents */
@@ -130,7 +130,7 @@ Paste the contents below directly into `site/src/styles/overrides.css` to activa
       --color-focus: #6eb5ff;
 
       --accent-creature: #ff6e63;
-      --accent-magic-item: #c88aff;
+      --accent-item: #c88aff;
       --accent-spell: #3dd9f5;
 
       --rarity-common: #c2b4a3;
@@ -155,7 +155,7 @@ Paste the contents below directly into `site/src/styles/overrides.css` to activa
       --color-focus: #6eb5ff;
 
       --accent-creature: #ff6e63;
-      --accent-magic-item: #c88aff;
+      --accent-item: #c88aff;
       --accent-spell: #3dd9f5;
 
       --rarity-common: #c2b4a3;
@@ -397,7 +397,7 @@ When you are ready to make this the permanent baseline in your token files:
   :root,
   [data-theme='light'] {
     --accent-creature: var(--red-700);       /* #c91d16 Cherokee Vermilion */
-    --accent-magic-item: var(--violet-700);  /* #7422de Imperial Amethyst */
+    --accent-item: var(--violet-700);  /* #7422de Imperial Amethyst */
     --accent-spell: var(--sea-700);          /* #006b82 Taliesin Peacock Teal */
 
     --rarity-common: var(--ink-600);         /* #574639 Architectural Bronze */
@@ -411,7 +411,7 @@ When you are ready to make this the permanent baseline in your token files:
   @media screen and (prefers-color-scheme: dark) {
     :root:not([data-theme='light']) {
       --accent-creature: var(--red-300);      /* #ff6e63 */
-      --accent-magic-item: var(--violet-300); /* #c88aff */
+      --accent-item: var(--violet-300); /* #c88aff */
       --accent-spell: var(--sea-300);         /* #3dd9f5 */
 
       --rarity-common: var(--bone-400);       /* #c2b4a3 */
@@ -426,7 +426,7 @@ When you are ready to make this the permanent baseline in your token files:
   @media screen {
     [data-theme='dark'] {
       --accent-creature: var(--red-300);      /* #ff6e63 */
-      --accent-magic-item: var(--violet-300); /* #c88aff */
+      --accent-item: var(--violet-300); /* #c88aff */
       --accent-spell: var(--sea-300);         /* #3dd9f5 */
 
       --rarity-common: var(--bone-400);       /* #c2b4a3 */
@@ -439,7 +439,7 @@ When you are ready to make this the permanent baseline in your token files:
   }
 
   [data-type='creature'] { --accent: var(--accent-creature); }
-  [data-type='magic-item'] { --accent: var(--accent-magic-item); }
+  [data-type='item'] { --accent: var(--accent-item); }
   [data-type='spell'] { --accent: var(--accent-spell); }
 
   [data-rarity='common'] { --accent: var(--rarity-common); }

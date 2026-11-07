@@ -12,7 +12,7 @@ import { loadRegistry, PROJECT_ROOT } from '../scripts/validate/schema.ts';
 
 // docs/content-model.md#srd-manifest-and-coverage (SRD manifest and coverage); issue #130.
 const R = 'dnd-5e-2024';
-const TYPES = ['creature', 'magic-item', 'spell'];
+const TYPES = ['creature', 'item', 'spell'];
 
 const manifest = (): Manifest => ({
   ruleset: R,
@@ -114,9 +114,9 @@ describe(`rulesets/${R}/srd-manifest.json`, () => {
     const types = Object.keys((await loadRegistry())[R]!.types);
     expect(checkManifest(file, R, types)).toEqual([]);
     const count = (type: string) => file.entries.filter((r) => r.type === type).length;
-    expect({ creature: count('creature'), 'magic-item': count('magic-item'), spell: count('spell') }).toEqual({
+    expect({ creature: count('creature'), 'item': count('item'), spell: count('spell') }).toEqual({
       creature: 329,
-      'magic-item': 243,
+      'item': 243,
       spell: 339,
     });
   });

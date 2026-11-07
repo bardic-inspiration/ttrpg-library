@@ -29,8 +29,8 @@ describe('a11yPages (docs/styling.md#accessibility)', () => {
   });
 
   it('filters by an enum facet value when the first facet is one', () => {
-    expect(a11yPages([record('magic-item', 'wand', { 'stats.rarity': 'very-rare' })])[1]!.path).toBe(
-      'dnd-5e-2024/magic-item/?f.stats.rarity=very-rare',
+    expect(a11yPages([record('item', 'wand', { 'stats.rarity': 'very-rare' })])[1]!.path).toBe(
+      'dnd-5e-2024/item/?f.stats.rarity=very-rare',
     );
   });
 

@@ -95,8 +95,8 @@ export interface CreatureStats {
   };
 }
 
-// Shapes of dnd-5e-2024 spell and magic-item stats (docs/rulesets.md#magic-items, docs/rulesets.md#spells),
-// mirroring schemas/spell.schema.json and schemas/magic-item.schema.json.
+// Shapes of dnd-5e-2024 spell and item stats (docs/rulesets.md#items, docs/rulesets.md#spells),
+// mirroring schemas/spell.schema.json and schemas/item.schema.json.
 
 export interface SpellStats {
   level: number;
@@ -166,7 +166,7 @@ export interface DerivedStatBlock {
   saves: Record<Ability, number>;
 }
 
-export interface MagicItemSpell {
+export interface ItemSpell {
   spell: RefOrText;
   chargeCost?: number;
   /** The most charges a variable-cost casting spends; `chargeCost` is then the least. */
@@ -175,15 +175,15 @@ export interface MagicItemSpell {
   attackBonus?: number;
 }
 
-export interface MagicItemStats {
+export interface ItemStats {
   category: string;
   baseItem?: string;
   rarity: string;
-  /** Each variant's rarity, for a `varies` item (docs/rulesets.md#magic-items). */
+  /** Each variant's rarity, for a `varies` item (docs/rulesets.md#items). */
   rarityVariants?: { rarity: string; variant: string }[];
   attunement: { required: boolean; requirement?: string };
   charges?: { max: number | string; recharge?: string; depletion?: string };
-  spells?: MagicItemSpell[];
+  spells?: ItemSpell[];
   cursed?: true;
   effect: string;
   statBlocks?: StatBlock[];

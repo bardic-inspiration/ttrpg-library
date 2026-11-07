@@ -97,7 +97,7 @@ describe('library.json records', () => {
           attribution: 'srd-5.2',
           types: {
             creature: { label: 'C', plural: 'Cs', template: 't', facets: [{ path: 'stats.speed.fly', label: 'Fly', kind: 'range' }] },
-            'magic-item': { label: 'M', plural: 'Ms', template: 't', facets: [] },
+            'item': { label: 'M', plural: 'Ms', template: 't', facets: [] },
             spell: { label: 'S', plural: 'Ss', template: 't', facets: [] },
           },
         },
@@ -112,7 +112,7 @@ describe('library.json records', () => {
       { path: 'stats.spells[0].spell', key: 'spell/frost-lance' },
     ]);
     expect(records.find((r) => r.id === 'frost-lance')?.refBy).toEqual([
-      { path: 'stats.spells[0].spell', key: 'magic-item/wand-of-frost-lances' },
+      { path: 'stats.spells[0].spell', key: 'item/wand-of-frost-lances' },
     ]);
   });
 
@@ -184,7 +184,7 @@ describe('the build', () => {
     await writeIndex(valid, out, await buildIndex(valid));
     const library = JSON.parse(await readFile(join(out, 'library.json'), 'utf8')) as { id: string }[];
     expect(library.map((r) => r.id)).toEqual(['cinder-hound', 'wand-of-frost-lances', 'frost-lance']);
-    for (const path of ['creature/cinder-hound.json', 'magic-item/wand-of-frost-lances.json', 'spell/frost-lance.json']) {
+    for (const path of ['creature/cinder-hound.json', 'item/wand-of-frost-lances.json', 'spell/frost-lance.json']) {
       expect(await readFile(join(out, 'data/dnd-5e-2024', path), 'utf8')).toBe(await readFile(join(valid, 'dnd-5e-2024', path), 'utf8'));
     }
   });
@@ -192,7 +192,7 @@ describe('the build', () => {
   it('writes each entry’s export bundle, the entry with its derived values, beside the raw copy', async () => {
     const out = await tempDir();
     await writeIndex(valid, out, await buildIndex(valid));
-    for (const path of ['creature/cinder-hound', 'magic-item/wand-of-frost-lances', 'spell/frost-lance']) {
+    for (const path of ['creature/cinder-hound', 'item/wand-of-frost-lances', 'spell/frost-lance']) {
       const entry = JSON.parse(await readFile(join(valid, 'dnd-5e-2024', `${path}.json`), 'utf8')) as { type: string; stats: unknown };
       const bundle = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024', `${path}.export.json`), 'utf8')) as unknown;
       expect(bundle).toEqual({ entry, derived: ruleset.derive(entry.type, entry.stats) });
@@ -238,11 +238,11 @@ describe('the type registry', () => {
     const registry = await loadRegistryFile();
     const types = registry['dnd-5e-2024']!.types;
     const creature = await readSchema('creature.schema.json');
-    const item = await readSchema('magic-item.schema.json');
+    const item = await readSchema('item.schema.json');
     const sizes = ((creature.properties as any).size.items.enum) as string[];
     const rarities = ((item.properties as any).rarity.enum) as string[];
     expect(types.creature!.facets.find((f) => f.path === 'stats.size')?.order).toEqual(sizes);
-    expect(types['magic-item']!.facets.find((f) => f.path === 'stats.rarity')?.order).toEqual(rarities);
+    expect(types['item']!.facets.find((f) => f.path === 'stats.rarity')?.order).toEqual(rarities);
   });
 
   // docs/generation.md#gap-buckets: every axis is a facet of its type; bins sit on range facets, ascending
@@ -289,8 +289,8 @@ describe('schema walk', () => {
   });
 
   it('tells an optional flag from a required boolean', async () => {
-    expect(isFlag('cursed', await schemaSet('magic-item'))).toBe(true);
-    expect(isFlag('attunement.required', await schemaSet('magic-item'))).toBe(false);
+    expect(isFlag('cursed', await schemaSet('item'))).toBe(true);
+    expect(isFlag('attunement.required', await schemaSet('item'))).toBe(false);
     expect(isFlag('ritual', await schemaSet('spell'))).toBe(false);
   });
 });

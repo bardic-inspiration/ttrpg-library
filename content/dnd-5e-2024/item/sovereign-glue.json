@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "sovereign-glue",
+  "name": "Sovereign Glue",
+  "summary": "A glue that forms a permanent bond between any two objects.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "legendary",
+    "attunement": {
+      "required": false
+    },
+    "effect": "This viscous, milky-white substance can form a permanent adhesive bond between any two objects. It must be stored in a jar or flask that has been coated inside with *{ref:item/oil-of-slipperiness}*. When found, a container contains 1d6 + 1 ounces.\n\nOne ounce of the glue can cover a 1-foot square surface. Applying an ounce of *Sovereign Glue* takes a Utilize action, and the applied glue takes 1 minute to set. Once it has done so, the bond it creates can be broken only by the application of *{ref:item/universal-solvent}* or *{ref:item/oil-of-etherealness}*, or with a *{ref:spell/wish}* spell."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

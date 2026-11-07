@@ -1,0 +1,73 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "cube-of-force",
+  "name": "Cube of Force",
+  "summary": "A small cube whose six faces cast protective spells for charges.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 10,
+      "recharge": "1d6 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/mage-armor"
+        },
+        "chargeCost": 1,
+        "saveDc": 17
+      },
+      {
+        "spell": {
+          "ref": "spell/shield"
+        },
+        "chargeCost": 1,
+        "saveDc": 17
+      },
+      {
+        "spell": {
+          "ref": "spell/tiny-hut"
+        },
+        "chargeCost": 3,
+        "saveDc": 17
+      },
+      {
+        "spell": {
+          "ref": "spell/private-sanctum"
+        },
+        "chargeCost": 4,
+        "saveDc": 17
+      },
+      {
+        "spell": {
+          "ref": "spell/resilient-sphere"
+        },
+        "chargeCost": 4,
+        "saveDc": 17
+      },
+      {
+        "spell": {
+          "ref": "spell/wall-of-force"
+        },
+        "chargeCost": 5,
+        "saveDc": 17
+      }
+    ],
+    "effect": "This cube is about an inch across. Each face has a distinct marking on it. You can press one of those faces, expend the number of charges required for it, and thereby cast the spell associated with it (save DC 17), as shown in the Cube of Force Faces table.\n\nThe cube starts with 10 charges, and it regains 1d6 expended charges daily at dawn.\n\n**Cube of Force Faces**\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/mage-armor}* | 1 |\n| *{ref:spell/shield}* | 1 |\n| *{ref:spell/tiny-hut}* | 3 |\n| *{ref:spell/private-sanctum}* | 4 |\n| *{ref:spell/resilient-sphere}* | 4 |\n| *{ref:spell/wall-of-force}* | 5 |"
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        174
+      ],
+      "srd": true
+    }
+  }
+}

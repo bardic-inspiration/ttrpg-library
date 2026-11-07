@@ -24,7 +24,7 @@ describe('listEntryFiles', () => {
   it('lists entry files relative to the root', async () => {
     expect(await listEntryFiles(join(library, 'valid'))).toEqual([
       'dnd-5e-2024/creature/cinder-hound.json',
-      'dnd-5e-2024/magic-item/wand-of-frost-lances.json',
+      'dnd-5e-2024/item/wand-of-frost-lances.json',
       'dnd-5e-2024/spell/frost-lance.json',
     ]);
   });
@@ -63,7 +63,7 @@ describe('validateLibrary', () => {
 /**
  * One fixture per error in tests/fixtures/invalid/: an example entry with one
  * thing broken (the cinder hound, or Frost Lance for `spell-*` and the wand
- * for `magic-item-*`). It replaces that example in a copy of the valid
+ * for `item-*`). It replaces that example in a copy of the valid
  * library, so refs to the other examples resolve. Each must fail with a
  * message matching its pattern.
  */
@@ -129,18 +129,18 @@ const INVALID: Record<string, RegExp> = {
   'spell-leveled-cantrip-upgrade': /^stats\.cantripUpgrade: cantripUpgrade is for cantrips/,
   'spell-reaction-without-trigger': /^stats\.castingTime: a reaction casting time needs a trigger/,
   'spell-trigger-without-reaction': /^stats\.castingTime\.trigger: a trigger is allowed only on a reaction or bonus action/,
-  'magic-item-unknown-category': /^stats\.category: must be one of/,
-  'magic-item-unknown-rarity': /^stats\.rarity: must be one of/,
-  'magic-item-missing-attunement': /^stats: missing required key "attunement"/,
-  'magic-item-zero-charge-cost': /^stats\.spells\[0\]\.chargeCost: must be >= 1/,
-  'magic-item-weapon-without-base': /^stats\.baseItem: a weapon needs a baseItem/,
-  'magic-item-rarity-variants-without-varies': /^stats\.rarityVariants: rarityVariants are allowed only when rarity is "varies"/,
-  'magic-item-requirement-without-attunement': /^stats\.attunement\.requirement: a requirement is allowed only when attunement\.required is true/,
-  'magic-item-max-charge-cost-not-above': /^stats\.spells\[0\]\.maxChargeCost: maxChargeCost must be above chargeCost \(3\)/,
-  'magic-item-max-charge-cost-without-charge-cost': /^stats\.spells\[0\]\.maxChargeCost: a maxChargeCost needs a chargeCost/,
-  'magic-item-charge-cost-without-charges': /^stats\.spells\[0\]\.chargeCost: a chargeCost is allowed only when the item has charges/,
-  'magic-item-ref-missing-target': /^stats\.spells\[0\]\.spell: ref "spell\/frost-lances-of-doom" does not resolve: no spell has id "frost-lances-of-doom"$/,
-  'magic-item-ref-type-mismatch': /^stats\.spells\[0\]\.spell: ref "creature\/frost-lance" does not resolve: no creature has id "frost-lance"; "frost-lance" is a spell$/,
+  'item-unknown-category': /^stats\.category: must be one of/,
+  'item-unknown-rarity': /^stats\.rarity: must be one of/,
+  'item-missing-attunement': /^stats: missing required key "attunement"/,
+  'item-zero-charge-cost': /^stats\.spells\[0\]\.chargeCost: must be >= 1/,
+  'item-weapon-without-base': /^stats\.baseItem: a weapon needs a baseItem/,
+  'item-rarity-variants-without-varies': /^stats\.rarityVariants: rarityVariants are allowed only when rarity is "varies"/,
+  'item-requirement-without-attunement': /^stats\.attunement\.requirement: a requirement is allowed only when attunement\.required is true/,
+  'item-max-charge-cost-not-above': /^stats\.spells\[0\]\.maxChargeCost: maxChargeCost must be above chargeCost \(3\)/,
+  'item-max-charge-cost-without-charge-cost': /^stats\.spells\[0\]\.maxChargeCost: a maxChargeCost needs a chargeCost/,
+  'item-charge-cost-without-charges': /^stats\.spells\[0\]\.chargeCost: a chargeCost is allowed only when the item has charges/,
+  'item-ref-missing-target': /^stats\.spells\[0\]\.spell: ref "spell\/frost-lances-of-doom" does not resolve: no spell has id "frost-lances-of-doom"$/,
+  'item-ref-type-mismatch': /^stats\.spells\[0\]\.spell: ref "creature\/frost-lance" does not resolve: no creature has id "frost-lance"; "frost-lance" is a spell$/,
   'blocklist-in-name': /^name: "Beholder" is on the blocklist \(config\/blocklist\.json\); use an SRD or original name$/,
   'placeholder-in-summary': /^summary: "TODO" is placeholder text/,
   'placeholder-in-stats-text': /^stats\.traits\[0\]\.text: "TBD" is placeholder text/,
@@ -148,7 +148,7 @@ const INVALID: Record<string, RegExp> = {
   'blocklist-in-description': /^description: "Faerûn" is on the blocklist/,
   'blocklist-in-descriptors': /^stats\.descriptors\[0\]: "Githyanki" is on the blocklist/,
   'blocklist-in-stats-text': /^stats\.traits\[0\]\.text: "beholders" is on the blocklist/,
-  'magic-item-blocklist-in-spell': /^stats\.spells\[0\]\.spell: "Bigby's" is on the blocklist/,
+  'item-blocklist-in-spell': /^stats\.spells\[0\]\.spell: "Bigby's" is on the blocklist/,
   'spell-blocklist-in-effect': /^stats\.effect: "Tasha's" is on the blocklist/,
   'markdown-heading': /^description: a heading is not allowed; text fields use only paragraphs, \*\*bold\*\*, \*italic\*, lists, line breaks, and pipe tables$/,
   'markdown-image': /^description: an image is not allowed/,
@@ -156,15 +156,15 @@ const INVALID: Record<string, RegExp> = {
   'markdown-html': /^stats\.actions\[1\]\.onSuccess: HTML is not allowed/,
   'spell-malformed-table': /^stats\.higherLevels: table row 1 has 1 cell; its header has 2$/,
   'spell-markdown-trigger': /^stats\.castingTime\.trigger: a link is not allowed/,
-  'magic-item-markdown-autolink': /^stats\.effect: a link is not allowed/,
+  'item-markdown-autolink': /^stats\.effect: a link is not allowed/,
 };
 
 /** Where each invalid fixture is placed: its base example's path, so only the broken thing fails. */
 const fixturePath = (name: string) =>
   name.startsWith('spell-')
     ? 'dnd-5e-2024/spell/frost-lance.json'
-    : name.startsWith('magic-item-')
-      ? 'dnd-5e-2024/magic-item/wand-of-frost-lances.json'
+    : name.startsWith('item-')
+      ? 'dnd-5e-2024/item/wand-of-frost-lances.json'
       : 'dnd-5e-2024/creature/cinder-hound.json';
 
 describe('invalid fixtures', () => {
@@ -189,7 +189,7 @@ describe('invalid fixtures', () => {
  * (docs/content-model.md#situational-fields): each case sets one optional field
  * to a "none" value on an example, which the schema must reject.
  */
-type Example = 'creature' | 'spell' | 'magic-item';
+type Example = 'creature' | 'spell' | 'item';
 const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'descriptors', [], /^stats\.descriptors: must NOT have fewer than 1 items/],
   ['creature', 'initiative', {}, /^stats\.initiative: must NOT have fewer than 1 properties/],
@@ -230,15 +230,15 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'actions.1.onFailureOrSuccess', '', /^stats\.actions\[1\]\.onFailureOrSuccess: must NOT have fewer than 1 characters/],
   ['creature', 'shortName', '', /^stats\.shortName: must NOT have fewer than 1 characters/],
   ['creature', 'spellcasting', { ability: 'wis', noComponents: '' }, /^stats\.spellcasting\.noComponents: must NOT have fewer than 1 characters/],
-  ['magic-item', 'spells.0.spell.note', '', /^stats\.spells\[0\]\.spell\.note: must NOT have fewer than 1 characters/],
-  ['magic-item', 'charges.recharge', '', /^stats\.charges\.recharge: must NOT have fewer than 1 characters/],
-  ['magic-item', 'rarityVariants', [], /^stats\.rarityVariants: must NOT have fewer than 2 items/],
-  ['magic-item', 'cursed', false, /^stats\.cursed: must be equal to constant/],
-  ['magic-item', 'spells.0.chargeCost', 0, /^stats\.spells\[0\]\.chargeCost: must be >= 1/],
-  ['magic-item', 'spells.0.maxChargeCost', 1.5, /^stats\.spells\[0\]\.maxChargeCost: must be integer/],
+  ['item', 'spells.0.spell.note', '', /^stats\.spells\[0\]\.spell\.note: must NOT have fewer than 1 characters/],
+  ['item', 'charges.recharge', '', /^stats\.charges\.recharge: must NOT have fewer than 1 characters/],
+  ['item', 'rarityVariants', [], /^stats\.rarityVariants: must NOT have fewer than 2 items/],
+  ['item', 'cursed', false, /^stats\.cursed: must be equal to constant/],
+  ['item', 'spells.0.chargeCost', 0, /^stats\.spells\[0\]\.chargeCost: must be >= 1/],
+  ['item', 'spells.0.maxChargeCost', 1.5, /^stats\.spells\[0\]\.maxChargeCost: must be integer/],
 ];
 
-const EXAMPLES = { creature: cinderHound, spell: frostLance, 'magic-item': wandOfFrostLances };
+const EXAMPLES = { creature: cinderHound, spell: frostLance, 'item': wandOfFrostLances };
 
 /** Sets `stats.<path>` (dot-separated, numeric segments index arrays). */
 function setStat(stats: Record<string, any>, path: string, value: unknown) {
@@ -392,28 +392,28 @@ describe('references (docs/content-model.md#references)', () => {
     });
     expect(byId['frost-lance']).toMatchObject({
       refs: [],
-      refBy: [{ path: 'stats.spells[0].spell', key: 'magic-item/wand-of-frost-lances' }],
+      refBy: [{ path: 'stats.spells[0].spell', key: 'item/wand-of-frost-lances' }],
     });
     expect(byId['cinder-hound']).toMatchObject({ refs: [], refBy: [] });
   });
 
   it('collects refs from creature spellcasting and gear, in document order', async () => {
     const hound = await cinderHound();
-    hound.stats.gear = ['Collar', { ref: 'magic-item/wand-of-frost-lances' }];
+    hound.stats.gear = ['Collar', { ref: 'item/wand-of-frost-lances' }];
     hound.stats.spellcasting = { ability: 'wis', atWill: [{ ref: 'spell/frost-lance' }], perDay: { '1': ['Fog Cloud', { ref: 'spell/frost-lance' }] } };
     const { content } = await temp([hound, await frostLance(), await wandOfFrostLances()]);
     const result = await validateLibrary(content);
     expect(result.errors).toEqual([]);
     const byId = Object.fromEntries(result.entries.map((e) => [e.entry.id, e]));
     expect(byId['cinder-hound']?.refs).toEqual([
-      { path: 'stats.gear[1]', key: 'magic-item/wand-of-frost-lances' },
+      { path: 'stats.gear[1]', key: 'item/wand-of-frost-lances' },
       { path: 'stats.spellcasting.atWill[0]', key: 'spell/frost-lance' },
       { path: 'stats.spellcasting.perDay.1[1]', key: 'spell/frost-lance' },
     ]);
     expect(byId['frost-lance']?.refBy.map((l) => l.key)).toEqual([
       'creature/cinder-hound',
       'creature/cinder-hound',
-      'magic-item/wand-of-frost-lances',
+      'item/wand-of-frost-lances',
     ]);
   });
 
@@ -422,7 +422,7 @@ describe('references (docs/content-model.md#references)', () => {
     const { errors } = await validateLibrary(content);
     expect(errors).toEqual([
       {
-        file: 'dnd-5e-2024/magic-item/wand-of-frost-lances.json',
+        file: 'dnd-5e-2024/item/wand-of-frost-lances.json',
         message: 'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: no spell has id "frost-lance"',
       },
     ]);
@@ -511,7 +511,7 @@ describe('authored DCs (docs/rulesets.md#text-tokens, #88)', () => {
   });
 });
 
-describe('magic-item warnings (docs/rulesets.md#consistency-checks)', () => {
+describe('item warnings (docs/rulesets.md#consistency-checks)', () => {
   it('warns when the effect restates an authored save DC or attack bonus', async () => {
     const wand = await wandOfFrostLances();
     wand.stats.spells = [

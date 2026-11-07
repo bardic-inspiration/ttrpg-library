@@ -6,6 +6,7 @@ import { galleryConfig, type LibraryRecord, type Registry } from './gallery/conf
 import { parseQuery } from './gallery/state.ts';
 import { computeView, searchIndex } from './gallery/view.ts';
 import { fragmentUrl, parsePrintQuery, type PageSize, type PrintQuery } from './print.ts';
+import { currentKey, typeAliases } from './redirects.ts';
 
 export interface PrintSelection {
   /** The records to print, in print order. */
@@ -15,16 +16,19 @@ export interface PrintSelection {
 }
 
 /**
- * The entries a print query names. The `ids` form keeps the given order. The
+ * The entries a print query names. The `ids` form keeps the given order, and
+ * reads a renamed type's old key as its current one (docs/site.md#redirects). The
  * gallery-query form reads the rest of the query as the home gallery's (`/`,
  * docs/site.md#gallery), so `f.type` narrows by type, and prints its results in its order.
  */
 export function selectEntries(query: PrintQuery, records: LibraryRecord[], registry: Registry): PrintSelection {
   if (query.ids) {
     const byKey = new Map(records.map((record) => [`${record.type}/${record.id}`, record]));
+    const aliases = typeAliases(registry);
+    const ids = query.ids.map((key) => currentKey(key, aliases));
     return {
-      records: query.ids.map((key) => byKey.get(key)).filter((r): r is LibraryRecord => r !== undefined),
-      missing: query.ids.filter((key) => !byKey.has(key)),
+      records: ids.map((key) => byKey.get(key)).filter((r): r is LibraryRecord => r !== undefined),
+      missing: query.ids.filter((_, i) => !byKey.has(ids[i]!)),
     };
   }
   const gallery = galleryConfig(registry, {});

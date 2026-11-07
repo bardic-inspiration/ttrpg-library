@@ -15,7 +15,7 @@ describe('detail page (docs/site.md#detail-page)', () => {
   it('links Frost Lance to the wand that casts it, and the wand to Frost Lance', async () => {
     const spell = await render('frost-lance');
     expect(textOf(spell)).toContain('Cast by Wand of Frost Lances');
-    expect(spell).toMatch(/<a href="[^"]*\/dnd-5e-2024\/magic-item\/wand-of-frost-lances\/"[^>]*>Wand of Frost Lances<\/a>/);
+    expect(spell).toMatch(/<a href="[^"]*\/dnd-5e-2024\/item\/wand-of-frost-lances\/"[^>]*>Wand of Frost Lances<\/a>/);
     const wand = await render('wand-of-frost-lances');
     expect(textOf(wand)).toContain('Casts Frost Lance');
     expect(wand).toMatch(/<a href="[^"]*\/dnd-5e-2024\/spell\/frost-lance\/"[^>]*>Frost Lance<\/a>/);

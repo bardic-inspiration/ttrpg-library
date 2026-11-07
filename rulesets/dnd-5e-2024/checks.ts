@@ -3,7 +3,7 @@
 
 import { deriveCreature } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
-import type { Action, CreatureStats, DerivedAction, DerivedCreature, MagicItemStats, SpellStats, Tables } from './types.ts';
+import type { Action, CreatureStats, DerivedAction, DerivedCreature, ItemStats, SpellStats, Tables } from './types.ts';
 import { ACTION_LISTS } from './types.ts';
 import type { Issue } from '../module.ts';
 
@@ -134,8 +134,8 @@ export function checkCreature(stats: CreatureStats, tables: Tables): Issue[] {
   return issues;
 }
 
-/** Magic-item checks (docs/rulesets.md#consistency-checks "Magic item"). */
-export function checkMagicItem(stats: MagicItemStats): Issue[] {
+/** Item checks (docs/rulesets.md#consistency-checks "Item"). */
+export function checkItem(stats: ItemStats): Issue[] {
   const issues: Issue[] = [];
   const error = (path: string, message: string) => issues.push({ level: 'error', path, message });
 

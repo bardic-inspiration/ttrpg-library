@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "giant-slayer",
+  "name": "Giant Slayer",
+  "summary": "A +1 weapon that deals extra damage to Giants and can knock them Prone.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Any Simple or Martial",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You gain a +1 bonus to attack rolls and damage rolls made with this magic weapon.\n\nWhen you hit a Giant with this weapon, the Giant takes an extra 2d6 damage of the weapon's type and must succeed on a DC 15 Strength saving throw or have the Prone condition."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

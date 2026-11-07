@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "elven-chain",
+  "name": "Elven Chain",
+  "summary": "A +1 chain shirt that you can wear without armor training.",
+  "stats": {
+    "category": "armor",
+    "baseItem": "Chain Mail or Chain Shirt",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You gain a +1 bonus to Armor Class while you wear this armor. You are considered trained with this armor even if you lack training with Medium or Heavy armor."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

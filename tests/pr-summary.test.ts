@@ -6,7 +6,7 @@ describe('parseNameStatus', () => {
     const output = [
       'A\tcontent/dnd-5e-2024/creature/cinder-hound.json',
       'M\tcontent/dnd-5e-2024/spell/ember-lash.json',
-      'D\tcontent/dnd-5e-2024/magic-item/old-ring.json',
+      'D\tcontent/dnd-5e-2024/item/old-ring.json',
       'A\tassets/images/dnd-5e-2024/creature/cinder-hound.png',
       'M\tSPEC.md',
       '',
@@ -14,7 +14,7 @@ describe('parseNameStatus', () => {
     expect(parseNameStatus(output)).toEqual([
       { status: 'added', path: 'content/dnd-5e-2024/creature/cinder-hound.json' },
       { status: 'modified', path: 'content/dnd-5e-2024/spell/ember-lash.json' },
-      { status: 'removed', path: 'content/dnd-5e-2024/magic-item/old-ring.json' },
+      { status: 'removed', path: 'content/dnd-5e-2024/item/old-ring.json' },
     ]);
   });
 });
@@ -29,13 +29,13 @@ describe('renderSummary', () => {
       },
       {
         status: 'removed',
-        path: 'content/dnd-5e-2024/magic-item/old-ring.json',
+        path: 'content/dnd-5e-2024/item/old-ring.json',
         entry: undefined,
       },
     ]);
     expect(markdown).toContain('## Changed entries');
     expect(markdown).toContain('| added | Cinder Hound | creature | A hound \\| of embers. |');
-    expect(markdown).toContain('| removed | `old-ring` | magic-item |  |');
+    expect(markdown).toContain('| removed | `old-ring` | item |  |');
   });
 
   it('says so when no entries changed', () => {

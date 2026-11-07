@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "ring-of-feather-falling",
+  "name": "Ring of Feather Falling",
+  "summary": "A ring that slows your falls so you take no falling damage.",
+  "stats": {
+    "category": "ring",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "When you fall while wearing this ring, you descend 60 feet per round and take no damage from falling."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

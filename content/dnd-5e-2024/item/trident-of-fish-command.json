@@ -1,0 +1,39 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "trident-of-fish-command",
+  "name": "Trident of Fish Command",
+  "summary": "A trident that casts Dominate Beast on swimming creatures, using charges.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Trident",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 3,
+      "recharge": "1d3 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/dominate-beast"
+        },
+        "chargeCost": 1,
+        "saveDc": 15
+      }
+    ],
+    "effect": "This magic weapon has 3 charges, and it regains 1d3 expended charges daily at dawn. While you carry it, you can expend 1 charge to cast *{ref:spell/dominate-beast}* (save DC 15) from it on a Beast that has a Swim Speed."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

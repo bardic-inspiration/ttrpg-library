@@ -83,7 +83,7 @@ desktop widths.
 
 - `creature/lich`: its detail page, with the header wrapper free of card
   styling.
-- `magic-item/boots-of-levitation`: a rarity accent on an item.
+- `item/boots-of-levitation`: a rarity accent on an item.
 - `spell/fireball`: a type accent on a spell.
 
 ## Done when

@@ -15,14 +15,14 @@ P4 (a new type or extension is data, not code), and P5 (SRD fidelity).
 
 ## Current
 
-- The library has three types, `creature`, `spell`, and `magic-item`, all
+- The library has three types, `creature`, `spell`, and `item`, all
   authored as entries ([Entry envelope](../../docs/content-model.md#entry-envelope)),
   registered in `config/types.json`, and shown as cards and detail pages
   ([Pages and navigation](../../docs/site.md#pages-and-navigation)).
 - Conditions, damage types, skills, creature types, sizes, and abilities are
   closed lists in `rulesets/dnd-5e-2024/tables.json` and the
   `common.schema.json` enums.
-- A magic item's base item is a plain string (`baseItem`).
+- An item's base item is a plain string (`baseItem`).
 - Adding a type: [Extending](../../docs/rulesets.md#extending).
 
 ## Design
@@ -97,8 +97,8 @@ the UI redesign lays out (#113).
 
 ### Items
 
-`magic-item` is renamed `item`. Items are content built on equipment: an
-item links to its base equipment, an item or a group, on the rules side.
+Items are content built on equipment: an item links to its base equipment,
+an item or a group, on the rules side.
 
 ### Extension scope
 
@@ -321,8 +321,8 @@ group and cost, and the default sort is cost.
 
 #### Item
 
-`item` keeps every `magic-item` field, check, facet, and gap bucket, and
-changes one field. `baseItem` becomes structured links, and the template
+`item` keeps every field, check, facet, and gap bucket it has, and changes
+one field. `baseItem` becomes structured links, and the template
 words them:
 
 ```json
@@ -353,8 +353,7 @@ and every list of items.
 - **Links and labels:** `baseItem` reads "Base item" / "Base of". A group's
   section lists only the items that name it, not the items that name a
   group it belongs to.
-- **Guideline:** `item.md` is `magic-item.md` renamed, with its base item
-  guidance rewritten for links.
+- **Guideline:** `item.md`'s base item guidance is rewritten for links.
 
 #### Creature
 
@@ -385,17 +384,17 @@ rules text isn't carpeted with links to "Advantage" and "Bonus Action".
 
 - `creature/air-elemental`: its condition immunities become links to
   `condition/…` primitives.
-- `magic-item/adamantine-armor`: its base item "Any Medium or Heavy, Except
+- `item/adamantine-armor`: its base item "Any Medium or Heavy, Except
   Hide Armor" names two armor groups and excludes one item.
-- `magic-item/dragon-slayer`: its base item "Any Simple or Martial" names two
+- `item/dragon-slayer`: its base item "Any Simple or Martial" names two
   weapon groups.
 - `spell/contagion`: rules text naming the Poisoned condition links to the
   Poisoned primitive on the Conditions page: "have the
   {ref:condition/poisoned} condition", "While {ref:condition/poisoned}",
   and "the {ref:condition/poisoned} target" all read as printed.
-- `magic-item/flame-tongue`: its base item "Any Melee Weapon" names one
+- `item/flame-tongue`: its base item "Any Melee Weapon" names one
   union group, so the category's noun follows its qualifier.
-- `magic-item/frost-brand`: its base item, a list of six weapons, is a
+- `item/frost-brand`: its base item, a list of six weapons, is a
   `oneOf` of six weapon primitives.
 - `creature/guard-captain`: its gear "Javelins (6)" is a gear ref with a
   count; "Breastplate", "Longsword", and "Shield" are plain refs.
@@ -406,11 +405,6 @@ rules text isn't carpeted with links to "Advantage" and "Bonus Action".
 
 ## Migration
 
-- **`magic-item` to `item`:** every magic item's file moves to
-  `content/<ruleset>/item/` with its `id` unchanged, every `magic-item/…`
-  link becomes `item/…`, and the type's routes, registry entry, schema, and
-  guideline are renamed. The old URLs redirect to the new ones (P9: stable
-  URLs). It is a `migration`-labelled dev PR.
 - **Conditions:** the `Condition` enum in `common.schema.json` and the
   `conditions` table become the condition primitives, and a creature's
   `immunities.conditions` takes typed refs to them.
@@ -424,8 +418,8 @@ rules text isn't carpeted with links to "Advantage" and "Bonus Action".
 
 ## Done when
 
-- Each new type and the renamed `item` type validates against its schema,
-  with fixtures for its errors.
+- Each new type validates against its schema, with fixtures for its
+  errors.
 - The rules pages build, with an anchor for every primitive and group, and
   an extensions list.
 - `srd-coverage` reports every SRD primitive and equipment group present.
@@ -433,7 +427,6 @@ rules text isn't carpeted with links to "Advantage" and "Bonus Action".
   rendered on its parent's page.
 - Links to primitives, groups, and components resolve, and a link to a
   missing one fails CI.
-- No `magic-item` key remains, and every old magic-item URL redirects.
 
 ## Open questions
 

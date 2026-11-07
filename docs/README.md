@@ -11,7 +11,7 @@ the stage spec, [`spec/v2/`](../spec/v2/README.md). The v1 spec is kept at the
 |---|---|---|
 | [`architecture.md`](architecture.md) | What the library is, the pipeline, technology, repo layout, npm scripts, and the shared terms | Starting out, or looking for where something lives |
 | [`content-model.md`](content-model.md) | Entries in every ruleset: envelope, IDs, tags, meta, text, tables, images, refs, situational fields, SRD vs custom entries, validation | Writing or validating any entry, or changing what an entry is |
-| [`rulesets.md`](rulesets.md) | The ruleset module, derived values, tokens, and how creatures, magic items, and spells print | Working on `rulesets/`, a type's schema, or a stat block's wording |
+| [`rulesets.md`](rulesets.md) | The ruleset module, derived values, tokens, and how creatures, items, and spells print | Working on `rulesets/`, a type's schema, or a stat block's wording |
 | [`generation.md`](generation.md) | Requests, labels, the run order, defaults, the `generate` and `revise` skills, guidelines, schedule, gap buckets, SRD import | Changing how routines or skills work |
 | [`site.md`](site.md) | The type registry, index build, pages, gallery, detail page, templates | Working on `site/`, `config/types.json`, or the index builder |
 | [`styling.md`](styling.md) | The styling system, tokens, themes, visual direction, accessibility, refinement workflow | Changing how anything looks, or checking accessibility |

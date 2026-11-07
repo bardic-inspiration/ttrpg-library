@@ -219,7 +219,7 @@ A creature mentions spells (`spellcasting`) and gear (`gear`) through
 - **Create a dependency entry** in the same batch when the brief or the
   creature's concept calls for something new: a signature spell no SRD spell
   covers, or a named magic item the creature carries. Write it to its own
-  guideline (`spell.md`, `magic-item.md`) and ref it with its `<type>/<id>`,
+  guideline (`spell.md`, `item.md`) and ref it with its `<type>/<id>`,
   such as `spell/frost-lance`.
 - An SRD creature never gets a dependency entry: everything it uses is SRD
   content, reffed if it's in the library and a plain string otherwise.

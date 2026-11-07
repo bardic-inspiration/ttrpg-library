@@ -80,13 +80,13 @@ as a link to its anchor on its parent's page.
 
 - `creature/lich`: a creature's spellcasting lists ref spells; they read
   "Casts", and each spell reads "Cast by" back.
-- `magic-item/boots-of-levitation`: an item's `spells` ref a spell, with the
+- `item/boots-of-levitation`: an item's `spells` ref a spell, with the
   same "Casts" / "Cast by" labels as a creature.
 - `spell/animate-dead`: `{ref:…}` tokens in rules text link
   `creature/zombie` and `creature/skeleton` as "References" /
   "Referenced by".
-- `magic-item/handy-haversack`: tokens link entries of the same type,
-  `magic-item/bag-of-holding` and `magic-item/portable-hole`.
+- `item/handy-haversack`: tokens link entries of the same type,
+  `item/bag-of-holding` and `item/portable-hole`.
 
 ## Migration
 

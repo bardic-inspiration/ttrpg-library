@@ -62,7 +62,16 @@ export function parseQuery(search: string, config: GalleryConfig): GalleryState 
           ? parseRange(raw)
           : {
               kind: 'enum',
-              values: [...new Set(raw.split(',').map(decode).filter((v): v is string => !!v).map((v) => v.toLowerCase()))],
+              values: [
+                ...new Set(
+                  raw
+                    .split(',')
+                    .map(decode)
+                    .filter((v): v is string => !!v)
+                    .map((v) => v.toLowerCase())
+                    .map((v) => def.aliases?.[v] ?? v),
+                ),
+              ],
             };
       if (isActive(value)) state.filters.set(def.path, value);
     }

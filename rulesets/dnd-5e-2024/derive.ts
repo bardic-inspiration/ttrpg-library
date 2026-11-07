@@ -156,7 +156,7 @@ export function deriveCreature(stats: CreatureStats, tables: Tables): DerivedCre
 
 /**
  * The ability modifiers and saves of each stat block embedded in a spell or
- * magic item (docs/rulesets.md#magic-items, docs/rulesets.md#spells). Everything else in one is authored as
+ * magic item (docs/rulesets.md#items, docs/rulesets.md#spells). Everything else in one is authored as
  * printed. These blocks have no save proficiencies, so a save is the modifier.
  */
 export function deriveStatBlocks(blocks: StatBlock[] | undefined, tables: Tables): { statBlocks?: DerivedStatBlock[] } {

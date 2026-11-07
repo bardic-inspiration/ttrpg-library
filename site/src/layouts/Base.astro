@@ -35,9 +35,11 @@ interface Props {
   noindex?: boolean;
   /** Open Graph tags for link previews (docs/site.md#detail-page). `image` is a path under the site base. */
   og?: { title: string; description: string; image?: string; type?: 'website' | 'article' };
+  /** A path under the site base this page has moved to (docs/site.md#redirects): the page sends the reader there, keeping the query and fragment. */
+  redirect?: string;
 }
 
-const { title, noindex = false, og } = Astro.props;
+const { title, noindex = false, og, redirect } = Astro.props;
 const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
 ---
 <!doctype html>
@@ -45,7 +47,14 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {noindex && <meta name="robots" content="noindex" />}
+    {(noindex || redirect) && <meta name="robots" content="noindex" />}
+    {redirect && (
+      <>
+        <link rel="canonical" href={absolute(redirect)} />
+        <script is:inline set:html={`location.replace(${JSON.stringify(redirect)} + location.search + location.hash);`} />
+        <meta http-equiv="refresh" content={`0; url=${redirect}`} />
+      </>
+    )}
     <title>{title}</title>
     {og && (
       <>

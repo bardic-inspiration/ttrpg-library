@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "brooch-of-shielding",
+  "name": "Brooch of Shielding",
+  "summary": "A brooch that grants Resistance to Force damage and Immunity to Magic Missile.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true
+    },
+    "effect": "While wearing this brooch, you have Resistance to Force damage, and you have Immunity to damage from the *{ref:spell/magic-missile}* spell."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

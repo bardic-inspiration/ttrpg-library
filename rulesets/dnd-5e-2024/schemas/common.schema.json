@@ -40,7 +40,7 @@
       "additionalProperties": false,
       "required": ["ref"],
       "properties": {
-        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|magic-item|spell)/[a-z0-9-]+$" },
+        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|item|spell)/[a-z0-9-]+$" },
         "note": { "description": "A qualifier printed in parentheses after the target's name, such as \"level 5 version\".", "type": "string", "minLength": 1 }
       }
     },

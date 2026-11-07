@@ -115,7 +115,7 @@ npm scripts:
   file. Either an SRD entry or a custom entry.
 - **Ruleset:** a game system's rules, as one module in `rulesets/<ruleset>/`.
   The one ruleset is `dnd-5e-2024`.
-- **Type:** a kind of entry within a ruleset: `creature`, `magic-item`, `spell`.
+- **Type:** a kind of entry within a ruleset: `creature`, `item`, `spell`.
 - **Envelope:** the fixed keys every entry has, around its `stats`.
 - **Stats:** an entry's rules data, validated by its type's schema.
 - **Derived value:** a number the ruleset computes from an entry's inputs, such

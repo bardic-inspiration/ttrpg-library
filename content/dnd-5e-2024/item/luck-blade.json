@@ -1,0 +1,37 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "luck-blade",
+  "name": "Luck Blade",
+  "summary": "A +1 sword that grants +1 to saving throws, rerolls a failed D20 Test once a day, and may hold a Wish.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": "Glaive, Greatsword, Longsword, Rapier, Scimitar, Sickle, or Shortsword",
+    "rarity": "legendary",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": "1d3"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/wish"
+        },
+        "chargeCost": 1
+      }
+    ],
+    "effect": "You gain a +1 bonus to attack rolls and damage rolls made with this magic weapon. While the weapon is on your person, you also gain a +1 bonus to saving throws.\n\n***Luck.*** If the weapon is on your person, you can call on its luck (no action required) to reroll one failed D20 Test if you don't have the Incapacitated condition. You must use the second roll. Once used, this property can't be used again until the next dawn.\n\n***Wish.*** The weapon has 1d3 charges. While holding it, you can expend 1 charge and cast *{ref:spell/wish}* from it. Once used, this property can't be used again until the next dawn. The weapon loses this property if it has no charges."
+  },
+  "meta": {
+    "createdAt": "2026-11-04",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        133
+      ],
+      "srd": true
+    }
+  }
+}

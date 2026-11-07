@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "ring-of-protection",
+  "name": "Ring of Protection",
+  "summary": "A ring that improves your Armor Class and saving throws while you wear it.",
+  "stats": {
+    "category": "ring",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You gain a +1 bonus to Armor Class and saving throws while wearing this ring."
+  },
+  "meta": {
+    "createdAt": "2026-11-03",
+    "source": {
+      "kind": "routine",
+      "srd": true
+    }
+  }
+}
