@@ -77,31 +77,36 @@ metadata and changed paths; it never checks out or runs PR code.
 ### CI checks
 
 `validate.yml` runs on `pull_request` to `main` (`opened`, `synchronize`,
-`reopened`, `labeled`, `unlabeled`, so label changes re-run the lane rules):
+`reopened`, `labeled`, `unlabeled`, so label changes re-run the checks):
 
 1. **`lane`** gets the lane from the branch prefix, lists changed paths against
    the base, applies the lane rules with `scripts/lane/`, and runs the link
    check ([Link check](#link-check)). It outputs the lane, whether content
-   changed, and whether the PR is docs-only. Its scripts use only Node
-   built-ins and run on Node's type stripping, so it skips `npm ci`.
-2. **`content-checks`** (every PR except docs-only, after `lane`): set up the
-   latest Node 22 release (`check-latest`, so a runner's older cached patch
-   can't fail Astro's engine check) with npm cache, `npm ci`,
-   `npm run validate`, and `npm run build`. When content changed,
+   changed, whether the PR is docs-only or text-only, and whether it has the
+   `milestone` label. Its scripts use only Node built-ins and run on Node's
+   type stripping, so it skips `npm ci`.
+2. **`content-checks`** (every PR except docs-only and text-only, after
+   `lane`): set up the latest Node 22 release (`check-latest`, so a runner's
+   older cached patch can't fail Astro's engine check) with npm cache,
+   `npm ci`, `npm run validate`, and `npm run build`. When content changed,
    `scripts/pr-summary/` writes the job summary: changed entries with name,
    type, summary field, and summary; for creatures, the derived HP, AC, attack
    bonuses, DCs, and average damage per action; every warning, including every
    formula adjustment; and new back-links. The built site is uploaded as an
    artifact for 7 days.
-3. **`dev-checks`** (dev lane, not docs-only, after `content-checks`):
-   `npm run check` (types, `astro check`, Stylelint, the link check),
-   `npm test`, and `npm run a11y` against the built site.
-4. **`validate`** always runs and needs all of the above. It passes only if each
-   succeeded or was skipped by lane or by docs-only. It's the single required
-   status check, so branch protection never depends on which jobs a lane runs.
+3. **`dev-checks`** (dev lane, not docs-only, after `lane`, alongside
+   `content-checks`): `npm run check` (types, `astro check`, Stylelint, the link
+   check) and `npm test`. A text-only PR skips `npm run check`.
+4. **`a11y`** (milestone PRs only, after `content-checks`): installs
+   Playwright's Chromium and runs `npm run a11y` against the built site
+   artifact ([Milestone PRs](#milestone-prs)).
+5. **`validate`** always runs and needs all of the above. It passes only if each
+   succeeded or was skipped by lane, by docs-only or text-only, or for want of
+   the `milestone` label. It's the single required status check, so branch
+   protection never depends on which jobs a lane runs.
 
 Content PRs get fast feedback, since they can't change code; dev PRs get the
-full suite.
+types and tests; a milestone PR gets every check.
 
 ### Docs-only PRs
 
@@ -111,9 +116,27 @@ under `docs/` except `docs/routines.md`, a Markdown issue template, or
 `.github/PULL_REQUEST_TEMPLATE/dev.md`. It runs only the `lane` job, so the lane
 rules and the link check still apply. The list is `isDocsPath` in
 `scripts/lane/`. When a test, script, or the build starts reading one of these
-paths, remove it from the list in the same PR. Skills, guidelines, the stage
-spec, the content PR template, and `docs/routines.md` are read by tests and
-always get the full checks.
+paths, remove it from the list in the same PR.
+
+### Text-only PRs
+
+A PR is text-only when it isn't docs-only and every changed path is docs or
+Markdown that tests read but no build, type, or style check does: anything under
+`spec/`, `.claude/skills/`, or `rulesets/*/guidelines/` ending in `.md`,
+`docs/routines.md`, and `.github/PULL_REQUEST_TEMPLATE/content.md`. It skips
+`content-checks`, and `dev-checks` runs only `npm test`; the lane job's link
+check still applies. The list is `isTestTextPath` in `scripts/lane/`. When the
+build, `validate`, or a type or style check starts reading one of these paths,
+remove it from the list in the same PR. Any other change (code, config, schemas,
+content, issue forms) gets the full checks.
+
+### Milestone PRs
+
+The PR that closes a milestone's last task carries the `milestone` label, added
+by hand. It gets every check whatever its paths, so it is never docs-only or
+text-only, and it adds the `a11y` job: `npm run a11y` against the built site
+([Accessibility](styling.md#accessibility)). Adding the label re-runs
+`validate`. Other PRs don't run the accessibility checks.
 
 ### Link check
 
@@ -127,7 +150,7 @@ Docs are cited by file and heading ([docs/README.md](README.md#headings-and-cita
 - a section-number citation (`§` and a number).
 
 Entries, test fixtures, and the lockfile aren't scanned. It runs in the `lane`
-job, so docs-only PRs get it, and in `npm run check`.
+job, so docs-only and text-only PRs get it, and in `npm run check`.
 
 ### Deploy
 
@@ -150,7 +173,8 @@ Set by hand by the owner:
 - **Merge method:** squash only, with the PR title as the commit message.
   Delete head branches after merge.
 - **Labels:** the content issue labels ([generation.md](generation.md#labels)),
-  the lane and area labels above, and the dev issue labels.
+  the lane and area labels above, the dev issue labels, and `milestone`
+  ([Milestone PRs](#milestone-prs)).
 
 ### Dependencies
 
