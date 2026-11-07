@@ -34,7 +34,16 @@ repo. No external hosting.
 ### Style and processing
 
 - **What:** late-1800s and early-1900s book illustration and architectural
-  drawing: art nouveau, early modern, and similar pen-and-ink work.
+  drawing: art nouveau, early modern, and similar pen-and-ink work. The art
+  is *from* that era, not *of* it: prefer fictional illustrations of
+  medieval and Renaissance scenes, which suit the fantasy setting, over
+  scenes of the era itself.
+- **Subject and detail:** people at work with books, in modest settings such
+  as a study or a reading nook. Plain pen-and-ink line work at moderate
+  detail. The first test round (a social preview) rejected grand halls,
+  office-like interiors, ornate or "fancy" plates, and dense engravings or
+  poor scans. It rated a clean line illustration of a scholar among books
+  Good.
 - **Processing:** light. Crop to the art frame's aspect ratio, convert to
   monochrome, and save as WebP or PNG at the size the site displays. The
   tint is applied by CSS from the palette at display time, so one file
@@ -59,6 +68,25 @@ repo. No external hosting.
 - **Provenance** travels with every image from retrieval on: source URL,
   title, creator, date, and the license or public domain basis. A committed
   image records it with its entry and is credited in `ATTRIBUTION.md`.
+
+### Sourcing findings
+
+From the first test round, against Wikimedia Commons:
+
+- **Search by subject, not artist.** Artist-name queries returned portraits
+  and signatures. Queries like "scholar in his study" and "monk reading
+  manuscript" found the keeper.
+- **Rate limits.** Send a User-Agent that names the project and its repo
+  URL; a bare one is refused. Request only the standard thumbnail widths
+  (1280 and 1920 work, 640 does not), pace requests, and retry on 429.
+- **Network.** The session needs `commons.wikimedia.org` and
+  `upload.wikimedia.org` allowed.
+- **Provenance.** Internet Archive book scans rarely name an illustrator.
+  They clear on the publication-date rule, with the creator recorded as
+  unknown. A reproduction of an older print can fail the "from that era"
+  preference, so note the original's date when it is known.
+- **Size.** Skip sources narrower than the target crop rather than upscale.
+  Place the crop on the subject, not the center.
 
 ### The art skill
 
