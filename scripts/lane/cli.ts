@@ -33,14 +33,14 @@ if (needsMigrationLabel({ branch: env('BRANCH'), paths, labels }) && token && re
   });
   console.log(`Labels now: ${labels.join(', ') || 'none'}.`);
 }
-const { lane, contentChanged, docsOnly, errors } = checkLane({ branch: env('BRANCH'), paths, labels });
+const { lane, contentChanged, docsOnly, textOnly, milestone, errors } = checkLane({ branch: env('BRANCH'), paths, labels });
 
-console.log(`Lane: ${lane ?? 'none'}. ${paths.length} paths changed; content changed: ${contentChanged}; docs only: ${docsOnly}.`);
+console.log(`Lane: ${lane ?? 'none'}. ${paths.length} paths changed; content changed: ${contentChanged}; docs only: ${docsOnly}; text only: ${textOnly}; milestone: ${milestone}.`);
 for (const error of errors) {
   // One annotation per error; %0A keeps multi-line messages together.
   console.log(`::error title=Lane rules::${error.replaceAll('\n', '%0A')}`);
 }
 if (process.env.GITHUB_OUTPUT) {
-  appendFileSync(process.env.GITHUB_OUTPUT, `lane=${lane ?? ''}\ncontent-changed=${contentChanged}\ndocs-only=${docsOnly}\n`);
+  appendFileSync(process.env.GITHUB_OUTPUT, `lane=${lane ?? ''}\ncontent-changed=${contentChanged}\ndocs-only=${docsOnly}\ntext-only=${textOnly}\nmilestone=${milestone}\n`);
 }
 process.exitCode = errors.length > 0 ? 1 : 0;

@@ -231,6 +231,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Markdown files cite docs with relative links titled by the heading; code cites `docs/<file>.md#<heading>` as plain text. | Readable in both places, and both forms are checked | #108 |
 | v1's allowance for a format-fix PR to add the SRD entries that motivated it isn't carried over: it was scoped to the SRD import milestone, which is done. | | #108 |
 | Gap fill is off until v2 is built; routines take `request` issues only. | Entries made in the v1 shape would only add to v2's schema migrations | #95, #109 |
+| Text-only PRs (docs plus Markdown only tests read: the stage spec, skills, and guidelines) skip validate, build, and the type and style checks, and run the tests. `dev-checks` runs alongside `content-checks`. | Fast feedback where the build can't change | #212 |
 
 ### Linking
 
@@ -268,6 +269,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Print stacks entries by default; the one-entry-per-page mode is removed. | Fewer pages for session prep | #113 |
 | Every UI PR shows screenshots at 390, 820, and 1440px. Accessibility moves from per-PR CI to one WCAG 2.2 AA review at the end of each milestone. | Layout is the per-PR risk; a per-PR accessibility run isn't needed. Changes how P10 is checked | #113 |
 | One palette for the whole site: no light and dark themes, and no theme switch. | One look to design, check, and print | #113 |
+| The axe run moves out of per-PR CI to a job on the PR that closes a milestone, marked by a hand-added `milestone` label. | A per-PR run isn't needed; a label is explicit and re-runs `validate` | #212 |
 
 ### Export
 
