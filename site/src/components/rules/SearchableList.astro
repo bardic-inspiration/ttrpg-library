@@ -1,0 +1,53 @@
+---
+// A list of entry links with a search box that narrows it as you type (docs/site.md#rules-pages):
+// the extensions at the bottom of a rules page and on the Extensions page.
+// Without JavaScript the whole list shows.
+import { url } from '../../lib/url';
+
+interface Props {
+  /** The search box's label, such as "Search extensions". */
+  label: string;
+  items: { name: string; path: string; summary?: string }[];
+}
+
+const { label, items } = Astro.props;
+---
+<div class="searchable-list" data-searchable-list>
+  <label class="searchable-list__search">
+    <span>{label}</span>
+    <input type="search" autocomplete="off" />
+  </label>
+  <ul>
+    {items.map((item) => (
+      <li data-search={`${item.name} ${item.summary ?? ''}`.toLowerCase()}>
+        <a href={url(item.path)}>{item.name}</a>{item.summary && <>: {item.summary}</>}
+      </li>
+    ))}
+  </ul>
+</div>
+
+<script>
+  for (const list of document.querySelectorAll<HTMLElement>('[data-searchable-list]')) {
+    const input = list.querySelector('input');
+    const items = [...list.querySelectorAll<HTMLElement>('li[data-search]')];
+    input?.addEventListener('input', () => {
+      const query = input.value.trim().toLowerCase();
+      for (const item of items) item.hidden = query !== '' && !(item.dataset.search ?? '').includes(query);
+    });
+  }
+</script>
+
+<style>
+  @layer components {
+    .searchable-list {
+      display: grid;
+      gap: var(--space-xs);
+    }
+
+    .searchable-list__search {
+      display: grid;
+      gap: var(--space-3xs);
+      max-inline-size: var(--card-min-width);
+    }
+  }
+</style>

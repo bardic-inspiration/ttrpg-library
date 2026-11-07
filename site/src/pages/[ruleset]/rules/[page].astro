@@ -1,0 +1,22 @@
+---
+// One rules page per entry in a ruleset's rules/pages.json (docs/site.md#rules-pages).
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import RulesPage from '../../../components/rules/RulesPage.astro';
+import { loadEntries } from '../../../lib/library';
+import { loadRules, rulesContext } from '../../../lib/rules';
+
+export const getStaticPaths = (() => {
+  const rules = loadRules();
+  const all = loadEntries(rules);
+  return rules.flatMap((data) => {
+    const ctx = rulesContext(data, all, rules);
+    return data.pages.map((page) => ({ params: { ruleset: data.ruleset, page: page.id }, props: { ctx, page } }));
+  });
+}) satisfies GetStaticPaths;
+
+const { ctx, page } = Astro.props;
+---
+<Base title={`${page.title} · TTRPG Content Library`}>
+  <RulesPage ctx={ctx} page={page} />
+</Base>

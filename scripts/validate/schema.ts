@@ -2,7 +2,8 @@
 
 import { existsSync } from 'node:fs';
 import { readFile, readdir } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { Ajv2020, type ErrorObject, type ValidateFunction } from 'ajv/dist/2020.js';
 import addFormatsModule from 'ajv-formats';
 import type { RulesetModule } from '../../rulesets/module.ts';
@@ -109,6 +110,22 @@ export async function loadEnvelopeValidator(): Promise<ValidateFunction> {
   return newAjv().compile((await readJson(join(PROJECT_ROOT, 'schemas/envelope.schema.json'))) as object);
 }
 
+/** Where the repo's rulesets live. */
+export const RULESETS_ROOT = join(PROJECT_ROOT, 'rulesets');
+
+/** The validators for rules data (docs/rulesets.md#rules-data): a primitive's file, a groups file, and pages.json. */
+export interface RulesValidators {
+  primitive: ValidateFunction;
+  groups: ValidateFunction;
+  pages: ValidateFunction;
+}
+
+export async function loadRulesValidators(): Promise<RulesValidators> {
+  const ajv = newAjv();
+  const load = async (name: string) => ajv.compile((await readJson(join(PROJECT_ROOT, 'schemas', name))) as object);
+  return { primitive: await load('primitive.schema.json'), groups: await load('rules-groups.schema.json'), pages: await load('rules-pages.schema.json') };
+}
+
 export interface LoadedRuleset {
   module: RulesetModule;
   /** `stats` validators by type, for types with a schema file. */
@@ -119,15 +136,20 @@ export interface LoadedRuleset {
  * Loads `rulesets/<id>/`: its module and every `schemas/<type>.schema.json`.
  * Returns undefined when the folder or its index.ts is missing.
  */
-export async function loadRuleset(id: string): Promise<LoadedRuleset | undefined> {
-  const dir = join(PROJECT_ROOT, 'rulesets', id);
+export async function loadRuleset(id: string, rulesetsRoot: string = RULESETS_ROOT): Promise<LoadedRuleset | undefined> {
+  const dir = join(rulesetsRoot, id);
   let schemaFiles: string[];
   try {
     schemaFiles = await readdir(join(dir, 'schemas'));
   } catch {
     return undefined;
   }
-  const { ruleset } = (await import(`../../rulesets/${id}/index.ts`)) as { ruleset: RulesetModule };
+  // The repo's own rulesets import by a relative path the bundler can follow; a fixture ruleset by file URL.
+  const { ruleset } = (
+    resolve(rulesetsRoot) === resolve(RULESETS_ROOT)
+      ? await import(`../../rulesets/${id}/index.ts`)
+      : await import(pathToFileURL(join(dir, 'index.ts')).href)
+  ) as { ruleset: RulesetModule };
   const ajv = newAjv();
   const schemas = await Promise.all(
     schemaFiles.filter((f) => f.endsWith('.schema.json')).map(async (f) => ({ file: f, schema: (await readJson(join(dir, 'schemas', f))) as object })),
@@ -147,3 +169,5 @@ export async function loadRuleset(id: string): Promise<LoadedRuleset | undefined
 export async function loadRegistry(): Promise<Record<string, { types: Record<string, unknown> }>> {
   return (await readJson(join(PROJECT_ROOT, 'config/types.json'))) as Record<string, { types: Record<string, unknown> }>;
 }
+
+export { readJson };

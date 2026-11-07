@@ -1,0 +1,44 @@
+---
+// A primitive's or group's forward refs and back-refs on its rules page
+// (docs/site.md#rules-pages), labeled as the ruleset names them, like a detail page's Links.
+import type { Links } from '../../../../scripts/validate/refs';
+import { groupRefs } from '../../lib/refs';
+import type { RulesContext } from '../../lib/rules';
+import { url } from '../../lib/url';
+
+interface Props {
+  ctx: RulesContext;
+  key: string;
+}
+
+const { ctx, key } = Astro.props;
+const links: Links = ctx.links.get(key) ?? { refs: [], refBy: [] };
+const type = key.slice(0, key.indexOf('/'));
+const grouped = groupRefs(type, links.refs, links.refBy, ctx.targets, ctx.labelFor);
+const groups = [...grouped.forward, ...grouped.back];
+---
+{groups.length > 0 && (
+  <dl class="rule-links">
+    {groups.map((group) => (
+      <>
+        <dt>{group.label}</dt>
+        <dd>{group.targets.map((target, i) => <>{i > 0 && ', '}<a href={url(target.path)}>{target.name}</a></>)}</dd>
+      </>
+    ))}
+  </dl>
+)}
+
+<style>
+  @layer components {
+    .rule-links {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      column-gap: var(--space-2xs);
+      font-size: var(--text-small);
+
+      & dt {
+        font-weight: var(--font-weight-strong);
+      }
+    }
+  }
+</style>

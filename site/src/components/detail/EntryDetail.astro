@@ -18,11 +18,13 @@ interface Props {
   loaded: LoadedEntry;
   /** `<type>/<id>` → entry name. */
   names: Map<string, string>;
+  /** `<type>/<id>` → path of a primitive's or group's anchor, for links to rules data. */
+  paths?: Map<string, string>;
   /** `<type>/<id>` → link target. */
   targets: Map<string, RefTarget>;
 }
 
-const { loaded, names, targets } = Astro.props;
+const { loaded, names, paths, targets } = Astro.props;
 const { entry, derived } = loaded;
 const typeLabel =
   (registry as Record<string, { types: Record<string, { label: string }> }>)[entry.ruleset]?.types[entry.type]?.label ?? entry.type;
@@ -47,12 +49,12 @@ const source = provenance(entry);
     </div>
   </header>
 
-  <EntryTemplate entry={entry} derived={derived} names={names} mode="screen" level={2} />
+  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} mode="screen" level={2} />
 
   {present(entry.description) && (
     <section class="entry-detail__lore" aria-labelledby="lore-heading">
       <h2 id="lore-heading">Lore</h2>
-      <div class="lore" set:html={renderMarkdown(entry.description, { names, ruleset: entry.ruleset })} />
+      <div class="lore" set:html={renderMarkdown(entry.description, { names, ruleset: entry.ruleset, paths })} />
     </section>
   )}
 

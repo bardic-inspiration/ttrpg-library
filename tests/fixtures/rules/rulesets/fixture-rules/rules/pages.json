@@ -1,0 +1,11 @@
+[
+  {
+    "id": "glossary",
+    "title": "Glossary",
+    "blocks": [
+      { "kind": "prose", "title": "Conventions", "text": "Terms are listed alphabetically.", "sections": [{ "title": "Tags", "text": "Some terms have tags." }] },
+      { "kind": "primitives", "type": "term" }
+    ]
+  },
+  { "id": "tools", "title": "Tools", "blocks": [{ "kind": "group", "group": "gear/tools" }] }
+]

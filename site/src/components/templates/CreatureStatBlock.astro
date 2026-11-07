@@ -33,8 +33,8 @@ import StatBlockHeader from './parts/StatBlockHeader.astro';
 
 type Props = TemplateProps;
 
-const { entry, derived, names, mode, level = 2 } = Astro.props;
-const refs = { names, ruleset: entry.ruleset };
+const { entry, derived, names, paths, mode, level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
 const s = entry.stats as CreatureStats;
 const d = derived as unknown as DerivedCreature;
 const blocks = (list: 'traits' | 'actions' | 'bonusActions' | 'reactions'): ActionBlock[] | undefined =>

@@ -70,6 +70,7 @@ link goes through it.
 content/<ruleset>/<type>/<id>.json       entries
 assets/images/<ruleset>/<type>/<id>.*    optional art
 schemas/envelope.schema.json             the envelope every entry shares
+schemas/primitive.schema.json, rules-*.schema.json   rules data files (rulesets.md)
 rulesets/module.ts                       the contract every ruleset module meets
 rulesets/<ruleset>/                      everything ruleset-specific (rulesets.md)
 lib/                                     ruleset-independent helpers for scripts and the site

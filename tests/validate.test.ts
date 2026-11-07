@@ -38,7 +38,7 @@ describe('validateLibrary', () => {
   it('passes on an empty library', async () => {
     const empty = await mkdtemp(join(tmpdir(), 'ttrpg-empty-'));
     temps.push(empty);
-    expect(await validateLibrary(empty)).toEqual({ files: [], errors: [], warnings: [], entries: [] });
+    expect(await validateLibrary(empty)).toEqual({ files: [], errors: [], warnings: [], entries: [], rules: [] });
   });
 
   it('passes the example entries with no warnings, and returns their derived values', async () => {

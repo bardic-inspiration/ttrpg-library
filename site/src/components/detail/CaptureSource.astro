@@ -14,15 +14,17 @@ interface Props {
   loaded: LoadedEntry;
   /** `<type>/<id>` → entry name. */
   names: Map<string, string>;
+  /** Paths of primitives' and groups' anchors, for links to rules data. */
+  paths?: Map<string, string>;
 }
 
-const { loaded, names } = Astro.props;
+const { loaded, names, paths } = Astro.props;
 const { entry, derived } = loaded;
 ---
 <template data-capture={entry.id}>
   <div class="capture" data-theme="light" data-type={entry.type} data-wide={isWide(entry) ? '' : undefined}>
     {entry.image && <ArtFrame name={entry.name} src={url(entry.image)} />}
-    <EntryTemplate entry={entry} derived={derived} names={names} mode="capture" level={2} />
+    <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} mode="capture" level={2} />
     <p class="capture__footer">Includes SRD 5.2 material, CC-BY-4.0</p>
   </div>
 </template>

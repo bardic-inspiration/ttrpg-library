@@ -21,6 +21,8 @@ export interface TemplateProps {
   derived: Record<string, unknown>;
   /** `<type>/<id>` → entry name, for rendering refs as names. */
   names: Map<string, string>;
+  /** `<type>/<id>` → path of a primitive's or group's anchor, for links to rules data. */
+  paths?: Map<string, string>;
   mode?: TemplateMode;
   /** Heading level of the entry name; section headings sit one below it. Default 2. */
   level?: number;

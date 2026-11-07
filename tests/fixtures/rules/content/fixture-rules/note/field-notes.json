@@ -1,0 +1,12 @@
+{
+  "ruleset": "fixture-rules",
+  "type": "note",
+  "id": "field-notes",
+  "name": "Field Notes",
+  "summary": "Notes that link a term, a primitive, and a group.",
+  "stats": {
+    "text": "With a {ref:gear/hammer} you have {ref:term/advantage}. Any of the {ref:gear/hand-tools} will do, or a {ref:gear/mallet}.",
+    "gear": [{ "ref": "gear/ladder" }]
+  },
+  "meta": { "createdAt": "2026-11-07", "source": { "kind": "manual" } }
+}

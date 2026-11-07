@@ -1,0 +1,1 @@
+{ "type": "term", "id": "advantage", "name": "Advantage", "stats": { "text": "Roll two d20s and use the higher roll. See also {ref:term/disadvantage}." } }

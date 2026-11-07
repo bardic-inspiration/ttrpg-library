@@ -53,28 +53,12 @@ a new mechanism:
 The type extension (`types.md`, #112) declares these fields and
 labels for each new type.
 
-### Links to rules
-
-v2 splits the ruleset into rules and content (`types.md`, #112). A
-ruleset primitive, such as an SRD condition, an equipment item, an equipment
-group, or a glossary term, is a section of a combined rules page, not an
-entry with its own page. It is still a link target, through the same forms:
-
-- **Every primitive has a `<type>/<id>` key**, like an entry:
-  `condition/poisoned`, `equipment/longsword`, `equipment/medium-armor` (a
-  group), `glossary/bloodied`. A link to it renders as the primitive's name,
-  linked to its anchor on the rules page.
-- **An extension shares its type's keys.** A custom condition is
-  `condition/<id>`, like an SRD one, and links to its card. A link reads the
-  same whichever it points at, so promoting text to a link never depends on
-  where the target lives.
-- **Resolution and back-references work as for entries.** A link to a
-  missing primitive fails CI, and a primitive's section lists what links to
-  it.
+### Links to components
 
 A **component**, a hidden sub-entry of a page type such as a class feature
-(`types.md`), is linked the same way: by its own `<type>/<id>` key, rendered
-as a link to its anchor on its parent's page.
+(`types.md`), is linked like an entry or a ruleset primitive
+([Rules data](../../docs/rulesets.md#rules-data)): by its own `<type>/<id>`
+key, rendered as a link to its anchor on its parent's page.
 
 ## Cases
 
@@ -95,9 +79,8 @@ None. Existing entries already follow the standard.
 ## Done when
 
 There is nothing to build in this area alone. Each part goes with the types
-build PR that first exercises it: "Links to rules" with the first primitives
-that are link targets, the component rule with the first page type, and the
-rest of the file with the first v2 type with link fields.
+build PR that first exercises it: "Links to components" with the first page
+type, and the rest of the file with the first v2 type with link fields.
 
 ## Out of scope
 

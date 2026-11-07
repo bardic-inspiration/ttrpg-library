@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/rules-groups.schema.json",
+  "title": "A rules type's groups (docs/rulesets.md#rules-groups)",
+  "description": "rulesets/<ruleset>/rules/<type>-groups.json: the type's groups, in page order. A primitive or extension names its leaf group in stats.group and belongs to that group and every ancestor. Groups are closed: extensions add members, not groups.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "name"],
+    "properties": {
+      "id": { "description": "The group's id; its key is <type>/<id>, a link target like a primitive's.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 1, "maxLength": 64 },
+      "name": { "description": "The group's name, its section heading.", "type": "string", "minLength": 1, "maxLength": 80 },
+      "qualifier": { "description": "The group's short form, such as \"Martial\" for Martial Weapons.", "type": "string", "minLength": 1 },
+      "parent": { "description": "The id of the group this one nests in. A group with no parent is a category.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "union": { "description": "The ids of the groups this one joins. A union group has no members of its own, and its section lists its members after the tree.", "type": "array", "minItems": 2, "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" } },
+      "note": { "description": "Printed in parentheses after the heading.", "type": "string", "minLength": 1 },
+      "text": { "description": "SRD prose that opens the group's section, in the markdown subset.", "type": "string", "minLength": 1, "markdownSubset": true }
+    }
+  }
+}

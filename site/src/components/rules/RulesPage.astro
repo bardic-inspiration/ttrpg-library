@@ -1,0 +1,48 @@
+---
+// A rules page (docs/site.md#rules-pages): its title, then its blocks in order (prose, a rules
+// type's primitives, or a group's tree), each primitive and group in an
+// anchored section, and the extensions it lists at the bottom.
+import { entryPath } from '../../lib/library';
+import { pageExtensions, type RulesContext } from '../../lib/rules';
+import type { RulesPage } from '../../../../lib/rules';
+import GroupSection from './GroupSection.astro';
+import PrimitiveSection from './PrimitiveSection.astro';
+import ProseSection from './ProseSection.astro';
+import SearchableList from './SearchableList.astro';
+
+interface Props {
+  ctx: RulesContext;
+  page: RulesPage;
+}
+
+const { ctx, page } = Astro.props;
+const extensions = pageExtensions(ctx, page.id).map(({ entry }) => ({ name: entry.name, path: entryPath(entry), summary: entry.summary }));
+---
+<article class="rules-page">
+  <h1>{page.title}</h1>
+  {page.blocks.map((block) => {
+    if (block.kind === 'prose') return <ProseSection ctx={ctx} section={block} level={2} />;
+    if (block.kind === 'primitives') {
+      return ctx.data.primitives.filter((p) => p.type === block.type).map((primitive) => <PrimitiveSection ctx={ctx} primitive={primitive} level={2} />);
+    }
+    const slash = block.group.indexOf('/');
+    const tree = ctx.data.groups.get(block.group.slice(0, slash));
+    return tree && <GroupSection ctx={ctx} tree={tree} id={block.group.slice(slash + 1)} level={2} />;
+  })}
+  {extensions.length > 0 && (
+    <section class="rules-page__extensions" aria-labelledby="extensions-heading">
+      <h2 id="extensions-heading">Extensions</h2>
+      <SearchableList label="Search extensions" items={extensions} />
+    </section>
+  )}
+</article>
+
+<style>
+  @layer components {
+    .rules-page {
+      display: grid;
+      gap: var(--space-l);
+      max-inline-size: var(--measure);
+    }
+  }
+</style>

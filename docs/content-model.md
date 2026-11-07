@@ -161,7 +161,9 @@ error, as is a malformed one such as `{ref:zombie}`.
   content not in the library ("Fireball", or "Lightning Bolt (level 5
   version)"). Once the entry is in the library, new entries ref it. Text
   follows the same rule.
-- Every ref must resolve to an entry of its type, in the same ruleset. An entry
+- Every ref must resolve to an entry of its type, in the same ruleset, or to
+  a ruleset primitive or group of its type ([Rules data](rulesets.md#rules-data)),
+  which renders as its name linked to its anchor on its rules page. An entry
   that fails its own `stats` schema can still be a target, but its own refs
   aren't checked until its schema passes. Deleting an entry that others
   reference fails CI until those refs are removed or replaced.

@@ -1,0 +1,22 @@
+---
+// SRD chapter text on a rules page that isn't a primitive (docs/site.md#rules-pages), with its
+// nested sections a level down.
+import type { ProseSection as Prose } from '../../../../lib/rules';
+import { renderMarkdown } from '../../lib/markdown';
+import type { RulesContext } from '../../lib/rules';
+import Heading from '../templates/parts/Heading.astro';
+
+interface Props {
+  ctx: RulesContext;
+  section: Prose;
+  level: number;
+}
+
+const { ctx, section, level } = Astro.props;
+const refs = { names: ctx.names, ruleset: ctx.data.ruleset, paths: ctx.paths };
+---
+<section class="rule-prose">
+  <Heading level={level}>{section.title}</Heading>
+  {section.text && <div set:html={renderMarkdown(section.text, refs)} />}
+  {(section.sections ?? []).map((inner) => <Astro.self ctx={ctx} section={inner} level={level + 1} />)}
+</section>

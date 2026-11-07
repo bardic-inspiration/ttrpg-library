@@ -15,6 +15,8 @@ export interface RulesetDefinition {
   srdVersion: string;
   attribution: string;
   types: string[];
+  /** Rules types, whose primitives are kept in rules/ (docs/rulesets.md#rules-data). Omitted for none. */
+  rules?: { type: string; extensions: boolean }[];
 }
 
 /** How a detail page labels a reference, from each end: "Casts: Frost Lance", "Cast by: Wand of Frost Lances". */
