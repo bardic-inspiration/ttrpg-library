@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkLane, isDocsPath, laneOf, needsMigrationLabel, waitForLabel } from '../scripts/lane/index.ts';
+import { checkLane, isDocsPath, isTestTextPath, laneOf, needsMigrationLabel, waitForLabel } from '../scripts/lane/index.ts';
 
 describe('laneOf', () => {
   it.each([
@@ -34,7 +34,7 @@ describe('checkLane', () => {
 
   it('passes an unprefixed branch that touches no content', () => {
     const result = checkLane({ branch: 'user-patch-1', paths: ['README.md'], labels: [] });
-    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, textOnly: false, milestone: false, errors: [] });
   });
 
   it('fails an unprefixed branch that touches content without the migration label', () => {
@@ -53,7 +53,7 @@ describe('checkLane', () => {
       paths: ['content/dnd-5e-2024/creature/cinder-hound.json', 'assets/images/x.png'],
       labels: [],
     });
-    expect(result).toEqual({ lane: 'content', contentChanged: true, docsOnly: false, errors: [] });
+    expect(result).toEqual({ lane: 'content', contentChanged: true, docsOnly: false, textOnly: false, milestone: false, errors: [] });
   });
 
   it('fails a content PR that touches site/', () => {
@@ -80,7 +80,7 @@ describe('checkLane', () => {
 
   it('passes a dev PR that touches no content', () => {
     const result = checkLane({ branch: 'dev/lane-ci', paths: ['SPEC.md'], labels: [] });
-    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, textOnly: false, milestone: false, errors: [] });
   });
 
   it('fails a dev PR that touches content without the migration label', () => {
@@ -101,7 +101,7 @@ describe('checkLane', () => {
       paths: ['content/dnd-5e-2024/creature/a.json'],
       labels: ['dev', 'migration'],
     });
-    expect(result).toEqual({ lane: 'dev', contentChanged: true, docsOnly: false, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: true, docsOnly: false, textOnly: false, milestone: false, errors: [] });
   });
 });
 
@@ -156,6 +156,69 @@ describe('checkLane docsOnly', () => {
     const result = checkLane({ branch: 'gen/12-20261102', paths: ['README.md'], labels: [] });
     expect(result.docsOnly).toBe(true);
     expect(result.errors).toHaveLength(1);
+  });
+});
+
+describe('isTestTextPath (docs/workflow.md#text-only-prs)', () => {
+  it.each([
+    'spec/v2/ui.md',
+    'spec/v2/style-package/README.md',
+    '.claude/skills/generate/SKILL.md',
+    'rulesets/dnd-5e-2024/guidelines/creature.md',
+    'docs/routines.md',
+    '.github/PULL_REQUEST_TEMPLATE/content.md',
+  ])('treats %s as Markdown only tests read', (path) => {
+    expect(isTestTextPath(path)).toBe(true);
+  });
+
+  it.each([
+    // Code, config, or files the build reads.
+    'spec/v2/style-package/site/tokens.css',
+    '.claude/settings.json',
+    '.claude/hooks/session-start.sh',
+    '.claude/skills/generate/scripts/pick.ts',
+    'rulesets/dnd-5e-2024/schemas/creature.schema.json',
+    'rulesets/dnd-5e-2024/guidelines/creature.json',
+    '.github/ISSUE_TEMPLATE/content-request.yml',
+    'site/README.md',
+    'docs/decisions.md',
+  ])('treats %s as not text-only', (path) => {
+    expect(isTestTextPath(path)).toBe(false);
+  });
+});
+
+describe('checkLane textOnly', () => {
+  it('is true when every path is docs or Markdown only tests read, and at least one is the latter', () => {
+    const result = checkLane({ branch: 'dev/spec', paths: ['spec/v2/ui.md', 'docs/decisions.md'], labels: [] });
+    expect(result).toMatchObject({ docsOnly: false, textOnly: true });
+  });
+
+  it('is false for a docs-only PR, which skips more', () => {
+    const result = checkLane({ branch: 'dev/docs', paths: ['docs/decisions.md'], labels: [] });
+    expect(result).toMatchObject({ docsOnly: true, textOnly: false });
+  });
+
+  it('is false when any path is code', () => {
+    const result = checkLane({ branch: 'dev/spec', paths: ['spec/v2/ui.md', 'site/src/pages/index.astro'], labels: [] });
+    expect(result.textOnly).toBe(false);
+  });
+});
+
+describe('checkLane milestone (docs/workflow.md#milestone-prs)', () => {
+  it('is true with the milestone label', () => {
+    const result = checkLane({ branch: 'dev/x', paths: ['site/src/pages/index.astro'], labels: ['dev', 'milestone'] });
+    expect(result.milestone).toBe(true);
+  });
+
+  it('gives a milestone PR every check, whatever its paths', () => {
+    const docs = checkLane({ branch: 'dev/x', paths: ['docs/decisions.md'], labels: ['milestone'] });
+    expect(docs).toMatchObject({ docsOnly: false, textOnly: false, milestone: true });
+    const text = checkLane({ branch: 'dev/x', paths: ['spec/v2/ui.md'], labels: ['milestone'] });
+    expect(text).toMatchObject({ docsOnly: false, textOnly: false, milestone: true });
+  });
+
+  it('is false without the label', () => {
+    expect(checkLane({ branch: 'dev/x', paths: ['site/a.astro'], labels: ['dev'] }).milestone).toBe(false);
   });
 });
 

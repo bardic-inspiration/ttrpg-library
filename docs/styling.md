@@ -119,7 +119,8 @@ Target: WCAG 2.2 AA.
   that has an entry, and the print view of those entries, checked once loaded
   (with `window.print` stubbed). It launches Playwright's Chromium, and retries
   with `/opt/pw-browsers/chromium` if that fails and the path exists, as in
-  cloud sessions.
+  cloud sessions. CI runs it only on the PR that closes a milestone
+  ([Milestone PRs](workflow.md#milestone-prs)).
 
 ### Refinement workflow
 

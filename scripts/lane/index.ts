@@ -25,6 +25,22 @@ export function isDocsPath(path: string): boolean {
   return path === '.github/PULL_REQUEST_TEMPLATE/dev.md';
 }
 
+/**
+ * Markdown that tests read but no build, type, or style check does, so a PR
+ * that changes only these and docs skips `content-checks` and runs only the
+ * tests and the link check (docs/workflow.md#text-only-prs): the stage spec,
+ * the skills, the guidelines, `docs/routines.md`, and the content PR template.
+ */
+export function isTestTextPath(path: string): boolean {
+  if (!path.endsWith('.md')) return false;
+  if (path === 'docs/routines.md' || path === '.github/PULL_REQUEST_TEMPLATE/content.md') return true;
+  if (path.startsWith('spec/') || path.startsWith('.claude/skills/')) return true;
+  return /^rulesets\/[^/]+\/guidelines\/[^/]+\.md$/.test(path);
+}
+
+/** The label on the PR that closes a milestone, which runs every check (docs/workflow.md#milestone-prs). */
+export const MILESTONE_LABEL = 'milestone';
+
 export interface LaneInput {
   branch: string;
   /** Paths the PR changes, relative to the repo root. */
@@ -35,8 +51,12 @@ export interface LaneInput {
 export interface LaneResult {
   lane: Lane | undefined;
   contentChanged: boolean;
-  /** Every changed path is docs (and there is at least one). */
+  /** Every changed path is docs (and there is at least one). False on a milestone PR. */
   docsOnly: boolean;
+  /** Not docs-only, and every changed path is docs or Markdown only tests read. False on a milestone PR. */
+  textOnly: boolean;
+  /** The PR has the milestone label, so it gets every check, accessibility included. */
+  milestone: boolean;
   errors: string[];
 }
 
@@ -65,7 +85,10 @@ export function isContentPath(path: string): boolean {
 export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
   const lane = laneOf(branch);
   const contentChanged = paths.some(isContentPath);
-  const docsOnly = paths.length > 0 && paths.every(isDocsPath);
+  const milestone = labels.includes(MILESTONE_LABEL);
+  const docsOnly = !milestone && paths.length > 0 && paths.every(isDocsPath);
+  const textOnly =
+    !milestone && !docsOnly && paths.length > 0 && paths.every((path) => isDocsPath(path) || isTestTextPath(path));
   const errors: string[] = [];
   const list = (items: string[]) => items.map((item) => `  ${item}`).join('\n');
 
@@ -85,7 +108,7 @@ export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
       `A dev-lane PR may change content only with the migration label, which the labeler adds. Content paths:\n${list(paths.filter(isContentPath))}`,
     );
   }
-  return { lane, contentChanged, docsOnly, errors };
+  return { lane, contentChanged, docsOnly, textOnly, milestone, errors };
 }
 
 /** Whether a PR is a dev PR that changes content without the `migration` label the labeler adds. */

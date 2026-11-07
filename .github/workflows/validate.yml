@@ -1,9 +1,11 @@
-# docs/workflow.md#ci-checks: lane rules, then checks by lane. `validate` is the single
-# required status check, so branch protection never depends on which jobs a
-# lane runs. A dev PR that changes content needs the `migration` label, which
-# the labeler adds; its label event starts no new run (it uses GITHUB_TOKEN),
-# so the lane job reads the PR's live labels and waits for it. Label events
-# from people re-run the lane rules. A docs-only PR runs only the lane rules.
+# docs/workflow.md#ci-checks: lane rules, then checks by lane and by what the PR
+# changed. `validate` is the single required status check, so branch protection
+# never depends on which jobs a lane runs. A dev PR that changes content needs
+# the `migration` label, which the labeler adds; its label event starts no new
+# run (it uses GITHUB_TOKEN), so the lane job reads the PR's live labels and
+# waits for it. Label events from people re-run the workflow, so adding
+# `milestone` runs every check, accessibility included. A docs-only PR runs only
+# the lane rules; a text-only PR adds the tests.
 name: validate
 
 on:
@@ -26,6 +28,8 @@ jobs:
       lane: ${{ steps.lane.outputs.lane }}
       content-changed: ${{ steps.lane.outputs.content-changed }}
       docs-only: ${{ steps.lane.outputs.docs-only }}
+      text-only: ${{ steps.lane.outputs.text-only }}
+      milestone: ${{ steps.lane.outputs.milestone }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -50,7 +54,7 @@ jobs:
 
   content-checks:
     needs: lane
-    if: needs.lane.outputs.docs-only != 'true'
+    if: needs.lane.outputs.docs-only != 'true' && needs.lane.outputs.text-only != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -75,8 +79,9 @@ jobs:
           path: site/dist
           retention-days: 7
 
+  # Runs alongside content-checks: neither needs the other's output.
   dev-checks:
-    needs: [lane, content-checks]
+    needs: lane
     if: needs.lane.outputs.lane == 'dev' && needs.lane.outputs.docs-only != 'true'
     runs-on: ubuntu-latest
     steps:
@@ -87,9 +92,25 @@ jobs:
           check-latest: true
           cache: npm
       - run: npm ci
-      - run: npm run check
+      # Types, `astro check`, and Stylelint read no Markdown; the lane job ran the link check.
+      - if: needs.lane.outputs.text-only != 'true'
+        run: npm run check
       - run: npm test
-      # Accessibility checks run against the site content-checks built (docs/styling.md#accessibility).
+
+  # docs/workflow.md#milestone-prs: accessibility checks against the site
+  # content-checks built (docs/styling.md#accessibility), on milestone PRs only.
+  a11y:
+    needs: [lane, content-checks]
+    if: needs.lane.outputs.milestone == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          check-latest: true
+          cache: npm
+      - run: npm ci
       - uses: actions/download-artifact@v8
         with:
           name: site
@@ -99,26 +120,38 @@ jobs:
 
   validate:
     if: always()
-    needs: [lane, content-checks, dev-checks]
+    needs: [lane, content-checks, dev-checks, a11y]
     runs-on: ubuntu-latest
     steps:
       - name: Every job the lane needs passed
         env:
           LANE: ${{ needs.lane.outputs.lane }}
           DOCS_ONLY: ${{ needs.lane.outputs.docs-only }}
+          TEXT_ONLY: ${{ needs.lane.outputs.text-only }}
+          MILESTONE: ${{ needs.lane.outputs.milestone }}
           LANE_RESULT: ${{ needs.lane.result }}
           CONTENT_RESULT: ${{ needs.content-checks.result }}
           DEV_RESULT: ${{ needs.dev-checks.result }}
+          A11Y_RESULT: ${{ needs.a11y.result }}
         run: |
-          echo "lane: $LANE_RESULT (${LANE:-none}, docs only: ${DOCS_ONLY:-false}), content-checks: $CONTENT_RESULT, dev-checks: $DEV_RESULT"
+          echo "lane: $LANE_RESULT (${LANE:-none}, docs only: ${DOCS_ONLY:-false}, text only: ${TEXT_ONLY:-false}, milestone: ${MILESTONE:-false}), content-checks: $CONTENT_RESULT, dev-checks: $DEV_RESULT, a11y: $A11Y_RESULT"
           [ "$LANE_RESULT" = success ] || { echo "::error::lane did not pass"; exit 1; }
           if [ "$DOCS_ONLY" = true ]; then
-            [ "$CONTENT_RESULT" = skipped ] && [ "$DEV_RESULT" = skipped ] || { echo "::error::checks ran on a docs-only PR"; exit 1; }
+            [ "$CONTENT_RESULT" = skipped ] && [ "$DEV_RESULT" = skipped ] && [ "$A11Y_RESULT" = skipped ] || { echo "::error::checks ran on a docs-only PR"; exit 1; }
             exit 0
           fi
-          [ "$CONTENT_RESULT" = success ] || { echo "::error::content-checks did not pass"; exit 1; }
+          if [ "$TEXT_ONLY" = true ]; then
+            [ "$CONTENT_RESULT" = skipped ] || { echo "::error::content-checks ran on a text-only PR"; exit 1; }
+          else
+            [ "$CONTENT_RESULT" = success ] || { echo "::error::content-checks did not pass"; exit 1; }
+          fi
           if [ "$LANE" = dev ]; then
             [ "$DEV_RESULT" = success ] || { echo "::error::dev-checks did not pass"; exit 1; }
           else
             [ "$DEV_RESULT" = skipped ] || { echo "::error::dev-checks ran outside the dev lane"; exit 1; }
+          fi
+          if [ "$MILESTONE" = true ]; then
+            [ "$A11Y_RESULT" = success ] || { echo "::error::a11y did not pass on a milestone PR"; exit 1; }
+          else
+            [ "$A11Y_RESULT" = skipped ] || { echo "::error::a11y ran without the milestone label"; exit 1; }
           fi

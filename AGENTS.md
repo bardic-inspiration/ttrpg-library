@@ -167,8 +167,14 @@ The npm scripts are listed in
 ([CI checks](docs/workflow.md#ci-checks)):
 
 - **Content:** `npm run validate` and `npm run build`.
-- **Dev:** those two, then `npm run check`, `npm test`, and `npm run a11y`.
+- **Dev:** those two, then `npm run check` and `npm test`. The PR that
+  closes a milestone also runs `npm run a11y` and gets the `milestone` label
+  ([Milestone PRs](docs/workflow.md#milestone-prs)).
 - **Docs-only** (only root Markdown, `docs/` other than `docs/routines.md`,
   and the dev and Markdown issue templates;
   [Docs-only PRs](docs/workflow.md#docs-only-prs)): CI runs only the lane
   rules and the link check, so run `npm run links`.
+- **Text-only** (docs plus Markdown under `spec/`, `.claude/skills/`, or the
+  guidelines, `docs/routines.md`, or the content PR template;
+  [Text-only PRs](docs/workflow.md#text-only-prs)): `npm run links` and
+  `npm test`.

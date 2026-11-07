@@ -97,8 +97,9 @@ without splitting an action or trait.
   Playwright.
 - **Accessibility is reviewed once per milestone.** Each build milestone
   ends with one comprehensive review against WCAG 2.2 AA, filed as a Testing
-  backlog issue. The per-PR axe run (`npm run a11y`) and contrast test leave
-  CI and the pre-push checks.
+  backlog issue. The contrast test leaves CI and the pre-push checks. (The axe
+  run already runs only on milestone PRs:
+  [Milestone PRs](../../docs/workflow.md#milestone-prs).)
 
 ## Cases
 
@@ -118,8 +119,8 @@ without splitting an action or trait.
   contents, and an anchor link opens its section.
 - Print has no per-page mode.
 - The site has one set of color tokens, with no theme attribute or switch.
-- CI no longer runs the accessibility checks, and the docs describe the
-  milestone review.
+- CI no longer runs the contrast test, and the docs describe the milestone
+  review.
 
 ## Out of scope
 
