@@ -94,8 +94,10 @@ None. Existing entries already follow the standard.
 
 ## Done when
 
-There is nothing to build in this area alone. The first build PR that adds a
-v2 type with link fields under this standard deletes this file.
+There is nothing to build in this area alone. Each part goes with the types
+build PR that first exercises it: "Links to rules" with the first primitives
+that are link targets, the component rule with the first page type, and the
+rest of the file with the first v2 type with link fields.
 
 ## Out of scope
 
