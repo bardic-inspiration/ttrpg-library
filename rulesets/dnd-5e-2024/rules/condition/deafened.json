@@ -1,0 +1,13 @@
+{
+  "type": "condition",
+  "id": "deafened",
+  "name": "Deafened",
+  "stats": {
+    "effects": [
+      {
+        "name": "Can't Hear",
+        "text": "You can't hear and automatically fail any ability check that requires hearing."
+      }
+    ]
+  }
+}

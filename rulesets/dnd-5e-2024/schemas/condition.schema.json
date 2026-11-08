@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/condition.schema.json",
+  "title": "dnd-5e-2024 condition stats (docs/rulesets.md#conditions)",
+  "description": "A condition, an SRD primitive in rules/condition/ or a custom extension under content/. Stored inputs only: the template words the opening sentence (\"While you have the <Name> condition, you experience the following effects.\") from the name and the number of effects.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["effects"],
+  "properties": {
+    "effects": {
+      "description": "The condition's effects, in order, each printed as a bold-titled paragraph.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "text"],
+        "properties": {
+          "name": { "description": "The effect's title, without the period: \"Speed 0\", \"Attacks Affected\".", "type": "string", "minLength": 1, "pattern": "[^.]$" },
+          "text": { "description": "The effect's rules text.", "$ref": "common.schema.json#/$defs/Text" }
+        }
+      }
+    }
+  }
+}

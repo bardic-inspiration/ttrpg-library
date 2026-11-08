@@ -38,7 +38,10 @@ describe('validateLibrary', () => {
   it('passes on an empty library', async () => {
     const empty = await mkdtemp(join(tmpdir(), 'ttrpg-empty-'));
     temps.push(empty);
-    expect(await validateLibrary(empty)).toEqual({ files: [], errors: [], warnings: [], entries: [], rules: [] });
+    const result = await validateLibrary(empty);
+    expect({ ...result, rules: undefined }).toEqual({ files: [], errors: [], warnings: [], entries: [], rules: undefined });
+    // The ruleset's rules data is validated whether or not any entry uses it (docs/rulesets.md#rules-data).
+    expect(result.rules.map((r) => r.ruleset)).toEqual(['dnd-5e-2024']);
   });
 
   it('passes the example entries with no warnings, and returns their derived values', async () => {
@@ -62,12 +65,17 @@ describe('validateLibrary', () => {
 
 /**
  * One fixture per error in tests/fixtures/invalid/: an example entry with one
- * thing broken (the cinder hound, or Frost Lance for `spell-*` and the wand
- * for `item-*`). It replaces that example in a copy of the valid
+ * thing broken (the cinder hound, or Frost Lance for `spell-*`, the wand
+ * for `item-*`, and the Mired condition, tests/fixtures/condition/, for `condition-*`). It replaces that example in a copy of the valid
  * library, so refs to the other examples resolve. Each must fail with a
  * message matching its pattern.
  */
 const INVALID: Record<string, RegExp> = {
+  'condition-no-effects': /^stats\.effects: must NOT have fewer than 1 items/,
+  'condition-effect-name-period': /^stats\.effects\[0\]\.name: must match pattern/,
+  'condition-srd-marker': /^meta\.source\.srd: an extension is custom/,
+  'condition-unknown-key': /^stats\.duration: unknown key$/,
+  'condition-name-of-primitive': /^id "prone" is already used by rulesets\/dnd-5e-2024\/rules\/condition\/prone\.json$/,
   'unknown-top-level-key': /^hp: unknown key$/,
   'missing-meta': /missing required key "meta"/,
   'bad-id': /^id: must match pattern/,
@@ -165,7 +173,9 @@ const fixturePath = (name: string) =>
     ? 'dnd-5e-2024/spell/frost-lance.json'
     : name.startsWith('item-')
       ? 'dnd-5e-2024/item/wand-of-frost-lances.json'
-      : 'dnd-5e-2024/creature/cinder-hound.json';
+      : name.startsWith('condition-')
+        ? `dnd-5e-2024/condition/${name === 'condition-name-of-primitive' ? 'prone' : 'mired'}.json`
+        : 'dnd-5e-2024/creature/cinder-hound.json';
 
 describe('invalid fixtures', () => {
   it('has a pattern for every fixture file', async () => {

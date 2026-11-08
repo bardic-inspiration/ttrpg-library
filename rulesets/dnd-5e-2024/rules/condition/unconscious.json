@@ -1,0 +1,33 @@
+{
+  "type": "condition",
+  "id": "unconscious",
+  "name": "Unconscious",
+  "stats": {
+    "effects": [
+      {
+        "name": "Inert",
+        "text": "You have the {ref:condition/incapacitated} and {ref:condition/prone} conditions, and you drop whatever you're holding. When this condition ends, you remain {ref:condition/prone}."
+      },
+      {
+        "name": "Speed 0",
+        "text": "Your Speed is 0 and can't increase."
+      },
+      {
+        "name": "Attacks Affected",
+        "text": "Attack rolls against you have Advantage."
+      },
+      {
+        "name": "Saving Throws Affected",
+        "text": "You automatically fail Strength and Dexterity saving throws."
+      },
+      {
+        "name": "Automatic Critical Hits",
+        "text": "Any attack roll that hits you is a Critical Hit if the attacker is within 5 feet of you."
+      },
+      {
+        "name": "Unaware",
+        "text": "You're unaware of your surroundings."
+      }
+    ]
+  }
+}

@@ -1,10 +1,14 @@
 ---
 // One primitive's section on its rules page (docs/site.md#rules-pages): its name as an anchored
-// heading, its stats as labeled lines, and its links. A link to the primitive
-// lands on this section.
+// heading, its rules, and its links. A link to the primitive lands on this
+// section. A type whose registry template has a body part here renders with
+// it (a condition's effects); any other renders its stats as labeled lines.
 import { anchorId, ruleKey, type Primitive } from '../../../../lib/rules';
+import type { ConditionStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { genericLines } from '../../lib/generic';
 import type { RulesContext } from '../../lib/rules';
+import registry from '../../../../config/types.json';
+import ConditionEffects from '../templates/parts/ConditionEffects.astro';
 import Heading from '../templates/parts/Heading.astro';
 import PropertyList from '../templates/parts/PropertyList.astro';
 import RefLinks from './RefLinks.astro';
@@ -17,12 +21,26 @@ interface Props {
 
 const { ctx, primitive, level } = Astro.props;
 const key = ruleKey(primitive);
+const template = (registry as Record<string, { types: Record<string, { template?: string }> }>)[ctx.data.ruleset]?.types[primitive.type]?.template;
 // The group is the section the primitive sits in, so it isn't repeated as a line.
 const skip = ctx.data.groups.has(primitive.type) ? ['group'] : [];
 const refs = { names: ctx.names, ruleset: ctx.data.ruleset, paths: ctx.paths };
 ---
 <section class="rule" id={anchorId(key)} data-type={primitive.type}>
   <Heading level={level}>{primitive.name}</Heading>
-  <PropertyList lines={genericLines(primitive.stats, ctx.names, '', skip)} refs={refs} />
+  {template === 'condition-card' ? (
+    <ConditionEffects name={primitive.name} stats={primitive.stats as unknown as ConditionStats} refs={refs} />
+  ) : (
+    <PropertyList lines={genericLines(primitive.stats, ctx.names, '', skip)} refs={refs} />
+  )}
   <RefLinks ctx={ctx} key={key} />
 </section>
+
+<style>
+  @layer components {
+    .rule {
+      display: grid;
+      gap: var(--space-2xs);
+    }
+  }
+</style>

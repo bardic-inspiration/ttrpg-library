@@ -9,11 +9,12 @@ const read = async (file: string) => JSON.parse(await readFile(join(dir, file), 
 // The schemas and tables.json both list the shared enums (docs/rulesets.md#the-ruleset-module);
 // these tests keep the two in step.
 describe('dnd-5e-2024 schemas match tables.json', () => {
-  it('shares abilities, damage types, and conditions', async () => {
+  it('shares abilities and damage types; conditions are primitives, not an enum (docs/rulesets.md#conditions)', async () => {
     const { $defs } = await read('common.schema.json');
     expect($defs.Ability.enum).toEqual(tables.abilities);
     expect($defs.DamageType.enum).toEqual(tables.damageTypes);
-    expect($defs.Condition.enum).toEqual(tables.conditions);
+    expect($defs.Condition).toBeUndefined();
+    expect('conditions' in tables).toBe(false);
   });
 
   it('shares sizes, creature types, skills, and CRs', async () => {

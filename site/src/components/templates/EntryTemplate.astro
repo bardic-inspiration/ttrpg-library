@@ -3,6 +3,7 @@
 // or the generic fallback when the registry names none this site has.
 import { templateFor, type TemplateProps } from '../../lib/template';
 import registry from '../../../../config/types.json';
+import ConditionCard from './ConditionCard.astro';
 import CreatureStatBlock from './CreatureStatBlock.astro';
 import GenericTemplate from './GenericTemplate.astro';
 import ItemCard from './ItemCard.astro';
@@ -13,6 +14,7 @@ type Props = TemplateProps;
 const { entry } = Astro.props;
 const types = (registry as Record<string, { types: Record<string, { template?: string }> }>)[entry.ruleset]?.types;
 const components = {
+  'condition-card': ConditionCard,
   'creature-stat-block': CreatureStatBlock,
   'item-card': ItemCard,
   'spell-card': SpellCard,

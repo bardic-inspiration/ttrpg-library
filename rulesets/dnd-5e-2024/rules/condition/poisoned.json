@@ -1,0 +1,13 @@
+{
+  "type": "condition",
+  "id": "poisoned",
+  "name": "Poisoned",
+  "stats": {
+    "effects": [
+      {
+        "name": "Ability Checks and Attacks Affected",
+        "text": "You have Disadvantage on attack rolls and ability checks."
+      }
+    ]
+  }
+}

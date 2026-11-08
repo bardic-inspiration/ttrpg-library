@@ -104,15 +104,22 @@ export const skillsLine = (s: CreatureStats, d: DerivedCreature): string | undef
 const damageList = (list: string[]): string => list.map(capitalize).join(', ');
 
 
-/** Vulnerabilities, Resistances, and Immunities, each only when present (docs/content-model.md#situational-fields). */
+/** Condition immunities as markdown: each a `{ref:…}` token, rendered as the condition's name linked to its anchor, with its note. */
+const conditionList = (list: { ref: string; note?: string }[]): string =>
+  list.map((c) => (c.note === undefined ? `{ref:${c.ref}}` : `{ref:${c.ref}} (${escapeMarkdown(c.note)})`)).join(', ');
+
+/**
+ * Vulnerabilities, Resistances, and Immunities, each only when present (docs/content-model.md#situational-fields).
+ * The Immunities line is markdown, because its conditions are links (docs/rulesets.md#creatures).
+ */
 export function defenseLines(s: CreatureStats): PropertyLine[] {
   const immunities = whenPresent(s.immunities, (i) =>
-    [whenPresent(i.damage, damageList), whenPresent(i.conditions, damageList)].filter(present).join('; '),
+    [whenPresent(i.damage, (d) => escapeMarkdown(damageList(d))), whenPresent(i.conditions, conditionList)].filter(present).join('; '),
   );
-  const lines = [
+  const lines: (PropertyLine | { label: string; value: undefined })[] = [
     { label: 'Vulnerabilities', value: whenPresent(s.vulnerabilities, damageList) },
     { label: 'Resistances', value: whenPresent(s.resistances, damageList) },
-    { label: 'Immunities', value: immunities },
+    immunities === undefined ? { label: 'Immunities', value: undefined } : { label: 'Immunities', value: immunities, markdown: true },
   ];
   return lines.filter((line): line is PropertyLine => present(line.value));
 }

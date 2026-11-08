@@ -30,12 +30,24 @@
         "acid"
       ],
       "conditions": [
-        "blinded",
-        "charmed",
-        "deafened",
-        "exhaustion",
-        "frightened",
-        "prone"
+        {
+          "ref": "condition/blinded"
+        },
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/deafened"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/prone"
+        }
       ]
     },
     "senses": {

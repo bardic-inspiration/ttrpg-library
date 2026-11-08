@@ -42,10 +42,18 @@
         "radiant"
       ],
       "conditions": [
-        "charmed",
-        "exhaustion",
-        "frightened",
-        "poisoned"
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "senses": {

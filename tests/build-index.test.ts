@@ -220,16 +220,18 @@ describe('the build', () => {
 });
 
 describe('the type registry', () => {
-  it('registers every type the ruleset defines, with the docs/site.md#type-registry keys', async () => {
+  it('registers every content type, and every rules type that takes extensions, with the docs/site.md#type-registry keys', async () => {
     const registry = await loadRegistryFile();
-    expect(Object.keys(registry['dnd-5e-2024']!.types).sort()).toEqual([...ruleset.definition.types].sort());
-    for (const config of Object.values(registry['dnd-5e-2024']!.types)) {
-      for (const key of ['label', 'plural', 'template', 'facets', 'cardFields', 'defaultSort', 'defaultFilters', 'summaryField']) {
-        expect(config).toHaveProperty(key);
-      }
+    const extensionTypes = (ruleset.definition.rules ?? []).filter((r) => r.extensions).map((r) => r.type);
+    expect(Object.keys(registry['dnd-5e-2024']!.types).sort()).toEqual([...ruleset.definition.types, ...extensionTypes].sort());
+    for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
+      // A rules extension has no key stat to show in PR bodies (docs/site.md#type-registry).
+      const keys = ['label', 'plural', 'template', 'facets', 'cardFields', 'defaultSort', 'defaultFilters'];
+      for (const key of extensionTypes.includes(type) ? keys : [...keys, 'summaryField']) expect(config).toHaveProperty(key);
       const paths = config.facets.map((f) => f.path);
       for (const field of config.cardFields as string[]) expect(paths).toContain(field);
-      expect(paths).toContain(String(config.defaultSort).replace(/:(asc|desc)$/, ''));
+      // The default sort is a facet, or a path every record has (docs/site.md#gallery "Sort").
+      expect([...paths, 'name', 'createdAt']).toContain(String(config.defaultSort).replace(/:(asc|desc)$/, ''));
       for (const filter of config.defaultFilters as string[]) if (!filter.startsWith('tags.')) expect(paths).toContain(filter);
     }
   });
@@ -247,9 +249,15 @@ describe('the type registry', () => {
 
   // docs/generation.md#gap-buckets: every axis is a facet of its type; bins sit on range facets, ascending
   // and disjoint; categorical values sit on enum facets and are values the schema allows.
-  it('gives every type gap buckets whose axes are its facets', async () => {
+  it('gives every content type gap buckets whose axes are its facets, and a rules extension type none', async () => {
     const registry = await loadRegistryFile();
+    const extensionTypes = new Set((ruleset.definition.rules ?? []).map((r) => r.type));
     for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
+      // Gap fill never adds a rules extension (docs/generation.md#gap-buckets).
+      if (extensionTypes.has(type)) {
+        expect(config.gapBuckets, `${type} gapBuckets`).toBeUndefined();
+        continue;
+      }
       const axes = config.gapBuckets as Array<{ path: string; bins?: [number, number][]; enum?: string[] }>;
       expect(Array.isArray(axes) && axes.length > 0, `${type} gapBuckets`).toBe(true);
       const schema = await readSchema(`${type}.schema.json`);

@@ -34,7 +34,9 @@
         "poison"
       ],
       "conditions": [
-        "poisoned"
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "languages": {

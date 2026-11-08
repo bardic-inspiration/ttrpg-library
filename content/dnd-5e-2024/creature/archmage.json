@@ -46,7 +46,10 @@
         "psychic"
       ],
       "conditions": [
-        "Charmed (with Mind Blank)"
+        {
+          "ref": "condition/charmed",
+          "note": "with Mind Blank"
+        }
       ]
     },
     "gear": [

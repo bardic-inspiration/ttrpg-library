@@ -3,6 +3,16 @@
     "label": "D&D 5e (SRD 5.2)",
     "attribution": "srd-5.2",
     "types": {
+      "condition": {
+        "label": "Condition",
+        "plural": "Conditions",
+        "template": "condition-card",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/condition.md",
+        "facets": [],
+        "cardFields": [],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["tags.theme"]
+      },
       "creature": {
         "label": "Creature",
         "plural": "Creatures",

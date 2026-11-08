@@ -48,8 +48,12 @@
         "poison"
       ],
       "conditions": [
-        "frightened",
-        "poisoned"
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "senses": {

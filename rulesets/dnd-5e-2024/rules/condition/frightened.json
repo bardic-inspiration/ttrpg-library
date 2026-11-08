@@ -1,0 +1,17 @@
+{
+  "type": "condition",
+  "id": "frightened",
+  "name": "Frightened",
+  "stats": {
+    "effects": [
+      {
+        "name": "Ability Checks and Attacks Affected",
+        "text": "You have Disadvantage on ability checks and attack rolls while the source of fear is within line of sight."
+      },
+      {
+        "name": "Can't Approach",
+        "text": "You can't willingly move closer to the source of fear."
+      }
+    ]
+  }
+}

@@ -14,6 +14,7 @@ body:
       label: Type
       description: The kind of entry to generate.
       options:
+        - condition
         - creature
         - item
         - spell

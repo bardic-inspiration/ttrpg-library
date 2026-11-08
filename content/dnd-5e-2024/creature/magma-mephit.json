@@ -38,8 +38,12 @@
         "poison"
       ],
       "conditions": [
-        "exhaustion",
-        "poisoned"
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "senses": {

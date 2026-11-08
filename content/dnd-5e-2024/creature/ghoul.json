@@ -30,9 +30,15 @@
         "poison"
       ],
       "conditions": [
-        "charmed",
-        "exhaustion",
-        "poisoned"
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "senses": {

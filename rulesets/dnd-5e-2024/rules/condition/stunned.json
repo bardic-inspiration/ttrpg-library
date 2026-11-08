@@ -1,0 +1,21 @@
+{
+  "type": "condition",
+  "id": "stunned",
+  "name": "Stunned",
+  "stats": {
+    "effects": [
+      {
+        "name": "Incapacitated",
+        "text": "You have the {ref:condition/incapacitated} condition."
+      },
+      {
+        "name": "Saving Throws Affected",
+        "text": "You automatically fail Strength and Dexterity saving throws."
+      },
+      {
+        "name": "Attacks Affected",
+        "text": "Attack rolls against you have Advantage."
+      }
+    ]
+  }
+}

@@ -34,11 +34,21 @@
         "poison"
       ],
       "conditions": [
-        "exhaustion",
-        "paralyzed",
-        "petrified",
-        "poisoned",
-        "unconscious"
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/poisoned"
+        },
+        {
+          "ref": "condition/unconscious"
+        }
       ]
     },
     "senses": {

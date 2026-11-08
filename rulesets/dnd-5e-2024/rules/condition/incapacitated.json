@@ -1,0 +1,25 @@
+{
+  "type": "condition",
+  "id": "incapacitated",
+  "name": "Incapacitated",
+  "stats": {
+    "effects": [
+      {
+        "name": "Inactive",
+        "text": "You can't take any action, Bonus Action, or Reaction."
+      },
+      {
+        "name": "No Concentration",
+        "text": "Your Concentration is broken."
+      },
+      {
+        "name": "Speechless",
+        "text": "You can't speak."
+      },
+      {
+        "name": "Surprised",
+        "text": "If you're Incapacitated when you roll Initiative, you have Disadvantage on the roll."
+      }
+    ]
+  }
+}

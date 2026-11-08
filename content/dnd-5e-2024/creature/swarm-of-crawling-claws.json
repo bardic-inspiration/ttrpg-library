@@ -38,17 +38,39 @@
         "poison"
       ],
       "conditions": [
-        "charmed",
-        "exhaustion",
-        "frightened",
-        "grappled",
-        "incapacitated",
-        "paralyzed",
-        "petrified",
-        "poisoned",
-        "prone",
-        "restrained",
-        "stunned"
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/incapacitated"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/poisoned"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        },
+        {
+          "ref": "condition/stunned"
+        }
       ]
     },
     "senses": {

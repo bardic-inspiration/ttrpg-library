@@ -50,8 +50,12 @@
         "psychic"
       ],
       "conditions": [
-        "charmed",
-        "frightened"
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/frightened"
+        }
       ]
     },
     "senses": {

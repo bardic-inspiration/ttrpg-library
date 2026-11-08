@@ -1,0 +1,37 @@
+{
+  "type": "condition",
+  "id": "petrified",
+  "name": "Petrified",
+  "stats": {
+    "effects": [
+      {
+        "name": "Turned to Inanimate Substance",
+        "text": "You are transformed, along with any nonmagical objects you are wearing and carrying, into a solid inanimate substance (usually stone). Your weight increases by a factor of ten, and you cease aging."
+      },
+      {
+        "name": "Incapacitated",
+        "text": "You have the {ref:condition/incapacitated} condition."
+      },
+      {
+        "name": "Speed 0",
+        "text": "Your Speed is 0 and can't increase."
+      },
+      {
+        "name": "Attacks Affected",
+        "text": "Attack rolls against you have Advantage."
+      },
+      {
+        "name": "Saving Throws Affected",
+        "text": "You automatically fail Strength and Dexterity saving throws."
+      },
+      {
+        "name": "Resist Damage",
+        "text": "You have Resistance to all damage."
+      },
+      {
+        "name": "Poison Immunity",
+        "text": "You have Immunity to the {ref:condition/poisoned} condition."
+      }
+    ]
+  }
+}

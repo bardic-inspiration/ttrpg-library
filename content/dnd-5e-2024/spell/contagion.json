@@ -29,7 +29,7 @@
       "unit": "day",
       "concentration": false
     },
-    "effect": "Your touch inflicts a magical contagion. The target must succeed on a Constitution saving throw or take 11d8 Necrotic damage and have the Poisoned condition. Also, choose one ability when you cast the spell. While Poisoned, the target has Disadvantage on saving throws made with the chosen ability.\n\nThe target must repeat the saving throw at the end of each of its turns until it gets three successes or failures. If the target succeeds on three of these saves, the spell ends on the target. If the target fails three of the saves, the spell lasts for 7 days on it.\n\nWhenever the Poisoned target receives an effect that would end the Poisoned condition, the target must succeed on a Constitution saving throw, or the Poisoned condition doesn't end on it."
+    "effect": "Your touch inflicts a magical contagion. The target must succeed on a Constitution saving throw or take 11d8 Necrotic damage and have the {ref:condition/poisoned} condition. Also, choose one ability when you cast the spell. While {ref:condition/poisoned}, the target has Disadvantage on saving throws made with the chosen ability.\n\nThe target must repeat the saving throw at the end of each of its turns until it gets three successes or failures. If the target succeeds on three of these saves, the spell ends on the target. If the target fails three of the saves, the spell lasts for 7 days on it.\n\nWhenever the {ref:condition/poisoned} target receives an effect that would end the {ref:condition/poisoned} condition, the target must succeed on a Constitution saving throw, or the {ref:condition/poisoned} condition doesn't end on it."
   },
   "meta": {
     "createdAt": "2026-11-04",

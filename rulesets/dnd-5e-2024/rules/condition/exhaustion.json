@@ -1,0 +1,25 @@
+{
+  "type": "condition",
+  "id": "exhaustion",
+  "name": "Exhaustion",
+  "stats": {
+    "effects": [
+      {
+        "name": "Exhaustion Levels",
+        "text": "This condition is cumulative. Each time you receive it, you gain 1 Exhaustion level. You die if your Exhaustion level is 6."
+      },
+      {
+        "name": "D20 Tests Affected",
+        "text": "When you make a D20 Test, the roll is reduced by 2 times your Exhaustion level."
+      },
+      {
+        "name": "Speed Reduced",
+        "text": "Your Speed is reduced by a number of feet equal to 5 times your Exhaustion level."
+      },
+      {
+        "name": "Removing Exhaustion Levels",
+        "text": "Finishing a Long Rest removes 1 of your Exhaustion levels. When your Exhaustion level reaches 0, the condition ends."
+      }
+    ]
+  }
+}

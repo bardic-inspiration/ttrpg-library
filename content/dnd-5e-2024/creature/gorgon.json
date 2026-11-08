@@ -30,8 +30,12 @@
     },
     "immunities": {
       "conditions": [
-        "exhaustion",
-        "petrified"
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/petrified"
+        }
       ]
     },
     "senses": {

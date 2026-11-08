@@ -44,7 +44,10 @@
     ],
     "immunities": {
       "conditions": [
-        "Charmed (except from its vampire master)"
+        {
+          "ref": "condition/charmed",
+          "note": "except from its vampire master"
+        }
       ]
     },
     "gear": [
