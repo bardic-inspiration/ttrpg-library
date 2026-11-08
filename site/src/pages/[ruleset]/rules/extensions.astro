@@ -1,0 +1,28 @@
+---
+// A ruleset's Extensions page (docs/site.md#rules-pages), for each ruleset with a rules type
+// that takes extensions.
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import ExtensionsPage from '../../../components/rules/ExtensionsPage.astro';
+import { loadEntries } from '../../../lib/library';
+import { loadRules, rulesContext } from '../../../lib/rules';
+import type { Registry } from '../../../lib/gallery/config';
+import registry from '../../../../../config/types.json';
+
+export const getStaticPaths = (() => {
+  const rules = loadRules();
+  const all = loadEntries(rules);
+  return rules
+    .filter((data) => data.types.some((t) => t.extensions))
+    .map((data) => {
+      const types = (registry as unknown as Registry)[data.ruleset]?.types ?? {};
+      const plurals = Object.fromEntries(Object.entries(types).map(([type, config]) => [type, config.plural]));
+      return { params: { ruleset: data.ruleset }, props: { ctx: rulesContext(data, all, rules), plurals } };
+    });
+}) satisfies GetStaticPaths;
+
+const { ctx, plurals } = Astro.props;
+---
+<Base title={`Extensions · TTRPG Content Library`}>
+  <ExtensionsPage ctx={ctx} plurals={plurals} />
+</Base>

@@ -1,0 +1,6 @@
+[
+  { "id": "tools", "name": "Tools", "text": "Tools help you work. Each has {ref:term/advantage} on the job." },
+  { "id": "hand-tools", "name": "Hand Tools", "qualifier": "Hand", "parent": "tools", "note": "1 Hand" },
+  { "id": "big-tools", "name": "Big Tools", "qualifier": "Big", "parent": "tools" },
+  { "id": "any-tools", "name": "Any Tools", "parent": "tools", "union": ["hand-tools", "big-tools"] }
+]

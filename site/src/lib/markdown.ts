@@ -7,7 +7,8 @@
 // scrolls on its own when the table is wider than the text column; a bold
 // line directly above a table is its title, rendered as the caption. A
 // `{ref:<type>/<id>}` token renders as the target's current name, linked to
-// its detail page (docs/content-model.md#references): the only link text can carry.
+// its detail page, or a primitive's or group's anchor on its rules page
+// (docs/content-model.md#references): the only link text can carry.
 
 import { Marked, type Token, type TokenizerAndRendererExtension, type Tokens } from 'marked';
 import { tableTitleAt } from '../../../lib/table-title.ts';
@@ -16,10 +17,12 @@ import { url } from './url.ts';
 const escapeHtml = (text: string): string =>
   text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
 
-/** What `{ref:…}` links resolve against: entry names by `<type>/<id>`, and the entry's ruleset (refs never cross one). */
+/** What `{ref:…}` links resolve against: names by `<type>/<id>`, and the entry's ruleset (refs never cross one). */
 export interface TextRefs {
   names: Map<string, string>;
   ruleset: string;
+  /** Paths under the site base for targets that aren't entries: a primitive's or group's anchor on its rules page. */
+  paths?: Map<string, string>;
 }
 
 /** The links for the text being rendered now; parsing is synchronous, so one at a time. */
@@ -51,7 +54,8 @@ const refExtension: TokenizerAndRendererExtension = {
     const ref = token as unknown as RefToken;
     const name = escapeHtml(refName(ref));
     if (!current?.names.has(ref.key)) return name;
-    return `<a class="ref-link" href="${escapeHtml(url(`${current.ruleset}/${ref.key}/`))}">${name}</a>`;
+    const path = current.paths?.get(ref.key) ?? `${current.ruleset}/${ref.key}/`;
+    return `<a class="ref-link" href="${escapeHtml(url(path))}">${name}</a>`;
   },
 };
 

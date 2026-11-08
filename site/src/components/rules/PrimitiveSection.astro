@@ -1,0 +1,28 @@
+---
+// One primitive's section on its rules page (docs/site.md#rules-pages): its name as an anchored
+// heading, its stats as labeled lines, and its links. A link to the primitive
+// lands on this section.
+import { anchorId, ruleKey, type Primitive } from '../../../../lib/rules';
+import { genericLines } from '../../lib/generic';
+import type { RulesContext } from '../../lib/rules';
+import Heading from '../templates/parts/Heading.astro';
+import PropertyList from '../templates/parts/PropertyList.astro';
+import RefLinks from './RefLinks.astro';
+
+interface Props {
+  ctx: RulesContext;
+  primitive: Primitive;
+  level: number;
+}
+
+const { ctx, primitive, level } = Astro.props;
+const key = ruleKey(primitive);
+// The group is the section the primitive sits in, so it isn't repeated as a line.
+const skip = ctx.data.groups.has(primitive.type) ? ['group'] : [];
+const refs = { names: ctx.names, ruleset: ctx.data.ruleset, paths: ctx.paths };
+---
+<section class="rule" id={anchorId(key)} data-type={primitive.type}>
+  <Heading level={level}>{primitive.name}</Heading>
+  <PropertyList lines={genericLines(primitive.stats, ctx.names, '', skip)} refs={refs} />
+  <RefLinks ctx={ctx} key={key} />
+</section>

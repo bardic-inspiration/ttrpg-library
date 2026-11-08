@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/rules-pages.schema.json",
+  "title": "A ruleset's rules pages (docs/rulesets.md#rules-pages)",
+  "description": "rulesets/<ruleset>/rules/pages.json: the rules pages, in order. Each page is served at /<ruleset>/rules/<id>/, and every primitive and group appears on exactly one.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "title",
+      "blocks"
+    ],
+    "properties": {
+      "id": {
+        "description": "The page's URL segment. \"extensions\" is taken by the Extensions page.",
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+        "not": {
+          "const": "extensions"
+        }
+      },
+      "title": {
+        "description": "The page's heading.",
+        "type": "string",
+        "minLength": 1
+      },
+      "blocks": {
+        "description": "What the page shows, in order.",
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/$defs/Block"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Section": {
+      "description": "SRD chapter text that isn't a primitive, word for word, with optional nested sections.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "text"
+          ]
+        },
+        {
+          "required": [
+            "sections"
+          ]
+        }
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "markdownSubset": true
+        },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Section"
+          }
+        }
+      }
+    },
+    "Block": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "oneOf": [
+        {
+          "description": "A prose section.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "title"
+          ],
+          "anyOf": [
+            {
+              "required": [
+                "text"
+              ]
+            },
+            {
+              "required": [
+                "sections"
+              ]
+            }
+          ],
+          "properties": {
+            "kind": {
+              "const": "prose"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "markdownSubset": true
+            },
+            "sections": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/Section"
+              }
+            }
+          }
+        },
+        {
+          "description": "Every primitive of a rules type that has no groups.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "type"
+          ],
+          "properties": {
+            "kind": {
+              "const": "primitives"
+            },
+            "type": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            }
+          }
+        },
+        {
+          "description": "A group's tree: its section, its child groups' sections, and its members.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "group"
+          ],
+          "properties": {
+            "kind": {
+              "const": "group"
+            },
+            "group": {
+              "description": "The group's key, <type>/<id>.",
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*/[a-z0-9]+(-[a-z0-9]+)*$"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

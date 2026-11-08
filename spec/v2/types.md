@@ -37,17 +37,11 @@ The ruleset splits into two layers.
   are spells, items, creatures, feats, backgrounds, species, classes, and
   subclasses.
 
-Within the rules, the line falls between the basis and the custom additions:
-
-- **Ruleset primitives** are the SRD's rules. They are ruleset data, kept
-  with the ruleset, not entries under `content/`. They display as **pages**:
-  one combined page per rules type, with an anchored section for each
-  primitive, so any of them is easy to reference and link.
-- **Ruleset extensions** are custom rules, authored like any content entry
-  (a request, the `generate` skill, a content PR). They display as
-  **cards**. Extensions appear on an Extensions page beside the ruleset's
-  rules pages (`ui.md`, #113), and in a simple, searchable list at the
-  bottom of each rules page.
+Within the rules, the line falls between the basis, **ruleset primitives**
+shown on rules pages, and the custom additions, **ruleset extensions** shown
+as cards. That mechanism is built ([Rules data](../../docs/rulesets.md#rules-data));
+extensions are authored like any content entry (a request, the `generate`
+skill, a content PR).
 
 | Rules type | Primitives | Extensions in v2 | Rules page |
 |---|---|---|---|
@@ -108,27 +102,11 @@ mechanic, waits for v3's house rules system.
 
 ### Rules data
 
-- **One file per primitive**, at `rulesets/<ruleset>/rules/<type>/<id>.json`,
-  holding `type`, `id`, `name`, and `stats`. The path must match, and the
-  `id` is the slug of the name, as for an entry. A primitive has no
-  `summary`, `meta`, `tags`, `description`, or `image`: every primitive is an
-  SRD rule, reproduced unmodified ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entries)),
-  with its rules text word for word.
-- **An extension is an ordinary entry** under `content/<ruleset>/<type>/`,
-  and its `stats` validate against the same type schema as a primitive's.
-  An extension is always custom: `meta.source.srd` on one is an error.
-- **One key space per type.** A key is unique across a type's primitives,
-  its equipment groups, and its extensions, and so is a name, ignoring case
-  (error). Since an extension is custom, the SRD-name rule already keeps it
-  off a primitive's name.
-- **Validated like entries:** the type schema, ref resolution, the markdown
-  subset, `{ref:…}` tokens, the blocklist, and placeholders. A primitive's
-  links count for back-references, so a glossary term's "See also" token
-  lists the term it names.
-- **Registered in `ruleset.json`** under a `rules` list, separate from
-  `types`, each with whether it takes extensions. Only a rules type that
-  takes extensions has a registry entry in `config/types.json`, because
-  only extensions have cards.
+The rules data mechanism is built ([Rules data](../../docs/rulesets.md#rules-data),
+[Rules groups](../../docs/rulesets.md#rules-groups),
+[Rules pages](../../docs/rulesets.md#rules-pages)). What the rules types
+still add:
+
 - **In the SRD manifest.** The manifest lists every primitive and equipment
   group by type and exact name, so `srd-coverage` proves the rules data is
   complete. Primitives have no tier.
@@ -139,12 +117,8 @@ mechanic, waits for v3's house rules system.
 
 ### Rules pages
 
-`rulesets/<ruleset>/rules/pages.json` lists the rules pages in order. Each
-has an `id`, a `title`, and its blocks in order: a prose section (`title`,
-`text`, and nested `sections`), a rules type's primitives, or an equipment
-group's tree. Prose is SRD text word for word, in the markdown subset, for
-chapter text that isn't a primitive, such as "Weapon Proficiency" or "Armor
-Training".
+Prose blocks hold SRD chapter text that isn't a primitive, such as "Weapon
+Proficiency" or "Armor Training".
 
 | Page | Shows |
 |---|---|
@@ -157,23 +131,15 @@ Training".
 | Adventuring Gear | The chapter's gear text, and the gear tree |
 | Mounts and Vehicles | The chapter's mount and vehicle text, and the tree |
 
-A page's URL is `/<ruleset>/rules/<page>/`, and a primitive's or group's
-anchor is `#<type>-<id>`, so primitives of two types on one page can't
-collide. The Equipment page's sections are anchored but aren't link targets:
-a mention of one ("see 'Hirelings'") stays plain text, like any mention of
-an SRD chapter. Each category page lists the equipment extensions in its
-category at the bottom; the Conditions page lists condition extensions. The
-layout is the UI's ([`ui.md`](ui.md)).
+The Equipment page's sections are anchored but aren't link targets: a
+mention of one ("see 'Hirelings'") stays plain text, like any mention of an
+SRD chapter.
 
 ### Equipment groups
 
-`rulesets/<ruleset>/rules/equipment-groups.json` lists the groups, in page
-order. A group has an `id`, a `name`, an optional `qualifier` (its short form
-in a base item, below), an optional `parent`, an optional `note` printed in
-parentheses after its heading, and optional `text`, SRD prose that opens its
-section. A group with no parent is a category, and its page is the
-category's page. Groups are closed in v2: extensions add equipment, not
-groups.
+Equipment's groups are in `rules/equipment-groups.json`. A group's
+`qualifier` is its short form in a base item (below), and a category adds
+its singular `noun`. A category's page is the category's page.
 
 | Category | Groups (qualifier) |
 |---|---|
@@ -183,13 +149,10 @@ groups.
 | Adventuring Gear | None |
 | Mounts and Vehicles | Mounts and Other Animals; Tack, Harness, and Drawn Vehicles; Airborne and Waterborne Vehicles |
 
-A primitive names its leaf group in `stats.group`, and belongs to that group
-and every ancestor. A group may instead be a `union` of other groups, with
-no members of its own: Melee Weapons (Melee) is Simple Melee and Martial
-Melee, and Ranged Weapons (Ranged) is Simple Ranged and Martial Ranged. A
-union group's section lists its members as links, after the tree. The
-Shield group is "Shields", because the Shield is an item of the same type
-and names are unique.
+Melee Weapons (Melee) is a union of Simple Melee and Martial Melee, and
+Ranged Weapons (Ranged) of Simple Ranged and Martial Ranged, each with
+Weapons as its parent. The Shield group is "Shields", because the Shield is
+an item of the same type and names are unique.
 
 Members print in name order, except armor, which prints by base AC and then
 cost, as the SRD's table does.
@@ -420,13 +383,10 @@ rules text isn't carpeted with links to "Advantage" and "Bonus Action".
 
 - Each new type validates against its schema, with fixtures for its
   errors.
-- The rules pages build, with an anchor for every primitive and group, and
-  an extensions list.
 - `srd-coverage` reports every SRD primitive and equipment group present.
 - Components don't appear in the library's galleries or search, and each is
   rendered on its parent's page.
-- Links to primitives, groups, and components resolve, and a link to a
-  missing one fails CI.
+- Links to components resolve, and a link to a missing one fails CI.
 
 ## Open questions
 

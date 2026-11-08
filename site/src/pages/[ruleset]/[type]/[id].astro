@@ -8,7 +8,8 @@ import Base from '../../../layouts/Base.astro';
 import CaptureSource from '../../../components/detail/CaptureSource.astro';
 import EntryDetail from '../../../components/detail/EntryDetail.astro';
 import ExportControls from '../../../components/detail/ExportControls';
-import { entryNames, loadEntries, refTargets, type LoadedEntry } from '../../../lib/library';
+import { entryNames, loadEntries, refPaths, refTargets, type LoadedEntry } from '../../../lib/library';
+import { loadRules } from '../../../lib/rules';
 import { formerTypes } from '../../../lib/redirects';
 import type { RefTarget } from '../../../lib/refs';
 import { url } from '../../../lib/url';
@@ -16,16 +17,18 @@ import type { Registry } from '../../../lib/gallery/config';
 import registry from '../../../../../config/types.json';
 
 type Props =
-  | { loaded: LoadedEntry; names: Map<string, string>; targets: Map<string, RefTarget>; moved?: undefined }
+  | { loaded: LoadedEntry; names: Map<string, string>; paths: Map<string, string>; targets: Map<string, RefTarget>; moved?: undefined }
   | { moved: { name: string; to: string } };
 
 export const getStaticPaths = (() => {
-  const all = loadEntries();
-  const names = entryNames(all);
-  const targets = refTargets(all);
+  const rules = loadRules();
+  const all = loadEntries(rules);
+  const names = entryNames(all, rules);
+  const paths = refPaths(rules);
+  const targets = refTargets(all, rules);
   const pages = all.map((loaded) => ({
     params: { ruleset: loaded.entry.ruleset, type: loaded.entry.type, id: loaded.entry.id },
-    props: { loaded, names, targets } as Props,
+    props: { loaded, names, paths, targets } as Props,
   }));
   const moved = formerTypes(registry as unknown as Registry).flatMap((former) =>
     all
@@ -54,9 +57,9 @@ const props = Astro.props;
       type: 'article',
     }}
   >
-    <EntryDetail loaded={props.loaded} names={props.names} targets={props.targets}>
+    <EntryDetail loaded={props.loaded} names={props.names} paths={props.paths} targets={props.targets}>
       <ExportControls slot="export" client:load item={{ entry: props.loaded.entry, derived: props.loaded.derived }} base={url()} />
     </EntryDetail>
-    <CaptureSource loaded={props.loaded} names={props.names} />
+    <CaptureSource loaded={props.loaded} names={props.names} paths={props.paths} />
   </Base>
 )}

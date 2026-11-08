@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/primitive.schema.json",
+  "title": "Ruleset primitive (docs/rulesets.md#rules-data)",
+  "description": "One SRD rule kept with its ruleset at rulesets/<ruleset>/rules/<type>/<id>.json. Every primitive is an SRD rule, reproduced unmodified, so it has no summary, meta, tags, description, or image. `stats` is validated by the ruleset's schema for the type, the same schema an extension's stats use.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "id", "name", "stats"],
+  "properties": {
+    "type": { "description": "The rules type, listed under `rules` in the ruleset's ruleset.json, such as \"condition\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "id": { "description": "The slug of the name, equal to the file name. Unique across the type's primitives, groups, and extensions.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 1, "maxLength": 64 },
+    "name": { "description": "The SRD name exactly. Unique across the type's primitives, groups, and extensions, ignoring case.", "type": "string", "minLength": 1, "maxLength": 80 },
+    "stats": { "description": "Rules data, validated by the ruleset's schema for the type.", "type": "object" }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/fixture-rules/common.schema.json",
+  "$defs": {
+    "Ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "type": "string", "pattern": "^(note|term|gear)/[a-z0-9-]+$" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "GearRef": {
+      "description": "A typed ref: only gear.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "type": "string", "pattern": "^gear/[a-z0-9-]+$" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Text": { "type": "string", "minLength": 1, "markdownSubset": true }
+  }
+}

@@ -11,15 +11,17 @@ interface Props {
   loaded: LoadedEntry;
   /** `<type>/<id>` → entry name. */
   names: Map<string, string>;
+  /** Paths of primitives' and groups' anchors, for links to rules data. */
+  paths?: Map<string, string>;
   /** Heading level of the entry name. Default 2, under the print view's `h1`. */
   level?: number;
 }
 
-const { loaded, names, level = 2 } = Astro.props;
+const { loaded, names, paths, level = 2 } = Astro.props;
 const { entry, derived } = loaded;
 ---
 <article class="print-entry" data-id={entry.id} data-name={entry.name} data-type={entry.type}>
-  <EntryTemplate entry={entry} derived={derived} names={names} mode="print" level={level} />
+  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} mode="print" level={level} />
 </article>
 
 <style>

@@ -1,0 +1,9 @@
+{
+  "ruleset": "fixture-rules",
+  "type": "gear",
+  "id": "mallet",
+  "name": "Mallet",
+  "summary": "A wooden hammer, a custom piece of gear.",
+  "stats": { "group": "hand-tools", "text": "A Mallet taps without denting." },
+  "meta": { "createdAt": "2026-11-07", "source": { "kind": "manual" } }
+}

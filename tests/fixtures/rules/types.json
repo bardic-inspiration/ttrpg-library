@@ -1,0 +1,10 @@
+{
+  "fixture-rules": {
+    "label": "Fixture Rules",
+    "attribution": "srd-5.2",
+    "types": {
+      "note": { "label": "Note", "plural": "Notes", "template": "generic", "facets": [] },
+      "gear": { "label": "Gear", "plural": "Gear", "template": "generic", "facets": [] }
+    }
+  }
+}

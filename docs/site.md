@@ -97,6 +97,8 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 | `/<ruleset>/` | All entries in the ruleset, with the same type filter and order |
 | `/<ruleset>/<type>/` | Gallery for one type, with its default facets and sort |
 | `/<ruleset>/<type>/<id>/` | Detail page |
+| `/<ruleset>/rules/<page>/` | A rules page ([Rules pages](#rules-pages)) |
+| `/<ruleset>/rules/extensions/` | The ruleset's Extensions page |
 | `/print/` | Print view for one or many entries ([export.md](export.md#print)) |
 | `/about/` | What the library is, SRD attribution, licenses |
 | `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)) |
@@ -105,6 +107,34 @@ The header carries ruleset and type navigation, built from the registry. The
 footer carries the SRD 5.2 attribution statement on every page. The site is
 served under the base `/ttrpg-library/`
 ([architecture.md](architecture.md#technology)).
+
+### Rules pages
+
+Each page in a ruleset's `rules/pages.json` builds at
+`/<ruleset>/rules/<page>/` ([Rules pages](rulesets.md#rules-pages)), from
+`site/src/components/rules/`:
+
+- **Its blocks, in order.** Prose renders as sections with headings a level
+  below the page's; a primitives block and a group tree render each
+  primitive and group as a section of its own.
+- **An anchored section per primitive and group**, with the id
+  `<type>-<id>`, so a link lands on it and two types on one page can't
+  collide. A primitive's section shows its name and its `stats` as labeled
+  lines (the group it sits in isn't repeated); a group's shows its name, its
+  `note`, and its `text`. Each lists its forward refs and back-refs under
+  the ruleset's labels, like a detail page's Links. A union group lists its
+  members as links.
+- **Its extensions**, at the bottom: the extensions whose primitives would
+  sit on this page, by type or by group, in a list with a search box that
+  narrows it as you type, each linked to its card.
+
+A ruleset with a rules type that takes extensions also builds an Extensions
+page at `/<ruleset>/rules/extensions/`: one searchable list per such type.
+Rules pages aren't in the header yet.
+
+A link to a primitive or group, from any entry or rules page, renders as its
+name linked to its anchor; refs carry the anchors' paths alongside the names
+(`refPaths` in `site/src/lib/library.ts`).
 
 ### Redirects
 
@@ -224,7 +254,9 @@ indexes.
 - One component per type template, `creature-stat-block`, `item-card`,
   and `spell-card`, plus a `generic` fallback that renders the fixed keys,
   `stats` as a definition list, and tags. `EntryTemplate` picks the component
-  from the registry's `template`, falling back to `generic`.
+  from the registry's `template`, falling back to `generic`. The generic
+  lines render a ref as its target's name, linked to its page or rules
+  anchor; a rules page renders a primitive's `stats` with the same lines.
 - The same component renders on the detail page, in PNG capture, and in print,
   with a `mode` prop (`screen`, `capture`, `print`) that adjusts only spacing,
   columns, and interactive elements.

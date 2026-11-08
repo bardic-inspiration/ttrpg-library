@@ -21,6 +21,8 @@ export interface RefEntry {
   stats?: unknown;
   /** Searched for `{ref:…}` tokens, before `stats`. */
   description?: string;
+  /** Where `stats` sits in the file, for link paths. Default `stats`; a group's text is `text`. */
+  statsPath?: string;
 }
 
 /** One link from one entry to another, as both ends see it. */
@@ -104,8 +106,9 @@ export function collectRefs(stats: unknown, path = 'stats', malformed: Malformed
 /**
  * Resolves every ref against the library and computes back-references. A ref
  * fails when no entry of its type has its id (IDs are unique per type,
- * docs/content-model.md#ids-and-names), or when the target is in another ruleset (not allowed in v1). Links
- * are keyed by `<type>/<id>`; only resolved refs become links.
+ * docs/content-model.md#ids-and-names), or when the target is in another ruleset (not allowed in v1). Ruleset
+ * primitives and groups are targets like entries (docs/rulesets.md#rules-data). Links are keyed by
+ * `<type>/<id>`; only resolved refs become links.
  */
 export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; issues: RefIssue[] } {
   const byKey = new Map<string, RefEntry>();
@@ -129,7 +132,7 @@ export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; i
     const malformed: MalformedRef[] = [];
     const found = [
       ...(entry.description === undefined ? [] : collectRefs(entry.description, 'description', malformed)),
-      ...collectRefs(entry.stats, 'stats', malformed),
+      ...collectRefs(entry.stats, entry.statsPath ?? 'stats', malformed),
     ];
     for (const { path, raw } of malformed) {
       issues.push({ file: entry.file, message: `${path}: ref token ${raw} is malformed; write {ref:<type>/<id>}, such as {ref:spell/fireball}` });

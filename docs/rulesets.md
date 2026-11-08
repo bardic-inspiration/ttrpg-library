@@ -40,7 +40,7 @@ adding a ruleset is adding a folder:
 
 | File | Purpose |
 |---|---|
-| `ruleset.json` | ID, label, SRD version, attribution key, list of types |
+| `ruleset.json` | ID, label, SRD version, attribution key, list of types, and the `rules` types ([Rules data](#rules-data)) |
 | `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
 | `derive.ts` | Pure functions, one per type, computing derived values from `stats` |
 | `tokens.ts` | Text tokens that render derived values inside prose |
@@ -51,6 +51,7 @@ adding a ruleset is adding a folder:
 | `schemas/` | `common.schema.json` and one `<type>.schema.json` per type |
 | `guidelines/<type>.md` | Generation guidance ([generation.md](generation.md#guidelines)) |
 | `srd-manifest.json` | Every SRD entry of the ruleset ([content-model.md](content-model.md#srd-manifest-and-coverage)) |
+| `rules/` | The ruleset's primitives, groups, and rules pages ([Rules data](#rules-data)) |
 
 The validator, the index builder, the site templates, and the exporters all
 import this module, so each derived value is computed in exactly one place. The
@@ -61,6 +62,71 @@ folder or registry entry fails as unknown. A type with no formulas derives `{}`.
 item's `spells[].spell`) are "Casts" / "Cast by"; creature `gear` is "Gear" /
 "Carried by"; any other field, including a `{ref:…}` token in text, is
 "References" / "Referenced by".
+
+### Rules data
+
+A ruleset splits into rules, its definitions, and content, the authorable
+library. A **rules type** is listed in `ruleset.json` under `rules`, separate
+from `types`, with whether it takes extensions:
+`"rules": [{ "type": "condition", "extensions": true }]`.
+
+- **Primitives** are the SRD's rules, kept with the ruleset: one file per
+  primitive at `rules/<type>/<id>.json`, holding `type`, `id`, `name`, and
+  `stats` (`schemas/primitive.schema.json`). The path must match, and a
+  primitive has no `summary`, `meta`, `tags`, `description`, or `image`: it
+  is an SRD rule, reproduced unmodified.
+- **Extensions** are custom rules: ordinary entries under
+  `content/<ruleset>/<type>/`, whose `stats` validate against the same type
+  schema as a primitive's. Only a type that takes extensions may have them,
+  it needs a registry entry for their cards, and an extension is always
+  custom, so `meta.source.srd` on one is an error.
+- **One key space per type.** A key (`<type>/<id>`) is unique across a
+  type's primitives, groups, and extensions, and so is a name, ignoring case.
+- **Validated like entries:** the type schema, the markdown subset, refs and
+  `{ref:…}` tokens, the blocklist, and placeholders; the ruleset's checks run
+  with their warnings skipped, as for an SRD entry. A primitive's and a
+  group's links count for back-references. Every registered ruleset's rules
+  data is validated, whether or not an entry uses it.
+- **Link targets.** A primitive or group is linked like an entry, by a ref
+  object or a `{ref:…}` token, and the link renders as its name, linked to
+  its anchor on its rules page ([References](content-model.md#references)).
+
+`lib/rules.ts` places rules data on pages and is shared by the validator
+(`scripts/validate/rules.ts`) and the site (`site/src/lib/rules.ts`).
+
+### Rules groups
+
+A rules type may group its primitives in `rules/<type>-groups.json`
+(`schemas/rules-groups.schema.json`): a list, in page order, of groups with
+an `id`, a `name`, and optionally a `qualifier` (a short form), a `parent`,
+a `note` printed in parentheses after the heading, and `text`, prose that
+opens the group's section. A group's key is `<type>/<id>`, a link target
+like a primitive's.
+
+- A group with no `parent` is a category. Parents must exist and never loop.
+- A primitive or extension of a grouped type names its **leaf group**, one
+  with no groups in it, in `stats.group`, and belongs to that group and every
+  ancestor.
+- A **union** group lists other groups in `union` and has no members or
+  groups of its own. Its members are theirs, and its section lists them as
+  links. It may have a `parent`, which places it in that tree.
+- Groups are closed: extensions add members, not groups.
+
+### Rules pages
+
+`rules/pages.json` (`schemas/rules-pages.schema.json`) lists the ruleset's
+rules pages in order. Each has an `id`, its URL segment, a `title`, and
+`blocks` in order:
+
+| Block | Shows |
+|---|---|
+| `{ "kind": "prose", "title", "text", "sections" }` | SRD chapter text that isn't a primitive, word for word, with nested sections |
+| `{ "kind": "primitives", "type" }` | Every primitive of a type that has no groups, by name |
+| `{ "kind": "group", "group": "<type>/<id>" }` | A group's tree: its section, then its members (a leaf) or the groups nested in it, with union groups last |
+
+Every primitive and group appears on exactly one page, and the validator
+names any that appear on none or on several. `extensions` is not a page id;
+it is the Extensions page's ([site.md](site.md#rules-pages)).
 
 ### dnd-5e-2024 derivations
 
@@ -278,5 +344,6 @@ Balance isn't checked by CI; it's judged in review
 | To add or change | Touch |
 |---|---|
 | A content type | In `rulesets/<ruleset>/`: a schema, a `derive` function if it has formulas, checks if needed, a guideline, and the type in `ruleset.json`. Plus a registry entry and the request form's dropdown; a template only if the generic layout doesn't fit |
+| A rules type | In `rulesets/<ruleset>/`: a schema, the type under `rules` in `ruleset.json`, its primitives under `rules/<type>/`, groups if it has them, and its place in `rules/pages.json`. A type that takes extensions also gets a registry entry and a guideline |
 | A ruleset | A new `rulesets/<ruleset>/` folder, registry entries, an attribution statement, and a licensing review ([licensing.md](licensing.md#new-rulesets)) |
 | A rules formula or table | `tables.json` or `derive.ts`; every entry picks it up on the next build |

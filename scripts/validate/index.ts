@@ -2,7 +2,19 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { checkImage, checkPath, checkUniqueness, type EntryHead, type FileIssue } from './library.ts';
 import { entryKey, linkEntries, REF_TOKEN, type Link, type RefEntry } from './refs.ts';
-import { PROJECT_ROOT, formatErrors, loadEnvelopeValidator, loadRegistry, loadRuleset, validateWithText, type LoadedRuleset } from './schema.ts';
+import {
+  PROJECT_ROOT,
+  RULESETS_ROOT,
+  formatErrors,
+  loadEnvelopeValidator,
+  loadRegistry,
+  loadRuleset,
+  loadRulesValidators,
+  validateWithText,
+  type LoadedRuleset,
+} from './schema.ts';
+import type { RulesData } from '../../lib/rules.ts';
+import { groupProblem, loadRules } from './rules.ts';
 import { termMatcher } from '../../lib/text.ts';
 import { checkBlocklist, checkMarkdown, checkPlaceholders, loadBlocklist, stringsIn } from './text.ts';
 import { listEntryFiles } from './walk.ts';
@@ -30,11 +42,17 @@ export interface ValidationResult {
   errors: ValidationError[];
   warnings: ValidationError[];
   entries: ValidEntry[];
+  /** The rules data of each ruleset that has rules types (docs/rulesets.md#rules-data). */
+  rules: RulesData[];
 }
 
 export interface ValidateOptions {
   /** Where `image` paths resolve. Defaults to the content root's parent (the repo root). */
   assetsRoot?: string;
+  /** Where ruleset folders live. Defaults to the repo's rulesets/; tests point it at a fixture ruleset. */
+  rulesetsRoot?: string;
+  /** The registry (config/types.json). Defaults to the repo's. */
+  registry?: Record<string, { types: Record<string, unknown> }>;
 }
 
 /**
@@ -48,12 +66,27 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const issues: FileIssue[] = [];
   const error = (file: string, message: string) => issues.push({ level: 'error', file, message });
   const envelope = await loadEnvelopeValidator();
-  const registry = await loadRegistry();
+  const registry = options.registry ?? (await loadRegistry());
+  const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
   const blocklist = termMatcher(await loadBlocklist(PROJECT_ROOT));
   const rulesets = new Map<string, LoadedRuleset | undefined>();
   const heads: EntryHead[] = [];
   const entries: Omit<ValidEntry, 'refs' | 'refBy'>[] = [];
   const linkable: RefEntry[] = [];
+
+  // Every registered ruleset's rules data, whether or not any entry uses it (docs/rulesets.md#rules-data).
+  const rules: RulesData[] = [];
+  const rulesValidators = await loadRulesValidators();
+  for (const id of Object.keys(registry)) {
+    const ruleset = await loadRuleset(id, rulesetsRoot);
+    rulesets.set(id, ruleset);
+    if (!ruleset?.module.definition.rules?.length) continue;
+    const loaded = await loadRules(join(rulesetsRoot, id), `rulesets/${id}`, ruleset, rulesValidators, blocklist);
+    issues.push(...loaded.issues);
+    heads.push(...loaded.heads);
+    linkable.push(...loaded.linkable);
+    rules.push(loaded.data);
+  }
 
   for (const file of files) {
     let data: unknown;
@@ -90,7 +123,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     issues.push(...(await checkImage({ ...entry, file }, assetsRoot)));
 
     if (!rulesets.has(entry.ruleset)) {
-      rulesets.set(entry.ruleset, registry[entry.ruleset] ? await loadRuleset(entry.ruleset) : undefined);
+      rulesets.set(entry.ruleset, registry[entry.ruleset] ? await loadRuleset(entry.ruleset, rulesetsRoot) : undefined);
     }
     const ruleset = rulesets.get(entry.ruleset);
     if (!ruleset) {
@@ -98,10 +131,17 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       continue;
     }
     const validateStats = ruleset.stats.get(entry.type);
-    if (!ruleset.module.definition.types.includes(entry.type) || !validateStats || !registry[entry.ruleset]?.types[entry.type]) {
+    // An extension is an entry of a rules type that takes them (docs/rulesets.md#rules-data).
+    const rulesType = ruleset.module.definition.rules?.find((r) => r.type === entry.type);
+    if (rulesType && !rulesType.extensions) {
+      error(file, `type: "${entry.type}" is a rules type that takes no extensions; its rules are kept in rulesets/${entry.ruleset}/rules/`);
+      continue;
+    }
+    if ((!ruleset.module.definition.types.includes(entry.type) && !rulesType) || !validateStats || !registry[entry.ruleset]?.types[entry.type]) {
       error(file, `type: unknown type "${entry.type}" for ${entry.ruleset}; it must be listed in ruleset.json, have a schema, and have a config/types.json entry`);
       continue;
     }
+    if (rulesType && srd) error(file, 'meta.source.srd: an extension is custom; the SRD rules are kept in the ruleset as primitives');
     const statsResult = validateWithText(validateStats, entry.stats, 'stats');
     if (!statsResult.valid) {
       for (const message of formatErrors(validateStats.errors, 'stats')) error(file, message);
@@ -124,6 +164,11 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       if (srd && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
     }
+    if (rulesType) {
+      const tree = rules.find((r) => r.ruleset === entry.ruleset)?.groups.get(entry.type);
+      const problem = groupProblem(tree, entry);
+      if (problem) error(file, problem);
+    }
     linked.stats = entry.stats;
     entries.push({
       file,
@@ -142,5 +187,5 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     const { refs, refBy } = links.get(entryKey(e.entry)) ?? { refs: [], refBy: [] };
     return { ...e, refs, refBy };
   });
-  return { files, errors: pick('error'), warnings: pick('warning'), entries: withLinks };
+  return { files, errors: pick('error'), warnings: pick('warning'), entries: withLinks, rules };
 }

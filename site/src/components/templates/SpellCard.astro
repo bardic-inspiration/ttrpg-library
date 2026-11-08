@@ -16,9 +16,9 @@ import type { DerivedStatBlock } from '../../../../rulesets/dnd-5e-2024/types.ts
 
 type Props = TemplateProps;
 
-const { entry, derived, names, mode, level = 2 } = Astro.props;
+const { entry, derived, names, paths, mode, level = 2 } = Astro.props;
 const blocks = (derived as { statBlocks?: DerivedStatBlock[] }).statBlocks ?? [];
-const refs = { names, ruleset: entry.ruleset };
+const refs = { names, ruleset: entry.ruleset, paths };
 const s = entry.stats as SpellStats;
 const lines = [
   { label: 'Casting Time', value: castingTimeLine(s), markdown: true },

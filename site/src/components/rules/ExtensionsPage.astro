@@ -1,0 +1,33 @@
+---
+// A ruleset's Extensions page (docs/site.md#rules-pages): its custom rules, one searchable list
+// per rules type that takes extensions, each linked to its card.
+import { entryPath } from '../../lib/library';
+import type { RulesContext } from '../../lib/rules';
+import SearchableList from './SearchableList.astro';
+
+interface Props {
+  ctx: RulesContext;
+  /** Plural display name by rules type, from the registry. */
+  plurals: Record<string, string>;
+}
+
+const { ctx, plurals } = Astro.props;
+const sections = ctx.data.types
+  .filter((t) => t.extensions)
+  .map((t) => ({
+    type: t.type,
+    title: plurals[t.type] ?? t.type,
+    items: ctx.extensions
+      .filter(({ entry }) => entry.type === t.type)
+      .map(({ entry }) => ({ name: entry.name, path: entryPath(entry), summary: entry.summary })),
+  }));
+---
+<article class="rules-page">
+  <h1>Extensions</h1>
+  {sections.map((section) => (
+    <section aria-labelledby={`extensions-${section.type}`}>
+      <h2 id={`extensions-${section.type}`}>{section.title}</h2>
+      {section.items.length > 0 ? <SearchableList label={`Search ${section.title.toLowerCase()}`} items={section.items} /> : <p>None yet.</p>}
+    </section>
+  ))}
+</article>

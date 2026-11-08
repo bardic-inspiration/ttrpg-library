@@ -8,7 +8,8 @@ import { dirname, join } from 'node:path';
 import { SITE_BASE } from '../../lib/site.ts';
 import { validateLibrary, type ValidationError, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
 import { REF_TOKEN, type Link } from '../validate/refs.ts';
-import { PROJECT_ROOT } from '../validate/schema.ts';
+import { PROJECT_ROOT, RULESETS_ROOT } from '../validate/schema.ts';
+import { ruleNames } from '../../lib/rules.ts';
 import { plainText } from '../validate/text.ts';
 import { isFlag, refOrTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
 
@@ -74,8 +75,8 @@ export const loadRegistryFile = async (): Promise<Registry> =>
   JSON.parse(await readFile(join(PROJECT_ROOT, 'config/types.json'), 'utf8')) as Registry;
 
 /** A ruleset's raw schemas, for the facets and search text that read them. */
-async function loadSchemas(ruleset: string): Promise<{ files: Map<string, Schema> }> {
-  const dir = join(PROJECT_ROOT, 'rulesets', ruleset, 'schemas');
+async function loadSchemas(ruleset: string, rulesetsRoot: string): Promise<{ files: Map<string, Schema> }> {
+  const dir = join(rulesetsRoot, ruleset, 'schemas');
   const files = new Map<string, Schema>();
   for (const file of (await readdir(dir)).filter((f) => f.endsWith('.schema.json'))) {
     files.set(file, JSON.parse(await readFile(join(dir, file), 'utf8')) as Schema);
@@ -144,11 +145,16 @@ const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
  * whenever validation fails, so a broken library never produces an index.
  */
 export async function buildIndex(root: string, options: BuildOptions = {}): Promise<BuildResult> {
-  const { errors, warnings, entries } = await validateLibrary(root, options);
+  const { errors, warnings, entries, rules } = await validateLibrary(root, options);
   if (errors.length > 0) return { errors, warnings, records: [], files: [], bundles: [] };
   const registry = options.registry ?? (await loadRegistryFile());
+  const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
 
-  const nameOf = new Map(entries.map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name]));
+  // A {ref:…} link reads as its target's name in search text, whether the target is an entry or a primitive.
+  const nameOf = new Map([
+    ...rules.flatMap((data) => [...ruleNames(data)]),
+    ...entries.map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name] as [string, string]),
+  ]);
   const schemaFiles = new Map<string, { files: Map<string, Schema> }>();
   const sorted = [...entries].sort(
     (a, b) => compare(a.entry.ruleset, b.entry.ruleset) || compare(a.entry.type, b.entry.type) || compare(a.entry.id, b.entry.id),
@@ -158,7 +164,7 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
   for (const item of sorted) {
     const { entry } = item;
     let loaded = schemaFiles.get(entry.ruleset);
-    if (!loaded) schemaFiles.set(entry.ruleset, (loaded = await loadSchemas(entry.ruleset)));
+    if (!loaded) schemaFiles.set(entry.ruleset, (loaded = await loadSchemas(entry.ruleset, rulesetsRoot)));
     const root = loaded.files.get(`${entry.type}.schema.json`) ?? {};
     const schemas: SchemaSet = { root, files: loaded.files };
     const config = registry[entry.ruleset]?.types[entry.type];

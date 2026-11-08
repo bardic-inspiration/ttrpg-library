@@ -271,6 +271,13 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A renamed type lists its earlier keys under `formerly` in the registry. The site builds redirect pages for the old gallery and detail URLs (keeping the query and fragment), and print and gallery queries read an old key as the current one. Entries and refs use only current keys. | P4, P9: one registry key covers every old URL | #223 |
 | The `item` type's display names are "Item" and "Items". | Match the key; items are still the SRD's magic items | #223 |
 | The decision record keeps `magic-item` in rows that describe what was decided under that name. | It is history, not a description of the current library | #223 |
+| Groups are a generic rules-data mechanism: any rules type may have `rules/<type>-groups.json`, and its members name a leaf group in `stats.group`. A union group may have a parent, which places it in that tree. | P4: equipment is the first user, not the only shape | #224 |
+| `rules/pages.json` blocks are prose, a type's primitives, or a group's tree; a type with groups is shown only through group blocks. Every primitive and group appears on exactly one page. | P2: a primitive with no page would have a link with nowhere to land | #224 |
+| A rules page's anchors are `<type>-<id>`. The Extensions page is `/<ruleset>/rules/extensions/`, so `extensions` is not a page id. | Anchors of two types on one page can't collide | #224 |
+| Every registered ruleset's rules data is validated, whether or not an entry uses it. | P2 | #224 |
+| A primitive's section renders its `stats` with the generic template's lines until its type gets a template; the generic lines render refs as links, for entries too. | P4: a new rules type renders with no code | #224 |
+| The validator and index build take a rulesets root and a registry, so tests run a fixture ruleset. | Rules data is proven before any real rules type exists | #224 |
+| Extension lists filter with a plain search box; rules pages join the header with the navigation task. | The layout and navigation are the UI's (#236, #237) | #224 |
 
 ### UI
 
