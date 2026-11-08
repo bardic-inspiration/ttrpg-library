@@ -37,9 +37,15 @@
         "poison"
       ],
       "conditions": [
-        "exhaustion",
-        "petrified",
-        "poisoned"
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "senses": {

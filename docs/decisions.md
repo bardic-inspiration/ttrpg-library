@@ -278,6 +278,10 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A primitive's section renders its `stats` with the generic template's lines until its type gets a template; the generic lines render refs as links, for entries too. | P4: a new rules type renders with no code | #224 |
 | The validator and index build take a rulesets root and a registry, so tests run a fixture ruleset. | Rules data is proven before any real rules type exists | #224 |
 | Extension lists filter with a plain search box; rules pages join the header with the navigation task. | The layout and navigation are the UI's (#236, #237) | #224 |
+| A condition card shows its summary like other cards; its effect names aren't a card field. | Showing them would need a facet of effect names, which filters nothing useful | #225 |
+| A rules extension type has no `summaryField` and no `gapBuckets`; its registry entry sorts by name. | It has no key stat, and gap fill never adds one | #225 |
+| The condition-immunity facet waits for the filter tree, and SRD coverage of primitives for a later rules task. | Each needs machinery the conditions don't (a facet over refs; tierless manifest records) | #225 |
+| Contagion's Poisoned mentions are linked with the conditions, as the spec's case; the link pass links every other mention. | Proves the case without starting the pass early (#228) | #225 |
 
 ### UI
 

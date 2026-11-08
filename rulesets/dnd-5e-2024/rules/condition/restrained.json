@@ -1,0 +1,21 @@
+{
+  "type": "condition",
+  "id": "restrained",
+  "name": "Restrained",
+  "stats": {
+    "effects": [
+      {
+        "name": "Speed 0",
+        "text": "Your Speed is 0 and can't increase."
+      },
+      {
+        "name": "Attacks Affected",
+        "text": "Attack rolls against you have Advantage, and your attack rolls have Disadvantage."
+      },
+      {
+        "name": "Saving Throws Affected",
+        "text": "You have Disadvantage on Dexterity saving throws."
+      }
+    ]
+  }
+}

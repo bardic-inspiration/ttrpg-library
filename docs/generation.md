@@ -15,7 +15,7 @@ GitHub issues are the request queue. Issue templates set blank issues off, so
 every issue starts in a lane.
 
 - **Content request** (`.github/ISSUE_TEMPLATE/content-request.yml`, label
-  `request`): type (creature, item, or spell), count (a 1–10 dropdown,
+  `request`): type (condition, creature, item, or spell), count (a 1–10 dropdown,
   since issue forms have no number field; a free-form request may ask for
   more), brief, tags (one `key: value` per line, comma-separated for lists),
   and ruleset. Blank fields take the values in `config/defaults.json`.
@@ -210,6 +210,8 @@ on-demand prompts are the scheduled prompt with inputs added.
 
 ### Gap buckets
 
+Gap fill never adds a rules extension, so a rules type that takes extensions,
+such as `condition`, has no `gapBuckets`; its entries come only from requests.
 A type's `gapBuckets` in `config/types.json` says how gap fill partitions it: a
 list of axes, each partitioning one of the type's facets. The buckets are every
 combination of one value per axis, so one axis partitions the type and two

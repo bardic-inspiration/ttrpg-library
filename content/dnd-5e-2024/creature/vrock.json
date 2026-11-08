@@ -44,7 +44,9 @@
         "poison"
       ],
       "conditions": [
-        "poisoned"
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "senses": {

@@ -31,12 +31,24 @@
     },
     "immunities": {
       "conditions": [
-        "blinded",
-        "charmed",
-        "deafened",
-        "frightened",
-        "stunned",
-        "unconscious"
+        {
+          "ref": "condition/blinded"
+        },
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/deafened"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/stunned"
+        },
+        {
+          "ref": "condition/unconscious"
+        }
       ]
     },
     "senses": {

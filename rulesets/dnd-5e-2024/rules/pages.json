@@ -1,0 +1,12 @@
+[
+  {
+    "id": "conditions",
+    "title": "Conditions",
+    "blocks": [
+      {
+        "kind": "primitives",
+        "type": "condition"
+      }
+    ]
+  }
+]

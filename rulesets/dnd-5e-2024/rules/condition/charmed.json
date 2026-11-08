@@ -1,0 +1,17 @@
+{
+  "type": "condition",
+  "id": "charmed",
+  "name": "Charmed",
+  "stats": {
+    "effects": [
+      {
+        "name": "Can't Harm the Charmer",
+        "text": "You can't attack the charmer or target the charmer with damaging abilities or magical effects."
+      },
+      {
+        "name": "Social Advantage",
+        "text": "The charmer has Advantage on any ability check to interact with you socially."
+      }
+    ]
+  }
+}

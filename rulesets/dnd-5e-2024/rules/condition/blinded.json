@@ -1,0 +1,17 @@
+{
+  "type": "condition",
+  "id": "blinded",
+  "name": "Blinded",
+  "stats": {
+    "effects": [
+      {
+        "name": "Can't See",
+        "text": "You can't see and automatically fail any ability check that requires sight."
+      },
+      {
+        "name": "Attacks Affected",
+        "text": "Attack rolls against you have Advantage, and your attack rolls have Disadvantage."
+      }
+    ]
+  }
+}

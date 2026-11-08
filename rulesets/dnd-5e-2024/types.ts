@@ -70,7 +70,7 @@ export interface CreatureStats {
   skills?: Record<string, Proficiency | { proficiency?: Proficiency; adjust: number }>;
   vulnerabilities?: string[];
   resistances?: string[];
-  immunities?: { damage?: string[]; conditions?: string[] };
+  immunities?: { damage?: string[]; conditions?: { ref: string; note?: string }[] };
   gear?: RefOrText[];
   senses?: { darkvision?: number; blindsight?: number; tremorsense?: number; truesight?: number; note?: string };
   languages: { spoken: string[]; understood?: string[]; telepathy?: number; note?: string };
@@ -204,7 +204,6 @@ export interface Tables {
   abilityNames: Record<Ability, string>;
   skills: Record<string, Ability>;
   damageTypes: string[];
-  conditions: string[];
   creatureTypes: string[];
 }
 
@@ -241,3 +240,8 @@ export interface DerivedCreature {
 
 /** The action lists `<actionList>` in docs/rulesets.md#the-ruleset-module. */
 export const ACTION_LISTS = ['traits', 'actions', 'bonusActions', 'reactions'] as const;
+
+/** A condition's stats (schemas/condition.schema.json), a primitive's or an extension's. */
+export interface ConditionStats {
+  effects: { name: string; text: string }[];
+}

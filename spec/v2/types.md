@@ -19,9 +19,9 @@ P4 (a new type or extension is data, not code), and P5 (SRD fidelity).
   authored as entries ([Entry envelope](../../docs/content-model.md#entry-envelope)),
   registered in `config/types.json`, and shown as cards and detail pages
   ([Pages and navigation](../../docs/site.md#pages-and-navigation)).
-- Conditions, damage types, skills, creature types, sizes, and abilities are
-  closed lists in `rulesets/dnd-5e-2024/tables.json` and the
-  `common.schema.json` enums.
+- Damage types, skills, creature types, sizes, and abilities are closed
+  lists in `rulesets/dnd-5e-2024/tables.json` and the `common.schema.json`
+  enums. Conditions are a rules type ([Conditions](../../docs/rulesets.md#conditions)).
 - An item's base item is a plain string (`baseItem`).
 - Adding a type: [Extending](../../docs/rulesets.md#extending).
 
@@ -46,7 +46,6 @@ skill, a content PR).
 | Rules type | Primitives | Extensions in v2 | Rules page |
 |---|---|---|---|
 | Glossary term | Every SRD Rules Glossary term | None | Glossary |
-| Condition | The SRD conditions | Authorable | Conditions |
 | Equipment | The SRD weapons, armor, tools, adventuring gear, and mounts and vehicles, with weapon properties and mastery properties | Authorable | One per category, and Equipment for the chapter's general rules |
 
 Abilities, damage types, skills, creature types, and sizes stay closed lists
@@ -123,7 +122,6 @@ Proficiency" or "Armor Training".
 | Page | Shows |
 |---|---|
 | Glossary | The Glossary Conventions and abbreviations as its intro, then every glossary term. Each condition appears at its alphabetical place as "Name [Condition]", linked to its section on the Conditions page; it isn't stored twice. |
-| Conditions | Every condition |
 | Equipment | The chapter's general rules: Coins, Selling Equipment, Lifestyle Expenses, Food, Drink, and Lodging, Hirelings, Spellcasting Services, Magic Items, Crafting Nonmagical Items, Brewing Potions of Healing, and Scribing Spell Scrolls, with their tables, plus links to the five category pages |
 | Weapons | The chapter's weapon text, Properties, Mastery Properties, and the weapons tree |
 | Armor | The chapter's armor text, and the armor tree |
@@ -174,26 +172,9 @@ Each type's stored inputs, derived values, consistency checks, guideline,
 link fields and labels, registry facets, and gap buckets. A field that takes
 a link to a rules type takes a typed ref: a `Ref` whose key pattern allows
 only that type, defined in `common.schema.json`, so a link of the wrong type
-fails the schema. Gap fill never adds a rules extension; a custom condition
-or equipment comes only from a request, so neither type has gap buckets.
-
-#### Condition
-
-- **Inputs:** `effects`, a list of at least one `{ name, text }`, `text`
-  being `Text`. The template opens with "While you have the <Name>
-  condition, you experience the following effect." ("effects." for more
-  than one), the sentence all 15 SRD conditions open with, and prints each
-  effect as a bold-titled paragraph: "**Speed 0.** Your Speed is 0 and can't
-  increase."
-- **Derived:** nothing.
-- **Checks:** none beyond the schema.
-- **Guideline:** `condition.md`: a custom condition is a state several
-  entries share, not a one-off effect; effects are titled and written in
-  the SRD's second person; it builds on SRD conditions by linking them
-  ("You have the Incapacitated condition") rather than restating them.
-- **Links and labels:** `{ref:…}` tokens in effect text read "References" /
-  "Referenced by".
-- **Registry:** no facets beyond the type; the card shows the effect names.
+fails the schema (built for conditions as `ConditionRef`). Gap fill never
+adds a rules extension; custom equipment comes only from a request, so it
+has no gap buckets.
 
 #### Glossary term
 
@@ -320,13 +301,10 @@ and every list of items.
 
 #### Creature
 
-Two fields change:
-
-- **`immunities.conditions`** takes typed refs to conditions in place of the
-  condition enum. The Immunities line prints the same words, each linked.
-  The labels are "Immune to" / "Immune creatures", and the field becomes an
-  enum facet, valued by key and shown by name (the UI's Creature ›
-  Immunities › Conditions).
+- **`immunities.conditions`** holds typed refs to conditions (built:
+  [Conditions](../../docs/rulesets.md#conditions)). It becomes an enum
+  facet, valued by key and shown by name (the UI's Creature › Immunities ›
+  Conditions), with the filter tree (#235).
 - **`gear`** stays `RefOrText`, and a ref may target equipment as well as an
   item. A gear ref may add a `count` of 2 or more, printed after the name
   with an "s" added: `{ "ref": "equipment/javelin", "count": 6 }` reads
@@ -345,16 +323,10 @@ rules text isn't carpeted with links to "Advantage" and "Bonus Action".
 
 ## Cases
 
-- `creature/air-elemental`: its condition immunities become links to
-  `condition/…` primitives.
 - `item/adamantine-armor`: its base item "Any Medium or Heavy, Except
   Hide Armor" names two armor groups and excludes one item.
 - `item/dragon-slayer`: its base item "Any Simple or Martial" names two
   weapon groups.
-- `spell/contagion`: rules text naming the Poisoned condition links to the
-  Poisoned primitive on the Conditions page: "have the
-  {ref:condition/poisoned} condition", "While {ref:condition/poisoned}",
-  and "the {ref:condition/poisoned} target" all read as printed.
 - `item/flame-tongue`: its base item "Any Melee Weapon" names one
   union group, so the category's noun follows its qualifier.
 - `item/frost-brand`: its base item, a list of six weapons, is a
@@ -368,9 +340,6 @@ rules text isn't carpeted with links to "Advantage" and "Bonus Action".
 
 ## Migration
 
-- **Conditions:** the `Condition` enum in `common.schema.json` and the
-  `conditions` table become the condition primitives, and a creature's
-  `immunities.conditions` takes typed refs to them.
 - **Base items:** every `baseItem` string becomes its `any` or `oneOf`
   form, which must render the same words.
 - **Creature gear** naming equipment becomes refs, with a `count` where the

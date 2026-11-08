@@ -48,10 +48,18 @@
         "lightning"
       ],
       "conditions": [
-        "frightened",
-        "grappled",
-        "paralyzed",
-        "restrained"
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/restrained"
+        }
       ]
     },
     "senses": {

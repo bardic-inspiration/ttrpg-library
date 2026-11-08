@@ -35,13 +35,27 @@
         "slashing"
       ],
       "conditions": [
-        "charmed",
-        "deafened",
-        "exhaustion",
-        "frightened",
-        "grappled",
-        "prone",
-        "restrained"
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/deafened"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        }
       ]
     },
     "senses": {

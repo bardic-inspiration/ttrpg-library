@@ -30,18 +30,24 @@
       "description": "The SRD damage types.",
       "enum": ["acid", "bludgeoning", "cold", "fire", "force", "lightning", "necrotic", "piercing", "poison", "psychic", "radiant", "slashing", "thunder"]
     },
-    "Condition": {
-      "description": "The SRD conditions.",
-      "enum": ["blinded", "charmed", "deafened", "exhaustion", "frightened", "grappled", "incapacitated", "invisible", "paralyzed", "petrified", "poisoned", "prone", "restrained", "stunned", "unconscious"]
-    },
     "Ref": {
       "description": "A link to a library entry. It renders the target's current name, linked to its page.",
       "type": "object",
       "additionalProperties": false,
       "required": ["ref"],
       "properties": {
-        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|item|spell)/[a-z0-9-]+$" },
+        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|item|spell|condition)/[a-z0-9-]+$" },
         "note": { "description": "A qualifier printed in parentheses after the target's name, such as \"level 5 version\".", "type": "string", "minLength": 1 }
+      }
+    },
+    "ConditionRef": {
+      "description": "A link to a condition, an SRD primitive or a custom extension (docs/rulesets.md#rules-data). A typed ref: it allows only condition keys. A `note` prints in parentheses after the name: \"Charmed (with Mind Blank)\".",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The condition, as condition/<id>.", "type": "string", "pattern": "^condition/[a-z0-9]+(-[a-z0-9]+)*$" },
+        "note": { "description": "A qualifier printed in parentheses after the name.", "type": "string", "minLength": 1 }
       }
     },
     "RefOrText": { "description": "A ref to a library entry, or a plain string for SRD content not in the library.", "anyOf": [{ "$ref": "#/$defs/Ref" }, { "type": "string", "minLength": 1 }] },

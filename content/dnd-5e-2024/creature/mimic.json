@@ -36,7 +36,9 @@
         "acid"
       ],
       "conditions": [
-        "prone"
+        {
+          "ref": "condition/prone"
+        }
       ]
     },
     "senses": {

@@ -34,12 +34,24 @@
         "psychic"
       ],
       "conditions": [
-        "charmed",
-        "exhaustion",
-        "frightened",
-        "paralyzed",
-        "petrified",
-        "poisoned"
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "senses": {

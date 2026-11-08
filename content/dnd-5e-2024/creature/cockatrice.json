@@ -28,7 +28,9 @@
     },
     "immunities": {
       "conditions": [
-        "petrified"
+        {
+          "ref": "condition/petrified"
+        }
       ]
     },
     "senses": {

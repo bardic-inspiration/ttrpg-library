@@ -4,8 +4,9 @@
 
 Everything specific to a ruleset: its schemas, rules tables, derived values,
 text tokens, consistency checks, and how its types print. The one ruleset is
-`dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0), with three types: `creature`,
-`item`, and `spell`. What every entry shares is in
+`dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0), with three content types,
+`creature`, `item`, and `spell`, and one rules type, `condition`. What every
+entry shares is in
 [content-model.md](content-model.md).
 
 ## Behavior
@@ -58,9 +59,10 @@ import this module, so each derived value is computed in exactly one place. The
 validator loads a ruleset by folder name, so an entry whose `ruleset` has no
 folder or registry entry fails as unknown. A type with no formulas derives `{}`.
 
-`dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, a magic
+`dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, an
 item's `spells[].spell`) are "Casts" / "Cast by"; creature `gear` is "Gear" /
-"Carried by"; any other field, including a `{ref:…}` token in text, is
+"Carried by"; a creature's condition immunities are "Immune to" / "Immune
+creatures"; any other field, including a `{ref:…}` token in text, is
 "References" / "Referenced by".
 
 ### Rules data
@@ -143,9 +145,9 @@ The formulas are in `derive.ts` and the tables, including the SRD CR table, in
 ### Shared definitions
 
 `schemas/common.schema.json` holds the definitions the type schemas share:
-abilities, dice, damage, proficiency levels, adjustments, damage types,
-conditions, refs (`Ref`, `RefOrText`), rules text (`Text`), and the embedded
-`StatBlock`. Each definition's shape and meaning is in its `description`.
+abilities, dice, damage, proficiency levels, adjustments, damage types, refs
+(`Ref`, `RefOrText`, and the typed `ConditionRef`, which allows only condition
+keys), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
 
 ### Text tokens
 
@@ -183,6 +185,12 @@ stat block.
 
 `schemas/creature.schema.json` describes each field. The stat block follows
 SRD 5.2:
+
+- **Condition immunities are links.** The Immunities line prints damage
+  types, then a semicolon, then each condition immunity as the condition's
+  name linked to its section on the Conditions page, with a ref's `note` in
+  parentheses: "Poison; Charmed (with Mind Blank), Exhaustion"
+  ([Conditions](#conditions)).
 
 - **Attack and save lines are generated** from structured fields, never
   written as prose: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2)
@@ -261,6 +269,28 @@ SRD 5.2:
   ("1d3").
 - The spell list renders each spell with its cost ("1 charge", or "1–3
   charges" for a variable cost) and its authored DC or attack bonus.
+
+### Conditions
+
+`condition` is a rules type that takes extensions
+([Rules data](#rules-data)). The 15 SRD conditions are primitives in
+`rules/condition/`, shown on the Conditions page (`rules/pages.json`), and
+there is no condition enum or table. A custom condition is an entry under
+`content/dnd-5e-2024/condition/`, authored from a request like any content,
+shown as a card, and listed on the Conditions page and the Extensions page.
+
+`schemas/condition.schema.json` stores only `effects`, each a `name` and its
+rules `text`. The template opens with the sentence every SRD condition
+prints, worded from the name and the number of effects ("While you have the
+Poisoned condition, you experience the following effect."), then prints each
+effect as a bold-italic titled paragraph: "***Speed 0.*** Your Speed is 0 and
+can't increase." A condition's text links the other conditions it names
+("You have the Incapacitated condition"). Conditions derive nothing and have
+no consistency checks, facets, or gap buckets.
+
+A field that takes a condition takes a `ConditionRef`: a creature's
+`immunities.conditions`, where a qualifier goes in the ref's `note`
+("Charmed (with Mind Blank)").
 
 ### Spells
 

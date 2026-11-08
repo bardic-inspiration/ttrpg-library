@@ -1,0 +1,21 @@
+{
+  "type": "condition",
+  "id": "invisible",
+  "name": "Invisible",
+  "stats": {
+    "effects": [
+      {
+        "name": "Surprise",
+        "text": "If you're Invisible when you roll Initiative, you have Advantage on the roll."
+      },
+      {
+        "name": "Concealed",
+        "text": "You aren't affected by any effect that requires its target to be seen unless the effect's creator can somehow see you. Any equipment you are wearing or carrying is also concealed."
+      },
+      {
+        "name": "Attacks Affected",
+        "text": "Attack rolls against you have Disadvantage, and your attack rolls have Advantage. If a creature can somehow see you, you don't gain this benefit against that creature."
+      }
+    ]
+  }
+}

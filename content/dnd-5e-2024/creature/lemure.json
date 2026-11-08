@@ -37,9 +37,15 @@
         "poison"
       ],
       "conditions": [
-        "charmed",
-        "frightened",
-        "poisoned"
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
       ]
     },
     "senses": {

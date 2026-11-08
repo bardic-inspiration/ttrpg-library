@@ -3,5 +3,15 @@
   "label": "D&D 5e (SRD 5.2)",
   "srdVersion": "5.2",
   "attribution": "srd-5.2",
-  "types": ["creature", "item", "spell"]
+  "types": [
+    "creature",
+    "item",
+    "spell"
+  ],
+  "rules": [
+    {
+      "type": "condition",
+      "extensions": true
+    }
+  ]
 }

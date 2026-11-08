@@ -41,8 +41,12 @@
         "lightning"
       ],
       "conditions": [
-        "deafened",
-        "exhaustion"
+        {
+          "ref": "condition/deafened"
+        },
+        {
+          "ref": "condition/exhaustion"
+        }
       ]
     },
     "senses": {

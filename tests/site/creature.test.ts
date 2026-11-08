@@ -289,9 +289,13 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     expect(sizeTypeLine(s)).toBe('Medium Swarm of Tiny Beasts, Unaligned');
     expect(sizeTypeLine({ ...s, creatureType: 'undead', alignment: 'neutral evil' })).toBe('Medium Swarm of Tiny Undead, Neutral Evil');
   });
-  it('prints a qualified condition immunity as written (#166)', async () => {
-    const { s } = await build({ immunities: { conditions: ['Charmed (except from its vampire master)'] } });
-    expect(defenseLines(s)).toEqual([{ label: 'Immunities', value: 'Charmed (except from its vampire master)' }]);
+  it('prints condition immunities as links, a qualifier as the ref’s note (#166, docs/rulesets.md#creatures)', async () => {
+    const { s } = await build({
+      immunities: { damage: ['poison'], conditions: [{ ref: 'condition/charmed', note: 'except from its vampire master' }, { ref: 'condition/poisoned' }] },
+    });
+    expect(defenseLines(s)).toEqual([
+      { label: 'Immunities', value: 'Poison; {ref:condition/charmed} (except from its vampire master), {ref:condition/poisoned}', markdown: true },
+    ]);
   });
   it('adds a skill adjust to the derived bonus (#166)', async () => {
     const { s, d } = await build({ skills: { stealth: { proficiency: 'proficient', adjust: 1 } } });

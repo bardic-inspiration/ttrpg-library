@@ -1,0 +1,19 @@
+---
+// The dnd-5e-2024 condition card (registry template `condition-card`, docs/rulesets.md#conditions,
+// docs/site.md#templates), for a custom condition: name, then its effects as the
+// Conditions page prints an SRD one.
+import type { ConditionStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import type { TemplateProps } from '../../lib/template';
+import ConditionEffects from './parts/ConditionEffects.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, paths, mode, level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+---
+<StatBlock name={`${entry.name} condition`} type="condition" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle="Condition" level={level} />
+  <ConditionEffects name={entry.name} stats={entry.stats as ConditionStats} refs={refs} />
+</StatBlock>

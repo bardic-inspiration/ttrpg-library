@@ -1,0 +1,29 @@
+---
+// A condition's rules (docs/rulesets.md#conditions): the opening sentence, then each effect as a
+// bold-italic titled paragraph, as SRD 5.2 prints them. Shared by the condition
+// card and a condition's section on the Conditions page.
+import type { ConditionStats } from '../../../../../rulesets/dnd-5e-2024/types.ts';
+import { conditionIntro } from '../../../lib/condition';
+import type { TextRefs } from '../../../lib/markdown';
+import RulesText from './RulesText.astro';
+
+interface Props {
+  name: string;
+  stats: ConditionStats;
+  refs?: TextRefs;
+}
+
+const { name, stats, refs } = Astro.props;
+---
+<div class="condition-effects">
+  <p>{conditionIntro(name, stats)}</p>
+  {stats.effects.map((effect) => <RulesText label={effect.name} text={effect.text} refs={refs} />)}
+</div>
+
+<style>
+  @layer components {
+    .condition-effects > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+  }
+</style>

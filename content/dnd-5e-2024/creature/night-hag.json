@@ -40,7 +40,9 @@
     ],
     "immunities": {
       "conditions": [
-        "charmed"
+        {
+          "ref": "condition/charmed"
+        }
       ]
     },
     "senses": {

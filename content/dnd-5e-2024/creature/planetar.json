@@ -47,9 +47,15 @@
     ],
     "immunities": {
       "conditions": [
-        "charmed",
-        "exhaustion",
-        "frightened"
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        }
       ]
     },
     "senses": {

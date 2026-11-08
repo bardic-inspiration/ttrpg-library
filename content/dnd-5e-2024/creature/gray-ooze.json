@@ -36,14 +36,30 @@
     ],
     "immunities": {
       "conditions": [
-        "blinded",
-        "charmed",
-        "deafened",
-        "exhaustion",
-        "frightened",
-        "grappled",
-        "prone",
-        "restrained"
+        {
+          "ref": "condition/blinded"
+        },
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/deafened"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        }
       ]
     },
     "senses": {

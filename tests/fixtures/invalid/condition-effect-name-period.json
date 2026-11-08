@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "condition",
+  "id": "mired",
+  "name": "Mired",
+  "summary": "Thick mud drags at your legs, slowing you and spoiling your footing.",
+  "description": "Bog spirits leave their victims knee-deep in mud that clings long after the ground is dry.",
+  "stats": {
+    "effects": [
+      {
+        "name": "Slowed.",
+        "text": "Your Speed is halved."
+      },
+      {
+        "name": "Unsteady",
+        "text": "You have Disadvantage on Dexterity saving throws. If you're also {ref:condition/restrained}, you can't stand up."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-08",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}
