@@ -6,7 +6,13 @@
   "summary": "A Shield that grants Advantage against spells and imposes Disadvantage on spell attacks against you.",
   "stats": {
     "category": "armor",
-    "baseItem": "Shield",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/shield"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

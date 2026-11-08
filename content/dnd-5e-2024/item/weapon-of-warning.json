@@ -6,7 +6,16 @@
   "summary": "A weapon that warns you of danger, wakes you and allies, and grants Advantage on Initiative.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Simple or Martial",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/simple-weapons"
+        },
+        {
+          "ref": "equipment/martial-weapons"
+        }
+      ]
+    },
     "rarity": "uncommon",
     "attunement": {
       "required": true

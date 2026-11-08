@@ -6,7 +6,16 @@
   "summary": "A magic weapon with a bonus to attack and damage rolls set by its rarity.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Simple or Martial",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/simple-weapons"
+        },
+        {
+          "ref": "equipment/martial-weapons"
+        }
+      ]
+    },
     "rarity": "varies",
     "rarityVariants": [
       {

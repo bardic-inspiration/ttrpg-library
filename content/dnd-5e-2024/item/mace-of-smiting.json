@@ -6,7 +6,13 @@
   "summary": "A +1 mace, +3 against Constructs, that can destroy them with a critical hit.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Mace",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/mace"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": false

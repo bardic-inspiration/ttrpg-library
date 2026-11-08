@@ -1,0 +1,28 @@
+{
+  "type": "equipment",
+  "id": "longsword",
+  "name": "Longsword",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "weapon": {
+      "damage": {
+        "dice": "1d8",
+        "type": "slashing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/versatile"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/sap"
+      },
+      "versatile": "1d10"
+    }
+  }
+}

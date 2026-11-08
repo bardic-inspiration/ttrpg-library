@@ -1,0 +1,33 @@
+{
+  "type": "equipment",
+  "id": "pike",
+  "name": "Pike",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 18,
+    "weapon": {
+      "damage": {
+        "dice": "1d10",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/heavy"
+        },
+        {
+          "ref": "weapon-property/reach"
+        },
+        {
+          "ref": "weapon-property/two-handed"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/push"
+      }
+    }
+  }
+}

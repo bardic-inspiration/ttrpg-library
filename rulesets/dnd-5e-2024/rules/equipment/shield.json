@@ -1,0 +1,16 @@
+{
+  "type": "equipment",
+  "id": "shield",
+  "name": "Shield",
+  "stats": {
+    "group": "shields",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 6,
+    "armor": {
+      "ac": 2
+    }
+  }
+}

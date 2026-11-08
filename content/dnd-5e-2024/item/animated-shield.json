@@ -6,7 +6,13 @@
   "summary": "A Shield that animates to hover and protect you, leaving your hands free.",
   "stats": {
     "category": "armor",
-    "baseItem": "Shield",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/shield"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

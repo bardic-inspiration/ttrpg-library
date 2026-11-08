@@ -1,0 +1,38 @@
+{
+  "type": "equipment",
+  "id": "hand-crossbow",
+  "name": "Hand Crossbow",
+  "stats": {
+    "group": "martial-ranged-weapons",
+    "cost": {
+      "amount": 75,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/ammunition"
+        },
+        {
+          "ref": "weapon-property/light"
+        },
+        {
+          "ref": "weapon-property/loading"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/vex"
+      },
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "ammunition": "Bolt"
+    }
+  }
+}

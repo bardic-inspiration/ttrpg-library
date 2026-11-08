@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "disguise-kit",
+  "name": "Disguise Kit",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "tool": {
+      "ability": "cha",
+      "utilize": "Apply makeup (DC 10)",
+      "craft": "{ref:equipment/costume}"
+    }
+  }
+}

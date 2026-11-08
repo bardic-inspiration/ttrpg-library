@@ -1,0 +1,31 @@
+{
+  "type": "equipment",
+  "id": "javelin",
+  "name": "Javelin",
+  "stats": {
+    "group": "simple-melee-weapons",
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/thrown"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/slow"
+      },
+      "range": {
+        "normal": 30,
+        "long": 120
+      }
+    }
+  }
+}

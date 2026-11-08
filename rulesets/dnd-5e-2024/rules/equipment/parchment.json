@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "parchment",
+  "name": "Parchment",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    },
+    "text": "One sheet of Parchment can hold about 250 handwritten words."
+  }
+}

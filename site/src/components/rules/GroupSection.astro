@@ -2,7 +2,7 @@
 // A group's section on its rules page (docs/site.md#rules-pages): its anchored heading with its
 // note, its opening text, its members (a leaf group) or the groups nested in
 // it, and its links. A union group lists its members as links instead.
-import { anchorId, ruleKey, type GroupTree } from '../../../../lib/rules';
+import { anchorId, ruleKey, sortMembers, type GroupTree } from '../../../../lib/rules';
 import { renderMarkdown } from '../../lib/markdown';
 import type { RulesContext } from '../../lib/rules';
 import { url } from '../../lib/url';
@@ -23,7 +23,7 @@ const key = ruleKey({ type: tree.type, id });
 const refs = { names: ctx.names, ruleset: ctx.data.ruleset, paths: ctx.paths };
 const primitives = ctx.data.primitives.filter((p) => p.type === tree.type);
 const children = tree.children(id);
-const members = tree.isLeaf(id) ? tree.membersOf(id, primitives) : [];
+const members = tree.isLeaf(id) ? sortMembers(group, tree.membersOf(id, primitives), ctx.derive) : [];
 const unionMembers = group.union ? tree.allMembers(id, primitives) : [];
 ---
 <section class="rule-group" id={anchorId(key)} data-type={tree.type}>

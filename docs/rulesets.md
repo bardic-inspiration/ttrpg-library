@@ -5,8 +5,8 @@
 Everything specific to a ruleset: its schemas, rules tables, derived values,
 text tokens, consistency checks, and how its types print. The one ruleset is
 `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0), with three content types,
-`creature`, `item`, and `spell`, and one rules type, `condition`. What every
-entry shares is in
+`creature`, `item`, and `spell`, and the rules types `condition`, `equipment`,
+`weapon-property`, and `mastery-property`. What every entry shares is in
 [content-model.md](content-model.md).
 
 ## Behavior
@@ -43,7 +43,7 @@ adding a ruleset is adding a folder:
 |---|---|
 | `ruleset.json` | ID, label, SRD version, attribution key, list of types, and the `rules` types ([Rules data](#rules-data)) |
 | `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
-| `derive.ts` | Pure functions, one per type, computing derived values from `stats` |
+| `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`) |
 | `tokens.ts` | Text tokens that render derived values inside prose |
 | `checks.ts` | Consistency checks a schema can't express |
 | `refs.ts` | `refLabels(type, path)`: how detail pages name a ref from each end |
@@ -58,11 +58,16 @@ The validator, the index builder, the site templates, and the exporters all
 import this module, so each derived value is computed in exactly one place. The
 validator loads a ruleset by folder name, so an entry whose `ruleset` has no
 folder or registry entry fails as unknown. A type with no formulas derives `{}`.
+`derive` and `check` also receive the ruleset's rules data, for values and
+checks that read it: equipment's category comes from its group, and an
+item's base item is checked against the equipment groups.
 
 `dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, an
 item's `spells[].spell`) are "Casts" / "Cast by"; creature `gear` is "Gear" /
 "Carried by"; a creature's condition immunities are "Immune to" / "Immune
-creatures"; any other field, including a `{ref:…}` token in text, is
+creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
+`properties` and `mastery` are "Properties" / "Weapons" and "Mastery" /
+"Weapons"; any other field, including a `{ref:…}` token in text, is
 "References" / "Referenced by".
 
 ### Rules data
@@ -92,6 +97,10 @@ from `types`, with whether it takes extensions:
 - **Link targets.** A primitive or group is linked like an entry, by a ref
   object or a `{ref:…}` token, and the link renders as its name, linked to
   its anchor on its rules page ([References](content-model.md#references)).
+- **Rules data links only to rules data.** A primitive's, group's, or page's
+  link to a content entry is an error, since the ruleset would depend on the
+  library; a mention of an entry in rules prose stays plain text. A page's
+  links must resolve to a primitive or group.
 
 `lib/rules.ts` places rules data on pages and is shared by the validator
 (`scripts/validate/rules.ts`) and the site (`site/src/lib/rules.ts`).
@@ -100,9 +109,11 @@ from `types`, with whether it takes extensions:
 
 A rules type may group its primitives in `rules/<type>-groups.json`
 (`schemas/rules-groups.schema.json`): a list, in page order, of groups with
-an `id`, a `name`, and optionally a `qualifier` (a short form), a `parent`,
-a `note` printed in parentheses after the heading, and `text`, prose that
-opens the group's section. A group's key is `<type>/<id>`, a link target
+an `id`, a `name`, and optionally a `qualifier` (a short form), a `noun` (a
+category's singular noun), a `parent`, a `note` printed in parentheses after
+the heading, `text`, prose that opens the group's section, and `sortBy`,
+paths into each member's stats and derived values that order its members
+(by name otherwise). A group's key is `<type>/<id>`, a link target
 like a primitive's.
 
 - A group with no `parent` is a category. Parents must exist and never loop.
@@ -122,7 +133,7 @@ rules pages in order. Each has an `id`, its URL segment, a `title`, and
 
 | Block | Shows |
 |---|---|
-| `{ "kind": "prose", "title", "text", "sections" }` | SRD chapter text that isn't a primitive, word for word, with nested sections |
+| `{ "kind": "prose", "title", "text", "sections" }` | SRD chapter text that isn't a primitive, word for word, with nested sections; text that opens a page has no title |
 | `{ "kind": "primitives", "type" }` | Every primitive of a type that has no groups, by name |
 | `{ "kind": "group", "group": "<type>/<id>" }` | A group's tree: its section, then its members (a leaf) or the groups nested in it, with union groups last |
 
@@ -259,7 +270,8 @@ SRD 5.2:
 
 `schemas/item.schema.json` describes each field. How the card reads:
 
-- The subtitle reads the category, then the rarity in title case ("Very
+- The subtitle reads the category, the base item in parentheses for armor
+  and weapons, then the rarity in title case ("Very
   Rare"), with `varies` as "Rarity Varies". An item with `rarityVariants`
   prints them instead, as an English list joined by "or": "Uncommon (+1), Rare
   (+2), or Very Rare (+3)". `rarity` stays `varies`, so the gallery facet,
@@ -269,6 +281,76 @@ SRD 5.2:
   ("1d3").
 - The spell list renders each spell with its cost ("1 charge", or "1–3
   charges" for a variable cost) and its authored DC or attack bonus.
+
+**Base items.** `baseItem` is links to equipment, and the template words
+them, so every base item the SRD prints reads word for word:
+
+- `oneOf` lists items, printed as an English list joined by "or": "Glaive,
+  Greatsword, Longsword, or Scimitar", or "Shield" alone.
+- `any` lists groups or items with variants, printed "Any", then each
+  target's `qualifier` (a group's short form) or name, joined by "or". When
+  its only target is a group, the category's `noun` follows: "Any Melee
+  Weapon". `except` adds ", Except" and the items it leaves out, joined by
+  "and": "Any Medium or Heavy, Except Hide Armor".
+
+Each qualifier and name links to its anchor on the equipment pages; "Any",
+"or", and "Except" are plain. The item's detail page lists them as "Base
+item", and each group or item lists the items built on it as "Base of" (only
+those that name it, not those that name a group it belongs to).
+
+### Equipment
+
+`equipment` is a rules type that takes extensions ([Rules data](#rules-data)).
+The SRD's 180 weapons, armor, tools, pieces of adventuring gear, and mounts
+and vehicles are primitives in `rules/equipment/`; custom equipment is an
+entry under `content/dnd-5e-2024/equipment/`, authored from a request and shown
+as a card. Weapon properties and mastery properties are two primitive-only
+rules types, `weapon-property` and `mastery-property`, with keys of their own
+so the Ammunition property doesn't collide with the Ammunition gear.
+
+**Groups** (`rules/equipment-groups.json`, [Rules groups](#rules-groups)):
+
+| Category (noun) | Groups (qualifier) |
+|---|---|
+| Weapons ("Weapon") | Simple Weapons (Simple), with Simple Melee Weapons and Simple Ranged Weapons; Martial Weapons (Martial), with Martial Melee and Martial Ranged Weapons; and the unions Melee Weapons (Melee) and Ranged Weapons (Ranged) |
+| Armor ("Armor") | Light Armor (Light), Medium Armor (Medium), Heavy Armor (Heavy), each printed by base AC then cost, and Shields; each with its don and doff time as its note |
+| Tools | Artisan's Tools, Other Tools |
+| Adventuring Gear | none: the category is its own leaf |
+| Mounts and Vehicles | Mounts and Other Animals; Tack, Harness, and Drawn Vehicles; Airborne and Waterborne Vehicles |
+
+The Shield group is "Shields", because the Shield is equipment of the same
+type and names are unique.
+
+**Pages.** The Equipment page holds the chapter's general rules (Coins,
+Selling Equipment, Lifestyle Expenses, Food, Drink, and Lodging, Hirelings,
+Spellcasting, Magic Items, Crafting Nonmagical Items, Brewing Potions of
+Healing, and Scribing Spell Scrolls) and links to the five category pages:
+Weapons (with Properties and Mastery Properties), Armor, Tools, Adventuring
+Gear, and Mounts and Vehicles, each with the chapter's text for it.
+
+**Stats** (`schemas/equipment.schema.json`): every equipment has its leaf
+`group`, a `cost` (`{ amount, unit }`), a `weight` in pounds with an optional
+`weightNote`, and optional `text`. Its category is derived from the group,
+never stored, and the block for its category is present only for it:
+`weapon` (damage, properties, mastery, range, ammunition, versatile damage),
+`armor` (AC, Dexterity and its cap, Strength, Stealth), `tool` (ability,
+Utilize, Craft), `mount` (carrying capacity), or `vehicle` (speed, crew,
+passengers, cargo, AC, HP, damage threshold). Equipment that comes in forms
+sharing one description, such as Ammunition, the three foci, the Gaming Set,
+the Musical Instrument, the Spell Scroll, and the Saddle, has `variants`,
+each with its own cost and weight, and none of its own; a variant isn't a
+link target.
+
+**How it reads**, on its section and its card: the description, a variants
+table, then labeled lines in SRD 5.2 form. Properties read "Ammunition (Range
+80/320; Bolt), Loading, Two-Handed" with each property linked, armor "12 +
+Dex modifier (max 2)" or a Shield's "+2", weights "1/4 lb." or "1½ lb.", costs
+"1,500 GP", and equipment with variants "Varies" where any variant has a
+value and "—" where none does.
+
+**Derived:** `category` (the group's root) and `costGp`, the cost in gold
+pieces, which the gallery sorts and filters by. Custom equipment has facets
+for category, group, cost, and weapon damage type, and no gap buckets.
 
 ### Conditions
 
@@ -342,6 +424,11 @@ warnings below on an SRD entry.
 | Creature | Any authored DC token `{dc=<n>}` | warning |
 | Creature | Derived attack bonus above +17 or save DC above 30 | warning |
 | Item | `baseItem` present for `armor` and `weapon` | error |
+| Item | `baseItem.oneOf` names no group; `any` names groups or items with variants; each `except` item is in an `any` group | error |
+| Equipment | The block for its category is present, and no other category's | error |
+| Equipment | `cost` and `weight` absent with `variants`; `cost` present without | error |
+| Equipment | A weapon's `range` exactly with Ammunition or Thrown, `ammunition` exactly with Ammunition, `versatile` exactly with Versatile; long range above normal | error |
+| Equipment | Armor's `dexMax` only with `dex`; a `weightNote` only with a `weight` | error |
 | Item | `rarityVariants` only when `rarity` is `varies` | error |
 | Item | `attunement.requirement` only when `required` is true | error |
 | Item | `spells[].chargeCost` only when `charges` is present | error |

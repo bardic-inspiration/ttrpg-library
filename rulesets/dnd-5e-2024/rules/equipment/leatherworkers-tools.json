@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "leatherworkers-tools",
+  "name": "Leatherworker's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "dex",
+      "utilize": "Add a design to a leather item (DC 10)",
+      "craft": "{ref:equipment/sling}, {ref:equipment/whip}, {ref:equipment/hide-armor}, {ref:equipment/leather-armor}, {ref:equipment/studded-leather-armor}, {ref:equipment/backpack}, Crossbow Bolt Case, Map or Scroll Case, {ref:equipment/parchment}, {ref:equipment/pouch}, {ref:equipment/quiver}, {ref:equipment/waterskin}"
+    }
+  }
+}

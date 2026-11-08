@@ -6,7 +6,16 @@
   "summary": "A +3 weapon that deals extra Radiant damage to Fiends and Undead and projects a protective aura.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Simple or Martial",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/simple-weapons"
+        },
+        {
+          "ref": "equipment/martial-weapons"
+        }
+      ]
+    },
     "rarity": "legendary",
     "attunement": {
       "required": true,

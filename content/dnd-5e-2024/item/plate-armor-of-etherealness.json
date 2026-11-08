@@ -6,7 +6,16 @@
   "summary": "Plate armor that lets you step into the Ethereal Plane once a day.",
   "stats": {
     "category": "armor",
-    "baseItem": "Half Plate Armor or Plate Armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/half-plate-armor"
+        },
+        {
+          "ref": "equipment/plate-armor"
+        }
+      ]
+    },
     "rarity": "legendary",
     "attunement": {
       "required": true

@@ -6,7 +6,13 @@
   "summary": "Scale armor made from a dragon's scales that grants Resistance to that dragon's damage type and senses nearby dragons.",
   "stats": {
     "category": "armor",
-    "baseItem": "Scale Mail",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/scale-mail"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "flask",
+  "name": "Flask",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "cp"
+    },
+    "weight": 1,
+    "text": "A Flask holds up to 1 pint."
+  }
+}

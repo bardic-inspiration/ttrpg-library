@@ -6,7 +6,19 @@
   "summary": "Armor that grants Resistance to one damage type, chosen or rolled on a table.",
   "stats": {
     "category": "armor",
-    "baseItem": "Any Light, Medium, or Heavy",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/light-armor"
+        },
+        {
+          "ref": "equipment/medium-armor"
+        },
+        {
+          "ref": "equipment/heavy-armor"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": true

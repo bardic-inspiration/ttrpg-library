@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "bottle-glass",
+  "name": "Bottle, Glass",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "text": "A Glass Bottle holds up to 1½ pints."
+  }
+}

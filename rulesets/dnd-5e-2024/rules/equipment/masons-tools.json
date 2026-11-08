@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "masons-tools",
+  "name": "Mason's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 8,
+    "tool": {
+      "ability": "str",
+      "utilize": "Chisel a symbol or hole in stone (DC 10)",
+      "craft": "{ref:equipment/block-and-tackle}"
+    }
+  }
+}

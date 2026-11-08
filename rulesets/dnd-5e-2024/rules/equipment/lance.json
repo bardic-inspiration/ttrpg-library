@@ -1,0 +1,34 @@
+{
+  "type": "equipment",
+  "id": "lance",
+  "name": "Lance",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 6,
+    "weapon": {
+      "damage": {
+        "dice": "1d10",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/heavy"
+        },
+        {
+          "ref": "weapon-property/reach"
+        },
+        {
+          "ref": "weapon-property/two-handed",
+          "note": "unless mounted"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/topple"
+      }
+    }
+  }
+}

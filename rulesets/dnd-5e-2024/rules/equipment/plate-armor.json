@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "plate-armor",
+  "name": "Plate Armor",
+  "stats": {
+    "group": "heavy-armor",
+    "cost": {
+      "amount": 1500,
+      "unit": "gp"
+    },
+    "weight": 65,
+    "armor": {
+      "ac": 18,
+      "strength": 15,
+      "stealthDisadvantage": true
+    }
+  }
+}

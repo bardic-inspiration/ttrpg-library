@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "bucket",
+  "name": "Bucket",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    },
+    "weight": 2,
+    "text": "A Bucket holds up to half a cubic foot of contents."
+  }
+}

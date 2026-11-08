@@ -1,0 +1,27 @@
+{
+  "type": "equipment",
+  "id": "sickle",
+  "name": "Sickle",
+  "stats": {
+    "group": "simple-melee-weapons",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d4",
+        "type": "slashing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/light"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/nick"
+      }
+    }
+  }
+}

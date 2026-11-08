@@ -1,0 +1,38 @@
+{
+  "type": "equipment",
+  "id": "light-crossbow",
+  "name": "Light Crossbow",
+  "stats": {
+    "group": "simple-ranged-weapons",
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "weapon": {
+      "damage": {
+        "dice": "1d8",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/ammunition"
+        },
+        {
+          "ref": "weapon-property/loading"
+        },
+        {
+          "ref": "weapon-property/two-handed"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/slow"
+      },
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "ammunition": "Bolt"
+    }
+  }
+}

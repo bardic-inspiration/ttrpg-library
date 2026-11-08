@@ -1,0 +1,30 @@
+{
+  "type": "equipment",
+  "id": "whip",
+  "name": "Whip",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "weapon": {
+      "damage": {
+        "dice": "1d4",
+        "type": "slashing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/finesse"
+        },
+        {
+          "ref": "weapon-property/reach"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/slow"
+      }
+    }
+  }
+}

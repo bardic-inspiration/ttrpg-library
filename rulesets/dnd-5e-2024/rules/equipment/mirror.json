@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "mirror",
+  "name": "Mirror",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 0.5,
+    "text": "A handheld steel Mirror is useful for personal cosmetics but also for peeking around corners and reflecting light as a signal."
+  }
+}

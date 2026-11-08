@@ -1,0 +1,34 @@
+{
+  "type": "equipment",
+  "id": "light-hammer",
+  "name": "Light Hammer",
+  "stats": {
+    "group": "simple-melee-weapons",
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d4",
+        "type": "bludgeoning"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/light"
+        },
+        {
+          "ref": "weapon-property/thrown"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/nick"
+      },
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    }
+  }
+}

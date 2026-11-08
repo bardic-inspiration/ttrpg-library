@@ -1,0 +1,19 @@
+{
+  "type": "equipment",
+  "id": "scale-mail",
+  "name": "Scale Mail",
+  "stats": {
+    "group": "medium-armor",
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weight": 45,
+    "armor": {
+      "ac": 14,
+      "dex": true,
+      "dexMax": 2,
+      "stealthDisadvantage": true
+    }
+  }
+}

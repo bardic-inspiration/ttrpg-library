@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "paper",
+  "name": "Paper",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "sp"
+    },
+    "text": "One sheet of Paper can hold about 250 handwritten words."
+  }
+}

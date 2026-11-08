@@ -6,7 +6,16 @@
   "summary": "A +1 chain shirt that you can wear without armor training.",
   "stats": {
     "category": "armor",
-    "baseItem": "Chain Mail or Chain Shirt",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/chain-mail"
+        },
+        {
+          "ref": "equipment/chain-shirt"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": false

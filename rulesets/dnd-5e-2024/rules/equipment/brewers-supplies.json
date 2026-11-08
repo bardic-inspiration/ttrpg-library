@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "brewers-supplies",
+  "name": "Brewer's Supplies",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 20,
+      "unit": "gp"
+    },
+    "weight": 9,
+    "tool": {
+      "ability": "int",
+      "utilize": "Detect poisoned drink (DC 15), or identify alcohol (DC 10)",
+      "craft": "{ref:equipment/antitoxin}"
+    }
+  }
+}

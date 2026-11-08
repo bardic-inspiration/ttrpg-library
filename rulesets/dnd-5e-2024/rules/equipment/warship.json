@@ -1,0 +1,21 @@
+{
+  "type": "equipment",
+  "id": "warship",
+  "name": "Warship",
+  "stats": {
+    "group": "airborne-and-waterborne-vehicles",
+    "cost": {
+      "amount": 25000,
+      "unit": "gp"
+    },
+    "vehicle": {
+      "speedMph": 2.5,
+      "crew": 60,
+      "passengers": 60,
+      "cargoTons": 200,
+      "ac": 15,
+      "hp": 500,
+      "damageThreshold": 20
+    }
+  }
+}

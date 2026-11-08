@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "lock",
+  "name": "Lock",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 1,
+    "text": "A Lock comes with a key. Without the key, a creature can use {ref:equipment/thieves-tools} to pick this Lock with a successful DC 15 Dexterity (Sleight of Hand) check."
+  }
+}

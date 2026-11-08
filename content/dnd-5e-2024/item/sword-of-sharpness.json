@@ -6,7 +6,22 @@
   "summary": "A sword that maximizes damage against objects and can sever limbs on a 20.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Glaive, Greatsword, Longsword, or Scimitar",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/glaive"
+        },
+        {
+          "ref": "equipment/greatsword"
+        },
+        {
+          "ref": "equipment/longsword"
+        },
+        {
+          "ref": "equipment/scimitar"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

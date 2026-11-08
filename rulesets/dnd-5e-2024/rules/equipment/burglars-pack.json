@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "burglars-pack",
+  "name": "Burglar's Pack",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 16,
+      "unit": "gp"
+    },
+    "weight": 42,
+    "text": "A Burglar's Pack contains the following items: {ref:equipment/backpack}, {ref:equipment/ball-bearings}, {ref:equipment/bell}, 10 Candles, {ref:equipment/crowbar}, Hooded Lantern, 7 flasks of {ref:equipment/oil}, 5 days of {ref:equipment/rations}, {ref:equipment/rope}, {ref:equipment/tinderbox}, and {ref:equipment/waterskin}."
+  }
+}

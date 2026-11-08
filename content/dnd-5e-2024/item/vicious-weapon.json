@@ -6,7 +6,16 @@
   "summary": "A weapon that deals an extra 2d6 damage of its type on a hit.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Simple or Martial",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/simple-weapons"
+        },
+        {
+          "ref": "equipment/martial-weapons"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": false

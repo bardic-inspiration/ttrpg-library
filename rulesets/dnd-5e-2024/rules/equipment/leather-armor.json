@@ -1,0 +1,17 @@
+{
+  "type": "equipment",
+  "id": "leather-armor",
+  "name": "Leather Armor",
+  "stats": {
+    "group": "light-armor",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 10,
+    "armor": {
+      "ac": 11,
+      "dex": true
+    }
+  }
+}

@@ -6,7 +6,13 @@
   "summary": "A +3 weapon that lets you move its bonus to your Armor Class each turn.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Melee Weapon",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/melee-weapons"
+        }
+      ]
+    },
     "rarity": "legendary",
     "attunement": {
       "required": true

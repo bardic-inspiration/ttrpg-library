@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "splint-armor",
+  "name": "Splint Armor",
+  "stats": {
+    "group": "heavy-armor",
+    "cost": {
+      "amount": 200,
+      "unit": "gp"
+    },
+    "weight": 60,
+    "armor": {
+      "ac": 17,
+      "strength": 15,
+      "stealthDisadvantage": true
+    }
+  }
+}

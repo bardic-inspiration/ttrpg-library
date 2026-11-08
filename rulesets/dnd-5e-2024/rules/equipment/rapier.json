@@ -1,0 +1,27 @@
+{
+  "type": "equipment",
+  "id": "rapier",
+  "name": "Rapier",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d8",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/finesse"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/vex"
+      }
+    }
+  }
+}

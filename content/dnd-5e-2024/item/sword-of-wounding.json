@@ -6,7 +6,28 @@
   "summary": "A sword whose wounds deal extra Necrotic damage and keep hurting until closed.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Glaive, Greatsword, Longsword, Rapier, Scimitar, or Shortsword",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/glaive"
+        },
+        {
+          "ref": "equipment/greatsword"
+        },
+        {
+          "ref": "equipment/longsword"
+        },
+        {
+          "ref": "equipment/rapier"
+        },
+        {
+          "ref": "equipment/scimitar"
+        },
+        {
+          "ref": "equipment/shortsword"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": true

@@ -140,7 +140,7 @@ export function checkItem(stats: ItemStats): Issue[] {
   const error = (path: string, message: string) => issues.push({ level: 'error', path, message });
 
   if ((stats.category === 'armor' || stats.category === 'weapon') && stats.baseItem === undefined) {
-    error('stats.baseItem', `a ${stats.category} needs a baseItem, such as "Longsword" or "any medium armor"`);
+    error('stats.baseItem', `a ${stats.category} needs a baseItem: { "oneOf": [{ "ref": "equipment/longsword" }] } or { "any": [{ "ref": "equipment/medium-armor" }] }`);
   }
   if (stats.rarityVariants !== undefined && stats.rarity !== 'varies') {
     error('stats.rarityVariants', 'rarityVariants are allowed only when rarity is "varies"');

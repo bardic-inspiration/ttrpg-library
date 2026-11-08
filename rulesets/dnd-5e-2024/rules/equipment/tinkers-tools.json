@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "tinkers-tools",
+  "name": "Tinker's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weight": 10,
+    "tool": {
+      "ability": "dex",
+      "utilize": "Assemble a Tiny item composed of scrap, which falls apart in 1 minute (DC 20)",
+      "craft": "{ref:equipment/musket}, {ref:equipment/pistol}, {ref:equipment/bell}, Bullseye Lantern, {ref:equipment/flask}, Hooded Lantern, {ref:equipment/hunting-trap}, {ref:equipment/lock}, {ref:equipment/manacles}, {ref:equipment/mirror}, {ref:equipment/shovel}, {ref:equipment/signal-whistle}, {ref:equipment/tinderbox}"
+    }
+  }
+}

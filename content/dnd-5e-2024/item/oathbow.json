@@ -6,7 +6,16 @@
   "summary": "A longbow that marks a sworn enemy for extra damage and Advantage on attacks against it.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Longbow or Shortbow",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/longbow"
+        },
+        {
+          "ref": "equipment/shortbow"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

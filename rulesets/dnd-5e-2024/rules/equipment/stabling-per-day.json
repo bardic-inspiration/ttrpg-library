@@ -1,0 +1,12 @@
+{
+  "type": "equipment",
+  "id": "stabling-per-day",
+  "name": "Stabling per day",
+  "stats": {
+    "group": "tack-harness-and-drawn-vehicles",
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    }
+  }
+}

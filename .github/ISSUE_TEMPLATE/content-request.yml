@@ -16,6 +16,7 @@ body:
       options:
         - condition
         - creature
+        - equipment
         - item
         - spell
     validations:

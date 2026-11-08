@@ -1,0 +1,17 @@
+{
+  "type": "equipment",
+  "id": "thieves-tools",
+  "name": "Thieves' Tools",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weight": 1,
+    "tool": {
+      "ability": "dex",
+      "utilize": "Pick a lock (DC 15), or disarm a trap (DC 15)"
+    }
+  }
+}

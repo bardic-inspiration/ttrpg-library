@@ -6,7 +6,13 @@
   "summary": "+1 studded leather armor that can look like ordinary clothing.",
   "stats": {
     "category": "armor",
-    "baseItem": "Studded Leather Armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/studded-leather-armor"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": false

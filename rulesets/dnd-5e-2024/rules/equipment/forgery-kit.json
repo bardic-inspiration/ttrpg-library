@@ -1,0 +1,17 @@
+{
+  "type": "equipment",
+  "id": "forgery-kit",
+  "name": "Forgery Kit",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "dex",
+      "utilize": "Mimic 10 or fewer words of someone else's handwriting (DC 15), or duplicate a wax seal (DC 20)"
+    }
+  }
+}

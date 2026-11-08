@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "rations",
+  "name": "Rations",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 5,
+      "unit": "sp"
+    },
+    "weight": 2,
+    "text": "Rations consist of travel-ready food, including jerky, dried fruit, hardtack, and nuts. See \"Malnutrition\" in \"Rules Glossary\" for the risks of not eating."
+  }
+}

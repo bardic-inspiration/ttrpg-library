@@ -6,7 +6,19 @@
   "summary": "Cursed +1 plate armor with clawed gauntlets that strike as magic weapons.",
   "stats": {
     "category": "armor",
-    "baseItem": "Any Light, Medium, or Heavy",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/light-armor"
+        },
+        {
+          "ref": "equipment/medium-armor"
+        },
+        {
+          "ref": "equipment/heavy-armor"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

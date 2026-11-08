@@ -6,7 +6,13 @@
   "summary": "A +1 dagger that can coat its blade with poison once a day.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Dagger",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/dagger"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": false

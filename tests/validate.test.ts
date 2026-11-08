@@ -66,11 +66,18 @@ describe('validateLibrary', () => {
 /**
  * One fixture per error in tests/fixtures/invalid/: an example entry with one
  * thing broken (the cinder hound, or Frost Lance for `spell-*`, the wand
- * for `item-*`, and the Mired condition, tests/fixtures/condition/, for `condition-*`). It replaces that example in a copy of the valid
+ * for `item-*`, the Mired condition (tests/fixtures/condition/) for `condition-*`, and the
+ * Tidewater Net (tests/fixtures/equipment/) for `equipment-*`). It replaces that example in a copy of the valid
  * library, so refs to the other examples resolve. Each must fail with a
  * message matching its pattern.
  */
 const INVALID: Record<string, RegExp> = {
+  'equipment-no-cost': /^stats\.cost: missing: equipment without variants has a cost$/,
+  'equipment-wrong-block': /^stats\.armor: an armor block is only for equipment in armor$/,
+  'equipment-variants-with-cost': /^stats\.cost: equipment with variants has no cost of its own/,
+  'equipment-group-not-leaf': /^stats\.group: "weapons" has groups in it; name a group with none$/,
+  'equipment-weapon-range-without-property': /^stats\.weapon\.range: a range is only for a weapon with the Ammunition or Thrown property$/,
+  'equipment-srd-marker': /^meta\.source\.srd: an extension is custom/,
   'condition-no-effects': /^stats\.effects: must NOT have fewer than 1 items/,
   'condition-effect-name-period': /^stats\.effects\[0\]\.name: must match pattern/,
   'condition-srd-marker': /^meta\.source\.srd: an extension is custom/,
@@ -173,9 +180,11 @@ const fixturePath = (name: string) =>
     ? 'dnd-5e-2024/spell/frost-lance.json'
     : name.startsWith('item-')
       ? 'dnd-5e-2024/item/wand-of-frost-lances.json'
-      : name.startsWith('condition-')
-        ? `dnd-5e-2024/condition/${name === 'condition-name-of-primitive' ? 'prone' : 'mired'}.json`
-        : 'dnd-5e-2024/creature/cinder-hound.json';
+      : name.startsWith('equipment-')
+        ? 'dnd-5e-2024/equipment/tidewater-net.json'
+        : name.startsWith('condition-')
+          ? `dnd-5e-2024/condition/${name === 'condition-name-of-primitive' ? 'prone' : 'mired'}.json`
+          : 'dnd-5e-2024/creature/cinder-hound.json';
 
 describe('invalid fixtures', () => {
   it('has a pattern for every fixture file', async () => {

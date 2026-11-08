@@ -1,0 +1,38 @@
+---
+// Equipment's rules (docs/rulesets.md#equipment): its description, its variants as a table, then
+// its stats as labeled lines in SRD 5.2 form. Shared by equipment's section on its
+// category page and the card of custom equipment.
+import type { EquipmentStats } from '../../../../../rulesets/dnd-5e-2024/types.ts';
+import { equipmentLines, variantsTable } from '../../../lib/equipment';
+import { escapeMarkdown, renderMarkdown, type TextRefs } from '../../../lib/markdown';
+import PropertyList from './PropertyList.astro';
+import RulesText from './RulesText.astro';
+
+interface Props {
+  stats: EquipmentStats;
+  refs?: TextRefs;
+}
+
+const { stats, refs } = Astro.props;
+const table = variantsTable(stats);
+// The variants table renders as a pipe table, so it takes the site's one table style.
+const cell = (text: string) => escapeMarkdown(text).replace(/\|/g, '\\|');
+const tableMarkdown = table && [
+  `| ${table.headers.join(' | ')} |`,
+  `|${table.headers.map(() => '---').join('|')}|`,
+  ...table.rows.map((row) => `| ${row.map(cell).join(' | ')} |`),
+].join('\n');
+---
+<div class="equipment-body">
+  {stats.text && <RulesText text={stats.text} refs={refs} />}
+  {tableMarkdown && <div set:html={renderMarkdown(tableMarkdown, refs)} />}
+  <PropertyList lines={equipmentLines(stats, stats.group === 'shields')} refs={refs} />
+</div>
+
+<style>
+  @layer components {
+    .equipment-body > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+  }
+</style>

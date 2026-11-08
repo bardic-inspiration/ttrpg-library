@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "carriage",
+  "name": "Carriage",
+  "stats": {
+    "group": "tack-harness-and-drawn-vehicles",
+    "cost": {
+      "amount": 100,
+      "unit": "gp"
+    },
+    "weight": 600
+  }
+}

@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import type { TermMatcher } from '../../lib/text.ts';
 import { GroupTree, placeRules, ruleKey, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../lib/rules.ts';
 import type { EntryHead, FileIssue } from './library.ts';
-import { REF_TOKEN, type RefEntry } from './refs.ts';
+import { REF_TOKEN, collectRefs, textRefs, type RefEntry } from './refs.ts';
 import { formatErrors, validateWithText, type LoadedRuleset, type RulesValidators } from './schema.ts';
 import { checkBlocklist, checkMarkdown, checkPlaceholders, stringsIn } from './text.ts';
 
@@ -125,7 +125,9 @@ export async function loadRules(
         error(file, message);
       }
       // A primitive is an SRD rule, literal like an SRD entry: the ruleset's review warnings are skipped.
-      for (const issue of ruleset.module.check(type, primitive.stats)) {
+      // Checks read the groups, which load before a type's primitives.
+      const sofar: RulesData = { ruleset: id, types, primitives: [...primitives], groups, pages: [] };
+      for (const issue of ruleset.module.check(type, primitive.stats, sofar)) {
         if (issue.level === 'error') error(file, `${issue.path}: ${issue.message}`);
       }
       link.stats = primitive.stats;
@@ -162,6 +164,7 @@ export async function loadRules(
     for (const { key, pages: on } of placement.twice) error(pagesFile, `${key} appears on more than one page: ${on.join(', ')}`);
     for (const key of placement.unplaced) error(pagesFile, `${key} appears on no page; add a block that shows it`);
   }
+  issues.push(...checkRulesLinks(data, linkable, rel));
   return { data, issues, heads, linkable, texts };
 }
 
@@ -245,5 +248,40 @@ function checkPages(pages: RulesPage[], types: { type: string }[], groups: Map<s
       }
     }
   }
+  return issues;
+}
+
+/**
+ * Rules data links only to rules data (docs/rulesets.md#rules-data): a primitive's, group's, or
+ * page's link to a content entry would make the ruleset depend on the library. A page's links are
+ * checked here too, since pages aren't link ends: each must name a primitive or group.
+ */
+function checkRulesLinks(data: RulesData, linkable: RefEntry[], rel: string): FileIssue[] {
+  const issues: FileIssue[] = [];
+  const rulesTypes = new Set(data.types.map((t) => t.type));
+  const keys = new Set(linkable.map((l) => `${l.type}/${l.id}`));
+  for (const l of linkable) {
+    if (l.stats === undefined) continue;
+    for (const { path, ref } of collectRefs(l.stats, l.statsPath ?? 'stats')) {
+      const type = ref.slice(0, ref.indexOf('/'));
+      if (!rulesTypes.has(type)) issues.push({ level: 'error', file: l.file, message: `${path}: rules data links only to rules data; "${ref}" is a ${type} entry` });
+    }
+  }
+  const visit = (texts: { path: string; text: string }[]) => {
+    for (const { path, text } of texts) {
+      for (const { ref } of textRefs(text, path).refs) {
+        const type = ref.slice(0, ref.indexOf('/'));
+        const file = `${rel}/rules/pages.json`;
+        if (!rulesTypes.has(type)) issues.push({ level: 'error', file, message: `${path}: rules data links only to rules data; "${ref}" is a ${type} entry` });
+        else if (!keys.has(ref)) issues.push({ level: 'error', file, message: `${path}: ref "${ref}" does not resolve` });
+      }
+    }
+  };
+  const proseTexts = (blocks: { title?: string; text?: string; sections?: unknown[] }[], at: string): { path: string; text: string }[] =>
+    blocks.flatMap((b, i) => [
+      ...(b.text ? [{ path: `${at}[${i}].text`, text: b.text }] : []),
+      ...proseTexts((b.sections ?? []) as { text?: string; sections?: unknown[] }[], `${at}[${i}].sections`),
+    ]);
+  data.pages.forEach((page) => visit(proseTexts(page.blocks as { text?: string; sections?: unknown[] }[], `${page.id}.blocks`)));
   return issues;
 }

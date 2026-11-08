@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "bell",
+  "name": "Bell",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "text": "When rung as a Utilize action, a Bell produces a sound that can be heard up to 60 feet away."
+  }
+}

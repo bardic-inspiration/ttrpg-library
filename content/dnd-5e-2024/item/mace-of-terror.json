@@ -6,7 +6,13 @@
   "summary": "A mace that releases a wave of terror, frightening nearby creatures, using charges.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Mace",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/mace"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": true

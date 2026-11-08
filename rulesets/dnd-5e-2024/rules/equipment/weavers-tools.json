@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "weavers-tools",
+  "name": "Weaver's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "dex",
+      "utilize": "Mend a tear in clothing (DC 10), or sew a Tiny design (DC 10)",
+      "craft": "{ref:equipment/padded-armor}, {ref:equipment/basket}, {ref:equipment/bedroll}, {ref:equipment/blanket}, Fine Clothes, {ref:equipment/net}, {ref:equipment/robe}, {ref:equipment/rope}, {ref:equipment/sack}, {ref:equipment/string}, {ref:equipment/tent}, Traveler's Clothes"
+    }
+  }
+}

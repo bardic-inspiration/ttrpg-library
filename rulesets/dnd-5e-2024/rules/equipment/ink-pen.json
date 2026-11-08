@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "ink-pen",
+  "name": "Ink Pen",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "cp"
+    },
+    "text": "Using {ref:equipment/ink}, an Ink Pen is used to write or draw."
+  }
+}

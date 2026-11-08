@@ -1,0 +1,30 @@
+{
+  "type": "equipment",
+  "id": "scimitar",
+  "name": "Scimitar",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "slashing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/finesse"
+        },
+        {
+          "ref": "weapon-property/light"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/nick"
+      }
+    }
+  }
+}

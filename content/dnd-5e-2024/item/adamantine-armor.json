@@ -6,7 +6,21 @@
   "summary": "Armor reinforced with adamantine that turns Critical Hits against you into normal hits.",
   "stats": {
     "category": "armor",
-    "baseItem": "Any Medium or Heavy, Except Hide Armor",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/medium-armor"
+        },
+        {
+          "ref": "equipment/heavy-armor"
+        }
+      ],
+      "except": [
+        {
+          "ref": "equipment/hide-armor"
+        }
+      ]
+    },
     "rarity": "uncommon",
     "attunement": {
       "required": false

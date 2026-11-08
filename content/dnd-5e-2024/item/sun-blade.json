@@ -6,7 +6,13 @@
   "summary": "A hilt that projects a blade of radiance that deals Radiant damage and sheds sunlight.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Longsword",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/longsword"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": true

@@ -1,0 +1,8 @@
+{
+  "type": "weapon-property",
+  "id": "two-handed",
+  "name": "Two-Handed",
+  "stats": {
+    "text": "A Two-Handed weapon requires two hands when you attack with it."
+  }
+}

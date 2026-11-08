@@ -8,7 +8,8 @@ import Heading from '../templates/parts/Heading.astro';
 
 interface Props {
   ctx: RulesContext;
-  section: Prose;
+  /** A page's opening prose may have no title. */
+  section: Omit<Prose, 'title'> & { title?: string };
   level: number;
 }
 
@@ -16,7 +17,7 @@ const { ctx, section, level } = Astro.props;
 const refs = { names: ctx.names, ruleset: ctx.data.ruleset, paths: ctx.paths };
 ---
 <section class="rule-prose">
-  <Heading level={level}>{section.title}</Heading>
+  {section.title && <Heading level={level}>{section.title}</Heading>}
   {section.text && <div set:html={renderMarkdown(section.text, refs)} />}
   {(section.sections ?? []).map((inner) => <Astro.self ctx={ctx} section={inner} level={level + 1} />)}
 </section>

@@ -1,0 +1,34 @@
+{
+  "type": "equipment",
+  "id": "dart",
+  "name": "Dart",
+  "stats": {
+    "group": "simple-ranged-weapons",
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    },
+    "weight": 0.25,
+    "weapon": {
+      "damage": {
+        "dice": "1d4",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/finesse"
+        },
+        {
+          "ref": "weapon-property/thrown"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/vex"
+      },
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    }
+  }
+}

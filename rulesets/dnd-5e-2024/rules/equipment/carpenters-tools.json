@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "carpenters-tools",
+  "name": "Carpenter's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 8,
+      "unit": "gp"
+    },
+    "weight": 6,
+    "tool": {
+      "ability": "str",
+      "utilize": "Seal or pry open a door or container (DC 20)",
+      "craft": "{ref:equipment/club}, {ref:equipment/greatclub}, {ref:equipment/quarterstaff}, {ref:equipment/barrel}, {ref:equipment/chest}, {ref:equipment/ladder}, {ref:equipment/pole}, Portable Ram, {ref:equipment/torch}"
+    }
+  }
+}

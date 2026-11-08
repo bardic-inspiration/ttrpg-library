@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "spikes-iron",
+  "name": "Spikes, Iron",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "text": "Iron Spikes come in bundles of ten. As a Utilize action, you can use a blunt object, such as a {ref:equipment/light-hammer}, to hammer a spike into wood, earth, or a similar material. You can do so to jam a door shut or to then tie a {ref:equipment/rope} or {ref:equipment/chain} to the Spike."
+  }
+}

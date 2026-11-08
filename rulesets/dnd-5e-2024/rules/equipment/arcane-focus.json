@@ -1,0 +1,51 @@
+{
+  "type": "equipment",
+  "id": "arcane-focus",
+  "name": "Arcane Focus",
+  "stats": {
+    "group": "adventuring-gear",
+    "variants": [
+      {
+        "name": "Crystal",
+        "weight": 1,
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Orb",
+        "weight": 3,
+        "cost": {
+          "amount": 20,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Rod",
+        "weight": 2,
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Staff (also a Quarterstaff)",
+        "weight": 4,
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Wand",
+        "weight": 1,
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        }
+      }
+    ],
+    "text": "An Arcane Focus takes one of the forms in the Arcane Focuses table and is bejeweled or carved to channel arcane magic. A Sorcerer, Warlock, or Wizard can use such an item as a Spellcasting Focus."
+  }
+}

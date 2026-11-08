@@ -1,0 +1,38 @@
+{
+  "type": "equipment",
+  "id": "longbow",
+  "name": "Longbow",
+  "stats": {
+    "group": "martial-ranged-weapons",
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d8",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/ammunition"
+        },
+        {
+          "ref": "weapon-property/heavy"
+        },
+        {
+          "ref": "weapon-property/two-handed"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/slow"
+      },
+      "range": {
+        "normal": 150,
+        "long": 600
+      },
+      "ammunition": "Arrow"
+    }
+  }
+}

@@ -6,7 +6,13 @@
   "summary": "A javelin that deals Lightning damage and can become a bolt of lightning when thrown.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Javelin",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/javelin"
+        }
+      ]
+    },
     "rarity": "uncommon",
     "attunement": {
       "required": false

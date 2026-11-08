@@ -1,0 +1,42 @@
+{
+  "type": "equipment",
+  "id": "gaming-set",
+  "name": "Gaming Set",
+  "stats": {
+    "group": "other-tools",
+    "variants": [
+      {
+        "name": "Dice",
+        "cost": {
+          "amount": 1,
+          "unit": "sp"
+        }
+      },
+      {
+        "name": "dragonchess",
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "playing cards",
+        "cost": {
+          "amount": 5,
+          "unit": "sp"
+        }
+      },
+      {
+        "name": "three-dragon ante",
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        }
+      }
+    ],
+    "tool": {
+      "ability": "wis",
+      "utilize": "Discern whether someone is cheating (DC 10), or win the game (DC 20)"
+    }
+  }
+}

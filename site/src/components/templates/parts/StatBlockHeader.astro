@@ -1,10 +1,12 @@
 ---
-// The entry name as a heading, and the italic line under it (docs/site.md#templates).
+// The entry name as a heading, and the italic line under it (docs/site.md#templates). The
+// subtitle may be segments, some linked to a primitive or group (an item's base item).
+import { url } from '../../../lib/url';
 import Heading from './Heading.astro';
 
 interface Props {
   name: string;
-  subtitle: string;
+  subtitle: string | { text: string; href?: string }[];
   /** The name's heading level; section headings sit one below it. */
   level: number;
 }
@@ -13,7 +15,11 @@ const { name, subtitle, level } = Astro.props;
 ---
 <header class="statblock-header">
   <Heading level={level} class="statblock-header__name">{name}</Heading>
-  <p class="statblock-header__subtitle">{subtitle}</p>
+  <p class="statblock-header__subtitle">
+    {typeof subtitle === 'string'
+      ? subtitle
+      : subtitle.map((part) => (part.href ? <a class="ref-link" href={url(part.href)}>{part.text}</a> : part.text))}
+  </p>
 </header>
 
 <style>

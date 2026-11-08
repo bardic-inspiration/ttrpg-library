@@ -6,7 +6,13 @@
   "summary": "A magic Shield that adds a bonus to Armor Class, set by its rarity, on top of its normal bonus.",
   "stats": {
     "category": "armor",
-    "baseItem": "Shield",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/shield"
+        }
+      ]
+    },
     "rarity": "varies",
     "rarityVariants": [
       {

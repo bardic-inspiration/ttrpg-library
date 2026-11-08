@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "grappling-hook",
+  "name": "Grappling Hook",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weight": 4,
+    "text": "As a Utilize action, you can throw the Grappling Hook at a railing, a ledge, or another catch within 50 feet of yourself, and the hook catches on if you succeed on a DC 13 Dexterity (Acrobatics) check. If you tied a {ref:equipment/rope} to the hook, you can then climb it."
+  }
+}

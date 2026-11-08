@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "entertainers-pack",
+  "name": "Entertainer's Pack",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 40,
+      "unit": "gp"
+    },
+    "weight": 58.5,
+    "text": "An Entertainer's Pack contains the following items: {ref:equipment/backpack}, {ref:equipment/bedroll}, {ref:equipment/bell}, Bullseye Lantern, 3 Costumes, {ref:equipment/mirror}, 8 flasks of {ref:equipment/oil}, 9 days of {ref:equipment/rations}, {ref:equipment/tinderbox}, and {ref:equipment/waterskin}."
+  }
+}

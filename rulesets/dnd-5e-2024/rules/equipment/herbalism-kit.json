@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "herbalism-kit",
+  "name": "Herbalism Kit",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "tool": {
+      "ability": "int",
+      "utilize": "Identify a plant (DC 10)",
+      "craft": "{ref:equipment/antitoxin}, {ref:equipment/candle}, {ref:equipment/healers-kit}, {ref:equipment/potion-of-healing}"
+    }
+  }
+}

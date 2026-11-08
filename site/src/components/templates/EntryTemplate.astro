@@ -5,6 +5,7 @@ import { templateFor, type TemplateProps } from '../../lib/template';
 import registry from '../../../../config/types.json';
 import ConditionCard from './ConditionCard.astro';
 import CreatureStatBlock from './CreatureStatBlock.astro';
+import EquipmentCard from './EquipmentCard.astro';
 import GenericTemplate from './GenericTemplate.astro';
 import ItemCard from './ItemCard.astro';
 import SpellCard from './SpellCard.astro';
@@ -16,6 +17,7 @@ const types = (registry as Record<string, { types: Record<string, { template?: s
 const components = {
   'condition-card': ConditionCard,
   'creature-stat-block': CreatureStatBlock,
+  'equipment-card': EquipmentCard,
   'item-card': ItemCard,
   'spell-card': SpellCard,
   generic: GenericTemplate,

@@ -6,7 +6,13 @@
   "summary": "A melee weapon that bursts into flame on command, shedding light and dealing extra Fire damage.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Melee Weapon",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/melee-weapons"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": true

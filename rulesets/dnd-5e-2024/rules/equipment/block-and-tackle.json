@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "block-and-tackle",
+  "name": "Block and Tackle",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "text": "A Block and Tackle allows you to hoist up to four times the weight you can normally lift."
+  }
+}

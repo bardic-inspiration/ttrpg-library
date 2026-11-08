@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "basket",
+  "name": "Basket",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 4,
+      "unit": "sp"
+    },
+    "weight": 2,
+    "text": "A Basket holds up to 40 pounds within 2 cubic feet."
+  }
+}

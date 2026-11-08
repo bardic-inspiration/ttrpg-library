@@ -11,7 +11,17 @@
       "description": "The item's category.",
       "enum": ["armor", "potion", "ring", "rod", "scroll", "staff", "wand", "weapon", "wondrous-item"]
     },
-    "baseItem": { "description": "The base item, required for armor and weapons, such as \"Longsword\" or \"any medium armor\".", "type": "string", "minLength": 1 },
+    "baseItem": {
+      "description": "The equipment the item is built on, required for armor and weapons, as links the template words (docs/rulesets.md#items): `oneOf` lists items (\"Longsword or Rapier\"); `any` lists groups or items with variants (\"Any Simple or Martial\"), with `except` naming members it leaves out (\", Except Hide Armor\").",
+      "type": "object",
+      "additionalProperties": false,
+      "oneOf": [{ "required": ["oneOf"] }, { "required": ["any"] }],
+      "properties": {
+        "oneOf": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/EquipmentRef" } },
+        "any": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/EquipmentRef" } },
+        "except": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/EquipmentRef" } }
+      }
+    },
     "rarity": {
       "description": "The rarity, read in title case. \"varies\" reads \"Rarity Varies\" unless rarityVariants gives each variant's.",
       "enum": ["common", "uncommon", "rare", "very-rare", "legendary", "artifact", "varies"]

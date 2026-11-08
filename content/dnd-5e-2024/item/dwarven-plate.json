@@ -6,7 +6,16 @@
   "summary": "Plate armor that adds +2 to AC and lets you resist being moved.",
   "stats": {
     "category": "armor",
-    "baseItem": "Half Plate Armor or Plate Armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/half-plate-armor"
+        },
+        {
+          "ref": "equipment/plate-armor"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": false

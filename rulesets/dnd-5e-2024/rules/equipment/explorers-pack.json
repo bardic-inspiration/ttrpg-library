@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "explorers-pack",
+  "name": "Explorer's Pack",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 55,
+    "text": "An Explorer's Pack contains the following items: {ref:equipment/backpack}, {ref:equipment/bedroll}, 2 flasks of {ref:equipment/oil}, 10 days of {ref:equipment/rations}, {ref:equipment/rope}, {ref:equipment/tinderbox}, 10 Torches, and {ref:equipment/waterskin}."
+  }
+}
