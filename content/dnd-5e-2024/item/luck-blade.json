@@ -6,7 +6,31 @@
   "summary": "A +1 sword that grants +1 to saving throws, rerolls a failed D20 Test once a day, and may hold a Wish.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Glaive, Greatsword, Longsword, Rapier, Scimitar, Sickle, or Shortsword",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/glaive"
+        },
+        {
+          "ref": "equipment/greatsword"
+        },
+        {
+          "ref": "equipment/longsword"
+        },
+        {
+          "ref": "equipment/rapier"
+        },
+        {
+          "ref": "equipment/scimitar"
+        },
+        {
+          "ref": "equipment/sickle"
+        },
+        {
+          "ref": "equipment/shortsword"
+        }
+      ]
+    },
     "rarity": "legendary",
     "attunement": {
       "required": true

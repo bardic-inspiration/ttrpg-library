@@ -1,0 +1,30 @@
+{
+  "type": "equipment",
+  "id": "shortsword",
+  "name": "Shortsword",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/finesse"
+        },
+        {
+          "ref": "weapon-property/light"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/vex"
+      }
+    }
+  }
+}

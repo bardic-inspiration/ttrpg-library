@@ -1,0 +1,17 @@
+{
+  "type": "equipment",
+  "id": "ring-mail",
+  "name": "Ring Mail",
+  "stats": {
+    "group": "heavy-armor",
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    },
+    "weight": 40,
+    "armor": {
+      "ac": 14,
+      "stealthDisadvantage": true
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "type": "equipment",
+  "id": "pistol",
+  "name": "Pistol",
+  "stats": {
+    "group": "martial-ranged-weapons",
+    "cost": {
+      "amount": 250,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "weapon": {
+      "damage": {
+        "dice": "1d10",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/ammunition"
+        },
+        {
+          "ref": "weapon-property/loading"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/vex"
+      },
+      "range": {
+        "normal": 30,
+        "long": 90
+      },
+      "ammunition": "Bullet"
+    }
+  }
+}

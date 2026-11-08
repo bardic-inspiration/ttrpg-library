@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "pot-iron",
+  "name": "Pot, Iron",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weight": 10,
+    "text": "An Iron Pot holds up to 1 gallon."
+  }
+}

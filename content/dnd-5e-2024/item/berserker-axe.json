@@ -6,7 +6,19 @@
   "summary": "A cursed +1 axe that raises your Hit Point maximum but drives you into a berserk rage.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Battleaxe, Greataxe, or Halberd",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/battleaxe"
+        },
+        {
+          "ref": "equipment/greataxe"
+        },
+        {
+          "ref": "equipment/halberd"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": true

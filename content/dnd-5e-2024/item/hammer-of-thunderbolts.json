@@ -6,7 +6,16 @@
   "summary": "A +1 maul that stuns with a thrown thunderclap and grows stronger with a Belt of Giant Strength.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Maul or Warhammer",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/maul"
+        },
+        {
+          "ref": "equipment/warhammer"
+        }
+      ]
+    },
     "rarity": "legendary",
     "attunement": {
       "required": true

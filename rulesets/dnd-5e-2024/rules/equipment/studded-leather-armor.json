@@ -1,0 +1,17 @@
+{
+  "type": "equipment",
+  "id": "studded-leather-armor",
+  "name": "Studded Leather Armor",
+  "stats": {
+    "group": "light-armor",
+    "cost": {
+      "amount": 45,
+      "unit": "gp"
+    },
+    "weight": 13,
+    "armor": {
+      "ac": 12,
+      "dex": true
+    }
+  }
+}

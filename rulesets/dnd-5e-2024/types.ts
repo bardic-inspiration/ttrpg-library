@@ -175,9 +175,18 @@ export interface ItemSpell {
   attackBonus?: number;
 }
 
+/** A link with an optional note (`Ref` in common.schema.json). */
+export interface Ref {
+  ref: string;
+  note?: string;
+}
+
+/** An item's base equipment (docs/rulesets.md#items): a list of items, or any of some groups. */
+export type BaseItem = { oneOf: Ref[]; any?: undefined; except?: undefined } | { any: Ref[]; except?: Ref[]; oneOf?: undefined };
+
 export interface ItemStats {
   category: string;
-  baseItem?: string;
+  baseItem?: BaseItem;
   rarity: string;
   /** Each variant's rarity, for a `varies` item (docs/rulesets.md#items). */
   rarityVariants?: { rarity: string; variant: string }[];
@@ -244,4 +253,39 @@ export const ACTION_LISTS = ['traits', 'actions', 'bonusActions', 'reactions'] a
 /** A condition's stats (schemas/condition.schema.json), a primitive's or an extension's. */
 export interface ConditionStats {
   effects: { name: string; text: string }[];
+}
+
+export type CostUnit = 'cp' | 'sp' | 'ep' | 'gp' | 'pp';
+
+export interface Cost {
+  amount: number;
+  unit: CostUnit;
+}
+
+/** Equipment's stats (schemas/equipment.schema.json), a primitive's or an extension's. */
+export interface EquipmentStats {
+  group: string;
+  cost?: Cost;
+  weight?: number;
+  weightNote?: string;
+  text?: string;
+  variants?: { name: string; cost?: Cost; weight?: number; amount?: number; storage?: string }[];
+  weapon?: {
+    damage: { dice?: string; flat?: number; type: string };
+    properties?: Ref[];
+    mastery: Ref;
+    range?: { normal: number; long: number };
+    ammunition?: string;
+    versatile?: string;
+  };
+  armor?: { ac: number; dex?: true; dexMax?: number; strength?: number; stealthDisadvantage?: true };
+  tool?: { ability: Ability; utilize: string; craft?: string };
+  mount?: { carryingCapacity: number };
+  vehicle?: { speedMph: number; crew: number; passengers?: number; cargoTons?: number; ac: number; hp: number; damageThreshold?: number };
+}
+
+/** Equipment's derived values: its category (the root of its group) and its cost in gold pieces. */
+export interface DerivedEquipment {
+  category?: string;
+  costGp?: number;
 }

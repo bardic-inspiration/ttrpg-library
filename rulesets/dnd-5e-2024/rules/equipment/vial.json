@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "vial",
+  "name": "Vial",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "text": "A Vial holds up to 4 ounces."
+  }
+}

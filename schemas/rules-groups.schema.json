@@ -7,15 +7,68 @@
   "items": {
     "type": "object",
     "additionalProperties": false,
-    "required": ["id", "name"],
+    "required": [
+      "id",
+      "name"
+    ],
     "properties": {
-      "id": { "description": "The group's id; its key is <type>/<id>, a link target like a primitive's.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 1, "maxLength": 64 },
-      "name": { "description": "The group's name, its section heading.", "type": "string", "minLength": 1, "maxLength": 80 },
-      "qualifier": { "description": "The group's short form, such as \"Martial\" for Martial Weapons.", "type": "string", "minLength": 1 },
-      "parent": { "description": "The id of the group this one nests in. A group with no parent is a category.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
-      "union": { "description": "The ids of the groups this one joins. A union group has no members of its own, and its section lists its members after the tree.", "type": "array", "minItems": 2, "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" } },
-      "note": { "description": "Printed in parentheses after the heading.", "type": "string", "minLength": 1 },
-      "text": { "description": "SRD prose that opens the group's section, in the markdown subset.", "type": "string", "minLength": 1, "markdownSubset": true }
+      "id": {
+        "description": "The group's id; its key is <type>/<id>, a link target like a primitive's.",
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+        "minLength": 1,
+        "maxLength": 64
+      },
+      "name": {
+        "description": "The group's name, its section heading.",
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "qualifier": {
+        "description": "The group's short form, such as \"Martial\" for Martial Weapons.",
+        "type": "string",
+        "minLength": 1
+      },
+      "noun": {
+        "description": "A category's singular noun, such as \"Weapon\", added after a lone group's qualifier where the ruleset words one (docs/rulesets.md#items).",
+        "type": "string",
+        "minLength": 1
+      },
+      "parent": {
+        "description": "The id of the group this one nests in. A group with no parent is a category.",
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "union": {
+        "description": "The ids of the groups this one joins. A union group has no members of its own, and its section lists its members after the tree.",
+        "type": "array",
+        "minItems": 2,
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        }
+      },
+      "note": {
+        "description": "Printed in parentheses after the heading.",
+        "type": "string",
+        "minLength": 1
+      },
+      "text": {
+        "description": "SRD prose that opens the group's section, in the markdown subset.",
+        "type": "string",
+        "minLength": 1,
+        "markdownSubset": true
+      },
+      "sortBy": {
+        "description": "How the group's members print: by these paths into each member's stats and derived values, in turn (such as [\"stats.armor.ac\", \"derived.costGp\"]), then by name. Omitted, by name.",
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "pattern": "^(stats|derived)\\.[A-Za-z0-9.]+$"
+        }
+      }
     }
   }
 }

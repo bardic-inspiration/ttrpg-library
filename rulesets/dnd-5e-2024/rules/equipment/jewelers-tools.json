@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "jewelers-tools",
+  "name": "Jeweler's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "tool": {
+      "ability": "int",
+      "utilize": "Discern a gem's value (DC 15)",
+      "craft": "{ref:equipment/arcane-focus}, {ref:equipment/holy-symbol}"
+    }
+  }
+}

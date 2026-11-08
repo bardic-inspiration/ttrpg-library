@@ -1,0 +1,34 @@
+{
+  "type": "equipment",
+  "id": "handaxe",
+  "name": "Handaxe",
+  "stats": {
+    "group": "simple-melee-weapons",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "slashing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/light"
+        },
+        {
+          "ref": "weapon-property/thrown"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/vex"
+      },
+      "range": {
+        "normal": 20,
+        "long": 60
+      }
+    }
+  }
+}

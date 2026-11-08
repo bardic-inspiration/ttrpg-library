@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "cobblers-tools",
+  "name": "Cobbler's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "dex",
+      "utilize": "Modify footwear to give Advantage on the wearer's next Dexterity (Acrobatics) check (DC 10)",
+      "craft": "{ref:equipment/climbers-kit}"
+    }
+  }
+}

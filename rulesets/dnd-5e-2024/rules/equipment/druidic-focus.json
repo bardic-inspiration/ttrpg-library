@@ -1,0 +1,34 @@
+{
+  "type": "equipment",
+  "id": "druidic-focus",
+  "name": "Druidic Focus",
+  "stats": {
+    "group": "adventuring-gear",
+    "variants": [
+      {
+        "name": "Sprig of mistletoe",
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Wooden staff (also a Quarterstaff)",
+        "weight": 4,
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Yew wand",
+        "weight": 1,
+        "cost": {
+          "amount": 10,
+          "unit": "gp"
+        }
+      }
+    ],
+    "text": "A Druidic Focus takes one of the forms in the Druidic Focuses table and is carved, tied with ribbon, or painted to channel primal magic. A Druid or Ranger can use such an object as a Spellcasting Focus."
+  }
+}

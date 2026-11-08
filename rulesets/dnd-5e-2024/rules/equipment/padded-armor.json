@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "padded-armor",
+  "name": "Padded Armor",
+  "stats": {
+    "group": "light-armor",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 8,
+    "armor": {
+      "ac": 11,
+      "dex": true,
+      "stealthDisadvantage": true
+    }
+  }
+}

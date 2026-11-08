@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "scholars-pack",
+  "name": "Scholar's Pack",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 40,
+      "unit": "gp"
+    },
+    "weight": 22,
+    "text": "A Scholar's Pack contains the following items: {ref:equipment/backpack}, {ref:equipment/book}, {ref:equipment/ink}, {ref:equipment/ink-pen}, {ref:equipment/lamp}, 10 flasks of {ref:equipment/oil}, 10 sheets of {ref:equipment/parchment}, and {ref:equipment/tinderbox}."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "healers-kit",
+  "name": "Healer's Kit",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "text": "A Healer's Kit has ten uses. As a Utilize action, you can expend one of its uses to stabilize an {ref:condition/unconscious} creature that has 0 Hit Points without needing to make a Wisdom (Medicine) check."
+  }
+}

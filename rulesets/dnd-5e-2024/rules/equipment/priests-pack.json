@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "priests-pack",
+  "name": "Priest's Pack",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 33,
+      "unit": "gp"
+    },
+    "weight": 29,
+    "text": "A Priest's Pack contains the following items: {ref:equipment/backpack}, {ref:equipment/blanket}, {ref:equipment/holy-water}, {ref:equipment/lamp}, 7 days of {ref:equipment/rations}, {ref:equipment/robe}, and {ref:equipment/tinderbox}."
+  }
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "weapons",
+    "name": "Weapons",
+    "noun": "Weapon"
+  },
+  {
+    "id": "simple-weapons",
+    "name": "Simple Weapons",
+    "qualifier": "Simple",
+    "parent": "weapons"
+  },
+  {
+    "id": "simple-melee-weapons",
+    "name": "Simple Melee Weapons",
+    "parent": "simple-weapons"
+  },
+  {
+    "id": "simple-ranged-weapons",
+    "name": "Simple Ranged Weapons",
+    "parent": "simple-weapons"
+  },
+  {
+    "id": "martial-weapons",
+    "name": "Martial Weapons",
+    "qualifier": "Martial",
+    "parent": "weapons"
+  },
+  {
+    "id": "martial-melee-weapons",
+    "name": "Martial Melee Weapons",
+    "parent": "martial-weapons"
+  },
+  {
+    "id": "martial-ranged-weapons",
+    "name": "Martial Ranged Weapons",
+    "parent": "martial-weapons"
+  },
+  {
+    "id": "melee-weapons",
+    "name": "Melee Weapons",
+    "qualifier": "Melee",
+    "parent": "weapons",
+    "union": [
+      "simple-melee-weapons",
+      "martial-melee-weapons"
+    ]
+  },
+  {
+    "id": "ranged-weapons",
+    "name": "Ranged Weapons",
+    "qualifier": "Ranged",
+    "parent": "weapons",
+    "union": [
+      "simple-ranged-weapons",
+      "martial-ranged-weapons"
+    ]
+  },
+  {
+    "id": "armor",
+    "name": "Armor",
+    "noun": "Armor"
+  },
+  {
+    "id": "light-armor",
+    "name": "Light Armor",
+    "qualifier": "Light",
+    "parent": "armor",
+    "note": "1 Minute to Don or Doff",
+    "sortBy": [
+      "stats.armor.ac",
+      "derived.costGp"
+    ]
+  },
+  {
+    "id": "medium-armor",
+    "name": "Medium Armor",
+    "qualifier": "Medium",
+    "parent": "armor",
+    "note": "5 Minutes to Don and 1 Minute to Doff",
+    "sortBy": [
+      "stats.armor.ac",
+      "derived.costGp"
+    ]
+  },
+  {
+    "id": "heavy-armor",
+    "name": "Heavy Armor",
+    "qualifier": "Heavy",
+    "parent": "armor",
+    "note": "10 Minutes to Don and 5 Minutes to Doff",
+    "sortBy": [
+      "stats.armor.ac",
+      "derived.costGp"
+    ]
+  },
+  {
+    "id": "shields",
+    "name": "Shields",
+    "parent": "armor",
+    "note": "Utilize Action to Don or Doff"
+  },
+  {
+    "id": "tools",
+    "name": "Tools"
+  },
+  {
+    "id": "artisans-tools",
+    "name": "Artisan's Tools",
+    "parent": "tools",
+    "text": "Artisan's Tools are each focused on crafting items and pursuing a trade. Each of these tools requires a separate proficiency."
+  },
+  {
+    "id": "other-tools",
+    "name": "Other Tools",
+    "parent": "tools"
+  },
+  {
+    "id": "adventuring-gear",
+    "name": "Adventuring Gear"
+  },
+  {
+    "id": "mounts-and-vehicles",
+    "name": "Mounts and Vehicles"
+  },
+  {
+    "id": "mounts-and-other-animals",
+    "name": "Mounts and Other Animals",
+    "parent": "mounts-and-vehicles"
+  },
+  {
+    "id": "tack-harness-and-drawn-vehicles",
+    "name": "Tack, Harness, and Drawn Vehicles",
+    "parent": "mounts-and-vehicles"
+  },
+  {
+    "id": "airborne-and-waterborne-vehicles",
+    "name": "Airborne and Waterborne Vehicles",
+    "parent": "mounts-and-vehicles",
+    "text": "The Airborne and Waterborne Vehicles table provides statistics for various types of large vehicles. The following notes apply.\n\n***Speed.*** A ship sailing against a strong wind moves at half speed. In a dead calm (no wind), waterborne ships can't move under sail and must be rowed. Keelboats and Rowboats are used on lakes and rivers. If going downstream, add the speed of the current (typically 3 miles per hour) to the speed of the vehicle. These vehicles can't be rowed against any significant current, but they can be pulled upstream by draft animals on the shores. A {ref:equipment/rowboat} can be carried and weighs 100 pounds.\n\n***Crew.*** A ship larger than a {ref:equipment/keelboat} or {ref:equipment/rowboat} needs a crew of skilled hirelings (see \"Hirelings\" later in \"Equipment\") to function. The minimum number of skilled hirelings needed to crew a ship depends on the type of ship, as shown in the table.\n\n***Passengers.*** The table lists the number of Small and Medium passengers the ship can accommodate using hammocks. A ship outfitted with private accommodations can carry one-fifth as many passengers. A passenger usually pays 5 SP per day for a hammock, but prices can vary from ship to ship. A small private cabin usually costs 2 GP per day.\n\n***Damage Threshold.*** If a vehicle has a damage threshold (see \"Rules Glossary\"), it's noted in the table.\n\n***Ship Repair.*** Repairs to a damaged ship can be made while the vessel is berthed. Repairing 1 Hit Point of damage requires 1 day and costs 20 GP for materials and labor. If the repairs are made in a location where supplies and skilled labor are abundant, such as a city shipyard, the repair time and cost are halved."
+  }
+]

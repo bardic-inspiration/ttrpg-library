@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "smiths-tools",
+  "name": "Smith's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 20,
+      "unit": "gp"
+    },
+    "weight": 8,
+    "tool": {
+      "ability": "str",
+      "utilize": "Pry open a door or container (DC 20)",
+      "craft": "Any Melee weapon (except {ref:equipment/club}, {ref:equipment/greatclub}, {ref:equipment/quarterstaff}, and {ref:equipment/whip}), Medium armor (except Hide), Heavy armor, {ref:equipment/ball-bearings}, {ref:equipment/bucket}, {ref:equipment/caltrops}, {ref:equipment/chain}, {ref:equipment/crowbar}, Firearm Bullets, {ref:equipment/grappling-hook}, Iron Pot, Iron Spikes, Sling Bullets"
+    }
+  }
+}

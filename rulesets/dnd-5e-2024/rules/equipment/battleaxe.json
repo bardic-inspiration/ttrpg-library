@@ -1,0 +1,28 @@
+{
+  "type": "equipment",
+  "id": "battleaxe",
+  "name": "Battleaxe",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 4,
+    "weapon": {
+      "damage": {
+        "dice": "1d8",
+        "type": "slashing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/versatile"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/topple"
+      },
+      "versatile": "1d10"
+    }
+  }
+}

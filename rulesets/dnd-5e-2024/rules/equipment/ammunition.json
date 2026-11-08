@@ -1,0 +1,61 @@
+{
+  "type": "equipment",
+  "id": "ammunition",
+  "name": "Ammunition",
+  "stats": {
+    "group": "adventuring-gear",
+    "variants": [
+      {
+        "name": "Arrows",
+        "amount": 20,
+        "storage": "Quiver",
+        "weight": 1,
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Bolts",
+        "amount": 20,
+        "storage": "Case",
+        "weight": 1.5,
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Bullets, Firearm",
+        "amount": 10,
+        "storage": "Pouch",
+        "weight": 2,
+        "cost": {
+          "amount": 3,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Bullets, Sling",
+        "amount": 20,
+        "storage": "Pouch",
+        "weight": 1.5,
+        "cost": {
+          "amount": 4,
+          "unit": "cp"
+        }
+      },
+      {
+        "name": "Needles",
+        "amount": 50,
+        "storage": "Pouch",
+        "weight": 1,
+        "cost": {
+          "amount": 1,
+          "unit": "gp"
+        }
+      }
+    ],
+    "text": "Ammunition is required by a weapon that has the Ammunition property. A weapon's description specifies the type of ammunition used by the weapon. The Ammunition table lists the different types and the amount you get when you buy them. The table also lists the item that is typically used to store each type; storage must be bought separately."
+  }
+}

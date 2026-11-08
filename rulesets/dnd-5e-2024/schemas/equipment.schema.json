@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/equipment.schema.json",
+  "title": "dnd-5e-2024 equipment stats (docs/rulesets.md#equipment)",
+  "description": "Equipment, an SRD primitive in rules/equipment/ or a custom extension under content/. The category is derived from the group, never stored; the block for the category (weapon, armor, tool, mount, vehicle) is present only for it. Cross-field rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "group"
+  ],
+  "properties": {
+    "group": {
+      "description": "The leaf group the equipment sits in, from rules/equipment-groups.json, such as \"martial-melee-weapons\".",
+      "type": "string",
+      "minLength": 1
+    },
+    "cost": {
+      "$ref": "#/$defs/Cost"
+    },
+    "weight": {
+      "description": "Pounds, printed as a fraction where the SRD uses one (\"1/4 lb.\", \"1½ lb.\"). Omitted prints \"—\".",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "weightNote": {
+      "description": "Printed after the weight: \"5 lb. (full)\".",
+      "type": "string",
+      "minLength": 1
+    },
+    "text": {
+      "description": "The description as printed.",
+      "$ref": "common.schema.json#/$defs/Text"
+    },
+    "variants": {
+      "description": "Forms that share this description, each with its own cost and weight. Where a table prints the equipment's own cost or weight, it reads \"Varies\" when any variant has one and \"—\" when none does.",
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "description": "The variant as printed: \"Arrows\", \"Staff (also a Quarterstaff)\", \"dragonchess\".",
+            "type": "string",
+            "minLength": 1
+          },
+          "cost": {
+            "$ref": "#/$defs/Cost"
+          },
+          "weight": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "amount": {
+            "description": "How many come at the cost, for ammunition.",
+            "type": "integer",
+            "minimum": 1
+          },
+          "storage": {
+            "description": "What holds them, as printed, for ammunition: \"Quiver\".",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "weapon": {
+      "description": "A weapon's stats.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "damage",
+        "mastery"
+      ],
+      "properties": {
+        "damage": {
+          "description": "Dice and type, or a flat amount for the Blowgun's \"1 Piercing\".",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "oneOf": [
+            {
+              "required": [
+                "dice"
+              ]
+            },
+            {
+              "required": [
+                "flat"
+              ]
+            }
+          ],
+          "properties": {
+            "dice": {
+              "$ref": "common.schema.json#/$defs/Dice"
+            },
+            "flat": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "type": {
+              "$ref": "common.schema.json#/$defs/DamageType"
+            }
+          }
+        },
+        "properties": {
+          "description": "The weapon's properties, in printed order.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "common.schema.json#/$defs/WeaponPropertyRef"
+          }
+        },
+        "mastery": {
+          "$ref": "common.schema.json#/$defs/MasteryPropertyRef"
+        },
+        "range": {
+          "description": "Normal and long range in feet, with the Ammunition or Thrown property.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "normal",
+            "long"
+          ],
+          "properties": {
+            "normal": {
+              "type": "integer",
+              "minimum": 5
+            },
+            "long": {
+              "type": "integer",
+              "minimum": 5
+            }
+          }
+        },
+        "ammunition": {
+          "description": "The piece of ammunition, as printed, with the Ammunition property: \"Bolt\".",
+          "type": "string",
+          "minLength": 1
+        },
+        "versatile": {
+          "description": "The two-handed damage dice, with the Versatile property.",
+          "$ref": "common.schema.json#/$defs/Dice"
+        }
+      }
+    },
+    "armor": {
+      "description": "Armor's stats. A Shield's `ac` is its bonus.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ac"
+      ],
+      "properties": {
+        "ac": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "dex": {
+          "description": "The Dexterity modifier adds to the AC.",
+          "const": true
+        },
+        "dexMax": {
+          "description": "The most the Dexterity modifier adds.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "strength": {
+          "description": "The Strength score that avoids the Speed penalty.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "stealthDisadvantage": {
+          "const": true
+        }
+      }
+    },
+    "tool": {
+      "description": "A tool's stats.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ability",
+        "utilize"
+      ],
+      "properties": {
+        "ability": {
+          "$ref": "common.schema.json#/$defs/Ability"
+        },
+        "utilize": {
+          "description": "What the Utilize action can do with it, with DCs, as printed.",
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "craft": {
+          "description": "What it crafts, as printed.",
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    },
+    "mount": {
+      "description": "A mount's or other animal's stats.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "carryingCapacity"
+      ],
+      "properties": {
+        "carryingCapacity": {
+          "description": "Pounds.",
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "vehicle": {
+      "description": "A large vehicle's stats. A value the SRD prints as \"—\" is omitted.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "speedMph",
+        "crew",
+        "ac",
+        "hp"
+      ],
+      "properties": {
+        "speedMph": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "crew": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "passengers": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "cargoTons": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "ac": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "hp": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "damageThreshold": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Cost": {
+      "description": "A price: \"15 GP\".",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "amount",
+        "unit"
+      ],
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "unit": {
+          "enum": [
+            "cp",
+            "sp",
+            "ep",
+            "gp",
+            "pp"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "shovel",
+  "name": "Shovel",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "text": "Working for 1 hour, you can use a Shovel to dig a hole that is 5 feet on each side in soil or similar material."
+  }
+}

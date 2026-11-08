@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "cartographers-tools",
+  "name": "Cartographer's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weight": 6,
+    "tool": {
+      "ability": "wis",
+      "utilize": "Draft a map of a small area (DC 15)",
+      "craft": "{ref:equipment/map}"
+    }
+  }
+}

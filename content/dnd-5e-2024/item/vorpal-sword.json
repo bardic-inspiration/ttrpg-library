@@ -6,7 +6,22 @@
   "summary": "A +3 sword that ignores Slashing Resistance and can sever a head on a 20.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Glaive, Greatsword, Longsword, or Scimitar",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/glaive"
+        },
+        {
+          "ref": "equipment/greatsword"
+        },
+        {
+          "ref": "equipment/longsword"
+        },
+        {
+          "ref": "equipment/scimitar"
+        }
+      ]
+    },
     "rarity": "legendary",
     "attunement": {
       "required": true

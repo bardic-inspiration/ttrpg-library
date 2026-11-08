@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "robe",
+  "name": "Robe",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weight": 4,
+    "text": "A Robe has vocational or ceremonial significance. Some events and locations admit only people wearing a Robe bearing certain colors or symbols."
+  }
+}

@@ -40,11 +40,11 @@ const render = async (component: any, props: Record<string, unknown>) =>
 
 describe('the SRD conditions', () => {
   it('are the 15 primitives, on the Conditions page, with no enum or table left', async () => {
-    expect(data.primitives.map((p) => p.name).sort()).toEqual([
+    expect(data.primitives.filter((p) => p.type === 'condition').map((p) => p.name).sort()).toEqual([
       'Blinded', 'Charmed', 'Deafened', 'Exhaustion', 'Frightened', 'Grappled', 'Incapacitated', 'Invisible',
       'Paralyzed', 'Petrified', 'Poisoned', 'Prone', 'Restrained', 'Stunned', 'Unconscious',
     ]);
-    expect(data.pages).toEqual([{ id: 'conditions', title: 'Conditions', blocks: [{ kind: 'primitives', type: 'condition' }] }]);
+    expect(data.pages.find((p) => p.id === 'conditions')).toEqual({ id: 'conditions', title: 'Conditions', blocks: [{ kind: 'primitives', type: 'condition' }] });
     const common = await readJson(join(ROOT, 'rulesets/dnd-5e-2024/schemas/common.schema.json'));
     expect(common.$defs.Condition).toBeUndefined();
   });
@@ -65,8 +65,8 @@ describe('the SRD conditions', () => {
 
 describe('the Conditions page', () => {
   it('anchors every condition and prints it as the SRD does, with what links to it and the custom conditions', async () => {
-    const html = await render(RulesPage, { ctx, page: data.pages[0] });
-    for (const p of data.primitives) expect(html).toContain(`id="condition-${p.id}"`);
+    const html = await render(RulesPage, { ctx, page: data.pages.find((p) => p.id === 'conditions') });
+    for (const p of data.primitives.filter((p) => p.type === 'condition')) expect(html).toContain(`id="condition-${p.id}"`);
     const text = textOf(html);
     expect(text).toContain(
       'Poisoned While you have the Poisoned condition, you experience the following effect. Ability Checks and Attacks Affected. You have Disadvantage on attack rolls and ability checks.',

@@ -7,7 +7,7 @@ import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { present, whenPresent } from './display.ts';
 import { formatRarity } from './format.ts';
 import { refOrTextName } from './refs.ts';
-import type { ItemSpell, ItemStats } from '../../../rulesets/dnd-5e-2024/types.ts';
+import type { BaseItem, ItemSpell, ItemStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(' ');
@@ -25,15 +25,58 @@ function rarityText(s: ItemStats): string {
   return s.rarity === 'varies' ? 'Rarity Varies' : formatRarity(s.rarity);
 }
 
-/** "Wand, Uncommon (Requires Attunement by a Spellcaster)", "Weapon (Longsword), Rare". */
-export function subtitleLine(s: ItemStats): string {
-  const category = titleCase(s.category) + (whenPresent(s.baseItem, (base) => ` (${base})`) ?? '');
+/** A run of subtitle text; one with a `key` links to that primitive or group. */
+export interface Segment {
+  text: string;
+  key?: string;
+}
+
+/** What wording a base item needs to know about each equipment key. */
+export type BaseLookup = (key: string) => { name: string; qualifier?: string; noun?: string; group: boolean } | undefined;
+
+/** An English list of segments: "A", "A or B", "A, B, or C". */
+function englishList(items: Segment[], conjunction: string): Segment[] {
+  if (items.length <= 2) return items.flatMap((item, i) => (i === 0 ? [item] : [{ text: ` ${conjunction} ` }, item]));
+  return items.flatMap((item, i) => (i === 0 ? [item] : [{ text: i === items.length - 1 ? `, ${conjunction} ` : ', ' }, item]));
+}
+
+/**
+ * A base item's words (docs/rulesets.md#items), each target a linked segment. `oneOf` reads its
+ * names joined by "or"; `any` reads "Any", then each target's qualifier (a group's) or name, joined
+ * by "or", with the category's noun after a lone qualified group ("Any Melee Weapon"); `except`
+ * adds ", Except" and its names, joined by "and".
+ */
+export function baseItemSegments(base: BaseItem, lookup: BaseLookup): Segment[] {
+  const name = (ref: string): Segment => ({ text: lookup(ref)?.name ?? ref.slice(ref.indexOf('/') + 1), key: ref });
+  if (base.oneOf) return englishList(base.oneOf.map((r) => name(r.ref)), 'or');
+  const targets = base.any.map((r) => {
+    const found = lookup(r.ref);
+    return { segment: { text: found?.qualifier ?? found?.name ?? name(r.ref).text, key: r.ref }, found };
+  });
+  const lone = targets.length === 1 && targets[0]!.found?.group && targets[0]!.found.qualifier ? targets[0]!.found.noun : undefined;
+  return [
+    { text: 'Any ' },
+    ...englishList(targets.map((t) => t.segment), 'or'),
+    ...(lone ? [{ text: ` ${lone}` }] : []),
+    ...(base.except ? [{ text: ', Except ' }, ...englishList(base.except.map((r) => name(r.ref)), 'and')] : []),
+  ];
+}
+
+const noLookup: BaseLookup = () => undefined;
+
+/** "Wand, Uncommon (Requires Attunement by a Spellcaster)", "Weapon (Longsword), Rare", with the base item's targets as links. */
+export function subtitleSegments(s: ItemStats, lookup: BaseLookup = noLookup): Segment[] {
   const rarity = rarityText(s);
   const attunement = s.attunement.required
     ? ` (Requires Attunement${whenPresent(s.attunement.requirement, (r) => ` ${r}`) ?? ''})`
     : '';
-  return `${category}, ${rarity}${attunement}`;
+  const base = s.baseItem ? [{ text: ' (' }, ...baseItemSegments(s.baseItem, lookup), { text: ')' }] : [];
+  return [{ text: titleCase(s.category) }, ...base, { text: `, ${rarity}${attunement}` }];
 }
+
+/** The subtitle as plain text. */
+export const subtitleLine = (s: ItemStats, lookup: BaseLookup = noLookup): string =>
+  subtitleSegments(s, lookup).map((segment) => segment.text).join('');
 
 /**
  * "7; regains 1d6 + 1 daily at dawn", or just "12" for charges that never

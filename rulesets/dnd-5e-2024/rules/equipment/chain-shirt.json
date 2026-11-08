@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "chain-shirt",
+  "name": "Chain Shirt",
+  "stats": {
+    "group": "medium-armor",
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weight": 20,
+    "armor": {
+      "ac": 13,
+      "dex": true,
+      "dexMax": 2
+    }
+  }
+}

@@ -15,6 +15,8 @@ export interface RulesGroup {
   id: string;
   name: string;
   qualifier?: string;
+  noun?: string;
+  sortBy?: string[];
   parent?: string;
   union?: string[];
   note?: string;
@@ -31,7 +33,7 @@ export interface ProseSection {
   sections?: ProseSection[];
 }
 
-export type PageBlock = (ProseSection & { kind: 'prose' }) | { kind: 'primitives'; type: string } | { kind: 'group'; group: string };
+export type PageBlock = (Omit<ProseSection, 'title'> & { title?: string; kind: 'prose' }) | { kind: 'primitives'; type: string } | { kind: 'group'; group: string };
 
 export interface RulesPage {
   id: string;
@@ -216,6 +218,36 @@ export function extensionPage(data: RulesData, extension: Member): string | unde
     }
   }
   return undefined;
+}
+
+/** The value at a dotted path such as `stats.armor.ac`, or undefined. */
+function valueAt(value: unknown, path: string): unknown {
+  let current = value;
+  for (const key of path.split('.')) {
+    if (typeof current !== 'object' || current === null) return undefined;
+    current = (current as Record<string, unknown>)[key];
+  }
+  return current;
+}
+
+/**
+ * A group's members in print order: by its `sortBy` paths into each member's stats and derived
+ * values, in turn, then by name; by name alone without `sortBy`.
+ */
+export function sortMembers<T extends Member>(group: RulesGroup, members: T[], derive: (member: T) => Record<string, unknown>): T[] {
+  const keys = group.sortBy ?? [];
+  const key = (m: T) => keys.map((path) => valueAt({ stats: m.stats, derived: derive(m) }, path));
+  return [...members].sort((a, b) => {
+    const [ka, kb] = [key(a), key(b)];
+    for (let i = 0; i < keys.length; i++) {
+      const [x, y] = [ka[i], kb[i]];
+      if (x === y) continue;
+      if (x === undefined) return 1;
+      if (y === undefined) return -1;
+      return typeof x === 'number' && typeof y === 'number' ? x - y : String(x).localeCompare(String(y));
+    }
+    return byName(a, b);
+  });
 }
 
 /** Every group of the ruleset, with its type. */

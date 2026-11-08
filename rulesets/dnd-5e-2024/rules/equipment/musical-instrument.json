@@ -1,0 +1,94 @@
+{
+  "type": "equipment",
+  "id": "musical-instrument",
+  "name": "Musical Instrument",
+  "stats": {
+    "group": "other-tools",
+    "variants": [
+      {
+        "name": "Bagpipes",
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 6
+      },
+      {
+        "name": "drum",
+        "cost": {
+          "amount": 6,
+          "unit": "gp"
+        },
+        "weight": 3
+      },
+      {
+        "name": "dulcimer",
+        "cost": {
+          "amount": 25,
+          "unit": "gp"
+        },
+        "weight": 10
+      },
+      {
+        "name": "flute",
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 1
+      },
+      {
+        "name": "horn",
+        "cost": {
+          "amount": 3,
+          "unit": "gp"
+        },
+        "weight": 2
+      },
+      {
+        "name": "lute",
+        "cost": {
+          "amount": 35,
+          "unit": "gp"
+        },
+        "weight": 2
+      },
+      {
+        "name": "lyre",
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 2
+      },
+      {
+        "name": "pan flute",
+        "cost": {
+          "amount": 12,
+          "unit": "gp"
+        },
+        "weight": 2
+      },
+      {
+        "name": "shawm",
+        "cost": {
+          "amount": 2,
+          "unit": "gp"
+        },
+        "weight": 1
+      },
+      {
+        "name": "viol",
+        "cost": {
+          "amount": 30,
+          "unit": "gp"
+        },
+        "weight": 1
+      }
+    ],
+    "tool": {
+      "ability": "cha",
+      "utilize": "Play a known tune (DC 10), or improvise a song (DC 15)"
+    }
+  }
+}

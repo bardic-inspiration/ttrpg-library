@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "woodcarvers-tools",
+  "name": "Woodcarver's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "dex",
+      "utilize": "Carve a pattern in wood (DC 10)",
+      "craft": "{ref:equipment/club}, {ref:equipment/greatclub}, {ref:equipment/quarterstaff}, Ranged weapons (except {ref:equipment/pistol}, {ref:equipment/musket}, and {ref:equipment/sling}), {ref:equipment/arcane-focus}, Arrows, Bolts, {ref:equipment/druidic-focus}, {ref:equipment/ink-pen}, Needles"
+    }
+  }
+}

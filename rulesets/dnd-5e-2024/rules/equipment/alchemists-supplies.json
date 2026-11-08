@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "alchemists-supplies",
+  "name": "Alchemist's Supplies",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weight": 8,
+    "tool": {
+      "ability": "int",
+      "utilize": "Identify a substance (DC 15), or start a fire (DC 15)",
+      "craft": "{ref:equipment/acid}, {ref:equipment/alchemists-fire}, {ref:equipment/component-pouch}, {ref:equipment/oil}, {ref:equipment/paper}, {ref:equipment/perfume}"
+    }
+  }
+}

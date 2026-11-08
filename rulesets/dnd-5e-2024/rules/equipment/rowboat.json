@@ -1,0 +1,19 @@
+{
+  "type": "equipment",
+  "id": "rowboat",
+  "name": "Rowboat",
+  "stats": {
+    "group": "airborne-and-waterborne-vehicles",
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "vehicle": {
+      "speedMph": 1.5,
+      "crew": 1,
+      "passengers": 3,
+      "ac": 11,
+      "hp": 50
+    }
+  }
+}

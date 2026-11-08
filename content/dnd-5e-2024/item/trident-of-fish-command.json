@@ -6,7 +6,13 @@
   "summary": "A trident that casts Dominate Beast on swimming creatures, using charges.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Trident",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/trident"
+        }
+      ]
+    },
     "rarity": "uncommon",
     "attunement": {
       "required": true

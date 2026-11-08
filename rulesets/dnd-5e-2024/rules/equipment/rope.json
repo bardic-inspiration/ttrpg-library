@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "rope",
+  "name": "Rope",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "text": "As a Utilize action, you can tie a knot with Rope if you succeed on a DC 10 Dexterity (Sleight of Hand) check. The Rope can be burst with a successful DC 20 Strength (Athletics) check.\n\nYou can bind an unwilling creature with the Rope only if the creature has the {ref:condition/grappled}, {ref:condition/incapacitated}, or {ref:condition/restrained} condition. If the creature's legs are bound, the creature has the {ref:condition/restrained} condition until it escapes. Escaping the Rope requires the creature to make a successful DC 15 Dexterity (Acrobatics) check as an action."
+  }
+}

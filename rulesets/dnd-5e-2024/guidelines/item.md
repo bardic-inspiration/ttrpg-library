@@ -52,8 +52,12 @@ Exemplar (summary, description, and effect):
   collision by swapping one word or pluralizing ("Boots of Striding" next to an
   SRD item of nearly that name). An item that does what an SRD item does is a
   duplicate; ref or name the SRD item instead.
-- A weapon or armor item names its kind in `baseItem` ("Longsword", "any
-  medium armor"), not only in its name.
+- A weapon or armor item names its kind in `baseItem`, not only in its name:
+  links to equipment the template words ([Items](../../../docs/rulesets.md#items)).
+  a `oneOf` list naming `equipment/longsword` reads "Longsword"; an `any`
+  list naming `equipment/medium-armor` reads "Any Medium Armor"; `except`
+  leaves out items of an `any` group. Name groups under `any` and single
+  items under `oneOf`.
 - The `id` is the slug of the name and never changes. On a collision, pick a
   different name; never add a number.
 
@@ -143,8 +147,9 @@ string.
 - **Mentioning a library entry** in `effect` links it with a token instead of
   writing its name: `*{ref:spell/frost-lance}*` for a spell, which keeps the
   italics. The site shows the entry's name, linked ([References](../../../docs/content-model.md#references)).
-- `baseItem` and any item named in `effect` use SRD names. The blocklist applies
-  to every plain string.
+- `baseItem` links SRD equipment or custom equipment by key; any item named in
+  `effect` uses its SRD name or a token. The blocklist applies to every plain
+  string.
 
 ### Stat blocks the item prints
 

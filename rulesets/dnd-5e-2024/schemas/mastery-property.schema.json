@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/mastery-property.schema.json",
+  "title": "dnd-5e-2024 mastery property stats (docs/rulesets.md#equipment)",
+  "description": "A mastery property, a primitive-only rules type shown on the Weapons page.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["text"],
+  "properties": {
+    "text": { "description": "The definition as printed.", "$ref": "common.schema.json#/$defs/Text" }
+  }
+}

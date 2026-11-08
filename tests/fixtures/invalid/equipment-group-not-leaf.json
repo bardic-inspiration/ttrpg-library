@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "equipment",
+  "id": "tidewater-net",
+  "name": "Tidewater Net",
+  "summary": "A weighted fishing net that sinks fast and holds what it catches.",
+  "description": "Coastal villages weave these nets from tarred cord and hang them from every doorway to dry.",
+  "stats": {
+    "group": "weapons",
+    "cost": {
+      "amount": 3,
+      "unit": "gp"
+    },
+    "weight": 4,
+    "text": "When you take the Attack action, you can replace one of your attacks with throwing a Tidewater Net at a creature you can see within 10 feet of yourself. The target must succeed on a Dexterity saving throw (DC 8 plus your Dexterity modifier and Proficiency Bonus) or have the {ref:condition/restrained} condition until it escapes."
+  },
+  "meta": {
+    "createdAt": "2026-11-08",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

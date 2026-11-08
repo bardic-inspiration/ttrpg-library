@@ -36,7 +36,7 @@
       "additionalProperties": false,
       "required": ["ref"],
       "properties": {
-        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|item|spell|condition)/[a-z0-9-]+$" },
+        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|item|spell|condition|equipment|weapon-property|mastery-property)/[a-z0-9-]+$" },
         "note": { "description": "A qualifier printed in parentheses after the target's name, such as \"level 5 version\".", "type": "string", "minLength": 1 }
       }
     },
@@ -47,6 +47,36 @@
       "required": ["ref"],
       "properties": {
         "ref": { "description": "The condition, as condition/<id>.", "type": "string", "pattern": "^condition/[a-z0-9]+(-[a-z0-9]+)*$" },
+        "note": { "description": "A qualifier printed in parentheses after the name.", "type": "string", "minLength": 1 }
+      }
+    },
+    "EquipmentRef": {
+      "description": "A link to equipment: an SRD primitive, a group, or a custom extension (docs/rulesets.md#equipment). A typed ref: it allows only equipment keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The target, as equipment/<id>.", "type": "string", "pattern": "^equipment/[a-z0-9]+(-[a-z0-9]+)*$" },
+        "note": { "description": "A qualifier printed in parentheses after the name.", "type": "string", "minLength": 1 }
+      }
+    },
+    "WeaponPropertyRef": {
+      "description": "A link to a weapon property on the Weapons page; a note prints in parentheses after it: \"Two-Handed (unless mounted)\".",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The target, as weapon-property/<id>.", "type": "string", "pattern": "^weapon-property/[a-z0-9]+(-[a-z0-9]+)*$" },
+        "note": { "description": "A qualifier printed in parentheses after the name.", "type": "string", "minLength": 1 }
+      }
+    },
+    "MasteryPropertyRef": {
+      "description": "A link to a mastery property on the Weapons page.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The target, as mastery-property/<id>.", "type": "string", "pattern": "^mastery-property/[a-z0-9]+(-[a-z0-9]+)*$" },
         "note": { "description": "A qualifier printed in parentheses after the name.", "type": "string", "minLength": 1 }
       }
     },

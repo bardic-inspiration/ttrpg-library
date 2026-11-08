@@ -1,0 +1,34 @@
+{
+  "type": "equipment",
+  "id": "holy-symbol",
+  "name": "Holy Symbol",
+  "stats": {
+    "group": "adventuring-gear",
+    "variants": [
+      {
+        "name": "Amulet (worn or held)",
+        "weight": 1,
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Emblem (borne on fabric or a Shield)",
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        }
+      },
+      {
+        "name": "Reliquary (held)",
+        "weight": 2,
+        "cost": {
+          "amount": 5,
+          "unit": "gp"
+        }
+      }
+    ],
+    "text": "A Holy Symbol takes one of the forms in the Holy Symbol table and is bejeweled or painted to channel divine magic. A Cleric or Paladin can use a Holy Symbol as a Spellcasting Focus.\n\nThe table indicates whether a Holy Symbol needs to be held, worn, or borne on fabric (such as a tabard or banner) or a {ref:equipment/shield}."
+  }
+}

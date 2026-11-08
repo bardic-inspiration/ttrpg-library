@@ -6,7 +6,25 @@
   "summary": "A sword that flies and attacks on its own at your command.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Greatsword, Longsword, Rapier, Scimitar, or Shortsword",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/greatsword"
+        },
+        {
+          "ref": "equipment/longsword"
+        },
+        {
+          "ref": "equipment/rapier"
+        },
+        {
+          "ref": "equipment/scimitar"
+        },
+        {
+          "ref": "equipment/shortsword"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "chain",
+  "name": "Chain",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 10,
+    "text": "As a Utilize action, you can wrap a Chain around an unwilling creature within 5 feet of yourself that has the {ref:condition/grappled}, {ref:condition/incapacitated}, or {ref:condition/restrained} condition if you succeed on a DC 13 Strength (Athletics) check. If the creature's legs are bound, the creature has the {ref:condition/restrained} condition until it escapes. Escaping the Chain requires the creature to make a successful DC 18 Dexterity (Acrobatics) check as an action. Bursting the Chain requires a successful DC 20 Strength (Athletics) check as an action."
+  }
+}

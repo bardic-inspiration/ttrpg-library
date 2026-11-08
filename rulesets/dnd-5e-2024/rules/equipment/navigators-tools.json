@@ -1,0 +1,17 @@
+{
+  "type": "equipment",
+  "id": "navigators-tools",
+  "name": "Navigator's Tools",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "tool": {
+      "ability": "wis",
+      "utilize": "Plot a course (DC 10), or determine position by stargazing (DC 15)"
+    }
+  }
+}

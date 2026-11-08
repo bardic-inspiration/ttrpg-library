@@ -2,6 +2,8 @@
 // validator, index builder, and site load a ruleset through it, so each
 // derived value is computed in exactly one place.
 
+import type { RulesData } from '../lib/rules.ts';
+
 export interface Issue {
   level: 'error' | 'warning';
   /** Where in the entry, such as `stats.actions[0].text`. */
@@ -27,10 +29,13 @@ export interface RefLabels {
 
 export interface RulesetModule {
   definition: RulesetDefinition;
-  /** Derived values for one entry's schema-valid `stats`; `{}` for a type with no formulas. */
-  derive(type: string, stats: unknown): Record<string, unknown>;
-  /** Consistency checks for one entry's schema-valid `stats` (docs/rulesets.md#consistency-checks). */
-  check(type: string, stats: unknown): Issue[];
+  /**
+   * Derived values for one entry's or primitive's schema-valid `stats`; `{}` for a type with no
+   * formulas. `rules` is the ruleset's rules data, for values that read it (an equipment's category).
+   */
+  derive(type: string, stats: unknown, rules?: RulesData): Record<string, unknown>;
+  /** Consistency checks for one entry's or primitive's schema-valid `stats` (docs/rulesets.md#consistency-checks), with the ruleset's rules data. */
+  check(type: string, stats: unknown, rules?: RulesData): Issue[];
   /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (docs/content-model.md#references). */
   refLabels(type: string, path: string): RefLabels;
 }

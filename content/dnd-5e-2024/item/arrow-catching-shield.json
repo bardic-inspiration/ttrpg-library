@@ -6,7 +6,13 @@
   "summary": "A Shield that adds +2 to AC against ranged attacks and can redirect them to you.",
   "stats": {
     "category": "armor",
-    "baseItem": "Shield",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/shield"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": true

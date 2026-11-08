@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "string",
+  "name": "String",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    },
+    "text": "String is 10 feet long. You can tie a knot in it as a Utilize action."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "equipment",
+  "id": "half-plate-armor",
+  "name": "Half Plate Armor",
+  "stats": {
+    "group": "medium-armor",
+    "cost": {
+      "amount": 750,
+      "unit": "gp"
+    },
+    "weight": 40,
+    "armor": {
+      "ac": 15,
+      "dex": true,
+      "dexMax": 2,
+      "stealthDisadvantage": true
+    }
+  }
+}

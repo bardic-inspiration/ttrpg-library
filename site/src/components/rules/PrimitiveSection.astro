@@ -4,13 +4,15 @@
 // section. A type whose registry template has a body part here renders with
 // it (a condition's effects); any other renders its stats as labeled lines.
 import { anchorId, ruleKey, type Primitive } from '../../../../lib/rules';
-import type { ConditionStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import type { ConditionStats, EquipmentStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { genericLines } from '../../lib/generic';
 import type { RulesContext } from '../../lib/rules';
 import registry from '../../../../config/types.json';
 import ConditionEffects from '../templates/parts/ConditionEffects.astro';
+import EquipmentBody from '../templates/parts/EquipmentBody.astro';
 import Heading from '../templates/parts/Heading.astro';
 import PropertyList from '../templates/parts/PropertyList.astro';
+import RulesText from '../templates/parts/RulesText.astro';
 import RefLinks from './RefLinks.astro';
 
 interface Props {
@@ -25,11 +27,17 @@ const template = (registry as Record<string, { types: Record<string, { template?
 // The group is the section the primitive sits in, so it isn't repeated as a line.
 const skip = ctx.data.groups.has(primitive.type) ? ['group'] : [];
 const refs = { names: ctx.names, ruleset: ctx.data.ruleset, paths: ctx.paths };
+// A primitive that is only rules text (a weapon property) reads as a paragraph.
+const onlyText = Object.keys(primitive.stats).length === 1 && typeof primitive.stats.text === 'string';
 ---
 <section class="rule" id={anchorId(key)} data-type={primitive.type}>
   <Heading level={level}>{primitive.name}</Heading>
   {template === 'condition-card' ? (
     <ConditionEffects name={primitive.name} stats={primitive.stats as unknown as ConditionStats} refs={refs} />
+  ) : template === 'equipment-card' ? (
+    <EquipmentBody stats={primitive.stats as unknown as EquipmentStats} refs={refs} />
+  ) : onlyText ? (
+    <RulesText text={primitive.stats.text as string} refs={refs} />
   ) : (
     <PropertyList lines={genericLines(primitive.stats, ctx.names, '', skip)} refs={refs} />
   )}

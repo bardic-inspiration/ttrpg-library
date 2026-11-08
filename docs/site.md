@@ -121,8 +121,9 @@ Each page in a ruleset's `rules/pages.json` builds at
   `<type>-<id>`, so a link lands on it and two types on one page can't
   collide. A primitive's section shows its name and its rules: with its
   type's body part when its registry template has one (a condition's
-  effects, as on its card), otherwise its `stats` as labeled lines (the
-  group it sits in isn't repeated). A group's shows its name, its `note`,
+  effects, or equipment's lines, as on its card), otherwise its rules text as
+  a paragraph when that is all it has (a weapon property), or its `stats` as
+  labeled lines (the group it sits in isn't repeated). A group's shows its name, its `note`,
   and its `text`. Each lists its forward refs and back-refs under
   the ruleset's labels, like a detail page's Links. A union group lists its
   members as links.
@@ -254,7 +255,7 @@ indexes.
 ### Templates
 
 - One component per type template, `condition-card`, `creature-stat-block`,
-  `item-card`, and `spell-card`, plus a `generic` fallback that renders the fixed keys,
+  `equipment-card`, `item-card`, and `spell-card`, plus a `generic` fallback that renders the fixed keys,
   `stats` as a definition list, and tags. `EntryTemplate` picks the component
   from the registry's `template`, falling back to `generic`. The generic
   lines render a ref as its target's name, linked to its page or rules

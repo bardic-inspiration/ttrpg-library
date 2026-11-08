@@ -1,0 +1,28 @@
+{
+  "type": "equipment",
+  "id": "warhammer",
+  "name": "Warhammer",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "weapon": {
+      "damage": {
+        "dice": "1d8",
+        "type": "bludgeoning"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/versatile"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/push"
+      },
+      "versatile": "1d10"
+    }
+  }
+}

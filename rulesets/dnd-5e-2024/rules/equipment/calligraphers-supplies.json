@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "calligraphers-supplies",
+  "name": "Calligrapher's Supplies",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "dex",
+      "utilize": "Write text with impressive flourishes that guard against forgery (DC 15)",
+      "craft": "{ref:equipment/ink}, {ref:equipment/spell-scroll}"
+    }
+  }
+}

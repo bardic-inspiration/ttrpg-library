@@ -6,7 +6,13 @@
   "summary": "Magic ammunition that deals heavy extra Force damage to one type of creature, then becomes nonmagical.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Ammunition",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/ammunition"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": false

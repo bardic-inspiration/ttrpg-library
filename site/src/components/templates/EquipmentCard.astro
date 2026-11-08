@@ -1,0 +1,24 @@
+---
+// The dnd-5e-2024 equipment card (registry template `equipment-card`, docs/rulesets.md#equipment,
+// docs/site.md#templates), for custom equipment: name, its group, then its rules as its
+// category page prints SRD equipment.
+import type { EquipmentStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { loadRules } from '../../lib/rules';
+import type { TemplateProps } from '../../lib/template';
+import EquipmentBody from './parts/EquipmentBody.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, paths, mode, level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+const s = entry.stats as EquipmentStats;
+const group = loadRules().find((r) => r.ruleset === entry.ruleset)?.groups.get('equipment')?.byId.get(s.group);
+const key = `equipment/${s.group}`;
+const subtitle = [{ text: group?.name ?? s.group, ...(paths?.has(key) ? { href: paths.get(key) } : {}) }];
+---
+<StatBlock name={`${entry.name} equipment`} type="equipment" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={subtitle} level={level} />
+  <EquipmentBody stats={s} refs={refs} />
+</StatBlock>

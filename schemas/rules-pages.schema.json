@@ -82,12 +82,11 @@
       ],
       "oneOf": [
         {
-          "description": "A prose section.",
+          "description": "A prose section. Its title may be left out for text that opens a page, whose heading would repeat the page title.",
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "kind",
-            "title"
+            "kind"
           ],
           "anyOf": [
             {

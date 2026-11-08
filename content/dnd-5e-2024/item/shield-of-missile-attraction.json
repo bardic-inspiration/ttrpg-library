@@ -6,7 +6,13 @@
   "summary": "A cursed Shield that grants Resistance to ranged weapons but draws their attacks to you.",
   "stats": {
     "category": "armor",
-    "baseItem": "Shield",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/shield"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": true

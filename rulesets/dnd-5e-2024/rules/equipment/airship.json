@@ -1,0 +1,20 @@
+{
+  "type": "equipment",
+  "id": "airship",
+  "name": "Airship",
+  "stats": {
+    "group": "airborne-and-waterborne-vehicles",
+    "cost": {
+      "amount": 40000,
+      "unit": "gp"
+    },
+    "vehicle": {
+      "speedMph": 8,
+      "crew": 10,
+      "passengers": 20,
+      "cargoTons": 1,
+      "ac": 13,
+      "hp": 300
+    }
+  }
+}

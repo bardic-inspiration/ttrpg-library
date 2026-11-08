@@ -6,7 +6,13 @@
   "summary": "A +2 scimitar that lets you make an extra attack as a Bonus Action.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Scimitar",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/scimitar"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

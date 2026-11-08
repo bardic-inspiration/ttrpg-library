@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { ItemStats, SpellStats } from '../../rulesets/dnd-5e-2024/types.ts';
 import { chargesLine, spellLine, subtitleLine } from '../../site/src/lib/item.ts';
 import { castingTimeLine, componentsLine, durationLine, levelLine, rangeLine } from '../../site/src/lib/spell.ts';
+import { baseLookup, loadRules } from '../../site/src/lib/rules.ts';
 import { frostLance, wandOfFrostLances } from '../helpers.ts';
 
 describe('spell card lines (docs/rulesets.md#spells)', async () => {
@@ -54,13 +55,14 @@ describe('spell card lines (docs/rulesets.md#spells)', async () => {
 
 describe('magic item card lines (docs/rulesets.md#items)', async () => {
   const wand = (await wandOfFrostLances()).stats as ItemStats;
+  const lookup = baseLookup(loadRules());
   const names = new Map([['spell/frost-lance', 'Frost Lance']]);
 
   it('formats category, base item, rarity, and attunement', () => {
     expect(subtitleLine(wand)).toBe('Wand, Uncommon (Requires Attunement by a spellcaster)');
-    expect(subtitleLine({ ...wand, category: 'weapon', baseItem: 'Longsword', rarity: 'very-rare', attunement: { required: false } })).toBe(
-      'Weapon (Longsword), Very Rare',
-    );
+    expect(
+      subtitleLine({ ...wand, category: 'weapon', baseItem: { oneOf: [{ ref: 'equipment/longsword' }] }, rarity: 'very-rare', attunement: { required: false } }, lookup),
+    ).toBe('Weapon (Longsword), Very Rare');
     expect(subtitleLine({ ...wand, category: 'wondrous-item', rarity: 'varies', attunement: { required: true } })).toBe(
       'Wondrous Item, Rarity Varies (Requires Attunement)',
     );
@@ -69,7 +71,7 @@ describe('magic item card lines (docs/rulesets.md#items)', async () => {
   it('prints the rarity of each variant in place of "Rarity Varies" (docs/rulesets.md#items)', () => {
     const variants = (rarities: [string, string][]) => rarities.map(([rarity, variant]) => ({ rarity, variant }));
     expect(
-      subtitleLine({ ...wand, category: 'weapon', baseItem: 'Any Ammunition', rarity: 'varies', attunement: { required: false }, rarityVariants: variants([['uncommon', '+1'], ['rare', '+2'], ['very-rare', '+3']]) }),
+      subtitleLine({ ...wand, category: 'weapon', baseItem: { any: [{ ref: 'equipment/ammunition' }] }, rarity: 'varies', attunement: { required: false }, rarityVariants: variants([['uncommon', '+1'], ['rare', '+2'], ['very-rare', '+3']]) }, lookup),
     ).toBe('Weapon (Any Ammunition), Uncommon (+1), Rare (+2), or Very Rare (+3)');
     expect(
       subtitleLine({ ...wand, category: 'wondrous-item', rarity: 'varies', attunement: { required: false }, rarityVariants: variants([['rare', 'Silver or Brass'], ['legendary', 'Iron']]) }),

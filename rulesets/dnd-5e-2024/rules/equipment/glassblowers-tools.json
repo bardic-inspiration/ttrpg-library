@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "glassblowers-tools",
+  "name": "Glassblower's Tools",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "int",
+      "utilize": "Discern what a glass object held in the past 24 hours (DC 15)",
+      "craft": "Glass Bottle, {ref:equipment/magnifying-glass}, {ref:equipment/spyglass}, {ref:equipment/vial}"
+    }
+  }
+}

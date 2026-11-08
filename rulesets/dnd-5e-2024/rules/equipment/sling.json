@@ -1,0 +1,31 @@
+{
+  "type": "equipment",
+  "id": "sling",
+  "name": "Sling",
+  "stats": {
+    "group": "simple-ranged-weapons",
+    "cost": {
+      "amount": 1,
+      "unit": "sp"
+    },
+    "weapon": {
+      "damage": {
+        "dice": "1d4",
+        "type": "bludgeoning"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/ammunition"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/slow"
+      },
+      "range": {
+        "normal": 30,
+        "long": 120
+      },
+      "ammunition": "Bullet"
+    }
+  }
+}

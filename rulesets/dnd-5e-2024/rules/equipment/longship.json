@@ -1,0 +1,21 @@
+{
+  "type": "equipment",
+  "id": "longship",
+  "name": "Longship",
+  "stats": {
+    "group": "airborne-and-waterborne-vehicles",
+    "cost": {
+      "amount": 10000,
+      "unit": "gp"
+    },
+    "vehicle": {
+      "speedMph": 3,
+      "crew": 40,
+      "passengers": 150,
+      "cargoTons": 10,
+      "ac": 15,
+      "hp": 300,
+      "damageThreshold": 15
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "equipment",
+  "id": "mule",
+  "name": "Mule",
+  "stats": {
+    "group": "mounts-and-other-animals",
+    "cost": {
+      "amount": 8,
+      "unit": "gp"
+    },
+    "mount": {
+      "carryingCapacity": 420
+    }
+  }
+}

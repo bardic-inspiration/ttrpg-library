@@ -54,6 +54,8 @@ export interface RulesContext {
   /** The ruleset's extension entries (entries of its rules types), by name. */
   extensions: LoadedEntry[];
   labelFor: (type: string, path: string) => RefLabels;
+  /** A primitive's derived values, for sorting a group's members. */
+  derive: (primitive: { type: string; stats: unknown }) => Record<string, unknown>;
 }
 
 /**
@@ -78,9 +80,34 @@ export function rulesContext(
     ),
     extensions: all.filter(({ entry }) => entry.ruleset === data.ruleset && types.has(entry.type)),
     labelFor: (type, path) => module.refLabels(type, path),
+    derive: (primitive) => module.derive(primitive.type, primitive.stats, data),
   };
 }
 
 /** The extensions listed at the bottom of one rules page. */
 export const pageExtensions = (ctx: RulesContext, page: string): LoadedEntry[] =>
   ctx.extensions.filter(({ entry }) => extensionPage(ctx.data, entry) === page);
+
+/**
+ * Names, qualifiers, and category nouns of equipment keys, for wording an item's base item
+ * (docs/rulesets.md#items): a group's noun is its category's.
+ */
+export function baseLookup(rules: RulesData[]): (key: string) => { name: string; qualifier?: string; noun?: string; group: boolean } | undefined {
+  const entries = new Map<string, { name: string; qualifier?: string; noun?: string; group: boolean }>();
+  for (const data of rules) {
+    for (const p of data.primitives) entries.set(`${p.type}/${p.id}`, { name: p.name, group: false });
+    for (const tree of data.groups.values()) {
+      for (const g of tree.groups) {
+        let root = g;
+        while (root.parent !== undefined) root = tree.byId.get(root.parent) ?? root;
+        entries.set(`${tree.type}/${g.id}`, {
+          name: g.name,
+          group: true,
+          ...(g.qualifier ? { qualifier: g.qualifier } : {}),
+          ...(root.noun ? { noun: root.noun } : {}),
+        });
+      }
+    }
+  }
+  return (key) => entries.get(key);
+}

@@ -160,7 +160,8 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     }
     // An SRD entry is literal (docs/content-model.md#srd-and-custom-entries): its deviations and authored
     // numbers match the SRD, so the ruleset's review warnings are skipped.
-    for (const issue of ruleset.module.check(entry.type, entry.stats)) {
+    const rulesData = rules.find((r) => r.ruleset === entry.ruleset);
+    for (const issue of ruleset.module.check(entry.type, entry.stats, rulesData)) {
       if (srd && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
     }
@@ -173,7 +174,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     entries.push({
       file,
       entry,
-      derived: ruleset.module.derive(entry.type, entry.stats),
+      derived: ruleset.module.derive(entry.type, entry.stats, rulesData),
       texts: [...envelopeResult.texts, ...statsResult.texts],
     });
   }

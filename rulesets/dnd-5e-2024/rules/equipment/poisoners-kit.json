@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "poisoners-kit",
+  "name": "Poisoner's Kit",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 50,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "tool": {
+      "ability": "int",
+      "utilize": "Detect a poisoned object (DC 10)",
+      "craft": "Basic Poison"
+    }
+  }
+}

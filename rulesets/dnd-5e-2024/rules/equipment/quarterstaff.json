@@ -1,0 +1,28 @@
+{
+  "type": "equipment",
+  "id": "quarterstaff",
+  "name": "Quarterstaff",
+  "stats": {
+    "group": "simple-melee-weapons",
+    "cost": {
+      "amount": 2,
+      "unit": "sp"
+    },
+    "weight": 4,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "bludgeoning"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/versatile"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/topple"
+      },
+      "versatile": "1d8"
+    }
+  }
+}

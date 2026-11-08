@@ -44,6 +44,21 @@
         "summaryField": "stats.cr",
         "gapBuckets": [{ "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }]
       },
+      "equipment": {
+        "label": "Equipment",
+        "plural": "Equipment",
+        "template": "equipment-card",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/equipment.md",
+        "facets": [
+          { "path": "derived.category", "label": "Category", "kind": "enum", "format": "title" },
+          { "path": "stats.group", "label": "Group", "kind": "enum", "format": "title" },
+          { "path": "derived.costGp", "label": "Cost (GP)", "kind": "range" },
+          { "path": "stats.weapon.damage.type", "label": "Damage type", "kind": "enum", "format": "title" }
+        ],
+        "cardFields": ["stats.group", "derived.costGp"],
+        "defaultSort": "derived.costGp:asc",
+        "defaultFilters": ["derived.category", "tags.theme"]
+      },
       "item": {
         "label": "Item",
         "formerly": ["magic-item"],

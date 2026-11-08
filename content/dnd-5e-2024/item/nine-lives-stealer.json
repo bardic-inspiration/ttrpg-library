@@ -6,7 +6,16 @@
   "summary": "A +2 weapon that can slay a creature outright on a 20, a limited number of times.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Simple or Martial",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/simple-weapons"
+        },
+        {
+          "ref": "equipment/martial-weapons"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

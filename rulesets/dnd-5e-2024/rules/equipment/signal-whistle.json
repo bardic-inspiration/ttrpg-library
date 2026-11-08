@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "signal-whistle",
+  "name": "Signal Whistle",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 5,
+      "unit": "cp"
+    },
+    "text": "When blown as a Utilize action, a Signal Whistle produces a sound that can be heard up to 600 feet away."
+  }
+}

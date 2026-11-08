@@ -6,7 +6,16 @@
   "summary": "A +1 weapon that deals extra damage to Dragons.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Any Simple or Martial",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/simple-weapons"
+        },
+        {
+          "ref": "equipment/martial-weapons"
+        }
+      ]
+    },
     "rarity": "rare",
     "attunement": {
       "required": false

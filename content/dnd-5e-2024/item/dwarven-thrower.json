@@ -6,7 +6,13 @@
   "summary": "A +3 warhammer that returns when thrown and deals extra damage to Giants.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Warhammer",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/warhammer"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true,

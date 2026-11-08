@@ -6,7 +6,21 @@
   "summary": "Light, flexible armor that imposes no Disadvantage on Stealth and has no Strength requirement.",
   "stats": {
     "category": "armor",
-    "baseItem": "Any Medium or Heavy, Except Hide Armor",
+    "baseItem": {
+      "any": [
+        {
+          "ref": "equipment/medium-armor"
+        },
+        {
+          "ref": "equipment/heavy-armor"
+        }
+      ],
+      "except": [
+        {
+          "ref": "equipment/hide-armor"
+        }
+      ]
+    },
     "rarity": "uncommon",
     "attunement": {
       "required": false

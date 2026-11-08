@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "diplomats-pack",
+  "name": "Diplomat's Pack",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 39,
+      "unit": "gp"
+    },
+    "weight": 39,
+    "text": "A Diplomat's Pack contains the following items: {ref:equipment/chest}, Fine Clothes, {ref:equipment/ink}, 5 Ink Pens, {ref:equipment/lamp}, 2 Map or Scroll Cases, 4 flasks of {ref:equipment/oil}, 5 sheets of {ref:equipment/paper}, 5 sheets of {ref:equipment/parchment}, {ref:equipment/perfume}, and {ref:equipment/tinderbox}."
+  }
+}

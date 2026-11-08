@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "crowbar",
+  "name": "Crowbar",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "text": "Using a Crowbar gives you Advantage on Strength checks where the Crowbar's leverage can be applied."
+  }
+}

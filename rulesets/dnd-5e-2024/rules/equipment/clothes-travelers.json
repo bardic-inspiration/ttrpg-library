@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "clothes-travelers",
+  "name": "Clothes, Traveler's",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "gp"
+    },
+    "weight": 4,
+    "text": "Traveler's Clothes are resilient garments designed for travel in various environments."
+  }
+}

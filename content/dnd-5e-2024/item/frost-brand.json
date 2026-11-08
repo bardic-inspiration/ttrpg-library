@@ -6,7 +6,28 @@
   "summary": "A weapon that deals extra Cold damage, grants Fire Resistance, and puts out flames.",
   "stats": {
     "category": "weapon",
-    "baseItem": "Glaive, Greatsword, Longsword, Rapier, Scimitar, or Shortsword",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/glaive"
+        },
+        {
+          "ref": "equipment/greatsword"
+        },
+        {
+          "ref": "equipment/longsword"
+        },
+        {
+          "ref": "equipment/rapier"
+        },
+        {
+          "ref": "equipment/scimitar"
+        },
+        {
+          "ref": "equipment/shortsword"
+        }
+      ]
+    },
     "rarity": "very-rare",
     "attunement": {
       "required": true

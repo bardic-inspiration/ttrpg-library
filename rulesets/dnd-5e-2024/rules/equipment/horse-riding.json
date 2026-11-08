@@ -1,0 +1,15 @@
+{
+  "type": "equipment",
+  "id": "horse-riding",
+  "name": "Horse, Riding",
+  "stats": {
+    "group": "mounts-and-other-animals",
+    "cost": {
+      "amount": 75,
+      "unit": "gp"
+    },
+    "mount": {
+      "carryingCapacity": 480
+    }
+  }
+}

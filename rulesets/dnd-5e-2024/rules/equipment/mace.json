@@ -1,0 +1,22 @@
+{
+  "type": "equipment",
+  "id": "mace",
+  "name": "Mace",
+  "stats": {
+    "group": "simple-melee-weapons",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 4,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "bludgeoning"
+      },
+      "mastery": {
+        "ref": "mastery-property/sap"
+      }
+    }
+  }
+}

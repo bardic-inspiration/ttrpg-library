@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "painters-supplies",
+  "name": "Painter's Supplies",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "wis",
+      "utilize": "Paint a recognizable image of something you've seen (DC 10)",
+      "craft": "{ref:equipment/druidic-focus}, {ref:equipment/holy-symbol}"
+    }
+  }
+}

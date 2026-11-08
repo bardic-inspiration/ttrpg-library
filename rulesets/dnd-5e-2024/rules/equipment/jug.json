@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "jug",
+  "name": "Jug",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 2,
+      "unit": "cp"
+    },
+    "weight": 4,
+    "text": "A Jug holds up to 1 gallon."
+  }
+}

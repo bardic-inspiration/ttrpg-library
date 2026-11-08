@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "spyglass",
+  "name": "Spyglass",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 1000,
+      "unit": "gp"
+    },
+    "weight": 1,
+    "text": "Objects viewed through a Spyglass are magnified to twice their size."
+  }
+}

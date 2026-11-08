@@ -1,0 +1,35 @@
+{
+  "type": "equipment",
+  "id": "shortbow",
+  "name": "Shortbow",
+  "stats": {
+    "group": "simple-ranged-weapons",
+    "cost": {
+      "amount": 25,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/ammunition"
+        },
+        {
+          "ref": "weapon-property/two-handed"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/vex"
+      },
+      "range": {
+        "normal": 80,
+        "long": 320
+      },
+      "ammunition": "Arrow"
+    }
+  }
+}

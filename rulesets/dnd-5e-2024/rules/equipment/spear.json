@@ -1,0 +1,35 @@
+{
+  "type": "equipment",
+  "id": "spear",
+  "name": "Spear",
+  "stats": {
+    "group": "simple-melee-weapons",
+    "cost": {
+      "amount": 1,
+      "unit": "gp"
+    },
+    "weight": 3,
+    "weapon": {
+      "damage": {
+        "dice": "1d6",
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/thrown"
+        },
+        {
+          "ref": "weapon-property/versatile"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/sap"
+      },
+      "range": {
+        "normal": 20,
+        "long": 60
+      },
+      "versatile": "1d8"
+    }
+  }
+}

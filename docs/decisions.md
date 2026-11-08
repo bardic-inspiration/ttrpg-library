@@ -282,6 +282,14 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A rules extension type has no `summaryField` and no `gapBuckets`; its registry entry sorts by name. | It has no key stat, and gap fill never adds one | #225 |
 | The condition-immunity facet waits for the filter tree, and SRD coverage of primitives for a later rules task. | Each needs machinery the conditions don't (a facet over refs; tierless manifest records) | #225 |
 | Contagion's Poisoned mentions are linked with the conditions, as the spec's case; the link pass links every other mention. | Proves the case without starting the pass early (#228) | #225 |
+| Rules data links only to rules data: a primitive's, group's, or page's link to an entry is an error, and page links must resolve. Mounts don't link their creatures, and the Equipment page names Identify and the rings in plain text. | The ruleset is the basis; linking down into the library would make every library depend on certain entries existing | #226 |
+| A ruleset module's `derive` and `check` receive the ruleset's rules data. | Equipment's category comes from its group, and base items are checked against the groups and variants | #226 |
+| Groups take a category `noun` and `sortBy` paths; armor prints by AC then cost through `sortBy`. A page's opening prose may have no title. | P4: the base item wording and the SRD's armor order are data, not code | #226 |
+| The Spell Scroll and the Saddle are equipment with variants, like the foci; a variants table heads its first column "Variant". | Each shares one description across priced forms; the SRD's own column names vary by table | #226 |
+| The Equipment page links the five category pages in a "Categories" section, and keeps the SRD's "Spellcasting" heading. The large-vehicle notes are the vehicles group's text, with run-in heads. | The page needs a way to the categories; group text has no headings | #226 |
+| Equipment text and rules prose link each exact mention of a condition or equipment as they're transcribed; plurals and names inside a longer capitalized phrase stay plain, and "Ammunition" stays plain because it names the property. | Linking is part of authoring (#111) | #226 |
+| Custom equipment filters by category, group, cost, and weapon damage type, sorts by cost, and has no gap buckets. Filters on weapon properties and mastery wait for the filter tree. | Those facets are lists of refs, which need the tree's ref labels (#235) | #226 |
+| A base item renders as linked segments in the item card's subtitle. | A link's text is a group's qualifier, which a `{ref:…}` token can't render | #226 |
 
 ### UI
 

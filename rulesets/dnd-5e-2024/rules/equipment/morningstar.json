@@ -1,0 +1,22 @@
+{
+  "type": "equipment",
+  "id": "morningstar",
+  "name": "Morningstar",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weight": 4,
+    "weapon": {
+      "damage": {
+        "dice": "1d8",
+        "type": "piercing"
+      },
+      "mastery": {
+        "ref": "mastery-property/sap"
+      }
+    }
+  }
+}

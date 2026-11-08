@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "chest",
+  "name": "Chest",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 5,
+      "unit": "gp"
+    },
+    "weight": 25,
+    "text": "A Chest holds up to 12 cubic feet of contents."
+  }
+}

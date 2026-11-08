@@ -1,0 +1,35 @@
+{
+  "type": "equipment",
+  "id": "blowgun",
+  "name": "Blowgun",
+  "stats": {
+    "group": "martial-ranged-weapons",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 1,
+    "weapon": {
+      "damage": {
+        "flat": 1,
+        "type": "piercing"
+      },
+      "properties": [
+        {
+          "ref": "weapon-property/ammunition"
+        },
+        {
+          "ref": "weapon-property/loading"
+        }
+      ],
+      "mastery": {
+        "ref": "mastery-property/vex"
+      },
+      "range": {
+        "normal": 25,
+        "long": 100
+      },
+      "ammunition": "Needle"
+    }
+  }
+}

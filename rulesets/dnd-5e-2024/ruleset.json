@@ -12,6 +12,18 @@
     {
       "type": "condition",
       "extensions": true
+    },
+    {
+      "type": "equipment",
+      "extensions": true
+    },
+    {
+      "type": "weapon-property",
+      "extensions": false
+    },
+    {
+      "type": "mastery-property",
+      "extensions": false
     }
   ]
 }

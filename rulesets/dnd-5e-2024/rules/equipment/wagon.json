@@ -1,0 +1,13 @@
+{
+  "type": "equipment",
+  "id": "wagon",
+  "name": "Wagon",
+  "stats": {
+    "group": "tack-harness-and-drawn-vehicles",
+    "cost": {
+      "amount": 35,
+      "unit": "gp"
+    },
+    "weight": 400
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "equipment",
+  "id": "flail",
+  "name": "Flail",
+  "stats": {
+    "group": "martial-melee-weapons",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "weapon": {
+      "damage": {
+        "dice": "1d8",
+        "type": "bludgeoning"
+      },
+      "mastery": {
+        "ref": "mastery-property/sap"
+      }
+    }
+  }
+}

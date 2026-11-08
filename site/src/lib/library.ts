@@ -72,7 +72,7 @@ export function loadLibrary(
   return entries
     .map((entry) => ({
       entry,
-      derived: moduleFor(entry.ruleset).derive(entry.type, entry.stats),
+      derived: moduleFor(entry.ruleset).derive(entry.type, entry.stats, rules.find((r) => r.ruleset === entry.ruleset)),
       ...(links.get(entryKey(entry)) ?? { refs: [], refBy: [] }),
     }))
     .sort((a, b) => a.entry.name.localeCompare(b.entry.name));

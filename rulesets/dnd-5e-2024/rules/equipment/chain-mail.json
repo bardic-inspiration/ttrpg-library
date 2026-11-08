@@ -1,0 +1,18 @@
+{
+  "type": "equipment",
+  "id": "chain-mail",
+  "name": "Chain Mail",
+  "stats": {
+    "group": "heavy-armor",
+    "cost": {
+      "amount": 75,
+      "unit": "gp"
+    },
+    "weight": 55,
+    "armor": {
+      "ac": 16,
+      "strength": 13,
+      "stealthDisadvantage": true
+    }
+  }
+}

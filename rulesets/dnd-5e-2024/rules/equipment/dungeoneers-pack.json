@@ -1,0 +1,14 @@
+{
+  "type": "equipment",
+  "id": "dungeoneers-pack",
+  "name": "Dungeoneer's Pack",
+  "stats": {
+    "group": "adventuring-gear",
+    "cost": {
+      "amount": 12,
+      "unit": "gp"
+    },
+    "weight": 55,
+    "text": "A Dungeoneer's Pack contains the following items: {ref:equipment/backpack}, {ref:equipment/caltrops}, {ref:equipment/crowbar}, 2 flasks of {ref:equipment/oil}, 10 days of {ref:equipment/rations}, {ref:equipment/rope}, {ref:equipment/tinderbox}, 10 Torches, and {ref:equipment/waterskin}."
+  }
+}
