@@ -17,11 +17,11 @@
         }
       }
     ],
-    "effect": "While wearing this cloak, you have Advantage on Dexterity (Stealth) checks. In an area of Dim Light or Darkness, you can grip the edges of the cloak and use it to gain a Fly Speed of 40 feet. If you ever fail to grip the cloak's edges while flying in this way, or if you are no longer in Dim Light or Darkness, you lose this Fly Speed.\n\nWhile wearing the cloak in an area of Dim Light or Darkness, you can cast *{ref:spell/polymorph}* on yourself, shape-shifting into a **{ref:creature/bat}**. While in that form, you retain your Intelligence, Wisdom, and Charisma scores. The cloak can't be used this way again until the next dawn."
+    "effect": "While wearing this cloak, you have {ref:glossary/advantage} on Dexterity (Stealth) checks. In an area of {ref:glossary/dim-light} or {ref:glossary/darkness}, you can grip the edges of the cloak and use it to gain a {ref:glossary/fly-speed} of 40 feet. If you ever fail to grip the cloak's edges while flying in this way, or if you are no longer in Dim Light or Darkness, you lose this Fly Speed.\n\nWhile wearing the cloak in an area of Dim Light or Darkness, you can cast *{ref:spell/polymorph}* on yourself, shape-shifting into a **{ref:creature/bat}**. While in that form, you retain your Intelligence, Wisdom, and Charisma scores. The cloak can't be used this way again until the next dawn."
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

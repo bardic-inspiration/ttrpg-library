@@ -10,7 +10,7 @@
     "attunement": {
       "required": true
     },
-    "effect": "While you wear this ring, Difficult Terrain doesn't cost you extra movement. In addition, magic can neither reduce any of your Speeds nor cause you to have the Paralyzed or Restrained condition."
+    "effect": "While you wear this ring, {ref:glossary/difficult-terrain} doesn't cost you extra movement. In addition, magic can neither reduce any of your Speeds nor cause you to have the {ref:condition/paralyzed} or {ref:condition/restrained} condition."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

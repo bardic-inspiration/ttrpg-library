@@ -17,7 +17,7 @@
     "attunement": {
       "required": true
     },
-    "effect": "While holding this Shield, you have Advantage on saving throws against spells and other magical effects, and spell attack rolls have Disadvantage against you."
+    "effect": "While holding this {ref:equipment/shield}, you have {ref:glossary/advantage} on saving throws against spells and other magical effects, and spell attack rolls have {ref:glossary/disadvantage} against you."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -27,6 +27,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

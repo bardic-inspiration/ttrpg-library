@@ -17,7 +17,7 @@
         }
       }
     ],
-    "effect": "This cape smells faintly of brimstone. While wearing it, you can use it to cast *{ref:spell/dimension-door}* as a Magic action. This property can't be used again until the next dawn.\n\nWhen you teleport with that spell, you leave behind a cloud of smoke. The space you left is Lightly Obscured by that smoke until the end of your next turn."
+    "effect": "This cape smells faintly of brimstone. While wearing it, you can use it to cast *{ref:spell/dimension-door}* as a {ref:glossary/magic} action. This property can't be used again until the next dawn.\n\nWhen you teleport with that spell, you leave behind a cloud of smoke. The space you left is {ref:glossary/lightly-obscured} by that smoke until the end of your next turn."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -27,6 +27,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

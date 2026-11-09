@@ -10,13 +10,14 @@
     "attunement": {
       "required": false
     },
-    "effect": "While you wear these boots, your steps make no sound, regardless of the surface you are moving across. You also have Advantage on Dexterity (Stealth) checks."
+    "effect": "While you wear these boots, your steps make no sound, regardless of the surface you are moving across. You also have {ref:glossary/advantage} on Dexterity (Stealth) checks."
   },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {
       "kind": "routine",
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -11,7 +11,7 @@
       "required": true,
       "requirement": "by a Sorcerer, Warlock, or Wizard"
     },
-    "effect": "This elegant garment is made from exquisite cloth and adorned with runes.\n\nYou gain these benefits while wearing the robe.\n\n***Armor.*** If you aren't wearing armor, your base Armor Class is 15 plus your Dexterity modifier.\n\n***Magic Resistance.*** You have Advantage on saving throws against spells and other magical effects.\n\n***War Mage.*** Your spell save DC and spell attack bonus each increase by 2."
+    "effect": "This elegant garment is made from exquisite cloth and adorned with runes.\n\nYou gain these benefits while wearing the robe.\n\n***Armor.*** If you aren't wearing armor, your base {ref:glossary/armor-class} is 15 plus your Dexterity modifier.\n\n***Magic Resistance.*** You have {ref:glossary/advantage} on saving throws against spells and other magical effects.\n\n***War Mage.*** Your spell save DC and spell attack bonus each increase by 2."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -21,6 +21,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }
