@@ -36,7 +36,7 @@
       {
         "name": "Regeneration",
         "kind": "other",
-        "text": "The limb regains 5 Hit Points at the start of each of its turns. If the limb takes Acid or Fire damage, this trait doesn't function on the limb's next turn. The limb dies only if it starts its turn with 0 Hit Points and doesn't regenerate."
+        "text": "The limb regains 5 {ref:glossary/hit-points} at the start of each of its turns. If the limb takes Acid or Fire damage, this trait doesn't function on the limb's next turn. The limb dies only if it starts its turn with 0 Hit Points and doesn't regenerate."
       },
       {
         "name": "Troll Spawn",
@@ -68,6 +68,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

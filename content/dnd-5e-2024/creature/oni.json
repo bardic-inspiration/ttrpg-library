@@ -55,7 +55,7 @@
       {
         "name": "Regeneration",
         "kind": "other",
-        "text": "The oni regains 10 Hit Points at the start of each of its turns if it has at least 1 Hit Point."
+        "text": "The oni regains 10 {ref:glossary/hit-points} at the start of each of its turns if it has at least 1 Hit Point."
       }
     ],
     "actions": [
@@ -95,7 +95,7 @@
             "type": "psychic"
           }
         ],
-        "onHit": "and the target has the Frightened condition until the start of the oni's next turn."
+        "onHit": "and the target has the {ref:condition/frightened} condition until the start of the oni's next turn."
       },
       {
         "name": "Shape-Shift",
@@ -140,6 +140,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

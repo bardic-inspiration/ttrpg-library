@@ -57,7 +57,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "and the target has the Poisoned condition. Whenever the Poisoned target finishes a Long Rest, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target's Hit Point maximum decreases by {dmg:1d10} and doesn't return to normal until the Poisoned condition ends on the target. *Success:* The Poisoned condition ends."
+        "onHit": "and the target has the {ref:condition/poisoned} condition. Whenever the {ref:condition/poisoned} target finishes a {ref:glossary/long-rest}, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target's Hit Point maximum decreases by {dmg:1d10} and doesn't return to normal until the {ref:condition/poisoned} condition ends on the target. *Success:* The {ref:condition/poisoned} condition ends."
       },
       {
         "name": "Tentacle",
@@ -71,7 +71,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=13}) from one of two tentacles."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=13}) from one of two tentacles."
       },
       {
         "name": "Tentacle Slam",
@@ -88,7 +88,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onFailure": "and the target has the Stunned condition until the start of the otyugh's next turn.",
+        "onFailure": "and the target has the {ref:condition/stunned} condition until the start of the otyugh's next turn.",
         "onSuccess": "Half damage only."
       }
     ]
@@ -101,6 +101,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

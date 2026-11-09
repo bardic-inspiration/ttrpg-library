@@ -115,7 +115,7 @@
           "ability": "con",
           "targets": "each creature in a 60-foot Cone"
         },
-        "onFailure": "The target can't take Reactions; its Speed is halved; and it can take either an action or a Bonus Action on its turn, not both. This effect lasts until the end of its next turn."
+        "onFailure": "The target can't take Reactions; its {ref:glossary/speed} is halved; and it can take either an action or a {ref:glossary/bonus-action} on its turn, not both. This effect lasts until the end of its next turn."
       }
     ],
     "spellcasting": {
@@ -167,7 +167,7 @@
               "type": "psychic"
             }
           ],
-          "onFailure": "Until the end of its next turn, the target rolls 1d6 whenever it makes an ability check or attack roll and subtracts the number rolled from the D20 Test.",
+          "onFailure": "Until the end of its next turn, the target rolls 1d6 whenever it makes an ability check or attack roll and subtracts the number rolled from the {ref:glossary/d20-test}.",
           "onFailureOrSuccess": "The dragon can't take this action again until the start of its next turn."
         },
         {
@@ -178,7 +178,7 @@
         {
           "name": "Pounce",
           "kind": "other",
-          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+          "text": "The dragon moves up to half its {ref:glossary/speed}, and it makes one Rend attack."
         }
       ]
     }
@@ -191,6 +191,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

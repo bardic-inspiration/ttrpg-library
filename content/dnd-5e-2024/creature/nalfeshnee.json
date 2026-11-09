@@ -70,12 +70,12 @@
       {
         "name": "Demonic Restoration",
         "kind": "other",
-        "text": "If the nalfeshnee dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+        "text": "If the nalfeshnee dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Abyss."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The nalfeshnee has Advantage on saving throws against spells and other magical effects."
+        "text": "The nalfeshnee has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -122,7 +122,7 @@
             "type": "psychic"
           }
         ],
-        "onFailure": "and the target has the Frightened condition for 1 minute, until it takes damage, or until it ends its turn with the nalfeshnee out of line of sight.",
+        "onFailure": "and the target has the {ref:condition/frightened} condition for 1 minute, until it takes damage, or until it ends its turn with the nalfeshnee out of line of sight.",
         "onSuccess": "The target is immune to this nalfeshnee's Horror Nimbus for 24 hours.",
         "recharge": "5-6"
       }
@@ -143,6 +143,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -49,7 +49,7 @@
       {
         "name": "Standing Leap",
         "kind": "other",
-        "text": "The frog's Long Jump is up to 20 feet and its High Jump is up to 10 feet with or without a running start."
+        "text": "The frog's {ref:glossary/long-jump} is up to 20 feet and its {ref:glossary/high-jump} is up to 10 feet with or without a running start."
       }
     ],
     "actions": [
@@ -66,12 +66,12 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=11})."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=11})."
       },
       {
         "name": "Swallow",
         "kind": "other",
-        "text": "The frog swallows a Small or smaller target it is grappling. While swallowed, the target isn't Grappled but has the Blinded and Restrained conditions, and it has Total Cover against attacks and other effects outside the frog. While swallowing the target, the frog can't use Bite, and if the frog dies, the swallowed target is no longer Restrained and can escape from the corpse using 5 feet of movement, exiting with the Prone condition.\n\nAt the end of the frog's next turn, the swallowed target takes {dmg:2d4:acid}. If that damage doesn't kill it, the frog disgorges it, causing it to exit Prone."
+        "text": "The frog swallows a Small or smaller target it is grappling. While swallowed, the target isn't {ref:condition/grappled} but has the {ref:condition/blinded} and {ref:condition/restrained} conditions, and it has Total Cover against attacks and other effects outside the frog. While swallowing the target, the frog can't use Bite, and if the frog dies, the swallowed target is no longer {ref:condition/restrained} and can escape from the corpse using 5 feet of movement, exiting with the {ref:condition/prone} condition.\n\nAt the end of the frog's next turn, the swallowed target takes {dmg:2d4:acid}. If that damage doesn't kill it, the frog disgorges it, causing it to exit {ref:condition/prone}."
       }
     ]
   },
@@ -83,6 +83,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

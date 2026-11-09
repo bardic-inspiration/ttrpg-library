@@ -68,12 +68,12 @@
       {
         "name": "Diabolical Restoration",
         "kind": "other",
-        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Nine Hells."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The devil has Advantage on saving throws against spells and other magical effects."
+        "text": "The devil has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -102,7 +102,7 @@
             "type": "cold"
           }
         ],
-        "onHit": "Until the end of its next turn, the target can't take a Bonus Action or Reaction, its Speed decreases by 10 feet, and it can move or take one action on its turn, not both. *Hit or Miss:* The spear magically returns to the devil's hand immediately after a ranged attack."
+        "onHit": "Until the end of its next turn, the target can't take a {ref:glossary/bonus-action} or {ref:glossary/reaction}, its {ref:glossary/speed} decreases by 10 feet, and it can move or take one action on its turn, not both. *Hit or Miss:* The spear magically returns to the devil's hand immediately after a ranged attack."
       },
       {
         "name": "Tail",
@@ -137,6 +137,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

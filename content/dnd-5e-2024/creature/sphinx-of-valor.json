@@ -73,7 +73,7 @@
       {
         "name": "Inscrutable",
         "kind": "other",
-        "text": "No magic can observe the sphinx remotely or detect its thoughts without its permission. Wisdom (Insight) checks made to ascertain its intentions or sincerity are made with Disadvantage."
+        "text": "No magic can observe the sphinx remotely or detect its thoughts without its permission. Wisdom (Insight) checks made to ascertain its intentions or sincerity are made with {ref:glossary/disadvantage}."
       },
       {
         "name": "Legendary Resistance",
@@ -104,7 +104,7 @@
       {
         "name": "Roar",
         "kind": "other",
-        "text": "The sphinx emits a magical roar. Whenever it roars, the roar has a different effect, as detailed below (the sequence resets when it takes a Long Rest):\n\n**First Roar.** *Wisdom Saving Throw:* {dc:wis}, each enemy in a 500-foot Emanation originating from the sphinx. *Failure:* The target has the Frightened condition for 1 minute.\n\n**Second Roar.** *Wisdom Saving Throw:* {dc:wis}, each enemy in a 500-foot Emanation originating from the sphinx. *Failure:* The target has the Paralyzed condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.\n\n**Third Roar.** *Constitution Saving Throw:* {dc:wis}, each enemy in a 500-foot Emanation originating from the sphinx. *Failure:* {dmg:8d10:thunder}, and the target has the Prone condition. *Success:* Half damage only.",
+        "text": "The sphinx emits a magical roar. Whenever it roars, the roar has a different effect, as detailed below (the sequence resets when it takes a {ref:glossary/long-rest}):\n\n**First Roar.** *Wisdom Saving Throw:* {dc:wis}, each enemy in a 500-foot {ref:glossary/emanation} originating from the sphinx. *Failure:* The target has the {ref:condition/frightened} condition for 1 minute.\n\n**Second Roar.** *Wisdom Saving Throw:* {dc:wis}, each enemy in a 500-foot Emanation originating from the sphinx. *Failure:* The target has the {ref:condition/paralyzed} condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.\n\n**Third Roar.** *Constitution Saving Throw:* {dc:wis}, each enemy in a 500-foot Emanation originating from the sphinx. *Failure:* {dmg:8d10:thunder}, and the target has the {ref:condition/prone} condition. *Success:* Half damage only.",
         "uses": "3/day"
       }
     ],
@@ -158,7 +158,7 @@
             "ability": "con",
             "targets": "one creature the sphinx can see within 120 feet"
           },
-          "onFailure": "The target gains 1 Exhaustion level. While the target has any Exhaustion levels, it appears 3d10 years older.",
+          "onFailure": "The target gains 1 {ref:condition/exhaustion} level. While the target has any {ref:condition/exhaustion} levels, it appears 3d10 years older.",
           "onFailureOrSuccess": "The sphinx can't take this action again until the start of its next turn."
         }
       ]
@@ -166,7 +166,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

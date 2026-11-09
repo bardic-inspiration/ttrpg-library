@@ -76,7 +76,7 @@
           "ability": "con",
           "targets": "each creature in a 10-foot Emanation originating from the dretch"
         },
-        "onFailure": "The target has the Poisoned condition until the end of its next turn. While Poisoned, the creature can take either an action or a Bonus Action on its turn, not both, and it can't take Reactions.",
+        "onFailure": "The target has the {ref:condition/poisoned} condition until the end of its next turn. While {ref:condition/poisoned}, the creature can take either an action or a {ref:glossary/bonus-action} on its turn, not both, and it can't take Reactions.",
         "uses": "1/day"
       }
     ]
@@ -89,6 +89,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -63,12 +63,12 @@
       {
         "name": "Demonic Restoration",
         "kind": "other",
-        "text": "If the vrock dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+        "text": "If the vrock dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Abyss."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The vrock has Advantage on saving throws against spells and other magical effects."
+        "text": "The vrock has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -102,7 +102,7 @@
           "ability": "con",
           "targets": "each creature in a 20-foot Emanation originating from the vrock"
         },
-        "onFailure": "The target has the Poisoned condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. While Poisoned, the target takes {dmg:1d10:poison} at the start of each of its turns. Emptying a flask of Holy Water on the target ends the effect early.",
+        "onFailure": "The target has the {ref:condition/poisoned} condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. While {ref:condition/poisoned}, the target takes {dmg:1d10:poison} at the start of each of its turns. Emptying a flask of {ref:equipment/holy-water} on the target ends the effect early.",
         "recharge": "6"
       },
       {
@@ -119,7 +119,7 @@
             "type": "thunder"
           }
         ],
-        "onFailure": "and the target has the Stunned condition until the end of the vrock's next turn.",
+        "onFailure": "and the target has the {ref:condition/stunned} condition until the end of the vrock's next turn.",
         "uses": "1/day"
       }
     ]
@@ -132,6 +132,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

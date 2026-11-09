@@ -74,12 +74,12 @@
       {
         "name": "Death Throes",
         "kind": "other",
-        "text": "The balor explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 30-foot Emanation originating from the balor. *Failure:* {dmg:9d6:fire} plus {dmg:9d6:force}. *Success:* Half damage. *Failure or Success:* If the balor dies outside the Abyss, it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+        "text": "The balor explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 30-foot {ref:glossary/emanation} originating from the balor. *Failure:* {dmg:9d6:fire} plus {dmg:9d6:force}. *Success:* Half damage. *Failure or Success:* If the balor dies outside the Abyss, it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Abyss."
       },
       {
         "name": "Fire Aura",
         "kind": "other",
-        "text": "At the end of each of the balor's turns, each creature in a 5-foot Emanation originating from the balor takes {dmg:3d8:fire}."
+        "text": "At the end of each of the balor's turns, each creature in a 5-foot {ref:glossary/emanation} originating from the balor takes {dmg:3d8:fire}."
       },
       {
         "name": "Legendary Resistance",
@@ -90,7 +90,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The balor has Advantage on saving throws against spells and other magical effects."
+        "text": "The balor has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -115,7 +115,7 @@
             "type": "fire"
           }
         ],
-        "onHit": "If the target is a Huge or smaller creature, the balor pulls the target up to 25 feet straight toward itself, and the target has the Prone condition."
+        "onHit": "If the target is a Huge or smaller creature, the balor pulls the target up to 25 feet straight toward itself, and the target has the {ref:condition/prone} condition."
       },
       {
         "name": "Lightning Blade",
@@ -152,6 +152,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

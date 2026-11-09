@@ -71,7 +71,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "and the target has the Poisoned condition until the end of the couatl's next turn."
+        "onHit": "and the target has the {ref:condition/poisoned} condition until the end of the couatl's next turn."
       },
       {
         "name": "Constrict",
@@ -88,7 +88,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onFailure": "The target has the Grappled condition (escape {dc=13}), and it has the Restrained condition until the grapple ends."
+        "onFailure": "The target has the {ref:condition/grappled} condition (escape {dc=13}), and it has the {ref:condition/restrained} condition until the grapple ends."
       }
     ],
     "spellcasting": {
@@ -140,7 +140,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

@@ -35,7 +35,9 @@
       "stealth": "proficient"
     },
     "gear": [
-      "Longbow"
+      {
+        "ref": "equipment/longbow"
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -65,7 +67,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Humanoid, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target is cursed. If the cursed target drops to 0 Hit Points, it instead becomes a **Weretiger** under the GM's control and has 10 Hit Points. *Success:* The target is immune to this weretiger's curse for 24 hours."
+        "onHit": "If the target is a Humanoid, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target is cursed. If the cursed target drops to 0 {ref:glossary/hit-points}, it instead becomes a **Weretiger** under the GM's control and has 10 Hit Points. *Success:* The target is immune to this weretiger's curse for 24 hours."
       },
       {
         "name": "Scratch",
@@ -101,7 +103,7 @@
       {
         "name": "Prowl (Tiger or Hybrid Form Only)",
         "kind": "other",
-        "text": "The weretiger moves up to its Speed without provoking Opportunity Attacks. At the end of this movement, the weretiger can take the Hide action."
+        "text": "The weretiger moves up to its {ref:glossary/speed} without provoking {ref:glossary/opportunity-attacks}. At the end of this movement, the weretiger can take the {ref:glossary/hide} action."
       },
       {
         "name": "Shape-Shift",
@@ -118,6 +120,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

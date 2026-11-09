@@ -60,7 +60,7 @@
           "normal": 40,
           "long": 160
         },
-        "onHit": "1 Piercing damage, and the target has the Charmed condition until the start of the sprite's next turn."
+        "onHit": "1 Piercing damage, and the target has the {ref:condition/charmed} condition until the start of the sprite's next turn."
       },
       {
         "name": "Heart Sight",
@@ -87,6 +87,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -90,7 +90,7 @@
       {
         "name": "Invisibility",
         "kind": "other",
-        "text": "The stalker has the Invisible condition."
+        "text": "The stalker has the {ref:condition/invisible} condition."
       }
     ],
     "actions": [
@@ -127,7 +127,7 @@
             "type": "thunder"
           }
         ],
-        "onFailure": "and the target has the Grappled condition (escape {dc=13}). Until the grapple ends, the target can't cast spells with a Verbal component and takes {dmg:2d6:thunder} at the start of each of the stalker's turns."
+        "onFailure": "and the target has the {ref:condition/grappled} condition (escape {dc=13}). Until the grapple ends, the target can't cast spells with a Verbal component and takes {dmg:2d6:thunder} at the start of each of the stalker's turns."
       }
     ]
   },
@@ -139,6 +139,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

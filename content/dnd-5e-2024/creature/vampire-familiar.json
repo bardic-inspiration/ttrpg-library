@@ -51,7 +51,10 @@
       ]
     },
     "gear": [
-      "Daggers (10)"
+      {
+        "ref": "equipment/dagger",
+        "count": 10
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -95,14 +98,14 @@
             "type": "necrotic"
           }
         ],
-        "onHit": "If the target is reduced to 0 Hit Points by this attack, the target becomes Stable but has the Poisoned condition for 1 hour. While it has the Poisoned condition, the target has the Paralyzed condition."
+        "onHit": "If the target is reduced to 0 {ref:glossary/hit-points} by this attack, the target becomes {ref:glossary/stable} but has the {ref:condition/poisoned} condition for 1 hour. While it has the {ref:condition/poisoned} condition, the target has the {ref:condition/paralyzed} condition."
       }
     ],
     "bonusActions": [
       {
         "name": "Deathless Agility",
         "kind": "other",
-        "text": "The familiar takes the Dash or Disengage action."
+        "text": "The familiar takes the {ref:glossary/dash} or {ref:glossary/disengage} action."
       }
     ]
   },
@@ -114,6 +117,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -45,12 +45,12 @@
       {
         "name": "Confer Fire Resistance",
         "kind": "other",
-        "text": "The nightmare can grant Resistance to Fire damage to a rider while it is on the nightmare."
+        "text": "The nightmare can grant {ref:glossary/resistance} to Fire damage to a rider while it is on the nightmare."
       },
       {
         "name": "Illumination",
         "kind": "other",
-        "text": "The nightmare sheds Bright Light in a 10-foot radius and Dim Light for an additional 10 feet."
+        "text": "The nightmare sheds {ref:glossary/bright-light} in a 10-foot radius and {ref:glossary/dim-light} for an additional 10 feet."
       }
     ],
     "actions": [
@@ -86,6 +86,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

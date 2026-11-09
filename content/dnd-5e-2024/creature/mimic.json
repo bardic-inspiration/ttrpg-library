@@ -52,7 +52,7 @@
       {
         "name": "Adhesive (Object Form Only)",
         "kind": "other",
-        "text": "The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic has the Grappled condition (escape {dc=13}). Ability checks made to escape this grapple have Disadvantage."
+        "text": "The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic has the {ref:condition/grappled} condition (escape {dc=13}). Ability checks made to escape this grapple have {ref:glossary/disadvantage}."
       }
     ],
     "actions": [
@@ -69,7 +69,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "—or {dmg:2d8+str:piercing} if the target is Grappled by the mimic—plus {dmg:1d8:acid}."
+        "onHit": "—or {dmg:2d8+str:piercing} if the target is {ref:condition/grappled} by the mimic—plus {dmg:1d8:acid}."
       },
       {
         "name": "Pseudopod",
@@ -87,7 +87,7 @@
             "type": "acid"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=13}). Ability checks made to escape this grapple have Disadvantage."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=13}). Ability checks made to escape this grapple have {ref:glossary/disadvantage}."
       }
     ],
     "bonusActions": [
@@ -100,7 +100,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

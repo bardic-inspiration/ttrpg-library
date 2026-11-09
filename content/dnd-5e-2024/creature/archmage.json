@@ -65,7 +65,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The archmage has Advantage on saving throws against spells and other magical effects."
+        "text": "The archmage has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -167,7 +167,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

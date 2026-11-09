@@ -57,14 +57,14 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=13}) from all eight tentacles. While Grappled, the target has the Restrained condition."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=13}) from all eight tentacles. While {ref:condition/grappled}, the target has the {ref:condition/restrained} condition."
       }
     ],
     "reactions": [
       {
         "name": "Ink Cloud",
         "kind": "other",
-        "text": "*Trigger:* The octopus takes damage while underwater. *Response:* The octopus releases ink that fills a 10-foot Cube centered on itself, and the octopus moves up to its Swim Speed. The Cube is Heavily Obscured for 1 minute or until a strong current or similar effect disperses the ink.",
+        "text": "*Trigger:* The octopus takes damage while underwater. *Response:* The octopus releases ink that fills a 10-foot {ref:glossary/cube} centered on itself, and the octopus moves up to its {ref:glossary/swim-speed}. The Cube is {ref:glossary/heavily-obscured} for 1 minute or until a strong current or similar effect disperses the ink.",
         "uses": "1/day"
       }
     ]
@@ -77,6 +77,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

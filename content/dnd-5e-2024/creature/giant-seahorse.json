@@ -57,7 +57,7 @@
       {
         "name": "Bubble Dash",
         "kind": "other",
-        "text": "While underwater, the seahorse moves up to half its Swim Speed without provoking Opportunity Attacks."
+        "text": "While underwater, the seahorse moves up to half its {ref:glossary/swim-speed} without provoking {ref:glossary/opportunity-attacks}."
       }
     ]
   },
@@ -69,6 +69,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

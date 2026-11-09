@@ -87,7 +87,7 @@
       {
         "name": "Swarm",
         "kind": "other",
-        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny creature. The swarm can't regain Hit Points or gain Temporary Hit Points."
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny creature. The swarm can't regain {ref:glossary/hit-points} or gain {ref:glossary/temporary-hit-points}."
       }
     ],
     "actions": [
@@ -103,7 +103,7 @@
             "type": "necrotic"
           }
         ],
-        "onHit": "or {dmg:2d8+str:necrotic} if the swarm is Bloodied. If the target is a Medium or smaller creature, it has the Prone condition."
+        "onHit": "or {dmg:2d8+str:necrotic} if the swarm is {ref:glossary/bloodied}. If the target is a Medium or smaller creature, it has the {ref:condition/prone} condition."
       }
     ]
   },
@@ -115,6 +115,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

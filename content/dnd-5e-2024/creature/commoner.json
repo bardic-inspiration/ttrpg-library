@@ -27,7 +27,9 @@
       "cha": 10
     },
     "gear": [
-      "Club"
+      {
+        "ref": "equipment/club"
+      }
     ],
     "languages": {
       "spoken": [
@@ -39,7 +41,7 @@
       {
         "name": "Training",
         "kind": "other",
-        "text": "The commoner has proficiency in one skill of the GM's choice and has Advantage whenever it makes an ability check using that skill."
+        "text": "The commoner has proficiency in one skill of the GM's choice and has {ref:glossary/advantage} whenever it makes an ability check using that skill."
       }
     ],
     "actions": [
@@ -65,6 +67,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

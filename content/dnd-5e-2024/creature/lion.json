@@ -40,12 +40,12 @@
       {
         "name": "Pack Tactics",
         "kind": "other",
-        "text": "The lion has Advantage on an attack roll against a creature if at least one of the lion's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+        "text": "The lion has {ref:glossary/advantage} on an attack roll against a creature if at least one of the lion's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
       },
       {
         "name": "Running Leap",
         "kind": "other",
-        "text": "With a 10-foot running start, the lion can Long Jump up to 25 feet."
+        "text": "With a 10-foot running start, the lion can {ref:glossary/long-jump} up to 25 feet."
       }
     ],
     "actions": [
@@ -75,7 +75,7 @@
           "ability": "wis",
           "targets": "one creature within 15 feet"
         },
-        "onFailure": "The target has the Frightened condition until the start of the lion's next turn."
+        "onFailure": "The target has the {ref:condition/frightened} condition until the start of the lion's next turn."
       }
     ]
   },
@@ -87,6 +87,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -67,7 +67,7 @@
             "type": "slashing"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=12}) from all four tentacles."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=12}) from all four tentacles."
       }
     ]
   },
@@ -79,6 +79,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

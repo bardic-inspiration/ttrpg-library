@@ -109,7 +109,7 @@
       {
         "name": "Paralyzing Breath",
         "kind": "other",
-        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 90-foot Cone. *First Failure:* The target has the Incapacitated condition until the end of its next turn, when it repeats the save. *Second Failure:* The target has the Paralyzed condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 90-foot {ref:glossary/cone}. *First Failure:* The target has the {ref:condition/incapacitated} condition until the end of its next turn, when it repeats the save. *Second Failure:* The target has the {ref:condition/paralyzed} condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
       }
     ],
     "spellcasting": {
@@ -181,14 +181,14 @@
         {
           "name": "Pounce",
           "kind": "other",
-          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+          "text": "The dragon moves up to half its {ref:glossary/speed}, and it makes one Rend attack."
         }
       ]
     }
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

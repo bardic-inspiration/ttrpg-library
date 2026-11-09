@@ -46,7 +46,7 @@
       {
         "name": "Blood Frenzy",
         "kind": "other",
-        "text": "The sahuagin has Advantage on attack rolls against any creature that doesn't have all its Hit Points."
+        "text": "The sahuagin has {ref:glossary/advantage} on attack rolls against any creature that doesn't have all its {ref:glossary/hit-points}."
       },
       {
         "name": "Limited Amphibiousness",
@@ -83,7 +83,7 @@
       {
         "name": "Aquatic Charge",
         "kind": "other",
-        "text": "The sahuagin swims up to its Swim Speed straight toward an enemy it can see."
+        "text": "The sahuagin swims up to its {ref:glossary/swim-speed} straight toward an enemy it can see."
       }
     ]
   },
@@ -95,6 +95,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

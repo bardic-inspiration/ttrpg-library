@@ -71,12 +71,12 @@
       {
         "name": "Diabolical Restoration",
         "kind": "other",
-        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Nine Hells."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The devil has Advantage on saving throws against spells and other magical effects."
+        "text": "The devil has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -114,7 +114,7 @@
             "type": "poison"
           }
         ],
-        "onHit": "and the target has the Poisoned condition until the start of the devil's next turn. While Poisoned, the target can't regain Hit Points."
+        "onHit": "and the target has the {ref:condition/poisoned} condition until the start of the devil's next turn. While {ref:condition/poisoned}, the target can't regain {ref:glossary/hit-points}."
       }
     ]
   },
@@ -126,6 +126,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

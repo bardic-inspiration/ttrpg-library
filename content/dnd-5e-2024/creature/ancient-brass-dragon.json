@@ -116,7 +116,7 @@
           "ability": "con",
           "targets": "each creature in a 90-foot Cone"
         },
-        "onFailure": "The target has the Incapacitated condition until the end of its next turn, at which point it repeats the save. *Second Failure:* The target has the Unconscious condition for 10 minutes. This effect ends for the target if it takes damage or a creature within 5 feet of it takes an action to wake it."
+        "onFailure": "The target has the {ref:condition/incapacitated} condition until the end of its next turn, at which point it repeats the save. *Second Failure:* The target has the {ref:condition/unconscious} condition for 10 minutes. This effect ends for the target if it takes damage or a creature within 5 feet of it takes an action to wake it."
       }
     ],
     "spellcasting": {
@@ -165,7 +165,7 @@
         {
           "name": "Pounce",
           "kind": "other",
-          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+          "text": "The dragon moves up to half its {ref:glossary/speed}, and it makes one Rend attack."
         },
         {
           "name": "Scorching Sands",
@@ -181,7 +181,7 @@
               "type": "fire"
             }
           ],
-          "onFailure": "and the target's Speed is halved until the end of its next turn.",
+          "onFailure": "and the target's {ref:glossary/speed} is halved until the end of its next turn.",
           "onFailureOrSuccess": "The dragon can't take this action again until the start of its next turn."
         }
       ]
@@ -189,7 +189,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

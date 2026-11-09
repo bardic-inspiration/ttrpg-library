@@ -72,7 +72,7 @@
       {
         "name": "Celestial Restoration",
         "kind": "other",
-        "text": "If the naga dies, it returns to life in 1d6 days and regains all its Hit Points unless *{ref:spell/dispel-evil-and-good}* is cast on its remains."
+        "text": "If the naga dies, it returns to life in 1d6 days and regains all its {ref:glossary/hit-points} unless *{ref:spell/dispel-evil-and-good}* is cast on its remains."
       }
     ],
     "actions": [
@@ -112,7 +112,7 @@
             "type": "poison"
           }
         ],
-        "onFailure": "and the target has the Blinded condition until the start of the naga's next turn.",
+        "onFailure": "and the target has the {ref:condition/blinded} condition until the start of the naga's next turn.",
         "onSuccess": "Half damage only."
       }
     ],
@@ -155,6 +155,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

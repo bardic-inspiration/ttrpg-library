@@ -60,7 +60,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The quasit has Advantage on saving throws against spells and other magical effects."
+        "text": "The quasit has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -76,7 +76,7 @@
             "type": "slashing"
           }
         ],
-        "onHit": "and the target has the Poisoned condition until the start of the quasit's next turn."
+        "onHit": "and the target has the {ref:condition/poisoned} condition until the start of the quasit's next turn."
       },
       {
         "name": "Invisibility",
@@ -91,13 +91,13 @@
           "ability": "wis",
           "targets": "one creature within 20 feet"
         },
-        "onFailure": "The target has the Frightened condition. At the end of each of its turns, the target repeats the save, ending the effect on itself on a success. After 1 minute, it succeeds automatically.",
+        "onFailure": "The target has the {ref:condition/frightened} condition. At the end of each of its turns, the target repeats the save, ending the effect on itself on a success. After 1 minute, it succeeds automatically.",
         "uses": "1/day"
       },
       {
         "name": "Shape-Shift",
         "kind": "other",
-        "text": "The quasit shape-shifts to resemble a bat (Speed 10 ft., Fly 40 ft.), a centipede (40 ft., Climb 40 ft.), or a toad (40 ft., Swim 40 ft.), or it returns to its true form. Its game statistics are the same in each form, except for its Speed. Any equipment it is wearing or carrying isn't transformed."
+        "text": "The quasit shape-shifts to resemble a bat ({ref:glossary/speed} 10 ft., Fly 40 ft.), a centipede (40 ft., Climb 40 ft.), or a toad (40 ft., Swim 40 ft.), or it returns to its true form. Its game statistics are the same in each form, except for its Speed. Any equipment it is wearing or carrying isn't transformed."
       }
     ]
   },
@@ -109,6 +109,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

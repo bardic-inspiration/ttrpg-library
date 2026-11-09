@@ -37,9 +37,16 @@
       "survival": "proficient"
     },
     "gear": [
-      "Chain Shirt",
-      "Javelins (6)",
-      "Morningstar"
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/javelin",
+        "count": 6
+      },
+      {
+        "ref": "equipment/morningstar"
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -105,7 +112,7 @@
           "ability": "dex",
           "targets": "one Medium or smaller creature the bugbear can see within 10 feet"
         },
-        "onFailure": "The target has the Grappled condition (escape {dc=13})."
+        "onFailure": "The target has the {ref:condition/grappled} condition (escape {dc=13})."
       }
     ]
   },
@@ -117,6 +124,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

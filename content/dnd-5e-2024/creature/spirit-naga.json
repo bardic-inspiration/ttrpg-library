@@ -58,7 +58,7 @@
       {
         "name": "Fiendish Restoration",
         "kind": "other",
-        "text": "If it dies, the naga returns to life in 1d6 days and regains all its Hit Points. Only a *{ref:spell/wish}* spell can prevent this trait from functioning."
+        "text": "If it dies, the naga returns to life in 1d6 days and regains all its {ref:glossary/hit-points}. Only a *{ref:spell/wish}* spell can prevent this trait from functioning."
       }
     ],
     "actions": [
@@ -144,6 +144,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

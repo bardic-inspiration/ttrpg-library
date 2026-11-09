@@ -32,9 +32,15 @@
       "cha": 13
     },
     "gear": [
-      "Greatsword",
-      "Half Plate Armor",
-      "Longbow"
+      {
+        "ref": "equipment/greatsword"
+      },
+      {
+        "ref": "equipment/half-plate-armor"
+      },
+      {
+        "ref": "equipment/longbow"
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -50,7 +56,7 @@
       {
         "name": "Aura of Authority",
         "kind": "other",
-        "text": "While in a 10-foot Emanation originating from the hobgoblin, the hobgoblin and its allies have Advantage on attack rolls and saving throws, provided the hobgoblin doesn't have the Incapacitated condition."
+        "text": "While in a 10-foot {ref:glossary/emanation} originating from the hobgoblin, the hobgoblin and its allies have {ref:glossary/advantage} on attack rolls and saving throws, provided the hobgoblin doesn't have the {ref:condition/incapacitated} condition."
       }
     ],
     "actions": [
@@ -106,6 +112,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

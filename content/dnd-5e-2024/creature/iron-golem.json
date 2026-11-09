@@ -69,7 +69,7 @@
       {
         "name": "Fire Absorption",
         "kind": "other",
-        "text": "Whenever the golem is subjected to Fire damage, it regains a number of Hit Points equal to the Fire damage dealt."
+        "text": "Whenever the golem is subjected to Fire damage, it regains a number of {ref:glossary/hit-points} equal to the Fire damage dealt."
       },
       {
         "name": "Immutable Form",
@@ -79,7 +79,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The golem has Advantage on saving throws against spells and other magical effects."
+        "text": "The golem has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -146,6 +146,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

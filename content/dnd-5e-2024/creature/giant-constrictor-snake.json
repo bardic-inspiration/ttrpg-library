@@ -70,7 +70,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onFailure": "and the target has the Grappled condition (escape {dc=14})."
+        "onFailure": "and the target has the {ref:condition/grappled} condition (escape {dc=14})."
       }
     ]
   },
@@ -82,6 +82,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

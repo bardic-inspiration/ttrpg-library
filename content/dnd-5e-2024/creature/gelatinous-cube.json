@@ -61,7 +61,7 @@
       {
         "name": "Ooze Cube",
         "kind": "other",
-        "text": "The cube fills its entire space and is transparent. Other creatures can enter that space, but a creature that does so is subjected to the cube's Engulf and has Disadvantage on the saving throw.\n\nCreatures inside the cube have Total Cover, and the cube can hold one Large creature or up to four Medium or Small creatures inside itself at a time.\n\nAs an action, a creature within 5 feet of the cube can pull a creature or an object out of the cube by succeeding on a {dc=12} Strength (Athletics) check, and the puller takes {dmg:3d6:acid}."
+        "text": "The cube fills its entire space and is transparent. Other creatures can enter that space, but a creature that does so is subjected to the cube's Engulf and has {ref:glossary/disadvantage} on the saving throw.\n\nCreatures inside the cube have Total Cover, and the cube can hold one Large creature or up to four Medium or Small creatures inside itself at a time.\n\nAs an action, a creature within 5 feet of the cube can pull a creature or an object out of the cube by succeeding on a {dc=12} Strength (Athletics) check, and the puller takes {dmg:3d6:acid}."
       },
       {
         "name": "Transparent",
@@ -86,7 +86,7 @@
       {
         "name": "Engulf",
         "kind": "other",
-        "text": "The cube moves up to its Speed without provoking Opportunity Attacks. The cube can move through the spaces of Large or smaller creatures if it has room inside itself to contain them (see the Ooze Cube trait). *Dexterity Saving Throw:* {dc:str}, each creature whose space the cube enters for the first time during this move. *Failure:* {dmg:3d6:acid}, and the target is engulfed. An engulfed target is suffocating, can't cast spells with a Verbal component, has the Restrained condition, and takes {dmg:3d6:acid} at the start of each of the cube's turns. When the cube moves, the engulfed target moves with it. An engulfed target can try to escape by taking an action to make a {dc=12} Strength (Athletics) check. On a successful check, the target escapes and enters the nearest unoccupied space. *Success:* Half damage, and the target moves to an unoccupied space within 5 feet of the cube. If there is no unoccupied space, the target fails the save instead."
+        "text": "The cube moves up to its {ref:glossary/speed} without provoking {ref:glossary/opportunity-attacks}. The cube can move through the spaces of Large or smaller creatures if it has room inside itself to contain them (see the Ooze Cube trait). *Dexterity Saving Throw:* {dc:str}, each creature whose space the cube enters for the first time during this move. *Failure:* {dmg:3d6:acid}, and the target is engulfed. An engulfed target is suffocating, can't cast spells with a Verbal component, has the {ref:condition/restrained} condition, and takes {dmg:3d6:acid} at the start of each of the cube's turns. When the cube moves, the engulfed target moves with it. An engulfed target can try to escape by taking an action to make a {dc=12} Strength (Athletics) check. On a successful check, the target escapes and enters the nearest unoccupied space. *Success:* Half damage, and the target moves to an unoccupied space within 5 feet of the cube. If there is no unoccupied space, the target fails the save instead."
       }
     ]
   },
@@ -98,6 +98,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

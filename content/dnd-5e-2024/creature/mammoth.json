@@ -54,7 +54,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Huge or smaller creature and the mammoth moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition."
+        "onHit": "If the target is a Huge or smaller creature and the mammoth moved 20+ feet straight toward it immediately before the hit, the target has the {ref:condition/prone} condition."
       }
     ],
     "bonusActions": [
@@ -85,6 +85,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -39,9 +39,15 @@
       "stealth": "expertise"
     },
     "gear": [
-      "Hand Crossbow",
-      "Shortsword",
-      "Thieves' Tools"
+      {
+        "ref": "equipment/hand-crossbow"
+      },
+      {
+        "ref": "equipment/shortsword"
+      },
+      {
+        "ref": "equipment/thieves-tools"
+      }
     ],
     "languages": {
       "spoken": [
@@ -92,7 +98,7 @@
       {
         "name": "Cunning Action",
         "kind": "other",
-        "text": "The spy takes the Dash, Disengage, or Hide action."
+        "text": "The spy takes the {ref:glossary/dash}, {ref:glossary/disengage}, or {ref:glossary/hide} action."
       }
     ]
   },
@@ -104,6 +110,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

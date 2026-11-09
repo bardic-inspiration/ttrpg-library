@@ -27,9 +27,15 @@
       "cha": 11
     },
     "gear": [
-      "Heavy Crossbow",
-      "Leather Armor",
-      "Mace"
+      {
+        "ref": "equipment/heavy-crossbow"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      },
+      {
+        "ref": "equipment/mace"
+      }
     ],
     "languages": {
       "spoken": [
@@ -41,7 +47,7 @@
       {
         "name": "Pack Tactics",
         "kind": "other",
-        "text": "The tough has Advantage on an attack roll against a creature if at least one of the tough's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+        "text": "The tough has {ref:glossary/advantage} on an attack roll against a creature if at least one of the tough's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
       }
     ],
     "actions": [
@@ -84,6 +90,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

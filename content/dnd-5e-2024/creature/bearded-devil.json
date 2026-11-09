@@ -65,7 +65,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The devil has Advantage on saving throws against spells and other magical effects."
+        "text": "The devil has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -86,7 +86,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "and the target has the Poisoned condition until the start of the devil's next turn. Until this poison ends, the target can't regain Hit Points."
+        "onHit": "and the target has the {ref:condition/poisoned} condition until the start of the devil's next turn. Until this poison ends, the target can't regain {ref:glossary/hit-points}."
       },
       {
         "name": "Infernal Glaive",
@@ -100,7 +100,7 @@
             "type": "slashing"
           }
         ],
-        "onHit": "If the target is a creature and doesn't already have an infernal wound, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target receives an infernal wound. While wounded, the target loses {dmg:1d10} Hit Points at the start of each of its turns. The wound closes after 1 minute, after a spell restores Hit Points to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a {dc=12} Wisdom (Medicine) check."
+        "onHit": "If the target is a creature and doesn't already have an infernal wound, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target receives an infernal wound. While wounded, the target loses {dmg:1d10} {ref:glossary/hit-points} at the start of each of its turns. The wound closes after 1 minute, after a spell restores Hit Points to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a {dc=12} Wisdom (Medicine) check."
       }
     ]
   },
@@ -112,6 +112,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

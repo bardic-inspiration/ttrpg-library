@@ -30,9 +30,15 @@
       "perception": "proficient"
     },
     "gear": [
-      "Chain Shirt",
-      "Shield",
-      "Spear"
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/spear"
+      }
     ],
     "languages": {
       "spoken": [
@@ -68,6 +74,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

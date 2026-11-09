@@ -60,7 +60,7 @@
       {
         "name": "Death Burst",
         "kind": "other",
-        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot Emanation originating from the mephit. *Failure:* {dmg:2d4:bludgeoning}. *Success:* Half damage."
+        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot {ref:glossary/emanation} originating from the mephit. *Failure:* {dmg:2d4:bludgeoning}. *Success:* Half damage."
       }
     ],
     "actions": [
@@ -85,7 +85,7 @@
           "ability": "dex",
           "targets": "each creature in a 15-foot Cone"
         },
-        "onFailure": "The target has the Blinded condition until the end of the mephit's next turn.",
+        "onFailure": "The target has the {ref:condition/blinded} condition until the end of the mephit's next turn.",
         "recharge": "6"
       },
       {
@@ -104,6 +104,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

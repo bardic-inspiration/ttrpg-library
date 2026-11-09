@@ -90,7 +90,7 @@
             "type": "fire"
           }
         ],
-        "onHit": "and the target is pushed up to 15 feet straight away from the giant and has Disadvantage on the next attack roll it makes before the end of its next turn."
+        "onHit": "and the target is pushed up to 15 feet straight away from the giant and has {ref:glossary/disadvantage} on the next attack roll it makes before the end of its next turn."
       }
     ]
   },
@@ -102,6 +102,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -27,8 +27,12 @@
       "cha": 8
     },
     "gear": [
-      "Chain Shirt",
-      "Spear"
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/spear"
+      }
     ],
     "languages": {
       "spoken": [
@@ -40,7 +44,7 @@
       {
         "name": "Pack Tactics",
         "kind": "other",
-        "text": "The warrior has Advantage on an attack roll against a creature if at least one of the warrior's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+        "text": "The warrior has {ref:glossary/advantage} on an attack roll against a creature if at least one of the warrior's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
       }
     ],
     "actions": [
@@ -71,6 +75,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

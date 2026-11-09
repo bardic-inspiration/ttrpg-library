@@ -71,12 +71,12 @@
       {
         "name": "Spider Climb",
         "kind": "other",
-        "text": "If the swarm has a Climb Speed, the swarm can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+        "text": "If the swarm has a {ref:glossary/climb-speed}, the swarm can climb difficult surfaces, including along ceilings, without needing to make an ability check."
       },
       {
         "name": "Swarm",
         "kind": "other",
-        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny insect. The swarm can't regain Hit Points or gain Temporary Hit Points."
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny insect. The swarm can't regain {ref:glossary/hit-points} or gain {ref:glossary/temporary-hit-points}."
       }
     ],
     "actions": [
@@ -92,7 +92,7 @@
             "type": "poison"
           }
         ],
-        "onHit": "or {dmg:1d4+dex:poison} if the swarm is Bloodied."
+        "onHit": "or {dmg:1d4+dex:poison} if the swarm is {ref:glossary/bloodied}."
       }
     ]
   },
@@ -104,6 +104,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

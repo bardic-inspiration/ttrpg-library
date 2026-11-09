@@ -75,7 +75,7 @@
       {
         "name": "Exalted Restoration",
         "kind": "other",
-        "text": "If the solar dies outside Mount Celestia, its body disappears, and it gains a new body instantly, reviving with all its Hit Points somewhere in Mount Celestia."
+        "text": "If the solar dies outside Mount Celestia, its body disappears, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in Mount Celestia."
       },
       {
         "name": "Legendary Resistance",
@@ -86,7 +86,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The solar has Advantage on saving throws against spells and other magical effects."
+        "text": "The solar has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -124,7 +124,7 @@
           "ability": "dex",
           "targets": "one creature the solar can see within 600 feet"
         },
-        "onFailure": "If the creature has 100 Hit Points or fewer, it dies. It otherwise takes {dmg:4d8+dex:piercing} plus {dmg:8d8:radiant}."
+        "onFailure": "If the creature has 100 {ref:glossary/hit-points} or fewer, it dies. It otherwise takes {dmg:4d8+dex:piercing} plus {dmg:8d8:radiant}."
       }
     ],
     "spellcasting": {
@@ -172,20 +172,20 @@
             "ability": "con",
             "targets": "one creature the solar can see within 120 feet"
           },
-          "onFailure": "The target has the Blinded condition for 1 minute.",
+          "onFailure": "The target has the {ref:condition/blinded} condition for 1 minute.",
           "onFailureOrSuccess": "The solar can't take this action again until the start of its next turn."
         },
         {
           "name": "Radiant Teleport",
           "kind": "other",
-          "text": "The solar teleports up to 60 feet to an unoccupied space it can see. *Dexterity Saving Throw:* {dc:cha}, each creature in a 10-foot Emanation originating from the solar at its destination space. *Failure:* {dmg:2d10:radiant}. *Success:* Half damage."
+          "text": "The solar teleports up to 60 feet to an unoccupied space it can see. *Dexterity Saving Throw:* {dc:cha}, each creature in a 10-foot {ref:glossary/emanation} originating from the solar at its destination space. *Failure:* {dmg:2d10:radiant}. *Success:* Half damage."
         }
       ]
     }
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

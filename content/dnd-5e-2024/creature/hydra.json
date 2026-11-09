@@ -70,12 +70,12 @@
       {
         "name": "Multiple Heads",
         "kind": "other",
-        "text": "The hydra has five heads. Whenever the hydra takes 25 damage or more on a single turn, one of its heads dies. The hydra dies if all its heads are dead. At the end of each of its turns when it has at least one living head, the hydra grows two heads for each of its heads that died since its last turn, unless it has taken Fire damage since its last turn. The hydra regains 20 Hit Points when it grows new heads."
+        "text": "The hydra has five heads. Whenever the hydra takes 25 damage or more on a single turn, one of its heads dies. The hydra dies if all its heads are dead. At the end of each of its turns when it has at least one living head, the hydra grows two heads for each of its heads that died since its last turn, unless it has taken Fire damage since its last turn. The hydra regains 20 {ref:glossary/hit-points} when it grows new heads."
       },
       {
         "name": "Reactive Heads",
         "kind": "other",
-        "text": "For each head the hydra has beyond one, it gets an extra Reaction that can be used only for Opportunity Attacks."
+        "text": "For each head the hydra has beyond one, it gets an extra {ref:glossary/reaction} that can be used only for {ref:glossary/opportunity-attacks}."
       }
     ],
     "actions": [
@@ -107,6 +107,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

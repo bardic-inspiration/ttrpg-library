@@ -34,9 +34,15 @@
       "perception": "proficient"
     },
     "gear": [
-      "Greatsword",
-      "Heavy Crossbow",
-      "Splint Armor"
+      {
+        "ref": "equipment/greatsword"
+      },
+      {
+        "ref": "equipment/heavy-crossbow"
+      },
+      {
+        "ref": "equipment/splint-armor"
+      }
     ],
     "languages": {
       "spoken": [
@@ -96,6 +102,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

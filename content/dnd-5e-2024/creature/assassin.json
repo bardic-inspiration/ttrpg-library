@@ -42,9 +42,15 @@
       "poison"
     ],
     "gear": [
-      "Light Crossbow",
-      "Shortsword",
-      "Studded Leather Armor"
+      {
+        "ref": "equipment/light-crossbow"
+      },
+      {
+        "ref": "equipment/shortsword"
+      },
+      {
+        "ref": "equipment/studded-leather-armor"
+      }
     ],
     "languages": {
       "spoken": [
@@ -57,7 +63,7 @@
       {
         "name": "Evasion",
         "kind": "other",
-        "text": "If the assassin is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, the assassin instead takes no damage if it succeeds on the save and only half damage if it fails. It can't use this trait if it has the Incapacitated condition."
+        "text": "If the assassin is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, the assassin instead takes no damage if it succeeds on the save and only half damage if it fails. It can't use this trait if it has the {ref:condition/incapacitated} condition."
       }
     ],
     "actions": [
@@ -82,7 +88,7 @@
             "type": "poison"
           }
         ],
-        "onHit": "and the target has the Poisoned condition until the start of the assassin's next turn."
+        "onHit": "and the target has the {ref:condition/poisoned} condition until the start of the assassin's next turn."
       },
       {
         "name": "Light Crossbow",
@@ -109,7 +115,7 @@
       {
         "name": "Cunning Action",
         "kind": "other",
-        "text": "The assassin takes the Dash, Disengage, or Hide action."
+        "text": "The assassin takes the {ref:glossary/dash}, {ref:glossary/disengage}, or {ref:glossary/hide} action."
       }
     ]
   },
@@ -121,6 +127,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

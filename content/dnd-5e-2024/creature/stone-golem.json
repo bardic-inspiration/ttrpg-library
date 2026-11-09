@@ -73,7 +73,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The golem has Advantage on saving throws against spells and other magical effects."
+        "text": "The golem has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -131,6 +131,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

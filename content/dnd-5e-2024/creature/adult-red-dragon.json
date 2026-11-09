@@ -149,14 +149,14 @@
         {
           "name": "Pounce",
           "kind": "other",
-          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+          "text": "The dragon moves up to half its {ref:glossary/speed}, and it makes one Rend attack."
         }
       ]
     }
   },
   "meta": {
     "createdAt": "2026-11-03",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

@@ -78,7 +78,7 @@
           "ability": "wis",
           "targets": "each creature in a 15-foot Emanation originating from the doppelganger that can see the doppelganger"
         },
-        "onFailure": "The target has the Frightened condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.",
+        "onFailure": "The target has the {ref:condition/frightened} condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.",
         "recharge": "6"
       }
     ],
@@ -98,6 +98,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

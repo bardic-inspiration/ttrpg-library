@@ -34,8 +34,12 @@
       "religion": "proficient"
     },
     "gear": [
-      "Leather Armor",
-      "Sickle"
+      {
+        "ref": "equipment/leather-armor"
+      },
+      {
+        "ref": "equipment/sickle"
+      }
     ],
     "languages": {
       "spoken": [
@@ -71,6 +75,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -41,13 +41,13 @@
       {
         "name": "Loathsome Limbs",
         "kind": "other",
-        "text": "If the troll ends any turn Bloodied and took 15+ Slashing damage during that turn, one of the troll's limbs is severed, falls into the troll's space, and becomes a **{ref:creature/troll-limb}**. The limb acts immediately after the troll's turn. The troll has 1 Exhaustion level for each missing limb, and it grows replacement limbs the next time it regains Hit Points.",
+        "text": "If the troll ends any turn {ref:glossary/bloodied} and took 15+ Slashing damage during that turn, one of the troll's limbs is severed, falls into the troll's space, and becomes a **{ref:creature/troll-limb}**. The limb acts immediately after the troll's turn. The troll has 1 {ref:condition/exhaustion} level for each missing limb, and it grows replacement limbs the next time it regains {ref:glossary/hit-points}.",
         "uses": "4/day"
       },
       {
         "name": "Regeneration",
         "kind": "other",
-        "text": "The troll regains 15 Hit Points at the start of each of its turns. If the troll takes Acid or Fire damage, this trait doesn't function on the troll's next turn.\n\nThe troll dies only if it starts its turn with 0 Hit Points and doesn't regenerate."
+        "text": "The troll regains 15 {ref:glossary/hit-points} at the start of each of its turns. If the troll takes Acid or Fire damage, this trait doesn't function on the troll's next turn.\n\nThe troll dies only if it starts its turn with 0 Hit Points and doesn't regenerate."
       }
     ],
     "actions": [
@@ -74,13 +74,13 @@
       {
         "name": "Charge",
         "kind": "other",
-        "text": "The troll moves up to half its Speed straight toward an enemy it can see."
+        "text": "The troll moves up to half its {ref:glossary/speed} straight toward an enemy it can see."
       }
     ]
   },
   "meta": {
     "createdAt": "2026-11-02",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "srd": true

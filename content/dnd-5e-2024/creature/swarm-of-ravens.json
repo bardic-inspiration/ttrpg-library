@@ -71,7 +71,7 @@
       {
         "name": "Swarm",
         "kind": "other",
-        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny raven. The swarm can't regain Hit Points or gain Temporary Hit Points."
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny raven. The swarm can't regain {ref:glossary/hit-points} or gain {ref:glossary/temporary-hit-points}."
       }
     ],
     "actions": [
@@ -87,7 +87,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "or {dmg:1d4:piercing} if the swarm is Bloodied."
+        "onHit": "or {dmg:1d4:piercing} if the swarm is {ref:glossary/bloodied}."
       },
       {
         "name": "Cacophony",
@@ -98,7 +98,7 @@
           "ability": "wis",
           "targets": "one creature in the swarm's space"
         },
-        "onFailure": "The target has the Deafened condition until the start of the swarm's next turn. While Deafened, the target also has Disadvantage on ability checks and attack rolls.",
+        "onFailure": "The target has the {ref:condition/deafened} condition until the start of the swarm's next turn. While {ref:condition/deafened}, the target also has {ref:glossary/disadvantage} on ability checks and attack rolls.",
         "recharge": "6"
       }
     ]
@@ -111,6 +111,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

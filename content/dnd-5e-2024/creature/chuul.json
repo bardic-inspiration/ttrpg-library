@@ -79,7 +79,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=14}) from one of two pincers."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=14}) from one of two pincers."
       },
       {
         "name": "Paralyzing Tentacles",
@@ -89,7 +89,7 @@
           "ability": "con",
           "targets": "one creature Grappled by the chuul"
         },
-        "onFailure": "The target has the Poisoned condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically. While Poisoned, the target has the Paralyzed condition."
+        "onFailure": "The target has the {ref:condition/poisoned} condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically. While {ref:condition/poisoned}, the target has the {ref:condition/paralyzed} condition."
       }
     ]
   },
@@ -101,6 +101,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

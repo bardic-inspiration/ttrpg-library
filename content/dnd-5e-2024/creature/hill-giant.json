@@ -55,7 +55,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/prone} condition."
       },
       {
         "name": "Trash Lob",
@@ -72,7 +72,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "and the target has the Poisoned condition until the end of its next turn."
+        "onHit": "and the target has the {ref:condition/poisoned} condition until the end of its next turn."
       }
     ]
   },
@@ -84,6 +84,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

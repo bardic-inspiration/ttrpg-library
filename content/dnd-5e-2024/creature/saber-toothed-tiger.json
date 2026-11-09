@@ -44,7 +44,7 @@
       {
         "name": "Running Leap",
         "kind": "other",
-        "text": "With a 10-foot running start, the tiger can Long Jump up to 25 feet."
+        "text": "With a 10-foot running start, the tiger can {ref:glossary/long-jump} up to 25 feet."
       }
     ],
     "actions": [
@@ -71,7 +71,7 @@
       {
         "name": "Nimble Escape",
         "kind": "other",
-        "text": "The tiger takes the Disengage or Hide action."
+        "text": "The tiger takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
       }
     ]
   },
@@ -83,6 +83,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

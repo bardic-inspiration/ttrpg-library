@@ -44,7 +44,7 @@
       {
         "name": "Death Burst",
         "kind": "other",
-        "text": "The magmin explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 10-foot Emanation originating from the magmin. *Failure*: {dmg:2d6:fire}. *Success:* Half damage."
+        "text": "The magmin explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 10-foot {ref:glossary/emanation} originating from the magmin. *Failure*: {dmg:2d6:fire}. *Success:* Half damage."
       }
     ],
     "actions": [
@@ -67,7 +67,7 @@
       {
         "name": "Ignited Illumination",
         "kind": "other",
-        "text": "The magmin sets itself ablaze or extinguishes its flames. While ablaze, the magmin sheds Bright Light in a 10-foot radius and Dim Light for an additional 10 feet."
+        "text": "The magmin sets itself ablaze or extinguishes its flames. While ablaze, the magmin sheds {ref:glossary/bright-light} in a 10-foot radius and {ref:glossary/dim-light} for an additional 10 feet."
       }
     ]
   },
@@ -79,6 +79,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

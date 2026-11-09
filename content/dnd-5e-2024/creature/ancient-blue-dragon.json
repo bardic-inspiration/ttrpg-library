@@ -144,7 +144,7 @@
         {
           "name": "Cloaked Flight",
           "kind": "other",
-          "text": "The dragon uses Spellcasting to cast *{ref:spell/invisibility}* on itself, and it can fly up to half its Fly Speed. The dragon can't take this action again until the start of its next turn."
+          "text": "The dragon uses Spellcasting to cast *{ref:spell/invisibility}* on itself, and it can fly up to half its {ref:glossary/fly-speed}. The dragon can't take this action again until the start of its next turn."
         },
         {
           "name": "Sonic Boom",
@@ -167,6 +167,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

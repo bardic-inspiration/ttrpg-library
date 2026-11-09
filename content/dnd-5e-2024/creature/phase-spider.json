@@ -75,7 +75,7 @@
             "type": "poison"
           }
         ],
-        "onHit": "If this damage reduces the target to 0 Hit Points, the target becomes Stable, and it has the Poisoned condition for 1 hour. While Poisoned, the target also has the Paralyzed condition."
+        "onHit": "If this damage reduces the target to 0 {ref:glossary/hit-points}, the target becomes {ref:glossary/stable}, and it has the {ref:condition/poisoned} condition for 1 hour. While {ref:condition/poisoned}, the target also has the {ref:condition/paralyzed} condition."
       }
     ],
     "bonusActions": [
@@ -94,6 +94,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -70,7 +70,7 @@
       {
         "name": "Regeneration",
         "kind": "other",
-        "text": "The guardian regains 10 Hit Points at the start of each of its turns if it has at least 1 Hit Point."
+        "text": "The guardian regains 10 {ref:glossary/hit-points} at the start of each of its turns if it has at least 1 Hit Point."
       },
       {
         "name": "Spell Storing",
@@ -118,6 +118,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

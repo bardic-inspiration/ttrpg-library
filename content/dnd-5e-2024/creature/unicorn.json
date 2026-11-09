@@ -66,7 +66,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The unicorn has Advantage on saving throws against spells and other magical effects."
+        "text": "The unicorn has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -148,12 +148,12 @@
         {
           "name": "Charging Horn",
           "kind": "other",
-          "text": "The unicorn moves up to half its Speed without provoking Opportunity Attacks, and it makes one Radiant Horn attack."
+          "text": "The unicorn moves up to half its {ref:glossary/speed} without provoking {ref:glossary/opportunity-attacks}, and it makes one Radiant Horn attack."
         },
         {
           "name": "Shimmering Shield",
           "kind": "other",
-          "text": "The unicorn targets itself or one creature it can see within 60 feet of itself. The target gains {dmg:3d6} Temporary Hit Points, and its AC increases by 2 until the end of the unicorn's next turn. The unicorn can't take this action again until the start of its next turn."
+          "text": "The unicorn targets itself or one creature it can see within 60 feet of itself. The target gains {dmg:3d6} {ref:glossary/temporary-hit-points}, and its AC increases by 2 until the end of the unicorn's next turn. The unicorn can't take this action again until the start of its next turn."
         }
       ]
     }
@@ -166,6 +166,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

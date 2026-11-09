@@ -63,7 +63,7 @@
       {
         "name": "Ice Walk",
         "kind": "other",
-        "text": "The dragon can move across and climb icy surfaces without needing to make an ability check. Additionally, Difficult Terrain composed of ice or snow doesn't cost it extra movement."
+        "text": "The dragon can move across and climb icy surfaces without needing to make an ability check. Additionally, {ref:glossary/difficult-terrain} composed of ice or snow doesn't cost it extra movement."
       },
       {
         "name": "Legendary Resistance",
@@ -133,7 +133,7 @@
               "type": "cold"
             }
           ],
-          "onFailure": "and the target's Speed is 0 until the end of the target's next turn.",
+          "onFailure": "and the target's {ref:glossary/speed} is 0 until the end of the target's next turn.",
           "onFailureOrSuccess": "The dragon can't take this action again until the start of its next turn."
         },
         {
@@ -144,7 +144,7 @@
         {
           "name": "Pounce",
           "kind": "other",
-          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+          "text": "The dragon moves up to half its {ref:glossary/speed}, and it makes one Rend attack."
         }
       ]
     }
@@ -157,6 +157,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -94,13 +94,13 @@
       {
         "name": "Paralyzing Breath",
         "kind": "other",
-        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 15-foot Cone. *First Failure:* The target has the Incapacitated condition until the end of its next turn, when it repeats the save. *Second Failure:* The target has the Paralyzed condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        "text": "*Constitution Saving Throw:* {dc:con}, each creature in a 15-foot {ref:glossary/cone}. *First Failure:* The target has the {ref:condition/incapacitated} condition until the end of its next turn, when it repeats the save. *Second Failure:* The target has the {ref:condition/paralyzed} condition, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
       }
     ]
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

@@ -36,7 +36,7 @@
       {
         "name": "Bloodied Fury",
         "kind": "other",
-        "text": "The boar has Advantage on melee attack rolls while it is Bloodied."
+        "text": "The boar has {ref:glossary/advantage} on melee attack rolls while it is {ref:glossary/bloodied}."
       }
     ],
     "actions": [
@@ -52,7 +52,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature and the boar moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d6:piercing} and has the Prone condition."
+        "onHit": "If the target is a Large or smaller creature and the boar moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d6:piercing} and has the {ref:condition/prone} condition."
       }
     ]
   },
@@ -64,6 +64,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

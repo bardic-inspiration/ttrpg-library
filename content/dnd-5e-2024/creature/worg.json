@@ -51,7 +51,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "and the next attack roll made against the target before the start of the worg's next turn has Advantage."
+        "onHit": "and the next attack roll made against the target before the start of the worg's next turn has {ref:glossary/advantage}."
       }
     ]
   },
@@ -63,6 +63,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

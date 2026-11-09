@@ -49,7 +49,7 @@
       {
         "name": "Sunlight Sensitivity",
         "kind": "other",
-        "text": "While in sunlight, the drider has Disadvantage on ability checks and attack rolls."
+        "text": "While in sunlight, the drider has {ref:glossary/disadvantage} on ability checks and attack rolls."
       },
       {
         "name": "Web Walker",
@@ -109,6 +109,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

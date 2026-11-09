@@ -35,9 +35,15 @@
       "religion": "expertise"
     },
     "gear": [
-      "Chain Shirt",
-      "Holy Symbol",
-      "Mace"
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/holy-symbol"
+      },
+      {
+        "ref": "equipment/mace"
+      }
     ],
     "languages": {
       "spoken": [
@@ -112,7 +118,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

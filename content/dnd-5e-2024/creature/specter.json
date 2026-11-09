@@ -86,12 +86,12 @@
       {
         "name": "Incorporeal Movement",
         "kind": "other",
-        "text": "The specter can move through other creatures and objects as if they were Difficult Terrain. It takes {dmg:1d10:force} if it ends its turn inside an object."
+        "text": "The specter can move through other creatures and objects as if they were {ref:glossary/difficult-terrain}. It takes {dmg:1d10:force} if it ends its turn inside an object."
       },
       {
         "name": "Sunlight Sensitivity",
         "kind": "other",
-        "text": "While in sunlight, the specter has Disadvantage on ability checks and attack rolls."
+        "text": "While in sunlight, the specter has {ref:glossary/disadvantage} on ability checks and attack rolls."
       }
     ],
     "actions": [
@@ -118,6 +118,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

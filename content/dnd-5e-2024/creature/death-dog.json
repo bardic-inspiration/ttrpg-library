@@ -76,7 +76,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a creature, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *First Failure:* The target has the Poisoned condition. While Poisoned, the target's Hit Point maximum doesn't return to normal when finishing a Long Rest, and it repeats the save every 24 hours that elapse, ending the effect on itself on a success. *Subsequent Failures:* The Poisoned target's Hit Point maximum decreases by {dmg:1d10}."
+        "onHit": "If the target is a creature, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *First Failure:* The target has the {ref:condition/poisoned} condition. While {ref:condition/poisoned}, the target's Hit Point maximum doesn't return to normal when finishing a {ref:glossary/long-rest}, and it repeats the save every 24 hours that elapse, ending the effect on itself on a success. *Subsequent Failures:* The {ref:condition/poisoned} target's Hit Point maximum decreases by {dmg:1d10}."
       }
     ]
   },
@@ -88,6 +88,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

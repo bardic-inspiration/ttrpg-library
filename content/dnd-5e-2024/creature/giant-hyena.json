@@ -54,7 +54,7 @@
       {
         "name": "Rampage",
         "kind": "other",
-        "text": "Immediately after dealing damage to a creature that was already Bloodied, the hyena can move up to half its Speed, and it makes one Bite attack.",
+        "text": "Immediately after dealing damage to a creature that was already {ref:glossary/bloodied}, the hyena can move up to half its {ref:glossary/speed}, and it makes one Bite attack.",
         "uses": "1/day"
       }
     ]
@@ -67,6 +67,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

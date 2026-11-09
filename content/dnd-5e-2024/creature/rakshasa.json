@@ -65,7 +65,7 @@
       {
         "name": "Fiendish Restoration",
         "kind": "other",
-        "text": "If the rakshasa dies outside the Nine Hells, its body turns to ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+        "text": "If the rakshasa dies outside the Nine Hells, its body turns to ichor, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Nine Hells."
       }
     ],
     "actions": [
@@ -90,7 +90,7 @@
             "type": "necrotic"
           }
         ],
-        "onHit": "If the target is a creature, it is cursed. While cursed, the target gains no benefit from finishing a Short or Long Rest."
+        "onHit": "If the target is a creature, it is cursed. While cursed, the target gains no benefit from finishing a Short or {ref:glossary/long-rest}."
       },
       {
         "name": "Baleful Command",
@@ -106,7 +106,7 @@
             "type": "psychic"
           }
         ],
-        "onFailure": "and the target has the Frightened and Incapacitated conditions until the start of the rakshasa's next turn.",
+        "onFailure": "and the target has the {ref:condition/frightened} and {ref:condition/incapacitated} conditions until the start of the rakshasa's next turn.",
         "recharge": "5-6"
       }
     ],
@@ -156,6 +156,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

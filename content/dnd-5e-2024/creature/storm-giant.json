@@ -107,7 +107,7 @@
             "type": "lightning"
           }
         ],
-        "onHit": "and the target has the Blinded and Deafened conditions until the start of the giant's next turn."
+        "onHit": "and the target has the {ref:condition/blinded} and {ref:condition/deafened} conditions until the start of the giant's next turn."
       },
       {
         "name": "Lightning Storm",
@@ -149,7 +149,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

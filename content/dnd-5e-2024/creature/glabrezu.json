@@ -70,12 +70,12 @@
       {
         "name": "Demonic Restoration",
         "kind": "other",
-        "text": "If the glabrezu dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+        "text": "If the glabrezu dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Abyss."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The glabrezu has Advantage on saving throws against spells and other magical effects."
+        "text": "The glabrezu has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -96,7 +96,7 @@
             "type": "slashing"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=15}) from one of two pincers."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=15}) from one of two pincers."
       },
       {
         "name": "Pummel",
@@ -153,6 +153,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }
