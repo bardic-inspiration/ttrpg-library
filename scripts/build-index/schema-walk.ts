@@ -12,7 +12,7 @@ export interface SchemaSet {
 }
 
 const isObject = (value: unknown): value is Schema => typeof value === 'object' && value !== null && !Array.isArray(value);
-const REF_OR_TEXT = /#\/\$defs\/RefOrText$/;
+const REF_OR_TEXT = /#\/\$defs\/(Counted)?RefOrText$/;
 
 interface Node {
   schema: Schema;

@@ -157,8 +157,8 @@ The formulas are in `derive.ts` and the tables, including the SRD CR table, in
 
 `schemas/common.schema.json` holds the definitions the type schemas share:
 abilities, dice, damage, proficiency levels, adjustments, damage types, refs
-(`Ref`, `RefOrText`, and the typed `ConditionRef`, which allows only condition
-keys), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
+(`Ref`, `RefOrText`, `CountedRefOrText`, whose ref may add a `count`, and the
+typed `ConditionRef`, which allows only condition keys), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
 
 ### Text tokens
 
