@@ -77,17 +77,6 @@ v2 extension only adds: new content entries, custom conditions, and custom
 equipment. Anything that modifies or replaces a rule, or adds a new
 mechanic, waits for v3's house rules system.
 
-### Rules data
-
-The rules data mechanism is built ([Rules data](../../docs/rulesets.md#rules-data),
-[Rules groups](../../docs/rulesets.md#rules-groups),
-[Rules pages](../../docs/rulesets.md#rules-pages)). What the rules types
-still add:
-
-- **In the SRD manifest.** The manifest lists every primitive and equipment
-  group by type and exact name, so `srd-coverage` proves the rules data is
-  complete. Primitives have no tier.
-
 ### Fields
 
 Each type's stored inputs, derived values, consistency checks, guideline,
@@ -106,7 +95,6 @@ a link to a rules type takes a typed ref
 
 - Each new type validates against its schema, with fixtures for its
   errors.
-- `srd-coverage` reports every SRD primitive and equipment group present.
 - Components don't appear in the library's galleries or search, and each is
   rendered on its parent's page.
 - Links to components resolve, and a link to a missing one fails CI.

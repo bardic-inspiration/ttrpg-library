@@ -102,6 +102,9 @@ from `types`, with whether it takes extensions:
   library; a mention of an entry in rules prose stays plain text. A page's
   links must resolve to a primitive or group.
 
+The SRD manifest lists every primitive and group, so `npm run srd-coverage`
+proves the rules data complete ([SRD manifest and coverage](content-model.md#srd-manifest-and-coverage)).
+
 `lib/rules.ts` places rules data on pages and is shared by the validator
 (`scripts/validate/rules.ts`) and the site (`site/src/lib/rules.ts`).
 
