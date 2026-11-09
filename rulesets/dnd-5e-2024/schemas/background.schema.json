@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/background.schema.json",
+  "title": "dnd-5e-2024 background stats (docs/rulesets.md#backgrounds)",
+  "description": "Stored inputs only; a background derives nothing. Cross-field and cross-entry rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "abilities",
+    "feat",
+    "skills",
+    "tool",
+    "equipment"
+  ],
+  "properties": {
+    "abilities": {
+      "description": "The three ability scores the background raises, printed \"Intelligence, Wisdom, Charisma\".",
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.schema.json#/$defs/Ability"
+      }
+    },
+    "feat": {
+      "description": "The origin feat it grants, printed with \"(see “Feats”)\" after it.",
+      "$ref": "common.schema.json#/$defs/FeatRef"
+    },
+    "skills": {
+      "description": "The two skill proficiencies, printed \"Insight and Religion\".",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.schema.json#/$defs/Skill"
+      }
+    },
+    "tool": {
+      "description": "The tool proficiency: a tool, or with `choose`, one kind of a tool with variants or a group (\"Choose one kind of Gaming Set\").",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "common.schema.json#/$defs/EquipmentRef/properties/ref"
+        },
+        "note": {
+          "$ref": "common.schema.json#/$defs/EquipmentRef/properties/note"
+        },
+        "choose": {
+          "description": "Prints \"Choose one kind of\" before the name.",
+          "const": true
+        }
+      }
+    },
+    "equipment": {
+      "$ref": "common.schema.json#/$defs/StartingEquipment"
+    }
+  }
+}

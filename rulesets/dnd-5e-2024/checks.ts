@@ -3,7 +3,7 @@
 
 import { deriveCreature } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
-import type { Action, CreatureStats, DerivedAction, DerivedCreature, ItemStats, SpellStats, Tables } from './types.ts';
+import type { Action, BackgroundStats, CreatureStats, DerivedAction, DerivedCreature, FeatStats, ItemStats, SpellStats, Tables } from './types.ts';
 import { ACTION_LISTS } from './types.ts';
 import type { Issue } from '../module.ts';
 
@@ -214,4 +214,40 @@ export function checkSpell(stats: SpellStats): Issue[] {
     issues.push({ level: 'warning', path: 'stats.ritual', message: 'a cantrip is marked ritual; confirm it' });
   }
   return issues;
+}
+
+/** The SRD's feats follow these; a custom feat that doesn't needs a reason, so they warn (docs/rulesets.md#feats). */
+export function checkFeat(stats: FeatStats): Issue[] {
+  const issues: Issue[] = [];
+  const warning = (path: string, message: string) => issues.push({ level: 'warning', path, message });
+  if (stats.category === 'origin') {
+    if (stats.level !== undefined) warning('stats.level', 'an origin feat has no prerequisite, since a background grants it at level 1');
+    if (stats.prerequisite !== undefined) warning('stats.prerequisite', 'an origin feat has no prerequisite, since a background grants it at level 1');
+  }
+  if (stats.category === 'general' && (stats.level ?? 0) < 4) warning('stats.level', 'a general feat has a prerequisite of level 4 or more');
+  if (stats.category === 'epic-boon' && (stats.level ?? 0) < 19) warning('stats.level', 'an epic boon has a prerequisite of level 19 or more');
+  return issues;
+}
+
+/** Every SRD background offers 50 GP as its other option (docs/rulesets.md#backgrounds). */
+const BACKGROUND_GP = 50;
+
+export function checkBackground(stats: BackgroundStats): Issue[] {
+  const issues: Issue[] = [];
+  const last = stats.equipment.length - 1;
+  const option = stats.equipment[last];
+  if (option?.items !== undefined) {
+    issues.push({ level: 'error', path: `stats.equipment[${last}]`, message: 'the last option is coins only, the alternative to the package' });
+  } else if (option?.gp !== BACKGROUND_GP) {
+    issues.push({ level: 'warning', path: `stats.equipment[${last}].gp`, message: `the coin option is ${BACKGROUND_GP} GP in every SRD background` });
+  }
+  return issues;
+}
+
+/** A background grants an origin feat (docs/rulesets.md#backgrounds). */
+export function checkBackgroundLinks(stats: BackgroundStats, target: (key: string) => { type: string; stats: unknown } | undefined): Issue[] {
+  const feat = target(stats.feat.ref);
+  if (feat?.type !== 'feat') return [];
+  const category = (feat.stats as FeatStats).category;
+  return category === 'origin' ? [] : [{ level: 'error', path: 'stats.feat', message: `${stats.feat.ref} is a ${category} feat; a background grants an origin feat` }];
 }

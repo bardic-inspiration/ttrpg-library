@@ -41,7 +41,7 @@ const MINOR_WORDS = new Set(['a', 'an', 'and', 'at', 'by', 'for', 'in', 'of', 'o
  * slashes: `4/day, or 5/day in lair` is `4/Day, or 5/Day in Lair`, and
  * `sleight-of-hand` is `Sleight of Hand`.
  */
-const titleCase = (s: string): string =>
+export const titleCase = (s: string): string =>
   s
     .split(/[\s-]+/)
     .map((word, i) => (i > 0 && MINOR_WORDS.has(word) ? word : word.split('/').map(capitalize).join('/')))
@@ -145,7 +145,7 @@ export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
 }
 
 /** "A", "A and B", "A, B, and C", as SRD 5.2 joins understood languages. */
-const englishList = (items: string[]): string =>
+export const englishList = (items: string[]): string =>
   items.length < 3 ? items.join(' and ') : `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
 
 export function languagesLine(s: CreatureStats): string {

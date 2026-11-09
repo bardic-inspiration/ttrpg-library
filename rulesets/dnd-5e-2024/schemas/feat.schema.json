@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/feat.schema.json",
+  "title": "dnd-5e-2024 feat stats (docs/rulesets.md#feats)",
+  "description": "Stored inputs only. Derives `repeatable` for the facet. Cross-field rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "category"
+  ],
+  "oneOf": [
+    {
+      "required": [
+        "benefits"
+      ]
+    },
+    {
+      "required": [
+        "text"
+      ]
+    }
+  ],
+  "properties": {
+    "category": {
+      "description": "The feat's category, printed under its name: \"Origin Feat\", \"General Feat\", \"Fighting Style Feat\", \"Epic Boon Feat\".",
+      "enum": [
+        "origin",
+        "general",
+        "fighting-style",
+        "epic-boon"
+      ]
+    },
+    "level": {
+      "description": "The prerequisite's minimum character level, printed first in it: \"Level 4+\".",
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 20
+    },
+    "prerequisite": {
+      "description": "The rest of the prerequisite, as printed: \"Strength or Dexterity 13+\", \"Fighting Style Feature\".",
+      "$ref": "common.schema.json#/$defs/Text"
+    },
+    "benefits": {
+      "description": "Titled benefits, printed after \"You gain the following benefits.\" as bold-titled paragraphs.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "text"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "$ref": "common.schema.json#/$defs/Text"
+          }
+        }
+      }
+    },
+    "text": {
+      "description": "The benefit of a feat without titled benefits.",
+      "$ref": "common.schema.json#/$defs/Text"
+    },
+    "repeatable": {
+      "description": "The \"Repeatable\" paragraph's text, printed last: \"You can take this feat more than once.\"",
+      "$ref": "common.schema.json#/$defs/Text"
+    }
+  }
+}

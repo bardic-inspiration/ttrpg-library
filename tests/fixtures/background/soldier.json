@@ -1,0 +1,61 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "background",
+  "id": "soldier",
+  "name": "Soldier",
+  "summary": "A background of military service: Athletics, Intimidation, and the Savage Attacker feat.",
+  "stats": {
+    "abilities": [
+      "str",
+      "dex",
+      "con"
+    ],
+    "feat": {
+      "ref": "feat/savage-attacker"
+    },
+    "skills": [
+      "athletics",
+      "intimidation"
+    ],
+    "tool": {
+      "ref": "equipment/gaming-set",
+      "note": "see “Equipment”",
+      "choose": true
+    },
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/spear"
+          },
+          {
+            "ref": "equipment/shortbow"
+          },
+          "20 Arrows",
+          {
+            "ref": "equipment/gaming-set",
+            "note": "same as above"
+          },
+          {
+            "ref": "equipment/healers-kit"
+          },
+          {
+            "ref": "equipment/quiver"
+          },
+          "Traveler's Clothes"
+        ],
+        "gp": 14
+      },
+      {
+        "gp": 50
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

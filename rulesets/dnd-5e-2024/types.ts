@@ -290,3 +290,38 @@ export interface DerivedEquipment {
   category?: string;
   costGp?: number;
 }
+
+export type FeatCategory = 'origin' | 'general' | 'fighting-style' | 'epic-boon';
+
+/** feat.schema.json (docs/rulesets.md#feats): titled `benefits` or one `text`. */
+export interface FeatStats {
+  category: FeatCategory;
+  level?: number;
+  prerequisite?: string;
+  benefits?: { name: string; text: string }[];
+  text?: string;
+  repeatable?: string;
+}
+
+export interface DerivedFeat {
+  /** The feat has a Repeatable paragraph. */
+  repeatable: boolean;
+}
+
+/** One starting-equipment item: a counted, noted ref, or text (docs/rulesets.md#starting-equipment). */
+export type StartingItem = { ref: string; count?: number; note?: string } | string;
+
+/** One lettered option. */
+export interface StartingOption {
+  items?: StartingItem[];
+  gp?: number;
+}
+
+/** background.schema.json (docs/rulesets.md#backgrounds). */
+export interface BackgroundStats {
+  abilities: Ability[];
+  feat: Ref;
+  skills: string[];
+  tool: Ref & { choose?: true };
+  equipment: StartingOption[];
+}

@@ -216,6 +216,22 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const { links, issues: refIssues } = linkEntries(linkable);
   for (const { file, message } of refIssues) error(file, message);
 
+  // Checks that read a ref's target (docs/rulesets.md#consistency-checks), once every ref resolves.
+  const targets = new Map(linkable.map((l) => [entryKey(l), l]));
+  const target = (key: string) => {
+    const found = targets.get(key);
+    return found && found.stats !== undefined ? { type: found.type, stats: found.stats } : undefined;
+  };
+  for (const { file, entry } of [...entries, ...components]) {
+    const checkLinks = rulesets.get(entry.ruleset)?.module.checkLinks;
+    if (!checkLinks) continue;
+    const srd = (entry.meta as { source?: { srd?: true } } | undefined)?.source?.srd === true;
+    for (const issue of checkLinks(entry.type, entry.stats, target)) {
+      if (srd && issue.level === 'warning') continue;
+      issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
+    }
+  }
+
   // Each component's parent is the one entry whose stats list it by ref (docs/content-model.md#components).
   const listedBy = new Map<string, { file: string; type: string; id: string }[]>();
   for (const { file, entry } of entries) {

@@ -13,6 +13,7 @@ describe('dnd-5e-2024 schemas match tables.json', () => {
     const { $defs } = await read('common.schema.json');
     expect($defs.Ability.enum).toEqual(tables.abilities);
     expect($defs.DamageType.enum).toEqual(tables.damageTypes);
+    expect($defs.Skill.enum).toEqual(Object.keys(tables.skills));
     expect($defs.Condition).toBeUndefined();
     expect('conditions' in tables).toBe(false);
   });
