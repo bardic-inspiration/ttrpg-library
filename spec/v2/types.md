@@ -407,9 +407,7 @@ and hit die, and the default sort is name.
   read "References" / "Referenced by".
 - **Registry facets:** `stats.class` (valued by key, shown by name). The card
   shows the class, and the default sort is class.
-- **Gap buckets:** one axis, `stats.class`, valued by the twelve SRD class
-  keys. The categorical axis takes ref keys on a ref facet, which the build
-  adds to `lib/buckets.ts`.
+- **Gap buckets:** none. Subclasses come by request, like classes.
 
 ### SRD fidelity
 

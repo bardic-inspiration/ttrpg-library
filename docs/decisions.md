@@ -311,7 +311,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A feat stores its category, prerequisite level and text, titled benefits or one text, and a Repeatable paragraph. A background stores three abilities, an origin feat ref, two skills, a tool ref, and starting equipment. A species stores its creature type, sizes with heights, speed, and traits. | Each field matches a part the SRD prints for the type | #229 |
 | Classes and backgrounds share one starting-equipment shape: lettered options of counted refs or text, plus GP. | One shape; the template words each chapter's punctuation | #229 |
 | Subclass features' spell lists, the Elven Lineages and Fiendish Legacies, and similar tables stay tables in text, with spell tokens. | A field is added only when a shape recurs; these tables differ | #229 |
-| Feats fill gaps by category and subclasses by SRD class; backgrounds, species, and classes come only by request. | A class is too large for gap fill; backgrounds and species have no natural axis | #229 |
+| Feats fill gaps by category; backgrounds, species, classes, and subclasses come only by request. | Classes and subclasses are too large for gap fill; backgrounds and species have no natural axis | #229 |
 
 ### UI
 
