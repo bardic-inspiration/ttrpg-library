@@ -3,6 +3,6 @@
   "id": "attack-roll",
   "name": "Attack Roll",
   "stats": {
-    "text": "An attack roll is a D20 Test that represents making an attack with a weapon, an Unarmed Strike, or a spell. *See also* \"Playing the Game\" (\"D20 Tests\")."
+    "text": "An attack roll is a {ref:glossary/d20-test} that represents making an attack with a weapon, an {ref:glossary/unarmed-strike}, or a spell. *See also* \"Playing the Game\" (\"D20 Tests\")."
   }
 }

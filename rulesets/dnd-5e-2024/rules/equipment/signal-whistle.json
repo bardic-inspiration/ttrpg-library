@@ -8,6 +8,6 @@
       "amount": 5,
       "unit": "cp"
     },
-    "text": "When blown as a Utilize action, a Signal Whistle produces a sound that can be heard up to 600 feet away."
+    "text": "When blown as a {ref:glossary/utilize} action, a Signal Whistle produces a sound that can be heard up to 600 feet away."
   }
 }

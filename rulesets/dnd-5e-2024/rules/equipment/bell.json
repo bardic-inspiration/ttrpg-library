@@ -8,6 +8,6 @@
       "amount": 1,
       "unit": "gp"
     },
-    "text": "When rung as a Utilize action, a Bell produces a sound that can be heard up to 60 feet away."
+    "text": "When rung as a {ref:glossary/utilize} action, a Bell produces a sound that can be heard up to 60 feet away."
   }
 }

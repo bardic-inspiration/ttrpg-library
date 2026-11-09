@@ -46,7 +46,8 @@ export interface RefIssue {
 export const entryKey = (entry: { type: string; id: string }): string => `${entry.type}/${entry.id}`;
 
 /** The keys a `Ref` object may have (docs/content-model.md#references): `ref`, and an optional `note`. */
-const REF_KEYS = new Set(['ref', 'note']);
+// `count` is a creature gear ref's (docs/rulesets.md#creatures); the schema allows it only there.
+const REF_KEYS = new Set(['ref', 'note', 'count']);
 
 export const isRef = (value: unknown): value is { ref: string; note?: string } =>
   typeof value === 'object' &&

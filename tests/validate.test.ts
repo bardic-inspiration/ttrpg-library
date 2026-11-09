@@ -226,6 +226,7 @@ const NONE_VALUES: [Example, string, unknown, RegExp][] = [
   ['creature', 'immunities.damage', [], /^stats\.immunities\.damage: must NOT have fewer than 1 items/],
   ['creature', 'immunities.conditions', [], /^stats\.immunities\.conditions: must NOT have fewer than 1 items/],
   ['creature', 'gear', [], /^stats\.gear: must NOT have fewer than 1 items/],
+  ['creature', 'gear', [{ ref: 'equipment/javelin', count: 1 }], /^stats\.gear\[0\]\.count: must be >= 2/],
   ['creature', 'senses', {}, /^stats\.senses: must NOT have fewer than 1 properties/],
   ['creature', 'senses.note', '', /^stats\.senses\.note: must NOT have fewer than 1 characters/],
   ['creature', 'senses.darkvision', 0, /^stats\.senses\.darkvision: must be >= 1/],
@@ -418,7 +419,7 @@ describe('references (docs/content-model.md#references)', () => {
 
   it('collects refs from creature spellcasting and gear, in document order', async () => {
     const hound = await cinderHound();
-    hound.stats.gear = ['Collar', { ref: 'item/wand-of-frost-lances' }];
+    hound.stats.gear = ['Collar', { ref: 'item/wand-of-frost-lances' }, { ref: 'equipment/javelin', count: 6 }];
     hound.stats.spellcasting = { ability: 'wis', atWill: [{ ref: 'spell/frost-lance' }], perDay: { '1': ['Fog Cloud', { ref: 'spell/frost-lance' }] } };
     const { content } = await temp([hound, await frostLance(), await wandOfFrostLances()]);
     const result = await validateLibrary(content);
@@ -426,6 +427,7 @@ describe('references (docs/content-model.md#references)', () => {
     const byId = Object.fromEntries(result.entries.map((e) => [e.entry.id, e]));
     expect(byId['cinder-hound']?.refs).toEqual([
       { path: 'stats.gear[1]', key: 'item/wand-of-frost-lances' },
+      { path: 'stats.gear[2]', key: 'equipment/javelin' },
       { path: 'stats.spellcasting.atWill[0]', key: 'spell/frost-lance' },
       { path: 'stats.spellcasting.perDay.1[1]', key: 'spell/frost-lance' },
     ]);

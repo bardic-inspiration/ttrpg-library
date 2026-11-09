@@ -3,6 +3,6 @@
   "id": "condition",
   "name": "Condition",
   "stats": {
-    "text": "A condition is a temporary game state. The definition of a condition says how it affects its recipient, and various rules define how to end a condition. This glossary defines these conditions:\n\n- Blinded\n- Charmed\n- Deafened\n- Exhaustion\n- Frightened\n- Grappled\n- Incapacitated\n- Invisible\n- Paralyzed\n- Petrified\n- Poisoned\n- Prone\n- Restrained\n- Stunned\n- Unconscious\n\nA condition doesn't stack with itself; a recipient either has a condition or doesn't. The Exhaustion condition is an exception to that rule."
+    "text": "A condition is a temporary game state. The definition of a condition says how it affects its recipient, and various rules define how to end a condition. This glossary defines these conditions:\n\n- {ref:condition/blinded}\n- {ref:condition/charmed}\n- {ref:condition/deafened}\n- {ref:condition/exhaustion}\n- {ref:condition/frightened}\n- {ref:condition/grappled}\n- {ref:condition/incapacitated}\n- {ref:condition/invisible}\n- {ref:condition/paralyzed}\n- {ref:condition/petrified}\n- {ref:condition/poisoned}\n- {ref:condition/prone}\n- {ref:condition/restrained}\n- {ref:condition/stunned}\n- {ref:condition/unconscious}\n\nA condition doesn't stack with itself; a recipient either has a condition or doesn't. The {ref:condition/exhaustion} condition is an exception to that rule."
   }
 }

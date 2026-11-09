@@ -3,6 +3,6 @@
   "id": "damage",
   "name": "Damage",
   "stats": {
-    "text": "Damage represents harm that causes a creature or an object to lose Hit Points."
+    "text": "Damage represents harm that causes a creature or an object to lose {ref:glossary/hit-points}."
   }
 }

@@ -14,11 +14,11 @@
       },
       {
         "name": "Speed 0",
-        "text": "Your Speed is 0 and can't increase."
+        "text": "Your {ref:glossary/speed} is 0 and can't increase."
       },
       {
         "name": "Attacks Affected",
-        "text": "Attack rolls against you have Advantage."
+        "text": "Attack rolls against you have {ref:glossary/advantage}."
       },
       {
         "name": "Saving Throws Affected",
@@ -26,11 +26,11 @@
       },
       {
         "name": "Resist Damage",
-        "text": "You have Resistance to all damage."
+        "text": "You have {ref:glossary/resistance} to all damage."
       },
       {
         "name": "Poison Immunity",
-        "text": "You have Immunity to the {ref:condition/poisoned} condition."
+        "text": "You have {ref:glossary/immunity} to the {ref:condition/poisoned} condition."
       }
     ]
   }

@@ -3,6 +3,6 @@
   "id": "crawling",
   "name": "Crawling",
   "stats": {
-    "text": "While you're crawling, each foot of movement costs 1 extra foot (2 extra feet in Difficult Terrain). *See also* \"Speed.\""
+    "text": "While you're crawling, each foot of movement costs 1 extra foot (2 extra feet in {ref:glossary/difficult-terrain}). *See also* \"{ref:glossary/speed}.\""
   }
 }

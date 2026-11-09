@@ -4,6 +4,6 @@
   "name": "Dodge",
   "stats": {
     "tag": "action",
-    "text": "If you take the Dodge action, you gain the following benefits: until the start of your next turn, any attack roll made against you has Disadvantage if you can see the attacker, and you make Dexterity saving throws with Advantage.\n\nYou lose these benefits if you have the Incapacitated condition or if your Speed is 0."
+    "text": "If you take the Dodge action, you gain the following benefits: until the start of your next turn, any attack roll made against you has {ref:glossary/disadvantage} if you can see the attacker, and you make Dexterity saving throws with {ref:glossary/advantage}.\n\nYou lose these benefits if you have the {ref:condition/incapacitated} condition or if your {ref:glossary/speed} is 0."
   }
 }
