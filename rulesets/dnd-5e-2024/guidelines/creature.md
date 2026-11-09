@@ -213,9 +213,9 @@ A creature mentions spells (`spellcasting`) and gear (`gear`) through
 - **Ref an existing library entry** whenever one matches what the creature
   uses. Check `library.json` for it before writing anything new.
 - **Ref SRD equipment** in `gear`: every SRD weapon, armor, tool, and piece
-  of gear is in the ruleset's rules data, so "Longsword" is
-  `{ "ref": "equipment/longsword" }`, and a carried number is a `count`:
-  `{ "ref": "equipment/javelin", "count": 6 }` reads "Javelins (6)"
+  of gear is in the ruleset's rules data, so "Longsword" is a ref to
+  `equipment/longsword`, and a carried number is the ref's `count`: a ref to
+  `equipment/javelin` with a count of 6 reads "Javelins (6)"
   ([Creatures](../../../docs/rulesets.md#creatures)). Only gear that isn't a link target, such as an Arcane
   Focus variant ("Wand"), is a plain string.
 - **Use a plain string** for other SRD 5.2 content that isn't in the library,
