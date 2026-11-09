@@ -312,6 +312,13 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Classes and backgrounds share one starting-equipment shape: lettered options of counted refs or text, plus GP. | One shape; the template words each chapter's punctuation | #229 |
 | Subclass features' spell lists, the Elven Lineages and Fiendish Legacies, and similar tables stay tables in text, with spell tokens. | A field is added only when a shape recurs; these tables differ | #229 |
 | Feats fill gaps by category; backgrounds, species, classes, and subclasses come only by request. | Classes and subclasses are too large for gap fill; backgrounds and species have no natural axis | #229 |
+| A component has its own envelope schema, `schemas/component.schema.json`, which the validator picks when the entry's ruleset lists its type under `components`. | P2: an unknown key such as `summary` still fails; no conditional envelope | #230 |
+| A component's parent is the entry whose stats hold a `{ ref }` object to it; a `{ref:…}` token is a mention. | Ref objects sit only at typed fields, so a listing is exact; text can mention any component | #230 |
+| The validator checks that a component's id starts with its parent's id and a hyphen, not the full slug; a name repeats within a parent only as the first id plus `-<number>`. | Entry ids aren't slug-checked either; the prefix is what keeps keys unique across parents | #230 |
+| A page type's search text includes its components' names and text, in its order. | A search for a feature should find its class, since components have no records of their own | #230 |
+| Components render after the parent's template through `EntryTemplate`, so the detail page, print, and PNG capture show them alike: a heading, then rules text or the generic lines. | P3, P6: one rendering for every mode; the layout waits for the UI redesign (#237) | #230 |
+| A page's Links merge its own and its components' links, without the links among its parts. Rules pages' back-links include components. | A component has no page, so its links show on its parent's | #230 |
+| Components get no raw data file or export bundle; a page type's own bundle is unchanged. | Page types get Print and no Download in v2 (`export.md`, #115) | #230 |
 
 ### UI
 

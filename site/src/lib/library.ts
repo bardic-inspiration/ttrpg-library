@@ -4,14 +4,15 @@
 
 import type { RulesetModule } from '../../../rulesets/module.ts';
 import type { RefTarget } from './refs.ts';
-import { entryKey, linkEntries, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
-import { ruleKey, rulePaths, typedGroups, type RulesData } from '../../../lib/rules.ts';
+import { entryKey, linkEntries, objectRefs, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
+import { anchorId, ruleKey, rulePaths, typedGroups, type RulesData } from '../../../lib/rules.ts';
 
 export interface Entry {
   ruleset: string;
   type: string;
   id: string;
   name: string;
+  /** Absent only on a component (docs/content-model.md#components), which never reaches a card or page of its own. */
   summary: string;
   description?: string;
   stats: unknown;
@@ -27,6 +28,18 @@ export interface LoadedEntry {
   refs: Link[];
   /** Refs into this entry from other entries. */
   refBy: Link[];
+  /** A page type's components, in the order its stats list them (docs/content-model.md#components). */
+  components?: LoadedComponent[];
+}
+
+/** A component, loaded with its parent and shown only on the parent's page. */
+export interface LoadedComponent {
+  entry: Omit<Entry, 'summary'>;
+  derived: Record<string, unknown>;
+  refs: Link[];
+  refBy: Link[];
+  /** The parent's entry. */
+  parent: Entry;
 }
 
 const files = import.meta.glob<Entry>('../../../content/**/*.json', { eager: true, import: 'default' });
@@ -69,16 +82,34 @@ export function loadLibrary(
   moduleFor: (id: string) => RulesetModule = rulesetModule,
 ): LoadedEntry[] {
   const links = linkAll(entries, rules);
+  const load = (entry: Entry) => ({
+    entry,
+    derived: moduleFor(entry.ruleset).derive(entry.type, entry.stats, rules.find((r) => r.ruleset === entry.ruleset)),
+    ...(links.get(entryKey(entry)) ?? { refs: [], refBy: [] }),
+  });
+  // A component is loaded onto the entry that lists it by ref, in that order (docs/content-model.md#components).
+  const isComponent = (entry: Entry) => (moduleFor(entry.ruleset).definition.components ?? []).some((c) => c.type === entry.type);
+  const components = new Map(entries.filter(isComponent).map((entry) => [entryKey(entry), entry]));
   return entries
-    .map((entry) => ({
-      entry,
-      derived: moduleFor(entry.ruleset).derive(entry.type, entry.stats, rules.find((r) => r.ruleset === entry.ruleset)),
-      ...(links.get(entryKey(entry)) ?? { refs: [], refBy: [] }),
-    }))
+    .filter((entry) => !components.has(entryKey(entry)))
+    .map((entry) => {
+      const listed = [...new Set(objectRefs(entry.stats).map((r) => r.ref))].flatMap((key) => {
+        const component = components.get(key);
+        return component ? [{ ...load(component), parent: entry }] : [];
+      });
+      return listed.length > 0 ? { ...load(entry), components: listed } : load(entry);
+    })
     .sort((a, b) => a.entry.name.localeCompare(b.entry.name));
 }
 
-export const entryPath = (entry: Entry): string => `${entry.ruleset}/${entry.type}/${entry.id}/`;
+/** Every component in a loaded library, with its parent. */
+export const allComponents = (all: LoadedEntry[]): LoadedComponent[] => all.flatMap((loaded) => loaded.components ?? []);
+
+/** Where a component's section is: its parent's page, at `#<type>-<id>`. */
+export const componentPath = (component: LoadedComponent): string =>
+  `${entryPath(component.parent)}#${anchorId(entryKey(component.entry))}`;
+
+export const entryPath = (entry: Pick<Entry, 'ruleset' | 'type' | 'id'>): string => `${entry.ruleset}/${entry.type}/${entry.id}/`;
 
 /** `<type>/<id>` → name of an entry, primitive, or group, for rendering refs as names. */
 export const entryNames = (all: LoadedEntry[], rules: RulesData[] = []): Map<string, string> =>
@@ -87,11 +118,18 @@ export const entryNames = (all: LoadedEntry[], rules: RulesData[] = []): Map<str
       ...data.primitives.map((p) => [ruleKey(p), p.name] as [string, string]),
       ...typedGroups(data).map((g) => [ruleKey(g), g.name] as [string, string]),
     ]),
-    ...all.map(({ entry }) => [entryKey(entry), entry.name] as [string, string]),
+    ...[...all, ...allComponents(all)].map(({ entry }) => [entryKey(entry), entry.name] as [string, string]),
   ]);
 
-/** Primitive and group key → path of its anchor on its rules page; an entry's path needs no lookup. */
-export const refPaths = (rules: RulesData[]): Map<string, string> => new Map(rules.flatMap((data) => [...rulePaths(data)]));
+/**
+ * Primitive, group, and component key → path of its anchor: a rules page's, or a component's on its
+ * parent's page. An entry's path needs no lookup.
+ */
+export const refPaths = (rules: RulesData[], all: LoadedEntry[] = []): Map<string, string> =>
+  new Map([
+    ...rules.flatMap((data) => [...rulePaths(data)]),
+    ...allComponents(all).map((c) => [entryKey(c.entry), componentPath(c)] as [string, string]),
+  ]);
 
 /** `<type>/<id>` → link target, for the detail page's refs and back-refs: an entry's page, or a primitive's or group's anchor. */
 export function refTargets(all: LoadedEntry[], rules: RulesData[] = []): Map<string, RefTarget> {
@@ -100,5 +138,10 @@ export function refTargets(all: LoadedEntry[], rules: RulesData[] = []): Map<str
   return new Map([
     ...[...paths].map(([key, path]) => [key, { type: key.slice(0, key.indexOf('/')), name: names.get(key) ?? key, path }] as [string, RefTarget]),
     ...all.map(({ entry }) => [entryKey(entry), { type: entry.type, name: entry.name, path: entryPath(entry) }] as [string, RefTarget]),
+    // A link to a component names its parent too, "Barbarian › Rage", since many parents share component names.
+    ...allComponents(all).map(
+      (c) =>
+        [entryKey(c.entry), { type: c.entry.type, name: `${c.parent.name} › ${c.entry.name}`, path: componentPath(c) }] as [string, RefTarget],
+    ),
   ]);
 }

@@ -105,6 +105,20 @@ export function collectRefs(stats: unknown, path = 'stats', malformed: Malformed
 }
 
 /**
+ * The `{ ref }` objects in schema-valid `stats`, in document order, without
+ * `{ref:…}` tokens: the refs a field holds, as opposed to mentions in text. A
+ * page type lists its components this way (docs/content-model.md#components).
+ */
+export function objectRefs(stats: unknown, path = 'stats'): FoundRef[] {
+  if (isRef(stats)) return [{ path, ref: stats.ref }];
+  if (Array.isArray(stats)) return stats.flatMap((item, i) => objectRefs(item, `${path}[${i}]`));
+  if (typeof stats === 'object' && stats !== null) {
+    return Object.entries(stats).flatMap(([key, value]) => objectRefs(value, `${path}.${key}`));
+  }
+  return [];
+}
+
+/**
  * Resolves every ref against the library and computes back-references. A ref
  * fails when no entry of its type has its id (IDs are unique per type,
  * docs/content-model.md#ids-and-names), or when the target is in another ruleset (not allowed in v1). Ruleset

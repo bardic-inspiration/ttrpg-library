@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/component.schema.json",
+  "title": "Component envelope (docs/content-model.md#components)",
+  "description": "A component's fixed keys: an entry's envelope without summary, description, tags, or image, since it has no card and is read only on its parent's page. `stats` is validated by the ruleset's schema for the component type.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ruleset", "type", "id", "name", "stats", "meta"],
+  "properties": {
+    "ruleset": { "$ref": "envelope.schema.json#/properties/ruleset" },
+    "type": { "description": "The component type, listed under `components` in the ruleset's ruleset.json, such as \"class-feature\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "id": { "description": "The parent's id, a hyphen, and the slug of the name, with the level added where the parent prints the name twice. Equal to the file name, and never changed after merge.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 3, "maxLength": 96 },
+    "name": { "description": "Display name, unique within its parent. For an SRD component, the SRD name exactly.", "type": "string", "minLength": 1, "maxLength": 80 },
+    "stats": { "$ref": "envelope.schema.json#/properties/stats" },
+    "meta": { "$ref": "envelope.schema.json#/properties/meta" }
+  }
+}

@@ -4,7 +4,8 @@
     "attribution": "srd-5.2",
     "types": {
       "note": { "label": "Note", "plural": "Notes", "template": "generic", "facets": [] },
-      "gear": { "label": "Gear", "plural": "Gear", "template": "generic", "facets": [] }
+      "gear": { "label": "Gear", "plural": "Gear", "template": "generic", "facets": [] },
+      "manual": { "label": "Manual", "plural": "Manuals", "template": "generic", "facets": [] }
     }
   }
 }

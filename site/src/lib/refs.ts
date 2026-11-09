@@ -40,7 +40,48 @@ export function groupRefs(
   targets: Map<string, RefTarget>,
   labelFor: LabelFor,
 ): { forward: RefGroup[]; back: RefGroup[] } {
-  const group = (links: Link[], label: (link: Link) => string): RefGroup[] => {
+  return groupLinks(
+    refs.map((link) => ({ ...link, from: self })),
+    refBy,
+    targets,
+    labelFor,
+  );
+}
+
+/** One linked part of a page: its type and its links. */
+interface PagePart {
+  entry: { type: string; id: string };
+  refs: Link[];
+  refBy: Link[];
+}
+
+/**
+ * A page type's links (docs/content-model.md#components): its own and its components', labeled from
+ * the field each sits in. The links among the page's own parts (the parent's list of its
+ * components, a component naming its parent or a sibling) aren't shown, since the page
+ * shows those parts itself.
+ */
+export function groupPageRefs(
+  page: PagePart,
+  components: PagePart[],
+  targets: Map<string, RefTarget>,
+  labelFor: LabelFor,
+): { forward: RefGroup[]; back: RefGroup[] } {
+  const parts = [page, ...components];
+  const own = new Set(parts.map(({ entry }) => `${entry.type}/${entry.id}`));
+  const forward = parts.flatMap(({ entry, refs }) => refs.filter((l) => !own.has(l.key)).map((link) => ({ ...link, from: entry.type })));
+  const back = parts.flatMap(({ refBy }) => refBy.filter((l) => !own.has(l.key)));
+  return groupLinks(forward, back, targets, labelFor);
+}
+
+/** Groups forward links (each labeled from the type it sits in) and back-links (labeled from the referrer). */
+function groupLinks(
+  refs: (Link & { from: string })[],
+  refBy: Link[],
+  targets: Map<string, RefTarget>,
+  labelFor: LabelFor,
+): { forward: RefGroup[]; back: RefGroup[] } {
+  const group = <L extends Link>(links: L[], label: (link: L) => string): RefGroup[] => {
     const groups = new Map<string, RefGroup>();
     for (const link of links) {
       const target = targets.get(link.key);
@@ -53,7 +94,7 @@ export function groupRefs(
     return [...groups.values()];
   };
   return {
-    forward: group(refs, (link) => labelFor(self, link.path).forward),
+    forward: group(refs, (link) => labelFor(link.from, link.path).forward),
     back: group(refBy, (link) => labelFor(link.key.slice(0, link.key.indexOf('/')), link.path).back),
   };
 }

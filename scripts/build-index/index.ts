@@ -6,8 +6,8 @@
 import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { SITE_BASE } from '../../lib/site.ts';
-import { validateLibrary, type ValidationError, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
-import { REF_TOKEN, type Link } from '../validate/refs.ts';
+import { validateLibrary, type ValidationError, type ValidComponent, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
+import { objectRefs, REF_TOKEN, type Link } from '../validate/refs.ts';
 import { PROJECT_ROOT, RULESETS_ROOT } from '../validate/schema.ts';
 import { ruleNames } from '../../lib/rules.ts';
 import { plainText } from '../validate/text.ts';
@@ -124,7 +124,7 @@ const TOKEN = /\{[^{}]*\}/g;
  * target), then `description` and the rules text, with markup stripped and
  * each `{ref:…}` link read as its target's name.
  */
-function searchText(item: ValidEntry, schemas: SchemaSet, nameOf: Map<string, string>): string {
+function searchText(item: Pick<ValidComponent, 'entry' | 'texts'>, schemas: SchemaSet, nameOf: Map<string, string>): string {
   const refNames = refOrTextValues(item.entry.stats, schemas).flatMap((value) => {
     if (typeof value === 'string') return [value];
     const ref = (value as { ref?: unknown }).ref;
@@ -145,7 +145,7 @@ const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
  * whenever validation fails, so a broken library never produces an index.
  */
 export async function buildIndex(root: string, options: BuildOptions = {}): Promise<BuildResult> {
-  const { errors, warnings, entries, rules } = await validateLibrary(root, options);
+  const { errors, warnings, entries, components, rules } = await validateLibrary(root, options);
   if (errors.length > 0) return { errors, warnings, records: [], files: [], bundles: [] };
   const registry = options.registry ?? (await loadRegistryFile());
   const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
@@ -153,8 +153,16 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
   // A {ref:…} link reads as its target's name in search text, whether the target is an entry or a primitive.
   const nameOf = new Map([
     ...rules.flatMap((data) => [...ruleNames(data)]),
-    ...entries.map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name] as [string, string]),
+    ...[...entries, ...components].map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name] as [string, string]),
   ]);
+  // A component has no record of its own; its parent's search text holds it (docs/site.md#index-build).
+  const componentByKey = new Map(components.map((c) => [`${c.entry.type}/${c.entry.id}`, c]));
+  // In the order the parent lists them.
+  const componentsOf = (entry: ValidEntry['entry']): ValidComponent[] =>
+    objectRefs(entry.stats).flatMap(({ ref }) => {
+      const c = componentByKey.get(ref);
+      return c && c.parent === `${entry.type}/${entry.id}` ? [c] : [];
+    });
   const schemaFiles = new Map<string, { files: Map<string, Schema> }>();
   const sorted = [...entries].sort(
     (a, b) => compare(a.entry.ruleset, b.entry.ruleset) || compare(a.entry.type, b.entry.type) || compare(a.entry.id, b.entry.id),
@@ -165,8 +173,13 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
     const { entry } = item;
     let loaded = schemaFiles.get(entry.ruleset);
     if (!loaded) schemaFiles.set(entry.ruleset, (loaded = await loadSchemas(entry.ruleset, rulesetsRoot)));
-    const root = loaded.files.get(`${entry.type}.schema.json`) ?? {};
-    const schemas: SchemaSet = { root, files: loaded.files };
+    const files = loaded.files;
+    const schemasOf = (type: string): SchemaSet => ({ root: files.get(`${type}.schema.json`) ?? {}, files });
+    const schemas = schemasOf(entry.type);
+    const search = [
+      searchText(item, schemas, nameOf),
+      ...componentsOf(entry).map((c) => `${c.entry.name} ${searchText(c, schemasOf(c.entry.type), nameOf)}`),
+    ].join(' ').replace(/\s+/g, ' ').trim();
     const config = registry[entry.ruleset]?.types[entry.type];
     const meta = entry.meta as { createdAt: string };
     records.push({
@@ -182,7 +195,7 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
       createdAt: meta.createdAt,
       refs: item.refs,
       refBy: item.refBy,
-      search: searchText(item, schemas, nameOf),
+      search,
     });
   }
   return {

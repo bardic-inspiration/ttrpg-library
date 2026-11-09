@@ -21,7 +21,7 @@ const { loaded, names, paths, level = 2 } = Astro.props;
 const { entry, derived } = loaded;
 ---
 <article class="print-entry" data-id={entry.id} data-name={entry.name} data-type={entry.type}>
-  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} mode="print" level={level} />
+  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} mode="print" level={level} />
 </article>
 
 <style>

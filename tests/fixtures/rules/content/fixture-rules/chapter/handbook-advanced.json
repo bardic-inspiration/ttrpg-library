@@ -1,0 +1,16 @@
+{
+  "ruleset": "fixture-rules",
+  "type": "chapter",
+  "id": "handbook-advanced",
+  "name": "Advanced",
+  "stats": {
+    "text": "Read {ref:chapter/handbook-basics} first.",
+    "level": 2
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

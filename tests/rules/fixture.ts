@@ -1,6 +1,8 @@
-// The fixture ruleset for rules data (docs/rulesets.md#rules-data): `fixture-rules`, with a
+// The fixture ruleset for rules data (docs/rulesets.md#rules-data) and page types
+// (docs/content-model.md#components): `fixture-rules`, with a
 // content type `note`, a primitive-only rules type `term`, and a rules type
-// with groups and extensions, `gear`. Tests validate it in place, or copy it
+// with groups and extensions, `gear`; and a page type, `manual`, whose `chapter`
+// components it lists. Tests validate it in place, or copy it
 // to a temporary folder to break one thing.
 import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';

@@ -26,6 +26,8 @@ export interface TemplateProps {
   mode?: TemplateMode;
   /** Heading level of the entry name; section headings sit one below it. Default 2. */
   level?: number;
+  /** A page type's components, shown after its template (docs/content-model.md#components). */
+  components?: { entry: { type: string; id: string; name: string; stats: unknown } }[];
 }
 
 /** Template names (`config/types.json` `template`) that have their own component; others use `generic`. */

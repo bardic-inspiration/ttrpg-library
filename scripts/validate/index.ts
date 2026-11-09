@@ -1,11 +1,12 @@
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
-import { checkImage, checkPath, checkUniqueness, type EntryHead, type FileIssue } from './library.ts';
-import { entryKey, linkEntries, REF_TOKEN, type Link, type RefEntry } from './refs.ts';
+import { checkComponents, checkImage, checkPath, checkUniqueness, type ComponentListing, type EntryHead, type FileIssue } from './library.ts';
+import { entryKey, linkEntries, objectRefs, REF_TOKEN, type Link, type RefEntry } from './refs.ts';
 import {
   PROJECT_ROOT,
   RULESETS_ROOT,
   formatErrors,
+  loadComponentValidator,
   loadEnvelopeValidator,
   loadRegistry,
   loadRuleset,
@@ -37,11 +38,24 @@ export interface ValidEntry {
   texts: { path: string; text: string }[];
 }
 
+/**
+ * A component that passed the schema stage (docs/content-model.md#components): no `summary`, and
+ * the key of the entry that lists it.
+ */
+export interface ValidComponent extends Omit<ValidEntry, 'entry'> {
+  entry: EntryHead & { stats: unknown; [key: string]: unknown };
+  /** The parent's key, `<type>/<id>`. */
+  parent: string;
+}
+
 export interface ValidationResult {
   files: string[];
   errors: ValidationError[];
   warnings: ValidationError[];
+  /** Every entry but components, which are in `components`. */
   entries: ValidEntry[];
+  /** Components with exactly one valid parent, in file order. */
+  components: ValidComponent[];
   /** The rules data of each ruleset that has rules types (docs/rulesets.md#rules-data). */
   rules: RulesData[];
 }
@@ -66,12 +80,14 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const issues: FileIssue[] = [];
   const error = (file: string, message: string) => issues.push({ level: 'error', file, message });
   const envelope = await loadEnvelopeValidator();
+  const componentEnvelope = await loadComponentValidator();
   const registry = options.registry ?? (await loadRegistry());
   const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
   const blocklist = termMatcher(await loadBlocklist(PROJECT_ROOT));
   const rulesets = new Map<string, LoadedRuleset | undefined>();
   const heads: EntryHead[] = [];
   const entries: Omit<ValidEntry, 'refs' | 'refBy'>[] = [];
+  const components: (Omit<ValidComponent, 'refs' | 'refBy' | 'parent'> & { parents: string[] })[] = [];
   const linkable: RefEntry[] = [];
 
   // Every registered ruleset's rules data, whether or not any entry uses it (docs/rulesets.md#rules-data).
@@ -96,12 +112,22 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       error(file, `invalid JSON: ${(e as Error).message}`);
       continue;
     }
-    const envelopeResult = validateWithText(envelope, data);
+    // A component has its own envelope (docs/content-model.md#components), chosen by its ruleset's definition.
+    const head = (typeof data === 'object' && data !== null ? data : {}) as { ruleset?: unknown; type?: unknown };
+    if (typeof head.ruleset === 'string' && !rulesets.has(head.ruleset)) {
+      rulesets.set(head.ruleset, registry[head.ruleset] ? await loadRuleset(head.ruleset, rulesetsRoot) : undefined);
+    }
+    const componentType =
+      typeof head.ruleset === 'string' && typeof head.type === 'string'
+        ? rulesets.get(head.ruleset)?.module.definition.components?.find((c) => c.type === head.type)
+        : undefined;
+    const validateEnvelope = componentType ? componentEnvelope : envelope;
+    const envelopeResult = validateWithText(validateEnvelope, data);
     if (!envelopeResult.valid) {
-      for (const message of formatErrors(envelope.errors)) error(file, message);
+      for (const message of formatErrors(validateEnvelope.errors)) error(file, message);
       continue;
     }
-    const entry = data as ValidEntry['entry'];
+    const entry = data as ValidComponent['entry'] & { summary?: string };
     for (const { path, text } of envelopeResult.texts) for (const message of checkMarkdown(path, text)) error(file, message);
     for (const message of checkBlocklist(entry, blocklist)) error(file, message);
     for (const message of checkPlaceholders(entry)) error(file, message);
@@ -114,6 +140,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       name: entry.name,
       ...(entry.image ? { image: entry.image } : {}),
       ...(srd ? { srd } : {}),
+      ...(componentType ? { component: true } : {}),
     });
     const linked: RefEntry = { file, ruleset: entry.ruleset, type: entry.type, id: entry.id };
     if (typeof entry.description === 'string') linked.description = entry.description;
@@ -137,7 +164,12 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       error(file, `type: "${entry.type}" is a rules type that takes no extensions; its rules are kept in rulesets/${entry.ruleset}/rules/`);
       continue;
     }
-    if ((!ruleset.module.definition.types.includes(entry.type) && !rulesType) || !validateStats || !registry[entry.ruleset]?.types[entry.type]) {
+    const known = componentType ? true : (ruleset.module.definition.types.includes(entry.type) || rulesType) && registry[entry.ruleset]?.types[entry.type];
+    if (componentType && !validateStats) {
+      error(file, `type: component type "${entry.type}" for ${entry.ruleset} has no schema; it needs schemas/${entry.type}.schema.json`);
+      continue;
+    }
+    if (!known || !validateStats) {
       error(file, `type: unknown type "${entry.type}" for ${entry.ruleset}; it must be listed in ruleset.json, have a schema, and have a config/types.json entry`);
       continue;
     }
@@ -152,7 +184,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     const textPaths = new Set(statsResult.texts.map((t) => t.path));
     const plain = [
       { path: 'name', text: entry.name },
-      { path: 'summary', text: entry.summary },
+      ...(entry.summary === undefined ? [] : [{ path: 'summary', text: entry.summary }]),
       ...stringsIn(entry.stats, 'stats').filter((s) => !textPaths.has(s.path)),
     ];
     for (const { path } of plain.filter(({ text }) => new RegExp(REF_TOKEN.source).test(text))) {
@@ -171,22 +203,45 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       if (problem) error(file, problem);
     }
     linked.stats = entry.stats;
-    entries.push({
+    const valid = {
       file,
-      entry,
       derived: ruleset.module.derive(entry.type, entry.stats, rulesData),
       texts: [...envelopeResult.texts, ...statsResult.texts],
-    });
+    };
+    if (componentType) components.push({ ...valid, entry, parents: componentType.parents });
+    else entries.push({ ...valid, entry: entry as ValidEntry['entry'] });
   }
 
   issues.push(...checkUniqueness(heads));
   const { links, issues: refIssues } = linkEntries(linkable);
   for (const { file, message } of refIssues) error(file, message);
+
+  // Each component's parent is the one entry whose stats list it by ref (docs/content-model.md#components).
+  const listedBy = new Map<string, { file: string; type: string; id: string }[]>();
+  for (const { file, entry } of entries) {
+    for (const { ref } of objectRefs(entry.stats)) listedBy.set(ref, [...(listedBy.get(ref) ?? []), { file, type: entry.type, id: entry.id }]);
+  }
+  const listings: ComponentListing[] = components.map(({ file, entry, parents }) => ({
+    file,
+    type: entry.type,
+    id: entry.id,
+    name: entry.name,
+    parents,
+    listedBy: listedBy.get(entryKey(entry)) ?? [],
+  }));
+  const componentIssues = checkComponents(listings);
+  issues.push(...componentIssues);
+  const badComponents = new Set(componentIssues.map((i) => i.file));
+
   const pick = (level: FileIssue['level']) =>
     issues.filter((i) => i.level === level).map(({ file, message }) => ({ file, message }));
-  const withLinks = entries.map((e) => {
-    const { refs, refBy } = links.get(entryKey(e.entry)) ?? { refs: [], refBy: [] };
-    return { ...e, refs, refBy };
-  });
-  return { files, errors: pick('error'), warnings: pick('warning'), entries: withLinks, rules };
+  const linksOf = (e: { entry: { type: string; id: string } }) => links.get(entryKey(e.entry)) ?? { refs: [], refBy: [] };
+  const withLinks = entries.map((e) => ({ ...e, ...linksOf(e) }));
+  const validComponents = components
+    .filter((c) => !badComponents.has(c.file))
+    .map(({ parents: _, ...c }) => {
+      const parent = listedBy.get(entryKey(c.entry))![0]!;
+      return { ...c, ...linksOf(c), parent: entryKey(parent) };
+    });
+  return { files, errors: pick('error'), warnings: pick('warning'), entries: withLinks, components: validComponents, rules };
 }

@@ -1,0 +1,20 @@
+{
+  "ruleset": "fixture-rules",
+  "type": "manual",
+  "id": "pocket-guide",
+  "name": "Pocket Guide",
+  "summary": "A second manual, with a chapter named like one of the Handbook's.",
+  "stats": {
+    "chapters": [
+      {
+        "ref": "chapter/pocket-guide-basics"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

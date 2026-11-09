@@ -39,7 +39,7 @@ describe('validateLibrary', () => {
     const empty = await mkdtemp(join(tmpdir(), 'ttrpg-empty-'));
     temps.push(empty);
     const result = await validateLibrary(empty);
-    expect({ ...result, rules: undefined }).toEqual({ files: [], errors: [], warnings: [], entries: [], rules: undefined });
+    expect({ ...result, rules: undefined }).toEqual({ files: [], errors: [], warnings: [], entries: [], components: [], rules: undefined });
     // The ruleset's rules data is validated whether or not any entry uses it (docs/rulesets.md#rules-data).
     expect(result.rules.map((r) => r.ruleset)).toEqual(['dnd-5e-2024']);
   });

@@ -3,9 +3,10 @@
   "label": "Fixture Rules",
   "srdVersion": "5.2",
   "attribution": "srd-5.2",
-  "types": ["note"],
+  "types": ["note", "manual"],
   "rules": [
     { "type": "term", "extensions": false },
     { "type": "gear", "extensions": true }
-  ]
+  ],
+  "components": [{ "type": "chapter", "parents": ["manual"] }]
 }

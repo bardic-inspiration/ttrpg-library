@@ -156,12 +156,13 @@ export function stringsIn(value: unknown, path: string): { path: string; text: s
   return [];
 }
 
-type TextEntry = { name: string; summary: string; description?: string; stats: unknown };
+/** A component has no `summary` (docs/content-model.md#components). */
+type TextEntry = { name: string; summary?: string; description?: string; stats: unknown };
 
 /** `name`, `summary`, `description`, and every string in `stats` (which holds `descriptors`), with their paths. */
 const textFields = (entry: TextEntry): { path: string; text: string }[] => [
   { path: 'name', text: entry.name },
-  { path: 'summary', text: entry.summary },
+  ...(entry.summary === undefined ? [] : [{ path: 'summary', text: entry.summary }]),
   ...(entry.description === undefined ? [] : [{ path: 'description', text: entry.description }]),
   ...stringsIn(entry.stats, 'stats'),
 ];

@@ -24,7 +24,7 @@ export const getStaticPaths = (() => {
   const rules = loadRules();
   const all = loadEntries(rules);
   const names = entryNames(all, rules);
-  const paths = refPaths(rules);
+  const paths = refPaths(rules, all);
   const targets = refTargets(all, rules);
   const pages = all.map((loaded) => ({
     params: { ruleset: loaded.entry.ruleset, type: loaded.entry.type, id: loaded.entry.id },

@@ -110,6 +110,13 @@ export async function loadEnvelopeValidator(): Promise<ValidateFunction> {
   return newAjv().compile((await readJson(join(PROJECT_ROOT, 'schemas/envelope.schema.json'))) as object);
 }
 
+/** The component envelope (docs/content-model.md#components), which reuses the entry envelope's definitions. */
+export async function loadComponentValidator(): Promise<ValidateFunction> {
+  const ajv = newAjv();
+  ajv.addSchema((await readJson(join(PROJECT_ROOT, 'schemas/envelope.schema.json'))) as object);
+  return ajv.compile((await readJson(join(PROJECT_ROOT, 'schemas/component.schema.json'))) as object);
+}
+
 /** Where the repo's rulesets live. */
 export const RULESETS_ROOT = join(PROJECT_ROOT, 'rulesets');
 
