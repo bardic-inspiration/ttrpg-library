@@ -59,7 +59,7 @@ describe('the SRD conditions', () => {
     const effects = (id: string) => JSON.stringify(data.primitives.find((p) => p.id === id)!.stats);
     expect(effects('paralyzed')).toContain('You have the {ref:condition/incapacitated} condition.');
     expect(effects('unconscious')).toContain('You have the {ref:condition/incapacitated} and {ref:condition/prone} conditions');
-    expect(effects('petrified')).toContain('Immunity to the {ref:condition/poisoned} condition.');
+    expect(effects('petrified')).toContain('{ref:glossary/immunity} to the {ref:condition/poisoned} condition.');
   });
 });
 

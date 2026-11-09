@@ -9,6 +9,6 @@
       "unit": "gp"
     },
     "weight": 5,
-    "text": "Using a Crowbar gives you Advantage on Strength checks where the Crowbar's leverage can be applied."
+    "text": "Using a Crowbar gives you {ref:glossary/advantage} on Strength checks where the Crowbar's leverage can be applied."
   }
 }

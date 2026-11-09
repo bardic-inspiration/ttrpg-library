@@ -13,7 +13,7 @@
     "castingTime": {
       "amount": 1,
       "unit": "bonus-action",
-      "trigger": "immediately after hitting a target with a Melee weapon or an Unarmed Strike"
+      "trigger": "immediately after hitting a target with a Melee weapon or an {ref:glossary/unarmed-strike}"
     },
     "ritual": false,
     "range": {
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

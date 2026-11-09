@@ -31,7 +31,7 @@
       "unit": "minute",
       "concentration": false
     },
-    "effect": "For the duration, you can comprehend and verbally communicate with Beasts, and you can use any of the Influence action's skill options with them.\n\nMost Beasts have little to say about topics that don't pertain to survival or companionship, but at minimum, a Beast can give you information about nearby locations and monsters, including whatever it has perceived within the past day."
+    "effect": "For the duration, you can comprehend and verbally communicate with Beasts, and you can use any of the {ref:glossary/influence} action's skill options with them.\n\nMost Beasts have little to say about topics that don't pertain to survival or companionship, but at minimum, a Beast can give you information about nearby locations and monsters, including whatever it has perceived within the past day."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -41,6 +41,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

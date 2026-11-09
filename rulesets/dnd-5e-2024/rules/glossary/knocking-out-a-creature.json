@@ -3,6 +3,6 @@
   "id": "knocking-out-a-creature",
   "name": "Knocking Out a Creature",
   "stats": {
-    "text": "When you would reduce a creature to 0 Hit Points with a melee attack, you can instead reduce the creature to 1 Hit Point. The creature then has the Unconscious condition and starts a Short Rest.\n\nThe creature remains Unconscious until it regains any Hit Points or until someone uses an action to administer first aid to it, which requires a successful DC 10 Wisdom (Medicine) check."
+    "text": "When you would reduce a creature to 0 {ref:glossary/hit-points} with a melee attack, you can instead reduce the creature to 1 Hit Point. The creature then has the {ref:condition/unconscious} condition and starts a {ref:glossary/short-rest}.\n\nThe creature remains {ref:condition/unconscious} until it regains any Hit Points or until someone uses an action to administer first aid to it, which requires a successful DC 10 Wisdom (Medicine) check."
   }
 }

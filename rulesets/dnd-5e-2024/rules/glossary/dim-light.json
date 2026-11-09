@@ -3,6 +3,6 @@
   "id": "dim-light",
   "name": "Dim Light",
   "stats": {
-    "text": "An area with Dim Light is Lightly Obscured. *See also* \"Lightly Obscured\" and \"Playing the Game\" (\"Exploration\")."
+    "text": "An area with Dim Light is {ref:glossary/lightly-obscured}. *See also* \"Lightly Obscured\" and \"Playing the Game\" (\"Exploration\")."
   }
 }

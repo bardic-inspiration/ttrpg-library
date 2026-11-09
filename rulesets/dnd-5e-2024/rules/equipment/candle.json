@@ -8,6 +8,6 @@
       "amount": 1,
       "unit": "cp"
     },
-    "text": "For 1 hour, a lit Candle sheds Bright Light in a 5-foot radius and Dim Light for an additional 5 feet."
+    "text": "For 1 hour, a lit Candle sheds {ref:glossary/bright-light} in a 5-foot radius and {ref:glossary/dim-light} for an additional 5 feet."
   }
 }

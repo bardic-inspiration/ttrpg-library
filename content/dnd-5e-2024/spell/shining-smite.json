@@ -13,7 +13,7 @@
     "castingTime": {
       "amount": 1,
       "unit": "bonus-action",
-      "trigger": "immediately after hitting a creature with a Melee weapon or an Unarmed Strike"
+      "trigger": "immediately after hitting a creature with a Melee weapon or an {ref:glossary/unarmed-strike}"
     },
     "ritual": false,
     "range": {
@@ -29,7 +29,7 @@
       "unit": "minute",
       "concentration": true
     },
-    "effect": "The target hit by the strike takes an extra 2d6 Radiant damage from the attack. Until the spell ends, the target sheds Bright Light in a 5-foot radius, attack rolls against it have Advantage, and it can't benefit from the Invisible condition.",
+    "effect": "The target hit by the strike takes an extra 2d6 Radiant damage from the attack. Until the spell ends, the target sheds {ref:glossary/bright-light} in a 5-foot radius, attack rolls against it have {ref:glossary/advantage}, and it can't benefit from the {ref:condition/invisible} condition.",
     "higherLevels": "The damage increases by 1d6 for each spell slot level above 2."
   },
   "meta": {
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

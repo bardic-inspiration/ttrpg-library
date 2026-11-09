@@ -3,6 +3,6 @@
   "id": "action",
   "name": "Action",
   "stats": {
-    "text": "On your turn, you can take one action. Choose which action to take from those below or from the special actions provided by your features. *See also* \"Playing the Game\" (\"Actions\"). These actions are defined elsewhere in this glossary:\n\n- Attack\n- Dash\n- Disengage\n- Dodge\n- Help\n- Hide\n- Influence\n- Magic\n- Ready\n- Search\n- Study\n- Utilize"
+    "text": "On your turn, you can take one action. Choose which action to take from those below or from the special actions provided by your features. *See also* \"Playing the Game\" (\"Actions\"). These actions are defined elsewhere in this glossary:\n\n- {ref:glossary/attack}\n- {ref:glossary/dash}\n- {ref:glossary/disengage}\n- {ref:glossary/dodge}\n- {ref:glossary/help}\n- {ref:glossary/hide}\n- {ref:glossary/influence}\n- {ref:glossary/magic}\n- {ref:glossary/ready}\n- {ref:glossary/search}\n- {ref:glossary/study}\n- {ref:glossary/utilize}"
   }
 }

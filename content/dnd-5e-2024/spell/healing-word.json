@@ -29,7 +29,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "A creature of your choice that you can see within range regains Hit Points equal to 2d4 plus your spellcasting ability modifier.",
+    "effect": "A creature of your choice that you can see within range regains {ref:glossary/hit-points} equal to 2d4 plus your spellcasting ability modifier.",
     "higherLevels": "The healing increases by 2d4 for each spell slot level above 1."
   },
   "meta": {
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

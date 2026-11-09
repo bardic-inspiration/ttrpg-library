@@ -80,6 +80,22 @@
         "note": { "description": "A qualifier printed in parentheses after the name.", "type": "string", "minLength": 1 }
       }
     },
+    "CountedRefOrText": {
+      "description": "A RefOrText whose ref may add a `count` of 2 or more, printed after the name with an \"s\" added: \"Javelins (6)\" (creature gear, docs/rulesets.md#creatures).",
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ref"],
+          "properties": {
+            "ref": { "$ref": "#/$defs/Ref/properties/ref" },
+            "note": { "$ref": "#/$defs/Ref/properties/note" },
+            "count": { "description": "How many, 2 or more.", "type": "integer", "minimum": 2 }
+          }
+        },
+        { "type": "string", "minLength": 1 }
+      ]
+    },
     "RefOrText": { "description": "A ref to a library entry, or a plain string for SRD content not in the library.", "anyOf": [{ "$ref": "#/$defs/Ref" }, { "type": "string", "minLength": 1 }] },
     "Text": { "description": "Rules text in the markdown subset, with tokens where the ruleset allows them.", "type": "string", "minLength": 1, "markdownSubset": true },
     "Line": { "description": "A stat block line, written as printed.", "type": "string", "minLength": 1 },

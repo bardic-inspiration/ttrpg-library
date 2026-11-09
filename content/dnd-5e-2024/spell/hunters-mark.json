@@ -29,8 +29,8 @@
       "unit": "hour",
       "concentration": true
     },
-    "effect": "You magically mark one creature you can see within range as your quarry. Until the spell ends, you deal an extra 1d6 Force damage to the target whenever you hit it with an attack roll. You also have Advantage on any Wisdom (Perception or Survival) check you make to find it.\n\nIf the target drops to 0 Hit Points before this spell ends, you can take a Bonus Action to move the mark to a new creature you can see within range.",
-    "higherLevels": "Your Concentration can last longer with a spell slot of level 3–4 (up to 8 hours) or 5+ (up to 24 hours)."
+    "effect": "You magically mark one creature you can see within range as your quarry. Until the spell ends, you deal an extra 1d6 Force damage to the target whenever you hit it with an attack roll. You also have {ref:glossary/advantage} on any Wisdom (Perception or Survival) check you make to find it.\n\nIf the target drops to 0 {ref:glossary/hit-points} before this spell ends, you can take a {ref:glossary/bonus-action} to move the mark to a new creature you can see within range.",
+    "higherLevels": "Your {ref:glossary/concentration} can last longer with a spell slot of level 3–4 (up to 8 hours) or 5+ (up to 24 hours)."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

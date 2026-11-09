@@ -33,7 +33,7 @@
       "unit": "minute",
       "concentration": false
     },
-    "effect": "Nonflammable grease covers the ground in a 10-foot square centered on a point within range and turns it into Difficult Terrain for the duration.\n\nWhen the grease appears, each creature standing in its area must succeed on a Dexterity saving throw or have the Prone condition. A creature that enters the area or ends its turn there must also succeed on that save or fall Prone."
+    "effect": "Nonflammable grease covers the ground in a 10-foot square centered on a point within range and turns it into {ref:glossary/difficult-terrain} for the duration.\n\nWhen the grease appears, each creature standing in its area must succeed on a Dexterity saving throw or have the {ref:condition/prone} condition. A creature that enters the area or ends its turn there must also succeed on that save or fall {ref:condition/prone}."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -43,6 +43,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

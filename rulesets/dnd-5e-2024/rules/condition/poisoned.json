@@ -6,7 +6,7 @@
     "effects": [
       {
         "name": "Ability Checks and Attacks Affected",
-        "text": "You have Disadvantage on attack rolls and ability checks."
+        "text": "You have {ref:glossary/disadvantage} on attack rolls and ability checks."
       }
     ]
   }

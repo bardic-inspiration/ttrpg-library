@@ -30,7 +30,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You touch a creature and end one condition on it: Blinded, Deafened, Paralyzed, or Poisoned."
+    "effect": "You touch a creature and end one condition on it: {ref:condition/blinded}, {ref:condition/deafened}, {ref:condition/paralyzed}, or {ref:condition/poisoned}."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

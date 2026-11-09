@@ -32,7 +32,7 @@
       "unit": "minute",
       "concentration": true
     },
-    "effect": "For the duration, you emit an aura in a 30-foot Emanation. While in the aura, creatures of your choice have Advantage on all saving throws, and other creatures have Disadvantage on attack rolls against them. In addition, when a Fiend or an Undead hits an affected creature with a melee attack roll, the attacker must succeed on a Constitution saving throw or have the Blinded condition until the end of its next turn."
+    "effect": "For the duration, you emit an aura in a 30-foot {ref:glossary/emanation}. While in the aura, creatures of your choice have {ref:glossary/advantage} on all saving throws, and other creatures have {ref:glossary/disadvantage} on attack rolls against them. In addition, when a Fiend or an Undead hits an affected creature with a melee attack roll, the attacker must succeed on a Constitution saving throw or have the {ref:condition/blinded} condition until the end of its next turn."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -42,6 +42,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

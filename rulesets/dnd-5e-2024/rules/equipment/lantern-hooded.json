@@ -9,6 +9,6 @@
       "unit": "gp"
     },
     "weight": 2,
-    "text": "A Hooded Lantern burns {ref:equipment/oil} as fuel to cast Bright Light in a 30-foot radius and Dim Light for an additional 30 feet. As a Bonus Action, you can lower the hood, reducing the light to Dim Light in a 5-foot radius, or raise it again."
+    "text": "A Hooded Lantern burns {ref:equipment/oil} as fuel to cast {ref:glossary/bright-light} in a 30-foot radius and {ref:glossary/dim-light} for an additional 30 feet. As a {ref:glossary/bonus-action}, you can lower the hood, reducing the light to Dim Light in a 5-foot radius, or raise it again."
   }
 }

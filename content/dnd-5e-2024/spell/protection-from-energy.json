@@ -32,7 +32,7 @@
       "unit": "hour",
       "concentration": true
     },
-    "effect": "For the duration, the willing creature you touch has Resistance to one damage type of your choice: Acid, Cold, Fire, Lightning, or Thunder."
+    "effect": "For the duration, the willing creature you touch has {ref:glossary/resistance} to one damage type of your choice: Acid, Cold, Fire, Lightning, or Thunder."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -42,6 +42,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

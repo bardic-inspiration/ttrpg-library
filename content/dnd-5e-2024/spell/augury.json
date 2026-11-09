@@ -32,7 +32,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You receive an omen from an otherworldly entity about the results of a course of action that you plan to take within the next 30 minutes. The GM chooses the omen from the Omens table.\n\n**Omens**\n\n| Omen | For Results That Will Be … |\n|---|---|\n| Weal | Good |\n| Woe | Bad |\n| Weal and woe | Good and bad |\n| Indifference | Neither good nor bad |\n\nThe spell doesn't account for circumstances, such as other spells, that might change the results.\n\nIf you cast the spell more than once before finishing a Long Rest, there is a cumulative 25 percent chance for each casting after the first that you get no answer."
+    "effect": "You receive an omen from an otherworldly entity about the results of a course of action that you plan to take within the next 30 minutes. The GM chooses the omen from the Omens table.\n\n**Omens**\n\n| Omen | For Results That Will Be … |\n|---|---|\n| Weal | Good |\n| Woe | Bad |\n| Weal and woe | Good and bad |\n| Indifference | Neither good nor bad |\n\nThe spell doesn't account for circumstances, such as other spells, that might change the results.\n\nIf you cast the spell more than once before finishing a {ref:glossary/long-rest}, there is a cumulative 25 percent chance for each casting after the first that you get no answer."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -42,6 +42,7 @@
         174
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

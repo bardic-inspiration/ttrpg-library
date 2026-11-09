@@ -71,7 +71,8 @@ export interface CreatureStats {
   vulnerabilities?: string[];
   resistances?: string[];
   immunities?: { damage?: string[]; conditions?: { ref: string; note?: string }[] };
-  gear?: RefOrText[];
+  /** A gear ref may add a `count` of 2 or more: "Javelins (6)". */
+  gear?: (string | (Ref & { count?: number }))[];
   senses?: { darkvision?: number; blindsight?: number; tremorsense?: number; truesight?: number; note?: string };
   languages: { spoken: string[]; understood?: string[]; telepathy?: number; note?: string };
   cr: number;
