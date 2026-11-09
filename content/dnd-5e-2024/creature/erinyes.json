@@ -69,17 +69,17 @@
       {
         "name": "Diabolical Restoration",
         "kind": "other",
-        "text": "If the erinyes dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+        "text": "If the erinyes dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Nine Hells."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The erinyes has Advantage on saving throws against spells and other magical effects."
+        "text": "The erinyes has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       },
       {
         "name": "Magic Rope",
         "kind": "other",
-        "text": "The erinyes has a magic rope. While bearing it, the erinyes can use the Entangling Rope action. The rope has AC 20, HP 90, and Immunity to Poison and Psychic damage. The rope turns to dust if reduced to 0 Hit Points, if it is 5+ feet away from the erinyes for 1 hour or more, or if the erinyes dies. If the rope is damaged or destroyed, the erinyes can fully restore it when finishing a Short or Long Rest."
+        "text": "The erinyes has a magic rope. While bearing it, the erinyes can use the Entangling Rope action. The rope has AC 20, HP 90, and {ref:glossary/immunity} to Poison and Psychic damage. The rope turns to dust if reduced to 0 {ref:glossary/hit-points}, if it is 5+ feet away from the erinyes for 1 hour or more, or if the erinyes dies. If the rope is damaged or destroyed, the erinyes can fully restore it when finishing a Short or {ref:glossary/long-rest}."
       }
     ],
     "actions": [
@@ -119,7 +119,7 @@
             "type": "force"
           }
         ],
-        "onFailure": "and the target has the Restrained condition until the rope is destroyed, the erinyes uses a Bonus Action to release the target, or the erinyes uses Entangling Rope again."
+        "onFailure": "and the target has the {ref:condition/restrained} condition until the rope is destroyed, the erinyes uses a {ref:glossary/bonus-action} to release the target, or the erinyes uses Entangling Rope again."
       }
     ],
     "reactions": [
@@ -138,6 +138,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

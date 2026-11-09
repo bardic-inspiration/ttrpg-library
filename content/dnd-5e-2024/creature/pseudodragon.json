@@ -46,7 +46,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The pseudodragon has Advantage on saving throws against spells and other magical effects."
+        "text": "The pseudodragon has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -82,7 +82,7 @@
             "type": "poison"
           }
         ],
-        "onFailure": "and the target has the Poisoned condition for 1 hour. *Failure by 5 or More:* While Poisoned, the target also has the Unconscious condition, which ends early if the target takes damage or a creature within 5 feet of it takes an action to wake it."
+        "onFailure": "and the target has the {ref:condition/poisoned} condition for 1 hour. *Failure by 5 or More:* While {ref:condition/poisoned}, the target also has the {ref:condition/unconscious} condition, which ends early if the target takes damage or a creature within 5 feet of it takes an action to wake it."
       }
     ]
   },
@@ -94,6 +94,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

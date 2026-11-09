@@ -63,7 +63,7 @@
       {
         "name": "Misty Escape",
         "kind": "other",
-        "text": "If the vampire drops to 0 Hit Points outside its resting place, the vampire uses Shape-Shift to become mist (no action required). If it can't use Shape-Shift, it is destroyed. While it has 0 Hit Points in mist form, it can't return to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it returns to its vampire form and has the Paralyzed condition until it regains any Hit Points, and it regains 1 Hit Point after spending 1 hour there."
+        "text": "If the vampire drops to 0 {ref:glossary/hit-points} outside its resting place, the vampire uses Shape-Shift to become mist (no action required). If it can't use Shape-Shift, it is destroyed. While it has 0 Hit Points in mist form, it can't return to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it returns to its vampire form and has the {ref:condition/paralyzed} condition until it regains any Hit Points, and it regains 1 Hit Point after spending 1 hour there."
       },
       {
         "name": "Spider Climb",
@@ -73,7 +73,7 @@
       {
         "name": "Vampire Weakness",
         "kind": "other",
-        "text": "The vampire has these weaknesses:\n\n**Forbiddance.** The vampire can't enter a residence without an invitation from an occupant.\n\n**Running Water.** The vampire takes 20 Acid damage if it ends its turn in running water.\n\n**Stake to the Heart.** If a weapon that deals Piercing damage is driven into the vampire's heart while the vampire has the Incapacitated condition in its resting place, the vampire has the Paralyzed condition until the weapon is removed.\n\n**Sunlight.** The vampire takes 20 Radiant damage if it starts its turn in sunlight. While in sunlight, it has Disadvantage on attack rolls and ability checks."
+        "text": "The vampire has these weaknesses:\n\n**Forbiddance.** The vampire can't enter a residence without an invitation from an occupant.\n\n**Running Water.** The vampire takes 20 Acid damage if it ends its turn in running water.\n\n**Stake to the Heart.** If a weapon that deals Piercing damage is driven into the vampire's heart while the vampire has the {ref:condition/incapacitated} condition in its resting place, the vampire has the {ref:condition/paralyzed} condition until the weapon is removed.\n\n**Sunlight.** The vampire takes 20 Radiant damage if it starts its turn in sunlight. While in sunlight, it has {ref:glossary/disadvantage} on attack rolls and ability checks."
       }
     ],
     "actions": [
@@ -98,7 +98,7 @@
             "type": "necrotic"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=14}) from one of two hands."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=14}) from one of two hands."
       },
       {
         "name": "Bite (Bat or Vampire Form Only)",
@@ -119,20 +119,20 @@
             "type": "necrotic"
           }
         ],
-        "onFailure": "The target's Hit Point maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount. A Humanoid reduced to 0 Hit Points by this damage and then buried rises the following sunset as a **{ref:creature/vampire-spawn}** under the vampire's control."
+        "onFailure": "The target's Hit Point maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains {ref:glossary/hit-points} equal to that amount. A Humanoid reduced to 0 Hit Points by this damage and then buried rises the following sunset as a **{ref:creature/vampire-spawn}** under the vampire's control."
       }
     ],
     "bonusActions": [
       {
         "name": "Charm",
         "kind": "other",
-        "text": "The vampire casts *{ref:spell/charm-person}*, requiring no spell components and using Charisma as the spellcasting ability (spell save {dc:con}), and the duration is 24 hours. The Charmed target is a willing recipient of the vampire's Bite, the damage of which doesn't end the spell. When the spell ends, the target is unaware it was Charmed by the vampire.",
+        "text": "The vampire casts *{ref:spell/charm-person}*, requiring no spell components and using Charisma as the spellcasting ability (spell save {dc:con}), and the duration is 24 hours. The {ref:condition/charmed} target is a willing recipient of the vampire's Bite, the damage of which doesn't end the spell. When the spell ends, the target is unaware it was {ref:condition/charmed} by the vampire.",
         "recharge": "5-6"
       },
       {
         "name": "Shape-Shift",
         "kind": "other",
-        "text": "If the vampire isn't in sunlight or running water, it shape-shifts into a Tiny bat (Speed 5 ft., Fly Speed 30 ft.) or a Medium cloud of mist (Speed 5 ft., Fly Speed 20 ft. [hover]), or it returns to its vampire form. Anything it is wearing transforms with it. While in bat form, the vampire can't speak. Its game statistics, other than its size and Speed, are unchanged. While in mist form, the vampire can't take any actions, speak, or manipulate objects. It is weightless and can enter an enemy's space and stop there. If air can pass through a space, the mist can do so, but it can't pass through liquid. It has Resistance to all damage, except the damage it takes from sunlight."
+        "text": "If the vampire isn't in sunlight or running water, it shape-shifts into a Tiny bat ({ref:glossary/speed} 5 ft., {ref:glossary/fly-speed} 30 ft.) or a Medium cloud of mist (Speed 5 ft., Fly Speed 20 ft. [hover]), or it returns to its vampire form. Anything it is wearing transforms with it. While in bat form, the vampire can't speak. Its game statistics, other than its size and Speed, are unchanged. While in mist form, the vampire can't take any actions, speak, or manipulate objects. It is weightless and can enter an enemy's space and stop there. If air can pass through a space, the mist can do so, but it can't pass through liquid. It has {ref:glossary/resistance} to all damage, except the damage it takes from sunlight."
       }
     ],
     "legendaryActions": {
@@ -148,7 +148,7 @@
         {
           "name": "Deathless Strike",
           "kind": "other",
-          "text": "The vampire moves up to half its Speed, and it makes one Grave Strike attack."
+          "text": "The vampire moves up to half its {ref:glossary/speed}, and it makes one Grave Strike attack."
         }
       ]
     }
@@ -161,6 +161,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

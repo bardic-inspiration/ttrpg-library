@@ -77,7 +77,7 @@
             "type": "psychic"
           }
         ],
-        "onFailure": "and the target is cursed for 1 hour. Until the curse ends, the target has the Charmed and Poisoned conditions."
+        "onFailure": "and the target is cursed for 1 hour. Until the curse ends, the target has the {ref:condition/charmed} and {ref:condition/poisoned} conditions."
       }
     ],
     "spellcasting": {
@@ -122,6 +122,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

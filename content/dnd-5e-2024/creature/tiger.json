@@ -49,14 +49,14 @@
             "type": "slashing"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/prone} condition."
       }
     ],
     "bonusActions": [
       {
         "name": "Nimble Escape",
         "kind": "other",
-        "text": "The tiger takes the Disengage or Hide action."
+        "text": "The tiger takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
       }
     ]
   },
@@ -68,6 +68,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

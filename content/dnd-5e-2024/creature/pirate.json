@@ -34,8 +34,13 @@
       "cha"
     ],
     "gear": [
-      "Daggers (6)",
-      "Leather Armor"
+      {
+        "ref": "equipment/dagger",
+        "count": 6
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
     ],
     "languages": {
       "spoken": [
@@ -74,7 +79,7 @@
           "ability": "wis",
           "targets": "one creature the pirate can see within 30 feet"
         },
-        "onFailure": "The target has the Charmed condition until the start of the pirate's next turn."
+        "onFailure": "The target has the {ref:condition/charmed} condition until the start of the pirate's next turn."
       }
     ]
   },
@@ -86,6 +91,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

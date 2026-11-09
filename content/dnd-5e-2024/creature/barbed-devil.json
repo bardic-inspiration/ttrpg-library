@@ -74,12 +74,12 @@
       {
         "name": "Diabolical Restoration",
         "kind": "other",
-        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Nine Hells."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The devil has Advantage on saving throws against spells and other magical effects."
+        "text": "The devil has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -100,7 +100,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=13}) from both claws."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=13}) from both claws."
       },
       {
         "name": "Tail",
@@ -140,6 +140,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -63,7 +63,7 @@
       {
         "name": "Hellish Restoration",
         "kind": "other",
-        "text": "If the lemure dies in the Nine Hells, it revives with all its Hit Points in 1d10 days unless it is killed by a creature under the effects of a *{ref:spell/bless}* spell or its remains are sprinkled with Holy Water."
+        "text": "If the lemure dies in the Nine Hells, it revives with all its {ref:glossary/hit-points} in 1d10 days unless it is killed by a creature under the effects of a *{ref:spell/bless}* spell or its remains are sprinkled with {ref:equipment/holy-water}."
       }
     ],
     "actions": [
@@ -89,6 +89,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

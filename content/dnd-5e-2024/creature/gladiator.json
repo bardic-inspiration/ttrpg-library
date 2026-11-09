@@ -40,9 +40,16 @@
       "performance": "proficient"
     },
     "gear": [
-      "Shield",
-      "Spears (3)",
-      "Studded Leather Armor"
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/spear",
+        "count": 3
+      },
+      {
+        "ref": "equipment/studded-leather-armor"
+      }
     ],
     "languages": {
       "spoken": [
@@ -88,7 +95,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onFailure": "If the target is a Medium or smaller creature, it has the Prone condition."
+        "onFailure": "If the target is a Medium or smaller creature, it has the {ref:condition/prone} condition."
       }
     ],
     "reactions": [
@@ -107,6 +114,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

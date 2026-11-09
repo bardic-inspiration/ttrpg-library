@@ -68,12 +68,12 @@
       {
         "name": "Diabolical Restoration",
         "kind": "other",
-        "text": "If the pit fiend dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+        "text": "If the pit fiend dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Nine Hells."
       },
       {
         "name": "Fear Aura",
         "kind": "other",
-        "text": "The pit fiend emanates an aura in a 20-foot Emanation while it doesn't have the Incapacitated condition. *Wisdom Saving Throw:* {dc:con}, any enemy that starts its turn in the aura. *Failure:* The target has the Frightened condition until the start of its next turn. *Success:* The target is immune to this pit fiend's aura for 24 hours."
+        "text": "The pit fiend emanates an aura in a 20-foot {ref:glossary/emanation} while it doesn't have the {ref:condition/incapacitated} condition. *Wisdom Saving Throw:* {dc:con}, any enemy that starts its turn in the aura. *Failure:* The target has the {ref:condition/frightened} condition until the start of its next turn. *Success:* The target is immune to this pit fiend's aura for 24 hours."
       },
       {
         "name": "Legendary Resistance",
@@ -84,7 +84,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The pit fiend has Advantage on saving throws against spells and other magical effects."
+        "text": "The pit fiend has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -105,7 +105,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a creature, it must make the following saving throw. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the Poisoned condition. While Poisoned, the target can't regain Hit Points and takes {dmg:6d6:poison} at the start of each of its turns, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        "onHit": "If the target is a creature, it must make the following saving throw. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the {ref:condition/poisoned} condition. While {ref:condition/poisoned}, the target can't regain {ref:glossary/hit-points} and takes {dmg:6d6:poison} at the start of each of its turns, and it repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
       },
       {
         "name": "Devilish Claw",
@@ -147,7 +147,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

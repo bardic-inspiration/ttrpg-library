@@ -27,8 +27,12 @@
       "cha": 9
     },
     "gear": [
-      "Greataxe",
-      "Hide Armor"
+      {
+        "ref": "equipment/greataxe"
+      },
+      {
+        "ref": "equipment/hide-armor"
+      }
     ],
     "languages": {
       "spoken": [
@@ -40,7 +44,7 @@
       {
         "name": "Bloodied Frenzy",
         "kind": "other",
-        "text": "While Bloodied, the berserker has Advantage on attack rolls and saving throws."
+        "text": "While {ref:glossary/bloodied}, the berserker has {ref:glossary/advantage} on attack rolls and saving throws."
       }
     ],
     "actions": [
@@ -67,6 +71,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

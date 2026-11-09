@@ -95,13 +95,13 @@
           "ability": "con",
           "targets": "each creature in a 15-foot Cone"
         },
-        "onFailure": "The target can't take Reactions; its Speed is halved; and it can take either an action or a Bonus Action on its turn, not both. This effect lasts until the end of its next turn."
+        "onFailure": "The target can't take Reactions; its {ref:glossary/speed} is halved; and it can take either an action or a {ref:glossary/bonus-action} on its turn, not both. This effect lasts until the end of its next turn."
       }
     ]
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

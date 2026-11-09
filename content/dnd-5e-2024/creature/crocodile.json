@@ -56,7 +56,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=12}). While Grappled, the target has the Restrained condition."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=12}). While {ref:condition/grappled}, the target has the {ref:condition/restrained} condition."
       }
     ]
   },
@@ -68,6 +68,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

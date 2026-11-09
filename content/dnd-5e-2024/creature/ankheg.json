@@ -38,7 +38,7 @@
       {
         "name": "Tunneler",
         "kind": "other",
-        "text": "The ankheg can burrow through solid rock at half its Burrow Speed and leaves a 10-foot-diameter tunnel in its wake."
+        "text": "The ankheg can burrow through solid rock at half its {ref:glossary/burrow-speed} and leaves a 10-foot-diameter tunnel in its wake."
       }
     ],
     "actions": [
@@ -59,7 +59,7 @@
             "type": "acid"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=13})."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=13})."
       },
       {
         "name": "Acid Spray",
@@ -88,6 +88,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

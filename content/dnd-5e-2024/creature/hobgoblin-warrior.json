@@ -32,10 +32,18 @@
       "cha": 9
     },
     "gear": [
-      "Half Plate Armor",
-      "Longbow",
-      "Longsword",
-      "Shield"
+      {
+        "ref": "equipment/half-plate-armor"
+      },
+      {
+        "ref": "equipment/longbow"
+      },
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/shield"
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -51,7 +59,7 @@
       {
         "name": "Pack Tactics",
         "kind": "other",
-        "text": "The hobgoblin has Advantage on an attack roll against a creature if at least one of the hobgoblin's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+        "text": "The hobgoblin has {ref:glossary/advantage} on an attack roll against a creature if at least one of the hobgoblin's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
       }
     ],
     "actions": [
@@ -98,6 +106,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -113,12 +113,12 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "The target has the Grappled condition (escape {dc=20}) from one of ten tentacles, and it has the Restrained condition until the grapple ends."
+        "onHit": "The target has the {ref:condition/grappled} condition (escape {dc=20}) from one of ten tentacles, and it has the {ref:condition/restrained} condition until the grapple ends."
       },
       {
         "name": "Fling",
         "kind": "other",
-        "text": "The kraken throws a Large or smaller creature Grappled by it to a space it can see within 60 feet of itself that isn't in the air. *Dexterity Saving Throw:* {dc:str}, the creature thrown and each creature in the destination space. *Failure:* {dmg:4d8:bludgeoning}, and the target has the Prone condition. *Success:* Half damage only."
+        "text": "The kraken throws a Large or smaller creature {ref:condition/grappled} by it to a space it can see within 60 feet of itself that isn't in the air. *Dexterity Saving Throw:* {dc:str}, the creature thrown and each creature in the destination space. *Failure:* {dmg:4d8:bludgeoning}, and the target has the {ref:condition/prone} condition. *Success:* Half damage only."
       },
       {
         "name": "Lightning Strike",
@@ -151,7 +151,7 @@
             "type": "piercing"
           }
         ],
-        "onFailure": "If the target is Large or smaller, it is swallowed and no longer Grappled. A swallowed creature has the Restrained condition, has Total Cover against attacks and other effects outside the kraken, and takes {dmg:7d6:acid} at the start of each of its turns. If the kraken takes 50 damage or more on a single turn from a creature inside it, the kraken must succeed on a {dc:str} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 10 feet of the kraken with the Prone condition. If the kraken dies, any swallowed creature no longer has the Restrained condition and can escape from the corpse using 15 feet of movement, exiting Prone."
+        "onFailure": "If the target is Large or smaller, it is swallowed and no longer {ref:condition/grappled}. A swallowed creature has the {ref:condition/restrained} condition, has Total Cover against attacks and other effects outside the kraken, and takes {dmg:7d6:acid} at the start of each of its turns. If the kraken takes 50 damage or more on a single turn from a creature inside it, the kraken must succeed on a {dc:str} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 10 feet of the kraken with the {ref:condition/prone} condition. If the kraken dies, any swallowed creature no longer has the {ref:condition/restrained} condition and can escape from the corpse using 15 feet of movement, exiting {ref:condition/prone}."
       }
     ],
     "legendaryActions": {
@@ -172,7 +172,7 @@
             "ability": "con",
             "targets": "each creature in a 15-foot Emanation originating from the kraken while it is underwater"
           },
-          "onFailure": "The target has the Blinded and Poisoned conditions until the end of the kraken's next turn. The kraken then moves up to its Speed.",
+          "onFailure": "The target has the {ref:condition/blinded} and {ref:condition/poisoned} conditions until the end of the kraken's next turn. The kraken then moves up to its {ref:glossary/speed}.",
           "onFailureOrSuccess": "The kraken can't take this action again until the start of its next turn."
         }
       ]
@@ -186,6 +186,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

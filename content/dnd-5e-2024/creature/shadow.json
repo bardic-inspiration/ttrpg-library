@@ -89,7 +89,7 @@
       {
         "name": "Sunlight Weakness",
         "kind": "other",
-        "text": "While in sunlight, the shadow has Disadvantage on D20 Tests."
+        "text": "While in sunlight, the shadow has {ref:glossary/disadvantage} on D20 Tests."
       }
     ],
     "actions": [
@@ -112,7 +112,7 @@
       {
         "name": "Shadow Stealth",
         "kind": "other",
-        "text": "While in Dim Light or Darkness, the shadow takes the Hide action."
+        "text": "While in {ref:glossary/dim-light} or {ref:glossary/darkness}, the shadow takes the {ref:glossary/hide} action."
       }
     ]
   },
@@ -124,6 +124,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

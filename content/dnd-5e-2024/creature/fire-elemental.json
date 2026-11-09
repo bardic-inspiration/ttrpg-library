@@ -76,7 +76,7 @@
       {
         "name": "Fire Aura",
         "kind": "other",
-        "text": "At the end of each of the elemental's turns, each creature in a 10-foot Emanation originating from the elemental takes {dmg:1d10:fire}. Creatures and flammable objects in the Emanation start burning."
+        "text": "At the end of each of the elemental's turns, each creature in a 10-foot {ref:glossary/emanation} originating from the elemental takes {dmg:1d10:fire}. Creatures and flammable objects in the Emanation start burning."
       },
       {
         "name": "Fire Form",
@@ -86,7 +86,7 @@
       {
         "name": "Illumination",
         "kind": "other",
-        "text": "The elemental sheds Bright Light in a 30-foot radius and Dim Light for an additional 30 feet."
+        "text": "The elemental sheds {ref:glossary/bright-light} in a 30-foot radius and {ref:glossary/dim-light} for an additional 30 feet."
       },
       {
         "name": "Water Susceptibility",
@@ -124,6 +124,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

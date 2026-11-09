@@ -32,8 +32,12 @@
       "persuasion": "proficient"
     },
     "gear": [
-      "Breastplate",
-      "Rapier"
+      {
+        "ref": "equipment/breastplate"
+      },
+      {
+        "ref": "equipment/rapier"
+      }
     ],
     "languages": {
       "spoken": [
@@ -72,6 +76,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -51,8 +51,12 @@
       ]
     },
     "gear": [
-      "Battleaxe",
-      "Morningstar"
+      {
+        "ref": "equipment/battleaxe"
+      },
+      {
+        "ref": "equipment/morningstar"
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -81,7 +85,7 @@
             "type": "slashing"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/prone} condition."
       },
       {
         "name": "Morningstar",
@@ -95,7 +99,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "and the target has Disadvantage on the next attack roll it makes before the end of its next turn."
+        "onHit": "and the target has {ref:glossary/disadvantage} on the next attack roll it makes before the end of its next turn."
       }
     ]
   },
@@ -107,6 +111,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

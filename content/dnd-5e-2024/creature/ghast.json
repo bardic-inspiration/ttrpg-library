@@ -65,7 +65,7 @@
           "ability": "con",
           "targets": "any creature that starts its turn in a 5-foot Emanation originating from the ghast"
         },
-        "onFailure": "The target has the Poisoned condition until the start of its next turn.",
+        "onFailure": "The target has the {ref:condition/poisoned} condition until the start of its next turn.",
         "onSuccess": "The target is immune to this ghast's Stench for 24 hours."
       }
     ],
@@ -99,7 +99,7 @@
             "type": "slashing"
           }
         ],
-        "onHit": "If the target is a non-Undead creature, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the Paralyzed condition until the end of its next turn."
+        "onHit": "If the target is a non-Undead creature, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the {ref:condition/paralyzed} condition until the end of its next turn."
       }
     ]
   },
@@ -111,6 +111,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

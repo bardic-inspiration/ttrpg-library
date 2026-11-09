@@ -86,12 +86,12 @@
       {
         "name": "Illumination",
         "kind": "other",
-        "text": "The wisp sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet."
+        "text": "The wisp sheds {ref:glossary/bright-light} in a 20-foot radius and {ref:glossary/dim-light} for an additional 20 feet."
       },
       {
         "name": "Incorporeal Movement",
         "kind": "other",
-        "text": "The wisp can move through other creatures and objects as if they were Difficult Terrain. It takes {dmg:1d10:force} if it ends its turn inside an object."
+        "text": "The wisp can move through other creatures and objects as if they were {ref:glossary/difficult-terrain}. It takes {dmg:1d10:force} if it ends its turn inside an object."
       }
     ],
     "actions": [
@@ -118,12 +118,12 @@
           "ability": "con",
           "targets": "one living creature the wisp can see within 5 feet that has 0 Hit Points"
         },
-        "onFailure": "The target dies, and the wisp regains {dmg:3d6} Hit Points."
+        "onFailure": "The target dies, and the wisp regains {dmg:3d6} {ref:glossary/hit-points}."
       },
       {
         "name": "Vanish",
         "kind": "other",
-        "text": "The wisp and its light have the Invisible condition until the wisp's Concentration ends on this effect, which ends early immediately after the wisp makes an attack roll or uses Consume Life."
+        "text": "The wisp and its light have the {ref:condition/invisible} condition until the wisp's {ref:glossary/concentration} ends on this effect, which ends early immediately after the wisp makes an attack roll or uses Consume Life."
       }
     ]
   },
@@ -135,6 +135,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

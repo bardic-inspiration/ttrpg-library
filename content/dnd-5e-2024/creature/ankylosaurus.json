@@ -53,7 +53,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Huge or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Huge or smaller creature, it has the {ref:condition/prone} condition."
       }
     ]
   },
@@ -65,6 +65,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

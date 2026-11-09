@@ -50,7 +50,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=13}) from one of two claws."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=13}) from one of two claws."
       },
       {
         "name": "Sting",
@@ -79,6 +79,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

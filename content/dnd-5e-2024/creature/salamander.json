@@ -48,7 +48,7 @@
       {
         "name": "Fire Aura",
         "kind": "other",
-        "text": "At the end of each of the salamander's turns, each creature of the salamander's choice in a 5-foot Emanation originating from the salamander takes {dmg:2d6:fire}."
+        "text": "At the end of each of the salamander's turns, each creature of the salamander's choice in a 5-foot {ref:glossary/emanation} originating from the salamander takes {dmg:2d6:fire}."
       }
     ],
     "actions": [
@@ -98,7 +98,7 @@
             "type": "fire"
           }
         ],
-        "onFailure": "The target has the Grappled condition (escape {dc=14}), and it has the Restrained condition until the grapple ends."
+        "onFailure": "The target has the {ref:condition/grappled} condition (escape {dc=14}), and it has the {ref:condition/restrained} condition until the grapple ends."
       }
     ]
   },
@@ -110,6 +110,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

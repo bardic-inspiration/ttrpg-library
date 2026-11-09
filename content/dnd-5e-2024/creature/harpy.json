@@ -49,7 +49,7 @@
       {
         "name": "Luring Song",
         "kind": "other",
-        "text": "The harpy sings a magical melody, which lasts until the harpy's Concentration ends on it. *Wisdom Saving Throw:* {dc:con}, each Humanoid and Giant in a 300-foot Emanation originating from the harpy when the song starts. *Failure:* The target has the Charmed condition until the song ends and repeats the save at the end of each of its turns. While Charmed, the target has the Incapacitated condition and ignores the Luring Song of other harpies. If the target is more than 5 feet from the harpy, the target moves on its turn toward the harpy by the most direct route, trying to get within 5 feet of the harpy. It doesn't avoid Opportunity Attacks; however, before moving into damaging terrain (such as lava or a pit) and whenever it takes damage from a source other than the harpy, the target repeats the save. *Success:* The target is immune to this harpy's Luring Song for 24 hours."
+        "text": "The harpy sings a magical melody, which lasts until the harpy's {ref:glossary/concentration} ends on it. *Wisdom Saving Throw:* {dc:con}, each Humanoid and Giant in a 300-foot {ref:glossary/emanation} originating from the harpy when the song starts. *Failure:* The target has the {ref:condition/charmed} condition until the song ends and repeats the save at the end of each of its turns. While {ref:condition/charmed}, the target has the {ref:condition/incapacitated} condition and ignores the Luring Song of other harpies. If the target is more than 5 feet from the harpy, the target moves on its turn toward the harpy by the most direct route, trying to get within 5 feet of the harpy. It doesn't avoid {ref:glossary/opportunity-attacks}; however, before moving into damaging terrain (such as lava or a pit) and whenever it takes damage from a source other than the harpy, the target repeats the save. *Success:* The target is immune to this harpy's Luring Song for 24 hours."
       }
     ]
   },
@@ -61,6 +61,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -59,7 +59,7 @@
       {
         "name": "Eldritch Restoration",
         "kind": "other",
-        "text": "If destroyed, the aboleth gains a new body in 5d10 days, reviving with all its Hit Points in the Far Realm or another location chosen by the GM."
+        "text": "If destroyed, the aboleth gains a new body in 5d10 days, reviving with all its {ref:glossary/hit-points} in the Far Realm or another location chosen by the GM."
       },
       {
         "name": "Legendary Resistance",
@@ -70,7 +70,7 @@
       {
         "name": "Mucus Cloud",
         "kind": "other",
-        "text": "While underwater, the aboleth is surrounded by mucus. *Constitution Saving Throw:* {dc:con}, each creature in a 5-foot Emanation originating from the aboleth at the end of the aboleth's turn. *Failure:* The target is cursed. Until the curse ends, the target's skin becomes slimy, the target can breathe air and water, and it can't regain Hit Points unless it is underwater. While the cursed creature is outside a body of water, the creature takes {dmg:1d12:acid} at the end of every 10 minutes unless moisture is applied to its skin before those minutes have passed."
+        "text": "While underwater, the aboleth is surrounded by mucus. *Constitution Saving Throw:* {dc:con}, each creature in a 5-foot {ref:glossary/emanation} originating from the aboleth at the end of the aboleth's turn. *Failure:* The target is cursed. Until the curse ends, the target's skin becomes slimy, the target can breathe air and water, and it can't regain {ref:glossary/hit-points} unless it is underwater. While the cursed creature is outside a body of water, the creature takes {dmg:1d12:acid} at the end of every 10 minutes unless moisture is applied to its skin before those minutes have passed."
       },
       {
         "name": "Probing Telepathy",
@@ -96,7 +96,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=14}) from one of four tentacles."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=14}) from one of four tentacles."
       },
       {
         "name": "Consume Memories",
@@ -113,7 +113,7 @@
           }
         ],
         "onSuccess": "Half damage.",
-        "onFailureOrSuccess": "The aboleth gains the target's memories if the target is a Humanoid and is reduced to 0 Hit Points by this action."
+        "onFailureOrSuccess": "The aboleth gains the target's memories if the target is a Humanoid and is reduced to 0 {ref:glossary/hit-points} by this action."
       },
       {
         "name": "Dominate Mind",
@@ -123,7 +123,7 @@
           "ability": "wis",
           "targets": "one creature the aboleth can see within 30 feet"
         },
-        "onFailure": "The target has the Charmed condition until the aboleth dies or is on a different plane of existence from the target. While Charmed, the target acts as an ally to the aboleth and is under its control while within 60 feet of it. In addition, the aboleth and the target can communicate telepathically with each other over any distance. The target repeats the save whenever it takes damage as well as after every 24 hours it spends at least 1 mile away from the aboleth, ending the effect on itself on a success.",
+        "onFailure": "The target has the {ref:condition/charmed} condition until the aboleth dies or is on a different plane of existence from the target. While {ref:condition/charmed}, the target acts as an ally to the aboleth and is under its control while within 60 feet of it. In addition, the aboleth and the target can communicate telepathically with each other over any distance. The target repeats the save whenever it takes damage as well as after every 24 hours it spends at least 1 mile away from the aboleth, ending the effect on itself on a success.",
         "uses": "2/day"
       }
     ],
@@ -140,7 +140,7 @@
         {
           "name": "Psychic Drain",
           "kind": "other",
-          "text": "If the aboleth has at least one creature Charmed or Grappled, it uses Consume Memories and regains {dmg:1d10} Hit Points."
+          "text": "If the aboleth has at least one creature {ref:condition/charmed} or {ref:condition/grappled}, it uses Consume Memories and regains {dmg:1d10} {ref:glossary/hit-points}."
         }
       ]
     }
@@ -153,6 +153,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -116,7 +116,7 @@
             "type": "thunder"
           }
         ],
-        "onFailure": "and the target is pushed up to 20 feet straight away from the elemental and has the Prone condition.",
+        "onFailure": "and the target is pushed up to 20 feet straight away from the elemental and has the {ref:condition/prone} condition.",
         "onSuccess": "Half damage only.",
         "recharge": "4-6"
       }
@@ -130,6 +130,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

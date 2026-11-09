@@ -45,7 +45,7 @@
       {
         "name": "Tunneler",
         "kind": "other",
-        "text": "The worm can burrow through solid rock at half its Burrow Speed and leaves a 10-foot-diameter tunnel in its wake."
+        "text": "The worm can burrow through solid rock at half its {ref:glossary/burrow-speed} and leaves a 10-foot-diameter tunnel in its wake."
       }
     ],
     "actions": [
@@ -66,7 +66,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=19}), and it has the Restrained condition until the grapple ends."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=19}), and it has the {ref:condition/restrained} condition until the grapple ends."
       },
       {
         "name": "Tail Stinger",
@@ -95,7 +95,7 @@
           "ability": "str",
           "targets": "one Large or smaller creature Grappled by the worm (it can have up to three creatures swallowed at a time)"
         },
-        "onFailure": "The target is swallowed by the worm, and the Grappled condition ends. A swallowed creature has the Blinded and Restrained conditions, has Total Cover against attacks and other effects outside the worm, and takes {dmg:5d6:acid} at the start of each of the worm's turns.\n\nIf the worm takes 30 damage or more on a single turn from a creature inside it, the worm must succeed on a {dc=21} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 5 feet of the worm and has the Prone condition. If the worm dies, any swallowed creature no longer has the Restrained condition and can escape from the corpse using 20 feet of movement, exiting Prone."
+        "onFailure": "The target is swallowed by the worm, and the {ref:condition/grappled} condition ends. A swallowed creature has the {ref:condition/blinded} and {ref:condition/restrained} conditions, has Total Cover against attacks and other effects outside the worm, and takes {dmg:5d6:acid} at the start of each of the worm's turns.\n\nIf the worm takes 30 damage or more on a single turn from a creature inside it, the worm must succeed on a {dc=21} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 5 feet of the worm and has the {ref:condition/prone} condition. If the worm dies, any swallowed creature no longer has the {ref:condition/restrained} condition and can escape from the corpse using 20 feet of movement, exiting {ref:condition/prone}."
       }
     ]
   },
@@ -107,6 +107,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

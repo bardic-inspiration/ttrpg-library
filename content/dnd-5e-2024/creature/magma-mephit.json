@@ -60,7 +60,7 @@
       {
         "name": "Death Burst",
         "kind": "other",
-        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot Emanation originating from the mephit. *Failure:* {dmg:2d6:fire}. *Success:* Half damage."
+        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot {ref:glossary/emanation} originating from the mephit. *Failure:* {dmg:2d6:fire}. *Success:* Half damage."
       }
     ],
     "actions": [
@@ -108,6 +108,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

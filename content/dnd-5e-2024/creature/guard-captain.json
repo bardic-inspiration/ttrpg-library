@@ -34,10 +34,19 @@
       "perception": "proficient"
     },
     "gear": [
-      "Breastplate",
-      "Javelins (6)",
-      "Longsword",
-      "Shield"
+      {
+        "ref": "equipment/breastplate"
+      },
+      {
+        "ref": "equipment/javelin",
+        "count": 6
+      },
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/shield"
+      }
     ],
     "languages": {
       "spoken": [
@@ -91,6 +100,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

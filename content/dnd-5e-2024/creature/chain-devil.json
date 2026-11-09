@@ -67,12 +67,12 @@
       {
         "name": "Diabolical Restoration",
         "kind": "other",
-        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Nine Hells."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The devil has Advantage on saving throws against spells and other magical effects."
+        "text": "The devil has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -93,19 +93,19 @@
             "type": "slashing"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=14}) from one of two chains, and it has the Restrained condition until the grapple ends."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=14}) from one of two chains, and it has the {ref:condition/restrained} condition until the grapple ends."
       },
       {
         "name": "Conjure Infernal Chain",
         "kind": "other",
-        "text": "The devil conjures a fiery chain to bind a creature. *Dexterity Saving Throw:* {dc:con}, one creature the devil can see within 60 feet. *Failure:* {dmg:2d4+str:fire}, and the target has the Restrained condition until the end of the devil's next turn, at which point the chain disappears. If the target is Large or smaller, the devil moves the target up to 30 feet straight toward itself. *Success:* The chain disappears."
+        "text": "The devil conjures a fiery chain to bind a creature. *Dexterity Saving Throw:* {dc:con}, one creature the devil can see within 60 feet. *Failure:* {dmg:2d4+str:fire}, and the target has the {ref:condition/restrained} condition until the end of the devil's next turn, at which point the chain disappears. If the target is Large or smaller, the devil moves the target up to 30 feet straight toward itself. *Success:* The chain disappears."
       }
     ],
     "reactions": [
       {
         "name": "Unnerving Gaze",
         "kind": "other",
-        "text": "*Trigger:* A creature the devil can see starts its turn within 30 feet of the devil and can see the devil. *Response—Wisdom Saving Throw:* {dc:con}, the triggering creature. *Failure:* The target has the Frightened condition until the end of its turn. *Success:* The target is immune to this devil's Unnerving Gaze for 24 hours."
+        "text": "*Trigger:* A creature the devil can see starts its turn within 30 feet of the devil and can see the devil. *Response—Wisdom Saving Throw:* {dc:con}, the triggering creature. *Failure:* The target has the {ref:condition/frightened} condition until the end of its turn. *Success:* The target is immune to this devil's Unnerving Gaze for 24 hours."
       }
     ]
   },
@@ -117,6 +117,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

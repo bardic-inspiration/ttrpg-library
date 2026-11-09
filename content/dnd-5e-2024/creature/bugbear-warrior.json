@@ -33,8 +33,13 @@
       "survival": "proficient"
     },
     "gear": [
-      "Hide Armor",
-      "Light Hammers (3)"
+      {
+        "ref": "equipment/hide-armor"
+      },
+      {
+        "ref": "equipment/light-hammer",
+        "count": 3
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -66,7 +71,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=12})."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=12})."
       },
       {
         "name": "Light Hammer",
@@ -96,6 +101,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

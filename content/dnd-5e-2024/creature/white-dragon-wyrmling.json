@@ -61,7 +61,7 @@
       {
         "name": "Ice Walk",
         "kind": "other",
-        "text": "The dragon can move across and climb icy surfaces without needing to make an ability check. Additionally, Difficult Terrain composed of ice or snow doesn't cost it extra movement."
+        "text": "The dragon can move across and climb icy surfaces without needing to make an ability check. Additionally, {ref:glossary/difficult-terrain} composed of ice or snow doesn't cost it extra movement."
       }
     ],
     "actions": [
@@ -114,6 +114,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

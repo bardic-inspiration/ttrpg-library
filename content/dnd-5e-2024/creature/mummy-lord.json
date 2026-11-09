@@ -88,12 +88,12 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The mummy has Advantage on saving throws against spells and other magical effects."
+        "text": "The mummy has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       },
       {
         "name": "Undead Restoration",
         "kind": "other",
-        "text": "If destroyed, the mummy gains a new body in 24 hours if its heart is intact, reviving with all its Hit Points. The new body appears in an unoccupied space within the mummy's lair. The heart is a Tiny object that has AC 17, HP 10, and Immunity to all damage except Fire."
+        "text": "If destroyed, the mummy gains a new body in 24 hours if its heart is intact, reviving with all its {ref:glossary/hit-points}. The new body appears in an unoccupied space within the mummy's lair. The heart is a Tiny object that has AC 17, HP 10, and {ref:glossary/immunity} to all damage except Fire."
       }
     ],
     "actions": [
@@ -118,7 +118,7 @@
             "type": "necrotic"
           }
         ],
-        "onHit": "If the target is a creature, it is cursed. While cursed, the target can't regain Hit Points, it gains no benefit from finishing a Long Rest, and its Hit Point maximum decreases by {dmg:3d6} every 24 hours that elapse. A creature dies and turns to dust if reduced to 0 Hit Points by this attack."
+        "onHit": "If the target is a creature, it is cursed. While cursed, the target can't regain {ref:glossary/hit-points}, it gains no benefit from finishing a {ref:glossary/long-rest}, and its Hit Point maximum decreases by {dmg:3d6} every 24 hours that elapse. A creature dies and turns to dust if reduced to 0 Hit Points by this attack."
       },
       {
         "name": "Channel Negative Energy",
@@ -150,7 +150,7 @@
             "type": "psychic"
           }
         ],
-        "onFailure": "and the target has the Paralyzed condition until the end of the mummy's next turn."
+        "onFailure": "and the target has the {ref:condition/paralyzed} condition until the end of the mummy's next turn."
       }
     ],
     "spellcasting": {
@@ -184,7 +184,7 @@
       {
         "name": "Whirlwind of Sand",
         "kind": "other",
-        "text": "*Trigger:* The mummy is hit by an attack roll. *Response:* The mummy adds 2 to its AC against the attack, possibly causing the attack to miss, and the mummy teleports up to 60 feet to an unoccupied space it can see. Each creature of its choice that it can see within 5 feet of its destination space has the Blinded condition until the end of the mummy's next turn."
+        "text": "*Trigger:* The mummy is hit by an attack roll. *Response:* The mummy adds 2 to its AC against the attack, possibly causing the attack to miss, and the mummy teleports up to 60 feet to an unoccupied space it can see. Each creature of its choice that it can see within 5 feet of its destination space has the {ref:condition/blinded} condition until the end of the mummy's next turn."
       }
     ],
     "legendaryActions": {
@@ -218,6 +218,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -56,7 +56,7 @@
       {
         "name": "Nimble Escape",
         "kind": "other",
-        "text": "The panther takes the Disengage or Hide action."
+        "text": "The panther takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
       }
     ]
   },
@@ -68,6 +68,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

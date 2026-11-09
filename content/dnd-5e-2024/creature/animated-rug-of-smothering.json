@@ -77,7 +77,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, the rug can give it the Grappled condition (escape {dc=13}) instead of dealing damage. Until the grapple ends, the target has the Blinded and Restrained conditions, is suffocating, and takes {dmg:2d6+str:bludgeoning} at the start of each of its turns. The rug can smother only one creature at a time.\n\nWhile grappling the target, the rug can't take this action, the rug halves the damage it takes (round down), and the target takes the same amount of damage."
+        "onHit": "If the target is a Medium or smaller creature, the rug can give it the {ref:condition/grappled} condition (escape {dc=13}) instead of dealing damage. Until the grapple ends, the target has the {ref:condition/blinded} and {ref:condition/restrained} conditions, is suffocating, and takes {dmg:2d6+str:bludgeoning} at the start of each of its turns. The rug can smother only one creature at a time.\n\nWhile grappling the target, the rug can't take this action, the rug halves the damage it takes (round down), and the target takes the same amount of damage."
       }
     ]
   },
@@ -89,6 +89,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

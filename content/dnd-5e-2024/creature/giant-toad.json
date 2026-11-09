@@ -42,7 +42,7 @@
       {
         "name": "Standing Leap",
         "kind": "other",
-        "text": "The toad's Long Jump is up to 20 feet and its High Jump is up to 10 feet with or without a running start."
+        "text": "The toad's {ref:glossary/long-jump} is up to 20 feet and its {ref:glossary/high-jump} is up to 10 feet with or without a running start."
       }
     ],
     "actions": [
@@ -62,12 +62,12 @@
             "type": "poison"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Grappled condition (escape {dc=12})."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=12})."
       },
       {
         "name": "Swallow",
         "kind": "other",
-        "text": "The toad swallows a Medium or smaller target it is grappling. While swallowed, the target isn't Grappled but has the Blinded and Restrained conditions, and it has Total Cover against attacks and other effects outside the toad. In addition, the target takes {dmg:3d6:acid} at the end of each of the toad's turns. The toad can have only one target swallowed at a time, and it can't use Bite while it has a swallowed target. If the toad dies, a swallowed creature is no longer Restrained and can escape from the corpse using 5 feet of movement, exiting with the Prone condition."
+        "text": "The toad swallows a Medium or smaller target it is grappling. While swallowed, the target isn't {ref:condition/grappled} but has the {ref:condition/blinded} and {ref:condition/restrained} conditions, and it has Total Cover against attacks and other effects outside the toad. In addition, the target takes {dmg:3d6:acid} at the end of each of the toad's turns. The toad can have only one target swallowed at a time, and it can't use Bite while it has a swallowed target. If the toad dies, a swallowed creature is no longer {ref:condition/restrained} and can escape from the corpse using 5 feet of movement, exiting with the {ref:condition/prone} condition."
       }
     ]
   },
@@ -79,6 +79,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

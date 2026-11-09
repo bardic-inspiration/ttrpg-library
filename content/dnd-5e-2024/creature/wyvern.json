@@ -71,7 +71,7 @@
             "type": "poison"
           }
         ],
-        "onHit": "and the target has the Poisoned condition until the start of the wyvern's next turn."
+        "onHit": "and the target has the {ref:condition/poisoned} condition until the start of the wyvern's next turn."
       }
     ]
   },
@@ -83,6 +83,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

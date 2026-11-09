@@ -30,9 +30,15 @@
       "perception": "proficient"
     },
     "gear": [
-      "Breastplate",
-      "Longbow",
-      "Pike"
+      {
+        "ref": "equipment/breastplate"
+      },
+      {
+        "ref": "equipment/longbow"
+      },
+      {
+        "ref": "equipment/pike"
+      }
     ],
     "languages": {
       "spoken": [
@@ -81,7 +87,7 @@
       {
         "name": "Trampling Charge",
         "kind": "other",
-        "text": "The centaur moves up to its Speed without provoking Opportunity Attacks and can move through the spaces of Medium or smaller creatures. Each creature whose space the centaur enters is targeted once by the following effect. *Strength Saving Throw:* {dc:str}. *Failure:* {dmg:1d6+str:bludgeoning}, and the target has the Prone condition.",
+        "text": "The centaur moves up to its {ref:glossary/speed} without provoking {ref:glossary/opportunity-attacks} and can move through the spaces of Medium or smaller creatures. Each creature whose space the centaur enters is targeted once by the following effect. *Strength Saving Throw:* {dc:str}. *Failure:* {dmg:1d6+str:bludgeoning}, and the target has the {ref:condition/prone} condition.",
         "recharge": "5-6"
       }
     ]
@@ -94,6 +100,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

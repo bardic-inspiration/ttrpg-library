@@ -37,7 +37,10 @@
       "perception": "proficient"
     },
     "gear": [
-      "Javelins (6)"
+      {
+        "ref": "equipment/javelin",
+        "count": 6
+      }
     ],
     "languages": {
       "spoken": [
@@ -64,7 +67,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Humanoid, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target is cursed. If the cursed target drops to 0 Hit Points, it instead becomes a **Wereboar** under the GM's control and has 10 Hit Points. *Success:* The target is immune to this wereboar's curse for 24 hours."
+        "onHit": "If the target is a Humanoid, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target is cursed. If the cursed target drops to 0 {ref:glossary/hit-points}, it instead becomes a **Wereboar** under the GM's control and has 10 Hit Points. *Success:* The target is immune to this wereboar's curse for 24 hours."
       },
       {
         "name": "Javelin (Humanoid or Hybrid Form Only)",
@@ -95,7 +98,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature and the wereboar moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d6:piercing} and has the Prone condition."
+        "onHit": "If the target is a Medium or smaller creature and the wereboar moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d6:piercing} and has the {ref:condition/prone} condition."
       }
     ],
     "bonusActions": [
@@ -114,6 +117,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

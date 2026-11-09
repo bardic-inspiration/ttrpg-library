@@ -101,7 +101,7 @@
       {
         "name": "Split",
         "kind": "other",
-        "text": "*Trigger:* While the pudding is Large or Medium and has 10+ Hit Points, it becomes Bloodied or is subjected to Lightning or Slashing damage. *Response:* The pudding splits into two new **Black Puddings.** Each new pudding is one size smaller than the original pudding and acts on its Initiative. The original pudding's Hit Points are divided evenly between the new puddings (round down)."
+        "text": "*Trigger:* While the pudding is Large or Medium and has 10+ {ref:glossary/hit-points}, it becomes {ref:glossary/bloodied} or is subjected to Lightning or Slashing damage. *Response:* The pudding splits into two new **Black Puddings.** Each new pudding is one size smaller than the original pudding and acts on its {ref:glossary/initiative}. The original pudding's Hit Points are divided evenly between the new puddings (round down)."
       }
     ]
   },
@@ -113,6 +113,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

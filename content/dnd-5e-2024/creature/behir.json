@@ -82,7 +82,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onFailure": "The target has the Grappled condition (escape {dc=16}), and it has the Restrained condition until the grapple ends."
+        "onFailure": "The target has the {ref:condition/grappled} condition (escape {dc=16}), and it has the {ref:condition/restrained} condition until the grapple ends."
       },
       {
         "name": "Lightning Breath",
@@ -111,7 +111,7 @@
           "ability": "dex",
           "targets": "one Large or smaller creature Grappled by the behir (the behir can have only one creature swallowed at a time)"
         },
-        "onFailure": "The behir swallows the target, which is no longer Grappled. While swallowed, a creature has the Blinded and Restrained conditions, has Total Cover against attacks and other effects outside the behir, and takes {dmg:6d6:acid} at the start of each of the behir's turns.\n\nIf the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a {dc:wis} Constitution saving throw at the end of that turn or regurgitate the creature, which falls in a space within 10 feet of the behir and has the Prone condition. If the behir dies, a swallowed creature is no longer Restrained and can escape from the corpse by using 15 feet of movement, exiting Prone."
+        "onFailure": "The behir swallows the target, which is no longer {ref:condition/grappled}. While swallowed, a creature has the {ref:condition/blinded} and {ref:condition/restrained} conditions, has Total Cover against attacks and other effects outside the behir, and takes {dmg:6d6:acid} at the start of each of the behir's turns.\n\nIf the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a {dc:wis} Constitution saving throw at the end of that turn or regurgitate the creature, which falls in a space within 10 feet of the behir and has the {ref:condition/prone} condition. If the behir dies, a swallowed creature is no longer {ref:condition/restrained} and can escape from the corpse by using 15 feet of movement, exiting {ref:condition/prone}."
       }
     ]
   },
@@ -123,6 +123,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

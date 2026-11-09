@@ -61,7 +61,7 @@
             "type": "cold"
           }
         ],
-        "onHit": "If the target is a creature, its Speed decreases by 10 feet until the end of its next turn. *Hit or Miss:* The spear magically returns to the merfolk's hand immediately after a ranged attack."
+        "onHit": "If the target is a creature, its {ref:glossary/speed} decreases by 10 feet until the end of its next turn. *Hit or Miss:* The spear magically returns to the merfolk's hand immediately after a ranged attack."
       }
     ]
   },
@@ -73,6 +73,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -61,7 +61,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature and the skeleton moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition."
+        "onHit": "If the target is a Large or smaller creature and the skeleton moved 20+ feet straight toward it immediately before the hit, the target has the {ref:condition/prone} condition."
       }
     ]
   },
@@ -73,6 +73,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

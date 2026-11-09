@@ -71,7 +71,7 @@
       {
         "name": "Swarm",
         "kind": "other",
-        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny piranha. The swarm can't regain Hit Points or gain Temporary Hit Points."
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny piranha. The swarm can't regain {ref:glossary/hit-points} or gain {ref:glossary/temporary-hit-points}."
       },
       {
         "name": "Water Breathing",
@@ -93,7 +93,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "or {dmg:1d4+dex:piercing} if the swarm is Bloodied."
+        "onHit": "or {dmg:1d4+dex:piercing} if the swarm is {ref:glossary/bloodied}."
       }
     ]
   },
@@ -105,6 +105,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

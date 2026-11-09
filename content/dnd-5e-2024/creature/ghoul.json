@@ -85,7 +85,7 @@
             "type": "slashing"
           }
         ],
-        "onHit": "If the target is a creature that isn't an Undead or elf, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the Paralyzed condition until the end of its next turn."
+        "onHit": "If the target is a creature that isn't an Undead or elf, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target has the {ref:condition/paralyzed} condition until the end of its next turn."
       }
     ]
   },
@@ -94,6 +94,7 @@
     "source": {
       "kind": "routine",
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

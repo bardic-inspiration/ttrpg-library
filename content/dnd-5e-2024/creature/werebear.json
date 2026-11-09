@@ -37,7 +37,10 @@
       "perception": "expertise"
     },
     "gear": [
-      "Handaxes (4)"
+      {
+        "ref": "equipment/handaxe",
+        "count": 4
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -67,7 +70,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Humanoid, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target is cursed. If the cursed target drops to 0 Hit Points, it instead becomes a **Werebear** under the GM's control and has 10 Hit Points. *Success:* The target is immune to this werebear's curse for 24 hours."
+        "onHit": "If the target is a Humanoid, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *Failure:* The target is cursed. If the cursed target drops to 0 {ref:glossary/hit-points}, it instead becomes a **Werebear** under the GM's control and has 10 Hit Points. *Success:* The target is immune to this werebear's curse for 24 hours."
       },
       {
         "name": "Handaxe (Humanoid or Hybrid Form Only)",
@@ -116,6 +119,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

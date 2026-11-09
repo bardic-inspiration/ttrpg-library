@@ -37,7 +37,7 @@
       {
         "name": "Pack Tactics",
         "kind": "other",
-        "text": "The hawk has Advantage on an attack roll against a creature if at least one of the hawk's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+        "text": "The hawk has {ref:glossary/advantage} on an attack roll against a creature if at least one of the hawk's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
       }
     ],
     "actions": [
@@ -53,7 +53,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "or {dmg:1d8+dex:piercing} if the target is Bloodied."
+        "onHit": "or {dmg:1d8+dex:piercing} if the target is {ref:glossary/bloodied}."
       }
     ]
   },
@@ -65,6 +65,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

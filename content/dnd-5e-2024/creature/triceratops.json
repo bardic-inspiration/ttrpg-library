@@ -50,7 +50,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is Huge or smaller and the triceratops moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d8:piercing} and has the Prone condition."
+        "onHit": "If the target is Huge or smaller and the triceratops moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d8:piercing} and has the {ref:condition/prone} condition."
       }
     ]
   },
@@ -62,6 +62,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

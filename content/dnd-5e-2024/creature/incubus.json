@@ -55,7 +55,7 @@
       {
         "name": "Succubus Form",
         "kind": "other",
-        "text": "When the incubus finishes a Long Rest, it can shape-shift into a **{ref:creature/succubus}**, using that stat block instead of this one. Any equipment it is wearing or carrying isn't transformed."
+        "text": "When the incubus finishes a {ref:glossary/long-rest}, it can shape-shift into a **{ref:creature/succubus}**, using that stat block instead of this one. Any equipment it is wearing or carrying isn't transformed."
       }
     ],
     "actions": [
@@ -110,14 +110,14 @@
           "ability": "wis",
           "targets": "one creature the incubus can see within 60 feet"
         },
-        "onFailure": "If the target has 20 Hit Points or fewer, it has the Unconscious condition for 1 hour, until it takes damage, or until a creature within 5 feet of it takes an action to wake it. Otherwise, the target takes {dmg:4d8:psychic}.",
+        "onFailure": "If the target has 20 {ref:glossary/hit-points} or fewer, it has the {ref:condition/unconscious} condition for 1 hour, until it takes damage, or until a creature within 5 feet of it takes an action to wake it. Otherwise, the target takes {dmg:4d8:psychic}.",
         "recharge": "6"
       }
     ]
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

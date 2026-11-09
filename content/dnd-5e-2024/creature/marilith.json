@@ -70,17 +70,17 @@
       {
         "name": "Demonic Restoration",
         "kind": "other",
-        "text": "If the marilith dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss."
+        "text": "If the marilith dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Abyss."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The marilith has Advantage on saving throws against spells and other magical effects."
+        "text": "The marilith has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       },
       {
         "name": "Reactive",
         "kind": "other",
-        "text": "The marilith can take one Reaction on every turn of combat."
+        "text": "The marilith can take one {ref:glossary/reaction} on every turn of combat."
       }
     ],
     "actions": [
@@ -121,7 +121,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onFailure": "The target has the Grappled condition (escape {dc=14}), and it has the Restrained condition until the grapple ends."
+        "onFailure": "The target has the {ref:condition/grappled} condition (escape {dc=14}), and it has the {ref:condition/restrained} condition until the grapple ends."
       }
     ],
     "bonusActions": [
@@ -148,6 +148,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

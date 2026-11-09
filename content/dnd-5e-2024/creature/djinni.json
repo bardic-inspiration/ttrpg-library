@@ -54,12 +54,12 @@
       {
         "name": "Elemental Restoration",
         "kind": "other",
-        "text": "If the djinni dies outside the Elemental Plane of Air, its body dissolves into mist, and it gains a new body in 1d4 days, reviving with all its Hit Points somewhere on the Plane of Air."
+        "text": "If the djinni dies outside the Elemental Plane of Air, its body dissolves into mist, and it gains a new body in 1d4 days, reviving with all its {ref:glossary/hit-points} somewhere on the Plane of Air."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The djinni has Advantage on saving throws against spells and other magical effects."
+        "text": "The djinni has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       },
       {
         "name": "Wishes",
@@ -103,12 +103,12 @@
             "type": "thunder"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/prone} condition."
       },
       {
         "name": "Create Whirlwind",
         "kind": "other",
-        "text": "The djinni conjures a whirlwind at a point it can see within 120 feet. The whirlwind fills a 20-foot-radius, 60-foot-high Cylinder centered on that point. The whirlwind lasts until the djinni's Concentration on it ends. The djinni can move the whirlwind up to 20 feet at the start of each of its turns. Whenever the whirlwind enters a creature's space or a creature enters the whirlwind, that creature is subjected to the following effect. *Strength Saving Throw:* {dc:cha} (a creature makes this save only once per turn, and the djinni is unaffected). *Failure:* While in the whirlwind, the target has the Restrained condition and moves with the whirlwind. At the start of each of its turns, the Restrained target takes {dmg:6d6:thunder}. At the end of each of its turns, the target repeats the save, ending the effect on itself on a success."
+        "text": "The djinni conjures a whirlwind at a point it can see within 120 feet. The whirlwind fills a 20-foot-radius, 60-foot-high {ref:glossary/cylinder} centered on that point. The whirlwind lasts until the djinni's {ref:glossary/concentration} on it ends. The djinni can move the whirlwind up to 20 feet at the start of each of its turns. Whenever the whirlwind enters a creature's space or a creature enters the whirlwind, that creature is subjected to the following effect. *Strength Saving Throw:* {dc:cha} (a creature makes this save only once per turn, and the djinni is unaffected). *Failure:* While in the whirlwind, the target has the {ref:condition/restrained} condition and moves with the whirlwind. At the start of each of its turns, the {ref:condition/restrained} target takes {dmg:6d6:thunder}. At the end of each of its turns, the target repeats the save, ending the effect on itself on a success."
       }
     ],
     "spellcasting": {
@@ -157,7 +157,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

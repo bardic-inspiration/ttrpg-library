@@ -162,7 +162,7 @@
               "type": "poison"
             }
           ],
-          "onFailure": "and the target has Disadvantage on saving throws to maintain Concentration until the end of its next turn.",
+          "onFailure": "and the target has {ref:glossary/disadvantage} on saving throws to maintain {ref:glossary/concentration} until the end of its next turn.",
           "onFailureOrSuccess": "The dragon can't take this action again until the start of its next turn."
         },
         {
@@ -173,7 +173,7 @@
         {
           "name": "Pounce",
           "kind": "other",
-          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+          "text": "The dragon moves up to half its {ref:glossary/speed}, and it makes one Rend attack."
         }
       ]
     }
@@ -186,6 +186,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

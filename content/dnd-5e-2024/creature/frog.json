@@ -46,7 +46,7 @@
       {
         "name": "Standing Leap",
         "kind": "other",
-        "text": "The frog's Long Jump is up to 10 feet and its High Jump is up to 5 feet with or without a running start."
+        "text": "The frog's {ref:glossary/long-jump} is up to 10 feet and its {ref:glossary/high-jump} is up to 5 feet with or without a running start."
       }
     ],
     "actions": [
@@ -72,6 +72,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -37,7 +37,7 @@
       {
         "name": "Pack Tactics",
         "kind": "other",
-        "text": "The vulture has Advantage on an attack roll against a creature if at least one of the vulture's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition."
+        "text": "The vulture has {ref:glossary/advantage} on an attack roll against a creature if at least one of the vulture's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
       }
     ],
     "actions": [
@@ -63,6 +63,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

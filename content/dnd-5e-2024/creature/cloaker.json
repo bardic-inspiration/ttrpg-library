@@ -53,7 +53,7 @@
       {
         "name": "Light Sensitivity",
         "kind": "other",
-        "text": "While in Bright Light, the cloaker has Disadvantage on attack rolls."
+        "text": "While in {ref:glossary/bright-light}, the cloaker has {ref:glossary/disadvantage} on attack rolls."
       }
     ],
     "actions": [
@@ -74,7 +74,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, the cloaker attaches to it. While the cloaker is attached, the target has the Blinded condition, and the cloaker can't make Attach attacks against other targets. In addition, the cloaker halves the damage it takes (round down), and the target takes the same amount of damage.\n\nThe cloaker can detach itself by spending 5 feet of movement. The target or a creature within 5 feet of it can take an action to try to detach the cloaker, doing so by succeeding on a {dc=14} Strength (Athletics) check."
+        "onHit": "If the target is a Large or smaller creature, the cloaker attaches to it. While the cloaker is attached, the target has the {ref:condition/blinded} condition, and the cloaker can't make Attach attacks against other targets. In addition, the cloaker halves the damage it takes (round down), and the target takes the same amount of damage.\n\nThe cloaker can detach itself by spending 5 feet of movement. The target or a creature within 5 feet of it can take an action to try to detach the cloaker, doing so by succeeding on a {dc=14} Strength (Athletics) check."
       },
       {
         "name": "Tail",
@@ -99,13 +99,13 @@
           "ability": "wis",
           "targets": "each creature in a 60-foot Emanation originating from the cloaker"
         },
-        "onFailure": "The target has the Frightened condition until the end of the cloaker's next turn.",
+        "onFailure": "The target has the {ref:condition/frightened} condition until the end of the cloaker's next turn.",
         "onSuccess": "The target is immune to this cloaker's Moan for the next 24 hours."
       },
       {
         "name": "Phantasms",
         "kind": "other",
-        "text": "The cloaker casts the *{ref:spell/mirror-image}* spell, requiring no spell components and using Wisdom as the spellcasting ability. The spell ends early if the cloaker starts or ends its turn in Bright Light.",
+        "text": "The cloaker casts the *{ref:spell/mirror-image}* spell, requiring no spell components and using Wisdom as the spellcasting ability. The spell ends early if the cloaker starts or ends its turn in {ref:glossary/bright-light}.",
         "recharge": "short-or-long-rest"
       }
     ]
@@ -118,6 +118,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -40,8 +40,12 @@
       "perception": "proficient"
     },
     "gear": [
-      "Pistol",
-      "Rapier"
+      {
+        "ref": "equipment/pistol"
+      },
+      {
+        "ref": "equipment/rapier"
+      }
     ],
     "languages": {
       "spoken": [
@@ -67,7 +71,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "and the pirate has Advantage on the next attack roll it makes before the end of this turn."
+        "onHit": "and the pirate has {ref:glossary/advantage} on the next attack roll it makes before the end of this turn."
       },
       {
         "name": "Pistol",
@@ -95,7 +99,7 @@
           "ability": "wis",
           "targets": "one creature the pirate can see within 30 feet"
         },
-        "onFailure": "The target has the Charmed condition until the start of the pirate's next turn."
+        "onFailure": "The target has the {ref:condition/charmed} condition until the start of the pirate's next turn."
       }
     ],
     "reactions": [
@@ -114,6 +118,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

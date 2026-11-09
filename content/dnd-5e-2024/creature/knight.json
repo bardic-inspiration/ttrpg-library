@@ -38,9 +38,15 @@
       ]
     },
     "gear": [
-      "Greatsword",
-      "Heavy Crossbow",
-      "Plate Armor"
+      {
+        "ref": "equipment/greatsword"
+      },
+      {
+        "ref": "equipment/heavy-crossbow"
+      },
+      {
+        "ref": "equipment/plate-armor"
+      }
     ],
     "languages": {
       "spoken": [
@@ -107,6 +113,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

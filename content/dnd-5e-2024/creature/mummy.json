@@ -86,7 +86,7 @@
             "type": "necrotic"
           }
         ],
-        "onHit": "If the target is a creature, it is cursed. While cursed, the target can't regain Hit Points, its Hit Point maximum doesn't return to normal when finishing a Long Rest, and its Hit Point maximum decreases by {dmg:3d6} every 24 hours that elapse. A creature dies and turns to dust if reduced to 0 Hit Points by this attack."
+        "onHit": "If the target is a creature, it is cursed. While cursed, the target can't regain {ref:glossary/hit-points}, its Hit Point maximum doesn't return to normal when finishing a {ref:glossary/long-rest}, and its Hit Point maximum decreases by {dmg:3d6} every 24 hours that elapse. A creature dies and turns to dust if reduced to 0 Hit Points by this attack."
       },
       {
         "name": "Dreadful Glare",
@@ -96,7 +96,7 @@
           "ability": "wis",
           "targets": "one creature the mummy can see within 60 feet"
         },
-        "onFailure": "The target has the Frightened condition until the end of the mummy's next turn.",
+        "onFailure": "The target has the {ref:condition/frightened} condition until the end of the mummy's next turn.",
         "onSuccess": "The target is immune to this mummy's Dreadful Glare for 24 hours."
       }
     ]
@@ -109,6 +109,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

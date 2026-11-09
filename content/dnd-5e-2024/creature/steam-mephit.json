@@ -57,12 +57,12 @@
       {
         "name": "Blurred Form",
         "kind": "other",
-        "text": "Attack rolls against the mephit are made with Disadvantage unless the mephit has the Incapacitated condition."
+        "text": "Attack rolls against the mephit are made with {ref:glossary/disadvantage} unless the mephit has the {ref:condition/incapacitated} condition."
       },
       {
         "name": "Death Burst",
         "kind": "other",
-        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot Emanation originating from the mephit. *Failure:* {dmg:2d4:fire}. *Success:* Half damage."
+        "text": "The mephit explodes when it dies. *Dexterity Saving Throw:* {dc:con}, each creature in a 5-foot {ref:glossary/emanation} originating from the mephit. *Failure:* {dmg:2d4:fire}. *Success:* Half damage."
       }
     ],
     "actions": [
@@ -96,9 +96,9 @@
             "type": "fire"
           }
         ],
-        "onFailure": "and the target's Speed decreases by 10 feet until the end of the mephit's next turn.",
+        "onFailure": "and the target's {ref:glossary/speed} decreases by 10 feet until the end of the mephit's next turn.",
         "onSuccess": "Half damage only.",
-        "onFailureOrSuccess": "Being underwater doesn't grant Resistance to this Fire damage.",
+        "onFailureOrSuccess": "Being underwater doesn't grant {ref:glossary/resistance} to this Fire damage.",
         "recharge": "6"
       }
     ]
@@ -111,6 +111,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

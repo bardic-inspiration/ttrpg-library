@@ -26,8 +26,13 @@
       "cha": 7
     },
     "gear": [
-      "Greatclub",
-      "Javelins (3)"
+      {
+        "ref": "equipment/greatclub"
+      },
+      {
+        "ref": "equipment/javelin",
+        "count": 3
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -77,6 +82,7 @@
     "source": {
       "kind": "routine",
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

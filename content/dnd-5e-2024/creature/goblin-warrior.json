@@ -32,10 +32,18 @@
       "stealth": "expertise"
     },
     "gear": [
-      "Leather Armor",
-      "Scimitar",
-      "Shield",
-      "Shortbow"
+      {
+        "ref": "equipment/leather-armor"
+      },
+      {
+        "ref": "equipment/scimitar"
+      },
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/shortbow"
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -92,7 +100,7 @@
       {
         "name": "Nimble Escape",
         "kind": "other",
-        "text": "The goblin takes the Disengage or Hide action."
+        "text": "The goblin takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
       }
     ]
   },
@@ -104,6 +112,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

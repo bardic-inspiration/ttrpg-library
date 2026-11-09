@@ -76,7 +76,7 @@
             "type": "fire"
           }
         ],
-        "onHit": "Being underwater doesn't grant Resistance to this Fire damage."
+        "onHit": "Being underwater doesn't grant {ref:glossary/resistance} to this Fire damage."
       },
       {
         "name": "Tail",
@@ -90,7 +90,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Huge or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Huge or smaller creature, it has the {ref:condition/prone} condition."
       },
       {
         "name": "Steam Breath",
@@ -107,7 +107,7 @@
           }
         ],
         "onSuccess": "Half damage.",
-        "onFailureOrSuccess": "Being underwater doesn't grant Resistance to this Fire damage.",
+        "onFailureOrSuccess": "Being underwater doesn't grant {ref:glossary/resistance} to this Fire damage.",
         "recharge": "5-6"
       }
     ]
@@ -120,6 +120,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

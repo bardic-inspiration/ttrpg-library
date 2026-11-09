@@ -42,8 +42,12 @@
       ]
     },
     "gear": [
-      "Shortbow",
-      "Shortsword"
+      {
+        "ref": "equipment/shortbow"
+      },
+      {
+        "ref": "equipment/shortsword"
+      }
     ],
     "senses": {
       "darkvision": 60
@@ -92,6 +96,7 @@
     "source": {
       "kind": "routine",
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

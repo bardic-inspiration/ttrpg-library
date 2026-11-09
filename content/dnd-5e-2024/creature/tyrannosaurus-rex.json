@@ -60,7 +60,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=17}). While Grappled, the target has the Restrained condition and can't be targeted by the tyrannosaurus's Tail."
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=17}). While {ref:condition/grappled}, the target has the {ref:condition/restrained} condition and can't be targeted by the tyrannosaurus's Tail."
       },
       {
         "name": "Tail",
@@ -74,7 +74,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Huge or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Huge or smaller creature, it has the {ref:condition/prone} condition."
       }
     ]
   },
@@ -86,6 +86,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

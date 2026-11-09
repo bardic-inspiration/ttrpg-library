@@ -42,7 +42,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If target is a Large or smaller creature and the rhinoceros moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d8:piercing} and has the Prone condition."
+        "onHit": "If target is a Large or smaller creature and the rhinoceros moved 20+ feet straight toward it immediately before the hit, the target takes an extra {dmg:2d8:piercing} and has the {ref:condition/prone} condition."
       }
     ]
   },
@@ -54,6 +54,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

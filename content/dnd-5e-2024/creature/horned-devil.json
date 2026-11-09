@@ -67,12 +67,12 @@
       {
         "name": "Diabolical Restoration",
         "kind": "other",
-        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells."
+        "text": "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its {ref:glossary/hit-points} somewhere in the Nine Hells."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The devil has Advantage on saving throws against spells and other magical effects."
+        "text": "The devil has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       }
     ],
     "actions": [
@@ -129,7 +129,7 @@
             "type": "necrotic"
           }
         ],
-        "onFailure": "and the target receives an infernal wound if it doesn't have one. While wounded, the target loses {dmg:3d6} Hit Points at the start of each of its turns. The wound closes after 1 minute, after a spell restores Hit Points to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a {dc=17} Wisdom (Medicine) check."
+        "onFailure": "and the target receives an infernal wound if it doesn't have one. While wounded, the target loses {dmg:3d6} {ref:glossary/hit-points} at the start of each of its turns. The wound closes after 1 minute, after a spell restores Hit Points to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a {dc=17} Wisdom (Medicine) check."
       }
     ]
   },
@@ -141,6 +141,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

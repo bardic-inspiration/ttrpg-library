@@ -66,7 +66,7 @@
       {
         "name": "Destroy Metal",
         "kind": "other",
-        "text": "The rust monster touches a nonmagical metal object within 5 feet of itself that isn't being worn or carried. The touch destroys a 1-foot Cube of the object."
+        "text": "The rust monster touches a nonmagical metal object within 5 feet of itself that isn't being worn or carried. The touch destroys a 1-foot {ref:glossary/cube} of the object."
       }
     ],
     "reactions": [
@@ -85,6 +85,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

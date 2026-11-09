@@ -87,7 +87,7 @@
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The tarrasque has Advantage on saving throws against spells and other magical effects."
+        "text": "The tarrasque has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       },
       {
         "name": "Reflective Carapace",
@@ -118,7 +118,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "and the target has the Grappled condition (escape {dc=20}). Until the grapple ends, the target has the Restrained condition and can't teleport."
+        "onHit": "and the target has the {ref:condition/grappled} condition (escape {dc=20}). Until the grapple ends, the target has the {ref:condition/restrained} condition and can't teleport."
       },
       {
         "name": "Claw",
@@ -145,7 +145,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Huge or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Huge or smaller creature, it has the {ref:condition/prone} condition."
       },
       {
         "name": "Thunderous Bellow",
@@ -161,7 +161,7 @@
             "type": "thunder"
           }
         ],
-        "onFailure": "and the target has the Deafened and Frightened conditions until the end of its next turn.",
+        "onFailure": "and the target has the {ref:condition/deafened} and {ref:condition/frightened} conditions until the end of its next turn.",
         "onSuccess": "Half damage only.",
         "recharge": "5-6"
       }
@@ -175,7 +175,7 @@
           "ability": "str",
           "targets": "one Large or smaller creature Grappled by the tarrasque (it can have up to six creatures swallowed at a time)"
         },
-        "onFailure": "The target is swallowed, and the Grappled condition ends. A swallowed creature has the Blinded and Restrained conditions and can't teleport, it has Total Cover against attacks and other effects outside the tarrasque, and it takes {dmg:16d6:acid} at the start of each of the tarrasque's turns. If the tarrasque takes 60 damage or more on a single turn from a creature inside it, the tarrasque must succeed on a {dc=20} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 10 feet of the tarrasque and has the Prone condition. If the tarrasque dies, any swallowed creature no longer has the Restrained condition and can escape from the corpse using 20 feet of movement, exiting Prone."
+        "onFailure": "The target is swallowed, and the {ref:condition/grappled} condition ends. A swallowed creature has the {ref:condition/blinded} and {ref:condition/restrained} conditions and can't teleport, it has Total Cover against attacks and other effects outside the tarrasque, and it takes {dmg:16d6:acid} at the start of each of the tarrasque's turns. If the tarrasque takes 60 damage or more on a single turn from a creature inside it, the tarrasque must succeed on a {dc=20} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 10 feet of the tarrasque and has the {ref:condition/prone} condition. If the tarrasque dies, any swallowed creature no longer has the {ref:condition/restrained} condition and can escape from the corpse using 20 feet of movement, exiting {ref:condition/prone}."
       }
     ],
     "legendaryActions": {
@@ -185,12 +185,12 @@
         {
           "name": "Onslaught",
           "kind": "other",
-          "text": "The tarrasque moves up to half its Speed, and it makes one Claw or Tail attack."
+          "text": "The tarrasque moves up to half its {ref:glossary/speed}, and it makes one Claw or Tail attack."
         },
         {
           "name": "World-Shaking Movement",
           "kind": "other",
-          "text": "The tarrasque moves up to its Speed. At the end of this movement, the tarrasque creates an instantaneous shock wave in a 60-foot Emanation originating from itself. Creatures in that area lose Concentration and, if Medium or smaller, have the Prone condition. The tarrasque can't take this action again until the start of its next turn."
+          "text": "The tarrasque moves up to its {ref:glossary/speed}. At the end of this movement, the tarrasque creates an instantaneous shock wave in a 60-foot {ref:glossary/emanation} originating from itself. Creatures in that area lose {ref:glossary/concentration} and, if Medium or smaller, have the {ref:condition/prone} condition. The tarrasque can't take this action again until the start of its next turn."
         }
       ]
     }
@@ -203,6 +203,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

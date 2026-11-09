@@ -60,7 +60,7 @@
       {
         "name": "Boulder Toss",
         "kind": "other",
-        "text": "The ape hurls a boulder at a point it can see within 90 feet. *Dexterity Saving Throw:* {dc:str}, each creature in a 5-foot-radius Sphere centered on that point. *Failure:* {dmg:7d6:bludgeoning}. If the target is a Large or smaller creature, it has the Prone condition. *Success:* Half damage only.",
+        "text": "The ape hurls a boulder at a point it can see within 90 feet. *Dexterity Saving Throw:* {dc:str}, each creature in a 5-foot-radius {ref:glossary/sphere} centered on that point. *Failure:* {dmg:7d6:bludgeoning}. If the target is a Large or smaller creature, it has the {ref:condition/prone} condition. *Success:* Half damage only.",
         "recharge": "6"
       }
     ],
@@ -80,6 +80,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

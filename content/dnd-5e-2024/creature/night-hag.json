@@ -61,17 +61,17 @@
       {
         "name": "Coven Magic",
         "kind": "other",
-        "text": "While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {dc:con}): *{ref:spell/augury}*, *{ref:spell/find-familiar}*, *{ref:spell/identify}*, *{ref:spell/locate-object}*, *{ref:spell/scrying}*, or *{ref:spell/unseen-servant}*. The hag must finish a Long Rest before using this trait to cast that spell again."
+        "text": "While within 30 feet of at least two hag allies, the hag can cast one of the following spells, requiring no Material components, using the spell's normal casting time, and using Intelligence as the spellcasting ability (spell save {dc:con}): *{ref:spell/augury}*, *{ref:spell/find-familiar}*, *{ref:spell/identify}*, *{ref:spell/locate-object}*, *{ref:spell/scrying}*, or *{ref:spell/unseen-servant}*. The hag must finish a {ref:glossary/long-rest} before using this trait to cast that spell again."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The hag has Advantage on saving throws against spells and other magical effects."
+        "text": "The hag has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       },
       {
         "name": "Soul Bag",
         "kind": "other",
-        "text": "The hag has a soul bag. While holding or carrying the bag, the hag can use its Nightmare Haunting action. The bag has AC 15, HP 20, and Resistance to all damage. The bag turns to dust if reduced to 0 Hit Points. If the bag is destroyed, any souls the bag is holding are released. The hag can create a new bag after 7 days."
+        "text": "The hag has a soul bag. While holding or carrying the bag, the hag can use its Nightmare Haunting action. The bag has AC 15, HP 20, and {ref:glossary/resistance} to all damage. The bag turns to dust if reduced to 0 {ref:glossary/hit-points}. If the bag is destroyed, any souls the bag is holding are released. The hag can create a new bag after 7 days."
       }
     ],
     "actions": [
@@ -136,7 +136,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

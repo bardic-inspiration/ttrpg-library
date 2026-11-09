@@ -121,7 +121,7 @@
           "ability": "str",
           "targets": "each creature that isn't currently affected by this breath in a 60-foot Cone"
         },
-        "onFailure": "The target has Disadvantage on Strength-based D20 Tests and subtracts {dmg:1d6} from its damage rolls. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        "onFailure": "The target has {ref:glossary/disadvantage} on Strength-based D20 Tests and subtracts {dmg:1d6} from its damage rolls. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
       }
     ],
     "spellcasting": {
@@ -171,7 +171,7 @@
               "type": "force"
             }
           ],
-          "onFailure": "and the target has the Incapacitated condition and is transported to a harmless demiplane until the start of the dragon's next turn, at which point it re appears in an unoccupied space of the dragon's choice within 120 feet of the dragon.",
+          "onFailure": "and the target has the {ref:condition/incapacitated} condition and is transported to a harmless demiplane until the start of the dragon's next turn, at which point it re appears in an unoccupied space of the dragon's choice within 120 feet of the dragon.",
           "onFailureOrSuccess": "The dragon can't take this action again until the start of its next turn."
         },
         {
@@ -182,7 +182,7 @@
         {
           "name": "Pounce",
           "kind": "other",
-          "text": "The dragon moves up to half its Speed, and it makes one Rend attack."
+          "text": "The dragon moves up to half its {ref:glossary/speed}, and it makes one Rend attack."
         }
       ]
     }
@@ -195,6 +195,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

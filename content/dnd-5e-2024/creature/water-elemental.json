@@ -75,7 +75,7 @@
       {
         "name": "Freeze",
         "kind": "other",
-        "text": "If the elemental takes Cold damage, its Speed decreases by 20 feet until the end of its next turn."
+        "text": "If the elemental takes Cold damage, its {ref:glossary/speed} decreases by 20 feet until the end of its next turn."
       },
       {
         "name": "Water Form",
@@ -101,7 +101,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onHit": "If the target is a Medium or smaller creature, it has the Prone condition."
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/prone} condition."
       },
       {
         "name": "Whelm",
@@ -118,7 +118,7 @@
             "type": "bludgeoning"
           }
         ],
-        "onFailure": "If the target is a Large or smaller creature, it has the Grappled condition (escape {dc=14}). Until the grapple ends, the target has the Restrained condition, is suffocating unless it can breathe water, and takes {dmg:2d8:bludgeoning} at the start of each of the elemental's turns. The elemental can grapple one Large creature or up to two Medium or smaller creatures at a time with Whelm. As an action, a creature within 5 feet of the elemental can pull a creature out of it by succeeding on a {dc=14} Strength (Athletics) check.",
+        "onFailure": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc=14}). Until the grapple ends, the target has the {ref:condition/restrained} condition, is suffocating unless it can breathe water, and takes {dmg:2d8:bludgeoning} at the start of each of the elemental's turns. The elemental can grapple one Large creature or up to two Medium or smaller creatures at a time with Whelm. As an action, a creature within 5 feet of the elemental can pull a creature out of it by succeeding on a {dc=14} Strength (Athletics) check.",
         "onSuccess": "Half damage only.",
         "recharge": "4-6"
       }
@@ -126,7 +126,7 @@
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

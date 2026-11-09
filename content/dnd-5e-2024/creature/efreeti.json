@@ -53,12 +53,12 @@
       {
         "name": "Elemental Restoration",
         "kind": "other",
-        "text": "If the efreeti dies outside the Elemental Plane of Fire, its body dissolves into ash, and it gains a new body in 1d4 days, reviving with all its Hit Points somewhere on the Plane of Fire."
+        "text": "If the efreeti dies outside the Elemental Plane of Fire, its body dissolves into ash, and it gains a new body in 1d4 days, reviving with all its {ref:glossary/hit-points} somewhere on the Plane of Fire."
       },
       {
         "name": "Magic Resistance",
         "kind": "other",
-        "text": "The efreeti has Advantage on saving throws against spells and other magical effects."
+        "text": "The efreeti has {ref:glossary/advantage} on saving throws against spells and other magical effects."
       },
       {
         "name": "Wishes",
@@ -148,6 +148,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

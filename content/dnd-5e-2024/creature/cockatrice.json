@@ -53,7 +53,7 @@
             "type": "piercing"
           }
         ],
-        "onHit": "If the target is a creature, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *First Failure:* The target has the Restrained condition. The target repeats the save at the end of its next turn if it is still Restrained, ending the effect on itself on a success. *Second Failure:* The target has the Petrified condition, instead of the Restrained condition, for 24 hours."
+        "onHit": "If the target is a creature, it is subjected to the following effect. *Constitution Saving Throw:* {dc:con}. *First Failure:* The target has the {ref:condition/restrained} condition. The target repeats the save at the end of its next turn if it is still {ref:condition/restrained}, ending the effect on itself on a success. *Second Failure:* The target has the {ref:condition/petrified} condition, instead of the {ref:condition/restrained} condition, for 24 hours."
       }
     ]
   },
@@ -65,6 +65,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

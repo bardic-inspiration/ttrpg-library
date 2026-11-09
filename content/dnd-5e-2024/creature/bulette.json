@@ -59,7 +59,7 @@
       {
         "name": "Deadly Leap",
         "kind": "other",
-        "text": "The bulette spends 5 feet of movement to jump to a space within 15 feet that contains one or more Large or smaller creatures. *Dexterity Saving Throw:* {dc:str}, each creature in the bulette's destination space. *Failure:* {dmg:3d12:bludgeoning}, and the target has the Prone condition. *Success:* Half damage, and the target is pushed 5 feet straight away from the bulette."
+        "text": "The bulette spends 5 feet of movement to jump to a space within 15 feet that contains one or more Large or smaller creatures. *Dexterity Saving Throw:* {dc:str}, each creature in the bulette's destination space. *Failure:* {dmg:3d12:bludgeoning}, and the target has the {ref:condition/prone} condition. *Success:* Half damage, and the target is pushed 5 feet straight away from the bulette."
       }
     ],
     "bonusActions": [
@@ -78,6 +78,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }
