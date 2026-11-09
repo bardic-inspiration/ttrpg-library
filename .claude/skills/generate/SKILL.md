@@ -117,7 +117,11 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
   A mention of a library entry in text is a `{ref:<type>/<id>}` link token
   ([References](../../../docs/content-model.md#references)), wrapped in `*…*` for a spell name; SRD content not in the library is
   plain text. An entry's mention of its own name stays plain text, never a
-  link to itself.
+  link to itself. A mention of a condition, equipment, or glossary term is a
+  token too, by [Mentions of rules](../../../docs/content-model.md#references): only where its name matches the text
+  exactly, at every mention for conditions and equipment ("the
+  {ref:condition/poisoned} condition") and at the first mention in each text
+  field for a glossary term ("has {ref:glossary/advantage}").
   No non-SRD proper nouns anywhere ([Blocklist](../../../docs/licensing.md#blocklist)).
 - **Situational fields.** Omit an optional field that doesn't apply; never
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` ([Situational fields](../../../docs/content-model.md#situational-fields)).
@@ -149,7 +153,10 @@ against it before pushing.
   `{ref:creature/<id>}` if it's in the library, and leave the name as plain
   text if it isn't.
 - Everything the entry uses (spells, gear) is SRD content: a ref if it's in
-  the library, a plain string otherwise. Never create a dependency entry. A
+  the library or the ruleset's rules data, a plain string otherwise. Gear
+  names SRD equipment, so it is a ref to it, with a `count` for a plural the
+  SRD prints (`{ "ref": "equipment/javelin", "count": 6 }` for "Javelins
+  (6)"); a variant such as the Mage's "Wand" stays a plain string ([Creatures](../../../docs/rulesets.md#creatures)). Never create a dependency entry. A
   qualifier the SRD prints after a name goes in the ref's `note`
   (`{ "ref": "spell/fireball", "note": "level 5 version" }`), or stays in the
   plain string (`"Lightning Bolt (level 5 version)"`) ([References](../../../docs/content-model.md#references)).

@@ -34,6 +34,20 @@ describe('a11yPages (docs/styling.md#accessibility)', () => {
     );
   });
 
+  it('checks each rules page, then the Extensions page of a ruleset that has one', () => {
+    const pages = a11yPages([], [
+      { ruleset: 'dnd-5e-2024', id: 'glossary', title: 'Glossary', extensions: true },
+      { ruleset: 'dnd-5e-2024', id: 'weapons', title: 'Weapons', extensions: true },
+      { ruleset: 'fixture-rules', id: 'terms', title: 'Terms', extensions: false },
+    ]);
+    expect(pages.slice(1)).toEqual([
+      { label: 'rules page: Glossary', path: 'dnd-5e-2024/rules/glossary/' },
+      { label: 'rules page: Weapons', path: 'dnd-5e-2024/rules/weapons/' },
+      { label: 'rules page: Extensions', path: 'dnd-5e-2024/rules/extensions/' },
+      { label: 'rules page: Terms', path: 'fixture-rules/rules/terms/' },
+    ]);
+  });
+
   it('checks only the home page of an empty library', () => {
     expect(a11yPages([])).toEqual([{ label: 'home', path: '' }]);
   });

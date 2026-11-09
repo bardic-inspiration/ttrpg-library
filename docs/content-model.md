@@ -310,12 +310,21 @@ Where the PDF misprints a heading, the manifest uses the entry's correct name
   for charges, or a variable charge cost;
 - spell: a table, a stat block, or a Reaction casting time with a trigger.
 
+The manifest's `rules` list holds the ruleset's rules data the same way
+([Rules data](rulesets.md#rules-data)): every primitive by rules type and exact
+name, and every group with `"group": true`, transcribed from the PDF where the
+SRD prints it (the groups are the ruleset's own list). Rules records have no
+tier.
+
 `npm run srd-coverage` matches SRD entries to manifest records by type and exact
 name. It prints, per type and tier, the count missing and their names, then any
 SRD entry that isn't in the manifest (usually a name that doesn't match
-exactly). `--type`, `--tier`, and `--ruleset` narrow it. A test checks that the
-manifest is valid, that its per-type counts are the expected ones, and that
-every SRD entry in the library is in it.
+exactly). It then matches the rules data's primitives and groups to the
+`rules` records by type, name, and kind, and prints the same report for them.
+`--type` (a type or a rules type), `--tier`, and `--ruleset` narrow it; `--tier`
+leaves the rules records out. A test checks that the manifest is valid, that its
+per-type counts are the expected ones, that every SRD entry in the library is in
+it, and that the rules data holds every rules record and no other.
 
 ### Validation
 

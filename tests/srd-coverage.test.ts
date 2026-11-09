@@ -5,8 +5,12 @@ import {
   formatReport,
   loadEntryHeads,
   loadManifest,
+  loadRuleHeads,
+  loadRulesTypes,
+  rulesCoverage,
   type EntryHead,
   type Manifest,
+  type RuleHead,
 } from '../scripts/srd-coverage/coverage.ts';
 import { loadRegistry, PROJECT_ROOT } from '../scripts/validate/schema.ts';
 
@@ -83,7 +87,60 @@ describe('coverage', () => {
   });
 });
 
+// docs/content-model.md#srd-manifest-and-coverage: the rules data's primitives and groups, tierless.
+const RULES_TYPES = ['condition', 'equipment'];
+const withRules = (): Manifest => ({
+  ...manifest(),
+  rules: [
+    { type: 'condition', name: 'Blinded' },
+    { type: 'condition', name: 'Prone' },
+    { type: 'equipment', name: 'Shield' },
+    { type: 'equipment', name: 'Shields', group: true },
+  ],
+});
+const rule = (type: string, name: string, group?: true): RuleHead => ({ type, name, ...(group ? { group } : {}) });
+
+describe('rules coverage', () => {
+  it('matches primitives and groups by type, exact name, and kind, and reports any the manifest lacks', () => {
+    const result = rulesCoverage(withRules(), [rule('condition', 'Prone'), rule('equipment', 'Shield'), rule('equipment', 'Shields'), rule('condition', 'Dazed')]);
+    expect(result.groups.map((g) => [g.type, g.missing.map((r) => r.name), g.total])).toEqual([
+      ['condition', ['Blinded'], 2],
+      ['equipment', ['Shields'], 2],
+    ]);
+    // "Shields" exists only as a primitive here, so the group record is missing and the primitive unlisted.
+    expect(result.unlisted).toEqual([rule('equipment', 'Shields'), rule('condition', 'Dazed')]);
+  });
+
+  it('filters by type', () => {
+    expect(rulesCoverage(withRules(), [], { type: 'equipment' }).groups.map((g) => g.type)).toEqual(['equipment']);
+  });
+
+  it('is part of the report', () => {
+    const report = formatReport(coverage(withRules(), []), rulesCoverage(withRules(), [rule('condition', 'Prone')]));
+    expect(report).toContain('condition rules: 1 missing of 2\n  Blinded');
+    expect(report).toContain('equipment rules: 2 missing of 2\n  Shield\n  Shields (group)');
+  });
+});
+
 describe('checkManifest', () => {
+  it('accepts rules records of the ruleset\'s rules types, without a tier', () => {
+    expect(checkManifest(withRules(), R, TYPES, RULES_TYPES)).toEqual([]);
+  });
+
+  it('rejects a rules record of an unknown rules type, with a tier, or duplicated', () => {
+    const bad = withRules();
+    bad.rules!.push(
+      { type: 'spell', name: 'Bless' },
+      { type: 'condition', name: 'Dazed', tier: 'simple' } as never,
+      { type: 'condition', name: 'Prone' },
+    );
+    expect(checkManifest(bad, R, TYPES, RULES_TYPES)).toEqual([
+      expect.stringMatching(/^rules\[4\]: type "spell" is not a rules type/),
+      expect.stringMatching(/^rules\[5\]: a rules record has no tier/),
+      expect.stringMatching(/^rules\[6\]: duplicate condition "Prone"/),
+    ]);
+  });
+
   it('accepts a valid manifest', () => {
     expect(checkManifest(manifest(), R, TYPES)).toEqual([]);
   });
@@ -112,13 +169,29 @@ describe(`rulesets/${R}/srd-manifest.json`, () => {
   it('is valid and lists every SRD 5.2 spell, magic item, and creature', async () => {
     const file = await loadManifest(PROJECT_ROOT, R);
     const types = Object.keys((await loadRegistry())[R]!.types);
-    expect(checkManifest(file, R, types)).toEqual([]);
+    expect(checkManifest(file, R, types, await loadRulesTypes(PROJECT_ROOT, R))).toEqual([]);
     const count = (type: string) => file.entries.filter((r) => r.type === type).length;
     expect({ creature: count('creature'), 'item': count('item'), spell: count('spell') }).toEqual({
       creature: 329,
       'item': 243,
       spell: 339,
     });
+  });
+
+  it('lists every SRD primitive and equipment group, and the rules data holds every one', async () => {
+    const file = await loadManifest(PROJECT_ROOT, R);
+    const count = (type: string, group = false) => (file.rules ?? []).filter((r) => r.type === type && (r.group === true) === group).length;
+    expect({
+      glossary: count('glossary'),
+      condition: count('condition'),
+      equipment: count('equipment'),
+      groups: count('equipment', true),
+      'weapon-property': count('weapon-property'),
+      'mastery-property': count('mastery-property'),
+    }).toEqual({ glossary: 140, condition: 15, equipment: 180, groups: 22, 'weapon-property': 10, 'mastery-property': 8 });
+    const result = rulesCoverage(file, await loadRuleHeads(PROJECT_ROOT, R));
+    expect(result.groups.flatMap((g) => g.missing)).toEqual([]);
+    expect(result.unlisted).toEqual([]);
   });
 
   it('covers every SRD entry in the library', async () => {

@@ -3,13 +3,13 @@
 // themes, and exits non-zero on any serious or critical violation. Run
 // `npm run build` first.
 
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { AxeBuilder } from '@axe-core/playwright';
 import { launchChromium } from '../browser/index.ts';
 import { PROJECT_ROOT } from '../validate/schema.ts';
 import { serveSite } from '../serve/index.ts';
-import { a11yPages, type IndexRecord } from './index.ts';
+import { a11yPages, type IndexRecord, type RulesPageRef } from './index.ts';
 
 const DIST = join(PROJECT_ROOT, 'site/dist');
 const BLOCKING = new Set(['serious', 'critical']);
@@ -19,7 +19,17 @@ const index = await readFile(join(DIST, 'library.json'), 'utf8').catch(() => {
   process.exit(1);
 });
 const records = JSON.parse(index) as IndexRecord[];
-const pages = a11yPages(records);
+// Each ruleset's rules pages, from rulesets/<ruleset>/rules/pages.json and ruleset.json.
+const rulesPages: RulesPageRef[] = [];
+const RULESETS = join(PROJECT_ROOT, 'rulesets');
+for (const dir of (await readdir(RULESETS, { withFileTypes: true })).filter((d) => d.isDirectory())) {
+  const listed = await readFile(join(RULESETS, dir.name, 'rules/pages.json'), 'utf8').catch(() => undefined);
+  if (listed === undefined) continue;
+  const definition = JSON.parse(await readFile(join(RULESETS, dir.name, 'ruleset.json'), 'utf8')) as { id: string; rules?: { extensions: boolean }[] };
+  const extensions = (definition.rules ?? []).some((r) => r.extensions);
+  for (const page of JSON.parse(listed) as { id: string; title: string }[]) rulesPages.push({ ruleset: definition.id, id: page.id, title: page.title, extensions });
+}
+const pages = a11yPages(records, rulesPages);
 const server = await serveSite(DIST);
 const browser = await launchChromium();
 let failures = 0;

@@ -116,8 +116,9 @@ Target: WCAG 2.2 AA.
   serious or critical violation. It serves `site/dist` under the site base and
   picks its pages from `library.json`: the home page, the first record's type
   gallery filtered by its first facet value, the first detail page of each type
-  that has an entry, and the print view of those entries, checked once loaded
-  (with `window.print` stubbed). It launches Playwright's Chromium, and retries
+  that has an entry, the print view of those entries, checked once loaded
+  (with `window.print` stubbed), and every rules page in each ruleset's
+  `rules/pages.json`, plus its Extensions page when it has one. It launches Playwright's Chromium, and retries
   with `/opt/pw-browsers/chromium` if that fails and the path exists, as in
   cloud sessions. CI runs it only on the PR that closes a milestone
   ([Milestone PRs](workflow.md#milestone-prs)).

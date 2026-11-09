@@ -297,6 +297,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Glossary text is plain; its mentions of other terms, conditions, and equipment become links in the link pass. | One pass applies the link rule to every rules text (#228) | #227 |
 | A gear ref's `count` lives in a shared `CountedRefOrText`, and the Gear line is markdown with each ref a link and a count as "{ref}s (n)". | The search index finds plain-text gear by the `RefOrText` family; the plural is the spec's "s" rule | #262 |
 | The link pass leaves plain: sentence- and cell-initial capitals, names inside a longer capitalized name, table and column names, chapter-section cross-references, a creature's own action names, "Acid" (the damage type), and "Ammunition" (the property). A bulleted line that is exactly a name, and a quoted "See also" name, link. | Exact text alone over-links words that only look like rule names; P5 | #262 |
+| The SRD manifest lists the rules data in a `rules` list: each primitive by rules type and exact name, transcribed from the PDF, and each group with `"group": true`, without tiers. `srd-coverage` reports them after the entries; `--tier` leaves them out. | P2: coverage proves the rules data complete, as it does the entries | #215 |
+| `npm run a11y` checks every rules page and the Extensions page. A rules section's link lists use body text, like a detail page's Links, which meets the 24px target size. | WCAG 2.2 AA (2.5.8); the milestone added these pages | #215 |
 
 ### UI
 
