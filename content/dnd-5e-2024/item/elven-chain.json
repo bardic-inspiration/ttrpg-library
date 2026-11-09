@@ -20,7 +20,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "You gain a +1 bonus to Armor Class while you wear this armor. You are considered trained with this armor even if you lack training with Medium or Heavy armor."
+    "effect": "You gain a +1 bonus to {ref:glossary/armor-class} while you wear this armor. You are considered trained with this armor even if you lack training with Medium or Heavy armor."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -30,6 +30,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

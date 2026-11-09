@@ -10,7 +10,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "Found in a small container, this powder resembles *{ref:item/dust-of-disappearance}*, and *{ref:spell/identify}* reveals it to be such. There is enough of it for one use.\n\nAs a Utilize action, you can throw the dust into the air, forcing yourself and every creature in a 30-foot Emanation originating from you to make a DC 15 Constitution saving throw. Constructs, Elementals, Oozes, Plants, and Undead succeed on the save automatically.\n\nOn a failed save, a creature begins sneezing uncontrollably; it has the Incapacitated condition and is suffocating. The creature repeats the save at the end of each of its turns, ending the effect on itself on a success. The effect also ends on any creature targeted by a *{ref:spell/lesser-restoration}* spell."
+    "effect": "Found in a small container, this powder resembles *{ref:item/dust-of-disappearance}*, and *{ref:spell/identify}* reveals it to be such. There is enough of it for one use.\n\nAs a {ref:glossary/utilize} action, you can throw the dust into the air, forcing yourself and every creature in a 30-foot {ref:glossary/emanation} originating from you to make a DC 15 Constitution saving throw. Constructs, Elementals, Oozes, Plants, and Undead succeed on the save automatically.\n\nOn a failed save, a creature begins sneezing uncontrollably; it has the {ref:condition/incapacitated} condition and is suffocating. The creature repeats the save at the end of each of its turns, ending the effect on itself on a success. The effect also ends on any creature targeted by a *{ref:spell/lesser-restoration}* spell."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -10,7 +10,7 @@
     "attunement": {
       "required": true
     },
-    "effect": "While wearing this brooch, you have Resistance to Force damage, and you have Immunity to damage from the *{ref:spell/magic-missile}* spell."
+    "effect": "While wearing this brooch, you have {ref:glossary/resistance} to Force damage, and you have {ref:glossary/immunity} to damage from the *{ref:spell/magic-missile}* spell."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

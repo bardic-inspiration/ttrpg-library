@@ -10,11 +10,11 @@
     "attunement": {
       "required": false
     },
-    "effect": "While you are within 5 feet of this brazier, you can take a Magic action to summon a **{ref:creature/fire-elemental}**. The elemental appears in an unoccupied space as close to the brazier as possible, understands your languages, obeys your commands, and takes its turn immediately after you on your Initiative count. The elemental disappears after 1 hour, when it dies, or when you dismiss it as a Bonus Action. The brazier can't be used this way again until the next dawn."
+    "effect": "While you are within 5 feet of this brazier, you can take a {ref:glossary/magic} action to summon a **{ref:creature/fire-elemental}**. The elemental appears in an unoccupied space as close to the brazier as possible, understands your languages, obeys your commands, and takes its turn immediately after you on your {ref:glossary/initiative} count. The elemental disappears after 1 hour, when it dies, or when you dismiss it as a {ref:glossary/bonus-action}. The brazier can't be used this way again until the next dawn."
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

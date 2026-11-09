@@ -10,7 +10,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "You have a Swim Speed of 40 feet while wearing this ring."
+    "effect": "You have a {ref:glossary/swim-speed} of 40 feet while wearing this ring."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

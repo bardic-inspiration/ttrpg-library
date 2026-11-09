@@ -42,7 +42,7 @@
         "chargeCost": 4
       }
     ],
-    "effect": "You have Resistance to Cold damage while you hold this staff.\n\n***Spells.*** The staff has 10 charges. While holding the staff, you can cast one of the spells on the following table from it, using your spell save DC. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/cone-of-cold}* | 5 |\n| *{ref:spell/fog-cloud}* | 1 |\n| *{ref:spell/ice-storm}* | 4 |\n| *{ref:spell/wall-of-ice}* | 4 |\n\n***Regaining Charges.*** The staff regains 1d6 + 4 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, the staff turns to water and is destroyed."
+    "effect": "You have {ref:glossary/resistance} to Cold damage while you hold this staff.\n\n***Spells.*** The staff has 10 charges. While holding the staff, you can cast one of the spells on the following table from it, using your spell save DC. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/cone-of-cold}* | 5 |\n| *{ref:spell/fog-cloud}* | 1 |\n| *{ref:spell/ice-storm}* | 4 |\n| *{ref:spell/wall-of-ice}* | 4 |\n\n***Regaining Charges.*** The staff regains 1d6 + 4 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, the staff turns to water and is destroyed."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -52,6 +52,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -20,11 +20,11 @@
     "attunement": {
       "required": true
     },
-    "effect": "While you're wearing this armor, you can take a Magic action and use a command word to gain the effect of the *{ref:spell/etherealness}* spell. The spell ends immediately if you remove the armor or take a Magic action to repeat the command word. This property of the armor can't be used again until the next dawn."
+    "effect": "While you're wearing this armor, you can take a {ref:glossary/magic} action and use a command word to gain the effect of the *{ref:spell/etherealness}* spell. The spell ends immediately if you remove the armor or take a Magic action to repeat the command word. This property of the armor can't be used again until the next dawn."
   },
   "meta": {
     "createdAt": "2026-11-04",
-    "updatedAt": "2026-11-04",
+    "updatedAt": "2026-11-09",
     "source": {
       "kind": "routine",
       "issues": [

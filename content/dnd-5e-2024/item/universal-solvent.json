@@ -10,7 +10,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "This tube holds milky liquid with a strong alcohol smell. When found, a tube contains 1d6 + 1 ounces.\n\nYou can take a Utilize action to pour 1 or more ounces of solvent from the tube onto a surface within reach. Each ounce instantly dissolves up to 1 square foot of adhesive it touches, including *{ref:item/sovereign-glue}*."
+    "effect": "This tube holds milky liquid with a strong alcohol smell. When found, a tube contains 1d6 + 1 ounces.\n\nYou can take a {ref:glossary/utilize} action to pour 1 or more ounces of solvent from the tube onto a surface within reach. Each ounce instantly dissolves up to 1 square foot of adhesive it touches, including *{ref:item/sovereign-glue}*."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

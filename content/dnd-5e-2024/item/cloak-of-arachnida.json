@@ -18,7 +18,7 @@
         "saveDc": 13
       }
     ],
-    "effect": "This fine garment is made of black silk interwoven with faint, silvery threads. While wearing it, you gain the following benefits.\n\n***Poison Resistance.*** You have Resistance to Poison damage.\n\n***Spider Climb.*** You have a Climb Speed equal to your Speed and can move up, down, and across vertical surfaces and along ceilings, while leaving your hands free.\n\n***Spider Walk.*** You can't be caught in webs of any sort and can move through webs as if they were Difficult Terrain.\n\n***Web.*** You can cast *{ref:spell/web}* (save DC 13). The web created by the spell fills twice its normal area. Once used, this property can't be used again until the next dawn."
+    "effect": "This fine garment is made of black silk interwoven with faint, silvery threads. While wearing it, you gain the following benefits.\n\n***Poison Resistance.*** You have {ref:glossary/resistance} to Poison damage.\n\n***Spider Climb.*** You have a {ref:glossary/climb-speed} equal to your {ref:glossary/speed} and can move up, down, and across vertical surfaces and along ceilings, while leaving your hands free.\n\n***Spider Walk.*** You can't be caught in webs of any sort and can move through webs as if they were {ref:glossary/difficult-terrain}.\n\n***Web.*** You can cast *{ref:spell/web}* (save DC 13). The web created by the spell fills twice its normal area. Once used, this property can't be used again until the next dawn."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -28,6 +28,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

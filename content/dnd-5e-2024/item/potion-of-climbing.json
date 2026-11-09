@@ -10,7 +10,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "When you drink this potion, you gain a Climb Speed equal to your Speed for 1 hour. During this time, you have Advantage on Strength (Athletics) checks to climb.\n\nThis potion is separated into brown, silver, and gray layers resembling bands of stone. Shaking the bottle fails to mix the colors."
+    "effect": "When you drink this potion, you gain a {ref:glossary/climb-speed} equal to your {ref:glossary/speed} for 1 hour. During this time, you have {ref:glossary/advantage} on Strength (Athletics) checks to climb.\n\nThis potion is separated into brown, silver, and gray layers resembling bands of stone. Shaking the bottle fails to mix the colors."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

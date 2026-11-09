@@ -10,7 +10,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "When you drink this potion, you gain the effect of the *{ref:spell/gaseous-form}* spell for 1 hour (no Concentration required) or until you end the effect as a Bonus Action.\n\nThis potion's container seems to hold fog that moves and pours like water."
+    "effect": "When you drink this potion, you gain the effect of the *{ref:spell/gaseous-form}* spell for 1 hour (no {ref:glossary/concentration} required) or until you end the effect as a {ref:glossary/bonus-action}.\n\nThis potion's container seems to hold fog that moves and pours like water."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }
