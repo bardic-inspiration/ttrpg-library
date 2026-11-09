@@ -1,7 +1,8 @@
 // Which pages `npm run a11y` checks (docs/styling.md#accessibility), read from the built
 // library.json: the home page, a type gallery with a filter applied, one
 // detail page per type that has an entry, and the print view (docs/export.md#print) showing
-// those same entries. A type with no entries has no detail page to check yet.
+// those same entries. A type with no entries has no detail page to check yet. Then every rules
+// page (docs/site.md#rules-pages), and the Extensions page of a ruleset that has one.
 
 export interface IndexRecord {
   id: string;
@@ -32,7 +33,15 @@ function filterFor(record: IndexRecord): string | undefined {
   return undefined;
 }
 
-export function a11yPages(records: IndexRecord[]): A11yPage[] {
+/** A rules page from a ruleset's rules/pages.json, and whether the ruleset has an Extensions page. */
+export interface RulesPageRef {
+  ruleset: string;
+  id: string;
+  title: string;
+  extensions: boolean;
+}
+
+export function a11yPages(records: IndexRecord[], rulesPages: RulesPageRef[] = []): A11yPage[] {
   const pages: A11yPage[] = [{ label: 'home', path: '' }];
   const first = records[0];
   if (first) {
@@ -52,6 +61,12 @@ export function a11yPages(records: IndexRecord[]): A11yPage[] {
       path: `print/?ids=${firsts.map((r) => `${r.type}/${encodeURIComponent(r.id)}`).join(',')}`,
       ready: '.print-entry',
     });
+  }
+  const rulesets = [...new Set(rulesPages.map((p) => p.ruleset))];
+  for (const ruleset of rulesets) {
+    const own = rulesPages.filter((p) => p.ruleset === ruleset);
+    for (const page of own) pages.push({ label: `rules page: ${page.title}`, path: `${ruleset}/rules/${page.id}/` });
+    if (own.some((p) => p.extensions)) pages.push({ label: 'rules page: Extensions', path: `${ruleset}/rules/extensions/` });
   }
   return pages;
 }
