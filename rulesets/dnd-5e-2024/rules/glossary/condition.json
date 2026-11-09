@@ -1,0 +1,8 @@
+{
+  "type": "glossary",
+  "id": "condition",
+  "name": "Condition",
+  "stats": {
+    "text": "A condition is a temporary game state. The definition of a condition says how it affects its recipient, and various rules define how to end a condition. This glossary defines these conditions:\n\n- Blinded\n- Charmed\n- Deafened\n- Exhaustion\n- Frightened\n- Grappled\n- Incapacitated\n- Invisible\n- Paralyzed\n- Petrified\n- Poisoned\n- Prone\n- Restrained\n- Stunned\n- Unconscious\n\nA condition doesn't stack with itself; a recipient either has a condition or doesn't. The Exhaustion condition is an exception to that rule."
+  }
+}

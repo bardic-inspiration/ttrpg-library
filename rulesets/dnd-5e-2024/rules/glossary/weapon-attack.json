@@ -1,0 +1,8 @@
+{
+  "type": "glossary",
+  "id": "weapon-attack",
+  "name": "Weapon Attack",
+  "stats": {
+    "text": "A weapon attack is an attack roll made with a weapon. *See also* \"Weapon.\""
+  }
+}

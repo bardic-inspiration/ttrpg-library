@@ -1,0 +1,8 @@
+{
+  "type": "glossary",
+  "id": "spell",
+  "name": "Spell",
+  "stats": {
+    "text": "A spell is a magical effect that has the characteristics described in \"Spells.\""
+  }
+}

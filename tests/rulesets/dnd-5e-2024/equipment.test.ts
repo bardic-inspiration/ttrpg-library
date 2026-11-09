@@ -44,7 +44,7 @@ describe('the SRD equipment', () => {
   });
 
   it('is placed on the Equipment page and one page per category, every primitive and group once', () => {
-    expect(data.pages.map((p) => p.id)).toEqual(['conditions', 'equipment', 'weapons', 'armor', 'tools', 'adventuring-gear', 'mounts-and-vehicles']);
+    expect(data.pages.map((p) => p.id)).toEqual(['glossary', 'conditions', 'equipment', 'weapons', 'armor', 'tools', 'adventuring-gear', 'mounts-and-vehicles']);
     const { pages, twice, unplaced } = placeRules(data);
     expect([twice, unplaced]).toEqual([[], []]);
     expect(pages.get('equipment/medium-armor')).toBe('armor');

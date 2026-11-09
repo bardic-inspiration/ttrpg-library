@@ -1,10 +1,11 @@
 ---
 // A rules page (docs/site.md#rules-pages): its title, then its blocks in order (prose, a rules
-// type's primitives, or a group's tree), each primitive and group in an
-// anchored section, and the extensions it lists at the bottom.
+// type's primitives, with any cross-listed type's primitives among them as links, or a group's
+// tree), each primitive and group in an anchored section, and the extensions it lists at the bottom.
 import { entryPath } from '../../lib/library';
-import { pageExtensions, type RulesContext } from '../../lib/rules';
+import { blockPrimitives, pageExtensions, type RulesContext } from '../../lib/rules';
 import type { RulesPage } from '../../../../lib/rules';
+import CrossListed from './CrossListed.astro';
 import GroupSection from './GroupSection.astro';
 import PrimitiveSection from './PrimitiveSection.astro';
 import ProseSection from './ProseSection.astro';
@@ -23,7 +24,9 @@ const extensions = pageExtensions(ctx, page.id).map(({ entry }) => ({ name: entr
   {page.blocks.map((block) => {
     if (block.kind === 'prose') return <ProseSection ctx={ctx} section={block} level={2} />;
     if (block.kind === 'primitives') {
-      return ctx.data.primitives.filter((p) => p.type === block.type).map((primitive) => <PrimitiveSection ctx={ctx} primitive={primitive} level={2} />);
+      return blockPrimitives(ctx.data, block).map(({ primitive, cross }) =>
+        cross ? <CrossListed ctx={ctx} primitive={primitive} level={2} /> : <PrimitiveSection ctx={ctx} primitive={primitive} level={2} />,
+      );
     }
     const slash = block.group.indexOf('/');
     const tree = ctx.data.groups.get(block.group.slice(0, slash));

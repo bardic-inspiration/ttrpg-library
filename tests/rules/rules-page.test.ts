@@ -83,6 +83,14 @@ describe('a rules page', () => {
     expect(text).not.toContain('Extensions');
   });
 
+  it('lists a cross-listed type’s primitives among its own by name, as links to their own page, without anchors', async () => {
+    const html = await render(RulesPage, { ctx, page: page('glossary') });
+    expect(html).toMatch(
+      /id="term-disadvantage"[\s\S]*<a href="\/fixture-rules\/rules\/tools\/#gear-hammer">Hammer \[Gear\]<\/a>[\s\S]*<a href="\/fixture-rules\/rules\/tools\/#gear-ladder">Ladder \[Gear\]<\/a>/,
+    );
+    expect(html).not.toContain('id="gear-hammer"');
+  });
+
   it('renders a group tree: anchored groups with notes and text, members under their leaf, a union’s members as links', async () => {
     const html = await render(RulesPage, { ctx, page: page('tools') });
     for (const id of ['gear-tools', 'gear-hand-tools', 'gear-big-tools', 'gear-any-tools', 'gear-hammer', 'gear-ladder']) expect(html).toContain(`id="${id}"`);

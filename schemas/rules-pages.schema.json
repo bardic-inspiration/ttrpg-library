@@ -123,7 +123,7 @@
           }
         },
         {
-          "description": "Every primitive of a rules type that has no groups.",
+          "description": "Every primitive of a rules type that has no groups, by name, with any cross-listed types' primitives among them.",
           "type": "object",
           "additionalProperties": false,
           "required": [
@@ -137,6 +137,16 @@
             "type": {
               "type": "string",
               "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            },
+            "crossList": {
+              "description": "Other rules types whose primitives are listed among these, at their alphabetical place, as \"Name [Type]\" linked to their sections on their own page. They aren't placed here.",
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              }
             }
           }
         },

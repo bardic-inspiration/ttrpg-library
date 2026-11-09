@@ -1,0 +1,8 @@
+{
+  "type": "glossary",
+  "id": "occupied-space",
+  "name": "Occupied Space",
+  "stats": {
+    "text": "A space is occupied if a creature is in it or if it is completely filled by objects."
+  }
+}

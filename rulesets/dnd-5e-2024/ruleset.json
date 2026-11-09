@@ -10,6 +10,10 @@
   ],
   "rules": [
     {
+      "type": "glossary",
+      "extensions": false
+    },
+    {
       "type": "condition",
       "extensions": true
     },

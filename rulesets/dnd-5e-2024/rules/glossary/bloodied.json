@@ -1,0 +1,8 @@
+{
+  "type": "glossary",
+  "id": "bloodied",
+  "name": "Bloodied",
+  "stats": {
+    "text": "A creature is Bloodied while it has half its Hit Points or fewer remaining."
+  }
+}

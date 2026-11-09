@@ -5,8 +5,8 @@
 Everything specific to a ruleset: its schemas, rules tables, derived values,
 text tokens, consistency checks, and how its types print. The one ruleset is
 `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0), with three content types,
-`creature`, `item`, and `spell`, and the rules types `condition`, `equipment`,
-`weapon-property`, and `mastery-property`. What every entry shares is in
+`creature`, `item`, and `spell`, and the rules types `glossary`, `condition`,
+`equipment`, `weapon-property`, and `mastery-property`. What every entry shares is in
 [content-model.md](content-model.md).
 
 ## Behavior
@@ -134,7 +134,7 @@ rules pages in order. Each has an `id`, its URL segment, a `title`, and
 | Block | Shows |
 |---|---|
 | `{ "kind": "prose", "title", "text", "sections" }` | SRD chapter text that isn't a primitive, word for word, with nested sections; text that opens a page has no title |
-| `{ "kind": "primitives", "type" }` | Every primitive of a type that has no groups, by name |
+| `{ "kind": "primitives", "type", "crossList" }` | Every primitive of a type that has no groups, by name; with `crossList`, other rules types' primitives sit among them as "Name [Type]", linked to their own page, without being placed here |
 | `{ "kind": "group", "group": "<type>/<id>" }` | A group's tree: its section, then its members (a leaf) or the groups nested in it, with union groups last |
 
 Every primitive and group appears on exactly one page, and the validator
@@ -351,6 +351,27 @@ value and "—" where none does.
 **Derived:** `category` (the group's root) and `costGp`, the cost in gold
 pieces, which the gallery sorts and filters by. Custom equipment has facets
 for category, group, cost, and weapon damage type, and no gap buckets.
+
+### Glossary
+
+`glossary` is a primitive-only rules type ([Rules data](#rules-data)): the
+140 terms of the SRD Rules Glossary are primitives in `rules/glossary/`,
+keyed `glossary/<id>`. Terms take no extensions. The SRD glossary's entries
+tagged Condition are the condition primitives ([Conditions](#conditions)),
+not glossary terms.
+
+`schemas/glossary.schema.json` stores an optional `tag`, one of `action`,
+`area-of-effect`, `attitude`, or `hazard`, and `text`, the definition as
+printed, including its "See also" sentence, with its lists and tables in the
+markdown subset. The name has no tag; the page prints it in brackets after
+the name: "Attack [Action]". Terms derive nothing and have no checks, guideline,
+registry entry, facets, or gap buckets. A `{ref:…}` token in a term's text is
+"References" / "Referenced by".
+
+The Glossary page is the first rules page. It opens with the Glossary
+Conventions, abbreviations included, and the Rules Definitions line, then
+lists every term by name, with the conditions cross-listed among them as
+"Blinded [Condition]", linked to the Conditions page.
 
 ### Conditions
 

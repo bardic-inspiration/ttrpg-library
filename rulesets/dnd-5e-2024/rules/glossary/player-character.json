@@ -1,0 +1,8 @@
+{
+  "type": "glossary",
+  "id": "player-character",
+  "name": "Player Character",
+  "stats": {
+    "text": "A player character is a character controlled by a player. *See also* \"Character Creation.\""
+  }
+}

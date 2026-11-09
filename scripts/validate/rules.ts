@@ -240,6 +240,10 @@ function checkPages(pages: RulesPage[], types: { type: string }[], groups: Map<s
       if (block.kind === 'primitives') {
         if (!known.has(block.type)) error(`${page.id}: "${block.type}" is not a rules type of this ruleset`);
         else if (groups.has(block.type)) error(`${page.id}: "${block.type}" has groups; show it with group blocks`);
+        for (const other of block.crossList ?? []) {
+          if (!known.has(other)) error(`${page.id}: cross-listed "${other}" is not a rules type of this ruleset`);
+          else if (other === block.type) error(`${page.id}: "${other}" can't be cross-listed among its own primitives`);
+        }
       }
       if (block.kind === 'group') {
         const slash = block.group.indexOf('/');

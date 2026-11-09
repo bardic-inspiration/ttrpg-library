@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/glossary.schema.json",
+  "title": "dnd-5e-2024 glossary term stats (docs/rulesets.md#glossary)",
+  "description": "An SRD Rules Glossary term, a primitive in rules/glossary/. Glossary terms take no extensions. A term tagged Condition is a condition primitive, not a glossary term.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["text"],
+  "properties": {
+    "tag": {
+      "description": "The family of rules the term belongs to, printed in brackets after its name: \"Attack [Action]\".",
+      "enum": ["action", "area-of-effect", "attitude", "hazard"]
+    },
+    "text": { "description": "The definition as printed, including its \"See also\" sentence.", "$ref": "common.schema.json#/$defs/Text" }
+  }
+}
