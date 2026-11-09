@@ -325,3 +325,22 @@ export interface BackgroundStats {
   tool: Ref & { choose?: true };
   equipment: StartingOption[];
 }
+
+/** species.schema.json (docs/rulesets.md#species): a page type whose traits are components. */
+export interface SpeciesStats {
+  creatureType: string;
+  sizes: { size: Size; height: string }[];
+  speed: number;
+  traits: Ref[];
+  intro?: string;
+}
+
+export interface DerivedSpecies {
+  /** Its sizes, for the facet. */
+  sizes: Size[];
+}
+
+/** species-trait.schema.json: one special trait. */
+export interface SpeciesTraitStats {
+  text: string;
+}

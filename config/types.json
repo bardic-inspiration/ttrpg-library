@@ -118,6 +118,26 @@
         "summaryField": "stats.rarity",
         "gapBuckets": [{ "path": "stats.rarity", "enum": ["common", "uncommon", "rare", "very-rare", "legendary"] }]
       },
+      "species": {
+        "label": "Species",
+        "plural": "Species",
+        "template": "species-page",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/species.md",
+        "facets": [
+          {
+            "path": "derived.sizes",
+            "label": "Size",
+            "kind": "enum",
+            "format": "title",
+            "order": ["tiny", "small", "medium", "large", "huge", "gargantuan"]
+          },
+          { "path": "stats.speed", "label": "Speed", "kind": "range" },
+          { "path": "stats.creatureType", "label": "Creature type", "kind": "enum", "format": "title" }
+        ],
+        "cardFields": ["derived.sizes", "stats.speed"],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["derived.sizes", "tags.theme"]
+      },
       "spell": {
         "label": "Spell",
         "plural": "Spells",

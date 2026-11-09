@@ -8,6 +8,7 @@
     "creature",
     "feat",
     "item",
+    "species",
     "spell"
   ],
   "rules": [
@@ -30,6 +31,12 @@
     {
       "type": "mastery-property",
       "extensions": false
+    }
+  ],
+  "components": [
+    {
+      "type": "species-trait",
+      "parents": ["species"]
     }
   ]
 }

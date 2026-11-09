@@ -1,13 +1,13 @@
 // The dnd-5e-2024 ruleset module (docs/rulesets.md#the-ruleset-module).
 
 import type { RulesetModule } from '../module.ts';
-import { checkBackground, checkBackgroundLinks, checkCreature, checkFeat, checkItem, checkSpell } from './checks.ts';
+import { checkBackground, checkBackgroundLinks, checkCreature, checkFeat, checkItem, checkSpecies, checkSpell } from './checks.ts';
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
 import { refLabels } from './refs.ts';
 import definition from './ruleset.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
-import type { BackgroundStats, CreatureStats, EquipmentStats, FeatStats, ItemStats, SpellStats, Tables } from './types.ts';
+import type { BackgroundStats, CreatureStats, EquipmentStats, FeatStats, ItemStats, SpeciesStats, SpellStats, Tables } from './types.ts';
 
 export const tables = tablesJson as Tables;
 
@@ -17,6 +17,7 @@ export const ruleset: RulesetModule = {
     if (type === 'creature') return { ...deriveCreature(stats as CreatureStats, tables) };
     if (type === 'equipment') return { ...deriveEquipment(stats as EquipmentStats, rules) };
     if (type === 'feat') return { repeatable: (stats as FeatStats).repeatable !== undefined };
+    if (type === 'species') return { sizes: (stats as SpeciesStats).sizes.map((s) => s.size) };
     if (type === 'spell' || type === 'item') {
       return deriveStatBlocks((stats as SpellStats | ItemStats).statBlocks, tables);
     }
@@ -32,6 +33,7 @@ export const ruleset: RulesetModule = {
     if (type === 'spell') return checkSpell(stats as SpellStats);
     if (type === 'feat') return checkFeat(stats as FeatStats);
     if (type === 'background') return checkBackground(stats as BackgroundStats);
+    if (type === 'species') return checkSpecies(stats as SpeciesStats);
     return [];
   },
   checkLinks(type, stats, target) {

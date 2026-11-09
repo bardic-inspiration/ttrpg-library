@@ -1,0 +1,16 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "dragonborn-damage-resistance",
+  "name": "Damage Resistance",
+  "stats": {
+    "text": "You have Resistance to the damage type determined by your Draconic Ancestry trait."
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

@@ -3,7 +3,7 @@
 
 import { deriveCreature } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
-import type { Action, BackgroundStats, CreatureStats, DerivedAction, DerivedCreature, FeatStats, ItemStats, SpellStats, Tables } from './types.ts';
+import type { Action, BackgroundStats, CreatureStats, DerivedAction, DerivedCreature, FeatStats, ItemStats, SpeciesStats, SpellStats, Tables } from './types.ts';
 import { ACTION_LISTS } from './types.ts';
 import type { Issue } from '../module.ts';
 
@@ -250,4 +250,9 @@ export function checkBackgroundLinks(stats: BackgroundStats, target: (key: strin
   if (feat?.type !== 'feat') return [];
   const category = (feat.stats as FeatStats).category;
   return category === 'origin' ? [] : [{ level: 'error', path: 'stats.feat', message: `${stats.feat.ref} is a ${category} feat; a background grants an origin feat` }];
+}
+
+/** A species' speed is a multiple of 5, as a creature's is (docs/rulesets.md#species). */
+export function checkSpecies(stats: SpeciesStats): Issue[] {
+  return stats.speed % 5 === 0 ? [] : [{ level: 'error', path: 'stats.speed', message: `speed ${stats.speed} is not a multiple of 5` }];
 }

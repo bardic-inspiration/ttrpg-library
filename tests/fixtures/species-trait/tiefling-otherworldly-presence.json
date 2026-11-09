@@ -1,0 +1,16 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "tiefling-otherworldly-presence",
+  "name": "Otherworldly Presence",
+  "stats": {
+    "text": "You know the Thaumaturgy cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy trait."
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

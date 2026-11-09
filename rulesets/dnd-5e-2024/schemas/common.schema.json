@@ -37,7 +37,7 @@
       "additionalProperties": false,
       "required": ["ref"],
       "properties": {
-        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|item|spell|feat|background|condition|equipment|weapon-property|mastery-property)/[a-z0-9-]+$" },
+        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^(creature|item|spell|feat|background|species|species-trait|condition|equipment|weapon-property|mastery-property)/[a-z0-9-]+$" },
         "note": { "description": "A qualifier printed in parentheses after the target's name, such as \"level 5 version\".", "type": "string", "minLength": 1 }
       }
     },
@@ -69,6 +69,15 @@
       "properties": {
         "ref": { "description": "The feat, as feat/<id>.", "type": "string", "pattern": "^feat/[a-z0-9]+(-[a-z0-9]+)*$" },
         "note": { "description": "A qualifier printed in parentheses after the name.", "type": "string", "minLength": 1 }
+      }
+    },
+    "SpeciesTraitRef": {
+      "description": "A link to a species trait, a component of a species (docs/content-model.md#components). A typed ref: it allows only species-trait keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The trait, as species-trait/<id>.", "type": "string", "pattern": "^species-trait/[a-z0-9]+(-[a-z0-9]+)*$" }
       }
     },
     "StartingEquipment": {

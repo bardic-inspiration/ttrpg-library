@@ -462,6 +462,27 @@ nothing. Its card prints the SRD's lines:
 
 Backgrounds come only by request; they have no gap buckets.
 
+### Species
+
+A species is a page type ([Components](content-model.md#components)): its
+special traits are `species-trait` components, which it lists in order in
+`traits`. `schemas/species.schema.json` and `schemas/species-trait.schema.json`
+describe each field. A species derives `sizes`, its list of sizes, for the
+Size filter. Its page (`species-page`) prints:
+
+- **Creature Type**, **Size**, and **Speed**, as the SRD does: "Medium (about
+  5–7 feet tall)", or two sizes joined by "or" and followed by ", chosen when
+  you select this species"; "30 feet".
+- The sentence that opens its traits, "As a Dragonborn, you have these special
+  traits." ("an" before a vowel), or the species' own `intro` where the SRD
+  words it otherwise, as the Tiefling's does.
+- Each trait as a bold-italic titled paragraph, in the species' order,
+  anchored at `#species-trait-<id>`. A choice among options is titled
+  paragraphs in the trait's text, and a table is a table in it, with tokens
+  for its spells.
+
+Species come only by request; they have no gap buckets.
+
 ### Starting equipment
 
 Backgrounds, and classes later, share `StartingEquipment` in
@@ -536,6 +557,7 @@ warnings below on an SRD entry.
 | Background | `feat` names an origin feat | error |
 | Background | The last equipment option is coins only | error |
 | Background | The coin option isn't 50 GP | warning |
+| Species | Speed is a multiple of 5 | error |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

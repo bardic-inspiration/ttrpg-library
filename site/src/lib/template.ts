@@ -31,7 +31,10 @@ export interface TemplateProps {
 }
 
 /** Template names (`config/types.json` `template`) that have their own component; others use `generic`. */
-export const TEMPLATES = ['background-card', 'condition-card', 'creature-stat-block', 'equipment-card', 'feat-card', 'item-card', 'spell-card'] as const;
+export const TEMPLATES = ['background-card', 'condition-card', 'creature-stat-block', 'equipment-card', 'feat-card', 'item-card', 'species-page', 'spell-card'] as const;
+
+/** Templates that place a page type's components themselves; any other gets them after it (docs/site.md#templates). */
+export const PLACES_COMPONENTS: readonly TemplateName[] = ['species-page'];
 
 export type TemplateName = (typeof TEMPLATES)[number] | 'generic';
 

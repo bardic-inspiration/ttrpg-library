@@ -23,6 +23,9 @@ describe('dnd-5e-2024 schemas match tables.json', () => {
     expect(properties.size.items.enum).toEqual(Object.keys(tables.sizes));
     expect(properties.creatureType.enum).toEqual(tables.creatureTypes);
     expect(properties.skills.propertyNames.enum).toEqual(Object.keys(tables.skills));
+    const species = (await import('../../../rulesets/dnd-5e-2024/schemas/species.schema.json', { with: { type: 'json' } })).default as any;
+    expect(species.properties.creatureType.enum).toEqual(tables.creatureTypes);
+    expect(species.properties.sizes.items.properties.size.enum).toEqual(Object.keys(tables.sizes));
     expect(properties.cr.enum).toEqual(tables.challengeRatings.map((row) => row.cr));
   });
 

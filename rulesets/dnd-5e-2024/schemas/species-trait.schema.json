@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/species-trait.schema.json",
+  "title": "dnd-5e-2024 species trait stats (docs/rulesets.md#species)",
+  "description": "A component of a species (docs/content-model.md#components): one special trait, printed as a bold-italic titled paragraph on its species' page.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "text"
+  ],
+  "properties": {
+    "text": {
+      "description": "The trait as printed. A choice among options is titled paragraphs, and a table is a table, with tokens for its spells.",
+      "$ref": "common.schema.json#/$defs/Text"
+    }
+  }
+}
