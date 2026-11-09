@@ -1,0 +1,35 @@
+---
+// The dnd-5e-2024 feat card (registry template `feat-card`, docs/rulesets.md#feats,
+// docs/site.md#templates): name, the category line with any prerequisite, then the benefits as
+// SRD 5.2 prints them: "You gain the following benefits." and bold-italic titled paragraphs, or
+// one text, and a closing "Repeatable." paragraph.
+import type { FeatStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { FEAT_BENEFITS_INTRO, featHeading } from '../../lib/feat';
+import type { TemplateProps } from '../../lib/template';
+import RulesText from './parts/RulesText.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, paths, mode, level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+const s = entry.stats as FeatStats;
+---
+<StatBlock name={`${entry.name} feat`} type="feat" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={{ markdown: featHeading(s), refs }} level={level} />
+  <div class="feat-benefits">
+    {s.benefits && <p>{FEAT_BENEFITS_INTRO}</p>}
+    {s.benefits?.map((benefit) => <RulesText label={benefit.name} text={benefit.text} refs={refs} />)}
+    {s.text && <RulesText text={s.text} refs={refs} />}
+    {s.repeatable && <RulesText label="Repeatable" text={s.repeatable} refs={refs} />}
+  </div>
+</StatBlock>
+
+<style>
+  @layer components {
+    .feat-benefits > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+  }
+</style>

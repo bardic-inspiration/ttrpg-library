@@ -28,7 +28,7 @@ Per type:
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters expanded by default; every other facet and tag stays reachable through "Add filter" |
-| `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level); omitted for a rules extension type, which has none |
+| `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a background, which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
 
@@ -41,7 +41,8 @@ display formatter:
 - `spell-level` reads 0 as "Cantrip" and any other level as "Level 3";
 - `rarity` reads title case as SRD 5.2 prints it ("Very Rare");
 - `title` reads a slug in title case with hyphens as spaces ("Wondrous Item"),
-  matching the detail templates.
+  matching the detail templates;
+- `ability` reads an ability key by its full name ("Intelligence").
 
 Without a `format`, a value reads as stored, which keeps tag values and free
 text as written.
@@ -270,8 +271,9 @@ indexes.
 
 ### Templates
 
-- One component per type template, `condition-card`, `creature-stat-block`,
-  `equipment-card`, `item-card`, and `spell-card`, plus a `generic` fallback that renders the fixed keys,
+- One component per type template, `background-card`, `condition-card`,
+  `creature-stat-block`, `equipment-card`, `feat-card`, `item-card`, and
+  `spell-card`, plus a `generic` fallback that renders the fixed keys,
   `stats` as a definition list, and tags. `EntryTemplate` picks the component
   from the registry's `template`, falling back to `generic`. The generic
   lines render a ref as its target's name, linked to its page or rules

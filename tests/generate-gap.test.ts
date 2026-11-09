@@ -82,7 +82,7 @@ describe('pickGap', () => {
   it('picks from config/types.json', async () => {
     const file = JSON.parse(await readFile(join(ROOT, 'config/types.json'), 'utf8')) as GapRegistry;
     const records = [rec('creature', { 'stats.cr': 2 })];
-    // Magic items and spells are both empty; magic items come first in the registry.
-    expect(pickGap(records, file, R)).toMatchObject({ type: 'item', bucket: { label: 'stats.rarity=common' } });
+    // Feats, items, and spells are empty; feats come first in the registry (backgrounds have no buckets).
+    expect(pickGap(records, file, R)).toMatchObject({ type: 'feat', bucket: { label: 'stats.category=origin' } });
   });
 });

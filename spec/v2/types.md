@@ -1,6 +1,5 @@
 ---
 issue: 112
-depends: [linking]
 ---
 
 # Types
@@ -10,7 +9,7 @@ depends: [linking]
 Ruleset completeness: the library holds every SRD 5.2 component a character
 or a game draws on, and user content builds on that base and extends it. Every
 relationship between them is data, made of links with references tracked
-automatically ([`linking.md`](linking.md)). It serves P3 (one source per fact),
+automatically ([References](../../docs/content-model.md#references)). It serves P3 (one source per fact),
 P4 (a new type or extension is data, not code), and P5 (SRD fidelity).
 
 ## Current
@@ -131,93 +130,11 @@ a link to one type takes a typed ref
   list is derived from these refs ([Class](#class)), so it's stored once, on
   the spells.
 
-#### Feat
-
-- **Inputs:**
-  - `category`: `origin`, `general`, `fighting-style`, or `epic-boon`,
-    printed under the name as "Origin Feat", "General Feat", "Fighting Style
-    Feat", or "Epic Boon Feat".
-  - `level`: the minimum character level of the prerequisite, printed
-    first in it as "Level 4+". Optional.
-  - `prerequisite`: the rest of the prerequisite as printed, `Text`:
-    "Strength or Dexterity 13+", "Fighting Style Feature", "Spellcasting
-    Feature". Optional. The heading line reads "General Feat (Prerequisite:
-    Level 4+, Strength or Dexterity 13+)".
-  - Exactly one of `benefits`, a list of at least one `{ name, text }`, and
-    `text`, `Text`. With `benefits`, the template opens with "You gain the
-    following benefits.", the sentence every SRD feat with titled benefits
-    opens with, and prints each as a bold-titled paragraph, as a condition's
-    effects print. A feat without titled benefits (Savage Attacker, Archery,
-    Ability Score Improvement) is one `text`.
-  - `repeatable`: the "Repeatable" paragraph's text, `Text`, printed last
-    as "**Repeatable.** You can take this feat more than once." Optional.
-- **Derived:** `repeatable`, true when the input is present, for the facet.
-- **Checks** (warnings, since every SRD feat follows them and a custom one
-  that doesn't needs a reason): an origin feat has no `level` or
-  `prerequisite`; a general feat's `level` is 4 or more, and an epic boon's
-  19 or more.
-- **Guideline:** `feat.md`: a custom feat sits in the category whose power
-  it matches, and is balanced against that category's SRD feats; an origin
-  feat is usable at level 1 and takes no prerequisite, because a background
-  grants it; titled benefits where there is more than one; an ability score
-  increase is a titled benefit worded as the SRD's ("Increase your Strength
-  or Dexterity score by 1, to a maximum of 20.").
-- **Links and labels:** tokens in text read "References" / "Referenced by".
-  A ref to a feat may carry a `note` for the choice it's taken with, which
-  prints in parentheses: "Magic Initiate (Cleric)".
-- **Registry facets:** `stats.category` (in the order above), `stats.level`
-  (range), and `derived.repeatable`. The card shows the category and level,
-  and the default sort is category.
-- **Gap buckets:** one axis, `stats.category`, valued `origin`, `general`,
-  `fighting-style`, and `epic-boon`.
-
 #### Background
 
-- **Inputs:**
-  - `abilities`: exactly three different abilities, printed as "Ability
-    Scores: Intelligence, Wisdom, Charisma".
-  - `feat`: a `FeatRef`, a typed ref to a feat, with an optional `note`:
-    "Feat: Magic Initiate (Cleric) (see “Feats”)". The template adds the
-    "(see “Feats”)" the SRD prints.
-  - `skills`: exactly two different skills, printed as "Skill
-    Proficiencies: Insight and Religion".
-  - `tool`: an `EquipmentRef` with an optional `choose: true`, which prints
-    "Choose one kind of" before the name: "Tool Proficiency: Choose one kind
-    of Gaming Set (see “Equipment”)", the parenthetical being the ref's
-    `note`.
-  - `equipment`: [Starting equipment](#starting-equipment).
-- **Derived:** nothing.
-- **Checks** (errors): `feat` names an origin feat; the last equipment
-  option is coins only. Warning: that option isn't 50 GP, the amount every
-  SRD background offers.
-- **Guideline:** `background.md`: a background is a place or occupation
-  before adventuring; its three abilities, two skills, and tool fit it; its
-  feat is an origin feat, from the SRD or the library; its package is worth
-  about 50 GP, with 50 GP as the other option. SRD backgrounds print no
-  lore, so a custom one's story goes in `description`.
-- **Links and labels:** `feat` reads "Grants" / "Granted by"; `tool` reads
-  "Tool proficiency" / "Backgrounds"; equipment refs read "Starting
-  equipment" / "Starting equipment of".
-- **Registry facets:** `stats.abilities`, `stats.skills` (enums over
-  lists), and `stats.feat` (valued by key, shown by name). The card shows the
-  abilities and the feat, and the default sort is name.
-- **Gap buckets:** none. Backgrounds come by request.
-
-#### Starting equipment
-
-Classes and backgrounds share the shape: a list of two or more options, each
-`{ items, gp }`, `items` a list of at least one item and `gp` a coin amount,
-at least one of the two present. An item is a ref to equipment or an item,
-with an optional `count` of 2 or more and `note`, or `Text` for anything
-else ("Musical Instrument of your choice", with a token for the
-instrument). A counted item prints its count first and adds an "s": "4
-Handaxes", "2 Pouches". The template letters the options and words the list:
-"Choose A or B: (A) Greataxe, 4 Handaxes, Explorer’s Pack, and 15 GP; or (B)
-75 GP", and "Choose A, B, or C" with three. A class's list joins its last
-item with "and", and a background's doesn't ("Robe, 8 GP"), as the SRD's
-two chapters print them. Variants aren't link targets
-([Equipment](../../docs/rulesets.md#equipment)), so "20 Arrows" is text, and "Arcane Focus
-(Quarterstaff)" is the Arcane Focus ref with a note.
+Built ([Backgrounds](../../docs/rulesets.md#backgrounds)), except one facet:
+**`stats.feat`** becomes an enum facet valued by key and shown by name, with
+the filter tree (#235), and the card shows it then, beside the abilities.
 
 #### Species
 
@@ -271,7 +188,7 @@ two chapters print them. Variants aren't link targets
 | `weapons` | `Text`: "Simple and Martial weapons" |
 | `tools` | `Text`. Optional: "Choose 3 Musical Instruments" |
 | `armor` | `Text`: "Light and Medium armor and Shields", or "None" |
-| `equipment` | [Starting equipment](#starting-equipment) |
+| `equipment` | [Starting equipment](../../docs/rulesets.md#starting-equipment), joined with "and" |
 | `multiclass` | `Text`: the bullets under "As a Multiclass Character", as printed. The template writes the "As a Level 1 Character" bullets, which every class shares |
 
 The Features table and what feeds it:
@@ -408,12 +325,8 @@ The hardest SRD cases, which become the build's fixtures:
 - **The Paladin:** half-caster slots, and Oath of Devotion Spells as a table
   in a subclass feature.
 - **The Druid:** Circle of the Land Spells, four tables in one feature.
-- **The Soldier and the Acolyte:** a chosen tool kind with a note, and a
-  feat with a note (Magic Initiate (Cleric)).
 - **The Human and the Tiefling:** two sizes, and the Tiefling's own trait
   intro; the Elf's and Tiefling's tables of spells.
-- **Magic Initiate and Grappler:** benefits with a Repeatable paragraph, and
-  a prerequisite of level and abilities.
 
 ## Migration
 

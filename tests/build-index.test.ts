@@ -219,15 +219,21 @@ describe('the build', () => {
   });
 });
 
+// Content types that come only by request, so they have no gap buckets, and have no key stat for
+// PR bodies (docs/generation.md#gap-buckets, docs/site.md#type-registry).
+const REQUEST_ONLY = ['background'];
+
 describe('the type registry', () => {
   it('registers every content type, and every rules type that takes extensions, with the docs/site.md#type-registry keys', async () => {
     const registry = await loadRegistryFile();
     const extensionTypes = (ruleset.definition.rules ?? []).filter((r) => r.extensions).map((r) => r.type);
     expect(Object.keys(registry['dnd-5e-2024']!.types).sort()).toEqual([...ruleset.definition.types, ...extensionTypes].sort());
     for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
-      // A rules extension has no key stat to show in PR bodies (docs/site.md#type-registry).
+      // A rules extension and a request-only type have no key stat to show in PR bodies (docs/site.md#type-registry).
       const keys = ['label', 'plural', 'template', 'facets', 'cardFields', 'defaultSort', 'defaultFilters'];
-      for (const key of extensionTypes.includes(type) ? keys : [...keys, 'summaryField']) expect(config).toHaveProperty(key);
+      const keyStat = !extensionTypes.includes(type) && !REQUEST_ONLY.includes(type);
+      for (const key of keyStat ? [...keys, 'summaryField'] : keys) expect(config).toHaveProperty(key);
+      if (!keyStat) expect(config, `${type} summaryField`).not.toHaveProperty('summaryField');
       const paths = config.facets.map((f) => f.path);
       for (const field of config.cardFields as string[]) expect(paths).toContain(field);
       // The default sort is a facet, or a path every record has (docs/site.md#gallery "Sort").
@@ -249,12 +255,12 @@ describe('the type registry', () => {
 
   // docs/generation.md#gap-buckets: every axis is a facet of its type; bins sit on range facets, ascending
   // and disjoint; categorical values sit on enum facets and are values the schema allows.
-  it('gives every content type gap buckets whose axes are its facets, and a rules extension type none', async () => {
+  it('gives every content type gap buckets whose axes are its facets, and a rules extension or request-only type none', async () => {
     const registry = await loadRegistryFile();
     const extensionTypes = new Set((ruleset.definition.rules ?? []).map((r) => r.type));
     for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
-      // Gap fill never adds a rules extension (docs/generation.md#gap-buckets).
-      if (extensionTypes.has(type)) {
+      // Gap fill never adds a rules extension or a request-only type (docs/generation.md#gap-buckets).
+      if (extensionTypes.has(type) || REQUEST_ONLY.includes(type)) {
         expect(config.gapBuckets, `${type} gapBuckets`).toBeUndefined();
         continue;
       }

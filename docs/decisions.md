@@ -319,6 +319,12 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Components render after the parent's template through `EntryTemplate`, so the detail page, print, and PNG capture show them alike: a heading, then rules text or the generic lines. | P3, P6: one rendering for every mode; the layout waits for the UI redesign (#237) | #230 |
 | A page's Links merge its own and its components' links, without the links among its parts. Rules pages' back-links include components. | A component has no page, so its links show on its parent's | #230 |
 | Components get no raw data file or export bundle; a page type's own bundle is unchanged. | Page types get Print and no Download in v2 (`export.md`, #115) | #230 |
+| A ruleset module may have `checkLinks`, run once every ref resolves with each target's type and stats, for checks across entries: a background's feat must be an origin feat. | `check` sees one entry's stats; this rule reads another's | #231 |
+| A background's coin option other than 50 GP is a warning, and a last option with items an error. | Every SRD background offers 50 GP; the coins-only option is part of the format | #231 |
+| A starting-equipment item whose SRD primitive name reads differently in a list ("Clothes, Traveler's") is text, as a variant is. | P5: a ref renders the primitive's name, which would change the printed words | #231 |
+| A registry facet may use the `ability` format, which reads an ability key by its full name from `tables.json`. | Backgrounds filter by ability score, stored as keys | #231 |
+| The background card's feat and the `stats.feat` facet wait for the filter tree. | A facet over refs needs the tree's ref labels (#235), as condition immunities do | #231 |
+| `linking.md` is deleted: v1's link standard carries into v2 unchanged, and the first v2 types declare their link fields in `refs.ts` and their schemas. | Nothing in it remained to build | #231 |
 
 ### UI
 

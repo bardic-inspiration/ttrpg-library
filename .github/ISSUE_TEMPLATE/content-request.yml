@@ -14,9 +14,11 @@ body:
       label: Type
       description: The kind of entry to generate.
       options:
+        - background
         - condition
         - creature
         - equipment
+        - feat
         - item
         - spell
     validations:

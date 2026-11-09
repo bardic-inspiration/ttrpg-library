@@ -41,6 +41,12 @@ export interface RulesetModule {
   derive(type: string, stats: unknown, rules?: RulesData): Record<string, unknown>;
   /** Consistency checks for one entry's or primitive's schema-valid `stats` (docs/rulesets.md#consistency-checks), with the ruleset's rules data. */
   check(type: string, stats: unknown, rules?: RulesData): Issue[];
+  /**
+   * Checks that read what an entry's refs point to (docs/rulesets.md#consistency-checks), such as a
+   * background's feat being an origin feat. They run after every ref resolves; `target` gives a
+   * resolved target's type and stats, or undefined for one whose stats failed their schema. Optional.
+   */
+  checkLinks?(type: string, stats: unknown, target: (key: string) => { type: string; stats: unknown } | undefined): Issue[];
   /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (docs/content-model.md#references). */
   refLabels(type: string, path: string): RefLabels;
 }

@@ -31,7 +31,7 @@ export interface TemplateProps {
 }
 
 /** Template names (`config/types.json` `template`) that have their own component; others use `generic`. */
-export const TEMPLATES = ['condition-card', 'creature-stat-block', 'equipment-card', 'item-card', 'spell-card'] as const;
+export const TEMPLATES = ['background-card', 'condition-card', 'creature-stat-block', 'equipment-card', 'feat-card', 'item-card', 'spell-card'] as const;
 
 export type TemplateName = (typeof TEMPLATES)[number] | 'generic';
 

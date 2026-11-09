@@ -60,10 +60,15 @@ validator loads a ruleset by folder name, so an entry whose `ruleset` has no
 folder or registry entry fails as unknown. A type with no formulas derives `{}`.
 `derive` and `check` also receive the ruleset's rules data, for values and
 checks that read it: equipment's category comes from its group, and an
-item's base item is checked against the equipment groups.
+item's base item is checked against the equipment groups. An optional
+`checkLinks` runs once every ref resolves, with a lookup of each target's type
+and stats, for checks that read another entry: a background's feat must be an
+origin feat.
 
 `dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, an
-item's `spells[].spell`) are "Casts" / "Cast by"; creature `gear` is "Gear" /
+item's `spells[].spell`) are "Casts" / "Cast by"; a background's `feat` is
+"Grants" / "Granted by", its `tool` "Tool proficiency" / "Backgrounds", and
+its equipment "Starting equipment" / "Starting equipment of"; creature `gear` is "Gear" /
 "Carried by"; a creature's condition immunities are "Immune to" / "Immune
 creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
 `properties` and `mastery` are "Properties" / "Weapons" and "Mastery" /
@@ -421,6 +426,61 @@ A field that takes a condition takes a `ConditionRef`: a creature's
   cost and "which the spell consumes". `costGp` and `consumed` are data for
   filters and checks, and add no words.
 
+### Feats
+
+`schemas/feat.schema.json` describes each field. A feat derives `repeatable`,
+true when it has a `repeatable` paragraph, for the Repeatable filter. How the
+card reads:
+
+- The line under the name is the category and any prerequisite: "Origin
+  Feat", or "General Feat (Prerequisite: Level 4+, Strength or Dexterity
+  13+)", the `level` first as "Level 4+", then the `prerequisite` as written.
+- Titled `benefits` print after "You gain the following benefits.", the
+  sentence every SRD feat with titled benefits opens with, each as a
+  bold-italic titled paragraph. A feat without titled benefits is one `text`.
+- A `repeatable` paragraph prints last: "***Repeatable.*** You can take this
+  feat more than once."
+- A ref to a feat may carry a `note` for the choice it's taken with: "Magic
+  Initiate (Cleric)".
+
+Feats fill gaps by category ([generation.md](generation.md#gap-buckets)).
+
+### Backgrounds
+
+`schemas/background.schema.json` describes each field. A background derives
+nothing. Its card prints the SRD's lines:
+
+- **Ability Scores:** its three abilities by name, "Intelligence, Wisdom,
+  Charisma".
+- **Feat:** its origin feat (a `FeatRef`), with any `note`, then "(see
+  “Feats”)" as the SRD prints it: "Magic Initiate (Cleric) (see “Feats”)".
+- **Skill Proficiencies:** its two skills, "Insight and Religion".
+- **Tool Proficiency:** its tool, an equipment ref; with `choose`, "Choose
+  one kind of Gaming Set (see “Equipment”)", the parenthetical being the
+  ref's `note`.
+- **Equipment:** its [starting equipment](#starting-equipment).
+
+Backgrounds come only by request; they have no gap buckets.
+
+### Starting equipment
+
+Backgrounds, and classes later, share `StartingEquipment` in
+`common.schema.json`: two or more options, each `items`, `gp`, or both. An
+item is a ref to equipment or an item, with an optional `count` of 2 or more
+and `note`, or text for anything else. The template letters the options and
+words the list (`site/src/lib/starting-equipment.ts`):
+
+- "Choose A or B: (A) …; or (B) 50 GP", and "Choose A, B, or C" with three.
+- A counted item prints its count first with an "s" added, "2 Daggers"; a
+  note prints in parentheses, "Parchment (10 sheets)"; coins print last, "8
+  GP".
+- A background's options join their parts with commas ("Robe, 8 GP"); a
+  class's join the last with "and" ("Explorer’s Pack, and 15 GP"), as the
+  SRD's two chapters print them.
+- A variant isn't a link target, so "20 Arrows" is text, and so is equipment
+  whose SRD name reads differently in a list: "Traveler's Clothes" is the
+  primitive "Clothes, Traveler's".
+
 ### Embedded stat blocks
 
 Some spells and items print a creature's stat block. One that also exists in
@@ -472,6 +532,10 @@ warnings below on an SRD entry.
 | Spell | `higherLevels` only at level 1 or above; `cantripUpgrade` only at level 0 | error |
 | Spell | `castingTime.trigger` present on a reaction, and only on a reaction or bonus action | error |
 | Spell | Cantrip marked `ritual` | warning |
+| Feat | An origin feat with a `level` or `prerequisite`; a general feat below level 4; an epic boon below level 19 | warning |
+| Background | `feat` names an origin feat | error |
+| Background | The last equipment option is coins only | error |
+| Background | The coin option isn't 50 GP | warning |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

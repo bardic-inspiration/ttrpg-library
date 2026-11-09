@@ -4,7 +4,9 @@
   "srdVersion": "5.2",
   "attribution": "srd-5.2",
   "types": [
+    "background",
     "creature",
+    "feat",
     "item",
     "spell"
   ],

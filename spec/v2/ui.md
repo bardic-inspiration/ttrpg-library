@@ -79,7 +79,7 @@ style redesign's (#114).
 - **Page types** (classes, subclasses, species) and **rules pages** are long
   pages laid out as accordion sections with a jump-to table of contents.
   Sections start collapsed. A link to a section, including a link to a
-  primitive or component ([`linking.md`](linking.md)), opens it and scrolls
+  primitive or component ([Components](../../docs/content-model.md#components)), opens it and scrolls
   to it.
 
 ### Print

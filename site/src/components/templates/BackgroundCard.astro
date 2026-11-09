@@ -1,0 +1,20 @@
+---
+// The dnd-5e-2024 background card (registry template `background-card`, docs/rulesets.md#backgrounds,
+// docs/site.md#templates): name, then the parts of a background as SRD 5.2 prints them, as
+// labeled lines: Ability Scores, Feat, Skill Proficiencies, Tool Proficiency, and Equipment.
+import type { BackgroundStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { backgroundLines } from '../../lib/background';
+import type { TemplateProps } from '../../lib/template';
+import PropertyList from './parts/PropertyList.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, paths, mode, level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+---
+<StatBlock name={`${entry.name} background`} type="background" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle="Background" level={level} />
+  <PropertyList lines={backgroundLines(entry.stats as BackgroundStats)} refs={refs} />
+</StatBlock>

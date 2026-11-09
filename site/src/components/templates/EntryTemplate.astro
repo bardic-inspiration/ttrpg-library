@@ -4,9 +4,11 @@
 // components (docs/content-model.md#components).
 import { templateFor, type TemplateProps } from '../../lib/template';
 import registry from '../../../../config/types.json';
+import BackgroundCard from './BackgroundCard.astro';
 import ConditionCard from './ConditionCard.astro';
 import CreatureStatBlock from './CreatureStatBlock.astro';
 import EquipmentCard from './EquipmentCard.astro';
+import FeatCard from './FeatCard.astro';
 import GenericTemplate from './GenericTemplate.astro';
 import ItemCard from './ItemCard.astro';
 import PageComponents from './parts/PageComponents.astro';
@@ -17,9 +19,11 @@ type Props = TemplateProps;
 const { entry, names, paths, components: parts = [], level = 2 } = Astro.props;
 const types = (registry as Record<string, { types: Record<string, { template?: string }> }>)[entry.ruleset]?.types;
 const templates = {
+  'background-card': BackgroundCard,
   'condition-card': ConditionCard,
   'creature-stat-block': CreatureStatBlock,
   'equipment-card': EquipmentCard,
+  'feat-card': FeatCard,
   'item-card': ItemCard,
   'spell-card': SpellCard,
   generic: GenericTemplate,

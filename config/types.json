@@ -3,6 +3,19 @@
     "label": "D&D 5e (SRD 5.2)",
     "attribution": "srd-5.2",
     "types": {
+      "background": {
+        "label": "Background",
+        "plural": "Backgrounds",
+        "template": "background-card",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/background.md",
+        "facets": [
+          { "path": "stats.abilities", "label": "Ability scores", "kind": "enum", "format": "ability" },
+          { "path": "stats.skills", "label": "Skills", "kind": "enum", "format": "title" }
+        ],
+        "cardFields": ["stats.abilities"],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["stats.abilities", "tags.theme"]
+      },
       "condition": {
         "label": "Condition",
         "plural": "Conditions",
@@ -58,6 +71,28 @@
         "cardFields": ["stats.group", "derived.costGp"],
         "defaultSort": "derived.costGp:asc",
         "defaultFilters": ["derived.category", "tags.theme"]
+      },
+      "feat": {
+        "label": "Feat",
+        "plural": "Feats",
+        "template": "feat-card",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/feat.md",
+        "facets": [
+          {
+            "path": "stats.category",
+            "label": "Category",
+            "kind": "enum",
+            "format": "title",
+            "order": ["origin", "general", "fighting-style", "epic-boon"]
+          },
+          { "path": "stats.level", "label": "Prerequisite level", "kind": "range" },
+          { "path": "derived.repeatable", "label": "Repeatable", "kind": "enum" }
+        ],
+        "cardFields": ["stats.category", "stats.level"],
+        "defaultSort": "stats.category:asc",
+        "defaultFilters": ["stats.category", "tags.theme"],
+        "summaryField": "stats.category",
+        "gapBuckets": [{ "path": "stats.category", "enum": ["origin", "general", "fighting-style", "epic-boon"] }]
       },
       "item": {
         "label": "Item",
