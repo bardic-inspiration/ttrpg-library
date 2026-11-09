@@ -30,8 +30,8 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You gain 2d4 + 4 Temporary Hit Points.",
-    "higherLevels": "You gain 5 additional Temporary Hit Points for each spell slot level above 1."
+    "effect": "You gain 2d4 + 4 {ref:glossary/temporary-hit-points}.",
+    "higherLevels": "You gain 5 additional {ref:glossary/temporary-hit-points} for each spell slot level above 1."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -41,6 +41,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

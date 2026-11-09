@@ -29,7 +29,7 @@
       "unit": "minute",
       "concentration": true
     },
-    "effect": "You summon a giant centipede, spider, or wasp (chosen when you cast the spell). It manifests in an unoccupied space you can see within range and uses the **Giant Insect** stat block. The form you choose determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.\n\nThe creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.",
+    "effect": "You summon a giant centipede, spider, or wasp (chosen when you cast the spell). It manifests in an unoccupied space you can see within range and uses the **Giant Insect** stat block. The form you choose determines certain details in its stat block. The creature disappears when it drops to 0 {ref:glossary/hit-points} or when the spell ends.\n\nThe creature is an ally to you and your allies. In combat, the creature shares your {ref:glossary/initiative} count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the {ref:glossary/dodge} action and uses its movement to avoid danger.",
     "higherLevels": "Use the spell slot's level for the spell's level in the stat block.",
     "statBlocks": [
       {
@@ -66,13 +66,13 @@
           },
           {
             "name": "Web Bolt (Spider Only)",
-            "text": "*Ranged Attack Roll:* Bonus equals your spell attack modifier, range 60 ft. *Hit:* 1d10 + 3 plus the spell's level Bludgeoning damage, and the target's Speed is reduced to 0 until the start of the insect's next turn."
+            "text": "*Ranged Attack Roll:* Bonus equals your spell attack modifier, range 60 ft. *Hit:* 1d10 + 3 plus the spell's level Bludgeoning damage, and the target's {ref:glossary/speed} is reduced to 0 until the start of the insect's next turn."
           }
         ],
         "bonusActions": [
           {
             "name": "Venomous Spew (Centipede Only)",
-            "text": "*Constitution Saving Throw:* Your spell save DC, one creature the insect can see within 10 feet. *Failure:* The target has the Poisoned condition until the start of the insect's next turn."
+            "text": "*Constitution Saving Throw:* Your spell save DC, one creature the insect can see within 10 feet. *Failure:* The target has the {ref:condition/poisoned} condition until the start of the insect's next turn."
           }
         ]
       }
@@ -86,6 +86,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

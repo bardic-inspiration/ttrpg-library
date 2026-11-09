@@ -34,7 +34,7 @@
       "unit": "hour",
       "concentration": true
     },
-    "effect": "A creature you touch has the Invisible condition until the spell ends. The spell ends early immediately after the target makes an attack roll, deals damage, or casts a spell.",
+    "effect": "A creature you touch has the {ref:condition/invisible} condition until the spell ends. The spell ends early immediately after the target makes an attack roll, deals damage, or casts a spell.",
     "higherLevels": "You can target one additional creature for each spell slot level above 2."
   },
   "meta": {
@@ -45,6 +45,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

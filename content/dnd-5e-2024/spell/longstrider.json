@@ -34,7 +34,7 @@
       "unit": "hour",
       "concentration": false
     },
-    "effect": "You touch a creature. The target's Speed increases by 10 feet until the spell ends.",
+    "effect": "You touch a creature. The target's {ref:glossary/speed} increases by 10 feet until the spell ends.",
     "higherLevels": "You can target one additional creature for each spell slot level above 1."
   },
   "meta": {
@@ -45,6 +45,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

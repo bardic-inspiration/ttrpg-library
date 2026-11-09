@@ -27,7 +27,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You utter a word imbued with power from the Upper Planes. Each creature of your choice in range makes a Charisma saving throw. On a failed save, a target that has 50 Hit Points or fewer suffers an effect based on its current Hit Points, as shown in the Divine Word Effects table. Regardless of its Hit Points, a Celestial, an Elemental, a Fey, or a Fiend target that fails its save is forced back to its plane of origin (if it isn't there already) and can't return to the current plane for 24 hours by any means short of a *{ref:spell/wish}* spell.\n\n**Divine Word Effects**\n\n| Hit Points | Effect |\n|---|---|\n| 0–20 | The target dies. |\n| 21–30 | The target has the Blinded, Deafened, and Stunned conditions for 1 hour. |\n| 31–40 | The target has the Blinded and Deafened conditions for 10 minutes. |\n| 41–50 | The target has the Deafened condition for 1 minute. |"
+    "effect": "You utter a word imbued with power from the Upper Planes. Each creature of your choice in range makes a Charisma saving throw. On a failed save, a target that has 50 {ref:glossary/hit-points} or fewer suffers an effect based on its current Hit Points, as shown in the Divine Word Effects table. Regardless of its Hit Points, a Celestial, an Elemental, a Fey, or a Fiend target that fails its save is forced back to its plane of origin (if it isn't there already) and can't return to the current plane for 24 hours by any means short of a *{ref:spell/wish}* spell.\n\n**Divine Word Effects**\n\n| Hit Points | Effect |\n|---|---|\n| 0–20 | The target dies. |\n| 21–30 | The target has the {ref:condition/blinded}, {ref:condition/deafened}, and {ref:condition/stunned} conditions for 1 hour. |\n| 31–40 | The target has the {ref:condition/blinded} and {ref:condition/deafened} conditions for 10 minutes. |\n| 41–50 | The target has the {ref:condition/deafened} condition for 1 minute. |"
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -37,6 +37,7 @@
         174
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

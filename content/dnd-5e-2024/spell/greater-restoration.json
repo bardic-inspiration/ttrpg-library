@@ -35,7 +35,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You touch a creature and magically remove one of the following effects from it:\n- 1 Exhaustion level\n- The Charmed or Petrified condition\n- A curse, including the target's Attunement to a cursed magic item\n- Any reduction to one of the target's ability scores\n- Any reduction to the target's Hit Point maximum"
+    "effect": "You touch a creature and magically remove one of the following effects from it:\n- 1 {ref:condition/exhaustion} level\n- The {ref:condition/charmed} or {ref:condition/petrified} condition\n- A curse, including the target's {ref:glossary/attunement} to a cursed magic item\n- Any reduction to one of the target's ability scores\n- Any reduction to the target's Hit Point maximum"
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -45,6 +45,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }
