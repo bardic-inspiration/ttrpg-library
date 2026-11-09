@@ -10,7 +10,7 @@
       },
       {
         "name": "Attacks Affected",
-        "text": "Attack rolls against you have Advantage, and your attack rolls have Disadvantage."
+        "text": "Attack rolls against you have {ref:glossary/advantage}, and your attack rolls have {ref:glossary/disadvantage}."
       }
     ]
   }

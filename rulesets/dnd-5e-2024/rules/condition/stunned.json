@@ -14,7 +14,7 @@
       },
       {
         "name": "Attacks Affected",
-        "text": "Attack rolls against you have Advantage."
+        "text": "Attack rolls against you have {ref:glossary/advantage}."
       }
     ]
   }

@@ -9,6 +9,6 @@
       "unit": "sp"
     },
     "weight": 3,
-    "text": "While wrapped in a blanket, you have Advantage on saving throws against extreme cold (see \"Gameplay Toolbox\")."
+    "text": "While wrapped in a blanket, you have {ref:glossary/advantage} on saving throws against extreme cold (see \"Gameplay Toolbox\")."
   }
 }

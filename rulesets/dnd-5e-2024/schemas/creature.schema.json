@@ -258,11 +258,11 @@
       }
     },
     "gear": {
-      "description": "Items the creature carries.",
+      "description": "Items the creature carries: a ref to equipment or an item, or plain text for gear that isn't a link target (an Arcane Focus variant such as \"Wand\").",
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "common.schema.json#/$defs/RefOrText"
+        "$ref": "common.schema.json#/$defs/CountedRefOrText"
       }
     },
     "senses": {

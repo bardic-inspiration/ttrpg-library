@@ -10,11 +10,11 @@
       },
       {
         "name": "Speed 0",
-        "text": "Your Speed is 0 and can't increase."
+        "text": "Your {ref:glossary/speed} is 0 and can't increase."
       },
       {
         "name": "Attacks Affected",
-        "text": "Attack rolls against you have Advantage."
+        "text": "Attack rolls against you have {ref:glossary/advantage}."
       },
       {
         "name": "Saving Throws Affected",
@@ -22,7 +22,7 @@
       },
       {
         "name": "Automatic Critical Hits",
-        "text": "Any attack roll that hits you is a Critical Hit if the attacker is within 5 feet of you."
+        "text": "Any attack roll that hits you is a {ref:glossary/critical-hit} if the attacker is within 5 feet of you."
       },
       {
         "name": "Unaware",

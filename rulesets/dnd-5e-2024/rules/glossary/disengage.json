@@ -4,6 +4,6 @@
   "name": "Disengage",
   "stats": {
     "tag": "action",
-    "text": "If you take the Disengage action, your movement doesn't provoke Opportunity Attacks for the rest of the current turn."
+    "text": "If you take the Disengage action, your movement doesn't provoke {ref:glossary/opportunity-attacks} for the rest of the current turn."
   }
 }

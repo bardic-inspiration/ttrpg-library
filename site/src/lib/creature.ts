@@ -109,6 +109,19 @@ const conditionList = (list: { ref: string; note?: string }[]): string =>
   list.map((c) => (c.note === undefined ? `{ref:${c.ref}}` : `{ref:${c.ref}} (${escapeMarkdown(c.note)})`)).join(', ');
 
 /**
+ * The Gear line, markdown because its refs are links (docs/rulesets.md#creatures): a count reads as
+ * a plural with an added "s" and the count in parentheses ("Javelins (6)"), and a note in parentheses.
+ */
+export function gearLine(s: CreatureStats): PropertyLine | undefined {
+  const items = s.gear?.map((g) => {
+    if (typeof g === 'string') return escapeMarkdown(g);
+    const name = g.count === undefined ? `{ref:${g.ref}}` : `{ref:${g.ref}}s (${g.count})`;
+    return g.note === undefined ? name : `${name} (${escapeMarkdown(g.note)})`;
+  });
+  return items === undefined || items.length === 0 ? undefined : { label: 'Gear', value: items.join(', '), markdown: true };
+}
+
+/**
  * Vulnerabilities, Resistances, and Immunities, each only when present (docs/content-model.md#situational-fields).
  * The Immunities line is markdown, because its conditions are links (docs/rulesets.md#creatures).
  */

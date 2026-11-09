@@ -140,7 +140,8 @@ A reference takes one of two forms, both keyed by `<type>/<id>`, since the ID
 never changes and is unique within its type:
 
 - **A ref object**, `{ "ref": "<type>/<id>" }`, valid only inside `stats` at
-  fields the schema declares as `RefOrText`. It may add a `note`, a qualifier
+  fields the schema declares as `RefOrText` (or `CountedRefOrText`, creature
+  gear, which may add a `count`). It may add a `note`, a qualifier
   printed in parentheses after the name wherever the ref renders:
   `{ "ref": "spell/fireball", "note": "level 5 version" }` reads "Fireball
   (level 5 version)".
@@ -157,6 +158,20 @@ link: "becomes a {ref:creature/zombie}" reads "becomes a Zombie". A token
 anywhere else (`name`, `summary`, a plain-string `stats` field) is a validation
 error, as is a malformed one such as `{ref:zombie}`.
 
+- **Mentions of rules.** A mention of a condition, equipment (or an
+  equipment group), or glossary term in SRD text is a token only where the
+  target's name reproduces the text exactly, case included: "the Poisoned
+  condition" and "has Advantage" link, while "an attack roll" and "2 Daggers"
+  stay plain. Conditions and equipment link at every mention; a glossary term
+  at its first mention in each text field, so rules text isn't carpeted with
+  links to "Advantage". A capitalized word that starts a sentence or a table
+  cell, a name inside a longer capitalized name ("Total Cover", "Opportunity
+  Attack", "Cube of Force Faces"), the name of a table or column ("the Armor
+  table"), a section of a chapter in a cross-reference ("Playing the Game"
+  ("Damage and Healing")), and a creature's mention of its own action
+  ("two Javelin attacks") stay plain. "Acid" names the damage type and
+  "Ammunition" the weapon property, so neither links to the equipment. Rules
+  data follows the same rule ([Rules data](rulesets.md#rules-data)).
 - A `RefOrText` field takes a ref or a plain string. A plain string names SRD
   content not in the library ("Fireball", or "Lightning Bolt (level 5
   version)"). Once the entry is in the library, new entries ref it. Text

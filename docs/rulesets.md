@@ -157,8 +157,8 @@ The formulas are in `derive.ts` and the tables, including the SRD CR table, in
 
 `schemas/common.schema.json` holds the definitions the type schemas share:
 abilities, dice, damage, proficiency levels, adjustments, damage types, refs
-(`Ref`, `RefOrText`, and the typed `ConditionRef`, which allows only condition
-keys), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
+(`Ref`, `RefOrText`, `CountedRefOrText`, whose ref may add a `count`, and the
+typed `ConditionRef`, which allows only condition keys), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
 
 ### Text tokens
 
@@ -202,6 +202,12 @@ SRD 5.2:
   name linked to its section on the Conditions page, with a ref's `note` in
   parentheses: "Poison; Charmed (with Mind Blank), Exhaustion"
   ([Conditions](#conditions)).
+- **Gear is links.** Each `gear` item is a ref to equipment or an item,
+  printed as its name linked to its section or page, or plain text for gear
+  that isn't a link target, such as the Mage's "Wand" (an Arcane Focus
+  variant). A ref's `count`, 2 or more, prints after the name with an "s"
+  added: `{ "ref": "equipment/javelin", "count": 6 }` reads "Javelins (6)",
+  as the SRD prints it; a `note` prints in parentheses.
 
 - **Attack and save lines are generated** from structured fields, never
   written as prose: `*Melee Attack Roll:* +4, reach 5 ft. *Hit:* 6 (1d8 + 2)

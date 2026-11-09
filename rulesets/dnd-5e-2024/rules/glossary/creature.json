@@ -3,6 +3,6 @@
   "id": "creature",
   "name": "Creature",
   "stats": {
-    "text": "Any being in the game, including a player's character, is a creature. *See also* \"Creature Type.\""
+    "text": "Any being in the game, including a player's character, is a creature. *See also* \"{ref:glossary/creature-type}.\""
   }
 }

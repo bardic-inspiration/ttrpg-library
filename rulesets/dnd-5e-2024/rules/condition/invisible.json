@@ -6,7 +6,7 @@
     "effects": [
       {
         "name": "Surprise",
-        "text": "If you're Invisible when you roll Initiative, you have Advantage on the roll."
+        "text": "If you're Invisible when you roll {ref:glossary/initiative}, you have {ref:glossary/advantage} on the roll."
       },
       {
         "name": "Concealed",
@@ -14,7 +14,7 @@
       },
       {
         "name": "Attacks Affected",
-        "text": "Attack rolls against you have Disadvantage, and your attack rolls have Advantage. If a creature can somehow see you, you don't gain this benefit against that creature."
+        "text": "Attack rolls against you have {ref:glossary/disadvantage}, and your attack rolls have {ref:glossary/advantage}. If a creature can somehow see you, you don't gain this benefit against that creature."
       }
     ]
   }

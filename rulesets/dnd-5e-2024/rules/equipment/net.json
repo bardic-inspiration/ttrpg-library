@@ -9,6 +9,6 @@
       "unit": "gp"
     },
     "weight": 3,
-    "text": "When you take the Attack action, you can replace one of your attacks with throwing a Net. Target a creature you can see within 15 feet of yourself. The target must succeed on a Dexterity saving throw (DC 8 plus your Dexterity modifier and Proficiency Bonus) or have the {ref:condition/restrained} condition until it escapes. The target succeeds automatically if it is Huge or larger.\n\nTo escape, the target or a creature within 5 feet of it must take an action to make a DC 10 Strength (Athletics) check, freeing the {ref:condition/restrained} creature on a success. Destroying the Net (AC 10; 5 HP; Immunity to Bludgeoning, Poison, and Psychic damage) also frees the target, ending the effect."
+    "text": "When you take the {ref:glossary/attack} action, you can replace one of your attacks with throwing a Net. Target a creature you can see within 15 feet of yourself. The target must succeed on a Dexterity saving throw (DC 8 plus your Dexterity modifier and Proficiency Bonus) or have the {ref:condition/restrained} condition until it escapes. The target succeeds automatically if it is Huge or larger.\n\nTo escape, the target or a creature within 5 feet of it must take an action to make a DC 10 Strength (Athletics) check, freeing the {ref:condition/restrained} creature on a success. Destroying the Net (AC 10; 5 HP; {ref:glossary/immunity} to Bludgeoning, Poison, and Psychic damage) also frees the target, ending the effect."
   }
 }
