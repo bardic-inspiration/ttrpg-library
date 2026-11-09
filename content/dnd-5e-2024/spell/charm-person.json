@@ -33,7 +33,7 @@
       "unit": "hour",
       "concentration": false
     },
-    "effect": "One Humanoid you can see within range makes a Wisdom saving throw. It does so with Advantage if you or your allies are fighting it. On a failed save, the target has the Charmed condition until the spell ends or until you or your allies damage it. The Charmed creature is Friendly to you. When the spell ends, the target knows it was Charmed by you.",
+    "effect": "One Humanoid you can see within range makes a Wisdom saving throw. It does so with {ref:glossary/advantage} if you or your allies are fighting it. On a failed save, the target has the {ref:condition/charmed} condition until the spell ends or until you or your allies damage it. The {ref:condition/charmed} creature is {ref:glossary/friendly} to you. When the spell ends, the target knows it was {ref:condition/charmed} by you.",
     "higherLevels": "You can target one additional creature for each spell slot level above 1."
   },
   "meta": {
@@ -44,6 +44,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

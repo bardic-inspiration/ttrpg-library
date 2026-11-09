@@ -14,7 +14,7 @@
     "charges": {
       "max": 6,
       "recharge": "1d6 daily at dawn",
-      "depletion": "If you expend the last charge, roll 1d20. On a 1, the staff loses its properties and becomes a nonmagical Quarterstaff."
+      "depletion": "If you expend the last charge, roll 1d20. On a 1, the staff loses its properties and becomes a nonmagical {ref:equipment/quarterstaff}."
     },
     "spells": [
       {
@@ -66,7 +66,7 @@
         "chargeCost": 6
       }
     ],
-    "effect": "This staff has 6 charges and can be wielded as a magic Quarterstaff that grants a +2 bonus to attack rolls and damage rolls made with it. While holding it, you have a +2 bonus to spell attack rolls.\n\n***Spells.*** While holding the staff, you can cast one of the spells on the following table from it, using your spell save DC. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/animal-friendship}* | 1 |\n| *{ref:spell/awaken}* | 5 |\n| *{ref:spell/barkskin}* | 2 |\n| *{ref:spell/locate-animals-or-plants}* | 2 |\n| *{ref:spell/pass-without-trace}* | 2 |\n| *{ref:spell/speak-with-animals}* | 1 |\n| *{ref:spell/speak-with-plants}* | 3 |\n| *{ref:spell/wall-of-thorns}* | 6 |\n\n***Tree Form.*** You can take a Magic action to plant one end of the staff in earth in an unoccupied space and expend 1 charge to transform the staff into a healthy tree. The tree is 60 feet tall and has a 5-foot-diameter trunk, and its branches at the top spread out in a 20-foot radius. The tree appears ordinary but radiates a faint aura of Transmutation magic that can be discerned with the *{ref:spell/detect-magic}* spell. While touching the tree and using a Magic action, you return the staff to its normal form. Any creature in the tree falls when the tree reverts to a staff.\n\n***Regaining Charges.*** The staff regains 1d6 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, the staff loses its properties and becomes a nonmagical Quarterstaff."
+    "effect": "This staff has 6 charges and can be wielded as a magic {ref:equipment/quarterstaff} that grants a +2 bonus to attack rolls and damage rolls made with it. While holding it, you have a +2 bonus to spell attack rolls.\n\n***Spells.*** While holding the staff, you can cast one of the spells on the following table from it, using your spell save DC. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/animal-friendship}* | 1 |\n| *{ref:spell/awaken}* | 5 |\n| *{ref:spell/barkskin}* | 2 |\n| *{ref:spell/locate-animals-or-plants}* | 2 |\n| *{ref:spell/pass-without-trace}* | 2 |\n| *{ref:spell/speak-with-animals}* | 1 |\n| *{ref:spell/speak-with-plants}* | 3 |\n| *{ref:spell/wall-of-thorns}* | 6 |\n\n***Tree Form.*** You can take a {ref:glossary/magic} action to plant one end of the staff in earth in an unoccupied space and expend 1 charge to transform the staff into a healthy tree. The tree is 60 feet tall and has a 5-foot-diameter trunk, and its branches at the top spread out in a 20-foot radius. The tree appears ordinary but radiates a faint aura of Transmutation magic that can be discerned with the *{ref:spell/detect-magic}* spell. While touching the tree and using a Magic action, you return the staff to its normal form. Any creature in the tree falls when the tree reverts to a staff.\n\n***Regaining Charges.*** The staff regains 1d6 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, the staff loses its properties and becomes a nonmagical {ref:equipment/quarterstaff}."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -76,6 +76,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

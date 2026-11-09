@@ -10,7 +10,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "When you drink this potion, you gain the \"enlarge\" effect of the *{ref:spell/enlarge-reduce}* spell for 10 minutes (no Concentration required).\n\nThe red in the potion's liquid continuously expands from a tiny bead to color the clear liquid around it and then contracts. Shaking the bottle fails to interrupt this process."
+    "effect": "When you drink this potion, you gain the \"enlarge\" effect of the *{ref:spell/enlarge-reduce}* spell for 10 minutes (no {ref:glossary/concentration} required).\n\nThe red in the potion's liquid continuously expands from a tiny bead to color the clear liquid around it and then contracts. Shaking the bottle fails to interrupt this process."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

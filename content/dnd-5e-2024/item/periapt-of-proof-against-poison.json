@@ -10,7 +10,7 @@
     "attunement": {
       "required": true
     },
-    "effect": "This delicate silver chain has a brilliant-cut black gem pendant. While you wear it, you have Immunity to the Poisoned condition and Poison damage."
+    "effect": "This delicate silver chain has a brilliant-cut black gem pendant. While you wear it, you have {ref:glossary/immunity} to the {ref:condition/poisoned} condition and Poison damage."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -29,7 +29,7 @@
       "unit": "minute",
       "concentration": true
     },
-    "effect": "Your body becomes blurred. For the duration, any creature has Disadvantage on attack rolls against you. An attacker is immune to this effect if it perceives you with Blindsight or Truesight."
+    "effect": "Your body becomes blurred. For the duration, any creature has {ref:glossary/disadvantage} on attack rolls against you. An attacker is immune to this effect if it perceives you with {ref:glossary/blindsight} or {ref:glossary/truesight}."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -39,6 +39,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

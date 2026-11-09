@@ -10,7 +10,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "When you drink this potion, you gain the effect of the *{ref:spell/haste}* spell for 1 minute (no Concentration required) without suffering the wave of lethargy that typically occurs when the effect ends.\n\nThis potion's yellow fluid is streaked with black and swirls on its own."
+    "effect": "When you drink this potion, you gain the effect of the *{ref:spell/haste}* spell for 1 minute (no {ref:glossary/concentration} required) without suffering the wave of lethargy that typically occurs when the effect ends.\n\nThis potion's yellow fluid is streaked with black and swirls on its own."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

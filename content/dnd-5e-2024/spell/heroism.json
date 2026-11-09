@@ -29,7 +29,7 @@
       "unit": "minute",
       "concentration": true
     },
-    "effect": "A willing creature you touch is imbued with bravery. Until the spell ends, the creature is immune to the Frightened condition and gains Temporary Hit Points equal to your spellcasting ability modifier at the start of each of its turns.",
+    "effect": "A willing creature you touch is imbued with bravery. Until the spell ends, the creature is immune to the {ref:condition/frightened} condition and gains {ref:glossary/temporary-hit-points} equal to your spellcasting ability modifier at the start of each of its turns.",
     "higherLevels": "You can target one additional creature for each spell slot level above 1."
   },
   "meta": {
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -28,7 +28,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "Choose a creature that you can see within range. Positive energy washes through the target, restoring 70 Hit Points. This spell also ends the Blinded, Deafened, and Poisoned conditions on the target.",
+    "effect": "Choose a creature that you can see within range. Positive energy washes through the target, restoring 70 {ref:glossary/hit-points}. This spell also ends the {ref:condition/blinded}, {ref:condition/deafened}, and {ref:condition/poisoned} conditions on the target.",
     "higherLevels": "The healing increases by 10 for each spell slot level above 6."
   },
   "meta": {
@@ -39,6 +39,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

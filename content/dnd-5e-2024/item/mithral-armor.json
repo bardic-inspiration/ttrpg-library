@@ -25,7 +25,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "Mithral is a light, flexible metal. Armor made of this substance can be worn under normal clothes. If the armor normally imposes Disadvantage on Dexterity (Stealth) checks or has a Strength requirement, the mithral version of the armor doesn't."
+    "effect": "Mithral is a light, flexible metal. Armor made of this substance can be worn under normal clothes. If the armor normally imposes {ref:glossary/disadvantage} on Dexterity (Stealth) checks or has a Strength requirement, the mithral version of the armor doesn't."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -35,6 +35,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

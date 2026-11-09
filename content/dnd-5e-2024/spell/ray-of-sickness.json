@@ -28,7 +28,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You shoot a greenish ray at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 2d8 Poison damage and has the Poisoned condition until the end of your next turn.",
+    "effect": "You shoot a greenish ray at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 2d8 Poison damage and has the {ref:condition/poisoned} condition until the end of your next turn.",
     "higherLevels": "The damage increases by 1d8 for each spell slot level above 1."
   },
   "meta": {
@@ -39,6 +39,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

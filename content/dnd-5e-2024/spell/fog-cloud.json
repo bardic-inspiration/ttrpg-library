@@ -32,7 +32,7 @@
       "unit": "hour",
       "concentration": true
     },
-    "effect": "You create a 20-foot-radius Sphere of fog centered on a point within range. The Sphere is Heavily Obscured. It lasts for the duration or until a strong wind (such as one created by *{ref:spell/gust-of-wind}*) disperses it.",
+    "effect": "You create a 20-foot-radius {ref:glossary/sphere} of fog centered on a point within range. The Sphere is {ref:glossary/heavily-obscured}. It lasts for the duration or until a strong wind (such as one created by *{ref:spell/gust-of-wind}*) disperses it.",
     "higherLevels": "The fog's radius increases by 20 feet for each spell slot level above 1."
   },
   "meta": {
@@ -43,6 +43,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

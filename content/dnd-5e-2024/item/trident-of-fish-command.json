@@ -30,7 +30,7 @@
         "saveDc": 15
       }
     ],
-    "effect": "This magic weapon has 3 charges, and it regains 1d3 expended charges daily at dawn. While you carry it, you can expend 1 charge to cast *{ref:spell/dominate-beast}* (save DC 15) from it on a Beast that has a Swim Speed."
+    "effect": "This magic weapon has 3 charges, and it regains 1d3 expended charges daily at dawn. While you carry it, you can expend 1 charge to cast *{ref:spell/dominate-beast}* (save DC 15) from it on a Beast that has a {ref:glossary/swim-speed}."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

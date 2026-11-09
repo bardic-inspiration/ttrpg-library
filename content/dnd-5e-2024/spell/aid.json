@@ -36,8 +36,8 @@
       "unit": "hour",
       "concentration": false
     },
-    "effect": "Choose up to three creatures within range. Each target's Hit Point maximum and current Hit Points increase by 5 for the duration.",
-    "higherLevels": "Each target's Hit Points increase by 5 for each spell slot level above 2."
+    "effect": "Choose up to three creatures within range. Each target's Hit Point maximum and current {ref:glossary/hit-points} increase by 5 for the duration.",
+    "higherLevels": "Each target's {ref:glossary/hit-points} increase by 5 for each spell slot level above 2."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -47,6 +47,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

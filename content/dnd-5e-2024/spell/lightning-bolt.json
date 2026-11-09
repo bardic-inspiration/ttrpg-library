@@ -30,7 +30,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "A stroke of lightning forming a 100-foot-long, 5-foot-wide Line blasts out from you in a direction you choose. Each creature in the Line makes a Dexterity saving throw, taking 8d6 Lightning damage on a failed save or half as much damage on a successful one.",
+    "effect": "A stroke of lightning forming a 100-foot-long, 5-foot-wide {ref:glossary/line} blasts out from you in a direction you choose. Each creature in the Line makes a Dexterity saving throw, taking 8d6 Lightning damage on a failed save or half as much damage on a successful one.",
     "higherLevels": "The damage increases by 1d6 for each spell slot level above 3."
   },
   "meta": {
@@ -41,6 +41,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

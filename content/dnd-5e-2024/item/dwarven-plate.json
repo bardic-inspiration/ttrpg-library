@@ -20,7 +20,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "While wearing this armor, you gain a +2 bonus to Armor Class. In addition, if an effect moves you against your will along the ground, you can take a Reaction to reduce the distance you are moved by up to 10 feet."
+    "effect": "While wearing this armor, you gain a +2 bonus to {ref:glossary/armor-class}. In addition, if an effect moves you against your will along the ground, you can take a {ref:glossary/reaction} to reduce the distance you are moved by up to 10 feet."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -30,6 +30,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

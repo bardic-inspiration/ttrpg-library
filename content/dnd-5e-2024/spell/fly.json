@@ -33,7 +33,7 @@
       "unit": "minute",
       "concentration": true
     },
-    "effect": "You touch a willing creature. For the duration, the target gains a Fly Speed of 60 feet and can hover. When the spell ends, the target falls if it is still aloft unless it can stop the fall.",
+    "effect": "You touch a willing creature. For the duration, the target gains a {ref:glossary/fly-speed} of 60 feet and can hover. When the spell ends, the target falls if it is still aloft unless it can stop the fall.",
     "higherLevels": "You can target one additional creature for each spell slot level above 3."
   },
   "meta": {
@@ -44,6 +44,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -34,7 +34,7 @@
       "unit": "minute",
       "concentration": true
     },
-    "effect": "You launch a sunbeam in a 5-foot-wide, 60-foot-long Line. Each creature in the Line makes a Constitution saving throw. On a failed save, a creature takes 6d8 Radiant damage and has the Blinded condition until the start of your next turn. On a successful save, it takes half as much damage only.\n\nUntil the spell ends, you can take a Magic action to create a new Line of radiance.\n\nFor the duration, a mote of brilliant radiance shines above you. It sheds Bright Light in a 30-foot radius and Dim Light for an additional 30 feet. This light is sunlight."
+    "effect": "You launch a sunbeam in a 5-foot-wide, 60-foot-long {ref:glossary/line}. Each creature in the Line makes a Constitution saving throw. On a failed save, a creature takes 6d8 Radiant damage and has the {ref:condition/blinded} condition until the start of your next turn. On a successful save, it takes half as much damage only.\n\nUntil the spell ends, you can take a {ref:glossary/magic} action to create a new Line of radiance.\n\nFor the duration, a mote of brilliant radiance shines above you. It sheds {ref:glossary/bright-light} in a 30-foot radius and {ref:glossary/dim-light} for an additional 30 feet. This light is sunlight."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -44,6 +44,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

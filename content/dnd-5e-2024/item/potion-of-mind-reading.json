@@ -10,7 +10,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "When you drink this potion, you gain the effect of the *{ref:spell/detect-thoughts}* spell (save DC 13) for 10 minutes (no Concentration required).\n\nThis potion's dense, purple liquid has an ovoid cloud of pink floating in it."
+    "effect": "When you drink this potion, you gain the effect of the *{ref:spell/detect-thoughts}* spell (save DC 13) for 10 minutes (no {ref:glossary/concentration} required).\n\nThis potion's dense, purple liquid has an ovoid cloud of pink floating in it."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

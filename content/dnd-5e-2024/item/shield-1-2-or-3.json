@@ -31,7 +31,7 @@
     "attunement": {
       "required": false
     },
-    "effect": "While holding this Shield, you have a bonus to Armor Class determined by the Shield's rarity, in addition to the Shield's normal bonus to AC."
+    "effect": "While holding this {ref:equipment/shield}, you have a bonus to {ref:glossary/armor-class} determined by the Shield's rarity, in addition to the Shield's normal bonus to AC."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -41,6 +41,7 @@
         178
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

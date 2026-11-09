@@ -10,7 +10,7 @@
     "attunement": {
       "required": true
     },
-    "effect": "While wearing these bracers, you have proficiency with the Longbow and Shortbow, and you gain a +2 bonus to damage rolls made with such weapons."
+    "effect": "While wearing these bracers, you have proficiency with the {ref:equipment/longbow} and {ref:equipment/shortbow}, and you gain a +2 bonus to damage rolls made with such weapons."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

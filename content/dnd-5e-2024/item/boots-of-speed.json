@@ -10,7 +10,7 @@
     "attunement": {
       "required": true
     },
-    "effect": "While you wear these boots, you can take a Bonus Action to click the boots' heels together. If you do, the boots double your Speed, and any creature that makes an Opportunity Attack against you has Disadvantage on the attack roll. If you click your heels together again, you end the effect.\n\nWhen you've used the boots' property for a total of 10 minutes, the magic ceases to function for you until you finish a Long Rest."
+    "effect": "While you wear these boots, you can take a {ref:glossary/bonus-action} to click the boots' heels together. If you do, the boots double your {ref:glossary/speed}, and any creature that makes an Opportunity Attack against you has {ref:glossary/disadvantage} on the attack roll. If you click your heels together again, you end the effect.\n\nWhen you've used the boots' property for a total of 10 minutes, the magic ceases to function for you until you finish a {ref:glossary/long-rest}."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -20,6 +20,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

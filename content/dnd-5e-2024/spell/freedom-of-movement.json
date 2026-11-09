@@ -34,7 +34,7 @@
       "unit": "hour",
       "concentration": false
     },
-    "effect": "You touch a willing creature. For the duration, the target's movement is unaffected by Difficult Terrain, and spells and other magical effects can neither reduce the target's Speed nor cause the target to have the Paralyzed or Restrained conditions. The target also has a Swim Speed equal to its Speed.\n\nIn addition, the target can spend 5 feet of movement to automatically escape from nonmagical restraints, such as manacles or a creature imposing the Grappled condition on it.",
+    "effect": "You touch a willing creature. For the duration, the target's movement is unaffected by {ref:glossary/difficult-terrain}, and spells and other magical effects can neither reduce the target's {ref:glossary/speed} nor cause the target to have the {ref:condition/paralyzed} or {ref:condition/restrained} conditions. The target also has a {ref:glossary/swim-speed} equal to its Speed.\n\nIn addition, the target can spend 5 feet of movement to automatically escape from nonmagical restraints, such as manacles or a creature imposing the {ref:condition/grappled} condition on it.",
     "higherLevels": "You can target one additional creature for each spell slot level above 4."
   },
   "meta": {
@@ -45,6 +45,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

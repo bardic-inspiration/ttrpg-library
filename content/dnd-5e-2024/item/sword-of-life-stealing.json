@@ -32,7 +32,7 @@
     "attunement": {
       "required": true
     },
-    "effect": "When you attack a creature with this magic weapon and roll a 20 on the d20 for the attack roll, that target takes an extra 15 Necrotic damage if it isn't a Construct or an Undead, and you gain Temporary Hit Points equal to the amount of Necrotic damage taken."
+    "effect": "When you attack a creature with this magic weapon and roll a 20 on the d20 for the attack roll, that target takes an extra 15 Necrotic damage if it isn't a Construct or an Undead, and you gain {ref:glossary/temporary-hit-points} equal to the amount of Necrotic damage taken."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -42,6 +42,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

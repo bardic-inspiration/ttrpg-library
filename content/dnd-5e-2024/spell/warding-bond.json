@@ -33,7 +33,7 @@
       "unit": "hour",
       "concentration": false
     },
-    "effect": "You touch another creature that is willing and create a mystic connection between you and the target until the spell ends. While the target is within 60 feet of you, it gains a +1 bonus to AC and saving throws, and it has Resistance to all damage. Also, each time it takes damage, you take the same amount of damage.\n\nThe spell ends if you drop to 0 Hit Points or if you and the target become separated by more than 60 feet. It also ends if the spell is cast again on either of the connected creatures."
+    "effect": "You touch another creature that is willing and create a mystic connection between you and the target until the spell ends. While the target is within 60 feet of you, it gains a +1 bonus to AC and saving throws, and it has {ref:glossary/resistance} to all damage. Also, each time it takes damage, you take the same amount of damage.\n\nThe spell ends if you drop to 0 {ref:glossary/hit-points} or if you and the target become separated by more than 60 feet. It also ends if the spell is cast again on either of the connected creatures."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -43,6 +43,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }
