@@ -122,11 +122,17 @@ Each page in a ruleset's `rules/pages.json` builds at
   collide. A primitive's section shows its name and its rules: with its
   type's body part when its registry template has one (a condition's
   effects, or equipment's lines, as on its card), otherwise its rules text as
-  a paragraph when that is all it has (a weapon property), or its `stats` as
+  paragraphs when that is all it has (a weapon property), its `tag` in
+  brackets after its name when it has one (a glossary term, "Attack
+  [Action]"), or its `stats` as
   labeled lines (the group it sits in isn't repeated). A group's shows its name, its `note`,
   and its `text`. Each lists its forward refs and back-refs under
   the ruleset's labels, like a detail page's Links. A union group lists its
   members as links.
+- **Cross-listed primitives**, from a primitives block's `crossList`: each
+  sits among the block's primitives by name as a heading with its type in
+  brackets, "Blinded [Condition]", linked to its section on its own page,
+  with no anchor here.
 - **Its extensions**, at the bottom: the extensions whose primitives would
   sit on this page, by type or by group, in a list with a search box that
   narrows it as you type, each linked to its card.

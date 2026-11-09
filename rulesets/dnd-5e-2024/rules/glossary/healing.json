@@ -1,0 +1,8 @@
+{
+  "type": "glossary",
+  "id": "healing",
+  "name": "Healing",
+  "stats": {
+    "text": "Healing is how you regain Hit Points. *See also* \"Playing the Game\" (\"Damage and Healing\")."
+  }
+}

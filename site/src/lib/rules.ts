@@ -3,7 +3,7 @@
 // already run in build:index, so the data here is known good.
 
 import type { RefLabels, RulesetDefinition, RulesetModule } from '../../../rulesets/module.ts';
-import { GroupTree, extensionPage, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../../lib/rules.ts';
+import { GroupTree, byName, extensionPage, type PageBlock, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../../lib/rules.ts';
 import type { Links } from '../../../scripts/validate/refs.ts';
 import { entryNames, linkAll, refPaths, refTargets, rulesetModule, type LoadedEntry } from './library.ts';
 import type { RefTarget } from './refs.ts';
@@ -82,6 +82,28 @@ export function rulesContext(
     labelFor: (type, path) => module.refLabels(type, path),
     derive: (primitive) => module.derive(primitive.type, primitive.stats, data),
   };
+}
+
+/**
+ * A tag or type id as printed in brackets after a name: "area-of-effect" reads "Area of
+ * Effect", "condition" reads "Condition".
+ */
+export const tagLabel = (id: string): string =>
+  id
+    .split('-')
+    .map((word, i) => (i > 0 && ['and', 'of', 'the'].includes(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)))
+    .join(' ');
+
+/**
+ * What a primitives block shows, by name: its type's primitives, and each cross-listed type's
+ * primitives marked `cross`, which link to their own page instead of being shown here.
+ */
+export function blockPrimitives(data: RulesData, block: Extract<PageBlock, { kind: 'primitives' }>): { primitive: Primitive; cross: boolean }[] {
+  const others = new Set(block.crossList ?? []);
+  return data.primitives
+    .filter((p) => p.type === block.type || others.has(p.type))
+    .sort(byName)
+    .map((primitive) => ({ primitive, cross: primitive.type !== block.type }));
 }
 
 /** The extensions listed at the bottom of one rules page. */

@@ -290,6 +290,11 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Equipment text and rules prose link each exact mention of a condition or equipment as they're transcribed; plurals and names inside a longer capitalized phrase stay plain, and "Ammunition" stays plain because it names the property. | Linking is part of authoring (#111) | #226 |
 | Custom equipment filters by category, group, cost, and weapon damage type, sorts by cost, and has no gap buckets. Filters on weapon properties and mastery wait for the filter tree. | Those facets are lists of refs, which need the tree's ref labels (#235) | #226 |
 | A base item renders as linked segments in the item card's subtitle. | A link's text is a group's qualifier, which a `{ref:…}` token can't render | #226 |
+| Glossary terms are the primitive-only rules type `glossary`, keys `glossary/<id>`: a term's name without its bracketed tag, the tag as a field, and its definition as one `text`, with the "See also" sentence as printed. The Glossary is the first rules page. | P3, P5: the tag is data, and the text reads word for word | #227 |
+| A primitives block may cross-list other rules types: their primitives sit among its own by name as "Name [Type]", linked to their own page, without being placed there. The Glossary cross-lists the conditions. | P3: a condition is stored once; P4: the cross-listing is data | #227 |
+| A primitive whose stats are only `text` and an optional `tag` renders as paragraphs, its tag in brackets after its name. | P4: the glossary needs no template | #227 |
+| The glossary's run-in lists (the actions, areas of effect, conditions, and creature types), printed in columns, are bulleted lists in alphabetical order; its two-up tables (Object Armor Class, Water and Food Needs per Day) are single tables in reading order; the abbreviations are a list of bold abbreviations with their meanings. | The markdown subset has no columns, and the abbreviations have no printed header row | #227 |
+| Glossary text is plain; its mentions of other terms, conditions, and equipment become links in the link pass. | One pass applies the link rule to every rules text (#228) | #227 |
 
 ### UI
 

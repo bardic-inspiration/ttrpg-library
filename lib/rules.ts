@@ -33,7 +33,7 @@ export interface ProseSection {
   sections?: ProseSection[];
 }
 
-export type PageBlock = (Omit<ProseSection, 'title'> & { title?: string; kind: 'prose' }) | { kind: 'primitives'; type: string } | { kind: 'group'; group: string };
+export type PageBlock = (Omit<ProseSection, 'title'> & { title?: string; kind: 'prose' }) | { kind: 'primitives'; type: string; crossList?: string[] } | { kind: 'group'; group: string };
 
 export interface RulesPage {
   id: string;

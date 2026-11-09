@@ -21,8 +21,9 @@ P4 (a new type or extension is data, not code), and P5 (SRD fidelity).
   ([Pages and navigation](../../docs/site.md#pages-and-navigation)).
 - Damage types, skills, creature types, sizes, and abilities are closed
   lists in `rulesets/dnd-5e-2024/tables.json` and the `common.schema.json`
-  enums. Conditions and equipment are rules types
-  ([Conditions](../../docs/rulesets.md#conditions), [Equipment](../../docs/rulesets.md#equipment)).
+  enums. Glossary terms, conditions, and equipment are rules types
+  ([Glossary](../../docs/rulesets.md#glossary), [Conditions](../../docs/rulesets.md#conditions),
+  [Equipment](../../docs/rulesets.md#equipment)), on rules pages.
 - Adding a type: [Extending](../../docs/rulesets.md#extending).
 
 ## Design
@@ -42,10 +43,6 @@ shown on rules pages, and the custom additions, **ruleset extensions** shown
 as cards. That mechanism is built ([Rules data](../../docs/rulesets.md#rules-data));
 extensions are authored like any content entry (a request, the `generate`
 skill, a content PR).
-
-| Rules type | Primitives | Extensions in v2 | Rules page |
-|---|---|---|---|
-| Glossary term | Every SRD Rules Glossary term | None | Glossary |
 
 Abilities, damage types, skills, creature types, and sizes stay closed lists
 in v2. User content can't extend them.
@@ -91,32 +88,12 @@ still add:
   group by type and exact name, so `srd-coverage` proves the rules data is
   complete. Primitives have no tier.
 
-### Rules pages
-
-The Glossary page has the Glossary Conventions and abbreviations as its
-intro, then every glossary term. Each condition appears at its alphabetical
-place as "Name [Condition]", linked to its section on the Conditions page;
-it isn't stored twice.
-
 ### Fields
 
 Each type's stored inputs, derived values, consistency checks, guideline,
 link fields and labels, registry facets, and gap buckets. A field that takes
 a link to a rules type takes a typed ref
 ([Shared definitions](../../docs/rulesets.md#shared-definitions)).
-
-#### Glossary term
-
-- **Inputs:** an optional `tag`, one of `action`, `area-of-effect`,
-  `attitude`, or `hazard`, printed in brackets after the name ("Attack
-  [Action]"); and `text`, the definition as printed, `Text`, including its
-  "See also" sentence. Terms tagged Condition are condition primitives
-  ([Rules pages](#rules-pages)).
-- **Derived:** nothing.
-- **Checks:** none beyond the schema.
-- **Links and labels:** tokens in text, such as "See also" mentions of other
-  terms, read "References" / "Referenced by".
-- Primitive-only: no guideline, registry entry, facets, or gap buckets.
 
 #### Creature
 

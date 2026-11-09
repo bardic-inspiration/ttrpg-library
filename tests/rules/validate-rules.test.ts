@@ -186,6 +186,15 @@ describe('rules pages', () => {
     expect(errors).toContain(`${PAGES}: tools: "gear" has groups; show it with group blocks`);
   });
 
+  it('cross-list only other rules types, without placing them', async () => {
+    const pages = await fixtureJson(PAGES);
+    pages[0].blocks[1].crossList = ['gear', 'spell', 'term'];
+    const errors = await errorsWith({ [PAGES]: pages });
+    expect(errors).toContain(`${PAGES}: glossary: cross-listed "spell" is not a rules type of this ruleset`);
+    expect(errors).toContain(`${PAGES}: glossary: "term" can't be cross-listed among its own primitives`);
+    expect(errors.filter((e) => e.includes('more than one page'))).toEqual([]);
+  });
+
   it('must exist when there are primitives', async () => {
     expect(await errorsWith({ [PAGES]: null })).toContain(`${PAGES}: missing: every primitive and group must appear on a rules page`);
   });

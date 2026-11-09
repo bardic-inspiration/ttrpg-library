@@ -1,0 +1,22 @@
+---
+// A cross-listed primitive on a rules page (docs/site.md#rules-pages): its name and its type in
+// brackets, "Blinded [Condition]", linked to its section on its own page. It has no anchor here,
+// since it's shown only there.
+import { ruleKey, type Primitive } from '../../../../lib/rules';
+import { tagLabel, type RulesContext } from '../../lib/rules';
+import { url } from '../../lib/url';
+import Heading from '../templates/parts/Heading.astro';
+
+interface Props {
+  ctx: RulesContext;
+  primitive: Primitive;
+  level: number;
+}
+
+const { ctx, primitive, level } = Astro.props;
+const path = ctx.paths.get(ruleKey(primitive));
+const label = `${primitive.name} [${tagLabel(primitive.type)}]`;
+---
+<section class="rule rule--cross" data-type={primitive.type}>
+  <Heading level={level}>{path ? <a href={url(path)}>{label}</a> : label}</Heading>
+</section>
