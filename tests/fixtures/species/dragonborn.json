@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "dragonborn",
+  "name": "Dragonborn",
+  "summary": "Humanoids of dragon lineage, with a breath weapon and resistance to their ancestor's damage type.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "medium",
+        "height": "about 5–7 feet tall"
+      }
+    ],
+    "speed": 30,
+    "traits": [
+      {
+        "ref": "species-trait/dragonborn-draconic-ancestry"
+      },
+      {
+        "ref": "species-trait/dragonborn-breath-weapon"
+      },
+      {
+        "ref": "species-trait/dragonborn-damage-resistance"
+      },
+      {
+        "ref": "species-trait/dragonborn-darkvision"
+      },
+      {
+        "ref": "species-trait/dragonborn-draconic-flight"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

@@ -73,14 +73,14 @@ the UI redesign lays out (#113).
 ### Components
 
 The component mechanism is built
-([Components](../../docs/content-model.md#components)). Three component types
-serve the three page types:
+([Components](../../docs/content-model.md#components)), and so is
+`species-trait` ([Species](../../docs/rulesets.md#species)). Two component
+types remain, for classes and subclasses:
 
 | Component | Parent lists it in | Is |
 |---|---|---|
 | `class-feature` | a class's or a subclass's `features` | A feature gained at a level: "Level 1: Rage", "Level 3: Frenzy" |
 | `class-option` | a class's `optionLists[].options` | One option of an option list: a Metamagic option, an Eldritch Invocation |
-| `species-trait` | a species' `traits` | One special trait: "Breath Weapon" |
 
 Class and subclass features share one type, because their shape is the same
 and the parent already says which one a feature is. Each is generated with
@@ -90,8 +90,7 @@ leaves the class unchanged.
 
 - **Ids:** `class-feature/barbarian-rage`,
   `class-feature/path-of-the-berserker-frenzy`,
-  `class-option/sorcerer-careful-spell`,
-  `species-trait/dragonborn-breath-weapon`. The Barbarian's "Improved Brutal
+  `class-option/sorcerer-careful-spell`. The Barbarian's "Improved Brutal
   Strike" at levels 13 and 17 is `class-feature/barbarian-improved-brutal-strike`
   and `class-feature/barbarian-improved-brutal-strike-17`.
 - **In the SRD manifest** by type, exact name, and parent key
@@ -135,45 +134,6 @@ a link to one type takes a typed ref
 Built ([Backgrounds](../../docs/rulesets.md#backgrounds)), except one facet:
 **`stats.feat`** becomes an enum facet valued by key and shown by name, with
 the filter tree (#235), and the card shows it then, beside the abilities.
-
-#### Species
-
-- **Inputs:**
-  - `creatureType`: a creature type from the closed list. Every SRD species
-    is Humanoid.
-  - `sizes`: one or two `{ size, height }`, printed as "Medium (about 5–7
-    feet tall)"; with two, joined by "or" and followed by ", chosen when you
-    select this species", as the SRD prints them.
-  - `speed`: feet, printed "30 feet".
-  - `traits`: typed refs to its species traits, in printed order, at least
-    one.
-  - `intro`: the sentence that opens the traits, `Line`. Optional. The
-    template writes "As a Dragonborn, you have these special traits.", with
-    "an" before a vowel; the Tiefling's "you have the following special
-    traits" sets `intro`.
-- **Derived:** `sizes`, the list of sizes, for the facet.
-- **Checks:** speed is a multiple of 5 (error).
-- **Guideline:** `species.md`: a species is a people with its own physiology
-  or magic, not a culture or a class; it's Humanoid unless the request says
-  otherwise; its traits are balanced against the SRD species' (most have a
-  sense, a defense, and one or two signature traits); a trait that grows
-  with level says so in its text, as Draconic Flight does.
-- **Links and labels:** structural links to traits aren't listed; tokens in
-  trait text, such as the spells in the Elven Lineages table, read
-  "References" / "Referenced by".
-- **Registry facets:** `derived.sizes` (enum, in size order), `stats.speed`
-  (range), and `stats.creatureType`. The card shows sizes and speed, and the
-  default sort is name.
-- **Gap buckets:** none.
-
-##### Species trait
-
-- **Inputs:** `text`, `Text`. A choice among options (Giant Ancestry's
-  boons, Gnomish Lineage) is titled paragraphs in the text, and a table
-  (Draconic Ancestors, Fiendish Legacies) is a table in the text, with tokens
-  for its spells.
-- The page prints each trait as a bold-titled paragraph, in the species'
-  order: "**Darkvision.** You have Darkvision with a range of 60 feet."
 
 #### Class
 
@@ -325,8 +285,6 @@ The hardest SRD cases, which become the build's fixtures:
 - **The Paladin:** half-caster slots, and Oath of Devotion Spells as a table
   in a subclass feature.
 - **The Druid:** Circle of the Land Spells, four tables in one feature.
-- **The Human and the Tiefling:** two sizes, and the Tiefling's own trait
-  intro; the Elf's and Tiefling's tables of spells.
 
 ## Migration
 

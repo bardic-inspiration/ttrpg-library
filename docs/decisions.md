@@ -325,6 +325,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A registry facet may use the `ability` format, which reads an ability key by its full name from `tables.json`. | Backgrounds filter by ability score, stored as keys | #231 |
 | The background card's feat and the `stats.feat` facet wait for the filter tree. | A facet over refs needs the tree's ref labels (#235), as condition immunities do | #231 |
 | `linking.md` is deleted: v1's link standard carries into v2 unchanged, and the first v2 types declare their link fields in `refs.ts` and their schemas. | Nothing in it remained to build | #231 |
+| A template may place a page type's components itself (`PLACES_COMPONENTS`); the species page prints its traits as anchored, bold-italic titled paragraphs rather than generic sections. | P5, P6: the SRD prints traits as run-in paragraphs | #232 |
+| The species page words "As a/an <Name>, …" with "an" before a vowel, and `intro` overrides it. | P6: eight of nine SRD species share the sentence | #232 |
 
 ### UI
 

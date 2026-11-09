@@ -1,0 +1,16 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "dragonborn-darkvision",
+  "name": "Darkvision",
+  "stats": {
+    "text": "You have Darkvision with a range of 60 feet."
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

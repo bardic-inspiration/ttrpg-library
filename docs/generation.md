@@ -212,8 +212,8 @@ on-demand prompts are the scheduled prompt with inputs added.
 
 Gap fill never adds a rules extension, so a rules type that takes extensions,
 such as `condition` or `equipment`, has no `gapBuckets`; its entries come only from requests.
-A content type that comes only by request, such as `background`, has no
-`gapBuckets` either.
+A content type that comes only by request, such as `background` or `species`,
+has no `gapBuckets` either.
 A type's `gapBuckets` in `config/types.json` says how gap fill partitions it: a
 list of axes, each partitioning one of the type's facets. The buckets are every
 combination of one value per axis, so one axis partitions the type and two
