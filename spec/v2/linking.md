@@ -53,13 +53,6 @@ a new mechanism:
 The type extension (`types.md`, #112) declares these fields and
 labels for each new type.
 
-### Links to components
-
-A **component**, a hidden sub-entry of a page type such as a class feature
-(`types.md`), is linked like an entry or a ruleset primitive
-([Rules data](../../docs/rulesets.md#rules-data)): by its own `<type>/<id>`
-key, rendered as a link to its anchor on its parent's page.
-
 ## Cases
 
 - `creature/lich`: a creature's spellcasting lists ref spells; they read
@@ -78,9 +71,9 @@ None. Existing entries already follow the standard.
 
 ## Done when
 
-There is nothing to build in this area alone. Each part goes with the types
-build PR that first exercises it: "Links to components" with the first page
-type, and the rest of the file with the first v2 type with link fields.
+There is nothing to build in this area alone. The file goes with the first
+v2 type with link fields. Links to components are built
+([Components](../../docs/content-model.md#components)).
 
 ## Out of scope
 

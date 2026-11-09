@@ -5,7 +5,7 @@
 // page passes its export controls (an island) in the `export` slot.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
-import { groupRefs, type RefTarget } from '../../lib/refs';
+import { groupPageRefs, groupRefs, type RefTarget } from '../../lib/refs';
 import { provenance, tagChips } from '../../lib/detail';
 import { renderMarkdown } from '../../lib/markdown';
 import { present } from '../../lib/display';
@@ -29,7 +29,11 @@ const { entry, derived } = loaded;
 const typeLabel =
   (registry as Record<string, { types: Record<string, { label: string }> }>)[entry.ruleset]?.types[entry.type]?.label ?? entry.type;
 const module = rulesetModule(entry.ruleset);
-const links = groupRefs(entry.type, loaded.refs, loaded.refBy, targets, (type, path) => module.refLabels(type, path));
+const labelFor = (type: string, path: string) => module.refLabels(type, path);
+// A page type's links are its own and its components' (docs/content-model.md#components).
+const links = loaded.components
+  ? groupPageRefs(loaded, loaded.components, targets, labelFor)
+  : groupRefs(entry.type, loaded.refs, loaded.refBy, targets, labelFor);
 const linkGroups = [...links.forward, ...links.back];
 const chips = tagChips(entry);
 const source = provenance(entry);
@@ -49,7 +53,7 @@ const source = provenance(entry);
     </div>
   </header>
 
-  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} mode="screen" level={2} />
+  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} mode="screen" level={2} />
 
   {present(entry.description) && (
     <section class="entry-detail__lore" aria-labelledby="lore-heading">

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/fixture-rules/chapter.schema.json",
+  "description": "A component of a manual.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "text"
+  ],
+  "properties": {
+    "text": {
+      "$ref": "common.schema.json#/$defs/Text"
+    },
+    "level": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

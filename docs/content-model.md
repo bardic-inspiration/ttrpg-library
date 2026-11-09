@@ -194,6 +194,49 @@ error, as is a malformed one such as `{ref:zombie}`.
 - A batch may add its own dependencies, such as a creature plus the new spell
   it casts.
 
+### Components
+
+A **page type** is shown as a page assembled from **components**: hidden
+sub-entries, each its own file, read only on their parent's page. A class's
+features and a species' traits are components.
+
+- **Registered in `ruleset.json`** under `components`, each with the types
+  that may list it: `"components": [{ "type": "class-feature", "parents":
+  ["class", "subclass"] }]`. A component type has a schema and no registry
+  entry, so it has no card, gallery, facets, guideline, or gap buckets
+  ([rulesets.md](rulesets.md#the-ruleset-module)).
+- **Stored like an entry**, at `content/<ruleset>/<type>/<id>.json`, with the
+  component envelope (`schemas/component.schema.json`): `ruleset`, `type`,
+  `id`, `name`, `stats`, and `meta`, and no `summary`, `description`, `tags`,
+  or `image`. The validator picks the envelope by whether the ruleset lists
+  the type under `components`.
+- **The parent lists its components**, in order, by `{ "ref": … }` objects
+  in its `stats`, and a component doesn't name its parent: its parent is the
+  one entry whose stats hold a ref object to it. A `{ref:…}` token is a
+  mention, not a listing. Each component is listed by exactly one entry, of a
+  type that may list it, and only once (errors).
+- **Its id starts with its parent's id and a hyphen**, then the slug of its
+  name: `class-feature/barbarian-rage`. Names repeat across parents ("Extra
+  Attack"), so a component's name is unique within its parent instead of its
+  type, and the near-duplicate warning skips it. A name the parent prints
+  again at a later level adds the level to the first one's id:
+  `barbarian-improved-brutal-strike-17` (error otherwise).
+- **Hidden from the library:** no `library.json` record, gallery card, search
+  result, detail page, raw data file, or print key of its own. Its parent's
+  search text holds its name and text, so a search for a feature finds its
+  class ([site.md](site.md#index-build)).
+- **On its parent's page,** after the parent's template, each component is a
+  section with its name as a heading, anchored at `#<type>-<id>`
+  ([site.md](site.md#detail-page)).
+- **Linked like an entry,** by its own `<type>/<id>` key, from a ref object or
+  a `{ref:…}` token. The link renders its name, linked to its anchor on its
+  parent's page, and a link to a missing component fails like any other. In
+  a page's Links and in back-links elsewhere, a component reads "Parent ›
+  Component", "Barbarian › Rage", since many parents share component names.
+- **Its links are its parent page's.** A page's Links list its own links and
+  its components', except the links among the page's own parts: the parent's
+  list of its components, and a component's link to its parent or a sibling.
+
 ### Situational fields
 
 Many `stats` fields apply to some entries and not others: a spell's material
@@ -338,7 +381,8 @@ Checks for every type and ruleset:
 | Check | Level |
 |---|---|
 | File path matches `ruleset`, `type`, `id` | error |
-| ID unique within its type; name unique within its type, ignoring case | error |
+| ID unique within its type; name unique within its type, ignoring case (a component's within its parent) | error |
+| A component is listed by exactly one parent of an allowed type, and its id starts with the parent's | error |
 | Near-duplicate names, unless both entries are SRD entries | warning |
 | Every ref resolves and its type matches | error |
 | Text fields use only the markdown subset | error |
@@ -354,7 +398,8 @@ nothing invalid reaches the site.
 ## Where the rules live
 
 - `schemas/envelope.schema.json`: the envelope, tags, meta, and image, with a
-  description of each field.
+  description of each field. `schemas/component.schema.json`: the component
+  envelope.
 - `scripts/validate/`: the CLI, the schema stage, the checks for every type,
   the text checks (`text.ts`), and ref resolution and back-references
   (`refs.ts`).

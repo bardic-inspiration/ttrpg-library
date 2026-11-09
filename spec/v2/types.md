@@ -73,7 +73,9 @@ the UI redesign lays out (#113).
 
 ### Components
 
-Three component types serve the three page types:
+The component mechanism is built
+([Components](../../docs/content-model.md#components)). Three component types
+serve the three page types:
 
 | Component | Parent lists it in | Is |
 |---|---|---|
@@ -82,46 +84,17 @@ Three component types serve the three page types:
 | `species-trait` | a species' `traits` | One special trait: "Breath Weapon" |
 
 Class and subclass features share one type, because their shape is the same
-and the parent already says which one a feature is.
+and the parent already says which one a feature is. Each is generated with
+its parent, under the parent's guideline. A subclass is not a component: it
+names its class ([Subclass](#subclass)), so a custom subclass of an SRD class
+leaves the class unchanged.
 
-- **Registered in `ruleset.json`** under a `components` list, separate from
-  `types` and `rules`, each with the parent types that may list it:
-  `"components": [{ "type": "class-feature", "parents": ["class", "subclass"] }]`.
-  A component type has a schema and no registry entry, guideline, facets,
-  or gap buckets. It's generated with its parent, under the parent's
-  guideline.
-- **Stored like an entry**, at `content/<ruleset>/<type>/<id>.json`, with an
-  envelope of `ruleset`, `type`, `id`, `name`, `stats`, and `meta`. It has
-  no `summary`, `description`, `tags`, or `image`, since it has no card and
-  is read only on its parent's page. `meta.source.srd` marks an SRD
-  component, as on an entry.
-- **Its id is its parent's id, a hyphen, and the slug of its name:**
-  `class-feature/barbarian-rage`, `class-feature/path-of-the-berserker-frenzy`,
-  `class-option/sorcerer-careful-spell`, `species-trait/dragonborn-breath-weapon`.
-  Many names repeat across parents ("Extra Attack", "Darkvision"), so the
-  parent's id keeps keys unique without a numeric suffix. Where one parent
-  prints a name twice, the later one adds its level: the Barbarian's
-  "Improved Brutal Strike" at levels 13 and 17 is
-  `class-feature/barbarian-improved-brutal-strike` and
-  `class-feature/barbarian-improved-brutal-strike-17`. A name is unique
-  within its parent, except for that case, and the near-duplicate name
-  warning skips components.
-- **The parent holds the order.** The parent lists its components by typed
-  ref, and the component doesn't name its parent: the parent is derived from
-  that list. Each component is listed by exactly one parent of an allowed
-  type (error otherwise), so none is orphaned or shared. A subclass is not a
-  component: it names its class ([Subclass](#subclass)), so a custom
-  subclass of an SRD class leaves the class unchanged.
-- **Hidden from the library:** no card, gallery, search record, detail page,
-  or print key of its own. Its anchor on its parent's page is
-  `#<type>-<id>`, as on a rules page, and a link to it renders its name,
-  linked to that anchor ([`linking.md`](linking.md#links-to-components)).
-- **Its links count for its parent's page.** A component's refs and tokens
-  are its own `refs`, and a back-link to a component names its parent and
-  itself, "Barbarian › Ability Score Improvement", linked to the anchor, so
-  twelve classes' "Ability Score Improvement" features read apart. The
-  parent's structural lists (`features`, `options`, `traits`) aren't shown
-  as links on its page, which shows the components themselves.
+- **Ids:** `class-feature/barbarian-rage`,
+  `class-feature/path-of-the-berserker-frenzy`,
+  `class-option/sorcerer-careful-spell`,
+  `species-trait/dragonborn-breath-weapon`. The Barbarian's "Improved Brutal
+  Strike" at levels 13 and 17 is `class-feature/barbarian-improved-brutal-strike`
+  and `class-feature/barbarian-improved-brutal-strike-17`.
 - **In the SRD manifest** by type, exact name, and parent key
   (`"parent": "class/barbarian"`), without tiers, so `srd-coverage` proves
   each parent's components complete.
@@ -452,9 +425,6 @@ its words.
 
 - Each new type validates against its schema, with fixtures for its
   errors.
-- Components don't appear in the library's galleries or search, and each is
-  rendered on its parent's page.
-- Links to components resolve, and a link to a missing one fails CI.
 - Each SRD class's derived Features table and spell list match the SRD's.
 
 ## Out of scope

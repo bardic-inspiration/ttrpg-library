@@ -1,0 +1,49 @@
+---
+// A page type's components, after its template (docs/content-model.md#components, docs/site.md#templates):
+// each a section with its name as a heading and an anchor, `#<type>-<id>`, where a link to it
+// lands. Rules text alone reads as paragraphs; any other stats as labeled lines. The layout
+// is basic until the UI redesign's accordion pages (#237).
+import { anchorId } from '../../../../../lib/rules';
+import { genericLines } from '../../../lib/generic';
+import type { TextRefs } from '../../../lib/markdown';
+import Heading from './Heading.astro';
+import PropertyList from './PropertyList.astro';
+import RulesText from './RulesText.astro';
+
+interface Props {
+  components: { entry: { type: string; id: string; name: string; stats: unknown } }[];
+  refs: TextRefs;
+  /** The components' heading level: one below the entry's name. */
+  level: number;
+}
+
+const { components, refs, level } = Astro.props;
+const onlyText = (stats: unknown): stats is { text: string } =>
+  typeof stats === 'object' && stats !== null && Object.keys(stats).length === 1 && typeof (stats as { text?: unknown }).text === 'string';
+---
+<div class="page-components">
+  {components.map(({ entry }) => (
+    <section class="page-component" id={anchorId(`${entry.type}/${entry.id}`)} data-type={entry.type}>
+      <Heading level={level}>{entry.name}</Heading>
+      {onlyText(entry.stats) ? (
+        <RulesText text={entry.stats.text} refs={refs} />
+      ) : (
+        <PropertyList lines={genericLines(entry.stats, refs.names)} refs={refs} />
+      )}
+    </section>
+  ))}
+</div>
+
+<style>
+  @layer components {
+    .page-components,
+    .page-component {
+      display: grid;
+      gap: var(--space-s);
+    }
+
+    .page-component {
+      gap: var(--space-2xs);
+    }
+  }
+</style>

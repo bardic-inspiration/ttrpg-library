@@ -1,4 +1,5 @@
-// A small ruleset for testing rules data (docs/rulesets.md#rules-data): one content type, `note`;
+// A small ruleset for testing rules data (docs/rulesets.md#rules-data) and page types: content types
+// `note` and `manual` (a page type with `chapter` components);
 // a primitive-only rules type, `term`; and a rules type with groups and
 // extensions, `gear`.
 

@@ -13,6 +13,8 @@ export interface EntryHead {
   image?: string;
   /** `meta.source.srd` is true (docs/content-model.md#srd-and-custom-entries). */
   srd?: boolean;
+  /** A component, whose name is unique within its parent rather than its type (docs/content-model.md#components). */
+  component?: boolean;
 }
 
 export interface FileIssue {
@@ -54,7 +56,8 @@ export function editDistance(a: string, b: string): number {
 /**
  * Unique IDs and names within a type (errors), and near-duplicate names within
  * a type (warnings) (docs/content-model.md#ids-and-names). A spell and a creature may share a name. Two SRD
- * entries are never warned about, since neither name can change.
+ * entries are never warned about, since neither name can change. A component's name is checked
+ * within its parent instead (`checkComponents`).
  */
 export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
   const issues: FileIssue[] = [];
@@ -65,6 +68,7 @@ export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
     const sameId = byId.get(idKey);
     if (sameId) issues.push({ level: 'error', file: entry.file, message: `id "${entry.id}" is already used by ${sameId.file}` });
     else byId.set(idKey, entry);
+    if (entry.component) continue;
     const key = `${entry.type}/${entry.name.toLowerCase()}`;
     const sameName = byName.get(key);
     if (sameName) issues.push({ level: 'error', file: entry.file, message: `name "${entry.name}" is already used by ${sameName.file}` });
@@ -73,7 +77,7 @@ export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
   for (let i = 0; i < entries.length; i++) {
     for (let j = i + 1; j < entries.length; j++) {
       const [a, b] = [entries[i], entries[j]];
-      if (!a || !b || a.type !== b.type || a.name.toLowerCase() === b.name.toLowerCase() || (a.srd && b.srd)) continue;
+      if (!a || !b || a.type !== b.type || a.component || a.name.toLowerCase() === b.name.toLowerCase() || (a.srd && b.srd)) continue;
       if (editDistance(normalizeName(a.name), normalizeName(b.name)) <= 2) {
         issues.push({ level: 'warning', file: b.file, message: `name "${b.name}" is close to "${a.name}" (${a.file})` });
       }
@@ -99,4 +103,63 @@ export async function checkImage(entry: EntryHead, assetsRoot: string): Promise<
   if (size > IMAGE_MAX_BYTES) return [{ level: 'error', file: entry.file, message: `image is ${kb} KB, above the 2 MB limit` }];
   if (size > IMAGE_WARN_BYTES) return [{ level: 'warning', file: entry.file, message: `image is ${kb} KB, above 500 KB` }];
   return [];
+}
+
+/** A component and the entries whose stats list it, by `{ ref }` object (docs/content-model.md#components). */
+export interface ComponentListing {
+  file: string;
+  type: string;
+  id: string;
+  name: string;
+  /** The types that may list it, from ruleset.json `components`. */
+  parents: string[];
+  listedBy: { file: string; type: string; id: string }[];
+}
+
+/**
+ * Each component is listed by exactly one entry, of a type that may list it,
+ * and its id starts with its parent's id and a hyphen. Within one parent, a
+ * name repeats only where the later id adds a number (a level) to the earlier
+ * one: "Improved Brutal Strike" at 13 and 17. Errors.
+ */
+export function checkComponents(components: ComponentListing[]): FileIssue[] {
+  const issues: FileIssue[] = [];
+  const error = (file: string, message: string) => issues.push({ level: 'error', file, message });
+  const byParent = new Map<string, ComponentListing[]>();
+  for (const c of components) {
+    const parents = [...new Map(c.listedBy.map((p) => [`${p.type}/${p.id}`, p])).values()];
+    const key = `${c.type}/${c.id}`;
+    if (parents.length === 0) {
+      error(c.file, `${key} is listed by no parent; a ${c.parents.join(' or ')} lists it by ref in its stats`);
+      continue;
+    }
+    if (parents.length > 1) {
+      error(c.file, `${key} is listed by ${parents.map((p) => `${p.type}/${p.id}`).join(' and ')}; a component has exactly one parent`);
+      continue;
+    }
+    const parent = parents[0]!;
+    const parentKey = `${parent.type}/${parent.id}`;
+    if (c.listedBy.length > 1) error(c.file, `${key} is listed more than once by ${parentKey}`);
+    if (!c.parents.includes(parent.type)) {
+      error(c.file, `${key} is listed by ${parentKey}, but only a ${c.parents.join(' or ')} may list a ${c.type}`);
+      continue;
+    }
+    if (!c.id.startsWith(`${parent.id}-`)) error(c.file, `id "${c.id}" must start with its parent's id, "${parent.id}-"`);
+    const siblings = byParent.get(parentKey) ?? [];
+    byParent.set(parentKey, [...siblings, c]);
+  }
+  for (const siblings of byParent.values()) {
+    const byName = new Map<string, ComponentListing[]>();
+    for (const c of siblings) byName.set(`${c.type}/${c.name.toLowerCase()}`, [...(byName.get(`${c.type}/${c.name.toLowerCase()}`) ?? []), c]);
+    for (const same of byName.values()) {
+      // The shortest id is the first printing; each later one is it plus a level.
+      const [first, ...later] = [...same].sort((a, b) => a.id.length - b.id.length || a.id.localeCompare(b.id));
+      for (const c of later) {
+        if (!new RegExp(`^${first!.id}-\\d+$`).test(c.id)) {
+          error(c.file, `name "${c.name}" is already used by ${first!.file} in the same parent; a name printed again at a later level adds the level to its id ("${first!.id}-17")`);
+        }
+      }
+    }
+  }
+  return issues;
 }

@@ -19,6 +19,11 @@ export interface RulesetDefinition {
   types: string[];
   /** Rules types, whose primitives are kept in rules/ (docs/rulesets.md#rules-data). Omitted for none. */
   rules?: { type: string; extensions: boolean }[];
+  /**
+   * Component types: hidden sub-entries a page type lists and shows on its page
+   * (docs/content-model.md#components), each with the types that may list it. Omitted for none.
+   */
+  components?: { type: string; parents: string[] }[];
 }
 
 /** How a detail page labels a reference, from each end: "Casts: Frost Lance", "Cast by: Wand of Frost Lances". */

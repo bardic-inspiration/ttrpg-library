@@ -74,6 +74,10 @@ path, or `null`), `facets`, `tags` (or `{}`), `createdAt`, `refs`, `refBy`, and
   markdown-subset field, with markdown and ruleset tokens removed and each
   `{ref:…}` token read as its target's name.
 
+A component ([content-model.md](content-model.md#components)) has no record,
+raw file, or export bundle. Its parent's `search` adds each component's name
+and the same names and text, in the order the parent lists them.
+
 Records are sorted by ruleset, type, then `id`, and the file is written without
 timestamps, so two builds of the same content are byte-identical. The index
 stays lean: full entries and derived values are fetched only for export, from
@@ -246,10 +250,16 @@ indexes.
 ### Detail page
 
 - Art (only when the entry has it), name, type, and summary.
-- The full stat block or card from the type's template.
+- The full stat block or card from the type's template, then a page type's
+  components, in its order: each a section with its name as a heading one
+  level below the entry's, anchored at `#<type>-<id>`, holding its rules text
+  as paragraphs or its other `stats` as the generic lines
+  (`PageComponents`). The layout is basic until the UI redesign (#237).
+  Print and PNG capture render them the same way.
 - `description` as lore, visually distinct from rules text.
 - Forward refs and back-refs as links
-  ([content-model.md](content-model.md#references)).
+  ([content-model.md](content-model.md#references)); a page type's include
+  its components' ([content-model.md](content-model.md#components)).
 - Tags as chips; a chip opens the type gallery filtered by that tag.
 - A provenance line: created and updated dates, and source issues linked to
   GitHub.

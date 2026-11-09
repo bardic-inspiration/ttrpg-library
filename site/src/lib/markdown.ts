@@ -21,7 +21,7 @@ const escapeHtml = (text: string): string =>
 export interface TextRefs {
   names: Map<string, string>;
   ruleset: string;
-  /** Paths under the site base for targets that aren't entries: a primitive's or group's anchor on its rules page. */
+  /** Paths under the site base for targets that aren't entries: a primitive's or group's anchor on its rules page, a component's on its parent's page. */
   paths?: Map<string, string>;
 }
 

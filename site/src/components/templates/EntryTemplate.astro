@@ -1,6 +1,7 @@
 ---
 // Renders an entry with its type's template (docs/site.md#type-registry `template`, docs/site.md#templates),
-// or the generic fallback when the registry names none this site has.
+// or the generic fallback when the registry names none this site has, then a page type's
+// components (docs/content-model.md#components).
 import { templateFor, type TemplateProps } from '../../lib/template';
 import registry from '../../../../config/types.json';
 import ConditionCard from './ConditionCard.astro';
@@ -8,13 +9,14 @@ import CreatureStatBlock from './CreatureStatBlock.astro';
 import EquipmentCard from './EquipmentCard.astro';
 import GenericTemplate from './GenericTemplate.astro';
 import ItemCard from './ItemCard.astro';
+import PageComponents from './parts/PageComponents.astro';
 import SpellCard from './SpellCard.astro';
 
 type Props = TemplateProps;
 
-const { entry } = Astro.props;
+const { entry, names, paths, components: parts = [], level = 2 } = Astro.props;
 const types = (registry as Record<string, { types: Record<string, { template?: string }> }>)[entry.ruleset]?.types;
-const components = {
+const templates = {
   'condition-card': ConditionCard,
   'creature-stat-block': CreatureStatBlock,
   'equipment-card': EquipmentCard,
@@ -22,6 +24,7 @@ const components = {
   'spell-card': SpellCard,
   generic: GenericTemplate,
 };
-const Template = components[templateFor(types?.[entry.type]?.template)];
+const Template = templates[templateFor(types?.[entry.type]?.template)];
 ---
 <Template {...Astro.props} />
+{parts.length > 0 && <PageComponents components={parts} refs={{ names, ruleset: entry.ruleset, paths }} level={level + 1} />}

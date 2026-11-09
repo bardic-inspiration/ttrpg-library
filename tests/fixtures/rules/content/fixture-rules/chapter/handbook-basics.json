@@ -1,0 +1,15 @@
+{
+  "ruleset": "fixture-rules",
+  "type": "chapter",
+  "id": "handbook-basics",
+  "name": "Basics",
+  "stats": {
+    "text": "Carry a {ref:gear/hammer}."
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

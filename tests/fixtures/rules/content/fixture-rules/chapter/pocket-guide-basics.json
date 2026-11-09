@@ -1,0 +1,15 @@
+{
+  "ruleset": "fixture-rules",
+  "type": "chapter",
+  "id": "pocket-guide-basics",
+  "name": "Basics",
+  "stats": {
+    "text": "The short version."
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

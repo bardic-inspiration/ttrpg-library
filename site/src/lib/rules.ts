@@ -5,7 +5,7 @@
 import type { RefLabels, RulesetDefinition, RulesetModule } from '../../../rulesets/module.ts';
 import { GroupTree, byName, extensionPage, type PageBlock, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../../lib/rules.ts';
 import type { Links } from '../../../scripts/validate/refs.ts';
-import { entryNames, linkAll, refPaths, refTargets, rulesetModule, type LoadedEntry } from './library.ts';
+import { allComponents, entryNames, linkAll, refPaths, refTargets, rulesetModule, type Entry, type LoadedEntry } from './library.ts';
 import type { RefTarget } from './refs.ts';
 
 const definitions = import.meta.glob<RulesetDefinition>('../../../rulesets/*/ruleset.json', { eager: true, import: 'default' });
@@ -72,10 +72,11 @@ export function rulesContext(
   return {
     data,
     names: entryNames(all, rules),
-    paths: refPaths(rules),
+    paths: refPaths(rules, all),
     targets: refTargets(all, rules),
+    // Components link too: a rule's back-links include the features that mention it.
     links: linkAll(
-      all.map(({ entry }) => entry),
+      [...all, ...allComponents(all)].map(({ entry }) => entry as Entry),
       rules,
     ),
     extensions: all.filter(({ entry }) => entry.ruleset === data.ruleset && types.has(entry.type)),

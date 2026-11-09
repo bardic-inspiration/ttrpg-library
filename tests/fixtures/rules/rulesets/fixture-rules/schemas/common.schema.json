@@ -5,22 +5,56 @@
     "Ref": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["ref"],
+      "required": [
+        "ref"
+      ],
       "properties": {
-        "ref": { "type": "string", "pattern": "^(note|term|gear)/[a-z0-9-]+$" },
-        "note": { "type": "string", "minLength": 1 }
+        "ref": {
+          "type": "string",
+          "pattern": "^(note|term|gear|manual|chapter)/[a-z0-9-]+$"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "GearRef": {
       "description": "A typed ref: only gear.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["ref"],
+      "required": [
+        "ref"
+      ],
       "properties": {
-        "ref": { "type": "string", "pattern": "^gear/[a-z0-9-]+$" },
-        "note": { "type": "string", "minLength": 1 }
+        "ref": {
+          "type": "string",
+          "pattern": "^gear/[a-z0-9-]+$"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
-    "Text": { "type": "string", "minLength": 1, "markdownSubset": true }
+    "Text": {
+      "type": "string",
+      "minLength": 1,
+      "markdownSubset": true
+    },
+    "ChapterRef": {
+      "description": "A typed ref: only a chapter, a component of a manual.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "pattern": "^chapter/[a-z0-9-]+$"
+        }
+      }
+    }
   }
 }

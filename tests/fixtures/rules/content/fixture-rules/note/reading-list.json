@@ -1,0 +1,16 @@
+{
+  "ruleset": "fixture-rules",
+  "type": "note",
+  "id": "reading-list",
+  "name": "Reading List",
+  "summary": "A note that links a component on its parent's page.",
+  "stats": {
+    "text": "See {ref:chapter/handbook-advanced}."
+  },
+  "meta": {
+    "createdAt": "2026-11-09",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

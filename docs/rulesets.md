@@ -41,7 +41,7 @@ adding a ruleset is adding a folder:
 
 | File | Purpose |
 |---|---|
-| `ruleset.json` | ID, label, SRD version, attribution key, list of types, and the `rules` types ([Rules data](#rules-data)) |
+| `ruleset.json` | ID, label, SRD version, attribution key, list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
 | `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
 | `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`) |
 | `tokens.ts` | Text tokens that render derived values inside prose |
@@ -491,6 +491,7 @@ Balance isn't checked by CI; it's judged in review
 | To add or change | Touch |
 |---|---|
 | A content type | In `rulesets/<ruleset>/`: a schema, a `derive` function if it has formulas, checks if needed, a guideline, and the type in `ruleset.json`. Plus a registry entry and the request form's dropdown; a template only if the generic layout doesn't fit |
+| A component type | In `rulesets/<ruleset>/`: a schema, the type under `components` in `ruleset.json` with its parent types, and a typed ref to it in each parent's schema ([Components](content-model.md#components)) |
 | A rules type | In `rulesets/<ruleset>/`: a schema, the type under `rules` in `ruleset.json`, its primitives under `rules/<type>/`, groups if it has them, and its place in `rules/pages.json`. A type that takes extensions also gets a registry entry and a guideline |
 | A ruleset | A new `rulesets/<ruleset>/` folder, registry entries, an attribution statement, and a licensing review ([licensing.md](licensing.md#new-rulesets)) |
 | A rules formula or table | `tables.json` or `derive.ts`; every entry picks it up on the next build |
