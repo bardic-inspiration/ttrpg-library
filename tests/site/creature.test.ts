@@ -7,6 +7,7 @@ import {
   actionBlock,
   crLine,
   defenseLines,
+  gearLine,
   formatCr,
   hpLine,
   initiativeLine,
@@ -296,6 +297,17 @@ describe('SRD 5.2 forms found by the import pilot (#142)', () => {
     expect(defenseLines(s)).toEqual([
       { label: 'Immunities', value: 'Poison; {ref:condition/charmed} (except from its vampire master), {ref:condition/poisoned}', markdown: true },
     ]);
+  });
+  it('prints gear refs as links, a count as a plural with the count in parentheses (docs/rulesets.md#creatures)', async () => {
+    const { s } = await build({
+      gear: ['Wand', { ref: 'equipment/breastplate' }, { ref: 'equipment/javelin', count: 6 }, { ref: 'equipment/shield', note: 'spiked' }],
+    });
+    expect(gearLine(s)).toEqual({
+      label: 'Gear',
+      value: 'Wand, {ref:equipment/breastplate}, {ref:equipment/javelin}s (6), {ref:equipment/shield} (spiked)',
+      markdown: true,
+    });
+    expect(gearLine({ ...s, gear: undefined })).toBeUndefined();
   });
   it('adds a skill adjust to the derived bonus (#166)', async () => {
     const { s, d } = await build({ skills: { stealth: { proficiency: 'proficient', adjust: 1 } } });

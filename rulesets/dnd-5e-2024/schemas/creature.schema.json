@@ -258,11 +258,23 @@
       }
     },
     "gear": {
-      "description": "Items the creature carries.",
+      "description": "Items the creature carries: a ref to equipment or an item, or plain text for gear that isn't a link target (an Arcane Focus variant such as \"Wand\").",
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "common.schema.json#/$defs/RefOrText"
+        "anyOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ref"],
+            "properties": {
+              "ref": { "$ref": "common.schema.json#/$defs/Ref/properties/ref" },
+              "note": { "$ref": "common.schema.json#/$defs/Ref/properties/note" },
+              "count": { "description": "How many the creature carries, 2 or more, printed after the name with an \"s\" added: \"Javelins (6)\".", "type": "integer", "minimum": 2 }
+            }
+          },
+          { "type": "string", "minLength": 1 }
+        ]
       }
     },
     "senses": {

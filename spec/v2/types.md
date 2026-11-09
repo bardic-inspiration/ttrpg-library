@@ -101,13 +101,6 @@ a link to a rules type takes a typed ref
   [Conditions](../../docs/rulesets.md#conditions)). It becomes an enum
   facet, valued by key and shown by name (the UI's Creature › Immunities ›
   Conditions), with the filter tree (#235).
-- **`gear`** stays `RefOrText`, and a ref may target equipment as well as an
-  item. A gear ref may add a `count` of 2 or more, printed after the name
-  with an "s" added: `{ "ref": "equipment/javelin", "count": 6 }` reads
-  "Javelins (6)", as the SRD prints it. Every plural in SRD gear adds an
-  "s"; a field for an irregular one waits until one is needed. A variant
-  isn't a link target, so gear naming one, such as the Mage's "Wand", stays
-  plain text.
 
 ### Mentions in text
 
