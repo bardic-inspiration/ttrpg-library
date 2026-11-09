@@ -33,7 +33,7 @@
       "unit": "hour",
       "concentration": false
     },
-    "effect": "For the duration, you see creatures and objects that have the Invisible condition as if they were visible, and you can see into the Ethereal Plane. Creatures and objects there appear ghostly."
+    "effect": "For the duration, you see creatures and objects that have the {ref:condition/invisible} condition as if they were visible, and you can see into the Ethereal Plane. Creatures and objects there appear ghostly."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -43,6 +43,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

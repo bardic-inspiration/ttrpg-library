@@ -32,7 +32,7 @@
       "unit": "hour",
       "concentration": true
     },
-    "effect": "You radiate a concealing aura in a 30-foot Emanation for the duration. While in the aura, you and each creature you choose have a +10 bonus to Dexterity (Stealth) checks and leave no tracks."
+    "effect": "You radiate a concealing aura in a 30-foot {ref:glossary/emanation} for the duration. While in the aura, you and each creature you choose have a +10 bonus to Dexterity (Stealth) checks and leave no tracks."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -42,6 +42,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

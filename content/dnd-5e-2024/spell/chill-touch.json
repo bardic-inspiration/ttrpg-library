@@ -28,7 +28,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "Channeling the chill of the grave, make a melee spell attack against a target within reach. On a hit, the target takes 1d10 Necrotic damage, and it can't regain Hit Points until the end of your next turn.",
+    "effect": "Channeling the chill of the grave, make a melee spell attack against a target within reach. On a hit, the target takes 1d10 Necrotic damage, and it can't regain {ref:glossary/hit-points} until the end of your next turn.",
     "cantripUpgrade": "The damage increases by 1d10 when you reach levels 5 (2d10), 11 (3d10), and 17 (4d10)."
   },
   "meta": {
@@ -39,6 +39,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

@@ -27,7 +27,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You summon an otherworldly being that appears as a loyal steed in an unoccupied space of your choice within range. This creature uses the **Otherworldly Steed** stat block. If you already have a steed from this spell, the steed is replaced by the new one.\n\nThe steed resembles a Large, rideable animal of your choice, such as a horse, a camel, a dire wolf, or an elk. Whenever you cast the spell, choose the steed's creature type—Celestial, Fey, or Fiend—which determines certain traits in the stat block.\n\n***Combat.*** The steed is an ally to you and your allies. In combat, it shares your Initiative count, and it functions as a controlled mount while you ride it (as defined in the rules on mounted combat). If you have the Incapacitated condition, the steed takes its turn immediately after yours and acts independently, focusing on protecting you.\n\n***Disappearance of the Steed.*** The steed disappears if it drops to 0 Hit Points or if you die. When it disappears, it leaves behind anything it was wearing or carrying. If you cast this spell again, you decide whether you summon the steed that disappeared or a different one.",
+    "effect": "You summon an otherworldly being that appears as a loyal steed in an unoccupied space of your choice within range. This creature uses the **Otherworldly Steed** stat block. If you already have a steed from this spell, the steed is replaced by the new one.\n\nThe steed resembles a Large, rideable animal of your choice, such as a horse, a camel, a dire wolf, or an elk. Whenever you cast the spell, choose the steed's creature type—Celestial, Fey, or Fiend—which determines certain traits in the stat block.\n\n***Combat.*** The steed is an ally to you and your allies. In combat, it shares your {ref:glossary/initiative} count, and it functions as a controlled mount while you ride it (as defined in the rules on mounted combat). If you have the {ref:condition/incapacitated} condition, the steed takes its turn immediately after yours and acts independently, focusing on protecting you.\n\n***Disappearance of the Steed.*** The steed disappears if it drops to 0 {ref:glossary/hit-points} or if you die. When it disappears, it leaves behind anything it was wearing or carrying. If you cast this spell again, you decide whether you summon the steed that disappeared or a different one.",
     "higherLevels": "Use the spell slot's level for the spell's level in the stat block.",
     "statBlocks": [
       {
@@ -50,7 +50,7 @@
         "traits": [
           {
             "name": "Life Bond",
-            "text": "When you regain Hit Points from a level 1+ spell, the steed regains the same number of Hit Points if you're within 5 feet of it."
+            "text": "When you regain {ref:glossary/hit-points} from a level 1+ spell, the steed regains the same number of Hit Points if you're within 5 feet of it."
           }
         ],
         "actions": [
@@ -62,7 +62,7 @@
         "bonusActions": [
           {
             "name": "Fell Glare (Fiend Only; Recharges after a Long Rest)",
-            "text": "*Wisdom Saving Throw:* DC equals your spell save DC, one creature within 60 feet the steed can see. *Failure:* The target has the Frightened condition until the end of your next turn."
+            "text": "*Wisdom Saving Throw:* DC equals your spell save DC, one creature within 60 feet the steed can see. *Failure:* The target has the {ref:condition/frightened} condition until the end of your next turn."
           },
           {
             "name": "Fey Step (Fey Only; Recharges after a Long Rest)",
@@ -70,7 +70,7 @@
           },
           {
             "name": "Healing Touch (Celestial Only; Recharges after a Long Rest)",
-            "text": "One creature within 5 feet of the steed regains a number of Hit Points equal to 2d8 plus the spell's level."
+            "text": "One creature within 5 feet of the steed regains a number of {ref:glossary/hit-points} equal to 2d8 plus the spell's level."
           }
         ]
       }
@@ -84,6 +84,7 @@
         134
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

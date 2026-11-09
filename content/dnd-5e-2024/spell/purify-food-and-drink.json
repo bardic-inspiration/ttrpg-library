@@ -29,7 +29,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You remove poison and rot from nonmagical food and drink in a 5-foot-radius Sphere centered on a point within range."
+    "effect": "You remove poison and rot from nonmagical food and drink in a 5-foot-radius {ref:glossary/sphere} centered on a point within range."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -39,6 +39,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

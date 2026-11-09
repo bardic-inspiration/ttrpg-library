@@ -31,8 +31,8 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You do one of the following:\n\n***Create Water.*** You create up to 10 gallons of clean water within range in an open container. Alternatively, the water falls as rain in a 30-foot Cube within range, extinguishing exposed flames there.\n\n***Destroy Water.*** You destroy up to 10 gallons of water in an open container within range. Alternatively, you destroy fog in a 30-foot Cube within range.",
-    "higherLevels": "You create or destroy 10 additional gallons of water, or the size of the Cube increases by 5 feet, for each spell slot level above 1."
+    "effect": "You do one of the following:\n\n***Create Water.*** You create up to 10 gallons of clean water within range in an open container. Alternatively, the water falls as rain in a 30-foot {ref:glossary/cube} within range, extinguishing exposed flames there.\n\n***Destroy Water.*** You destroy up to 10 gallons of water in an open container within range. Alternatively, you destroy fog in a 30-foot Cube within range.",
+    "higherLevels": "You create or destroy 10 additional gallons of water, or the size of the {ref:glossary/cube} increases by 5 feet, for each spell slot level above 1."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -42,6 +42,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

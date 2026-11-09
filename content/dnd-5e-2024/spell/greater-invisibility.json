@@ -30,7 +30,7 @@
       "unit": "minute",
       "concentration": true
     },
-    "effect": "A creature you touch has the Invisible condition until the spell ends."
+    "effect": "A creature you touch has the {ref:condition/invisible} condition until the spell ends."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }

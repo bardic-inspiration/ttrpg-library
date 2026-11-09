@@ -30,7 +30,7 @@
       "kind": "instantaneous",
       "concentration": false
     },
-    "effect": "You overwhelm the mind of one creature you can see within range. If the target has 150 Hit Points or fewer, it has the Stunned condition. Otherwise, its Speed is 0 until the start of your next turn.\n\nThe Stunned target makes a Constitution saving throw at the end of each of its turns, ending the condition on itself on a success."
+    "effect": "You overwhelm the mind of one creature you can see within range. If the target has 150 {ref:glossary/hit-points} or fewer, it has the {ref:condition/stunned} condition. Otherwise, its {ref:glossary/speed} is 0 until the start of your next turn.\n\nThe {ref:condition/stunned} target makes a Constitution saving throw at the end of each of its turns, ending the condition on itself on a success."
   },
   "meta": {
     "createdAt": "2026-11-04",
@@ -40,6 +40,7 @@
         133
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-09"
   }
 }
