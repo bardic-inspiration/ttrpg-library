@@ -3,6 +3,6 @@
   "id": "lightly-obscured",
   "name": "Lightly Obscured",
   "stats": {
-    "text": "You have Disadvantage on Wisdom (Perception) checks to see something in a Lightly Obscured space. *See also* \"Dim Light\" and \"Playing the Game\" (\"Exploration\")."
+    "text": "You have {ref:glossary/disadvantage} on Wisdom (Perception) checks to see something in a Lightly Obscured space. *See also* \"{ref:glossary/dim-light}\" and \"Playing the Game\" (\"Exploration\")."
   }
 }

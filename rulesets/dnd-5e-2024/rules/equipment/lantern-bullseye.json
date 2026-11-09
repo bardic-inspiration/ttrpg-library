@@ -9,6 +9,6 @@
       "unit": "gp"
     },
     "weight": 2,
-    "text": "A Bullseye Lantern burns {ref:equipment/oil} as fuel to cast Bright Light in a 60-foot Cone and Dim Light for an additional 60 feet."
+    "text": "A Bullseye Lantern burns {ref:equipment/oil} as fuel to cast {ref:glossary/bright-light} in a 60-foot {ref:glossary/cone} and {ref:glossary/dim-light} for an additional 60 feet."
   }
 }

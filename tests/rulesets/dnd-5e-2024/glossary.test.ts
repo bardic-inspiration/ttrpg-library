@@ -52,9 +52,17 @@ describe('the SRD glossary terms', () => {
     expect(terms.filter((t) => t.stats.tag).length).toBe(26);
   });
 
+  it('link mentions of conditions, equipment, and terms: a term at its first mention, not in a table or a chapter reference', () => {
+    expect(term('heavily-obscured').stats.text).toBe(
+      'You have the {ref:condition/blinded} condition while trying to see something in a Heavily Obscured space. *See also* "{ref:condition/blinded}," "{ref:glossary/darkness}," and "Playing the Game" ("Exploration").',
+    );
+    expect(term('healing').stats.text).toContain('"Playing the Game" ("Damage and Healing")');
+    expect(term('armor-training').stats.text).toContain('If you use a {ref:equipment/shield} and lack training');
+  });
+
   it('keep the definition as printed, with its See also sentence, lists, and tables', () => {
-    expect(term('adventure').stats.text).toBe('An adventure is a series of encounters. A story emerges through playing them. *See also* "Encounter."');
-    expect(term('action').stats.text).toContain('These actions are defined elsewhere in this glossary:\n\n- Attack\n- Dash\n');
+    expect(term('adventure').stats.text).toBe('An adventure is a series of encounters. A story emerges through playing them. *See also* "{ref:glossary/encounter}."');
+    expect(term('action').stats.text).toContain('These actions are defined elsewhere in this glossary:\n\n- {ref:glossary/attack}\n- {ref:glossary/dash}\n');
     expect(term('breaking-objects').stats.text).toContain('**Object Armor Class**\n\n| AC | Substance |\n|---|---|\n| 11 | Cloth, paper, rope |');
     expect(term('high-jump').stats.text).toContain('plus 1½ times your height');
   });

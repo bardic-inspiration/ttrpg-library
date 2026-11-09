@@ -295,6 +295,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A primitive whose stats are only `text` and an optional `tag` renders as paragraphs, its tag in brackets after its name. | P4: the glossary needs no template | #227 |
 | The glossary's run-in lists (the actions, areas of effect, conditions, and creature types), printed in columns, are bulleted lists in alphabetical order; its two-up tables (Object Armor Class, Water and Food Needs per Day) are single tables in reading order; the abbreviations are a list of bold abbreviations with their meanings. | The markdown subset has no columns, and the abbreviations have no printed header row | #227 |
 | Glossary text is plain; its mentions of other terms, conditions, and equipment become links in the link pass. | One pass applies the link rule to every rules text (#228) | #227 |
+| A gear ref's `count` lives in a shared `CountedRefOrText`, and the Gear line is markdown with each ref a link and a count as "{ref}s (n)". | The search index finds plain-text gear by the `RefOrText` family; the plural is the spec's "s" rule | #262 |
+| The link pass leaves plain: sentence- and cell-initial capitals, names inside a longer capitalized name, table and column names, chapter-section cross-references, a creature's own action names, "Acid" (the damage type), and "Ammunition" (the property). A bulleted line that is exactly a name, and a quoted "See also" name, link. | Exact text alone over-links words that only look like rule names; P5 | #262 |
 
 ### UI
 

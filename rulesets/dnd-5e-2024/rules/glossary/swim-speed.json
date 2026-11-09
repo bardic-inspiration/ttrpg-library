@@ -3,6 +3,6 @@
   "id": "swim-speed",
   "name": "Swim Speed",
   "stats": {
-    "text": "A Swim Speed can be used to swim without expending the extra movement normally associated with swimming. *See also* \"Swimming\" and \"Speed.\""
+    "text": "A Swim Speed can be used to swim without expending the extra movement normally associated with swimming. *See also* \"{ref:glossary/swimming}\" and \"{ref:glossary/speed}.\""
   }
 }

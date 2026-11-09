@@ -3,6 +3,6 @@
   "id": "darkness",
   "name": "Darkness",
   "stats": {
-    "text": "An area of Darkness is Heavily Obscured. *See also* \"Heavily Obscured\" and \"Playing the Game\" (\"Exploration\")."
+    "text": "An area of Darkness is {ref:glossary/heavily-obscured}. *See also* \"Heavily Obscured\" and \"Playing the Game\" (\"Exploration\")."
   }
 }

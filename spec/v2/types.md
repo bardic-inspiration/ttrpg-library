@@ -102,31 +102,6 @@ a link to a rules type takes a typed ref
   facet, valued by key and shown by name (the UI's Creature › Immunities ›
   Conditions), with the filter tree (#235).
 
-### Mentions in text
-
-A mention of a condition, equipment, or glossary term in text becomes a
-`{ref:…}` token only where the target's name reproduces the text exactly,
-case included, so SRD text stays word for word: "the Poisoned condition"
-and "has Advantage" link, while "an attack roll" and "2 Daggers" stay
-plain. Conditions and equipment are linked at every mention, as entries
-are; a glossary term is linked at its first mention in each text field, so
-rules text isn't carpeted with links to "Advantage" and "Bonus Action".
-
-## Cases
-
-- `creature/guard-captain`: its gear "Javelins (6)" is a gear ref with a
-  count; "Breastplate", "Longsword", and "Shield" are plain refs.
-- `creature/mage`: its gear "Wand" is an Arcane Focus variant, so it stays
-  plain text.
-
-## Migration
-
-- **Creature gear** naming equipment becomes refs, with a `count` where the
-  SRD prints one, in the link pass.
-- **Mentions in text** of conditions, equipment, and glossary terms become
-  links through a link pass once the primitives exist
-  ([Mentions in text](#mentions-in-text)).
-
 ## Done when
 
 - Each new type validates against its schema, with fixtures for its

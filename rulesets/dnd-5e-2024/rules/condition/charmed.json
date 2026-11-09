@@ -10,7 +10,7 @@
       },
       {
         "name": "Social Advantage",
-        "text": "The charmer has Advantage on any ability check to interact with you socially."
+        "text": "The charmer has {ref:glossary/advantage} on any ability check to interact with you socially."
       }
     ]
   }

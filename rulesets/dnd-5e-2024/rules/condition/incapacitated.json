@@ -6,11 +6,11 @@
     "effects": [
       {
         "name": "Inactive",
-        "text": "You can't take any action, Bonus Action, or Reaction."
+        "text": "You can't take any action, {ref:glossary/bonus-action}, or {ref:glossary/reaction}."
       },
       {
         "name": "No Concentration",
-        "text": "Your Concentration is broken."
+        "text": "Your {ref:glossary/concentration} is broken."
       },
       {
         "name": "Speechless",
@@ -18,7 +18,7 @@
       },
       {
         "name": "Surprised",
-        "text": "If you're Incapacitated when you roll Initiative, you have Disadvantage on the roll."
+        "text": "If you're Incapacitated when you roll {ref:glossary/initiative}, you have {ref:glossary/disadvantage} on the roll."
       }
     ]
   }

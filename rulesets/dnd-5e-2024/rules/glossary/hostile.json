@@ -4,6 +4,6 @@
   "name": "Hostile",
   "stats": {
     "tag": "attitude",
-    "text": "A Hostile creature views you unfavorably. You have Disadvantage on an ability check to influence a Hostile creature. *See also* \"Influence.\""
+    "text": "A Hostile creature views you unfavorably. You have {ref:glossary/disadvantage} on an ability check to influence a Hostile creature. *See also* \"{ref:glossary/influence}.\""
   }
 }

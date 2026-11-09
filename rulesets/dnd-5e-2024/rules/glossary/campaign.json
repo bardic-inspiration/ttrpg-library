@@ -3,6 +3,6 @@
   "id": "campaign",
   "name": "Campaign",
   "stats": {
-    "text": "A campaign is a series of adventures. *See also* \"Adventure.\""
+    "text": "A campaign is a series of adventures. *See also* \"{ref:glossary/adventure}.\""
   }
 }

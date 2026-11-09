@@ -3,6 +3,6 @@
   "id": "hazard",
   "name": "Hazard",
   "stats": {
-    "text": "A hazard is an environmental danger. *See also* \"Burning,\" \"Dehydration,\" \"Falling,\" \"Malnutrition,\" and \"Suffocation.\""
+    "text": "A hazard is an environmental danger. *See also* \"{ref:glossary/burning},\" \"{ref:glossary/dehydration},\" \"{ref:glossary/falling},\" \"{ref:glossary/malnutrition},\" and \"{ref:glossary/suffocation}.\""
   }
 }

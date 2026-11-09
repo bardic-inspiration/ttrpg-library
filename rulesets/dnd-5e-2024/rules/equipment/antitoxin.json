@@ -8,6 +8,6 @@
       "amount": 50,
       "unit": "gp"
     },
-    "text": "As a Bonus Action, you can drink a vial of Antitoxin to gain Advantage on saving throws to avoid or end the {ref:condition/poisoned} condition for 1 hour."
+    "text": "As a {ref:glossary/bonus-action}, you can drink a vial of Antitoxin to gain {ref:glossary/advantage} on saving throws to avoid or end the {ref:condition/poisoned} condition for 1 hour."
   }
 }

@@ -9,6 +9,6 @@
       "unit": "sp"
     },
     "weight": 1,
-    "text": "A Lamp burns {ref:equipment/oil} as fuel to cast Bright Light in a 15-foot radius and Dim Light for an additional 30 feet."
+    "text": "A Lamp burns {ref:equipment/oil} as fuel to cast {ref:glossary/bright-light} in a 15-foot radius and {ref:glossary/dim-light} for an additional 30 feet."
   }
 }

@@ -3,6 +3,6 @@
   "id": "surprise",
   "name": "Surprise",
   "stats": {
-    "text": "If a creature is caught unawares by the start of combat, that creature is surprised, which causes it to have Disadvantage on its Initiative roll. *See also* \"Playing the Game\" (\"Combat\")."
+    "text": "If a creature is caught unawares by the start of combat, that creature is surprised, which causes it to have {ref:glossary/disadvantage} on its {ref:glossary/initiative} roll. *See also* \"Playing the Game\" (\"Combat\")."
   }
 }

@@ -3,6 +3,6 @@
   "id": "heavily-obscured",
   "name": "Heavily Obscured",
   "stats": {
-    "text": "You have the Blinded condition while trying to see something in a Heavily Obscured space. *See also* \"Blinded,\" \"Darkness,\" and \"Playing the Game\" (\"Exploration\")."
+    "text": "You have the {ref:condition/blinded} condition while trying to see something in a Heavily Obscured space. *See also* \"{ref:condition/blinded},\" \"{ref:glossary/darkness},\" and \"Playing the Game\" (\"Exploration\")."
   }
 }

@@ -3,6 +3,6 @@
   "id": "carrying-capacity",
   "name": "Carrying Capacity",
   "stats": {
-    "text": "Your size and Strength score determine the maximum weight in pounds that you can carry, as shown in the Carrying Capacity table. The table also shows the maximum weight you can drag, lift, or push.\n\nWhile dragging, lifting, or pushing weight in excess of the maximum weight you can carry, your Speed can be no more than 5 feet.\n\n**Carrying Capacity**\n\n| Creature Size | Carry | Drag/Lift/Push |\n|---|---|---|\n| Tiny | Str. × 7.5 lb. | Str. × 15 lb. |\n| Small/Medium | Str. × 15 lb. | Str. × 30 lb. |\n| Large | Str. × 30 lb. | Str. × 60 lb. |\n| Huge | Str. × 60 lb. | Str. × 120 lb. |\n| Gargantuan | Str. × 120 lb. | Str. × 240 lb. |"
+    "text": "Your size and Strength score determine the maximum weight in pounds that you can carry, as shown in the Carrying Capacity table. The table also shows the maximum weight you can drag, lift, or push.\n\nWhile dragging, lifting, or pushing weight in excess of the maximum weight you can carry, your {ref:glossary/speed} can be no more than 5 feet.\n\n**Carrying Capacity**\n\n| Creature Size | Carry | Drag/Lift/Push |\n|---|---|---|\n| Tiny | Str. × 7.5 lb. | Str. × 15 lb. |\n| Small/Medium | Str. × 15 lb. | Str. × 30 lb. |\n| Large | Str. × 30 lb. | Str. × 60 lb. |\n| Huge | Str. × 60 lb. | Str. × 120 lb. |\n| Gargantuan | Str. × 120 lb. | Str. × 240 lb. |"
   }
 }
