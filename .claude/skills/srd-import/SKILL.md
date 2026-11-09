@@ -173,8 +173,9 @@ patterns don't match instead of guessing. Lessons from the first import:
   standard form. List each in the PR body as a misprint.
 - **Self-mentions** of an entry's own name stay plain italics, not links.
 - **Links.** A mention of an entry already in the library, or in the same
-  batch, is a `{ref:<type>/<id>}` link or a ref. Anything else stays plain
-  text, and gets linked by the link pass once it's imported.
+  batch, is a `{ref:<type>/<id>}` link or a ref, and so is a mention of a
+  condition, equipment, or glossary term, by [Mentions of rules](../../../docs/content-model.md#references). Anything
+  else stays plain text, and gets linked by the link pass once it's imported.
 - `meta.source.issues` is `[<stage>]`.
 
 ## Step 6: Verify
@@ -236,7 +237,11 @@ entry ("a shield", "the light"). What the pass covers, and the traps:
   italic names pairs up as a run of its own and hides the second name.
 - **Plain-string fields:** spells in a creature's `spellcasting` lists and an
   item's `spells` become refs, with any printed qualifier in the ref's
-  `note`. Gear stays as it is: its names are mundane equipment, not entries.
+  `note`. Gear becomes refs to equipment, with a `count` for a printed plural
+  ("Javelins (6)"); a variant such as "Wand" stays a plain string.
+- **Mentions of rules:** conditions, equipment, and glossary terms link by
+  [Mentions of rules](../../../docs/content-model.md#references), including what it leaves plain (a capital that starts
+  a sentence, a name inside a longer name, a creature's own action names).
 - **Left as plain text:** self-mentions, plurals the token can't render
   ("Ioun Stones", "Ghouls"), and names that aren't an entry's exact name
   ("Potion of Healing" for Potions of Healing). Report every replacement,

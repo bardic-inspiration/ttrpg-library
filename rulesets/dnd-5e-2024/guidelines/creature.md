@@ -212,10 +212,16 @@ A creature mentions spells (`spellcasting`) and gear (`gear`) through
 
 - **Ref an existing library entry** whenever one matches what the creature
   uses. Check `library.json` for it before writing anything new.
-- **Use a plain string** for SRD 5.2 content that isn't in the library, spelled
-  exactly as the SRD names it ("Fireball", "Longsword", "Chain Mail"). Don't
-  add an SRD spell or item to the library just to ref it; SRD entries are
-  added only when a request asks for them ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
+- **Ref SRD equipment** in `gear`: every SRD weapon, armor, tool, and piece
+  of gear is in the ruleset's rules data, so "Longsword" is
+  `{ "ref": "equipment/longsword" }`, and a carried number is a `count`:
+  `{ "ref": "equipment/javelin", "count": 6 }` reads "Javelins (6)"
+  ([Creatures](../../../docs/rulesets.md#creatures)). Only gear that isn't a link target, such as an Arcane
+  Focus variant ("Wand"), is a plain string.
+- **Use a plain string** for other SRD 5.2 content that isn't in the library,
+  spelled exactly as the SRD names it ("Fireball"). Don't add an SRD spell or
+  item to the library just to ref it; SRD entries are added only when a
+  request asks for them ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
 - **Create a dependency entry** in the same batch when the brief or the
   creature's concept calls for something new: a signature spell no SRD spell
   covers, or a named magic item the creature carries. Write it to its own
