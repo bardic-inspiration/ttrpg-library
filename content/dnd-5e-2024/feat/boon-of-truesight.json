@@ -1,0 +1,31 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "boon-of-truesight",
+  "name": "Boon of Truesight",
+  "summary": "An epic boon granting Truesight with a range of 60 feet.",
+  "stats": {
+    "category": "epic-boon",
+    "level": 19,
+    "benefits": [
+      {
+        "name": "Ability Score Increase",
+        "text": "Increase one ability score of your choice by 1, to a maximum of 30."
+      },
+      {
+        "name": "Truesight",
+        "text": "You have {ref:glossary/truesight} with a range of 60 feet."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

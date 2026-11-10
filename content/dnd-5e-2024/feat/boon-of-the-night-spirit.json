@@ -1,0 +1,35 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "boon-of-the-night-spirit",
+  "name": "Boon of the Night Spirit",
+  "summary": "An epic boon granting Invisibility and Resistance while in Dim Light or Darkness.",
+  "stats": {
+    "category": "epic-boon",
+    "level": 19,
+    "benefits": [
+      {
+        "name": "Ability Score Increase",
+        "text": "Increase one ability score of your choice by 1, to a maximum of 30."
+      },
+      {
+        "name": "Merge with Shadows",
+        "text": "While within {ref:glossary/dim-light} or {ref:glossary/darkness}, you can give yourself the {ref:condition/invisible} condition as a {ref:glossary/bonus-action}. The condition ends on you immediately after you take an action, a Bonus Action, or a {ref:glossary/reaction}."
+      },
+      {
+        "name": "Shadowy Form",
+        "text": "While within {ref:glossary/dim-light} or {ref:glossary/darkness}, you have {ref:glossary/resistance} to all damage except Psychic and Radiant."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
