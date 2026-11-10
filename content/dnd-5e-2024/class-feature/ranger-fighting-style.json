@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "ranger-fighting-style",
+  "name": "Fighting Style",
+  "stats": {
+    "levels": [
+      2
+    ],
+    "text": "You gain a Fighting Style feat of your choice (see \"Feats\"). Instead of choosing one of those feats, you can choose the option below.\n\n***Druidic Warrior.*** You learn two Druid cantrips of your choice (see the Druid class's section for a list of Druid spells). *{ref:spell/guidance}* and *{ref:spell/starry-wisp}* are recommended. The chosen cantrips count as Ranger spells for you, and Wisdom is your spellcasting ability for them. Whenever you gain a Ranger level, you can replace one of these cantrips with another Druid cantrip."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

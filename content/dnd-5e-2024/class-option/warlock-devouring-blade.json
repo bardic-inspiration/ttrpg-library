@@ -1,0 +1,20 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-devouring-blade",
+  "name": "Devouring Blade",
+  "stats": {
+    "prerequisite": "Level 12+ Warlock, {ref:class-option/warlock-thirsting-blade} Invocation",
+    "text": "The Extra Attack of your {ref:class-option/warlock-thirsting-blade} invocation confers two extra attacks rather than one."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "paladin-aura-expansion",
+  "name": "Aura Expansion",
+  "stats": {
+    "levels": [
+      18
+    ],
+    "text": "Your Aura of Protection is now a 30-foot Emanation."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

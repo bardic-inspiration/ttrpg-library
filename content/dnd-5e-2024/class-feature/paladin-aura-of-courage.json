@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "paladin-aura-of-courage",
+  "name": "Aura of Courage",
+  "stats": {
+    "levels": [
+      10
+    ],
+    "text": "You and your allies have {ref:glossary/immunity} to the {ref:condition/frightened} condition while in your Aura of Protection. If a {ref:condition/frightened} ally enters the aura, that condition has no effect on that ally while there."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "warlock-ability-score-improvement",
+  "name": "Ability Score Improvement",
+  "stats": {
+    "levels": [
+      4,
+      8,
+      12,
+      16
+    ],
+    "text": "You gain the Ability Score Improvement feat (see \"Feats\") or another feat of your choice for which you qualify. You gain this feature again at Warlock levels 8, 12, and 16."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

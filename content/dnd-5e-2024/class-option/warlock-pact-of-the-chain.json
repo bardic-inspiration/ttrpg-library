@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-pact-of-the-chain",
+  "name": "Pact of the Chain",
+  "stats": {
+    "text": "You learn the *{ref:spell/find-familiar}* spell and can cast it as a {ref:glossary/magic} action without expending a spell slot.\n\nWhen you cast the spell, you choose one of the normal forms for your familiar or one of the following special forms: **{ref:creature/imp}**, **{ref:creature/pseudodragon}**, **{ref:creature/quasit}**, **{ref:creature/skeleton}**, **{ref:creature/sphinx-of-wonder}**, **{ref:creature/sprite}**, or **{ref:creature/venomous-snake}** (see \"Monsters\" for the familiar's stat block).\n\nAdditionally, when you take the {ref:glossary/attack} action, you can forgo one of your own attacks to allow your familiar to make one attack of its own with its {ref:glossary/reaction}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "bard-superior-inspiration",
+  "name": "Superior Inspiration",
+  "stats": {
+    "levels": [
+      18
+    ],
+    "text": "When you roll {ref:glossary/initiative}, you regain expended uses of Bardic Inspiration until you have two if you have fewer than that."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

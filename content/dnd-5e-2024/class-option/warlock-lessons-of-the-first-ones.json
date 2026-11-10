@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-lessons-of-the-first-ones",
+  "name": "Lessons of the First Ones",
+  "stats": {
+    "prerequisite": "Level 2+ Warlock",
+    "text": "You have received knowledge from an elder entity of the multiverse, allowing you to gain one Origin feat of your choice (see \"Feats\").",
+    "repeatable": "You can gain this invocation more than once. Each time you do so, choose a different Origin feat."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

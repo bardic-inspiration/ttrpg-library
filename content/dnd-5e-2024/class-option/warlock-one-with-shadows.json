@@ -1,0 +1,20 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-one-with-shadows",
+  "name": "One with Shadows",
+  "stats": {
+    "prerequisite": "Level 5+ Warlock",
+    "text": "While you're in an area of {ref:glossary/dim-light} or {ref:glossary/darkness}, you can cast *{ref:spell/invisibility}* on yourself without expending a spell slot."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

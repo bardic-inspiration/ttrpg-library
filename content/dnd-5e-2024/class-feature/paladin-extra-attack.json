@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "paladin-extra-attack",
+  "name": "Extra Attack",
+  "stats": {
+    "levels": [
+      5
+    ],
+    "text": "You can attack twice instead of once whenever you take the {ref:glossary/attack} action on your turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

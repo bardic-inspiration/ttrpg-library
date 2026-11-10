@@ -1,0 +1,204 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "fighter",
+  "name": "Fighter",
+  "summary": "A master of weapons and armor with extra attacks, Action Surge, and Second Wind.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "str",
+        "dex"
+      ],
+      "join": "or"
+    },
+    "hitDie": "d10",
+    "savingThrows": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "acrobatics",
+        "animal-handling",
+        "athletics",
+        "history",
+        "insight",
+        "intimidation",
+        "persuasion",
+        "perception",
+        "survival"
+      ]
+    },
+    "weapons": "Simple and Martial weapons",
+    "armor": "Light, Medium, and Heavy armor and Shields",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/chain-mail"
+          },
+          {
+            "ref": "equipment/greatsword"
+          },
+          {
+            "ref": "equipment/flail"
+          },
+          {
+            "ref": "equipment/javelin",
+            "count": 8
+          },
+          {
+            "ref": "equipment/dungeoneers-pack"
+          }
+        ],
+        "gp": 4
+      },
+      {
+        "items": [
+          {
+            "ref": "equipment/studded-leather-armor"
+          },
+          {
+            "ref": "equipment/scimitar"
+          },
+          {
+            "ref": "equipment/shortsword"
+          },
+          {
+            "ref": "equipment/longbow"
+          },
+          "20 Arrows",
+          {
+            "ref": "equipment/quiver"
+          },
+          {
+            "ref": "equipment/dungeoneers-pack"
+          }
+        ],
+        "gp": 11
+      },
+      {
+        "gp": 155
+      }
+    ],
+    "multiclass": "- Gain the following traits from the Core Fighter Traits table: Hit Point Die, proficiency with Martial weapons, and training with Light and Medium armor and {ref:equipment/shields}.\n- Gain the Fighter's level 1 features, which are listed in the Fighter Features table.",
+    "features": [
+      {
+        "ref": "class-feature/fighter-fighting-style"
+      },
+      {
+        "ref": "class-feature/fighter-second-wind"
+      },
+      {
+        "ref": "class-feature/fighter-weapon-mastery"
+      },
+      {
+        "ref": "class-feature/fighter-action-surge"
+      },
+      {
+        "ref": "class-feature/fighter-tactical-mind"
+      },
+      {
+        "ref": "class-feature/fighter-fighter-subclass"
+      },
+      {
+        "ref": "class-feature/fighter-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/fighter-extra-attack"
+      },
+      {
+        "ref": "class-feature/fighter-tactical-shift"
+      },
+      {
+        "ref": "class-feature/fighter-indomitable"
+      },
+      {
+        "ref": "class-feature/fighter-tactical-master"
+      },
+      {
+        "ref": "class-feature/fighter-two-extra-attacks"
+      },
+      {
+        "ref": "class-feature/fighter-studied-attacks"
+      },
+      {
+        "ref": "class-feature/fighter-epic-boon"
+      },
+      {
+        "ref": "class-feature/fighter-three-extra-attacks"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      7,
+      10,
+      15,
+      18
+    ],
+    "columns": [
+      {
+        "name": "Second Wind",
+        "values": [
+          "2",
+          "2",
+          "2",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4"
+        ]
+      },
+      {
+        "name": "Weapon Mastery",
+        "values": [
+          "3",
+          "3",
+          "3",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "5",
+          "5",
+          "5",
+          "5",
+          "5",
+          "5",
+          "6",
+          "6",
+          "6",
+          "6",
+          "6"
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

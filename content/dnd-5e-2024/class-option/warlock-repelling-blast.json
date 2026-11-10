@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-repelling-blast",
+  "name": "Repelling Blast",
+  "stats": {
+    "prerequisite": "Level 2+ Warlock, a Warlock Cantrip That Deals Damage via an Attack Roll",
+    "text": "Choose one of your known Warlock cantrips that requires an attack roll. When you hit a Large or smaller creature with that cantrip, you can push the creature up to 10 feet straight away from you.",
+    "repeatable": "You can gain this invocation more than once. Each time you do so, choose a different eligible cantrip."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

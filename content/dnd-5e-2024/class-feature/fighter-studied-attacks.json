@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "fighter-studied-attacks",
+  "name": "Studied Attacks",
+  "stats": {
+    "levels": [
+      13
+    ],
+    "text": "You study your opponents and learn from each attack you make. If you make an attack roll against a creature and miss, you have {ref:glossary/advantage} on your next attack roll against that creature before the end of your next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

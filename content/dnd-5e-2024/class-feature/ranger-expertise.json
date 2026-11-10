@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "ranger-expertise",
+  "name": "Expertise",
+  "stats": {
+    "levels": [
+      9
+    ],
+    "text": "Choose two of your skill proficiencies with which you lack Expertise. You gain Expertise in those skills."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

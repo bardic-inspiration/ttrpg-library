@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "ranger-natures-veil",
+  "name": "Nature’s Veil",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "You invoke spirits of nature to magically hide yourself. As a {ref:glossary/bonus-action}, you can give yourself the {ref:condition/invisible} condition until the end of your next turn.\n\nYou can use this feature a number of times equal to your Wisdom modifier (minimum of once), and you regain all expended uses when you finish a {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

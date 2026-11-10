@@ -1,0 +1,20 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-investment-of-the-chain-master",
+  "name": "Investment of the Chain Master",
+  "stats": {
+    "prerequisite": "Level 5+ Warlock, {ref:class-option/warlock-pact-of-the-chain} Invocation",
+    "text": "When you cast *{ref:spell/find-familiar}*, you infuse the summoned familiar with a measure of your eldritch power, granting the creature the following benefits.\n\n***Aerial or Aquatic.*** The familiar gains either a {ref:glossary/fly-speed} or a {ref:glossary/swim-speed} (your choice) of 40 feet.\n\n***Quick Attack.*** As a {ref:glossary/bonus-action}, you can command the familiar to take the {ref:glossary/attack} action.\n\n***Necrotic or Radiant Damage.*** Whenever the familiar deals Bludgeoning, Piercing, or Slashing damage, you can make it deal Necrotic or Radiant damage instead.\n\n***Your Save DC.*** If the familiar forces a creature to make a saving throw, it uses your spell save DC.\n\n***Resistance.*** When the familiar takes damage, you can take a {ref:glossary/reaction} to grant it {ref:glossary/resistance} against that damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

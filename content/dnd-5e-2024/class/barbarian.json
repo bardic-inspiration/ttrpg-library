@@ -1,0 +1,208 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "barbarian",
+  "name": "Barbarian",
+  "summary": "A fierce warrior who enters a Rage for extra damage and resilience.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "str"
+      ]
+    },
+    "hitDie": "d12",
+    "savingThrows": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "animal-handling",
+        "athletics",
+        "intimidation",
+        "nature",
+        "perception",
+        "survival"
+      ]
+    },
+    "weapons": "Simple and Martial weapons",
+    "armor": "Light and Medium armor and Shields",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/greataxe"
+          },
+          {
+            "ref": "equipment/handaxe",
+            "count": 4
+          },
+          {
+            "ref": "equipment/explorers-pack"
+          }
+        ],
+        "gp": 15
+      },
+      {
+        "gp": 75
+      }
+    ],
+    "multiclass": "- Gain the following traits from the Core Barbarian Traits table: Hit Point Die, proficiency with Martial weapons, and training with {ref:equipment/shields}.\n- Gain the Barbarian's level 1 features, which are listed in the Barbarian Features table.",
+    "features": [
+      {
+        "ref": "class-feature/barbarian-rage"
+      },
+      {
+        "ref": "class-feature/barbarian-unarmored-defense"
+      },
+      {
+        "ref": "class-feature/barbarian-weapon-mastery"
+      },
+      {
+        "ref": "class-feature/barbarian-danger-sense"
+      },
+      {
+        "ref": "class-feature/barbarian-reckless-attack"
+      },
+      {
+        "ref": "class-feature/barbarian-barbarian-subclass"
+      },
+      {
+        "ref": "class-feature/barbarian-primal-knowledge"
+      },
+      {
+        "ref": "class-feature/barbarian-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/barbarian-extra-attack"
+      },
+      {
+        "ref": "class-feature/barbarian-fast-movement"
+      },
+      {
+        "ref": "class-feature/barbarian-feral-instinct"
+      },
+      {
+        "ref": "class-feature/barbarian-instinctive-pounce"
+      },
+      {
+        "ref": "class-feature/barbarian-brutal-strike"
+      },
+      {
+        "ref": "class-feature/barbarian-relentless-rage"
+      },
+      {
+        "ref": "class-feature/barbarian-improved-brutal-strike"
+      },
+      {
+        "ref": "class-feature/barbarian-persistent-rage"
+      },
+      {
+        "ref": "class-feature/barbarian-improved-brutal-strike-17"
+      },
+      {
+        "ref": "class-feature/barbarian-indomitable-might"
+      },
+      {
+        "ref": "class-feature/barbarian-epic-boon"
+      },
+      {
+        "ref": "class-feature/barbarian-primal-champion"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      6,
+      10,
+      14
+    ],
+    "columns": [
+      {
+        "name": "Rages",
+        "values": [
+          "2",
+          "2",
+          "3",
+          "3",
+          "3",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "5",
+          "5",
+          "5",
+          "5",
+          "5",
+          "6",
+          "6",
+          "6",
+          "6"
+        ]
+      },
+      {
+        "name": "Rage Damage",
+        "values": [
+          "+2",
+          "+2",
+          "+2",
+          "+2",
+          "+2",
+          "+2",
+          "+2",
+          "+2",
+          "+3",
+          "+3",
+          "+3",
+          "+3",
+          "+3",
+          "+3",
+          "+3",
+          "+4",
+          "+4",
+          "+4",
+          "+4",
+          "+4"
+        ]
+      },
+      {
+        "name": "Weapon Mastery",
+        "values": [
+          "2",
+          "2",
+          "2",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4",
+          "4"
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

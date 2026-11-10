@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-agonizing-blast",
+  "name": "Agonizing Blast",
+  "stats": {
+    "prerequisite": "Level 2+ Warlock, a Warlock Cantrip That Deals Damage",
+    "text": "Choose one of your known Warlock cantrips that deals damage. You can add your Charisma modifier to that spell's damage rolls.",
+    "repeatable": "You can gain this invocation more than once. Each time you do so, choose a different eligible cantrip."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

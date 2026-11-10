@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "paladin-radiant-strikes",
+  "name": "Radiant Strikes",
+  "stats": {
+    "levels": [
+      11
+    ],
+    "text": "Your strikes now carry supernatural power. When you hit a target with an attack roll using a Melee weapon or an {ref:glossary/unarmed-strike}, the target takes an extra 1d8 Radiant damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

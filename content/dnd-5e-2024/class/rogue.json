@@ -1,0 +1,170 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "rogue",
+  "name": "Rogue",
+  "summary": "A skilled expert who deals Sneak Attack damage and slips out of danger.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "dex"
+      ]
+    },
+    "hitDie": "d8",
+    "savingThrows": [
+      "dex",
+      "int"
+    ],
+    "skills": {
+      "choose": 4,
+      "from": [
+        "acrobatics",
+        "athletics",
+        "deception",
+        "insight",
+        "intimidation",
+        "investigation",
+        "perception",
+        "persuasion",
+        "sleight-of-hand",
+        "stealth"
+      ]
+    },
+    "weapons": "Simple weapons and Martial weapons that have the Finesse or Light property",
+    "tools": "{ref:equipment/thieves-tools}",
+    "armor": "Light armor",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/leather-armor"
+          },
+          {
+            "ref": "equipment/dagger",
+            "count": 2
+          },
+          {
+            "ref": "equipment/shortsword"
+          },
+          {
+            "ref": "equipment/shortbow"
+          },
+          "20 Arrows",
+          {
+            "ref": "equipment/quiver"
+          },
+          {
+            "ref": "equipment/thieves-tools"
+          },
+          {
+            "ref": "equipment/burglars-pack"
+          }
+        ],
+        "gp": 8
+      },
+      {
+        "gp": 100
+      }
+    ],
+    "multiclass": "- Gain the following traits from the Core Rogue Traits table: Hit Point Die, proficiency in one skill of your choice from the Rogue's skill list, proficiency with {ref:equipment/thieves-tools}, and training with Light armor.\n- Gain the Rogue's level 1 features, which are listed in the Rogue Features table.",
+    "features": [
+      {
+        "ref": "class-feature/rogue-expertise"
+      },
+      {
+        "ref": "class-feature/rogue-sneak-attack"
+      },
+      {
+        "ref": "class-feature/rogue-thieves-cant"
+      },
+      {
+        "ref": "class-feature/rogue-weapon-mastery"
+      },
+      {
+        "ref": "class-feature/rogue-cunning-action"
+      },
+      {
+        "ref": "class-feature/rogue-rogue-subclass"
+      },
+      {
+        "ref": "class-feature/rogue-steady-aim"
+      },
+      {
+        "ref": "class-feature/rogue-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/rogue-cunning-strike"
+      },
+      {
+        "ref": "class-feature/rogue-uncanny-dodge"
+      },
+      {
+        "ref": "class-feature/rogue-evasion"
+      },
+      {
+        "ref": "class-feature/rogue-reliable-talent"
+      },
+      {
+        "ref": "class-feature/rogue-improved-cunning-strike"
+      },
+      {
+        "ref": "class-feature/rogue-devious-strikes"
+      },
+      {
+        "ref": "class-feature/rogue-slippery-mind"
+      },
+      {
+        "ref": "class-feature/rogue-elusive"
+      },
+      {
+        "ref": "class-feature/rogue-epic-boon"
+      },
+      {
+        "ref": "class-feature/rogue-stroke-of-luck"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      9,
+      13,
+      17
+    ],
+    "columns": [
+      {
+        "name": "Sneak Attack",
+        "values": [
+          "1d6",
+          "1d6",
+          "2d6",
+          "2d6",
+          "3d6",
+          "3d6",
+          "4d6",
+          "4d6",
+          "5d6",
+          "5d6",
+          "6d6",
+          "6d6",
+          "7d6",
+          "7d6",
+          "8d6",
+          "8d6",
+          "9d6",
+          "9d6",
+          "10d6",
+          "10d6"
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

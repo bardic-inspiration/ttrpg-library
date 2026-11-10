@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "barbarian-reckless-attack",
+  "name": "Reckless Attack",
+  "stats": {
+    "levels": [
+      2
+    ],
+    "text": "You can throw aside all concern for defense to attack with increased ferocity. When you make your first attack roll on your turn, you can decide to attack recklessly. Doing so gives you {ref:glossary/advantage} on attack rolls using Strength until the start of your next turn, but attack rolls against you have Advantage during that time."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

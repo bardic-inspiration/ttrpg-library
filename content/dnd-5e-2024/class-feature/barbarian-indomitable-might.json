@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "barbarian-indomitable-might",
+  "name": "Indomitable Might",
+  "stats": {
+    "levels": [
+      18
+    ],
+    "text": "If your total for a Strength check or Strength saving throw is less than your Strength score, you can use that score in place of the total."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

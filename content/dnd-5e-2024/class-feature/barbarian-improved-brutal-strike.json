@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "barbarian-improved-brutal-strike",
+  "name": "Improved Brutal Strike",
+  "stats": {
+    "levels": [
+      13
+    ],
+    "text": "You have honed new ways to attack furiously. The following effects are now among your Brutal Strike options.\n\n***Staggering Blow.*** The target has {ref:glossary/disadvantage} on the next saving throw it makes, and it can't make {ref:glossary/opportunity-attacks} until the start of your next turn.\n\n***Sundering Blow.*** Before the start of your next turn, the next attack roll made by another creature against the target gains a +5 bonus to the roll. An attack roll can gain only one Sundering Blow bonus."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

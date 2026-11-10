@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-eldritch-mind",
+  "name": "Eldritch Mind",
+  "stats": {
+    "text": "You have {ref:glossary/advantage} on Constitution saving throws that you make to maintain {ref:glossary/concentration}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "wizard",
+  "name": "Wizard",
+  "summary": "A scholarly spellcaster who prepares spells from a spellbook.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "int"
+      ]
+    },
+    "hitDie": "d6",
+    "savingThrows": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "arcana",
+        "history",
+        "insight",
+        "investigation",
+        "medicine",
+        "nature",
+        "religion"
+      ]
+    },
+    "weapons": "Simple weapons",
+    "armor": "None",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/dagger",
+            "count": 2
+          },
+          {
+            "ref": "equipment/arcane-focus",
+            "note": "Quarterstaff"
+          },
+          {
+            "ref": "equipment/robe"
+          },
+          "Spellbook",
+          {
+            "ref": "equipment/scholars-pack"
+          }
+        ],
+        "gp": 5
+      },
+      {
+        "gp": 55
+      }
+    ],
+    "multiclass": "- Gain the Hit Point Die from the Core Wizard Traits table.\n- Gain the Wizard's level 1 features, which are listed in the Wizard Features table. See the multiclassing rules in \"Character Creation\" to determine your available spell slots.",
+    "features": [
+      {
+        "ref": "class-feature/wizard-spellcasting"
+      },
+      {
+        "ref": "class-feature/wizard-ritual-adept"
+      },
+      {
+        "ref": "class-feature/wizard-arcane-recovery"
+      },
+      {
+        "ref": "class-feature/wizard-scholar"
+      },
+      {
+        "ref": "class-feature/wizard-wizard-subclass"
+      },
+      {
+        "ref": "class-feature/wizard-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/wizard-memorize-spell"
+      },
+      {
+        "ref": "class-feature/wizard-spell-mastery"
+      },
+      {
+        "ref": "class-feature/wizard-epic-boon"
+      },
+      {
+        "ref": "class-feature/wizard-signature-spells"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      6,
+      10,
+      14
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "progression": "full",
+      "cantrips": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "prepared": [
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        16,
+        17,
+        18,
+        19,
+        21,
+        22,
+        23,
+        24,
+        25
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

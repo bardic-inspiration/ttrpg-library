@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "rogue-cunning-action",
+  "name": "Cunning Action",
+  "stats": {
+    "levels": [
+      2
+    ],
+    "text": "Your quick thinking and agility allow you to move and act quickly. On your turn, you can take one of the following actions as a {ref:glossary/bonus-action}: Dash, Disengage, or Hide."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

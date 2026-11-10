@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "rogue-elusive",
+  "name": "Elusive",
+  "stats": {
+    "levels": [
+      18
+    ],
+    "text": "You're so evasive that attackers rarely gain the upper hand against you. No attack roll can have {ref:glossary/advantage} against you unless you have the {ref:condition/incapacitated} condition."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
