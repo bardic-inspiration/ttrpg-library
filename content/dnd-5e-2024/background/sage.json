@@ -1,0 +1,62 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "background",
+  "id": "sage",
+  "name": "Sage",
+  "summary": "A background of scholarship: Arcana, History, and the Magic Initiate (Wizard) feat.",
+  "stats": {
+    "abilities": [
+      "con",
+      "int",
+      "wis"
+    ],
+    "feat": {
+      "ref": "feat/magic-initiate",
+      "note": "Wizard"
+    },
+    "skills": [
+      "arcana",
+      "history"
+    ],
+    "tool": {
+      "ref": "equipment/calligraphers-supplies"
+    },
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/quarterstaff"
+          },
+          {
+            "ref": "equipment/calligraphers-supplies"
+          },
+          {
+            "ref": "equipment/book",
+            "note": "history"
+          },
+          {
+            "ref": "equipment/parchment",
+            "note": "8 sheets"
+          },
+          {
+            "ref": "equipment/robe"
+          }
+        ],
+        "gp": 8
+      },
+      {
+        "gp": 50
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
