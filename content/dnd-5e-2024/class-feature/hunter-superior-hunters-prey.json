@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "hunter-superior-hunters-prey",
+  "name": "Superior Hunter’s Prey",
+  "stats": {
+    "levels": [
+      11
+    ],
+    "text": "Once per turn when you deal damage to a creature marked by your *{ref:spell/hunters-mark}*, you can also deal that spell's extra damage to a different creature that you can see within 30 feet of the first creature."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

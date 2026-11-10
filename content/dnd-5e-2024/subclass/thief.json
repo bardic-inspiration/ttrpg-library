@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "thief",
+  "name": "Thief",
+  "summary": "A Rogue subclass of burglary, climbing, and using magic devices.",
+  "stats": {
+    "class": {
+      "ref": "class/rogue"
+    },
+    "tagline": "Hunt for Treasure as a Classic Adventurer",
+    "text": "A mix of burglar, treasure hunter, and explorer, you are the epitome of an adventurer. In addition to improving your agility and stealth, you gain abilities useful for delving into ruins and getting maximum benefit from the magic items you find there.",
+    "features": [
+      {
+        "ref": "class-feature/thief-fast-hands"
+      },
+      {
+        "ref": "class-feature/thief-second-story-work"
+      },
+      {
+        "ref": "class-feature/thief-supreme-sneak"
+      },
+      {
+        "ref": "class-feature/thief-use-magic-device"
+      },
+      {
+        "ref": "class-feature/thief-thiefs-reflexes"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

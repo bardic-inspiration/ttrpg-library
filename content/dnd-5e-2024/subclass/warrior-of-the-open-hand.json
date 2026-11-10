@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "warrior-of-the-open-hand",
+  "name": "Warrior of the Open Hand",
+  "summary": "A Monk subclass of unarmed combat techniques.",
+  "stats": {
+    "class": {
+      "ref": "class/monk"
+    },
+    "tagline": "Master Unarmed Combat Techniques",
+    "text": "Warriors of the Open Hand are masters of unarmed combat. They learn techniques to push and trip their opponents and manipulate their own energy to protect themselves from harm.",
+    "features": [
+      {
+        "ref": "class-feature/warrior-of-the-open-hand-open-hand-technique"
+      },
+      {
+        "ref": "class-feature/warrior-of-the-open-hand-wholeness-of-body"
+      },
+      {
+        "ref": "class-feature/warrior-of-the-open-hand-fleet-step"
+      },
+      {
+        "ref": "class-feature/warrior-of-the-open-hand-quivering-palm"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

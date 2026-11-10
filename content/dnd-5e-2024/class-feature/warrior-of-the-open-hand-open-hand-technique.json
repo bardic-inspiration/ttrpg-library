@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "warrior-of-the-open-hand-open-hand-technique",
+  "name": "Open Hand Technique",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "Whenever you hit a creature with an attack granted by your Flurry of Blows, you can impose one of the following effects on that target.\n\n***Addle.*** The target can't make {ref:glossary/opportunity-attacks} until the start of its next turn.\n\n***Push.*** The target must succeed on a Strength saving throw or be pushed up to 15 feet away from you.\n\n***Topple.*** The target must succeed on a Dexterity saving throw or have the {ref:condition/prone} condition."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

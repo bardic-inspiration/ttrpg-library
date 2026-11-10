@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "thief-second-story-work",
+  "name": "Second-Story Work",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You've trained to get into especially hard-to-reach places, granting you these benefits.\n\n***Climber.*** You gain a {ref:glossary/climb-speed} equal to your Speed.\n\n***Jumper.*** You can determine your jump distance using your Dexterity rather than your Strength."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

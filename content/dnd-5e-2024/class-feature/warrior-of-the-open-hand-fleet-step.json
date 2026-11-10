@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "warrior-of-the-open-hand-fleet-step",
+  "name": "Fleet Step",
+  "stats": {
+    "levels": [
+      11
+    ],
+    "text": "When you take a {ref:glossary/bonus-action} other than Step of the Wind, you can also use Step of the Wind immediately after that Bonus Action."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

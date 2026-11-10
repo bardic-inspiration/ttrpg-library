@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "circle-of-the-land",
+  "name": "Circle of the Land",
+  "summary": "A Druid subclass drawing spells from an arid, polar, temperate, or tropical land.",
+  "stats": {
+    "class": {
+      "ref": "class/druid"
+    },
+    "tagline": "Celebrate Connection to the Natural World",
+    "text": "The Circle of the Land comprises mystics and sages who safeguard ancient knowledge and rites. These Druids meet within sacred circles of trees or standing stones to whisper primal secrets in Druidic. The circle's wisest members preside as the chief priests of their communities.",
+    "features": [
+      {
+        "ref": "class-feature/circle-of-the-land-circle-of-the-land-spells"
+      },
+      {
+        "ref": "class-feature/circle-of-the-land-lands-aid"
+      },
+      {
+        "ref": "class-feature/circle-of-the-land-natural-recovery"
+      },
+      {
+        "ref": "class-feature/circle-of-the-land-natures-ward"
+      },
+      {
+        "ref": "class-feature/circle-of-the-land-natures-sanctuary"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

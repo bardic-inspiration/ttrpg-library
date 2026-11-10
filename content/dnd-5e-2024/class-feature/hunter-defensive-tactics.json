@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "hunter-defensive-tactics",
+  "name": "Defensive Tactics",
+  "stats": {
+    "levels": [
+      7
+    ],
+    "text": "You gain one of the following feature options of your choice. Whenever you finish a Short or {ref:glossary/long-rest}, you can replace the chosen option with the other one.\n\n***Escape the Horde.*** Opportunity Attacks have {ref:glossary/disadvantage} against you.\n\n***Multiattack Defense.*** When a creature hits you with an attack roll, that creature has Disadvantage on all other attack rolls against you this turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

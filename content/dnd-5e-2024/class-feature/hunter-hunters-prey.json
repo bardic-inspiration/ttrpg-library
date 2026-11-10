@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "hunter-hunters-prey",
+  "name": "Hunter’s Prey",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You gain one of the following feature options of your choice. Whenever you finish a Short or {ref:glossary/long-rest}, you can replace the chosen option with the other one.\n\n***Colossus Slayer.*** Your tenacity can wear down even the most resilient foes. When you hit a creature with a weapon, the weapon deals an extra 1d8 damage to the target if it's missing any of its {ref:glossary/hit-points}. You can deal this extra damage only once per turn.\n\n***Horde Breaker.*** Once on each of your turns when you make an attack with a weapon, you can make another attack with the same weapon against a different creature that is within 5 feet of the original target, that is within the weapon's range, and that you haven't attacked this turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
