@@ -1,0 +1,62 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "background",
+  "id": "acolyte",
+  "name": "Acolyte",
+  "summary": "A background of temple service: Insight, Religion, and the Magic Initiate (Cleric) feat.",
+  "stats": {
+    "abilities": [
+      "int",
+      "wis",
+      "cha"
+    ],
+    "feat": {
+      "ref": "feat/magic-initiate",
+      "note": "Cleric"
+    },
+    "skills": [
+      "insight",
+      "religion"
+    ],
+    "tool": {
+      "ref": "equipment/calligraphers-supplies"
+    },
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/calligraphers-supplies"
+          },
+          {
+            "ref": "equipment/book",
+            "note": "prayers"
+          },
+          {
+            "ref": "equipment/holy-symbol"
+          },
+          {
+            "ref": "equipment/parchment",
+            "note": "10 sheets"
+          },
+          {
+            "ref": "equipment/robe"
+          }
+        ],
+        "gp": 8
+      },
+      {
+        "gp": 50
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
