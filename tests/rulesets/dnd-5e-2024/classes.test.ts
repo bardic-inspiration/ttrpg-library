@@ -30,9 +30,12 @@ const fixtures = async () => [
 ];
 /**
  * The fixtures and the library's SRD spells, which the features name and the spell list derives
- * from, with the creatures the spells name.
+ * from, with the creatures and species the spells name.
  */
-const withSpells = async () => [...(await fixtures()), ...(await dir(join(CONTENT, 'spell'))), ...(await dir(join(CONTENT, 'creature')))];
+const withSpells = async () => [
+  ...(await fixtures()),
+  ...(await Promise.all(['spell', 'creature', 'species', 'species-trait'].map((type) => dir(join(CONTENT, type))))).flat(),
+];
 
 const temps: string[] = [];
 afterEach(async () => {
