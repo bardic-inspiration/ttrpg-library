@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "champion-remarkable-athlete",
+  "name": "Remarkable Athlete",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "Thanks to your athleticism, you have {ref:glossary/advantage} on {ref:glossary/initiative} rolls and Strength (Athletics) checks.\n\nIn addition, immediately after you score a {ref:glossary/critical-hit}, you can move up to half your Speed without provoking {ref:glossary/opportunity-attacks}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "college-of-lore-bonus-proficiencies",
+  "name": "Bonus Proficiencies",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You gain proficiency with three skills of your choice."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

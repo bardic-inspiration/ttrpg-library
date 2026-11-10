@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "thief-supreme-sneak",
+  "name": "Supreme Sneak",
+  "stats": {
+    "levels": [
+      9
+    ],
+    "text": "You gain the following Cunning Strike option.\n\n***Stealth Attack (Cost: 1d6).*** If you have the {ref:glossary/hide} action's {ref:condition/invisible} condition, this attack doesn't end that condition on you if you end the turn behind Three-Quarters Cover or Total Cover."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

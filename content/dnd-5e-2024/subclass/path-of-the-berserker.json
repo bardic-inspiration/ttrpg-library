@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "path-of-the-berserker",
+  "name": "Path of the Berserker",
+  "summary": "A Barbarian subclass that channels Rage into frenzied violence.",
+  "stats": {
+    "class": {
+      "ref": "class/barbarian"
+    },
+    "tagline": "Channel Rage into Violent Fury",
+    "text": "Barbarians who walk the Path of the Berserker direct their Rage primarily toward violence. Their path is one of untrammeled fury, and they thrill in the chaos of battle as they allow their Rage to seize and empower them.",
+    "features": [
+      {
+        "ref": "class-feature/path-of-the-berserker-frenzy"
+      },
+      {
+        "ref": "class-feature/path-of-the-berserker-mindless-rage"
+      },
+      {
+        "ref": "class-feature/path-of-the-berserker-retaliation"
+      },
+      {
+        "ref": "class-feature/path-of-the-berserker-intimidating-presence"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

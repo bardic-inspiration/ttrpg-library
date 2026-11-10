@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "fiend-patron-fiend-spells",
+  "name": "Fiend Spells",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "The magic of your patron ensures you always have certain spells ready; when you reach a Warlock level specified in the Fiend Spells table, you thereafter always have the listed spells prepared.\n\n**Fiend Spells**\n\n| Warlock Level | Spells |\n|---|---|\n| 3 | *{ref:spell/burning-hands}*, *{ref:spell/command}*, *{ref:spell/scorching-ray}*, *{ref:spell/suggestion}* |\n| 5 | *{ref:spell/fireball}*, *{ref:spell/stinking-cloud}* |\n| 7 | *{ref:spell/fire-shield}*, *{ref:spell/wall-of-fire}* |\n| 9 | *{ref:spell/geas}*, *{ref:spell/insect-plague}* |"
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

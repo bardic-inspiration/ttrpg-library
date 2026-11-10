@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "circle-of-the-land-circle-of-the-land-spells",
+  "name": "Circle of the Land Spells",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "Whenever you finish a {ref:glossary/long-rest}, choose one type of land: arid, polar, temperate, or tropical. Consult the table below that corresponds to the chosen type; you have the spells listed for your Druid level and lower prepared.\n\n**Arid Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/blur}*, *{ref:spell/burning-hands}*, *{ref:spell/fire-bolt}* |\n| 5 | *{ref:spell/fireball}* |\n| 7 | *{ref:spell/blight}* |\n| 9 | *{ref:spell/wall-of-stone}* |\n\n**Polar Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/fog-cloud}*, *{ref:spell/hold-person}*, *{ref:spell/ray-of-frost}* |\n| 5 | *{ref:spell/sleet-storm}* |\n| 7 | *{ref:spell/ice-storm}* |\n| 9 | *{ref:spell/cone-of-cold}* |\n\n**Temperate Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/misty-step}*, *{ref:spell/shocking-grasp}*, *{ref:spell/sleep}* |\n| 5 | *{ref:spell/lightning-bolt}* |\n| 7 | *{ref:spell/freedom-of-movement}* |\n| 9 | *{ref:spell/tree-stride}* |\n\n**Tropical Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/acid-splash}*, *{ref:spell/ray-of-sickness}*, *{ref:spell/web}* |\n| 5 | *{ref:spell/stinking-cloud}* |\n| 7 | *{ref:spell/polymorph}* |\n| 9 | *{ref:spell/insect-plague}* |"
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "hunter",
+  "name": "Hunter",
+  "summary": "A Ranger subclass that hunts dangerous prey.",
+  "stats": {
+    "class": {
+      "ref": "class/ranger"
+    },
+    "tagline": "Protect Nature and People from Destruction",
+    "text": "You stalk prey in the wilds and elsewhere, using your abilities as a Hunter to protect nature and people everywhere from forces that would destroy them.",
+    "features": [
+      {
+        "ref": "class-feature/hunter-hunters-lore"
+      },
+      {
+        "ref": "class-feature/hunter-hunters-prey"
+      },
+      {
+        "ref": "class-feature/hunter-defensive-tactics"
+      },
+      {
+        "ref": "class-feature/hunter-superior-hunters-prey"
+      },
+      {
+        "ref": "class-feature/hunter-superior-hunters-defense"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

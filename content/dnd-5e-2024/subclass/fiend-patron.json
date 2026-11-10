@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "fiend-patron",
+  "name": "Fiend Patron",
+  "summary": "A Warlock subclass whose patron is a fiend of the Lower Planes.",
+  "stats": {
+    "class": {
+      "ref": "class/warlock"
+    },
+    "tagline": "Make a Deal with the Lower Planes",
+    "text": "Your pact draws on the Lower Planes, the realms of perdition. You might forge a bargain with a demon lord, an archdevil, or another fiend that is especially mighty. That patron's aims are evil—the corruption or destruction of all things, ultimately including you—and your path is defined by the extent to which you strive against those aims.",
+    "features": [
+      {
+        "ref": "class-feature/fiend-patron-dark-ones-blessing"
+      },
+      {
+        "ref": "class-feature/fiend-patron-fiend-spells"
+      },
+      {
+        "ref": "class-feature/fiend-patron-dark-ones-own-luck"
+      },
+      {
+        "ref": "class-feature/fiend-patron-fiendish-resilience"
+      },
+      {
+        "ref": "class-feature/fiend-patron-hurl-through-hell"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
