@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "life-domain-blessed-healer",
+  "name": "Blessed Healer",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "The healing spells you cast on others heal you as well. Immediately after you cast a spell with a spell slot that restores {ref:glossary/hit-points} to one or more creatures other than yourself, you regain Hit Points equal to 2 plus the spell slot's level."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

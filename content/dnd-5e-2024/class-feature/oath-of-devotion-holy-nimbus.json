@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "oath-of-devotion-holy-nimbus",
+  "name": "Holy Nimbus",
+  "stats": {
+    "levels": [
+      20
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can imbue your Aura of Protection with holy power, granting the benefits below for 10 minutes or until you end them (no action required). Once you use this feature, you can't use it again until you finish a {ref:glossary/long-rest}. You can also restore your use of it by expending a level 5 spell slot (no action required).\n\n***Holy Ward.*** You have {ref:glossary/advantage} on any saving throw you are forced to make by a Fiend or an Undead.\n\n***Radiant Damage.*** Whenever an enemy starts its turn in the aura, that creature takes Radiant damage equal to your Charisma modifier plus your Proficiency Bonus.\n\n***Sunlight.*** The aura is filled with {ref:glossary/bright-light} that is sunlight."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

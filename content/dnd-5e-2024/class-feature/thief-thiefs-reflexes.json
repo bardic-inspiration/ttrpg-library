@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "thief-thiefs-reflexes",
+  "name": "Thief’s Reflexes",
+  "stats": {
+    "levels": [
+      17
+    ],
+    "text": "You are adept at laying ambushes and quickly escaping danger. You can take two turns during the first round of any combat. You take your first turn at your normal {ref:glossary/initiative} and your second turn at your Initiative minus 10."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

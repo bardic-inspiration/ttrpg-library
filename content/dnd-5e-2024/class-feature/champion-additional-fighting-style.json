@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "champion-additional-fighting-style",
+  "name": "Additional Fighting Style",
+  "stats": {
+    "levels": [
+      7
+    ],
+    "text": "You gain another Fighting Style feat of your choice."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

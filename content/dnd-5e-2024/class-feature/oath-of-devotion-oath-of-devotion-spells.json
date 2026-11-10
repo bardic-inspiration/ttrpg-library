@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "oath-of-devotion-oath-of-devotion-spells",
+  "name": "Oath of Devotion Spells",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "The magic of your oath ensures you always have certain spells ready; when you reach a Paladin level specified in the Oath of Devotion Spells table, you thereafter always have the listed spells prepared.\n\n**Oath of Devotion Spells**\n\n| Paladin Level | Spells |\n|---|---|\n| 3 | *{ref:spell/protection-from-evil-and-good}*, *{ref:spell/shield-of-faith}* |\n| 5 | *{ref:spell/aid}*, *{ref:spell/zone-of-truth}* |\n| 9 | *{ref:spell/beacon-of-hope}*, *{ref:spell/dispel-magic}* |\n| 13 | *{ref:spell/freedom-of-movement}*, *{ref:spell/guardian-of-faith}* |\n| 17 | *{ref:spell/commune}*, *{ref:spell/flame-strike}* |"
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

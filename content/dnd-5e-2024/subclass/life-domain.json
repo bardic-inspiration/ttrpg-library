@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "life-domain",
+  "name": "Life Domain",
+  "summary": "A Cleric subclass devoted to healing.",
+  "stats": {
+    "class": {
+      "ref": "class/cleric"
+    },
+    "tagline": "Soothe the Hurts of the World",
+    "text": "The Life Domain focuses on the positive energy that helps sustain all life in the multiverse. Clerics who tap into this domain are masters of healing, using that life force to cure many hurts.\n\nExistence itself relies on the positive energy associated with this domain, so a Cleric of almost any religious tradition might choose it. This domain is particularly associated with agricultural deities, gods of healing or endurance, and gods of home and community. Religious orders of healing also seek the magic of this domain.",
+    "features": [
+      {
+        "ref": "class-feature/life-domain-disciple-of-life"
+      },
+      {
+        "ref": "class-feature/life-domain-life-domain-spells"
+      },
+      {
+        "ref": "class-feature/life-domain-preserve-life"
+      },
+      {
+        "ref": "class-feature/life-domain-blessed-healer"
+      },
+      {
+        "ref": "class-feature/life-domain-supreme-healing"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

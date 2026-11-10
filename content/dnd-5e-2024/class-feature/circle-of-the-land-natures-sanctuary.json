@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "circle-of-the-land-natures-sanctuary",
+  "name": "Nature’s Sanctuary",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "As a {ref:glossary/magic} action, you can expend a use of your Wild Shape and cause spectral trees and vines to appear in a 15-foot Cube on the ground within 120 feet of yourself. They last there for 1 minute or until you have the {ref:condition/incapacitated} condition or die. You and your allies have Half Cover while in that area, and your allies gain the current {ref:glossary/resistance} of your Nature's Ward while there.\n\nAs a {ref:glossary/bonus-action}, you can move the Cube up to 60 feet to ground within 120 feet of yourself."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

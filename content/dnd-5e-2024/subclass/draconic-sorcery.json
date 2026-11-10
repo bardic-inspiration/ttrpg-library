@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "draconic-sorcery",
+  "name": "Draconic Sorcery",
+  "summary": "A Sorcerer subclass whose magic comes from the gift of a dragon.",
+  "stats": {
+    "class": {
+      "ref": "class/sorcerer"
+    },
+    "tagline": "Breathe the Magic of Dragons",
+    "text": "Your innate magic comes from the gift of a dragon. Perhaps an ancient dragon facing death bequeathed some of its magical power to you or your ancestor. You might have absorbed magic from a site infused with dragons' power. Or perhaps you handled a treasure taken from a dragon's hoard that was steeped in draconic power. Or you might have a dragon for an ancestor.",
+    "features": [
+      {
+        "ref": "class-feature/draconic-sorcery-draconic-resilience"
+      },
+      {
+        "ref": "class-feature/draconic-sorcery-draconic-spells"
+      },
+      {
+        "ref": "class-feature/draconic-sorcery-elemental-affinity"
+      },
+      {
+        "ref": "class-feature/draconic-sorcery-dragon-wings"
+      },
+      {
+        "ref": "class-feature/draconic-sorcery-dragon-companion"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

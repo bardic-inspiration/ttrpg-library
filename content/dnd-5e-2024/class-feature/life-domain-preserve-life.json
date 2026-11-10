@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "life-domain-preserve-life",
+  "name": "Preserve Life",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "As a {ref:glossary/magic} action, you present your {ref:equipment/holy-symbol} and expend a use of your Channel Divinity to evoke healing energy that can restore a number of {ref:glossary/hit-points} equal to five times your Cleric level. Choose Bloodied creatures within 30 feet of yourself (which can include you), and divide those Hit Points among them. This feature can restore a creature to no more than half its Hit Point maximum."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

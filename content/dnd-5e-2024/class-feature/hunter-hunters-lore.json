@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "hunter-hunters-lore",
+  "name": "Hunter’s Lore",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You can call on the forces of nature to reveal certain strengths and weaknesses of your prey. While a creature is marked by your *{ref:spell/hunters-mark}*, you know whether that creature has any Immunities, Resistances, or Vulnerabilities, and if the creature has any, you know what they are."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

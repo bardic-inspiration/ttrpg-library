@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "oath-of-devotion-aura-of-devotion",
+  "name": "Aura of Devotion",
+  "stats": {
+    "levels": [
+      7
+    ],
+    "text": "You and your allies have {ref:glossary/immunity} to the {ref:condition/charmed} condition while in your Aura of Protection. If a {ref:condition/charmed} ally enters the aura, that condition has no effect on that ally while there."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

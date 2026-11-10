@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "champion",
+  "name": "Champion",
+  "summary": "A Fighter subclass of physical excellence and improved critical hits.",
+  "stats": {
+    "class": {
+      "ref": "class/fighter"
+    },
+    "tagline": "Pursue Physical Excellence in Combat",
+    "text": "A Champion focuses on the development of martial prowess in a relentless pursuit of victory. Champions combine rigorous training with physical excellence to deal devastating blows, withstand peril, and garner glory. Whether in athletic contests or bloody battle, Champions strive for the crown of the victor.",
+    "features": [
+      {
+        "ref": "class-feature/champion-improved-critical"
+      },
+      {
+        "ref": "class-feature/champion-remarkable-athlete"
+      },
+      {
+        "ref": "class-feature/champion-additional-fighting-style"
+      },
+      {
+        "ref": "class-feature/champion-heroic-warrior"
+      },
+      {
+        "ref": "class-feature/champion-superior-critical"
+      },
+      {
+        "ref": "class-feature/champion-survivor"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "champion-superior-critical",
+  "name": "Superior Critical",
+  "stats": {
+    "levels": [
+      15
+    ],
+    "text": "Your attack rolls with weapons and Unarmed Strikes can now score a {ref:glossary/critical-hit} on a roll of 18–20 on the d20."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

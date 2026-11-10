@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "circle-of-the-land-natures-ward",
+  "name": "Nature’s Ward",
+  "stats": {
+    "levels": [
+      10
+    ],
+    "text": "You are immune to the {ref:condition/poisoned} condition, and you have {ref:glossary/resistance} to a damage type associated with your current land choice in the Circle Spells feature, as shown in the Nature's Ward table.\n\n**Nature's Ward**\n\n| Land Type | Resistance |\n|---|---|\n| Arid | Fire |\n| Polar | Cold |\n| Temperate | Lightning |\n| Tropical | Poison |"
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
