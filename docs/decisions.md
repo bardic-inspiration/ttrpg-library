@@ -232,6 +232,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | v1's allowance for a format-fix PR to add the SRD entries that motivated it isn't carried over: it was scoped to the SRD import milestone, which is done. | | #108 |
 | Gap fill is off until v2 is built; routines take `request` issues only. | Entries made in the v1 shape would only add to v2's schema migrations | #95, #109 |
 | Text-only PRs (docs plus Markdown only tests read: the stage spec, skills, and guidelines) skip validate, build, and the type and style checks, and run the tests. `dev-checks` runs alongside `content-checks`. | Fast feedback where the build can't change | #212 |
+| The SRD import's PDF extraction is a committed Python module, `scripts/srd-extract/`, which stage converters import; the converters stay in scratch. CI only compiles it. | Four stages rebuilt the same extraction and rediscovered its edge cases; pdfplumber has no TypeScript equivalent, and CI never reads the PDF | #234 |
 
 ### Linking
 

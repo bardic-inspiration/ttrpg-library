@@ -31,3 +31,6 @@ test-results/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Python bytecode (scripts/srd-extract)
+__pycache__/

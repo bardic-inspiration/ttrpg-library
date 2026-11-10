@@ -84,6 +84,7 @@ scripts/
   pr-summary/      the job summary for changed entries
   generate/        request defaults and the gap-fill picker
   srd-coverage/    SRD manifest records the library lacks
+  srd-extract/     SRD PDF text extraction for import sessions (Python; not run in CI)
   serve/, a11y/, snapshots/, browser/   serving and browser checks of the built site
 site/                                    the Astro project (site.md)
 tests/                                   Vitest suites and fixtures
