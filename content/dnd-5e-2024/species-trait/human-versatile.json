@@ -4,7 +4,7 @@
   "id": "human-versatile",
   "name": "Versatile",
   "stats": {
-    "text": "You gain an Origin feat of your choice (see \"Feats\"). Skilled is recommended."
+    "text": "You gain an Origin feat of your choice (see \"Feats\"). {ref:feat/skilled} is recommended."
   },
   "meta": {
     "createdAt": "2026-11-10",
@@ -14,6 +14,7 @@
         234
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-10"
   }
 }

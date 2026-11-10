@@ -7,7 +7,7 @@
     "levels": [
       3
     ],
-    "text": "You gain a Sorcerer subclass of your choice. The Draconic Sorcery subclass is detailed after this class's description. A subclass is a specialization that grants you features at certain Sorcerer levels. For the rest of your career, you gain each of your subclass's features that are of your Sorcerer level or lower."
+    "text": "You gain a Sorcerer subclass of your choice. The {ref:subclass/draconic-sorcery} subclass is detailed after this class's description. A subclass is a specialization that grants you features at certain Sorcerer levels. For the rest of your career, you gain each of your subclass's features that are of your Sorcerer level or lower."
   },
   "meta": {
     "createdAt": "2026-11-10",
@@ -17,6 +17,7 @@
         234
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-10"
   }
 }

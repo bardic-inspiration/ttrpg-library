@@ -12,7 +12,7 @@
       14,
       16
     ],
-    "text": "You gain the Ability Score Improvement feat (see \"Feats\") or another feat of your choice for which you qualify. You gain this feature again at Fighter levels 6, 8, 12, 14, and 16."
+    "text": "You gain the {ref:feat/ability-score-improvement} feat (see \"Feats\") or another feat of your choice for which you qualify. You gain this feature again at Fighter levels 6, 8, 12, 14, and 16."
   },
   "meta": {
     "createdAt": "2026-11-10",
@@ -22,6 +22,7 @@
         234
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-10"
   }
 }
