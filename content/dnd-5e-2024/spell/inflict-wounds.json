@@ -8,7 +8,9 @@
     "level": 1,
     "school": "necromancy",
     "classes": [
-      "cleric"
+      {
+        "ref": "class/cleric"
+      }
     ],
     "castingTime": {
       "amount": 1,

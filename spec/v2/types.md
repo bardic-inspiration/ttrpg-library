@@ -105,13 +105,10 @@ a link to one type takes a typed ref
 
 #### Spell
 
-- **`classes`** takes typed refs to classes (`ClassRef`) in place of the
-  class enum, once the SRD classes are in the library. The level line prints
-  the same words, each linked: "Level 1 Evocation (Sorcerer, Wizard)". The
-  labels are "Classes" / "Spells", and the facet becomes an enum facet
-  valued by key and shown by name, like condition immunities. A class's spell
-  list is derived from these refs ([Classes](../../docs/rulesets.md#classes)), so it's stored once, on
-  the spells.
+Built ([Spells](../../docs/rulesets.md#spells)): `classes` are class refs,
+linked in the level line. Except one facet: the Classes filter becomes an
+enum facet over the refs, valued by key and shown by name, with the filter
+tree (#235), in place of the derived class ids it reads now.
 
 #### Background
 
@@ -123,40 +120,11 @@ the filter tree (#235), and the card shows it then, beside the abilities.
 
 Built ([Classes](../../docs/rulesets.md#classes),
 [Subclasses](../../docs/rulesets.md#subclasses)), except what waits for the
-SRD import (#234):
+filter tree:
 
-- The build checks each SRD class's derived Features table and spell list
-  against the SRD's.
 - The subclass card shows its class, `stats.class` becomes an enum facet
   valued by key and shown by name, and subclasses sort by class, with the
   filter tree (#235).
-
-## Cases
-
-The hardest SRD cases, which become the build's fixtures:
-
-- **The Sorcerer:** an option list (Metamagic Options, with costs), a feature
-  that repeats in the table (Metamagic at 10 and 17), a class column
-  (Sorcery Points), full-caster slots, a derived spell list, and a subclass
-  with "Subclass feature" at 6, 14, and 18.
-- **The Warlock:** Eldritch Invocation Options, with prerequisites that name
-  other options and Repeatable paragraphs; pact slots and slot level; and
-  Mystic Arcanum's noted rows.
-- **The Barbarian:** "Improved Brutal Strike" printed at two levels, and
-  three columns.
-- **The Paladin:** half-caster slots, and Oath of Devotion Spells as a table
-  in a subclass feature.
-- **The Druid:** Circle of the Land Spells, four tables in one feature.
-
-## Migration
-
-Spell `classes` move from the enum to class refs in the SRD import stage
-for classes (#234), once the classes exist; every entry keeps its classes and
-its words.
-
-## Done when
-
-- Each SRD class's derived Features table and spell list match the SRD's.
 
 ## Out of scope
 

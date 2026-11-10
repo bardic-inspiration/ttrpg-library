@@ -8,10 +8,18 @@
     "level": 9,
     "school": "divination",
     "classes": [
-      "bard",
-      "druid",
-      "warlock",
-      "wizard"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

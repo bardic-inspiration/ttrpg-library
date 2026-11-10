@@ -8,7 +8,9 @@
     "level": 8,
     "school": "necromancy",
     "classes": [
-      "wizard"
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

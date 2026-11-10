@@ -8,11 +8,21 @@
     "level": 5,
     "school": "divination",
     "classes": [
-      "bard",
-      "cleric",
-      "druid",
-      "warlock",
-      "wizard"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 10,

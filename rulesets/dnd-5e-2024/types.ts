@@ -102,7 +102,7 @@ export interface CreatureStats {
 export interface SpellStats {
   level: number;
   school: string;
-  classes: string[];
+  classes: Ref[];
   castingTime: { amount: number; unit: 'action' | 'bonus-action' | 'reaction' | 'minute' | 'hour'; trigger?: string; note?: string };
   ritual: boolean;
   range: {

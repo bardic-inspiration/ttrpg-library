@@ -8,8 +8,12 @@
     "level": 3,
     "school": "conjuration",
     "classes": [
-      "cleric",
-      "paladin"
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/paladin"
+      }
     ],
     "castingTime": {
       "amount": 1,

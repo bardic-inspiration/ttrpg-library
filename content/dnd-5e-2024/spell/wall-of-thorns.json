@@ -8,7 +8,9 @@
     "level": 6,
     "school": "conjuration",
     "classes": [
-      "druid"
+      {
+        "ref": "class/druid"
+      }
     ],
     "castingTime": {
       "amount": 1,

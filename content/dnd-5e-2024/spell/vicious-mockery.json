@@ -8,7 +8,9 @@
     "level": 0,
     "school": "enchantment",
     "classes": [
-      "bard"
+      {
+        "ref": "class/bard"
+      }
     ],
     "castingTime": {
       "amount": 1,

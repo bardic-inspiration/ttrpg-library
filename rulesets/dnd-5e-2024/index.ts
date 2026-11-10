@@ -23,9 +23,12 @@ export const ruleset: RulesetModule = {
     if (type === 'feat') return { repeatable: (stats as FeatStats).repeatable !== undefined };
     if (type === 'species') return { sizes: (stats as SpeciesStats).sizes.map((s) => s.size) };
     if (type === 'class') return { ...deriveClass(stats as ClassStats, tables) };
-    if (type === 'spell' || type === 'item') {
-      return deriveStatBlocks((stats as SpellStats | ItemStats).statBlocks, tables);
+    if (type === 'spell') {
+      const spell = stats as SpellStats;
+      // The class keys, for the Classes filter until the filter tree reads ref labels (#235).
+      return { ...deriveStatBlocks(spell.statBlocks, tables), classes: spell.classes.map((c) => c.ref.slice('class/'.length)) };
     }
+    if (type === 'item') return deriveStatBlocks((stats as ItemStats).statBlocks, tables);
     return {};
   },
   check(type, stats, rules, context) {

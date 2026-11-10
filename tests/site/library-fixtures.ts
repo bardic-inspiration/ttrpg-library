@@ -15,4 +15,4 @@ export async function fixtureLibrary() {
 
 /** Text of rendered HTML: tags dropped, whitespace collapsed. */
 export const textOf = (html: string): string =>
-  html.replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/\s+/g, ' ').replace(/ ([.,;:)])/g, '$1');
+  html.replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/\s+/g, ' ').replace(/ ([.,;:)])/g, '$1').replace(/\( /g, '(');

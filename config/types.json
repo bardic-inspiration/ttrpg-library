@@ -166,7 +166,7 @@
         "facets": [
           { "path": "stats.level", "label": "Level", "kind": "range", "format": "spell-level" },
           { "path": "stats.school", "label": "School", "kind": "enum", "vocabulary": "school" },
-          { "path": "stats.classes", "label": "Classes", "kind": "enum", "vocabulary": "class" },
+          { "path": "derived.classes", "label": "Classes", "kind": "enum", "vocabulary": "class" },
           { "path": "stats.duration.concentration", "label": "Concentration", "kind": "enum" },
           { "path": "stats.ritual", "label": "Ritual", "kind": "enum" },
           { "path": "stats.castingTime.unit", "label": "Casting time", "kind": "enum", "format": "title" }

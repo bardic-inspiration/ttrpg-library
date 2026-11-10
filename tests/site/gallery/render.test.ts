@@ -21,7 +21,8 @@ describe('Gallery', () => {
 
   it('renders a card per result, with the type badge and card fields, and no art when there is none', () => {
     const html = render({});
-    expect(html.match(/<article class="card"/g)).toHaveLength(3);
+    // The three example entries, and the two classes Frost Lance names.
+    expect(html.match(/<article class="card"/g)).toHaveLength(5);
     expect(html).toContain('data-type="creature"');
     expect(html).toContain('<dt>CR</dt><dd>2</dd>');
     expect(html).toContain('<dt>Level</dt><dd>Level 1</dd>');
@@ -43,7 +44,7 @@ describe('Gallery', () => {
   });
 
   it('announces the result count in a polite live region', () => {
-    expect(render({})).toContain('<p role="status" class="gallery__count">3 entries</p>');
+    expect(render({})).toContain('<p role="status" class="gallery__count">5 entries</p>');
     expect(render({ initialQuery: '?f.type=spell' })).toContain('>1 entry</p>');
     expect(render({ initialQuery: '?q=zzzzqqq' })).toContain('>No entries match.</p>');
   });

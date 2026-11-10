@@ -8,8 +8,12 @@
     "level": 0,
     "school": "evocation",
     "classes": [
-      "sorcerer",
-      "wizard"
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

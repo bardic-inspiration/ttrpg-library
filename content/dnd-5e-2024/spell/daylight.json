@@ -8,11 +8,21 @@
     "level": 3,
     "school": "evocation",
     "classes": [
-      "cleric",
-      "druid",
-      "paladin",
-      "ranger",
-      "sorcerer"
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/paladin"
+      },
+      {
+        "ref": "class/ranger"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
     ],
     "castingTime": {
       "amount": 1,

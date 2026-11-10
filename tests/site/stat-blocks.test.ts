@@ -77,8 +77,9 @@ describe('statBlocks schema (docs/rulesets.md#embedded-stat-blocks, docs/ruleset
     const spell = await frostLance();
     spell.stats.statBlocks = [sprite()];
     const { records } = await buildIndex(await library([spell]));
-    expect(records[0]!.search).toContain('Frost Sprite');
-    expect(records[0]!.search).toContain('Chill');
+    const record = records.find((r) => r.type === 'spell')!;
+    expect(record.search).toContain('Frost Sprite');
+    expect(record.search).toContain('Chill');
   });
 });
 

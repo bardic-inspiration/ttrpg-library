@@ -8,11 +8,21 @@
     "level": 4,
     "school": "enchantment",
     "classes": [
-      "bard",
-      "druid",
-      "sorcerer",
-      "warlock",
-      "wizard"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

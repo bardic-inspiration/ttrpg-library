@@ -8,7 +8,9 @@
     "level": 6,
     "school": "evocation",
     "classes": [
-      "wizard"
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

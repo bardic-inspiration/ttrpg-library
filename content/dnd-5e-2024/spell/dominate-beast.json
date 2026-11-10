@@ -8,9 +8,15 @@
     "level": 4,
     "school": "enchantment",
     "classes": [
-      "druid",
-      "ranger",
-      "sorcerer"
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/ranger"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
     ],
     "castingTime": {
       "amount": 1,

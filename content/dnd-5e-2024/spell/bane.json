@@ -8,9 +8,15 @@
     "level": 1,
     "school": "enchantment",
     "classes": [
-      "bard",
-      "cleric",
-      "warlock"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/warlock"
+      }
     ],
     "castingTime": {
       "amount": 1,

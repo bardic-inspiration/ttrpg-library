@@ -8,7 +8,9 @@
     "level": 4,
     "school": "conjuration",
     "classes": [
-      "cleric"
+      {
+        "ref": "class/cleric"
+      }
     ],
     "castingTime": {
       "amount": 1,

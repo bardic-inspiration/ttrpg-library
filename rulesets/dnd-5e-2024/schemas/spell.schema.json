@@ -13,11 +13,11 @@
       "enum": ["abjuration", "conjuration", "divination", "enchantment", "evocation", "illusion", "necromancy", "transmutation"]
     },
     "classes": {
-      "description": "The classes whose lists include the spell.",
+      "description": "The classes whose spell lists include the spell, printed in the level line and linked: \"Level 1 Evocation (Sorcerer, Wizard)\".",
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "enum": ["bard", "cleric", "druid", "paladin", "ranger", "sorcerer", "warlock", "wizard"] }
+      "items": { "$ref": "common.schema.json#/$defs/ClassRef" }
     },
     "castingTime": {
       "description": "Casting time.",

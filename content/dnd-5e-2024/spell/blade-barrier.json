@@ -8,7 +8,9 @@
     "level": 6,
     "school": "evocation",
     "classes": [
-      "cleric"
+      {
+        "ref": "class/cleric"
+      }
     ],
     "castingTime": {
       "amount": 1,

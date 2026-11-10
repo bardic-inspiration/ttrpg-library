@@ -8,10 +8,18 @@
     "level": 2,
     "school": "transmutation",
     "classes": [
-      "paladin",
-      "ranger",
-      "sorcerer",
-      "wizard"
+      {
+        "ref": "class/paladin"
+      },
+      {
+        "ref": "class/ranger"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

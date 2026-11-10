@@ -8,9 +8,15 @@
     "level": 8,
     "school": "enchantment",
     "classes": [
-      "bard",
-      "druid",
-      "wizard"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

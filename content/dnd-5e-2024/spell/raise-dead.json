@@ -8,9 +8,15 @@
     "level": 5,
     "school": "necromancy",
     "classes": [
-      "bard",
-      "cleric",
-      "paladin"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/paladin"
+      }
     ],
     "castingTime": {
       "amount": 1,

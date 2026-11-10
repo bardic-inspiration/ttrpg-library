@@ -8,7 +8,9 @@
     "level": 1,
     "school": "conjuration",
     "classes": [
-      "ranger"
+      {
+        "ref": "class/ranger"
+      }
     ],
     "castingTime": {
       "amount": 1,

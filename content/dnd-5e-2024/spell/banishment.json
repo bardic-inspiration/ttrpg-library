@@ -8,11 +8,21 @@
     "level": 4,
     "school": "abjuration",
     "classes": [
-      "cleric",
-      "paladin",
-      "sorcerer",
-      "warlock",
-      "wizard"
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/paladin"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

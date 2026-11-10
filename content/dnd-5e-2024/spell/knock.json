@@ -8,9 +8,15 @@
     "level": 2,
     "school": "transmutation",
     "classes": [
-      "bard",
-      "sorcerer",
-      "wizard"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

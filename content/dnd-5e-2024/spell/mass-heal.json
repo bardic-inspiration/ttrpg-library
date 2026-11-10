@@ -8,7 +8,9 @@
     "level": 9,
     "school": "abjuration",
     "classes": [
-      "cleric"
+      {
+        "ref": "class/cleric"
+      }
     ],
     "castingTime": {
       "amount": 1,

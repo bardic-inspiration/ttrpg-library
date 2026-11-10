@@ -8,7 +8,9 @@
     "level": 2,
     "school": "evocation",
     "classes": [
-      "druid"
+      {
+        "ref": "class/druid"
+      }
     ],
     "castingTime": {
       "amount": 1,
