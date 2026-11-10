@@ -232,6 +232,10 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | v1's allowance for a format-fix PR to add the SRD entries that motivated it isn't carried over: it was scoped to the SRD import milestone, which is done. | | #108 |
 | Gap fill is off until v2 is built; routines take `request` issues only. | Entries made in the v1 shape would only add to v2's schema migrations | #95, #109 |
 | Text-only PRs (docs plus Markdown only tests read: the stage spec, skills, and guidelines) skip validate, build, and the type and style checks, and run the tests. `dev-checks` runs alongside `content-checks`. | Fast feedback where the build can't change | #212 |
+| A session takes one issue, or one batch of an import stage, and a new session takes the next. | Every turn re-reads the session's context, so a long session costs more per turn; the docs and PRs carry what the next one needs | #234 |
+| Agents watch only PRs that may need their work: dev PRs, until merged or until the owner turns on auto-merge. An owner-started session's content PRs aren't watched. | Each event is a turn; most events on a PR the owner merges need nothing | #234 |
+| An import batch that refs a type still in an open PR waits for it to merge, rather than stacking on its branch. | Stacked branches cost merges of `main`, re-validation, and PR-number mix-ups | #234 |
+| A test that validates library entries loads the whole library except the types its fixtures stand in for. | A link added in content broke tests that loaded a few types by hand, twice in one stage (#284) | #234 |
 
 ### Linking
 
