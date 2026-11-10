@@ -66,9 +66,15 @@ defines. List each form the schema or the template can't hold.
 ## Step 4: Transcribe from the PDF
 
 Transcribe from the text layer of `docs/SRD_CC_v5.2.pdf`, never from memory.
-For a batch of more than a few entries, write a throwaway extraction script
-in the session's scratch space (never in the repo), so every entry goes
-through the same rules. What worked:
+Use `scripts/srd-extract/srd_extract.py`
+([README](../../../scripts/srd-extract/README.md)), so every entry goes through
+the same rules: `paragraphs <first> <last>` gives a page range as headings and
+styled paragraphs, `headings` maps a chapter's entries and features, and
+`link` makes mentions of rules into tokens. A batch's converter, the code that
+turns paragraphs into one type's entries, is written for that batch in the
+session's scratch space and imports the module; it isn't committed. Fix a
+rule below in the module, not in a converter, so later stages get it. The
+module follows these rules:
 
 - **Order by baseline.** Read characters with their font, size, and text
   matrix, and order them by the matrix baseline, not by the `top` value,
