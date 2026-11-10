@@ -29,12 +29,14 @@ const fixtures = async () => [
   ...(await dir(join(FIXTURES, 'class-option'))),
 ];
 /**
- * The fixtures and the library's SRD spells, which the features name and the spell list derives
- * from, with the creatures and species the spells name.
+ * The fixtures and the rest of the library: its SRD spells, which the features name and the spell
+ * list derives from, and every other entry they or their links reach. The library's own classes and
+ * their components stay out, since the fixtures stand in for the Sorcerer and Draconic Sorcery.
  */
+const FIXTURE_TYPES = new Set(['class', 'class-feature', 'class-option', 'subclass']);
 const withSpells = async () => [
   ...(await fixtures()),
-  ...(await Promise.all(['spell', 'creature', 'species', 'species-trait'].map((type) => dir(join(CONTENT, type))))).flat(),
+  ...(await Promise.all((await readdir(CONTENT)).filter((type) => !FIXTURE_TYPES.has(type)).map((type) => dir(join(CONTENT, type))))).flat(),
 ];
 
 const temps: string[] = [];
