@@ -328,6 +328,18 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A template may place a page type's components itself (`PLACES_COMPONENTS`); the species page prints its traits as anchored, bold-italic titled paragraphs rather than generic sections. | P5, P6: the SRD prints traits as run-in paragraphs | #232 |
 | The species page words "As a/an <Name>, …" with "an" before a vowel, and `intro` overrides it. | P6: eight of nine SRD species share the sentence | #232 |
 
+### Wording
+
+| Decision | Why | Source |
+|---|---|---|
+| The site is a web reference built on the SRD, not a facsimile of the print book. SRD fidelity means the same rules and meaning: a difference a player wouldn't play differently is style, and allowed. | The SRD was written for print; custom content, the site's main purpose, needs one house style | #273 |
+| Allowed SRD adaptations: form (casing, list punctuation, quotes, run-in heads, table layout), connective wording composed from fields, print cross-references replaced by links, and link display text. Changing a number, rules term, condition, scope, or name, or dropping or adding a rules sentence, is not. | A bright line between style and meaning that review can apply | #273 |
+| The SRD attribution states that the material is adapted, in the full statement and the short form. | CC-BY 4.0 requires indicating that licensed material was modified | #273 |
+| All composed text goes through one wording layer: ruleset-independent grammar in `lib/wording/` (phrases, casing, lists, plurals, articles) and a per-ruleset phrase book of sentences and vocabulary. Type modules only compose, and a test enforces it. | P3, P4: each phrasing rule once; new types add data | #273 |
+| Composed text is a `Phrase`, a list of plain and link parts, rendered to markdown or plain text, replacing plain strings, ad hoc markdown, and base item segments. | One form for every consumer | #273 |
+| A link token may carry display text, `{ref:<key>|<text>}`, in stored and composed text. | A link's words sometimes differ from its target's name: a group's qualifier, "Traveler's Clothes" | #273 |
+| Facet formats read the phrase book's vocabulary. | A value reads the same on a card, in a filter, and on its page | #273 |
+
 ### UI
 
 | Decision | Why | Source |
