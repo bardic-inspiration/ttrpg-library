@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "defense",
+  "name": "Defense",
+  "summary": "A fighting style feat granting +1 to Armor Class while you wear armor.",
+  "stats": {
+    "category": "fighting-style",
+    "prerequisite": "Fighting Style Feature",
+    "text": "While you're wearing Light, Medium, or Heavy armor, you gain a +1 bonus to {ref:glossary/armor-class}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

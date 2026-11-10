@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "two-weapon-fighting",
+  "name": "Two-Weapon Fighting",
+  "summary": "A fighting style feat that adds your ability modifier to the damage of a Light weapon's extra attack.",
+  "stats": {
+    "category": "fighting-style",
+    "prerequisite": "Fighting Style Feature",
+    "text": "When you make an extra attack as a result of using a weapon that has the Light property, you can add your ability modifier to the damage of that attack if you aren't already adding it to the damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

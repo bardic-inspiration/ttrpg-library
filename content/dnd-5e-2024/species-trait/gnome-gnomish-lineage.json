@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "gnome-gnomish-lineage",
+  "name": "Gnomish Lineage",
+  "stats": {
+    "text": "You are part of a lineage that grants you supernatural abilities. Choose one of the following options; whichever one you choose, Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage):\n\n***Forest Gnome.*** You know the *{ref:spell/minor-illusion}* cantrip. You also always have the *{ref:spell/speak-with-animals}* spell prepared. You can cast it without a spell slot a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a {ref:glossary/long-rest}. You can also use any spell slots you have to cast the spell.\n\n***Rock Gnome.*** You know the *{ref:spell/mending}* and *{ref:spell/prestidigitation}* cantrips. In addition, you can spend 10 minutes casting *{ref:spell/prestidigitation}* to create a Tiny clockwork device (AC 5, 1 HP), such as a toy, fire starter, or music box. When you create the device, you determine its function by choosing one effect from *{ref:spell/prestidigitation}*; the device produces that effect whenever you or another creature takes a {ref:glossary/bonus-action} to activate it with a touch. If the chosen effect has options within it, you choose one of those options for the device when you create it. For example, if you choose the spell's ignite-extinguish effect, you determine whether the device ignites or extinguishes fire; the device doesn't do both. You can have three such devices in existence at a time, and each falls apart 8 hours after its creation or when you dismantle it with a touch as a {ref:glossary/utilize} action."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
