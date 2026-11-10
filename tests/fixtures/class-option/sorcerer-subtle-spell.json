@@ -1,0 +1,17 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "sorcerer-subtle-spell",
+  "name": "Subtle Spell",
+  "stats": {
+    "cost": "1 Sorcery Point",
+    "text": "When you cast a spell, you can spend 1 Sorcery Point to cast it without any Verbal, Somatic, or Material components, except Material components that are consumed by the spell or that have a cost specified in the spell."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

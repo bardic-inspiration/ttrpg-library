@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "draconic-sorcery-dragon-wings",
+  "name": "Dragon Wings",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can cause draconic wings to appear on your back. The wings last for 1 hour or until you dismiss them (no action required). For the duration, you have a {ref:glossary/fly-speed} of 60 feet.\n\nOnce you use this feature, you can’t use it again until you finish a {ref:glossary/long-rest} unless you spend 3 Sorcery Points (no action required) to restore your use of it."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

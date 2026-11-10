@@ -327,6 +327,15 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | `linking.md` is deleted: v1's link standard carries into v2 unchanged, and the first v2 types declare their link fields in `refs.ts` and their schemas. | Nothing in it remained to build | #231 |
 | A template may place a page type's components itself (`PLACES_COMPONENTS`); the species page prints its traits as anchored, bold-italic titled paragraphs rather than generic sections. | P5, P6: the SRD prints traits as run-in paragraphs | #232 |
 | The species page words "As a/an <Name>, …" with "an" before a vowel, and `intro` overrides it. | P6: eight of nine SRD species share the sentence | #232 |
+| A ruleset module may have `deriveLinked`, values that read other entries, which the site merges into an entry's derived values: a class's Class Features column, spell list, and subclasses. | `derive` sees one entry's stats; these read its components, the spells, and the subclasses | #233 |
+| Until the SRD classes are imported, a class's spell list is the spells whose `classes` enum holds its id, plus its own `spells`. | Spell `classes` move to class refs in #234, once the classes exist to resolve them | #233 |
+| `check` receives whether the entry is an SRD entry, for the error on an SRD class with `spells`. | That rule depends on provenance, which a type's stats don't hold | #233 |
+| The class page prints its Features table and spell list as titled pipe tables, with each feature and spell a link, and the slot columns headed "Level 1 Slots" … in place of the SRD's grouped "Spell Slots per Spell Level" header. | P3: one table style; a pipe table has one header row, and the layout waits for the UI redesign (#237) | #233 |
+| At a level that has both class features and a later subclass level, the Class Features column prints "Subclass feature" after the features. | No SRD class has such a level; a custom one reads features first, as the first subclass level does | #233 |
+| The class page heads its Core Traits lines "Core <Class> Traits" and its subclasses "<Class> Subclasses"; the subclass page's heading is plain text, and it links its class through Links ("Subclass of"). | The SRD prints the traits as a titled table and has no subclass list; a heading isn't a link | #233 |
+| The subclass card's class, the `stats.class` facet, and a sort by class wait for the filter tree; subclasses sort by name until then. | A facet over refs needs the tree's ref labels (#235), as a background's feat does | #233 |
+| The hit die and casting progression read through the phrase book's `hitDie` ("D6") and `spellcastingProgression` ("Full", "Half", "Pact") vocabularies. | A value reads the same on a card, in a filter, and on its page | #233 |
+| The class fixtures are the SRD Sorcerer and Draconic Sorcery in full; the Warlock's, Paladin's, and Barbarian's cases are tested as derivations. Matching every SRD class's table and spell list is the import's (#234). | The Sorcerer holds most cases; the import transcribes the rest | #233 |
 
 ### Wording
 

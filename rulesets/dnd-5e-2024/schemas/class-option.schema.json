@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/class-option.schema.json",
+  "title": "dnd-5e-2024 class option stats (docs/rulesets.md#classes)",
+  "description": "A component of a class (docs/content-model.md#components): one option of an option list, such as a Metamagic option or an Eldritch Invocation, printed under the list on its class's page.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["text"],
+  "properties": {
+    "prerequisite": {
+      "description": "Printed under the name as \"Prerequisite: Level 5+ Warlock, Pact of the Blade Invocation\", with a token for an option it names.",
+      "$ref": "common.schema.json#/$defs/Text"
+    },
+    "cost": { "description": "Printed \"Cost: 1 Sorcery Point\".", "$ref": "common.schema.json#/$defs/Line" },
+    "text": { "$ref": "common.schema.json#/$defs/Text" },
+    "repeatable": { "description": "Printed last as \"Repeatable.\" and the text, as a feat's.", "$ref": "common.schema.json#/$defs/Text" }
+  }
+}

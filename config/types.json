@@ -16,6 +16,26 @@
         "defaultSort": "name:asc",
         "defaultFilters": ["stats.abilities", "tags.theme"]
       },
+      "class": {
+        "label": "Class",
+        "plural": "Classes",
+        "template": "class-page",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/class.md",
+        "facets": [
+          { "path": "stats.primaryAbility.abilities", "label": "Primary ability", "kind": "enum", "vocabulary": "ability" },
+          { "path": "stats.hitDie", "label": "Hit Point Die", "kind": "enum", "vocabulary": "hitDie", "order": ["d6", "d8", "d10", "d12"] },
+          {
+            "path": "stats.spellcasting.progression",
+            "label": "Spellcasting",
+            "kind": "enum",
+            "vocabulary": "spellcastingProgression",
+            "order": ["full", "half", "pact"]
+          }
+        ],
+        "cardFields": ["stats.primaryAbility.abilities", "stats.hitDie"],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["stats.primaryAbility.abilities", "tags.theme"]
+      },
       "condition": {
         "label": "Condition",
         "plural": "Conditions",
@@ -162,6 +182,16 @@
             "enum": ["abjuration", "conjuration", "divination", "enchantment", "evocation", "illusion", "necromancy", "transmutation"]
           }
         ]
+      },
+      "subclass": {
+        "label": "Subclass",
+        "plural": "Subclasses",
+        "template": "subclass-page",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/subclass.md",
+        "facets": [],
+        "cardFields": [],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["tags.theme"]
       }
     }
   }

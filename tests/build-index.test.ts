@@ -221,7 +221,7 @@ describe('the build', () => {
 
 // Content types that come only by request, so they have no gap buckets, and have no key stat for
 // PR bodies (docs/generation.md#gap-buckets, docs/site.md#type-registry).
-const REQUEST_ONLY = ['background', 'species'];
+const REQUEST_ONLY = ['background', 'class', 'species', 'subclass'];
 
 describe('the type registry', () => {
   it('registers every content type, and every rules type that takes extensions, with the docs/site.md#type-registry keys', async () => {

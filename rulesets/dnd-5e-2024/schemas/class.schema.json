@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/class.schema.json",
+  "title": "dnd-5e-2024 class stats (docs/rulesets.md#classes)",
+  "description": "A page type: its features and options are components it lists in order. Stored inputs only; derives the proficiency bonus and spell slots by level, and its Features table rows and spell list from the library. Cross-field rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["primaryAbility", "hitDie", "savingThrows", "skills", "weapons", "armor", "equipment", "multiclass", "features", "subclassLevels"],
+  "properties": {
+    "primaryAbility": {
+      "description": "Printed \"Strength or Dexterity\", \"Dexterity and Wisdom\"; `join` is required with two or more abilities, and only then.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["abilities"],
+      "properties": {
+        "abilities": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/Ability" } },
+        "join": { "enum": ["and", "or"] }
+      },
+      "if": { "properties": { "abilities": { "type": "array", "minItems": 2 } } },
+      "then": { "required": ["join"] },
+      "else": { "not": { "required": ["join"] } }
+    },
+    "hitDie": { "description": "Printed \"D12 per Barbarian level\".", "enum": ["d6", "d8", "d10", "d12"] },
+    "savingThrows": {
+      "description": "Exactly two abilities, printed \"Strength and Constitution\".",
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/Ability" }
+    },
+    "skills": {
+      "description": "Printed \"Choose 2: Animal Handling, Athletics, … or Survival\"; without `from`, \"Choose any 3 skills (see “Playing the Game”)\".",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["choose"],
+      "properties": {
+        "choose": { "type": "integer", "minimum": 1 },
+        "from": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/Skill" } }
+      }
+    },
+    "weapons": { "description": "Weapon Proficiencies, as printed: \"Simple and Martial weapons\".", "$ref": "common.schema.json#/$defs/Text" },
+    "tools": { "description": "Tool Proficiencies, as printed: \"Choose 3 Musical Instruments\".", "$ref": "common.schema.json#/$defs/Text" },
+    "armor": { "description": "Armor Training, as printed: \"Light and Medium armor and Shields\", or \"None\".", "$ref": "common.schema.json#/$defs/Text" },
+    "equipment": { "description": "Starting Equipment (docs/rulesets.md#starting-equipment).", "$ref": "common.schema.json#/$defs/StartingEquipment" },
+    "multiclass": {
+      "description": "The bullets under \"As a Multiclass Character\", as printed. The template writes the \"As a Level 1 Character\" bullets, which every class shares.",
+      "$ref": "common.schema.json#/$defs/Text"
+    },
+    "features": {
+      "description": "Its class features, in printed order: by level, and in table order within a level.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "common.schema.json#/$defs/ClassFeatureRef" }
+    },
+    "subclassLevels": {
+      "description": "The levels that grant subclass features, ascending: [3, 6, 10, 14]. The first is the level of the class's \"<Class> Subclass\" feature; the Features table prints \"Subclass feature\" at the others.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "integer", "minimum": 1, "maximum": 20 }
+    },
+    "columns": {
+      "description": "The Features table's class-specific columns, in order, each with its 20 values as printed (\"2\", \"+2\", \"1d6\", \"+10 ft.\", \"—\").",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "values"],
+        "properties": {
+          "name": { "$ref": "common.schema.json#/$defs/Line" },
+          "values": { "type": "array", "minItems": 20, "maxItems": 20, "items": { "$ref": "common.schema.json#/$defs/Line" } }
+        }
+      }
+    },
+    "spellcasting": {
+      "description": "Its casting: the slots derive from `progression` (full, half, or pact), and `cantrips` and `prepared` give the Features table's columns, one number per level.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ability", "progression", "prepared"],
+      "properties": {
+        "ability": { "$ref": "common.schema.json#/$defs/Ability" },
+        "progression": { "enum": ["full", "half", "pact"] },
+        "cantrips": { "type": "array", "minItems": 20, "maxItems": 20, "items": { "type": "integer", "minimum": 0 } },
+        "prepared": { "type": "array", "minItems": 20, "maxItems": 20, "items": { "type": "integer", "minimum": 0 } }
+      }
+    },
+    "optionLists": {
+      "description": "Its option lists, such as Metamagic Options: each a heading, its intro, and its options in printed order.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "text", "options"],
+        "properties": {
+          "name": { "description": "The heading: \"Metamagic Options\".", "$ref": "common.schema.json#/$defs/Line" },
+          "text": { "description": "The intro under the heading.", "$ref": "common.schema.json#/$defs/Text" },
+          "options": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/ClassOptionRef" } }
+        }
+      }
+    },
+    "spells": {
+      "description": "Existing spells that join its spell list, beside every spell whose `classes` names it. Only on a custom class.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/SpellRef" }
+    }
+  }
+}

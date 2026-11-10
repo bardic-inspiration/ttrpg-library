@@ -5,6 +5,7 @@
 import { PLACES_COMPONENTS, templateFor, type TemplateProps } from '../../lib/template';
 import registry from '../../../../config/types.json';
 import BackgroundCard from './BackgroundCard.astro';
+import ClassPage from './ClassPage.astro';
 import ConditionCard from './ConditionCard.astro';
 import CreatureStatBlock from './CreatureStatBlock.astro';
 import EquipmentCard from './EquipmentCard.astro';
@@ -14,6 +15,7 @@ import ItemCard from './ItemCard.astro';
 import PageComponents from './parts/PageComponents.astro';
 import SpeciesPage from './SpeciesPage.astro';
 import SpellCard from './SpellCard.astro';
+import SubclassPage from './SubclassPage.astro';
 
 type Props = TemplateProps;
 
@@ -21,6 +23,7 @@ const { entry, names, paths, components: parts = [], level = 2 } = Astro.props;
 const types = (registry as Record<string, { types: Record<string, { template?: string }> }>)[entry.ruleset]?.types;
 const templates = {
   'background-card': BackgroundCard,
+  'class-page': ClassPage,
   'condition-card': ConditionCard,
   'creature-stat-block': CreatureStatBlock,
   'equipment-card': EquipmentCard,
@@ -28,6 +31,7 @@ const templates = {
   'item-card': ItemCard,
   'species-page': SpeciesPage,
   'spell-card': SpellCard,
+  'subclass-page': SubclassPage,
   generic: GenericTemplate,
 };
 const name = templateFor(types?.[entry.type]?.template);

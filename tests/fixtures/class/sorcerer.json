@@ -1,0 +1,215 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "sorcerer",
+  "name": "Sorcerer",
+  "summary": "A spellcaster whose magic is innate, shaped with Sorcery Points and Metamagic.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "cha"
+      ]
+    },
+    "hitDie": "d6",
+    "savingThrows": [
+      "con",
+      "cha"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "arcana",
+        "deception",
+        "insight",
+        "intimidation",
+        "persuasion",
+        "religion"
+      ]
+    },
+    "weapons": "Simple weapons",
+    "armor": "None",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/spear"
+          },
+          {
+            "ref": "equipment/dagger",
+            "count": 2
+          },
+          {
+            "ref": "equipment/arcane-focus",
+            "note": "crystal"
+          },
+          {
+            "ref": "equipment/dungeoneers-pack"
+          }
+        ],
+        "gp": 28
+      },
+      {
+        "gp": 50
+      }
+    ],
+    "multiclass": "- Gain the Hit Point Die from the Core Sorcerer Traits table.\n- Gain the Sorcerer’s level 1 features, which are listed in the Sorcerer Features table. See the multiclassing rules in “Character Creation” to determine your available spell slots.",
+    "features": [
+      {
+        "ref": "class-feature/sorcerer-spellcasting"
+      },
+      {
+        "ref": "class-feature/sorcerer-innate-sorcery"
+      },
+      {
+        "ref": "class-feature/sorcerer-font-of-magic"
+      },
+      {
+        "ref": "class-feature/sorcerer-metamagic"
+      },
+      {
+        "ref": "class-feature/sorcerer-sorcerer-subclass"
+      },
+      {
+        "ref": "class-feature/sorcerer-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/sorcerer-sorcerous-restoration"
+      },
+      {
+        "ref": "class-feature/sorcerer-sorcery-incarnate"
+      },
+      {
+        "ref": "class-feature/sorcerer-epic-boon"
+      },
+      {
+        "ref": "class-feature/sorcerer-arcane-apotheosis"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      6,
+      14,
+      18
+    ],
+    "columns": [
+      {
+        "name": "Sorcery Points",
+        "values": [
+          "—",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20"
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "progression": "full",
+      "cantrips": [
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "prepared": [
+        2,
+        4,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        16,
+        17,
+        17,
+        18,
+        18,
+        19,
+        20,
+        21,
+        22
+      ]
+    },
+    "optionLists": [
+      {
+        "name": "Metamagic Options",
+        "text": "The following options are available to your Metamagic feature. The options are presented in alphabetical order.",
+        "options": [
+          {
+            "ref": "class-option/sorcerer-careful-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-distant-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-empowered-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-extended-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-heightened-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-quickened-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-seeking-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-subtle-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-transmuted-spell"
+          },
+          {
+            "ref": "class-option/sorcerer-twinned-spell"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

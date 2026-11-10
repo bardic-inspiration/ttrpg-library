@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/subclass.schema.json",
+  "title": "dnd-5e-2024 subclass stats (docs/rulesets.md#subclasses)",
+  "description": "A page type: its features are class-feature components it lists in level order. It names its class, which lists nothing back. Derives nothing; the checks against its class's subclass levels are in checks.ts (docs/rulesets.md#consistency-checks).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["class", "tagline", "text", "features"],
+  "properties": {
+    "class": { "description": "Its class.", "$ref": "common.schema.json#/$defs/ClassRef" },
+    "tagline": { "description": "The line under its name: \"Create Explosive Elemental Effects\".", "$ref": "common.schema.json#/$defs/Line" },
+    "text": { "description": "Its intro.", "$ref": "common.schema.json#/$defs/Text" },
+    "features": {
+      "description": "Its subclass features, in level order.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "common.schema.json#/$defs/ClassFeatureRef" }
+    }
+  }
+}

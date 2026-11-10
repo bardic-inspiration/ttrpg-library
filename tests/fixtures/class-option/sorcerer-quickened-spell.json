@@ -1,0 +1,17 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "sorcerer-quickened-spell",
+  "name": "Quickened Spell",
+  "stats": {
+    "cost": "2 Sorcery Points",
+    "text": "When you cast a spell that has a casting time of an action, you can spend 2 Sorcery Points to change the casting time to a {ref:glossary/bonus-action} for this casting. You can’t modify a spell in this way if you’ve already cast a level 1+ spell on the current turn, nor can you cast a level 1+ spell on this turn after modifying a spell in this way."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

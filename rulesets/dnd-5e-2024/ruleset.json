@@ -5,11 +5,13 @@
   "attribution": "srd-5.2",
   "types": [
     "background",
+    "class",
     "creature",
     "feat",
     "item",
     "species",
-    "spell"
+    "spell",
+    "subclass"
   ],
   "rules": [
     {
@@ -37,6 +39,14 @@
     {
       "type": "species-trait",
       "parents": ["species"]
+    },
+    {
+      "type": "class-feature",
+      "parents": ["class", "subclass"]
+    },
+    {
+      "type": "class-option",
+      "parents": ["class"]
     }
   ]
 }
