@@ -43,7 +43,7 @@ as the new components arrive. From it:
 
 Every type has its own art-glass accent color, and so does each item rarity,
 in the package's saturated, glass-like range. The package covers three types;
-the build adds one for each v2 type ([`types.md`](types.md)), each meeting
+the build adds one for each v2 type ([Rulesets](../../docs/rulesets.md)), each meeting
 the contrast bar on the palette's surfaces.
 
 ### Art

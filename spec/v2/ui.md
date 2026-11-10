@@ -45,7 +45,7 @@ The top bar is **Library | Rulesets | About | Contribute**.
   redirect to the Library with the matching filter set (P9).
 - **Rulesets** lists each ruleset's rules pages (the Glossary, Conditions,
   and one page per equipment category) and its Extensions page
-  ([`types.md`](types.md)).
+  ([Rules pages](../../docs/site.md#rules-pages)).
 - **About** is v1's About page.
 - **Contribute** links to the repository for now.
 
@@ -65,6 +65,16 @@ style redesign's (#114).
   Melee. Values are listed vertically, replacing v1's chips, and keep their
   counts. The tree holds every facet, so v1's "Add filter" goes. A range
   facet, such as CR, keeps its min and max inputs inside its node.
+- **Facets over refs** are enum facets valued by key and shown by the
+  target's name, so the tree can offer them:
+  - a creature's `immunities.conditions` (Creature › Immunities ›
+    Conditions);
+  - a spell's `classes`, in place of the derived class ids its Classes filter
+    reads now ([Spells](../../docs/rulesets.md#spells));
+  - a background's `stats.feat`, which the background card then shows beside
+    its abilities;
+  - a subclass's `stats.class`, which the subclass card then shows, and by
+    which subclasses then sort by default.
 - **Cards** keep v1's content and their checkbox for multi-select.
 - **Export** is one Download button and one Print button. Each acts on the
   selection, or on the filtered results when nothing is selected, and opens
