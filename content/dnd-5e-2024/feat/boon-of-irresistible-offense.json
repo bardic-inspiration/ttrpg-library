@@ -1,0 +1,35 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "boon-of-irresistible-offense",
+  "name": "Boon of Irresistible Offense",
+  "summary": "An epic boon whose weapon damage ignores Resistance and deals extra damage on a 20.",
+  "stats": {
+    "category": "epic-boon",
+    "level": 19,
+    "benefits": [
+      {
+        "name": "Ability Score Increase",
+        "text": "Increase your Strength or Dexterity score by 1, to a maximum of 30."
+      },
+      {
+        "name": "Overcome Defenses",
+        "text": "The Bludgeoning, Piercing, and Slashing damage you deal always ignores {ref:glossary/resistance}."
+      },
+      {
+        "name": "Overwhelming Strike",
+        "text": "When you roll a 20 on the d20 for an attack roll, you can deal extra damage to the target equal to the ability score increased by this feat. The extra damage's type is the same as the attack's type."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

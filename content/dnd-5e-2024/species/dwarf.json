@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "dwarf",
+  "name": "Dwarf",
+  "summary": "Sturdy humanoids with Darkvision, poison resilience, extra Hit Points, and a stone-sensing Tremorsense.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "medium",
+        "height": "about 4–5 feet tall"
+      }
+    ],
+    "speed": 30,
+    "traits": [
+      {
+        "ref": "species-trait/dwarf-darkvision"
+      },
+      {
+        "ref": "species-trait/dwarf-dwarven-resilience"
+      },
+      {
+        "ref": "species-trait/dwarf-dwarven-toughness"
+      },
+      {
+        "ref": "species-trait/dwarf-stonecunning"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

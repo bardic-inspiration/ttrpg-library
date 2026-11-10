@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "halfling",
+  "name": "Halfling",
+  "summary": "Small humanoids who are brave, nimble, lucky, and naturally stealthy.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "small",
+        "height": "about 2–3 feet tall"
+      }
+    ],
+    "speed": 30,
+    "traits": [
+      {
+        "ref": "species-trait/halfling-brave"
+      },
+      {
+        "ref": "species-trait/halfling-halfling-nimbleness"
+      },
+      {
+        "ref": "species-trait/halfling-luck"
+      },
+      {
+        "ref": "species-trait/halfling-naturally-stealthy"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

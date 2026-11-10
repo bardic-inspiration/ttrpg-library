@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "orc-relentless-endurance",
+  "name": "Relentless Endurance",
+  "stats": {
+    "text": "When you are reduced to 0 {ref:glossary/hit-points} but not killed outright, you can drop to 1 Hit Point instead. Once you use this trait, you can't do so again until you finish a {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

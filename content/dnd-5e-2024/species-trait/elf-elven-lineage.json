@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "elf-elven-lineage",
+  "name": "Elven Lineage",
+  "stats": {
+    "text": "You are part of a lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table. You gain the level 1 benefit of that lineage.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a {ref:glossary/long-rest}. You can also cast the spell using any spell slots you have of the appropriate level.\n\n**Elven Lineages**\n\n| Lineage | Level 1 | Level 3 | Level 5 |\n|---|---|---|---|\n| Drow | The range of your {ref:glossary/darkvision} increases to 120 feet. You also know the *{ref:spell/dancing-lights}* cantrip. | *{ref:spell/faerie-fire}* | *{ref:spell/darkness}* |\n| High Elf | You know the *{ref:spell/prestidigitation}* cantrip. Whenever you finish a Long Rest, you can replace that cantrip with a different cantrip from the Wizard spell list. | *{ref:spell/detect-magic}* | *{ref:spell/misty-step}* |\n| Wood Elf | Your Speed increases to 35 feet. You also know the *{ref:spell/druidcraft}* cantrip. | *{ref:spell/longstrider}* | *{ref:spell/pass-without-trace}* |\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage)."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

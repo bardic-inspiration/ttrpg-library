@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "savage-attacker",
+  "name": "Savage Attacker",
+  "summary": "An origin feat that lets you roll a weapon's damage dice twice once per turn.",
+  "stats": {
+    "category": "origin",
+    "text": "You've trained to deal particularly damaging strikes. Once per turn when you hit a target with a weapon, you can roll the weapon's damage dice twice and use either roll against the target."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

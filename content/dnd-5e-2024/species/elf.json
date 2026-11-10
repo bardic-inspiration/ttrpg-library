@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "elf",
+  "name": "Elf",
+  "summary": "Humanoids with Darkvision, fey ancestry, trance, and a lineage of Drow, High Elf, or Wood Elf magic.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "medium",
+        "height": "about 5–6 feet tall"
+      }
+    ],
+    "speed": 30,
+    "traits": [
+      {
+        "ref": "species-trait/elf-darkvision"
+      },
+      {
+        "ref": "species-trait/elf-elven-lineage"
+      },
+      {
+        "ref": "species-trait/elf-fey-ancestry"
+      },
+      {
+        "ref": "species-trait/elf-keen-senses"
+      },
+      {
+        "ref": "species-trait/elf-trance"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "human-versatile",
+  "name": "Versatile",
+  "stats": {
+    "text": "You gain an Origin feat of your choice (see \"Feats\"). Skilled is recommended."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
