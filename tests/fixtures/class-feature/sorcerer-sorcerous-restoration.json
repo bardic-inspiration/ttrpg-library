@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "sorcerer-sorcerous-restoration",
+  "name": "Sorcerous Restoration",
+  "stats": {
+    "levels": [
+      5
+    ],
+    "text": "When you finish a {ref:glossary/short-rest}, you can regain expended Sorcery Points, but no more than a number equal to half your Sorcerer level (round down). Once you use this feature, you can’t do so again until you finish a {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

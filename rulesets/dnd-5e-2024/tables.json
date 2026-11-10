@@ -1,5 +1,5 @@
 {
-  "source": "SRD 5.2, \"Monsters\": Challenge Rating table (Experience Points by Challenge Rating, Proficiency Bonus by Challenge Rating); \"Creature Size\" table; \"Skills\" table.",
+  "source": "SRD 5.2, \"Monsters\": Challenge Rating table (Experience Points by Challenge Rating, Proficiency Bonus by Challenge Rating); \"Creature Size\" table; \"Skills\" table. \"Character Creation\": Character Advancement table (Proficiency Bonus by level), Multiclass Spellcaster table (spell slots per spell level). \"Warlock\": Warlock Features table (Spell Slots and Slot Level columns).",
   "challengeRatings": [
     {
       "cr": 0,
@@ -251,5 +251,50 @@
     "ooze",
     "plant",
     "undead"
+  ],
+  "proficiencyBonusByLevel": [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6],
+  "multiclassSpellSlots": [
+    [2],
+    [3],
+    [4, 2],
+    [4, 3],
+    [4, 3, 2],
+    [4, 3, 3],
+    [4, 3, 3, 1],
+    [4, 3, 3, 2],
+    [4, 3, 3, 3, 1],
+    [4, 3, 3, 3, 2],
+    [4, 3, 3, 3, 2, 1],
+    [4, 3, 3, 3, 2, 1],
+    [4, 3, 3, 3, 2, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 2, 1, 1, 1, 1],
+    [4, 3, 3, 3, 3, 1, 1, 1, 1],
+    [4, 3, 3, 3, 3, 2, 1, 1, 1],
+    [4, 3, 3, 3, 3, 2, 2, 1, 1]
+  ],
+  "pactMagic": [
+    {"slots": 1, "slotLevel": 1},
+    {"slots": 2, "slotLevel": 1},
+    {"slots": 2, "slotLevel": 2},
+    {"slots": 2, "slotLevel": 2},
+    {"slots": 2, "slotLevel": 3},
+    {"slots": 2, "slotLevel": 3},
+    {"slots": 2, "slotLevel": 4},
+    {"slots": 2, "slotLevel": 4},
+    {"slots": 2, "slotLevel": 5},
+    {"slots": 2, "slotLevel": 5},
+    {"slots": 3, "slotLevel": 5},
+    {"slots": 3, "slotLevel": 5},
+    {"slots": 3, "slotLevel": 5},
+    {"slots": 3, "slotLevel": 5},
+    {"slots": 3, "slotLevel": 5},
+    {"slots": 3, "slotLevel": 5},
+    {"slots": 4, "slotLevel": 5},
+    {"slots": 4, "slotLevel": 5},
+    {"slots": 4, "slotLevel": 5},
+    {"slots": 4, "slotLevel": 5}
   ]
 }

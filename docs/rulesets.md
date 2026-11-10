@@ -44,9 +44,9 @@ adding a ruleset is adding a folder:
 | `ruleset.json` | ID, label, SRD version, attribution key, list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
 | `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
 | `phrases.json` | The phrase book: the fixed sentences templates fill, the display name of each enum value, and irregular plurals and articles ([Wording](site.md#wording)) |
-| `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`) |
+| `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`, classes' in `classes.ts`) |
 | `tokens.ts` | Text tokens that render derived values inside prose |
-| `checks.ts` | Consistency checks a schema can't express |
+| `checks.ts` | Consistency checks a schema can't express (equipment's and classes' beside their derivations) |
 | `refs.ts` | `refLabels(type, path)`: how detail pages name a ref from each end |
 | `index.ts` | Exports the module, meeting the `RulesetModule` contract in `rulesets/module.ts` |
 | `types.ts` | TypeScript shapes of `stats` and derived values, mirroring the schemas |
@@ -64,12 +64,18 @@ checks that read it: equipment's category comes from its group, and an
 item's base item is checked against the equipment groups. An optional
 `checkLinks` runs once every ref resolves, with a lookup of each target's type
 and stats, for checks that read another entry: a background's feat must be an
-origin feat.
+origin feat. `check` also receives whether the entry is an SRD entry, for a
+rule that depends on it. An optional `deriveLinked` computes values that read
+other entries, given the entry's key and every entry and component of its
+ruleset; the site merges them into the entry's derived values, as a class's
+spell list is the spells that name it ([Classes](#classes)).
 
 `dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, an
 item's `spells[].spell`) are "Casts" / "Cast by"; a background's `feat` is
 "Grants" / "Granted by", its `tool` "Tool proficiency" / "Backgrounds", and
-its equipment "Starting equipment" / "Starting equipment of"; creature `gear` is "Gear" /
+its equipment "Starting equipment" / "Starting equipment of", as a class's
+is; a class's `spells` are "Spells" / "Classes"; a subclass's `class` is
+"Subclass of" / "Subclasses"; creature `gear` is "Gear" /
 "Carried by"; a creature's condition immunities are "Immune to" / "Immune
 creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
 `properties` and `mastery` are "Properties" / "Weapons" and "Mastery" /
@@ -159,6 +165,8 @@ saves, skills, passive Perception, each action's attack bonus, save DC, and
 damage (average, modifier, and display), and the Spellcasting DC and attack
 bonus. Items and spells derive nothing, except the ability modifiers and
 saves of an embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)).
+Classes derive their proficiency bonus and spell slots by level
+([Classes](#classes)).
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
 `tables.json`, which cites the SRD section it comes from.
 
@@ -167,7 +175,9 @@ The formulas are in `derive.ts` and the tables, including the SRD CR table, in
 `schemas/common.schema.json` holds the definitions the type schemas share:
 abilities, dice, damage, proficiency levels, adjustments, damage types, refs
 (`Ref`, `RefOrText`, `CountedRefOrText`, whose ref may add a `count`, and the
-typed `ConditionRef`, which allows only condition keys), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
+typed refs, each allowing only its type's keys: `ConditionRef`,
+`EquipmentRef`, `FeatRef`, `SpellRef`, `ClassRef`, and one per component
+type), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
 
 ### Text tokens
 
@@ -484,9 +494,84 @@ Size filter. Its page (`species-page`) prints:
 
 Species come only by request; they have no gap buckets.
 
+### Classes
+
+A class is a page type ([Components](content-model.md#components)): its
+features are `class-feature` components, which it lists in printed order in
+`features` (by level, then table order), and its options are `class-option`
+components, listed under each of its `optionLists`.
+`schemas/class.schema.json`, `class-feature.schema.json`, and
+`class-option.schema.json` describe each field. A feature lists every level
+the Features table names it at, the first being the one it's described at;
+a level may carry a note for its row ("Mystic Arcanum (level 6 spell)"). A
+feature printed again on its own at a later level is a second feature whose
+id adds the level.
+
+A class derives (`classes.ts`), per level 1–20:
+
+- the proficiency bonus, from the Character Advancement table in
+  `tables.json`;
+- its spell slots from `spellcasting.progression`: a full caster reads the
+  Multiclass Spellcaster table at its level, a half caster at half its level
+  rounded up (the Paladin's and Ranger's slots), and a pact caster the Pact
+  Magic table, the Warlock's slots and slot level;
+- from the library (`deriveLinked`): the Class Features column, each
+  feature's name at each of its levels with its note, and "Subclass feature"
+  at the later `subclassLevels`; its spell list, every spell whose `classes`
+  holds its id plus its own `spells`, by level and then name, each with its
+  school and Special marks (C for Concentration, R for a ritual, M for a
+  material component with a cost); and its subclasses, by name.
+
+Its page (`class-page`) prints, in the SRD's order:
+
+- **Core <Class> Traits:** Primary Ability ("Strength or Dexterity"), Hit
+  Point Die ("D6 per Sorcerer level"), Saving Throw Proficiencies, Skill
+  Proficiencies ("Choose 2: Arcana, Deception, … or Religion", or "Choose any
+  3 skills (see “Playing the Game”)"), Weapon Proficiencies, Tool
+  Proficiencies when present, Armor Training, and Starting Equipment
+  ([Starting equipment](#starting-equipment)).
+- **Becoming a <Class> …:** the "As a Level 1 Character" bullets every class
+  shares, from the phrase book, then "As a Multiclass Character" and the
+  class's `multiclass` text.
+- **The <Class> Features table:** Level, Proficiency Bonus, Class Features
+  (each feature linked to its section), the class's `columns`, Cantrips,
+  Prepared Spells, and the slots: "Level 1 Slots" up to the highest spell
+  level with a slot, or a pact caster's Spell Slots and Slot Level.
+- **<Class> Class Features:** the intro sentence, then each feature headed
+  "Level 1: Spellcasting", anchored at `#class-feature-<id>`.
+- **Each option list:** its heading and intro, then each option under its
+  name, anchored at `#class-option-<id>`, with "Prerequisite: …" and
+  "Cost: …" lines, its text, and a closing "***Repeatable.***" paragraph.
+- **<Class> Spell List:** the intro sentence, then a table per spell level,
+  "Cantrips (Level 0 Sorcerer Spells)", "Level 1 Sorcerer Spells", with Spell,
+  School, and Special columns.
+- **<Class> Subclasses:** a link to each subclass.
+
+An SRD class's spell list comes only from its spells' `classes`; a custom
+class adds existing spells through `spells`, which a spell's card doesn't
+print. Until the SRD import moves spell `classes` to class refs (#234), the
+list matches the enum value to the class's id.
+
+Classes come only by request; they have no gap buckets.
+
+### Subclasses
+
+A subclass is a page type that names its class (`class`, a `ClassRef`); the
+class lists nothing back, so a custom subclass leaves an SRD class unchanged.
+Its features are `class-feature` components, listed in level order in
+`features`, and each level is one of its class's `subclassLevels`.
+`schemas/subclass.schema.json` describes each field. A subclass derives
+nothing. Its page (`subclass-page`) prints the heading "<Class> Subclass:
+<Name>" ("Sorcerer Subclass: Draconic Sorcery"), its `tagline` under it, its
+intro `text`, then each feature headed "Level 3: Draconic Resilience",
+anchored at `#class-feature-<id>`. An always-prepared spell list is a titled
+table in a feature's text, with spell tokens.
+
+Subclasses come only by request; they have no gap buckets.
+
 ### Starting equipment
 
-Backgrounds, and classes later, share `StartingEquipment` in
+Backgrounds and classes share `StartingEquipment` in
 `common.schema.json`: two or more options, each `items`, `gp`, or both. An
 item is a ref to equipment or an item, with an optional `count` of 2 or more
 and `note`, or text for anything else. The template letters the options and
@@ -559,6 +644,13 @@ warnings below on an SRD entry.
 | Background | The last equipment option is coins only | error |
 | Background | The coin option isn't 50 GP | warning |
 | Species | Speed is a multiple of 5 | error |
+| Class | `subclassLevels` ascend | error |
+| Class | `features` are in level order, by each feature's first level | error |
+| Class | The first subclass level is the level a listed feature is described at | error |
+| Class | An SRD class lists no `spells` | error |
+| Class | No feature at level 1, or a level after 1 with neither a feature nor a subclass level | warning |
+| Class feature | `levels` ascend | error |
+| Subclass | Each feature's levels are its class's subclass levels, and each subclass level has a feature | error |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

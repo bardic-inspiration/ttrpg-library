@@ -214,6 +214,12 @@ export interface Tables {
   skills: Record<string, Ability>;
   damageTypes: string[];
   creatureTypes: string[];
+  /** The Character Advancement table's Proficiency Bonus, levels 1–20. */
+  proficiencyBonusByLevel: number[];
+  /** The Multiclass Spellcaster table: slots per spell level (1 first), levels 1–20. */
+  multiclassSpellSlots: number[][];
+  /** The Pact Magic slots and their level, levels 1–20, from the Warlock Features table. */
+  pactMagic: { slots: number; slotLevel: number }[];
 }
 
 export interface DerivedDamage {
@@ -342,4 +348,77 @@ export interface DerivedSpecies {
 /** species-trait.schema.json: one special trait. */
 export interface SpeciesTraitStats {
   text: string;
+}
+
+/** class.schema.json (docs/rulesets.md#classes): a page type whose features and options are components. */
+export interface ClassStats {
+  primaryAbility: { abilities: Ability[]; join?: 'and' | 'or' };
+  hitDie: 'd6' | 'd8' | 'd10' | 'd12';
+  savingThrows: Ability[];
+  skills: { choose: number; from?: string[] };
+  weapons: string;
+  tools?: string;
+  armor: string;
+  equipment: StartingOption[];
+  multiclass: string;
+  features: Ref[];
+  subclassLevels: number[];
+  columns?: { name: string; values: string[] }[];
+  spellcasting?: { ability: Ability; progression: 'full' | 'half' | 'pact'; cantrips?: number[]; prepared: number[] };
+  optionLists?: { name: string; text: string; options: Ref[] }[];
+  spells?: Ref[];
+}
+
+/** A class's derived values from its own stats (docs/rulesets.md#classes), one per level 1–20. */
+export interface DerivedClass {
+  proficiencyBonus: number[];
+  /** Slots per spell level (1 first) at each level, for a full or half caster. */
+  spellSlots?: number[][];
+  /** Pact Magic slots and their level at each level, for a pact caster. */
+  pactSlots?: { slots: number; slotLevel: number }[];
+}
+
+/** One spell on a class's derived spell list. */
+export interface ClassSpell {
+  ref: string;
+  school: string;
+  concentration: boolean;
+  ritual: boolean;
+  /** A material component with a cost. */
+  material: boolean;
+}
+
+/** A class's derived values from the library (docs/rulesets.md#classes). */
+export interface LinkedClass {
+  /** The Class Features column at each level 1–20: the features named there, and whether it's a later subclass level. */
+  featureRows: { features: { ref: string; note?: string }[]; subclass: boolean }[];
+  /** Its spell list by spell level, ascending, each level's spells by name. */
+  spellList: { level: number; spells: ClassSpell[] }[];
+  /** Its subclasses' keys, by name. */
+  subclasses: string[];
+}
+
+/** A class feature's level in the Features table, with the note its row prints. */
+export type FeatureLevel = number | { level: number; note: string };
+
+/** class-feature.schema.json: one feature of a class or subclass. */
+export interface ClassFeatureStats {
+  levels: FeatureLevel[];
+  text: string;
+}
+
+/** class-option.schema.json: one option of a class's option list. */
+export interface ClassOptionStats {
+  prerequisite?: string;
+  cost?: string;
+  text: string;
+  repeatable?: string;
+}
+
+/** subclass.schema.json (docs/rulesets.md#subclasses): a page type naming its class. */
+export interface SubclassStats {
+  class: Ref;
+  tagline: string;
+  text: string;
+  features: Ref[];
 }

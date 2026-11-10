@@ -1,0 +1,39 @@
+---
+// The dnd-5e-2024 subclass page (registry template `subclass-page`, docs/rulesets.md#subclasses,
+// docs/site.md#templates): "<Class> Subclass: <Name>", its tagline, its intro, then each feature as
+// "Level 3: Frenzy", anchored at `#class-feature-<id>`, in level order. The layout is basic until
+// the UI redesign (#237).
+import { anchorId } from '../../../../lib/rules';
+import type { ClassFeatureStats, SubclassStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { featureHeading, subclassHeading } from '../../lib/class';
+import type { TemplateProps } from '../../lib/template';
+import Heading from './parts/Heading.astro';
+import RulesText from './parts/RulesText.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, paths, mode, level = 2, components = [] } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+const s = entry.stats as SubclassStats;
+const className = names.get(s.class.ref) ?? s.class.ref;
+---
+<StatBlock name={`${entry.name} subclass`} type="subclass" mode={mode}>
+  <StatBlockHeader name={subclassHeading(className, entry.name)} subtitle={s.tagline} level={level} />
+  <RulesText text={s.text} refs={refs} />
+  {components.map(({ entry: feature }) => (
+    <div class="subclass-feature" id={anchorId(`${feature.type}/${feature.id}`)} data-type={feature.type}>
+      <Heading level={level + 1}>{featureHeading(feature.name, feature.stats as ClassFeatureStats)}</Heading>
+      <RulesText text={(feature.stats as ClassFeatureStats).text} refs={refs} />
+    </div>
+  ))}
+</StatBlock>
+
+<style>
+  @layer components {
+    .subclass-feature > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+  }
+</style>

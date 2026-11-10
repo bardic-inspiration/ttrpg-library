@@ -193,7 +193,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     // An SRD entry is literal (docs/content-model.md#srd-and-custom-entries): its deviations and authored
     // numbers match the SRD, so the ruleset's review warnings are skipped.
     const rulesData = rules.find((r) => r.ruleset === entry.ruleset);
-    for (const issue of ruleset.module.check(entry.type, entry.stats, rulesData)) {
+    for (const issue of ruleset.module.check(entry.type, entry.stats, rulesData, { srd })) {
       if (srd && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
     }

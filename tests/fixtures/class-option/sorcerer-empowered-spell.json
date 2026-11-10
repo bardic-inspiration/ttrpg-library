@@ -1,0 +1,17 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "sorcerer-empowered-spell",
+  "name": "Empowered Spell",
+  "stats": {
+    "cost": "1 Sorcery Point",
+    "text": "When you roll damage for a spell, you can spend 1 Sorcery Point to reroll a number of the damage dice up to your Charisma modifier (minimum of one), and you must use the new rolls.\n\nYou can use Empowered Spell even if you’ve already used a different Metamagic option during the casting of the spell."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

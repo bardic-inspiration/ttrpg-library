@@ -27,6 +27,17 @@ export interface RulesetDefinition {
   components?: { type: string; parents: string[] }[];
 }
 
+/** A resolved ref target's type and stats, or undefined for one whose stats failed their schema. */
+export type LinkTarget = (key: string) => { type: string; stats: unknown } | undefined;
+
+/** An entry or component of the library, for values derived from other entries. */
+export interface LinkedEntry {
+  type: string;
+  id: string;
+  name: string;
+  stats: unknown;
+}
+
 /** How a detail page labels a reference, from each end: "Casts: Frost Lance", "Cast by: Wand of Frost Lances". */
 export interface RefLabels {
   forward: string;
@@ -40,14 +51,23 @@ export interface RulesetModule {
    * formulas. `rules` is the ruleset's rules data, for values that read it (an equipment's category).
    */
   derive(type: string, stats: unknown, rules?: RulesData): Record<string, unknown>;
-  /** Consistency checks for one entry's or primitive's schema-valid `stats` (docs/rulesets.md#consistency-checks), with the ruleset's rules data. */
-  check(type: string, stats: unknown, rules?: RulesData): Issue[];
+  /**
+   * Consistency checks for one entry's or primitive's schema-valid `stats` (docs/rulesets.md#consistency-checks),
+   * with the ruleset's rules data and whether the entry is an SRD entry.
+   */
+  check(type: string, stats: unknown, rules?: RulesData, context?: { srd: boolean }): Issue[];
   /**
    * Checks that read what an entry's refs point to (docs/rulesets.md#consistency-checks), such as a
    * background's feat being an origin feat. They run after every ref resolves; `target` gives a
    * resolved target's type and stats, or undefined for one whose stats failed their schema. Optional.
    */
-  checkLinks?(type: string, stats: unknown, target: (key: string) => { type: string; stats: unknown } | undefined): Issue[];
+  checkLinks?(type: string, stats: unknown, target: LinkTarget): Issue[];
+  /**
+   * Derived values that read other entries, such as a class's spell list from the spells that name
+   * it. `key` is the entry's `<type>/<id>`, and `entries` every entry and component of its ruleset.
+   * The site merges them into the entry's derived values. Optional.
+   */
+  deriveLinked?(type: string, key: string, stats: unknown, entries: readonly LinkedEntry[]): Record<string, unknown>;
   /** The ruleset's phrase book (docs/site.md#wording): its fixed sentences and the display names of its enum values. */
   phrases: PhraseBook;
   /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (docs/content-model.md#references). */

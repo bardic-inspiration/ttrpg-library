@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "sorcerer-sorcery-incarnate",
+  "name": "Sorcery Incarnate",
+  "stats": {
+    "levels": [
+      7
+    ],
+    "text": "If you have no uses of Innate Sorcery left, you can use it if you spend 2 Sorcery Points when you take the {ref:glossary/bonus-action} to activate it.\n\nIn addition, while your Innate Sorcery feature is active, you can use up to two of your Metamagic options on each spell you cast."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

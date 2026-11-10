@@ -56,7 +56,32 @@
     "creature.perDayEach": "{n}/Day Each",
     "equipment.dexArmor": "{ac} + Dex modifier",
     "equipment.dexArmorMax": "{ac} + Dex modifier (max {max})",
-    "creature.typeLine": "{sizes} {kind}, {alignment}"
+    "creature.typeLine": "{sizes} {kind}, {alignment}",
+    "class.hitDie": "{die} per {class} level",
+    "class.chooseSkills": "Choose {count}: {skills}",
+    "class.chooseAnySkills": "Choose any {count} skills (see “Playing the Game”)",
+    "class.coreTraits": "Core {class} Traits",
+    "class.becoming": "Becoming {class} …",
+    "class.levelOne": "As a Level 1 Character",
+    "class.levelOneTraits": "Gain all the traits in the Core {class} Traits table.",
+    "class.levelOneFeatures": "Gain the {class}’s level 1 features, which are listed in the {class} Features table.",
+    "class.multiclass": "As a Multiclass Character",
+    "class.featuresTable": "{class} Features",
+    "class.classFeatures": "{class} Class Features",
+    "class.featuresIntro": "As {aClass}, you gain the following class features when you reach the specified {class} levels. These features are listed in the {class} Features table.",
+    "class.subclassFeature": "Subclass feature",
+    "class.noFeature": "—",
+    "class.slotLevel": "Level {level} Slots",
+    "class.spellList": "{class} Spell List",
+    "class.spellListIntro": "This section presents the {class} spell list. The spells are organized by spell level and then alphabetized, and each spell’s school of magic is listed. In the Special column, C means the spell requires Concentration, R means it’s a Ritual, and M means it requires a specific Material component.",
+    "class.cantrips": "Cantrips (Level 0 {class} Spells)",
+    "class.spellLevel": "Level {level} {class} Spells",
+    "class.subclasses": "{class} Subclasses",
+    "classFeature.heading": "Level {level}: {name}",
+    "classOption.prerequisite": "Prerequisite: {prerequisite}",
+    "classOption.cost": "Cost: {cost}",
+    "classOption.repeatable": "Repeatable",
+    "subclass.heading": "{class} Subclass: {name}"
   },
   "vocabulary": {
     "ability": {
@@ -229,6 +254,17 @@
       "melee-attack": "Melee Attack Roll:",
       "ranged-attack": "Ranged Attack Roll:",
       "melee-or-ranged-attack": "Melee or Ranged Attack Roll:"
+    },
+    "hitDie": {
+      "d6": "D6",
+      "d8": "D8",
+      "d10": "D10",
+      "d12": "D12"
+    },
+    "spellcastingProgression": {
+      "full": "Full",
+      "half": "Half",
+      "pact": "Pact"
     }
   },
   "plurals": {

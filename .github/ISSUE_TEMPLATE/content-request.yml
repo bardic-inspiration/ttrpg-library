@@ -15,6 +15,7 @@ body:
       description: The kind of entry to generate.
       options:
         - background
+        - class
         - condition
         - creature
         - equipment
@@ -22,6 +23,7 @@ body:
         - item
         - species
         - spell
+        - subclass
     validations:
       required: true
   - type: dropdown

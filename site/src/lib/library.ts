@@ -82,9 +82,17 @@ export function loadLibrary(
   moduleFor: (id: string) => RulesetModule = rulesetModule,
 ): LoadedEntry[] {
   const links = linkAll(entries, rules);
+  // Values that read other entries, such as a class's spell list, join the entry's own (docs/rulesets.md#the-ruleset-module).
+  const byRuleset = Map.groupBy(entries, (e) => e.ruleset);
+  const derive = (entry: Entry) => {
+    const module = moduleFor(entry.ruleset);
+    const own = module.derive(entry.type, entry.stats, rules.find((r) => r.ruleset === entry.ruleset));
+    if (!module.deriveLinked) return own;
+    return { ...own, ...module.deriveLinked(entry.type, entryKey(entry), entry.stats, byRuleset.get(entry.ruleset) ?? []) };
+  };
   const load = (entry: Entry) => ({
     entry,
-    derived: moduleFor(entry.ruleset).derive(entry.type, entry.stats, rules.find((r) => r.ruleset === entry.ruleset)),
+    derived: derive(entry),
     ...(links.get(entryKey(entry)) ?? { refs: [], refBy: [] }),
   });
   // A component is loaded onto the entry that lists it by ref, in that order (docs/content-model.md#components).

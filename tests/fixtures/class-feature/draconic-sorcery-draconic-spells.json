@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "draconic-sorcery-draconic-spells",
+  "name": "Draconic Spells",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "When you reach a Sorcerer level specified in the Draconic Spells table, you thereafter always have the listed spells prepared.\n\n**Draconic Spells**\n\n| Sorcerer Level | Spells |\n|---|---|\n| 3 | *{ref:spell/alter-self}*, *{ref:spell/chromatic-orb}*, *{ref:spell/command}*, *{ref:spell/dragons-breath}* |\n| 5 | *{ref:spell/fear}*, *{ref:spell/fly}* |\n| 7 | *{ref:spell/arcane-eye}*, *{ref:spell/charm-monster}* |\n| 9 | *{ref:spell/legend-lore}*, *{ref:spell/summon-dragon}* |"
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

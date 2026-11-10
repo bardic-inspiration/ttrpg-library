@@ -28,7 +28,7 @@ Per type:
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
 | `defaultFilters` | Filters expanded by default; every other facet and tag stays reachable through "Add filter" |
-| `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type, a background, and a species, which have none |
+| `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, species, class, subclass), which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
 
@@ -259,7 +259,8 @@ indexes.
   as paragraphs or its other `stats` as the generic lines
   (`PageComponents`), unless its template places them itself
   (`PLACES_COMPONENTS` in `site/src/lib/template.ts`), as the species page
-  prints its traits as titled paragraphs. The layout is basic until the UI
+  prints its traits as titled paragraphs and the class and subclass pages
+  print their features and options in their own sections. The layout is basic until the UI
   redesign (#237).
   Print and PNG capture render them the same way.
 - `description` as lore, visually distinct from rules text.
@@ -276,9 +277,9 @@ indexes.
 
 ### Templates
 
-- One component per type template, `background-card`, `condition-card`,
-  `creature-stat-block`, `equipment-card`, `feat-card`, `item-card`,
-  `species-page`, and `spell-card`, plus a `generic` fallback that renders the fixed keys,
+- One component per type template, `background-card`, `class-page`,
+  `condition-card`, `creature-stat-block`, `equipment-card`, `feat-card`,
+  `item-card`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
   `stats` as a definition list, and tags. `EntryTemplate` picks the component
   from the registry's `template`, falling back to `generic`. The generic
   lines render a ref as its target's name, linked to its page or rules

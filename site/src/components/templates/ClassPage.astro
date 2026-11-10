@@ -1,0 +1,103 @@
+---
+// The dnd-5e-2024 class page (registry template `class-page`, docs/rulesets.md#classes,
+// docs/site.md#templates), in the SRD's order: the Core Traits lines, "Becoming a <Class> …", the
+// Features table, each class feature as "Level 1: Rage" anchored at `#class-feature-<id>`, the
+// option lists with each option anchored at `#class-option-<id>`, the spell list, then the class's
+// subclasses. The layout is basic until the UI redesign (#237).
+import { anchorId } from '../../../../lib/rules';
+import type { ClassFeatureStats, ClassOptionStats, ClassStats, DerivedClass, LinkedClass } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { OPTION_REPEATABLE, classLines, classWords, featureHeading, featuresTable, optionLines, spellListTables } from '../../lib/class';
+import { renderInlineMarkdown } from '../../lib/markdown';
+import type { TemplateProps } from '../../lib/template';
+import { url } from '../../lib/url';
+import Heading from './parts/Heading.astro';
+import PropertyList from './parts/PropertyList.astro';
+import RulesText from './parts/RulesText.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, derived, names, paths, mode, level = 2, components = [] } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+const s = entry.stats as ClassStats;
+const d = derived as unknown as DerivedClass & LinkedClass;
+const words = classWords(entry.name);
+const byKey = new Map(components.map(({ entry: c }) => [`${c.type}/${c.id}`, c]));
+const features = s.features.flatMap(({ ref }) => byKey.get(ref) ?? []);
+const optionLists = (s.optionLists ?? []).map((list) => ({ ...list, options: list.options.flatMap(({ ref }) => byKey.get(ref) ?? []) }));
+const subclasses = d.subclasses ?? [];
+---
+<StatBlock name={`${entry.name} class`} type="class" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle="Class" level={level} />
+  <section class="class-section" aria-label={words.coreTraits}>
+    <Heading level={level + 1}>{words.coreTraits}</Heading>
+    <PropertyList lines={classLines(entry.name, s, names)} refs={refs} />
+  </section>
+  <section class="class-section">
+    <Heading level={level + 1}>{words.becoming}</Heading>
+    <Heading level={level + 2}>{words.levelOne}</Heading>
+    <ul>{words.levelOneBullets.map((bullet) => <li>{bullet}</li>)}</ul>
+    <Heading level={level + 2}>{words.multiclass}</Heading>
+    <RulesText text={s.multiclass} refs={refs} />
+  </section>
+  {d.featureRows && <RulesText class="class-table" text={featuresTable(entry.name, s, d)} refs={refs} />}
+  <section class="class-section">
+    <Heading level={level + 1}>{words.classFeatures}</Heading>
+    <p>{words.featuresIntro}</p>
+    {features.map((feature) => (
+      <div class="class-feature" id={anchorId(`${feature.type}/${feature.id}`)} data-type={feature.type}>
+        <Heading level={level + 2}>{featureHeading(feature.name, feature.stats as ClassFeatureStats)}</Heading>
+        <RulesText text={(feature.stats as ClassFeatureStats).text} refs={refs} />
+      </div>
+    ))}
+  </section>
+  {optionLists.map((list) => (
+    <section class="class-section">
+      <Heading level={level + 1}>{list.name}</Heading>
+      <RulesText text={list.text} refs={refs} />
+      {list.options.map((option) => {
+        const o = option.stats as ClassOptionStats;
+        return (
+          <div class="class-option" id={anchorId(`${option.type}/${option.id}`)} data-type={option.type}>
+            <Heading level={level + 2}>{option.name}</Heading>
+            {optionLines(o).map((line) => <p class="class-option__line" set:html={renderInlineMarkdown(line, refs)} />)}
+            <RulesText text={o.text} refs={refs} />
+            {o.repeatable && <RulesText label={OPTION_REPEATABLE} text={o.repeatable} refs={refs} />}
+          </div>
+        );
+      })}
+    </section>
+  ))}
+  {d.spellList && d.spellList.length > 0 && (
+    <section class="class-section">
+      <Heading level={level + 1}>{words.spellList}</Heading>
+      <p>{words.spellListIntro}</p>
+      {spellListTables(entry.name, d).map((md) => <RulesText class="class-table" text={md} refs={refs} />)}
+    </section>
+  )}
+  {subclasses.length > 0 && (
+    <section class="class-section">
+      <Heading level={level + 1}>{words.subclasses}</Heading>
+      <ul>{subclasses.map((key) => <li><a class="ref-link" href={url(`${entry.ruleset}/${key}/`)}>{names.get(key) ?? key}</a></li>)}</ul>
+    </section>
+  )}
+</StatBlock>
+
+<style>
+  @layer components {
+    .class-section > :global(* + *),
+    .class-feature > :global(* + *),
+    .class-option > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+
+    .class-section ul {
+      padding-inline-start: var(--space-m);
+    }
+
+    .class-option__line {
+      font-style: italic;
+    }
+  }
+</style>
