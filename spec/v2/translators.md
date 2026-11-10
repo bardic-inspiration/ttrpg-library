@@ -1,6 +1,6 @@
 ---
 issue: 116
-depends: [export, types]
+depends: [export]
 ---
 
 # Translators
