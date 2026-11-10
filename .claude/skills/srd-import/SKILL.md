@@ -217,6 +217,13 @@ it follows. A format-fix dev PR that adds entries gets the `migration` label
 from the labeler, and the `lane` job waits for it ([Lane rules](../../../docs/workflow.md#lane-rules)), so it needs no
 manual label change.
 
+**Order batches by what they link to.** A batch whose entries ref a type that
+is still in an open PR (backgrounds and their feats, subclasses and their
+classes) waits for that PR to merge. Don't build it on the other batch's
+branch. Open the batches that depend on nothing first, then end the turn and
+tell the owner which merges unblock the rest, so they can merge them together.
+Write a PR's number only after it exists.
+
 ## Step 8: Link pass
 
 When a stage's batches have merged, mentions written as plain text because

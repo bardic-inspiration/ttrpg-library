@@ -25,6 +25,20 @@ arrive. Unsubscribe once the PR is merged or closed. A routine may subscribe
 to its content PR too, but the run-order sweep is what guarantees comments get
 handled ([Revisions](docs/generation.md#revisions)).
 
+Every subscribed event is a turn, so watch only what may need work:
+
+- **Content PRs from an owner-started session** (an SRD import batch, a link
+  pass) aren't watched. The owner reviews and merges them, and says when the
+  next step can start.
+- **Once the owner turns on auto-merge**, unsubscribe; GitHub merges the PR
+  when CI passes. Subscribe again only if asked to see it to green.
+- **A green event needs no message.** Reply to the owner only when something
+  is theirs to do or a task is finished.
+
+Keep tool output small: filter test runs to their failures, read GitHub
+items with field filters or `minimal_output`, and tail CI logs to the
+failing lines.
+
 ## Sub-issues
 
 Attach a task issue to its milestone issue with `sub_issue_write` (`add`),
