@@ -1,6 +1,5 @@
 ---
 issue: 113
-depends: [types]
 ---
 
 # UI
