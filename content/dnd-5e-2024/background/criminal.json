@@ -1,0 +1,59 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "background",
+  "id": "criminal",
+  "name": "Criminal",
+  "summary": "A background of crime: Sleight of Hand, Stealth, Thieves' Tools, and the Alert feat.",
+  "stats": {
+    "abilities": [
+      "dex",
+      "con",
+      "int"
+    ],
+    "feat": {
+      "ref": "feat/alert"
+    },
+    "skills": [
+      "sleight-of-hand",
+      "stealth"
+    ],
+    "tool": {
+      "ref": "equipment/thieves-tools"
+    },
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/dagger",
+            "count": 2
+          },
+          {
+            "ref": "equipment/thieves-tools"
+          },
+          {
+            "ref": "equipment/crowbar"
+          },
+          {
+            "ref": "equipment/pouch",
+            "count": 2
+          },
+          "{ref:equipment/clothes-travelers Traveler's Clothes}"
+        ],
+        "gp": 16
+      },
+      {
+        "gp": 50
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
