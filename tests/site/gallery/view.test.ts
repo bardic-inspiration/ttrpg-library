@@ -2,7 +2,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { galleryConfig, sortChoices, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
-import { addableFilters, chips, computeView, searchIndex, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
+import { chips, computeView, searchIndex, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
 import { fixtureRecords, record, registry } from './helpers.ts';
 
 let reg: Registry;
@@ -145,7 +145,7 @@ describe('default sort on routes that span types', () => {
   });
 });
 
-describe('chips and Add filter', () => {
+describe('filter values', () => {
   const records = [
     record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5 }, tags: { theme: 'Fire' } }),
     record({ id: 'b', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 1 }, tags: { theme: 'fire', world: 'Greyhawk' } }),
@@ -156,7 +156,7 @@ describe('chips and Add filter', () => {
     const state = parseQuery('?f.stats.cr=..2&f.stats.creatureType=beast', creature);
     const index = searchIndex(records);
     const def = creature.filters.find((f) => f.path === 'stats.creatureType')!;
-    const result = chips(def, records, withoutFilter(records, state, index, def.path), state.filters.get(def.path));
+    const result = chips(def, records, withoutFilter(creature, records, state, index, def.path), state.filters.get(def.path));
     expect(result).toEqual([
       { key: 'beast', stored: 'beast', count: 1 },
       { key: 'dragon', stored: 'dragon', count: 1 },
@@ -170,22 +170,16 @@ describe('chips and Add filter', () => {
     expect(chips(def, records, records, { kind: 'enum', values: ['fiend'] }).map((c) => [c.key, c.count])).toContainEqual(['fiend', 0]);
   });
 
-  it('offers facets of the current types and the tag keys in the current results', () => {
-    const state = parseQuery('?f.stats.cr=..2', creature);
-    const index = searchIndex(records);
-    const results = computeView(records, creature, state, index).results;
-    const paths = addableFilters(creature, state, records, results).map((d) => d.path);
-    expect(paths).toContain('stats.cr');
-    expect(paths).not.toContain('stats.abilities.str'); // no record has it
-    expect(paths.filter((p) => p.startsWith('tags.'))).toEqual(['tags.theme', 'tags.world']);
-    const narrowed = computeView(records, creature, parseQuery('?f.stats.cr=5..', creature), index).results;
-    expect(addableFilters(creature, state, records, narrowed).map((d) => d.path)).not.toContain('tags.world');
-  });
-
-  it('narrows facets to the chosen types on routes that span types', () => {
-    const state = parseQuery('?f.type=spell', home);
-    const paths = addableFilters(home, state, fixtures, fixtures).map((d) => d.path);
-    expect(paths).toContain('stats.school');
-    expect(paths).not.toContain('stats.cr');
+  it('sorts ref values, and records by a ref, by the target’s name', () => {
+    const config = galleryConfig(reg, { ruleset: 'dnd-5e-2024', type: 'subclass' }, { names: { 'class/bard': 'Bard', 'class/wizard': 'Wizard', 'class/cleric': 'Cleric' }, groups: {} });
+    const subs = [
+      record({ id: 'lore', type: 'subclass', facets: { 'stats.class': 'class/bard' } }),
+      record({ id: 'evoker', type: 'subclass', facets: { 'stats.class': 'class/wizard' } }),
+      record({ id: 'life', type: 'subclass', facets: { 'stats.class': 'class/cleric' } }),
+    ];
+    expect(config.defaultSort).toEqual({ path: 'stats.class', dir: 'asc' });
+    expect(sortRecords(subs, config.defaultSort, config).map((r) => r.id)).toEqual(['lore', 'life', 'evoker']);
+    const def = config.filters.find((f) => f.path === 'stats.class')!;
+    expect(chips(def, subs, subs).map((c) => c.key)).toEqual(['class/bard', 'class/cleric', 'class/wizard']);
   });
 });

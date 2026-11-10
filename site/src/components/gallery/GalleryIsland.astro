@@ -3,7 +3,11 @@
 // fetches library.json once it runs; without JavaScript, a plain list of the
 // route's entries links to every detail page instead.
 import Gallery from './Gallery';
-import { entryPath, loadEntries } from '../../lib/library';
+import registryJson from '../../../../config/types.json';
+import { entryNames, entryPath, loadEntries } from '../../lib/library';
+import { facetData } from '../../lib/gallery/facet-data';
+import type { Registry } from '../../lib/gallery/config';
+import { loadRules } from '../../lib/rules';
 import { url } from '../../lib/url';
 
 interface Props {
@@ -12,11 +16,15 @@ interface Props {
 }
 
 const { ruleset, type } = Astro.props;
-const entries = loadEntries()
+const rules = loadRules();
+const all = loadEntries(rules);
+// Ref targets' names and the groups a groups facet nests (docs/site.md#gallery "Filters").
+const data = facetData(registryJson as unknown as Registry, all, entryNames(all, rules), rules);
+const entries = all
   .filter(({ entry }) => (!ruleset || entry.ruleset === ruleset) && (!type || entry.type === type))
   .sort((a, b) => a.entry.name.localeCompare(b.entry.name, 'en', { sensitivity: 'base' }));
 ---
-<Gallery client:load ruleset={ruleset} type={type} indexUrl={url('library.json')} base={url()} />
+<Gallery client:load ruleset={ruleset} type={type} indexUrl={url('library.json')} base={url()} facetData={data} />
 <noscript>
   {entries.length === 0 ? (
     <p>No entries yet.</p>

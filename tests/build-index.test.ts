@@ -79,6 +79,20 @@ describe('library.json records', () => {
     }
   });
 
+  it('lift a ref facet as its refs’ keys (docs/site.md#type-registry)', async () => {
+    const { records } = await buildIndex(valid);
+    expect(records.find((r) => r.id === 'frost-lance')?.facets['stats.classes']).toEqual(['class/sorcerer', 'class/wizard']);
+    const hound = await cinderHound();
+    hound.stats.immunities = { damage: ['fire'], conditions: [{ ref: 'condition/poisoned' }, { ref: 'condition/charmed', note: 'magical' }] };
+    const lib = await temp([hound]);
+    const { errors, records: own } = await buildIndex(lib.content, { assetsRoot: lib.repo });
+    expect(errors).toEqual([]);
+    expect(own.find((r) => r.id === 'cinder-hound')?.facets).toMatchObject({
+      'stats.immunities.damage': ['fire'],
+      'stats.immunities.conditions': ['condition/poisoned', 'condition/charmed'],
+    });
+  });
+
   it('read an omitted optional flag as false and keep a present one', async () => {
     const cursed = await wandOfFrostLances();
     Object.assign(cursed, { id: 'cursed-wand', name: 'Cursed Wand' });

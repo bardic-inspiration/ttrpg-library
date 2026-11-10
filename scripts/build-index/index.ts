@@ -22,6 +22,10 @@ export interface Facet {
   /** A phrase book vocabulary whose display names the values read with (docs/site.md#wording). */
   vocabulary?: string;
   order?: string[];
+  /** Its values are refs (docs/content-model.md#references), lifted as keys and read by their targets' names. */
+  ref?: boolean;
+  /** Its values are the type's leaf groups (docs/rulesets.md#rules-groups), offered nested and matched by group. */
+  groups?: boolean;
 }
 
 export interface TypeConfig {
@@ -96,16 +100,24 @@ function at(value: unknown, path: string): unknown {
   return current;
 }
 
+/** A ref facet's value as keys: a ref object reads as its `ref`, an array item by item. */
+function refKeys(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(refKeys);
+  const ref = typeof value === 'object' && value !== null ? (value as { ref?: unknown }).ref : undefined;
+  return typeof ref === 'string' ? ref : value;
+}
+
 /**
  * The registry's facets for one entry, in registry order (docs/site.md#type-registry). A missing value
  * is left out, except an omitted optional flag, which reads as `false` (docs/content-model.md#situational-fields).
+ * A ref facet holds its refs' keys.
  */
 function facetValues(item: ValidEntry, facets: Facet[], schemas: SchemaSet): Record<string, unknown> {
   const source = { stats: item.entry.stats, derived: item.derived };
   const out: Record<string, unknown> = {};
-  for (const { path } of facets) {
+  for (const { path, ref } of facets) {
     const value = at(source, path);
-    if (value !== undefined) out[path] = value;
+    if (value !== undefined) out[path] = ref ? refKeys(value) : value;
     else if (path.startsWith('stats.') && isFlag(path.slice('stats.'.length), schemas)) out[path] = false;
   }
   return out;

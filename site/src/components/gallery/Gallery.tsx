@@ -5,14 +5,15 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import registryJson from '../../../../config/types.json' with { type: 'json' };
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
-import { filterDef, galleryConfig, sortChoices, type GalleryScope, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
+import { galleryConfig, sortChoices, type FacetData, type GalleryScope, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
 import { isActive, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
-import { addableFilters, bounds, chips, computeView, hasValues, searchIndex, withoutFilter } from '../../lib/gallery/view.ts';
+import { filterTree } from '../../lib/gallery/tree.ts';
+import { computeView, searchIndex } from '../../lib/gallery/view.ts';
 import SearchIcon from '../../icons/Search.tsx';
 import SortIcon from '../../icons/Sort.tsx';
 import { setTarget } from '../../lib/gallery/selection.ts';
 import Card from './Card.tsx';
-import { AddFilter, EnumFilter, RangeFilter, idFor } from './Filters.tsx';
+import { FilterTree } from './Filters.tsx';
 import SetActions from './SetActions.tsx';
 import './gallery.css';
 
@@ -25,20 +26,21 @@ export interface GalleryProps extends GalleryScope {
   records?: LibraryRecord[];
   /** The query string to start from; defaults to the page's. */
   initialQuery?: string;
+  /** Ref targets' names and grouped types' groups, from the build (docs/site.md#gallery "Filters"). */
+  facetData?: FacetData;
 }
 
 const registry = registryJson as unknown as Registry;
 
 const resultText = (n: number) => (n === 0 ? 'No entries match.' : n === 1 ? '1 entry' : `${n} entries`);
 
-export default function Gallery({ ruleset, type, indexUrl, base, records: given, initialQuery }: GalleryProps) {
-  const config = useMemo(() => galleryConfig(registry, { ruleset, type }), [ruleset, type]);
+export default function Gallery({ ruleset, type, indexUrl, base, records: given, initialQuery, facetData }: GalleryProps) {
+  const config = useMemo(() => galleryConfig(registry, { ruleset, type }, facetData), [ruleset, type, facetData]);
   const [records, setRecords] = useState<LibraryRecord[] | undefined>(given);
   const [failed, setFailed] = useState(false);
   const [state, setState] = useState<GalleryState>(() =>
     parseQuery(initialQuery ?? (typeof window === 'undefined' ? '' : window.location.search), config),
   );
-  const [shown, setShown] = useState<string[]>([]);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -74,11 +76,7 @@ export default function Gallery({ ruleset, type, indexUrl, base, records: given,
       else next.filters.delete(path);
     });
 
-  // Shown filters: the defaults that have values here, any active filter, and any the reader added.
-  const visible = [
-    ...new Set([...config.defaultFilters.filter((path) => hasValues(path, view.scoped)), ...state.filters.keys(), ...shown]),
-  ];
-  const addable = addableFilters(config, state, view.scoped, view.results).filter((def) => !visible.includes(def.path));
+  const tree = filterTree(config, state, view.scoped, index);
   const choices = sortChoices(config);
   const sortValue = choices.some((c) => c.path === state.sort.path) ? state.sort.path : config.defaultSort.path;
 
@@ -143,44 +141,11 @@ export default function Gallery({ ruleset, type, indexUrl, base, records: given,
 
       <div class="gallery__layout">
         <section class="gallery__filters" aria-label="Filters">
-          {visible.map((path) => {
-            const def = filterDef(config, path);
-            if (!def) return null;
-            const onRemove = config.defaultFilters.includes(path)
-              ? undefined
-              : () => {
-                  setShown(shown.filter((p) => p !== path));
-                  update((next) => {
-                    next.filters.delete(path);
-                  });
-                };
-            return def.kind === 'range' ? (
-              <RangeFilter
-                key={path}
-                def={def}
-                bounds={bounds(path, view.scoped)}
-                value={state.filters.get(path)}
-                onRemove={onRemove}
-                onChange={(min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
-              />
-            ) : (
-              <EnumFilter
-                key={path}
-                def={def}
-                chips={chips(def, view.scoped, withoutFilter(view.scoped, state, index, path), state.filters.get(path))}
-                value={state.filters.get(path)}
-                onRemove={onRemove}
-                onChange={(values) => setFilter(path, { kind: 'enum', values })}
-              />
-            );
-          })}
-          <AddFilter
-            options={addable}
-            onAdd={(path) => {
-              setShown([...shown, path]);
-              // Move focus into the new group once it renders.
-              requestAnimationFrame(() => document.getElementById(idFor(path))?.querySelector<HTMLElement>('.chip, input')?.focus());
-            }}
+          <FilterTree
+            nodes={tree}
+            filters={state.filters}
+            onEnum={(path, values) => setFilter(path, { kind: 'enum', values })}
+            onRange={(path, min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
           />
           {state.filters.size > 0 && (
             <button

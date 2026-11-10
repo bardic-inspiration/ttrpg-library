@@ -1,10 +1,10 @@
-// Filtering, search, sort, and chip counts (docs/site.md#gallery). Pure functions
+// Filtering, search, sort, and value counts (docs/site.md#gallery). Pure functions
 // over library.json records, so the island stays a thin view.
 
 import MiniSearch from 'minisearch';
-import { NAME, TYPE, filterDef, inScope, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
+import { NAME, filterDef, inScope, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
-import { enumValues, numberAt, valueAt } from './values.ts';
+import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
 
 /** Whether one record passes one filter. A record missing the value never matches. */
 export function matches(record: LibraryRecord, path: string, value: FilterValue): boolean {
@@ -14,6 +14,24 @@ export function matches(record: LibraryRecord, path: string, value: FilterValue)
   }
   const keys = new Set(enumValues(valueAt(record, path)).map((v) => v.key));
   return value.values.some((v) => keys.has(v));
+}
+
+/**
+ * The filters as matched: a group of a groups facet stands for every leaf group in it
+ * (docs/rulesets.md#rules-groups), since entries name only their leaf.
+ */
+export function matchedFilters(config: GalleryConfig, filters: Map<string, FilterValue>): Map<string, FilterValue> {
+  const out = new Map<string, FilterValue>();
+  for (const [path, value] of filters) {
+    const groups = filterDef(config, path)?.groups;
+    if (!groups || value.kind !== 'enum') {
+      out.set(path, value);
+      continue;
+    }
+    const leaves = new Map(groups.map((g) => [g.id.toLowerCase(), g.leaves.map((l) => l.toLowerCase())]));
+    out.set(path, { kind: 'enum', values: [...new Set(value.values.flatMap((v) => leaves.get(v) ?? [v]))] });
+  }
+  return out;
 }
 
 /** Records passing every active filter (AND across filters, OR within one), optionally skipping one path. */
@@ -48,10 +66,14 @@ const compareCode = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 const compareIdentity = (a: LibraryRecord, b: LibraryRecord) =>
   compareCode(a.ruleset, b.ruleset) || compareCode(a.type, b.type) || compareCode(a.id, b.id);
 
-/** The value a record sorts by: the first item of an array, an ordered enum by its declared position. */
+/**
+ * The value a record sorts by: the first item of an array, an ordered enum by its declared
+ * position, a ref by its target's name.
+ */
 function sortValue(record: LibraryRecord, key: SortKey, def: FilterDef | undefined): string | number | boolean | undefined {
   let value = valueAt(record, key.path);
   if (Array.isArray(value)) value = value[0];
+  if (typeof value === 'string' && def?.ref) return displayValue(def, value);
   if (typeof value === 'string' && def?.order) {
     const i = def.order.indexOf(value);
     return i === -1 ? def.order.length : i;
@@ -88,9 +110,10 @@ export interface Chip {
 }
 
 /**
- * Chips for an enum filter: every value present in the route's records, plus
- * any selected value, each with how many results it matches. Counts apply the
- * search and every other filter, so a chip's count is what selecting it adds.
+ * The values of an enum filter: every value present in `scoped`, plus any selected value,
+ * each with how many of `others` it matches. `others` has the search and every other filter
+ * applied, so a value's count is what selecting it adds. Ordered enums keep their order; a
+ * ref reads by its target's name, so it sorts by that name.
  */
 export function chips(def: FilterDef, scoped: LibraryRecord[], others: LibraryRecord[], active?: FilterValue): Chip[] {
   const stored = new Map<string, string | number | boolean>();
@@ -100,6 +123,7 @@ export function chips(def: FilterDef, scoped: LibraryRecord[], others: LibraryRe
   const counts = new Map<string, number>();
   for (const record of others) for (const key of new Set(enumValues(valueAt(record, def.path)).map((v) => v.key))) counts.set(key, (counts.get(key) ?? 0) + 1);
   const rank = (chip: Chip) => (def.order ? def.order.findIndex((o) => o.toLowerCase() === chip.key) : -1);
+  const text = (chip: Chip) => (def.ref ? displayValue(def, chip.stored) : String(chip.stored));
   return [...stored]
     .map(([key, value]) => ({ key, stored: value, count: counts.get(key) ?? 0 }))
     .sort((a, b) => {
@@ -107,7 +131,7 @@ export function chips(def: FilterDef, scoped: LibraryRecord[], others: LibraryRe
       const rb = rank(b);
       if (ra !== rb) return (ra === -1 ? Infinity : ra) - (rb === -1 ? Infinity : rb);
       if (typeof a.stored === 'number' && typeof b.stored === 'number') return a.stored - b.stored;
-      return compareText(String(a.stored), String(b.stored));
+      return compareText(text(a), text(b));
     });
 }
 
@@ -117,31 +141,9 @@ export function bounds(path: string, scoped: LibraryRecord[]): { min: number; ma
   return values.length > 0 ? { min: Math.min(...values), max: Math.max(...values) } : undefined;
 }
 
-/** Whether any record on the route has a value at this path. */
-export const hasValues = (path: string, scoped: LibraryRecord[]): boolean =>
-  scoped.some((r) => enumValues(valueAt(r, path)).length > 0);
-
-/**
- * Filters offered by "Add filter" (docs/site.md#gallery): every facet of the current types,
- * then every tag key present in the current results. The current types are
- * the type filter's values when one is set, otherwise every type on the route.
- */
-export function addableFilters(config: GalleryConfig, state: GalleryState, scoped: LibraryRecord[], results: LibraryRecord[]): FilterDef[] {
-  const typeFilter = state.filters.get(TYPE);
-  const types = new Set(
-    scoped
-      .filter((r) => !(typeFilter?.kind === 'enum' && typeFilter.values.length > 0) || typeFilter.values.includes(r.type.toLowerCase()))
-      .map((r) => r.type),
-  );
-  const facets = config.filters.filter(
-    (def) => def.path === TYPE || scoped.some((r) => types.has(r.type) && valueAt(r, def.path) !== undefined),
-  );
-  const tagKeys = [...new Set(results.flatMap((r) => Object.keys(r.tags)))].sort();
-  const tags = tagKeys
-    .map((key) => filterDef(config, `tags.${key}`))
-    .filter((def): def is FilterDef => def !== undefined && !config.filters.some((f) => f.path === def.path));
-  return [...facets, ...tags];
-}
+/** Whether any record has a value at this path. */
+export const hasValues = (path: string, records: LibraryRecord[]): boolean =>
+  records.some((r) => enumValues(valueAt(r, path)).length > 0);
 
 export interface GalleryView {
   scoped: LibraryRecord[];
@@ -158,16 +160,22 @@ export function computeView(
   index: MiniSearch<LibraryRecord>,
 ): GalleryView {
   const scoped = inScope(records, config.scope);
-  const filtered = applyFilters(scoped, state.filters);
+  const filtered = applyFilters(scoped, matchedFilters(config, state.filters));
   const hits = search(index, state.q);
   if (hits === undefined) return { scoped, results: sortRecords(filtered, state.sort, config), byRelevance: false };
   const byUrl = new Map(filtered.map((r) => [r.url, r]));
   return { scoped, results: hits.map((id) => byUrl.get(id)).filter((r): r is LibraryRecord => r !== undefined), byRelevance: true };
 }
 
-/** Records passing the search and every filter except one, for that filter's chip counts. */
-export function withoutFilter(scoped: LibraryRecord[], state: GalleryState, index: MiniSearch<LibraryRecord>, path: string): LibraryRecord[] {
-  const filtered = applyFilters(scoped, state.filters, path);
+/** Records passing the search and every filter except one, for that filter's value counts. */
+export function withoutFilter(
+  config: GalleryConfig,
+  scoped: LibraryRecord[],
+  state: GalleryState,
+  index: MiniSearch<LibraryRecord>,
+  path: string,
+): LibraryRecord[] {
+  const filtered = applyFilters(scoped, matchedFilters(config, state.filters), path);
   const hits = search(index, state.q);
   if (hits === undefined) return filtered;
   const ids = new Set(hits);

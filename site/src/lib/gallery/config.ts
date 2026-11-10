@@ -20,7 +20,32 @@ export interface FilterDef {
   labels?: Record<string, string>;
   /** Former values read as current ones, such as a renamed type's old key (docs/site.md#redirects). */
   aliases?: Record<string, string>;
+  /** Its values are ref keys, read by their targets' names (in `labels`). */
+  ref?: boolean;
+  /** Its values are the type's groups, nested; a group matches every leaf group in it. */
+  groups?: GroupInfo[];
 }
+
+/** One group a groups facet offers (docs/rulesets.md#rules-groups). */
+export interface GroupInfo {
+  id: string;
+  /** A category reads by its `noun`, another group by its `qualifier`, else by its name: Weapon › Martial. */
+  label: string;
+  /** The group it nests in; a category has none. A union nests in its parent too. */
+  parent?: string;
+  /** The leaf groups it contains, which entries name: itself for a leaf, every leaf in it, or a union's parts'. */
+  leaves: string[];
+}
+
+/** What the facets need besides the registry, from the build: ref targets' names and each grouped type's groups. */
+export interface FacetData {
+  /** `<type>/<id>` → name, for every value of a ref facet. */
+  names: Record<string, string>;
+  /** `<ruleset>/<type>` → its groups, in page order with unions last among their siblings. */
+  groups: Record<string, GroupInfo[]>;
+}
+
+export const NO_FACET_DATA: FacetData = { names: {}, groups: {} };
 
 export interface SortKey {
   path: string;
@@ -40,8 +65,16 @@ export interface GalleryConfig {
   defaultSort: SortKey;
   /** Filters shown expanded before any is chosen. */
   defaultFilters: string[];
-  /** Per type, keyed `<ruleset>/<type>`: its label, card fields, and facet definitions. */
-  types: Map<string, { label: string; cardFields: FilterDef[] }>;
+  /** Per type, keyed `<ruleset>/<type>`: its label, card fields, and facets in registry order. */
+  types: Map<string, TypeInfo>;
+}
+
+export interface TypeInfo {
+  ruleset: string;
+  type: string;
+  label: string;
+  cardFields: FilterDef[];
+  facets: FilterDef[];
 }
 
 /** The pseudo-paths every record has besides its facets (docs/site.md#gallery "Sort"). */
@@ -60,15 +93,24 @@ export function parseSortKey(value: string | undefined): SortKey | undefined {
   return match ? { path: match[1] as string, dir: match[2] as 'asc' | 'desc' } : undefined;
 }
 
-/** A facet as a filter; a vocabulary's names become its labels (docs/site.md#wording). */
-const facetDef = (facet: Facet, ruleset: string): FilterDef => {
+/**
+ * A facet as a filter. A vocabulary's names become its labels (docs/site.md#wording), and so do
+ * a ref facet's target names and a groups facet's group labels.
+ */
+const facetDef = (facet: Facet, ruleset: string, type: string, data: FacetData): FilterDef => {
+  const { groups: grouped, ...rest } = facet;
+  if (grouped) {
+    const groups = data.groups[`${ruleset}/${type}`] ?? [];
+    return { ...rest, groups, labels: Object.fromEntries(groups.map((g) => [g.id, g.label])) };
+  }
+  if (facet.ref) return { ...rest, labels: data.names };
   const labels = facet.vocabulary === undefined ? undefined : phraseBook(ruleset)?.vocabulary[facet.vocabulary];
-  return { ...facet, ...(labels ? { labels } : {}) };
+  return { ...rest, ...(labels ? { labels } : {}) };
 };
 
 /** The configuration for one gallery route. */
-export function galleryConfig(registry: Registry, scope: GalleryScope): GalleryConfig {
-  const types = new Map<string, { label: string; cardFields: FilterDef[] }>();
+export function galleryConfig(registry: Registry, scope: GalleryScope, data: FacetData = NO_FACET_DATA): GalleryConfig {
+  const types = new Map<string, TypeInfo>();
   const filters = new Map<string, FilterDef>();
   const typeLabels: Record<string, string> = {};
   let single: TypeConfig | undefined;
@@ -79,12 +121,12 @@ export function galleryConfig(registry: Registry, scope: GalleryScope): GalleryC
       if (scope.type && scope.type !== typeId) continue;
       if (scope.type) single = type;
       typeLabels[typeId] = type.label;
+      const facets = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data));
       const cardFields = ((type.cardFields as string[] | undefined) ?? [])
-        .map((path) => type.facets.find((facet) => facet.path === path))
-        .filter((facet): facet is Facet => facet !== undefined)
-        .map((facet) => facetDef(facet, rulesetId));
-      types.set(`${rulesetId}/${typeId}`, { label: type.label, cardFields });
-      for (const facet of type.facets) if (!filters.has(facet.path)) filters.set(facet.path, facetDef(facet, rulesetId));
+        .map((path) => facets.find((facet) => facet.path === path))
+        .filter((facet): facet is FilterDef => facet !== undefined);
+      types.set(`${rulesetId}/${typeId}`, { ruleset: rulesetId, type: typeId, label: type.label, cardFields, facets });
+      for (const facet of facets) if (!filters.has(facet.path)) filters.set(facet.path, facet);
     }
   }
 

@@ -49,11 +49,21 @@ describe('Gallery', () => {
     expect(render({ initialQuery: '?q=zzzzqqq' })).toContain('>No entries match.</p>');
   });
 
-  it('groups each filter in a fieldset with a legend, and chips report their state', () => {
+  it('renders the filters as a tree: types as checkboxes, nodes as disclosures, values as checkboxes with counts', () => {
     const html = render({ initialQuery: '?f.type=spell' });
-    expect(html).toMatch(/<fieldset class="filter" id="filter-type"[^>]*><legend class="filter__legend"><span class="filter__label">Type<\/span>/);
-    expect(html).toMatch(/aria-pressed="true">Spell/);
-    expect(html).toMatch(/aria-pressed="false">Creature/);
+    expect(html).not.toContain('Add filter');
+    expect(html).not.toContain('aria-pressed');
+    expect(html).toMatch(/<input type="checkbox" id="filter-dnd-5e-2024-spell" checked\/><label for="filter-dnd-5e-2024-spell">Spell <span class="tree__count">1<span class="visually-hidden"> entry<\/span><\/span><\/label>/);
+    expect(html).toMatch(/<input type="checkbox" id="filter-dnd-5e-2024-creature"\/>/);
+    expect(html).toMatch(/<button type="button" class="tree__toggle" id="filter-dnd-5e-2024-spell-toggle" aria-expanded="false" aria-controls="filter-dnd-5e-2024-spell-panel" aria-label="Spell filters">/);
+    expect(html).toMatch(/<ul class="tree__children" id="filter-dnd-5e-2024-spell-panel" hidden>/);
+  });
+
+  it('opens a type route’s default filters, with each value a labeled checkbox', () => {
+    const html = render({ type: 'creature', ruleset: 'dnd-5e-2024' });
+    expect(html).toMatch(/id="filter-stats-creatureType-toggle" aria-expanded="true"[^>]*>.*?Creature type<\/button>/);
+    expect(html).toMatch(/id="filter-stats-size-toggle" aria-expanded="false"/);
+    expect(html).toContain('<input type="checkbox" id="filter-stats-creatureType-monstrosity"/><label for="filter-stats-creatureType-monstrosity">Monstrosity <span class="tree__count">1');
   });
 
   it('labels every control', () => {
