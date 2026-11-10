@@ -7,7 +7,7 @@
     "levels": [
       3
     ],
-    "text": "You gain a Monk subclass of your choice. The Warrior of the Open Hand subclass is detailed after this class's description. A subclass is a specialization that grants you features at certain Monk levels. For the rest of your career, you gain each of your subclass's features that are of your Monk level or lower."
+    "text": "You gain a Monk subclass of your choice. The {ref:subclass/warrior-of-the-open-hand} subclass is detailed after this class's description. A subclass is a specialization that grants you features at certain Monk levels. For the rest of your career, you gain each of your subclass's features that are of your Monk level or lower."
   },
   "meta": {
     "createdAt": "2026-11-10",
@@ -17,6 +17,7 @@
         234
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-10"
   }
 }

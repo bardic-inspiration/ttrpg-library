@@ -7,7 +7,7 @@
     "levels": [
       19
     ],
-    "text": "You gain an Epic Boon feat (see \"Feats\") or another feat of your choice for which you qualify. Boon of Combat Prowess is recommended."
+    "text": "You gain an Epic Boon feat (see \"Feats\") or another feat of your choice for which you qualify. {ref:feat/boon-of-combat-prowess} is recommended."
   },
   "meta": {
     "createdAt": "2026-11-10",
@@ -17,6 +17,7 @@
         234
       ],
       "srd": true
-    }
+    },
+    "updatedAt": "2026-11-10"
   }
 }
