@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "ability-score-improvement",
+  "name": "Ability Score Improvement",
+  "summary": "A general feat that raises one ability score by 2 or two scores by 1.",
+  "stats": {
+    "category": "general",
+    "level": 4,
+    "text": "Increase one ability score of your choice by 2, or increase two ability scores of your choice by 1. This feat can't increase an ability score above 20.",
+    "repeatable": "You can take this feat more than once."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

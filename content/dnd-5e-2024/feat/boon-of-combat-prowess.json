@@ -1,0 +1,31 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "boon-of-combat-prowess",
+  "name": "Boon of Combat Prowess",
+  "summary": "An epic boon that turns a missed attack roll into a hit once per turn.",
+  "stats": {
+    "category": "epic-boon",
+    "level": 19,
+    "benefits": [
+      {
+        "name": "Ability Score Increase",
+        "text": "Increase one ability score of your choice by 1, to a maximum of 30."
+      },
+      {
+        "name": "Peerless Aim",
+        "text": "When you miss with an attack roll, you can hit instead. Once you use this benefit, you can't use it again until the start of your next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

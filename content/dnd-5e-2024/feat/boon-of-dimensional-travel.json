@@ -1,0 +1,31 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "boon-of-dimensional-travel",
+  "name": "Boon of Dimensional Travel",
+  "summary": "An epic boon that lets you teleport 30 feet after the Attack or Magic action.",
+  "stats": {
+    "category": "epic-boon",
+    "level": 19,
+    "benefits": [
+      {
+        "name": "Ability Score Increase",
+        "text": "Increase one ability score of your choice by 1, to a maximum of 30."
+      },
+      {
+        "name": "Blink Steps",
+        "text": "Immediately after you take the {ref:glossary/attack} action or the {ref:glossary/magic} action, you can teleport up to 30 feet to an unoccupied space you can see."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
