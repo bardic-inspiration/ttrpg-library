@@ -430,9 +430,6 @@ A field that takes a condition takes a `ConditionRef`: a creature's
   (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
   `classes` are class refs (`ClassRef`), each printed as its class's name,
   linked.
-- A spell derives `classes`, its class ids, for the Classes filter, which
-  reads them by the phrase book's `class` vocabulary until the filter tree
-  reads ref labels (#235).
 - A reaction or bonus action with a trigger reads "Reaction, which you take
   …" with the trigger rendered inline as rules text, so a spell name in it can
   be italic. A casting-time `note` prints after the unit: "Action (Overgrowth)

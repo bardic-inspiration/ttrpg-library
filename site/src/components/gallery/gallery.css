@@ -116,55 +116,91 @@
     justify-self: start;
   }
 
-  /* Filters. */
-  .filter {
+  /* The filter tree (docs/site.md#gallery "Filters"): nested disclosures, values as checkboxes. */
+  .tree,
+  .tree__children,
+  .tree__values {
     display: grid;
-    gap: var(--space-2xs);
-    min-inline-size: 0;
-    padding: var(--space-xs);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--control-radius);
-
-    &[data-active] {
-      border-color: var(--color-control-border);
-    }
-  }
-
-  .filter__legend {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2xs);
-    padding-inline: var(--space-3xs);
-    font-weight: var(--font-weight-label);
-  }
-
-  .filter__remove {
-    display: inline-flex;
-    padding: var(--space-3xs);
-    border-color: transparent;
-    background: transparent;
-  }
-
-  .filter__empty {
-    color: var(--color-text-muted);
-    font-size: var(--text-small);
-  }
-
-  .filter__chips {
-    display: flex;
-    flex-wrap: wrap;
     gap: var(--space-3xs);
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  .filter__range {
+  .tree__children,
+  .tree__values,
+  .tree__panel {
+    padding-inline-start: var(--tree-indent);
+  }
+
+  .tree__children[hidden],
+  .tree__values[hidden],
+  .tree__panel[hidden] {
+    display: none;
+  }
+
+  .tree__node--type {
+    padding-block: var(--space-3xs);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .tree__row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+
+    & label {
+      flex: 1;
+      min-inline-size: 0;
+    }
+  }
+
+  .tree__node--type > .tree__row label {
+    font-weight: var(--font-weight-label);
+  }
+
+  .tree__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-3xs);
+    border-color: transparent;
+    background: transparent;
+    font-weight: var(--font-weight-label);
+    text-align: start;
+
+    &[aria-expanded='true'] .tree__chevron {
+      transform: rotate(90deg);
+    }
+  }
+
+  .tree__node[data-active] > .tree__toggle {
+    text-decoration: underline;
+  }
+
+  /* A right-pointing triangle, turned down when open. */
+  .tree__chevron {
+    inline-size: 0;
+    block-size: 0;
+    border-block: calc(var(--tree-chevron) / 2) solid transparent;
+    border-inline-start: var(--tree-chevron) solid currentcolor;
+    transition: transform var(--duration-quick);
+  }
+
+  .tree__count {
+    color: var(--filter-count-text);
+    font-size: var(--text-small);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tree__range {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--filters-width) / 3)), 1fr));
     gap: var(--space-2xs);
+    padding-block: var(--space-3xs);
   }
 
-  .filter__bound {
+  .tree__bound {
     display: flex;
     align-items: center;
     gap: var(--space-3xs);
@@ -172,48 +208,6 @@
     & input {
       flex: 1;
       min-inline-size: 0;
-    }
-  }
-
-  .chip {
-    border-radius: var(--chip-radius);
-    font-size: var(--text-small);
-
-    &[aria-pressed='true'] .chip__count {
-      color: inherit;
-    }
-  }
-
-  .chip__count {
-    color: var(--chip-count-text);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .add-filter {
-    position: relative;
-    justify-self: start;
-  }
-
-  .add-filter__button {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3xs);
-  }
-
-  .add-filter__menu {
-    display: grid;
-    gap: var(--space-3xs);
-    margin-block-start: var(--space-3xs);
-    padding: var(--space-2xs);
-    list-style: none;
-    background: var(--card-bg);
-    border: var(--control-border);
-    border-radius: var(--control-radius);
-    box-shadow: var(--shadow-raised);
-
-    & button {
-      inline-size: 100%;
-      text-align: start;
     }
   }
 

@@ -27,7 +27,9 @@
     --art-aspect: var(--ratio-art);
     --filters-width: var(--size-filters);
     --filters-gap: var(--space-s);
-    --chip-count-text: var(--color-text-muted);
+    --filter-count-text: var(--color-text-muted);
+    --tree-indent: var(--space-s);
+    --tree-chevron: var(--space-2xs);
 
     /* Stat blocks. */
     --statblock-bg: var(--color-surface);

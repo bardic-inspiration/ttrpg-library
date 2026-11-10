@@ -369,6 +369,12 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Every UI PR shows screenshots at 390, 820, and 1440px. Accessibility moves from per-PR CI to one WCAG 2.2 AA review at the end of each milestone. | Layout is the per-PR risk; a per-PR accessibility run isn't needed. Changes how P10 is checked | #113 |
 | One palette for the whole site: no light and dark themes, and no theme switch. | One look to design, check, and print | #113 |
 | The axe run moves out of per-PR CI to a job on the PR that closes a milestone, marked by a hand-added `milestone` label. | A per-PR run isn't needed; a label is explicit and re-runs `validate` | #212 |
+| The filter tree nests a type's facets by their registry paths: facets that share a field below `stats` or `derived` sit in a node labeled from the field's key; a field holding one facet adds no node. | "Following the schema" with no new registry key; `stats.ac.value` shouldn't read as "Ac › AC" | #235 |
+| The tree keeps v1's filter semantics and URL form: one filter per path, OR within it and AND across paths, so a path two types share is one filter shown under each type. A type is a checkbox for `f.type`. | The pilot's "done when" keeps URL state as in v1; per-type filters would change every link | #235 |
+| A ref facet is marked `"ref": true`; the index lifts its values as keys, and the island gets the targets' names from the build. | Condition primitives aren't in `library.json`, so names can't come from the records alone | #235 |
+| Equipment's group is a `"groups": true` facet whose values nest as the groups file does, and a group matches every leaf in it; `derived.category` is no longer a facet, being the tree's top level. Categories read by `noun`, groups by `qualifier`, else by name. | Equipment › Weapon › Martial without a second, overlapping Category filter; the labels are the groups' own short forms | #235 |
+| Creatures gain damage and condition immunity facets, which share the Immunities node. Spells' Classes filter reads `stats.classes`, and the derived class ids are removed. Subclasses filter, show, and sort by their class, and backgrounds show their feat. | The spec's facets over refs; the derived list was a stopgap until ref labels | #235 |
+| A facet node shows only when some entry of its type has a value or it's active; a type shows only when the route has entries of it. Default filters start open on a type route only. | v1 showed default filters only with values; on routes spanning types, every open default would bury the type list | #235 |
 
 ### Export
 

@@ -26,8 +26,8 @@ selection). Publishing homebrew for others is out of scope for v2.
 
 - [Pages and navigation](../../docs/site.md#pages-and-navigation): routes and
   the header.
-- [Gallery](../../docs/site.md#gallery): filters, sort, search, URL state,
-  selection, and set actions.
+- [Gallery](../../docs/site.md#gallery): the filter tree, sort, search, URL
+  state, selection, and set actions.
 - [Detail page](../../docs/site.md#detail-page).
 - [Print](../../docs/export.md#print).
 - [CI checks](../../docs/workflow.md#ci-checks): the per-PR accessibility
@@ -58,22 +58,6 @@ style redesign's (#114).
 - **The filter menu** is a sidebar on desktop. On phones and tablets it is a
   collapsible container, closed by default, so results show on the first
   screen.
-- **Filters are a nested accordion checkbox tree** that follows the schema:
-  type, then field, then any subfield, then value, such as Creature ›
-  Immunities › Conditions › Poisoned, or Equipment › Weapon › Martial ›
-  Melee. Values are listed vertically, replacing v1's chips, and keep their
-  counts. The tree holds every facet, so v1's "Add filter" goes. A range
-  facet, such as CR, keeps its min and max inputs inside its node.
-- **Facets over refs** are enum facets valued by key and shown by the
-  target's name, so the tree can offer them:
-  - a creature's `immunities.conditions` (Creature › Immunities ›
-    Conditions);
-  - a spell's `classes`, in place of the derived class ids its Classes filter
-    reads now ([Spells](../../docs/rulesets.md#spells));
-  - a background's `stats.feat`, which the background card then shows beside
-    its abilities;
-  - a subclass's `stats.class`, which the subclass card then shows, and by
-    which subclasses then sort by default.
 - **Cards** keep v1's content and their checkbox for multi-select.
 - **Export** is one Download button and one Print button. Each acts on the
   selection, or on the filtered results when nothing is selected, and opens
@@ -112,8 +96,6 @@ without splitting an action or trait.
 
 ## Cases
 
-- `creature/air-elemental`: reached in the filter tree through Creature ›
-  Immunities › Conditions.
 - `creature/lich`: a long card entry on its detail page, at all three widths.
 - `spell/fireball` and `creature/lich`: printed together, stacked on the same
   page.
@@ -122,8 +104,6 @@ without splitting an action or trait.
 
 - The top bar reads Library, Rulesets, About, Contribute, and the old gallery
   routes redirect to the Library with their filter.
-- The filter tree is built from the schemas, and every facet of every type
-  appears in it.
 - Rules pages and page types render as accordion sections with a table of
   contents, and an anchor link opens its section.
 - Print has no per-page mode.

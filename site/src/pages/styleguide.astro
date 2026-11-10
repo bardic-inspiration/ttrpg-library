@@ -18,11 +18,13 @@ import DownloadIcon from '../icons/Download';
 import PrintIcon from '../icons/Print';
 import CloseIcon from '../icons/Close';
 import Card from '../components/gallery/Card';
-import { AddFilter, EnumFilter, RangeFilter } from '../components/gallery/Filters';
+import { FilterTree } from '../components/gallery/Filters';
 import '../components/gallery/gallery.css';
 import sampleArt from '../assets/sample-art.svg';
 import { galleryConfig, type Registry } from '../lib/gallery/config';
-import { chips } from '../lib/gallery/view';
+import { parseQuery } from '../lib/gallery/state';
+import { filterTree } from '../lib/gallery/tree';
+import { searchIndex } from '../lib/gallery/view';
 import registryJson from '../../../config/types.json';
 import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { PROJECT_ROOT } from '../../../scripts/validate/schema.ts';
@@ -71,9 +73,17 @@ const entryNames = namesOf(fixtureEntries);
 const registry = registryJson as unknown as Registry;
 const home = galleryConfig(registry, {});
 const creatureConfig = galleryConfig(registry, { ruleset: 'dnd-5e-2024', type: 'creature' });
-const typeFilter = home.filters.find((f) => f.path === 'type')!;
-const crFilter = creatureConfig.filters.find((f) => f.path === 'stats.cr')!;
-const typeChips = chips(typeFilter, fixtures.records, fixtures.records);
+const fixtureIndex = searchIndex(fixtures.records);
+// The filter tree as a route opens it, and with filters set, which opens the nodes holding them.
+const treeAt = (config: typeof home, query: string) => {
+  const state = parseQuery(query, config);
+  return { nodes: filterTree(config, state, fixtures.records, fixtureIndex), filters: state.filters };
+};
+const filterStates = [
+  { title: 'All types, as the home page opens it', ...treeAt(home, '') },
+  { title: 'All types, with a type and a facet value set', ...treeAt(home, '?f.type=spell&f.stats.school=evocation') },
+  { title: 'A type route, with its default filters open and a range set', ...treeAt(creatureConfig, '?f.stats.cr=1/4..2') },
+];
 const noop = () => {};
 const cardInfo = (r: (typeof fixtures.records)[number]) => home.types.get(`${r.ruleset}/${r.type}`)!;
 
@@ -211,15 +221,12 @@ const modes = ['screen', 'capture'] as const;
 
           <h4>Filter controls</h4>
           <div class="sg-filters">
-            <EnumFilter def={typeFilter} chips={typeChips} value={undefined} onChange={noop} />
-            <EnumFilter def={typeFilter} chips={typeChips} value={{ kind: 'enum', values: ['spell'] }} onChange={noop} onRemove={noop} />
-            <div class="sg-focus-demo">
-              <EnumFilter def={{ ...typeFilter, label: 'Type (focused chip)' }} chips={typeChips} value={undefined} onChange={noop} />
-            </div>
-            <EnumFilter def={{ path: 'tags.world', label: 'world', kind: 'enum' }} chips={[]} value={undefined} onChange={noop} />
-            <RangeFilter def={crFilter} bounds={{ min: 0.125, max: 2 }} value={undefined} onChange={noop} />
-            <RangeFilter def={crFilter} bounds={{ min: 0.125, max: 2 }} value={{ kind: 'range', min: 0.25, max: 2 }} onChange={noop} onRemove={noop} />
-            <AddFilter options={creatureConfig.filters} onAdd={noop} />
+            {filterStates.map(({ title, nodes, filters }) => (
+              <>
+                <h5>{title}</h5>
+                <FilterTree nodes={nodes} filters={filters} onEnum={noop} onRange={noop} />
+              </>
+            ))}
           </div>
 
           {fixtureEntries.map(({ entry, derived }) =>
@@ -424,10 +431,5 @@ const modes = ['screen', 'capture'] as const;
       max-inline-size: var(--filters-width);
     }
 
-    /* A static stand-in for keyboard focus on the first chip. */
-    .sg-focus-demo :global(li:first-child .chip) {
-      outline: var(--focus-ring);
-      outline-offset: var(--focus-ring-offset);
-    }
   }
 </style>

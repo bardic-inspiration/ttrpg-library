@@ -27,7 +27,7 @@ Per type:
 | `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>` |
-| `defaultFilters` | Filters expanded by default; every other facet and tag stays reachable through "Add filter" |
+| `defaultFilters` | Filter tree nodes open by default on the type's own route; every other facet and tag stays in the tree, closed |
 | `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, species, class, subclass), which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
@@ -48,6 +48,21 @@ optional display formatter:
 
 Without either, a value reads as stored, which keeps tag values and free text
 as written.
+
+Two flags change what a facet's values are:
+
+- **`ref`:** the values are refs ([References](content-model.md#references)).
+  The index lifts each as its key (`condition/poisoned`), and the gallery
+  reads it by its target's name and sorts by that name, in values and in
+  sorted records. A creature's `stats.immunities.conditions`, a spell's
+  `stats.classes`, a background's `stats.feat`, and a subclass's
+  `stats.class` are ref facets.
+- **`groups`:** the values are the type's leaf groups
+  ([Rules groups](rulesets.md#rules-groups)), offered nested as the groups
+  file nests them. Choosing a group matches every leaf group in it, and a
+  union group its parts' leaves, so `f.stats.group=martial-weapons` matches a
+  `martial-melee-weapons` entry. Equipment's `stats.group` is one, so its
+  category is the tree's top level rather than a facet of its own.
 
 ### Index build
 
@@ -187,24 +202,42 @@ when `false`. A `rarity`-formatted field reads as a badge carrying
 `data-rarity`. Other fields read as label and value. One column on phones, up
 to four on wide screens.
 
-**Filters.**
+**Filters** are a nested accordion checkbox tree built from the registry
+(`site/src/lib/gallery/tree.ts`): type, then field, then any subfield, then
+value, such as Creature › Immunities › Conditions › Poisoned.
 
-- A type gallery expands the registry's `defaultFilters`. Routes that span
-  types (`/`, `/<ruleset>/`) have one default filter instead: `type`, an enum
-  over the registered types. A default filter shows when some entry on the
-  route has a value for it.
-- Active filters and filters the reader added always show, and a non-default
-  filter has a button to remove it.
-- "Add filter" lists every facet for the current types plus every tag key in the
-  current results. The current types are the type filter's values when it's
-  set, otherwise every type on the route.
-- Range facets show min and max inputs, which accept fractions such as `1/8`.
-  Enum facets and tags show multi-select chips with counts. A chip's count is
-  the number of results it matches under the search and every other active
-  filter. Chips list every value present on the route in declared order (for
-  ordered enums) or alphabetically, plus any selected value no entry has.
+- **Types.** A route that spans types (`/`, `/<ruleset>/`) starts at its
+  types, each a checkbox for the type filter (`f.type`) with its count, and a
+  disclosure holding its facets. A type route starts at its own facets. A
+  type shows when the route has entries of it, or it's checked.
+- **Fields.** A type's facets follow in registry order. Facets whose paths
+  share a field below `stats` or `derived` sit in a node named for it by the
+  wording layer's `label`: `stats.immunities.damage` and
+  `stats.immunities.conditions` sit in Immunities, the six ability scores in
+  Abilities. A field only one facet sits in adds no node, so `stats.ac.value`
+  reads as AC. A facet shows when some entry of its type has a value for it,
+  or it's active.
+- **Tags** follow the types as one Tags node, holding every tag key on the
+  route and any tag filtered on.
+- **Values.** An enum facet or tag lists its values vertically as checkboxes,
+  each with its count: the entries of its type it matches under the search and
+  every other active filter. Values come in declared order (ordered enums),
+  by name (ref facets), or alphabetically, plus any selected value no entry
+  has. A groups facet's values nest, each group with its own disclosure. A
+  range facet's node holds min and max inputs, which accept fractions such as
+  `1/8`.
+- **Open nodes.** On a type route, the registry's `defaultFilters` start open.
+  Every node holding an active filter starts open, down to the value. The
+  reader opens and closes the rest.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
-  filter's value never matches it.
+  filter's value never matches it. A path two types share (`stats.level` on
+  spells and feats) is one filter: each type lists its own entries' values, and
+  checking one checks it under both.
+- The tree's ref names and groups come from the build: the gallery island
+  passes the names of every ref a ref facet holds, and each grouped type's
+  groups (`site/src/lib/gallery/facet-data.ts`). A category reads by its
+  `noun` and a group by its `qualifier`, else by name: Equipment › Group ›
+  Weapon › Martial › Martial Melee Weapons.
 
 **Sort.** By name, created date, or any facet, ascending or descending. Every
 facet of every type on the route is a sort choice, so CR is offered on `/` as

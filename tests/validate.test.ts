@@ -54,8 +54,8 @@ describe('validateLibrary', () => {
     expect(result.warnings).toEqual([]);
     const derived = Object.fromEntries(result.entries.map((e) => [e.entry.id, e.derived]));
     expect(derived['cinder-hound']).toMatchObject({ xp: 450, hp: { average: 32 } });
-    // Magic items derive nothing without an embedded stat block, and spells only their class keys (docs/rulesets.md#the-ruleset-module).
-    expect(derived['frost-lance']).toEqual({ classes: ['sorcerer', 'wizard'] });
+    // Spells and magic items derive nothing without an embedded stat block (docs/rulesets.md#the-ruleset-module).
+    expect(derived['frost-lance']).toEqual({});
     expect(derived['wand-of-frost-lances']).toEqual({});
   });
 

@@ -10,9 +10,10 @@
         "guideline": "rulesets/dnd-5e-2024/guidelines/background.md",
         "facets": [
           { "path": "stats.abilities", "label": "Ability scores", "kind": "enum", "vocabulary": "ability" },
-          { "path": "stats.skills", "label": "Skills", "kind": "enum", "vocabulary": "skill" }
+          { "path": "stats.skills", "label": "Skills", "kind": "enum", "vocabulary": "skill" },
+          { "path": "stats.feat", "label": "Feat", "kind": "enum", "ref": true }
         ],
-        "cardFields": ["stats.abilities"],
+        "cardFields": ["stats.abilities", "stats.feat"],
         "defaultSort": "name:asc",
         "defaultFilters": ["stats.abilities", "tags.theme"]
       },
@@ -69,7 +70,9 @@
           { "path": "stats.abilities.cha", "label": "CHA", "kind": "range" },
           { "path": "stats.ac.value", "label": "AC", "kind": "range" },
           { "path": "derived.hp.average", "label": "HP", "kind": "range" },
-          { "path": "derived.xp", "label": "XP", "kind": "range" }
+          { "path": "derived.xp", "label": "XP", "kind": "range" },
+          { "path": "stats.immunities.damage", "label": "Damage", "kind": "enum", "vocabulary": "damageType" },
+          { "path": "stats.immunities.conditions", "label": "Conditions", "kind": "enum", "ref": true }
         ],
         "cardFields": ["stats.cr", "stats.size", "stats.creatureType"],
         "defaultSort": "stats.cr:asc",
@@ -83,14 +86,13 @@
         "template": "equipment-card",
         "guideline": "rulesets/dnd-5e-2024/guidelines/equipment.md",
         "facets": [
-          { "path": "derived.category", "label": "Category", "kind": "enum", "format": "title" },
-          { "path": "stats.group", "label": "Group", "kind": "enum", "format": "title" },
+          { "path": "stats.group", "label": "Group", "kind": "enum", "format": "title", "groups": true },
           { "path": "derived.costGp", "label": "Cost (GP)", "kind": "range" },
           { "path": "stats.weapon.damage.type", "label": "Damage type", "kind": "enum", "vocabulary": "damageType" }
         ],
         "cardFields": ["stats.group", "derived.costGp"],
         "defaultSort": "derived.costGp:asc",
-        "defaultFilters": ["derived.category", "tags.theme"]
+        "defaultFilters": ["stats.group", "tags.theme"]
       },
       "feat": {
         "label": "Feat",
@@ -166,7 +168,7 @@
         "facets": [
           { "path": "stats.level", "label": "Level", "kind": "range", "format": "spell-level" },
           { "path": "stats.school", "label": "School", "kind": "enum", "vocabulary": "school" },
-          { "path": "derived.classes", "label": "Classes", "kind": "enum", "vocabulary": "class" },
+          { "path": "stats.classes", "label": "Classes", "kind": "enum", "ref": true },
           { "path": "stats.duration.concentration", "label": "Concentration", "kind": "enum" },
           { "path": "stats.ritual", "label": "Ritual", "kind": "enum" },
           { "path": "stats.castingTime.unit", "label": "Casting time", "kind": "enum", "format": "title" }
@@ -188,10 +190,12 @@
         "plural": "Subclasses",
         "template": "subclass-page",
         "guideline": "rulesets/dnd-5e-2024/guidelines/subclass.md",
-        "facets": [],
-        "cardFields": [],
-        "defaultSort": "name:asc",
-        "defaultFilters": ["tags.theme"]
+        "facets": [
+          { "path": "stats.class", "label": "Class", "kind": "enum", "ref": true }
+        ],
+        "cardFields": ["stats.class"],
+        "defaultSort": "stats.class:asc",
+        "defaultFilters": ["stats.class", "tags.theme"]
       }
     }
   }
