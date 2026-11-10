@@ -57,14 +57,23 @@ export const isRef = (value: unknown): value is { ref: string; note?: string } =
   typeof (value as { ref?: unknown }).ref === 'string';
 
 /**
- * A link written in text (docs/content-model.md#references): `{ref:<type>/<id>}`. It renders as the
- * target's current name, linked to its page. The validator allows it only in
- * markdown-subset fields.
+ * A link written in text (docs/content-model.md#references): `{ref:<type>/<id>}`, or
+ * `{ref:<type>/<id> <text>}` with display text after a space (a `|` would split a table cell). It renders as the target's current name, or the
+ * display text, linked to its page. The validator allows it only in markdown-subset fields.
  */
 export const REF_TOKEN = /\{ref:([^{}]*)\}/g;
 
-/** What a `{ref:…}` token must hold: a type and an id. */
+/** What a `{ref:…}` token must hold: a type and an id, then optionally a space and display text. */
 const REF_KEY = /^[a-z][a-z0-9-]*\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** A token's inside split into its key and optional display text; undefined when malformed. */
+export function parseRefToken(inside: string): { key: string; text?: string } | undefined {
+  const space = inside.indexOf(' ');
+  const key = space === -1 ? inside : inside.slice(0, space);
+  const text = space === -1 ? undefined : inside.slice(space + 1);
+  if (!REF_KEY.test(key) || (text !== undefined && text.trim() !== text) || text === '') return undefined;
+  return text === undefined ? { key } : { key, text };
+}
 
 /** A `{ref:…}` token whose inside isn't `<type>/<id>`. */
 export interface MalformedRef {
@@ -77,8 +86,8 @@ export function textRefs(text: string, path: string): { refs: FoundRef[]; malfor
   const refs: FoundRef[] = [];
   const malformed: MalformedRef[] = [];
   for (const match of text.matchAll(REF_TOKEN)) {
-    const key = match[1] ?? '';
-    if (REF_KEY.test(key)) refs.push({ path, ref: key });
+    const parsed = parseRefToken(match[1] ?? '');
+    if (parsed) refs.push({ path, ref: parsed.key });
     else malformed.push({ path, raw: match[0] });
   }
   return { refs, malformed };
@@ -150,7 +159,7 @@ export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; i
       ...collectRefs(entry.stats, entry.statsPath ?? 'stats', malformed),
     ];
     for (const { path, raw } of malformed) {
-      issues.push({ file: entry.file, message: `${path}: ref token ${raw} is malformed; write {ref:<type>/<id>}, such as {ref:spell/fireball}` });
+      issues.push({ file: entry.file, message: `${path}: ref token ${raw} is malformed; write {ref:<type>/<id>} or {ref:<type>/<id> <text>}, such as {ref:spell/fireball}` });
     }
     for (const { path, ref } of found) {
       const slash = ref.indexOf('/');

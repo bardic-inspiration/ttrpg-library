@@ -6,7 +6,7 @@ covers what the schema can't: voice, names, balance, prose, and when an item
 needs a dependency entry.
 
 These rules are for custom entries, original to this library. An SRD entry is
-reproduced from SRD 5.2 unmodified ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)): its name, numbers, and
+reproduced faithfully from SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)): its name, numbers, and
 rules text are the SRD's, so tone, naming, and balance targets don't apply to
 it. It still follows the token rules in prose style and the dependencies
 section below.

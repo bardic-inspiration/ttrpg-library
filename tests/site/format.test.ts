@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { formatRarity, formatSpellLevel, formatTitle, formatValue } from '../../site/src/lib/format.ts';
+import { formatSpellLevel, formatTitle, formatValue } from '../../site/src/lib/format.ts';
+import { name } from '../../site/src/lib/wording.ts';
 
 describe('display formatters (docs/site.md#type-registry `format`)', () => {
   it('formats spell levels', () => {
     expect([0, 1, 2, 3, 4, 9].map(formatSpellLevel)).toEqual(['Cantrip', 'Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 9']);
   });
 
-  it('formats rarities', () => {
-    expect(formatRarity('very-rare')).toBe('Very Rare');
+  it('reads rarities from the vocabulary (docs/site.md#wording)', () => {
+    expect(name('rarity', 'very-rare')).toBe('Very Rare');
   });
 
   it('formats enum slugs as title case', () => {

@@ -111,7 +111,7 @@ describe('PNG capture source (docs/export.md#png, docs/styling.md#styling-system
     expect(html).toMatch(/^\s*<template data-capture="cinder-hound"[ >]/);
     expect(html).toMatch(/class="capture[^"]*"[^>]*data-theme="light"/);
     expect(html).toContain('data-mode="capture"');
-    expect(html).toContain('Includes SRD 5.2 material, CC-BY-4.0');
+    expect(html).toContain('Includes adapted SRD 5.2 material, CC-BY-4.0');
     expect(html).not.toContain('data-wide');
   });
 

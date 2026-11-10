@@ -8,6 +8,7 @@ import definition from './ruleset.json' with { type: 'json' };
 
 export const ruleset: RulesetModule = {
   definition,
+  phrases: { sentences: {}, vocabulary: {}, plurals: {}, articles: {} },
   derive: () => ({}),
   check: () => [],
   refLabels: (type, path) =>

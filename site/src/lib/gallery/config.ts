@@ -2,6 +2,7 @@
 // and sorts available, and the defaults, all read from the registry (docs/site.md#type-registry).
 
 import type { Facet, LibraryRecord, Registry, TypeConfig } from '../../../../scripts/build-index/index.ts';
+import { phraseBook } from '../phrases.ts';
 import { typeAliases } from '../redirects.ts';
 
 export type { Facet, LibraryRecord, Registry };
@@ -12,8 +13,10 @@ export interface FilterDef {
   label: string;
   kind: 'range' | 'enum';
   format?: string;
+  /** The phrase book vocabulary its values read with. */
+  vocabulary?: string;
   order?: string[];
-  /** Display labels for stored values, such as type ids to type labels. */
+  /** Display labels for stored values, such as type ids to type labels, or a vocabulary's names. */
   labels?: Record<string, string>;
   /** Former values read as current ones, such as a renamed type's old key (docs/site.md#redirects). */
   aliases?: Record<string, string>;
@@ -57,7 +60,11 @@ export function parseSortKey(value: string | undefined): SortKey | undefined {
   return match ? { path: match[1] as string, dir: match[2] as 'asc' | 'desc' } : undefined;
 }
 
-const facetDef = (facet: Facet): FilterDef => ({ ...facet });
+/** A facet as a filter; a vocabulary's names become its labels (docs/site.md#wording). */
+const facetDef = (facet: Facet, ruleset: string): FilterDef => {
+  const labels = facet.vocabulary === undefined ? undefined : phraseBook(ruleset)?.vocabulary[facet.vocabulary];
+  return { ...facet, ...(labels ? { labels } : {}) };
+};
 
 /** The configuration for one gallery route. */
 export function galleryConfig(registry: Registry, scope: GalleryScope): GalleryConfig {
@@ -75,9 +82,9 @@ export function galleryConfig(registry: Registry, scope: GalleryScope): GalleryC
       const cardFields = ((type.cardFields as string[] | undefined) ?? [])
         .map((path) => type.facets.find((facet) => facet.path === path))
         .filter((facet): facet is Facet => facet !== undefined)
-        .map(facetDef);
+        .map((facet) => facetDef(facet, rulesetId));
       types.set(`${rulesetId}/${typeId}`, { label: type.label, cardFields });
-      for (const facet of type.facets) if (!filters.has(facet.path)) filters.set(facet.path, facetDef(facet));
+      for (const facet of type.facets) if (!filters.has(facet.path)) filters.set(facet.path, facetDef(facet, rulesetId));
     }
   }
 

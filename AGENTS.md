@@ -64,7 +64,7 @@ Every content session, routine or not, follows these:
 - Run `npm run validate` before every push; never push a failing batch.
 - SRD-only rules and the blocklist apply to every text field
   ([Blocklist](docs/licensing.md#blocklist)).
-- SRD entries are reproduced unmodified; custom entries never reuse an SRD
+- SRD entries are reproduced faithfully; custom entries never reuse an SRD
   entry's exact name or an SRD proper noun
   ([SRD and custom entries](docs/content-model.md#srd-and-custom-entries)).
 - Mark review replies with `<!-- routine:handled -->`.

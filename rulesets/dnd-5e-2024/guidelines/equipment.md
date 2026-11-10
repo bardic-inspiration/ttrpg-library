@@ -8,7 +8,7 @@ warranted, names, prices and stats, prose, and links.
 
 These rules are for custom equipment only. The SRD's weapons, armor, tools,
 adventuring gear, and mounts and vehicles are ruleset primitives in
-`rulesets/dnd-5e-2024/rules/equipment/`, reproduced unmodified and never
+`rulesets/dnd-5e-2024/rules/equipment/`, reproduced faithfully and never
 authored as entries. Custom equipment is always a custom entry: it never sets
 `meta.source.srd`.
 

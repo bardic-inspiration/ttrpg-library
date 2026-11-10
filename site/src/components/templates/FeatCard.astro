@@ -4,7 +4,7 @@
 // SRD 5.2 prints them: "You gain the following benefits." and bold-italic titled paragraphs, or
 // one text, and a closing "Repeatable." paragraph.
 import type { FeatStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
-import { FEAT_BENEFITS_INTRO, featHeading } from '../../lib/feat';
+import { FEAT_BENEFITS_INTRO, FEAT_REPEATABLE, featHeading } from '../../lib/feat';
 import type { TemplateProps } from '../../lib/template';
 import RulesText from './parts/RulesText.astro';
 import StatBlock from './parts/StatBlock.astro';
@@ -22,7 +22,7 @@ const s = entry.stats as FeatStats;
     {s.benefits && <p>{FEAT_BENEFITS_INTRO}</p>}
     {s.benefits?.map((benefit) => <RulesText label={benefit.name} text={benefit.text} refs={refs} />)}
     {s.text && <RulesText text={s.text} refs={refs} />}
-    {s.repeatable && <RulesText label="Repeatable" text={s.repeatable} refs={refs} />}
+    {s.repeatable && <RulesText label={FEAT_REPEATABLE} text={s.repeatable} refs={refs} />}
   </div>
 </StatBlock>
 

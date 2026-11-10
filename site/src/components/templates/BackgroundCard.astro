@@ -16,5 +16,5 @@ const refs = { names, ruleset: entry.ruleset, paths };
 ---
 <StatBlock name={`${entry.name} background`} type="background" mode={mode}>
   <StatBlockHeader name={entry.name} subtitle="Background" level={level} />
-  <PropertyList lines={backgroundLines(entry.stats as BackgroundStats)} refs={refs} />
+  <PropertyList lines={backgroundLines(entry.stats as BackgroundStats, names)} refs={refs} />
 </StatBlock>

@@ -4,10 +4,9 @@
 
 import type { Cost, EquipmentStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 import { escapeMarkdown } from './markdown.ts';
+import { name, pluralOf, sayText } from './wording.ts';
 import type { PropertyLine } from './template.ts';
 
-const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-const ABILITIES: Record<string, string> = { str: 'Strength', dex: 'Dexterity', con: 'Constitution', int: 'Intelligence', wis: 'Wisdom', cha: 'Charisma' };
 
 /** "1,500" */
 const thousands = (n: number): string => n.toLocaleString('en-US');
@@ -32,7 +31,7 @@ const varies = (s: EquipmentStats, key: 'cost' | 'weight'): string => ((s.varian
 
 /** "1d8 Slashing", "1 Piercing". */
 export const damageText = (damage: NonNullable<EquipmentStats['weapon']>['damage']): string =>
-  `${damage.dice ?? damage.flat} ${capitalize(damage.type)}`;
+  `${damage.dice ?? damage.flat} ${name('damageType', damage.type)}`;
 
 /**
  * A weapon's properties as the SRD prints them, each linked: "Ammunition (Range 80/320; Bolt), Loading,
@@ -56,7 +55,8 @@ export function propertiesText(weapon: NonNullable<EquipmentStats['weapon']>): s
 export function armorClassText(armor: NonNullable<EquipmentStats['armor']>, shield: boolean): string {
   if (shield) return `+${armor.ac}`;
   if (!armor.dex) return String(armor.ac);
-  return `${armor.ac} + Dex modifier${armor.dexMax !== undefined ? ` (max ${armor.dexMax})` : ''}`;
+  const ac = String(armor.ac);
+  return armor.dexMax === undefined ? sayText('equipment.dexArmor', { ac }) : sayText('equipment.dexArmorMax', { ac, max: String(armor.dexMax) });
 }
 
 /** A tool's variants as the SRD prints them: "Dice (1 SP), dragonchess (1 GP)", or with weights, "Bagpipes (30 GP, 6 lb.)". */
@@ -69,7 +69,7 @@ export const variantsText = (s: EquipmentStats): string =>
     .join(', ');
 
 /** "1 ton", "150 tons", "1/2 ton". */
-const tons = (n: number): string => `${numberText(n)} ${n > 1 ? 'tons' : 'ton'}`;
+const tons = (n: number): string => `${numberText(n)} ${n > 1 ? pluralOf('ton') : 'ton'}`;
 
 /**
  * The labeled lines of an equipment's stats, for its section on a rules page and its card: the
@@ -88,7 +88,7 @@ export function equipmentLines(s: EquipmentStats, shield = false): PropertyLine[
     if (s.armor.stealthDisadvantage) lines.push({ label: 'Stealth', value: 'Disadvantage' });
   }
   if (s.tool) {
-    lines.push({ label: 'Ability', value: ABILITIES[s.tool.ability] ?? s.tool.ability });
+    lines.push({ label: 'Ability', value: name('ability', s.tool.ability) });
     lines.push({ label: 'Utilize', value: s.tool.utilize, markdown: true });
     if (s.tool.craft !== undefined) lines.push({ label: 'Craft', value: s.tool.craft, markdown: true });
     if (s.variants) lines.push({ label: 'Variants', value: variantsText(s) });

@@ -33,7 +33,7 @@ function fields(record: LibraryRecord, cardFields: FilterDef[]) {
     if (value === undefined) continue;
     if (typeof value === 'boolean') {
       if (value) badges.push({ text: def.label });
-    } else if (def.format === 'rarity' && typeof value === 'string') {
+    } else if (def.vocabulary === 'rarity' && typeof value === 'string') {
       badges.push({ text: displayValue(def, value), rarity: value });
     } else {
       const text = Array.isArray(value) ? value.map((v) => displayValue(def, v)).join(', ') : displayValue(def, value);

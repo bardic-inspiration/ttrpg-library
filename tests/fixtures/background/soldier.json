@@ -42,7 +42,7 @@
           {
             "ref": "equipment/quiver"
           },
-          "Traveler's Clothes"
+          "{ref:equipment/clothes-travelers Traveler's Clothes}"
         ],
         "gp": 14
       },

@@ -148,12 +148,17 @@ never changes and is unique within its type:
 - **A text token**, `{ref:<type>/<id>}`, valid in any markdown-subset field in
   every ruleset and type. It is the one way text links to another entry.
 
-Neither form carries display text. The site shows the target's current name,
-so a rename updates every link, and no link text is written by hand. A token
+The site shows the target's current name, so a rename updates every link. A
+token may instead carry display text after a space, `{ref:<type>/<id> <text>}`,
+only where the SRD names a target differently in context: "{ref:equipment/clothes-travelers
+Traveler's Clothes}" reads "Traveler's Clothes", linked to the primitive
+"Clothes, Traveler's". A `|` separator, as first designed, would split a table
+cell. Templates compose such links too, for a group's qualifier in a base item
+("Melee") and a counted item's plural ("Javelins"). A token
 renders as that name linked to the target's detail page, and reads as the name
 in search text. It takes inline markup around it: a spell name is written
 `*{ref:spell/cure-wounds}*`, as SRD text italicizes spell names. Because the
-token renders the name, SRD text stays word for word when a mention becomes a
+token renders the name, SRD text keeps its words when a mention becomes a
 link: "becomes a {ref:creature/zombie}" reads "becomes a Zombie". A token
 anywhere else (`name`, `summary`, a plain-string `stats` field) is a validation
 error, as is a malformed one such as `{ref:zombie}`.
@@ -284,13 +289,33 @@ Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom
 entry**, original to this library. SRD text is transcribed from the reference
 copy in the repo, `docs/SRD_CC_v5.2.pdf`, never from memory.
 
-**SRD entries are included unmodified.**
+**SRD entries are reproduced faithfully.** The site is a web reference built
+on the SRD, not a facsimile of the printed book. An SRD entry keeps the SRD's
+rules and meaning: every number, die, range, duration, condition, rules term,
+and name, and the effect of every sentence. Its presentation follows the
+site's house style ([Wording](site.md#wording)). The test for any difference:
+would a player at the table play it differently? If not, it's style, and it's
+allowed without a note.
 
+- **Allowed adaptations:** form (capitalization of labels, list punctuation
+  with a serial comma and a conjunction, quote marks and dashes, run-in heads,
+  a two-up table as one table, bullets for printed columns); connective
+  wording the templates compose from fields (intros, "Choose A or B", plurals,
+  articles, one wording where the SRD's chapters differ only in style); print
+  cross-references such as "(see “Monsters” for its stat block)", which become
+  links or are dropped where a link already takes the reader there; and link
+  display text where the SRD names a target differently in context.
+- **Not allowed:** changing a number, a die, a range, a duration, a
+  condition, a rules term, who or what an effect applies to, or a name; or
+  dropping or adding a rules sentence. A change of meaning makes a custom
+  entry, never an SRD entry. Transcription starts from the SRD's words; the
+  adaptations are what the house style does to them, not a license to
+  paraphrase.
 - `name` is the SRD name exactly. `stats` reproduce the SRD stat block, so every
   number the template renders, derived or not, matches the SRD. Rules text is
-  the SRD's word for word, except that derived numbers are written as tokens
-  that render the same values.
-- An SRD entry carries both the data and the verbatim rule. It fills every
+  transcribed from the SRD, with derived numbers written as tokens that render
+  the same values.
+- An SRD entry carries both the data and the rule as written. It fills every
   structured field its type defines (an item's `charges` and `spells`, with
   their costs and DCs), and its rules text still keeps every sentence, even
   where both state the same thing. An SRD wand's `effect` keeps "This wand has

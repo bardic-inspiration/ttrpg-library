@@ -142,25 +142,26 @@ describe('wording', () => {
     );
   });
 
-  it('words a background’s lines as the SRD prints them', async () => {
+  it('words a background’s lines in the house style', async () => {
     const lines = (stats: unknown) => Object.fromEntries(backgroundLines(stats as BackgroundStats).map((l) => [l.label, l.value]));
     expect(lines((await fixture('background/acolyte.json')).stats)).toEqual({
       'Ability Scores': 'Intelligence, Wisdom, Charisma',
       Feat: '{ref:feat/magic-initiate} (Cleric) (see “Feats”)',
       'Skill Proficiencies': 'Insight and Religion',
       'Tool Proficiency': '{ref:equipment/calligraphers-supplies}',
+      // An option's parts are an English list, for backgrounds as for classes (docs/rulesets.md#starting-equipment).
       Equipment:
-        'Choose A or B: (A) {ref:equipment/calligraphers-supplies}, {ref:equipment/book} (prayers), {ref:equipment/holy-symbol}, {ref:equipment/parchment} (10 sheets), {ref:equipment/robe}, 8 GP; or (B) 50 GP',
+        'Choose A or B: (A) {ref:equipment/calligraphers-supplies}, {ref:equipment/book} (prayers), {ref:equipment/holy-symbol}, {ref:equipment/parchment} (10 sheets), {ref:equipment/robe}, and 8 GP; or (B) 50 GP',
     });
     expect(lines((await fixture('background/soldier.json')).stats)['Tool Proficiency']).toBe('Choose one kind of {ref:equipment/gaming-set} (see “Equipment”)');
   });
 
-  it('words a class’s starting equipment with "and", and three options', () => {
+  it('words lettered options, with a counted item’s plural as its link’s text', () => {
     const barbarian = [{ items: [{ ref: 'equipment/greataxe' }, { ref: 'equipment/handaxe', count: 4 }, { ref: 'equipment/explorers-pack' }], gp: 15 }, { gp: 75 }];
-    expect(startingEquipment(barbarian, { and: true })).toBe(
-      'Choose A or B: (A) {ref:equipment/greataxe}, 4 {ref:equipment/handaxe}s, {ref:equipment/explorers-pack}, and 15 GP; or (B) 75 GP',
+    expect(startingEquipment(barbarian, new Map([['equipment/handaxe', 'Handaxe']]))).toBe(
+      'Choose A or B: (A) {ref:equipment/greataxe}, 4 {ref:equipment/handaxe Handaxes}, {ref:equipment/explorers-pack}, and 15 GP; or (B) 75 GP',
     );
-    expect(startingEquipment([{ gp: 1 }, { gp: 2 }, { gp: 155 }], { and: true })).toBe('Choose A, B, or C: (A) 1 GP; (B) 2 GP; or (C) 155 GP');
+    expect(startingEquipment([{ gp: 1 }, { gp: 2 }, { gp: 155 }])).toBe('Choose A, B, or C: (A) 1 GP; (B) 2 GP; or (C) 155 GP');
   });
 });
 

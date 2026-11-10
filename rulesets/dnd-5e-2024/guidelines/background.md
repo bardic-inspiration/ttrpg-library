@@ -7,7 +7,7 @@ covers what the schema can't: what makes a background, names, the package,
 prose, and links.
 
 These rules are for custom backgrounds. An SRD background is reproduced
-unmodified ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
+faithfully ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
 
 ## Tone and voice
 

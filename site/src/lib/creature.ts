@@ -13,6 +13,8 @@ import { present, whenPresent } from './display.ts';
 import { formatCr } from './format.ts';
 import { escapeMarkdown } from './markdown.ts';
 import { refOrTextName } from './refs.ts';
+import { vocabularyName } from '../../../lib/wording/book.ts';
+import { capitalize, concat, joinWith, link, list, name, phrases, pluralLink, pluralOf, say, sayMarkdown, sayText, titleCase, toMarkdown, toPlain, withNote } from './wording.ts';
 import type { PropertyLine } from './template.ts';
 import type {
   Action,
@@ -32,34 +34,14 @@ export interface ActionBlock {
 /** An italic label such as "Hit:". */
 const label = (text: string): string => `*${text}*`;
 
-const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-/** Words title case leaves lowercase unless they come first (docs/rulesets.md#creature-display-forms). */
-const MINOR_WORDS = new Set(['a', 'an', 'and', 'at', 'by', 'for', 'in', 'of', 'on', 'or', 'per', 'the', 'to', 'with']);
-
-/**
- * Capitalizes each word but a minor one, splitting on spaces, hyphens, and
- * slashes: `4/day, or 5/day in lair` is `4/Day, or 5/Day in Lair`, and
- * `sleight-of-hand` is `Sleight of Hand`.
- */
-export const titleCase = (s: string): string =>
-  s
-    .split(/[\s-]+/)
-    .map((word, i) => (i > 0 && MINOR_WORDS.has(word) ? word : word.split('/').map(capitalize).join('/')))
-    .join(' ');
-
 export { formatCr };
 
-/** A creature type as a swarm's members: "Beasts", "Monstrosities", "Undead", "Fey". */
-const pluralType = (type: string): string => {
-  const word = capitalize(type);
-  if (type === 'undead' || type === 'fey') return word;
-  return type.endsWith('y') ? `${word.slice(0, -1)}ies` : `${word}s`;
-};
-
+/** "Medium Humanoid (Wizard), Neutral", or a swarm's "Large Swarm of Tiny Beasts, Unaligned": the members' type in the plural ("Undead" stays). */
 export const sizeTypeLine = (s: CreatureStats): string => {
-  const descriptors = whenPresent(s.descriptors, (list) => ` (${list.join(', ')})`) ?? '';
-  const kind = whenPresent(s.swarm, (member) => `Swarm of ${capitalize(member)} ${pluralType(s.creatureType)}`) ?? capitalize(s.creatureType);
-  return `${s.size.map(capitalize).join(' or ')} ${kind}${descriptors}, ${titleCase(s.alignment)}`;
+  const type = name('creatureType', s.creatureType);
+  const kind = whenPresent(s.swarm, (member) => sayText('creature.swarm', { size: name('size', member), types: pluralOf(type) })) ?? type;
+  const sizes = list(s.size.map((size) => name('size', size)), 'or');
+  return sayText('creature.typeLine', { sizes, kind: withNote(kind, whenPresent(s.descriptors, (d) => d.join(', '))), alignment: titleCase(s.alignment) });
 };
 
 export const acLine = (s: CreatureStats): string => whenPresent(s.ac.note, (note) => `${s.ac.value} (${note})`) ?? String(s.ac.value);
@@ -77,7 +59,7 @@ export function speedLine(s: CreatureStats): string {
   const parts = [`${walk} ft.`];
   for (const mode of SPEED_ORDER) {
     const feet = s.speed[mode];
-    if (present(feet)) parts.push(`${capitalize(mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
+    if (present(feet)) parts.push(`${name('speedMode', mode)} ${feet} ft.${mode === 'fly' && present(hover) ? ' (hover)' : ''}`);
   }
   // A speed the fields can't express, such as a form-limited one, as written (docs/rulesets.md#creatures).
   if (present(note)) parts.push(note);
@@ -97,28 +79,28 @@ export function abilityRows(s: CreatureStats, d: DerivedCreature) {
 export const skillsLine = (s: CreatureStats, d: DerivedCreature): string | undefined =>
   whenPresent(s.skills, () =>
     Object.entries(d.skills)
-      .map(([skill, bonus]) => `${titleCase(skill)} ${signed(bonus)}`)
+      .map(([skill, bonus]) => `${name('skill', skill)} ${signed(bonus)}`)
       .join(', '),
   );
 
-const damageList = (list: string[]): string => list.map(capitalize).join(', ');
+/** Damage types by name, and a qualified entry as written, with its first letter in capitals. */
+const damageList = (types: string[]): string => types.map((type) => vocabularyName(phrases, 'damageType', type) ?? capitalize(type)).join(', ');
 
 
 /** Condition immunities as markdown: each a `{ref:…}` token, rendered as the condition's name linked to its anchor, with its note. */
-const conditionList = (list: { ref: string; note?: string }[]): string =>
-  list.map((c) => (c.note === undefined ? `{ref:${c.ref}}` : `{ref:${c.ref}} (${escapeMarkdown(c.note)})`)).join(', ');
+const conditionList = (conditions: { ref: string; note?: string }[]): string => toMarkdown(joinWith(conditions.map((c) => withNote(link(c.ref), c.note)), ', '));
 
 /**
  * The Gear line, markdown because its refs are links (docs/rulesets.md#creatures): a count reads as
- * a plural with an added "s" and the count in parentheses ("Javelins (6)"), and a note in parentheses.
+ * the target's name in the plural with the count in parentheses ("Javelins (6)"), and a note in parentheses.
  */
-export function gearLine(s: CreatureStats): PropertyLine | undefined {
+export function gearLine(s: CreatureStats, names: Map<string, string> = new Map()): PropertyLine | undefined {
   const items = s.gear?.map((g) => {
-    if (typeof g === 'string') return escapeMarkdown(g);
-    const name = g.count === undefined ? `{ref:${g.ref}}` : `{ref:${g.ref}}s (${g.count})`;
-    return g.note === undefined ? name : `${name} (${escapeMarkdown(g.note)})`;
+    if (typeof g === 'string') return g;
+    const counted = g.count === undefined ? link(g.ref) : concat(pluralLink(g.ref, names), ` (${g.count})`);
+    return withNote(counted, g.note);
   });
-  return items === undefined || items.length === 0 ? undefined : { label: 'Gear', value: items.join(', '), markdown: true };
+  return items === undefined || items.length === 0 ? undefined : { label: 'Gear', value: toMarkdown(joinWith(items, ', ')), markdown: true };
 }
 
 /**
@@ -139,14 +121,10 @@ export function defenseLines(s: CreatureStats): PropertyLine[] {
 
 export function sensesLine(s: CreatureStats, d: DerivedCreature): string {
   // Senses are comma-separated; Passive Perception follows a semicolon (docs/rulesets.md#creatures).
-  const senses = SENSE_ORDER.flatMap((sense) => whenPresent(s.senses?.[sense], (feet) => [`${capitalize(sense)} ${feet} ft.`]) ?? []);
+  const senses = SENSE_ORDER.flatMap((sense) => whenPresent(s.senses?.[sense], (feet) => [`${name('sense', sense)} ${feet} ft.`]) ?? []);
   const list = senses.join(', ') + (whenPresent(s.senses?.note, (note) => ` (${note})`) ?? '');
-  return [list, `Passive Perception ${d.passivePerception}`].filter(Boolean).join('; ');
+  return [list, sayText('creature.passivePerception', { score: String(d.passivePerception) })].filter(Boolean).join('; ');
 }
-
-/** "A", "A and B", "A, B, and C", as SRD 5.2 joins understood languages. */
-export const englishList = (items: string[]): string =>
-  items.length < 3 ? items.join(' and ') : `${items.slice(0, -1).join(', ')}, and ${items.at(-1)}`;
 
 export function languagesLine(s: CreatureStats): string {
   // `spoken` is required and may be empty; `understood` lists languages the
@@ -155,31 +133,27 @@ export function languagesLine(s: CreatureStats): string {
   const { spoken, understood } = s.languages;
   const parts = spoken.length ? [spoken.join(', ')] : [];
   if (understood?.length) {
-    const object = spoken.length ? (understood.length > 1 ? ' them' : ' it') : '';
-    const clause = `understands ${englishList(understood)} but can't speak${object}`;
+    // With spoken languages, "but can't speak them" (or "it"); without, the clause starts the line.
+    const key = spoken.length ? (understood.length > 1 ? 'creature.understandsThem' : 'creature.understandsIt') : 'creature.understands';
+    const clause = sayText(key, { languages: list(understood, 'and') });
     parts.push(parts.length ? clause : capitalize(clause));
   }
-  const telepathy = whenPresent(s.languages.telepathy, (feet) => `telepathy ${feet} ft.`);
+  const telepathy = whenPresent(s.languages.telepathy, (feet) => sayText('creature.telepathy', { feet: String(feet) }));
   if (present(telepathy)) parts.push(telepathy);
   const line = parts.join('; ') || 'None';
   return whenPresent(s.languages.note, (note) => `${line} (${note})`) ?? line;
 }
 
 export function crLine(s: CreatureStats, d: DerivedCreature): string {
-  const xp = d.xpInLair === undefined ? `XP ${d.xp.toLocaleString('en-US')}` : `XP ${d.xp.toLocaleString('en-US')}, or ${d.xpInLair.toLocaleString('en-US')} in lair`;
+  const xp =
+    d.xpInLair === undefined
+      ? sayText('creature.xp', { xp: d.xp.toLocaleString('en-US') })
+      : sayText('creature.xpInLair', { xp: d.xp.toLocaleString('en-US'), lair: d.xpInLair.toLocaleString('en-US') });
   return `${formatCr(s.cr)} (${xp}; PB ${signed(d.pb)})`;
 }
 
-const RECHARGE: Record<string, string> = {
-  '4-6': 'Recharge 4–6',
-  '5-6': 'Recharge 5–6',
-  '6': 'Recharge 6',
-  'short-or-long-rest': 'Recharge after a Short or Long Rest',
-  'long-rest': 'Recharge after a Long Rest',
-};
-
 function actionName(action: Action): string {
-  const notes = [whenPresent(action.recharge, (r) => RECHARGE[r]), whenPresent(action.uses, titleCase)].filter(present);
+  const notes = [whenPresent(action.recharge, (r) => name('recharge', r)), whenPresent(action.uses, titleCase)].filter(present);
   return notes.length ? `${action.name} (${notes.join('; ')})` : action.name;
 }
 
@@ -194,23 +168,17 @@ function damageText(action: Action, derived: DerivedAction | undefined): string 
       .map((damage, i) => {
         const amount = whenPresent(derived?.damage[i]?.display, printMinus) ?? damage.dice ?? '';
         const text = present(damage.type)
-          ? `${amount} ${capitalize(damage.type)} damage`
-          : `${amount} damage ${escapeMarkdown(damage.note ?? '')}`;
-        if (i === 0) return text;
-        return whenPresent(damage.condition, (condition) => `, plus ${text} ${escapeMarkdown(condition)}`) ?? ` plus ${text}`;
+          ? say('creature.damage', { amount, type: name('damageType', damage.type) })
+          : say('creature.damageNote', { amount, note: damage.note ?? '' });
+        if (i === 0) return toMarkdown(text);
+        return whenPresent(damage.condition, (condition) => sayMarkdown('creature.conditionalRider', { damage: text, condition })) ?? sayMarkdown('creature.rider', { damage: text });
       })
       .join(''),
   );
 }
 
-const ATTACK_LABEL: Record<string, string> = {
-  'melee-attack': 'Melee Attack Roll:',
-  'ranged-attack': 'Ranged Attack Roll:',
-  'melee-or-ranged-attack': 'Melee or Ranged Attack Roll:',
-};
-
 const rangeText = (range: { normal: number; long?: number }): string =>
-  `range ${range.normal}${whenPresent(range.long, (long) => `/${long}`) ?? ''} ft.`;
+  sayText('creature.range', { range: `${range.normal}${whenPresent(range.long, (long) => `/${long}`) ?? ''}` });
 
 const sentence = (text: string) => (/[.!?]$/.test(text) ? text : `${text}.`);
 
@@ -236,17 +204,17 @@ export function actionBlock(action: Action, derived: DerivedAction | undefined, 
   if (action.kind === 'other') {
     parts.push(prose(action.text ?? ''));
   } else if (action.kind === 'save' && action.save) {
-    parts.push(`${label(`${tables.abilityNames[action.save.ability]} Saving Throw:`)} DC ${derived?.saveDc}, ${escapeMarkdown(action.save.targets)}.`);
+    parts.push(`${label(sayText('creature.saveLabel', { ability: name('ability', action.save.ability) }))} DC ${derived?.saveDc}, ${escapeMarkdown(action.save.targets)}.`);
     const damage = damageText(action, derived);
     const failure = afterDamage(damage, whenPresent(action.onFailure, prose));
     if (failure) parts.push(`${label('Failure:')} ${failure}`);
     if (present(action.onSuccess)) parts.push(`${label('Success:')} ${prose(action.onSuccess)}`);
     if (present(action.onFailureOrSuccess)) parts.push(`${label('Failure or Success:')} ${prose(action.onFailureOrSuccess)}`);
   } else {
-    const reach = whenPresent(action.reach, (feet) => `reach ${feet} ft.`);
+    const reach = whenPresent(action.reach, (feet) => sayText('creature.reach', { feet: String(feet) }));
     const range = whenPresent(action.range, rangeText);
     const note = whenPresent(action.attackNote, (text) => ` (${escapeMarkdown(text)})`) ?? '';
-    parts.push(`${label(ATTACK_LABEL[action.kind] ?? '')} ${signed(derived?.attackBonus ?? 0)}${note}, ${[reach, range].filter(present).join(' or ')}`);
+    parts.push(`${label(vocabularyName(phrases, 'attackKind', action.kind) ?? '')} ${signed(derived?.attackBonus ?? 0)}${note}, ${toPlain(list([reach, range].filter(present), 'or'))}`);
     const damage = damageText(action, derived);
     const hit = afterDamage(damage, whenPresent(action.onHit, prose));
     parts.push(`${label('Hit:')} ${hit}`);
@@ -262,8 +230,8 @@ const refOrText = (value: RefOrText, names: Map<string, string>): string => esca
  * 3 (4 in Lair).* Immediately after another creature's turn, …".
  */
 export function legendaryIntro(legendary: NonNullable<CreatureStats['legendaryActions']>, d: DerivedCreature): string {
-  const lair = whenPresent(legendary.usesInLair, (n) => ` (${n} in Lair)`) ?? '';
-  const uses = label(`Legendary Action Uses: ${legendary.uses}${lair}.`);
+  const lair = whenPresent(legendary.usesInLair, (n) => sayText('creature.usesInLair', { uses: String(n) })) ?? '';
+  const uses = label(sayText('creature.legendaryUses', { uses: String(legendary.uses), lair }));
   return whenPresent(legendary.intro, (intro) => `${uses} ${renderTokens(intro, d, tables)}`) ?? uses;
 }
 
@@ -275,26 +243,26 @@ export const shortName = (s: CreatureStats, name: string): string =>
  * The 5.2 "Spellcasting" action (docs/rulesets.md#creatures). `name` is the entry's name,
  * and `names` maps `<type>/<id>` to entry names.
  */
-export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>, name: string): ActionBlock | undefined {
+export function spellcastingBlock(s: CreatureStats, d: DerivedCreature, names: Map<string, string>, entryName: string): ActionBlock | undefined {
   const sc = s.spellcasting;
   if (!sc || !d.spellcasting) return undefined;
   // The parenthetical holds the save DC (unless noSaveDc) and the attack bonus (with includeAttack), and is left out when empty (docs/content-model.md#situational-fields).
   const numbers = [
-    ...(present(sc.noSaveDc) ? [] : [`spell save DC ${d.spellcasting.dc}`]),
-    ...(present(sc.includeAttack) ? [`${signed(d.spellcasting.attackBonus)} to hit with spell attacks`] : []),
+    ...(present(sc.noSaveDc) ? [] : [sayText('creature.spellSaveDc', { dc: String(d.spellcasting.dc) })]),
+    ...(present(sc.includeAttack) ? [sayText('creature.spellAttack', { bonus: signed(d.spellcasting.attackBonus) })] : []),
   ];
   const parenthetical = numbers.length > 0 ? ` (${numbers.join(', ')})` : '';
-  const components = whenPresent(sc.noComponents, (c) => `requiring no ${escapeMarkdown(c)} components and `) ?? '';
+  const components = whenPresent(sc.noComponents, (c) => say('creature.noComponents', { components: c })) ?? '';
   const parts = [
-    `The ${escapeMarkdown(shortName(s, name))} casts one of the following spells, ${components}using ${tables.abilityNames[sc.ability]} as the spellcasting ability${parenthetical}:`,
+    sayMarkdown('creature.spellcasting', { name: shortName(s, entryName), components, ability: name('ability', sc.ability), numbers: parenthetical }),
   ];
-  const list = (name: string, spells: RefOrText[] | undefined) => {
+  const spellList = (heading: string, spells: RefOrText[] | undefined) => {
     if (!present(spells)) return;
-    parts.push(`${label(`${name}:`)} ${spells.map((spell) => refOrText(spell, names)).join(', ')}`);
+    parts.push(`${label(`${heading}:`)} ${spells.map((spell) => refOrText(spell, names)).join(', ')}`);
   };
-  list('At Will', sc.atWill);
+  spellList('At Will', sc.atWill);
   // "Each" only when the level lists more than one spell: "1/Day: Fireball".
-  for (const n of ['3', '2', '1'] as const) list(`${n}/Day${(sc.perDay?.[n]?.length ?? 0) > 1 ? ' Each' : ''}`, sc.perDay?.[n]);
+  for (const n of ['3', '2', '1'] as const) spellList(sayText((sc.perDay?.[n]?.length ?? 0) > 1 ? 'creature.perDayEach' : 'creature.perDay', { n }), sc.perDay?.[n]);
   if (present(sc.note)) parts.push(renderTokens(sc.note, d, tables));
   // Each list, and the note, starts a line of its own (a markdown hard break).
   return { name: 'Spellcasting', body: parts.join('\\\n') };

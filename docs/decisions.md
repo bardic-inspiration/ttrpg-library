@@ -27,7 +27,7 @@ reversal is noted only when it explains the reason.
 | P2 | Fail closed | Rules data is strict. An unknown or malformed value fails CI instead of being skipped, because a silent skip loses an entry with no signal. Organization (tags) stays open. |
 | P3 | One source per fact | Each value, rule, or decision is held in one place. Derived values are computed, never stored. Shared logic is one helper used by every consumer. Copies drift. |
 | P4 | Configuration over code | A new type, page size, exporter, theme, or filter is a data or file addition, not a code change. |
-| P5 | SRD fidelity, custom originality | SRD entries reproduce SRD 5.2 exactly. Custom entries borrow no SRD entry name and no non-SRD intellectual property. |
+| P5 | SRD fidelity, custom originality | SRD entries keep SRD 5.2's rules and meaning; the site's house style may adapt their form (#273). Custom entries borrow no SRD entry name and no non-SRD intellectual property. |
 | P6 | Templates own presentation | Entries hold content; templates hold wording, order, and typography. One streamlined rule beats per-entry formatting. The data models the gameplay meaning, not every printed variation. |
 | P7 | Humans request, review, merge | Routines do the writing. Review needs no arithmetic. Merging to `main` is the only step that publishes. |
 | P8 | Enforced, not by convention | Lanes, text rules, and accessibility are checked by CI. Every content change made by code is visible. |
@@ -307,9 +307,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A spell's `classes` become class refs, and a class's spell list is derived from them. A custom class adds SRD spells through its own `spells`, which a spell's card doesn't print. | P3: the list is stored once; P5: SRD spells and their cards stay unchanged | #229 |
 | A class derives its proficiency bonus, Class Features column, and spell slots per level: full casters from the Multiclass Spellcaster table, half casters at half their level rounded up, and pact casters from a Pact Magic table in `tables.json`. Its other columns are stored as printed. | P3; the rounding reproduces the Paladin's and Ranger's slots | #229 |
 | A class feature lists every level it appears at, each with an optional note ("Mystic Arcanum (level 6 spell)"); a class lists its subclass levels, which bound its subclasses' features. | The Features table is derived, with no per-row text | #229 |
-| Templates word the SRD's fixed sentences: a feat's "You gain the following benefits.", a species' trait intro (with an `intro` override for the Tiefling), a class's "Becoming a <Class> …" bullets and spell list intro, and "(see “Feats”)". | P5, P6: entries store only what varies | #229 |
+| Templates word the SRD's fixed sentences, now from the phrase book: a feat's "You gain the following benefits.", a species' trait intro (with an `intro` override for the Tiefling), a class's "Becoming a <Class> …" bullets and spell list intro, and "(see “Feats”)". | P5, P6: entries store only what varies | #229, #273 |
 | A feat stores its category, prerequisite level and text, titled benefits or one text, and a Repeatable paragraph. A background stores three abilities, an origin feat ref, two skills, a tool ref, and starting equipment. A species stores its creature type, sizes with heights, speed, and traits. | Each field matches a part the SRD prints for the type | #229 |
-| Classes and backgrounds share one starting-equipment shape: lettered options of counted refs or text, plus GP. | One shape; the template words each chapter's punctuation | #229 |
+| Classes and backgrounds share one starting-equipment shape: lettered options of counted refs or text, plus GP, worded in one house style with "and" before the last part. | One shape and one wording; the SRD's two chapters differ only in style | #229, #273 |
 | Subclass features' spell lists, the Elven Lineages and Fiendish Legacies, and similar tables stay tables in text, with spell tokens. | A field is added only when a shape recurs; these tables differ | #229 |
 | Feats fill gaps by category; backgrounds, species, classes, and subclasses come only by request. | Classes and subclasses are too large for gap fill; backgrounds and species have no natural axis | #229 |
 | A component has its own envelope schema, `schemas/component.schema.json`, which the validator picks when the entry's ruleset lists its type under `components`. | P2: an unknown key such as `summary` still fails; no conditional envelope | #230 |
@@ -321,7 +321,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Components get no raw data file or export bundle; a page type's own bundle is unchanged. | Page types get Print and no Download in v2 (`export.md`, #115) | #230 |
 | A ruleset module may have `checkLinks`, run once every ref resolves with each target's type and stats, for checks across entries: a background's feat must be an origin feat. | `check` sees one entry's stats; this rule reads another's | #231 |
 | A background's coin option other than 50 GP is a warning, and a last option with items an error. | Every SRD background offers 50 GP; the coins-only option is part of the format | #231 |
-| A starting-equipment item whose SRD primitive name reads differently in a list ("Clothes, Traveler's") is text, as a variant is. | P5: a ref renders the primitive's name, which would change the printed words | #231 |
+| A starting-equipment item whose SRD primitive name reads differently in a list ("Clothes, Traveler's") is a token with display text, `{ref:equipment/clothes-travelers Traveler's Clothes}`. | P5: it reads as the SRD names it, and still links | #231, #273 |
 | A registry facet may use the `ability` format, which reads an ability key by its full name from `tables.json`. | Backgrounds filter by ability score, stored as keys | #231 |
 | The background card's feat and the `stats.feat` facet wait for the filter tree. | A facet over refs needs the tree's ref labels (#235), as condition immunities do | #231 |
 | `linking.md` is deleted: v1's link standard carries into v2 unchanged, and the first v2 types declare their link fields in `refs.ts` and their schemas. | Nothing in it remained to build | #231 |
@@ -337,7 +337,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The SRD attribution states that the material is adapted, in the full statement and the short form. | CC-BY 4.0 requires indicating that licensed material was modified | #273 |
 | All composed text goes through one wording layer: ruleset-independent grammar in `lib/wording/` (phrases, casing, lists, plurals, articles) and a per-ruleset phrase book of sentences and vocabulary. Type modules only compose, and a test enforces it. | P3, P4: each phrasing rule once; new types add data | #273 |
 | Composed text is a `Phrase`, a list of plain and link parts, rendered to markdown or plain text, replacing plain strings, ad hoc markdown, and base item segments. | One form for every consumer | #273 |
-| A link token may carry display text, `{ref:<key>|<text>}`, in stored and composed text. | A link's words sometimes differ from its target's name: a group's qualifier, "Traveler's Clothes" | #273 |
+| A link token may carry display text after a space, `{ref:<key> <text>}`, in stored and composed text. A `|`, as first designed, would split a table cell. | A link's words sometimes differ from its target's name: a group's qualifier, "Traveler's Clothes" | #273 |
 | Facet formats read the phrase book's vocabulary. | A value reads the same on a card, in a filter, and on its page | #273 |
 
 ### UI

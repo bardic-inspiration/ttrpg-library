@@ -5,7 +5,7 @@
 // Optional fields display only when present (docs/content-model.md#situational-fields).
 import type { ItemStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { present, whenPresent } from '../../lib/display';
-import { chargesLine, spellLine, subtitleSegments } from '../../lib/item';
+import { chargesLine, spellLine, subtitleMarkdown } from '../../lib/item';
 import { baseLookup, loadRules } from '../../lib/rules';
 import type { PropertyLine, TemplateProps } from '../../lib/template';
 import PropertyList from './parts/PropertyList.astro';
@@ -29,10 +29,7 @@ const properties: PropertyLine[] = [
 ];
 const spells = whenPresent(s.spells, (list) => list.map((spell) => spellLine(spell, names)));
 // The base item's targets link to their anchors on the equipment pages.
-const subtitle = subtitleSegments(s, baseLookup(loadRules())).map((part) => ({
-  text: part.text,
-  ...(part.key && paths?.has(part.key) ? { href: paths.get(part.key) } : {}),
-}));
+const subtitle = { markdown: subtitleMarkdown(s, baseLookup(loadRules())), refs };
 ---
 <StatBlock name={`${entry.name} magic item`} type="item" rarity={s.rarity} mode={mode}>
   <StatBlockHeader name={entry.name} subtitle={subtitle} level={level} />
