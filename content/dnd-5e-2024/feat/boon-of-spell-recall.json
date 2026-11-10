@@ -1,0 +1,32 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "feat",
+  "id": "boon-of-spell-recall",
+  "name": "Boon of Spell Recall",
+  "summary": "An epic boon that sometimes keeps a level 1–4 spell slot from being expended.",
+  "stats": {
+    "category": "epic-boon",
+    "level": 19,
+    "prerequisite": "Spellcasting Feature",
+    "benefits": [
+      {
+        "name": "Ability Score Increase",
+        "text": "Increase your Intelligence, Wisdom, or Charisma score by 1, to a maximum of 30."
+      },
+      {
+        "name": "Free Casting",
+        "text": "Whenever you cast a spell with a level 1–4 spell slot, roll 1d4. If the number you roll is the same as the slot's level, the slot isn't expended."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
