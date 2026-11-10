@@ -1,0 +1,31 @@
+---
+// The Rulesets section (docs/site.md#pages-and-navigation): each ruleset's rules pages, in its
+// rules/pages.json order, and its Extensions page when it has one (docs/site.md#rules-pages).
+import Base from '../layouts/Base.astro';
+import { loadRules } from '../lib/rules';
+import { url } from '../lib/url';
+import registry from '../../../config/types.json';
+
+const labels: Record<string, string> = Object.fromEntries(Object.entries(registry).map(([id, config]) => [id, config.label]));
+const rulesets = loadRules().map((data) => ({
+  id: data.ruleset,
+  label: labels[data.ruleset] ?? data.ruleset,
+  pages: [
+    ...data.pages.map((page) => ({ title: page.title, path: `${data.ruleset}/rules/${page.id}/` })),
+    ...(data.types.some((t) => t.extensions) ? [{ title: 'Extensions', path: `${data.ruleset}/rules/extensions/` }] : []),
+  ],
+}));
+---
+<Base title="Rulesets · TTRPG Content Library">
+  <h1>Rulesets</h1>
+  {rulesets.map((ruleset) => (
+    <section aria-labelledby={`ruleset-${ruleset.id}`}>
+      <h2 id={`ruleset-${ruleset.id}`}>{ruleset.label}</h2>
+      <ul>
+        {ruleset.pages.map((page) => (
+          <li><a href={url(page.path)}>{page.title}</a></li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>

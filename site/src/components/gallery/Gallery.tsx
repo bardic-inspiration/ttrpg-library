@@ -1,14 +1,14 @@
-// The gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery) for `/`, `/<ruleset>/`, and
-// `/<ruleset>/<type>/`. It loads library.json once, then filters, searches,
-// and sorts in memory, keeping the view in the query string. The logic lives
-// in lib/gallery/; this file is the view.
+// The Library's gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery). It loads
+// library.json once, then filters, searches, and sorts in memory, keeping the view in the query
+// string. The logic lives in lib/gallery/; this file is the view.
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import registryJson from '../../../../config/types.json' with { type: 'json' };
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
-import { galleryConfig, sortChoices, type FacetData, type GalleryScope, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
+import { galleryConfig, sortChoices, type FacetData, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
 import { isActive, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
 import { filterTree } from '../../lib/gallery/tree.ts';
 import { computeView, searchIndex } from '../../lib/gallery/view.ts';
+import FilterIcon from '../../icons/Filter.tsx';
 import SearchIcon from '../../icons/Search.tsx';
 import SortIcon from '../../icons/Sort.tsx';
 import { setTarget } from '../../lib/gallery/selection.ts';
@@ -17,7 +17,7 @@ import { FilterTree } from './Filters.tsx';
 import SetActions from './SetActions.tsx';
 import './gallery.css';
 
-export interface GalleryProps extends GalleryScope {
+export interface GalleryProps {
   /** Where library.json is served, under the site base. */
   indexUrl: string;
   /** The site base, for art paths (docs/content-model.md#images). */
@@ -34,14 +34,16 @@ const registry = registryJson as unknown as Registry;
 
 const resultText = (n: number) => (n === 0 ? 'No entries match.' : n === 1 ? '1 entry' : `${n} entries`);
 
-export default function Gallery({ ruleset, type, indexUrl, base, records: given, initialQuery, facetData }: GalleryProps) {
-  const config = useMemo(() => galleryConfig(registry, { ruleset, type }, facetData), [ruleset, type, facetData]);
+export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData }: GalleryProps) {
+  const config = useMemo(() => galleryConfig(registry, facetData), [facetData]);
   const [records, setRecords] = useState<LibraryRecord[] | undefined>(given);
   const [failed, setFailed] = useState(false);
   const [state, setState] = useState<GalleryState>(() =>
     parseQuery(initialQuery ?? (typeof window === 'undefined' ? '' : window.location.search), config),
   );
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  // The filter menu's container on phones and tablets, closed by default; on desktop it's a sidebar and always shows.
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     if (given) return;
@@ -76,93 +78,101 @@ export default function Gallery({ ruleset, type, indexUrl, base, records: given,
       else next.filters.delete(path);
     });
 
-  const tree = filterTree(config, state, view.scoped, index);
+  const tree = filterTree(config, state, records, index);
   const choices = sortChoices(config);
   const sortValue = choices.some((c) => c.path === state.sort.path) ? state.sort.path : config.defaultSort.path;
 
   return (
     <div class="gallery">
-      <div class="gallery__controls">
-        <div class="gallery__search" role="search">
-          <label for="gallery-q">
-            <SearchIcon /> Search
-          </label>
-          <input
-            id="gallery-q"
-            type="search"
-            placeholder="Name, tag, or text"
-            value={state.q}
-            onInput={(e) => {
-              const q = (e.currentTarget as HTMLInputElement).value;
-              update((next) => {
-                next.q = q;
-              });
-            }}
-          />
-        </div>
-        <div class="gallery__sort">
-          <label for="gallery-sort">
-            <SortIcon /> Sort
-          </label>
-          <select
-            id="gallery-sort"
-            value={sortValue}
-            onChange={(e) => {
-              const path = (e.currentTarget as HTMLSelectElement).value;
-              update((next) => {
-                next.sort = { ...next.sort, path };
-              });
-            }}
-          >
-            {choices.map((c) => (
-              <option key={c.path} value={c.path}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-          <label for="gallery-dir" class="visually-hidden">
-            Direction
-          </label>
-          <select
-            id="gallery-dir"
-            value={state.sort.dir}
-            onChange={(e) => {
-              const dir = (e.currentTarget as HTMLSelectElement).value === 'desc' ? 'desc' : 'asc';
-              update((next) => {
-                next.sort = { ...next.sort, dir };
-              });
-            }}
-          >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </div>
-      </div>
-
       <div class="gallery__layout">
-        <section class="gallery__filters" aria-label="Filters">
-          <FilterTree
-            nodes={tree}
-            filters={state.filters}
-            onEnum={(path, values) => setFilter(path, { kind: 'enum', values })}
-            onRange={(path, min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
-          />
-          {state.filters.size > 0 && (
-            <button
-              type="button"
-              class="gallery__clear"
-              onClick={() =>
+        <div class="gallery__menu">
+          <div class="gallery__search" role="search">
+            <label for="gallery-q">
+              <SearchIcon /> Search
+            </label>
+            <input
+              id="gallery-q"
+              type="search"
+              placeholder="Name, tag, or text"
+              value={state.q}
+              onInput={(e) => {
+                const q = (e.currentTarget as HTMLInputElement).value;
                 update((next) => {
-                  next.filters.clear();
-                })
-              }
-            >
-              Clear filters
-            </button>
-          )}
-        </section>
+                  next.q = q;
+                });
+              }}
+            />
+          </div>
+          <button
+            type="button"
+            class="gallery__filters-toggle"
+            aria-expanded={filtersOpen}
+            aria-controls="gallery-filters"
+            onClick={() => setFiltersOpen(!filtersOpen)}
+          >
+            <FilterIcon /> Filters
+          </button>
+          <section id="gallery-filters" class="gallery__filters" aria-label="Filters" data-open={filtersOpen || undefined}>
+            <FilterTree
+              nodes={tree}
+              filters={state.filters}
+              onEnum={(path, values) => setFilter(path, { kind: 'enum', values })}
+              onRange={(path, min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
+            />
+            {state.filters.size > 0 && (
+              <button
+                type="button"
+                class="gallery__clear"
+                onClick={() =>
+                  update((next) => {
+                    next.filters.clear();
+                  })
+                }
+              >
+                Clear filters
+              </button>
+            )}
+          </section>
+        </div>
 
         <section class="gallery__results" aria-label="Results">
+          <div class="gallery__sort">
+            <label for="gallery-sort">
+              <SortIcon /> Sort
+            </label>
+            <select
+              id="gallery-sort"
+              value={sortValue}
+              onChange={(e) => {
+                const path = (e.currentTarget as HTMLSelectElement).value;
+                update((next) => {
+                  next.sort = { ...next.sort, path };
+                });
+              }}
+            >
+              {choices.map((c) => (
+                <option key={c.path} value={c.path}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+            <label for="gallery-dir" class="visually-hidden">
+              Direction
+            </label>
+            <select
+              id="gallery-dir"
+              value={state.sort.dir}
+              onChange={(e) => {
+                const dir = (e.currentTarget as HTMLSelectElement).value === 'desc' ? 'desc' : 'asc';
+                update((next) => {
+                  next.sort = { ...next.sort, dir };
+                });
+              }}
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
           <div class="gallery__summary">
             <p role="status" class="gallery__count">
               {resultText(view.results.length)}

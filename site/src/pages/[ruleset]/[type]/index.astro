@@ -1,42 +1,33 @@
 ---
-// The gallery for one type (docs/site.md#pages-and-navigation), with that type's default filters
-// and sort from the registry (docs/site.md#type-registry). One page per registered type, and a
-// redirect from each of a renamed type's old keys (docs/site.md#redirects).
+// A type's old gallery (docs/site.md#redirects): it redirects to the Library with the ruleset
+// and type filters set and the type's default sort. One page per registered type, and one per
+// former key of a renamed type, which sets the current type.
 import type { GetStaticPaths } from 'astro';
 import Base from '../../../layouts/Base.astro';
-import GalleryIsland from '../../../components/gallery/GalleryIsland.astro';
 import { formerTypes } from '../../../lib/redirects';
-import { url } from '../../../lib/url';
+import { libraryQuery } from '../../../lib/gallery/library-url';
 import type { Registry } from '../../../lib/gallery/config';
-import registry from '../../../../../config/types.json';
+import { url } from '../../../lib/url';
+import registryJson from '../../../../../config/types.json';
 
-export const getStaticPaths = (() => [
-  ...Object.entries(registry).flatMap(([ruleset, config]) =>
-    Object.entries(config.types).map(([type, typeConfig]) => ({
-      params: { ruleset, type },
-      props: { plural: typeConfig.plural, rulesetLabel: config.label },
-    })),
-  ),
-  ...formerTypes(registry as unknown as Registry).map((former) => ({
-    params: { ruleset: former.ruleset, type: former.from },
+export const getStaticPaths = (() => {
+  const registry = registryJson as unknown as Registry;
+  const page = (ruleset: string, path: string, type: string) => ({
+    params: { ruleset, type: path },
     props: {
-      plural: (registry as unknown as Registry)[former.ruleset]!.types[former.to]!.plural,
-      rulesetLabel: (registry as unknown as Registry)[former.ruleset]!.label,
-      moved: url(`${former.ruleset}/${former.to}/`),
+      plural: registry[ruleset]!.types[type]!.plural,
+      rulesetLabel: registry[ruleset]!.label,
+      moved: `${url()}${libraryQuery(registry, ruleset, type)}`,
     },
-  })),
-]) satisfies GetStaticPaths;
+  });
+  return [
+    ...Object.entries(registry).flatMap(([ruleset, config]) => Object.keys(config.types).map((type) => page(ruleset, type, type))),
+    ...formerTypes(registry).map((former) => page(former.ruleset, former.from, former.to)),
+  ];
+}) satisfies GetStaticPaths;
 
-const { ruleset, type } = Astro.params;
-const { plural, rulesetLabel, moved } = Astro.props as { plural: string; rulesetLabel: string; moved?: string };
+const { plural, rulesetLabel, moved } = Astro.props;
 ---
-{moved ? (
-  <Base title={`${plural} · ${rulesetLabel} · TTRPG Content Library`} redirect={moved}>
-    <p>{plural} have moved to <a href={moved}>{moved}</a>.</p>
-  </Base>
-) : (
-  <Base title={`${plural} · ${rulesetLabel} · TTRPG Content Library`}>
-    <h1>{plural}</h1>
-    <GalleryIsland ruleset={ruleset} type={type} />
-  </Base>
-)}
+<Base title={`${plural} · ${rulesetLabel} · TTRPG Content Library`} redirect={moved}>
+  <p>{plural} are in the <a href={moved}>Library</a>.</p>
+</Base>

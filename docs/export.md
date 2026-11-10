@@ -72,7 +72,7 @@ computed numbers, so translators read `derived` rather than recomputing.
 - `/print/?ids=spell/a,creature/b&size=letter` or
   `/print/?<gallery query>&size=letter` renders entries in `print` mode. `ids`
   lists `<type>/<id>` keys and prints them in the given order, ignoring repeats.
-  Without `ids`, the query is read as the home gallery's, with the gallery's own
+  Without `ids`, the query is read as the Library's, with the gallery's own
   parsing and filtering, so `f.type` narrows by type, and results print in the
   gallery's order. A missing or unknown `size` is the default.
 - **Print fragments.** The build emits each entry's print fragment at

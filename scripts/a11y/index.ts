@@ -1,5 +1,5 @@
 // Which pages `npm run a11y` checks (docs/styling.md#accessibility), read from the built
-// library.json: the home page, a type gallery with a filter applied, one
+// library.json: the Library, the Rulesets page, the Library filtered to a type and a facet, one
 // detail page per type that has an entry, and the print view (docs/export.md#print) showing
 // those same entries. A type with no entries has no detail page to check yet. Then every rules
 // page (docs/site.md#rules-pages), and the Extensions page of a ruleset that has one.
@@ -42,13 +42,16 @@ export interface RulesPageRef {
 }
 
 export function a11yPages(records: IndexRecord[], rulesPages: RulesPageRef[] = []): A11yPage[] {
-  const pages: A11yPage[] = [{ label: 'home', path: '' }];
+  const pages: A11yPage[] = [
+    { label: 'Library', path: '' },
+    { label: 'Rulesets', path: 'rulesets/' },
+  ];
   const first = records[0];
   if (first) {
     const filter = filterFor(first);
     pages.push({
-      label: `${first.type} gallery, filtered`,
-      path: `${first.ruleset}/${first.type}/${filter ? `?${filter}` : ''}`,
+      label: `Library, filtered to ${first.type}`,
+      path: `?f.type=${encodeURIComponent(first.type)}${filter ? `&${filter}` : ''}`,
     });
   }
   const firsts = firstOfEachType(records);

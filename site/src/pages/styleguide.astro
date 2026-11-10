@@ -71,18 +71,17 @@ const fixtureEntries = loadLibrary(
 );
 const entryNames = namesOf(fixtureEntries);
 const registry = registryJson as unknown as Registry;
-const home = galleryConfig(registry, {});
-const creatureConfig = galleryConfig(registry, { ruleset: 'dnd-5e-2024', type: 'creature' });
+const home = galleryConfig(registry);
 const fixtureIndex = searchIndex(fixtures.records);
-// The filter tree as a route opens it, and with filters set, which opens the nodes holding them.
-const treeAt = (config: typeof home, query: string) => {
-  const state = parseQuery(query, config);
-  return { nodes: filterTree(config, state, fixtures.records, fixtureIndex), filters: state.filters };
+// The filter tree as the Library opens it, and with filters set, which opens the nodes holding them.
+const treeAt = (query: string) => {
+  const state = parseQuery(query, home);
+  return { nodes: filterTree(home, state, fixtures.records, fixtureIndex), filters: state.filters };
 };
 const filterStates = [
-  { title: 'All types, as the home page opens it', ...treeAt(home, '') },
-  { title: 'All types, with a type and a facet value set', ...treeAt(home, '?f.type=spell&f.stats.school=evocation') },
-  { title: 'A type route, with its default filters open and a range set', ...treeAt(creatureConfig, '?f.stats.cr=1/4..2') },
+  { title: 'As the Library opens it', ...treeAt('') },
+  { title: 'With a type and a facet value set', ...treeAt('?f.type=spell&f.stats.school=evocation') },
+  { title: 'With a type checked, its default filters open, and a range set', ...treeAt('?f.type=creature&f.stats.cr=1/4..2') },
 ];
 const noop = () => {};
 const cardInfo = (r: (typeof fixtures.records)[number]) => home.types.get(`${r.ruleset}/${r.type}`)!;

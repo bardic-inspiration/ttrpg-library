@@ -1,5 +1,5 @@
 // Links and lines for the detail page (docs/site.md#detail-page) that aren't the type
-// template: tag chips into the filtered type gallery, and provenance.
+// template: tag chips into the Library filtered to the type and tag, and provenance.
 
 import { REPO_URL } from '../../../lib/site.ts';
 import type { Entry } from './library.ts';
@@ -7,7 +7,7 @@ import type { Entry } from './library.ts';
 export interface TagChip {
   key: string;
   value: string;
-  /** Path under the site base: the type gallery filtered by this tag (docs/site.md#gallery URL state). */
+  /** Path under the site base: the Library filtered to the entry's ruleset, type, and this tag (docs/site.md#gallery URL state). */
   path: string;
 }
 
@@ -19,7 +19,7 @@ export function tagChips(entry: Entry): TagChip[] {
       return {
         key,
         value,
-        path: `${entry.ruleset}/${entry.type}/?${encodeURIComponent(`f.tags.${key}`)}=${encodeURIComponent(value)}`,
+        path: `?f.ruleset=${encodeURIComponent(entry.ruleset)}&f.type=${encodeURIComponent(entry.type)}&${encodeURIComponent(`f.tags.${key}`)}=${encodeURIComponent(value)}`,
       };
     }),
   );

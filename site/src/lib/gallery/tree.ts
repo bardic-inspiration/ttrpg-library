@@ -3,7 +3,7 @@
 
 import type MiniSearch from 'minisearch';
 import { label } from '../../../../lib/wording/grammar.ts';
-import { TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo } from './config.ts';
+import { RULESET, TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, valueAt } from './values.ts';
 import { bounds, chips, hasValues, withoutFilter } from './view.ts';
@@ -20,18 +20,18 @@ export interface ValueNode {
 }
 
 export type TreeNode =
-  /** A type on a route that spans types: checking it is the type filter; inside it, its facets. */
+  /** A type: checking it is the type filter; inside it, its facets. */
   | { kind: 'type'; id: string; value: ValueNode; open: boolean; children: TreeNode[] }
   /** A field two or more facets sit in, such as Immunities, or the Tags. */
   | { kind: 'field'; id: string; label: string; open: boolean; children: TreeNode[] }
   | { kind: 'enum'; id: string; def: FilterDef; open: boolean; values: ValueNode[] }
   | { kind: 'range'; id: string; def: FilterDef; open: boolean; bounds: { min: number; max: number } | undefined };
 
-/** What the tree reads besides the config: the route's records, the state, and the search index. */
+/** What the tree reads besides the config: the Library's records, the state, and the search index. */
 interface Context {
   config: GalleryConfig;
   state: GalleryState;
-  scoped: LibraryRecord[];
+  records: LibraryRecord[];
   /** Records passing the search and every filter but one path's, by path. */
   others: (path: string) => LibraryRecord[];
 }
@@ -131,9 +131,9 @@ function nest(ctx: Context, facets: FilterDef[], depth: number, records: Library
   return out;
 }
 
-/** The Tags node: every tag key on the route, or filtered on, each with its values. */
+/** The Tags node: every tag key in the Library, or filtered on, each with its values. */
 function tagsNode(ctx: Context, defaults: Set<string>): TreeNode | undefined {
-  const keys = new Set(ctx.scoped.flatMap((r) => Object.keys(r.tags)));
+  const keys = new Set(ctx.records.flatMap((r) => Object.keys(r.tags)));
   for (const path of ctx.state.filters.keys()) {
     const key = tagKey(path);
     if (key !== undefined) keys.add(key);
@@ -142,45 +142,52 @@ function tagsNode(ctx: Context, defaults: Set<string>): TreeNode | undefined {
     .sort()
     .map((key) => filterDef(ctx.config, `tags.${key}`))
     .filter((def): def is FilterDef => def !== undefined)
-    .map((def) => facetNode(ctx, { ...def, label: label(def.label) }, ctx.scoped, 'tags:', defaults.has(def.path)))
+    .map((def) => facetNode(ctx, { ...def, label: label(def.label) }, ctx.records, 'tags:', defaults.has(def.path)))
     .filter((node): node is TreeNode => node !== undefined);
   return children.length === 0 ? undefined : { kind: 'field', id: 'tags', label: 'Tags', open: isOpen(children), children };
 }
 
 /**
- * The filter tree for a route. A type route's tree starts at its type's facets; a route that
- * spans types starts at its types, each a value of the type filter holding its own facets.
- * Each type lists only its own records' values, with counts of its own records, though a
- * path two types share is one filter (docs/site.md#gallery "Filters"). Registry default
- * filters start open, and so does every node with an active filter in it.
+ * The Ruleset node: each ruleset as a value of the ruleset filter. It shows only when the
+ * Library holds more than one ruleset, or the filter is active, as after a redirect from a
+ * ruleset's old gallery (docs/site.md#redirects).
  */
-export function filterTree(config: GalleryConfig, state: GalleryState, scoped: LibraryRecord[], index: MiniSearch<LibraryRecord>): TreeNode[] {
+function rulesetNode(ctx: Context): TreeNode | undefined {
+  const def = filterDef(ctx.config, RULESET);
+  if (!def) return undefined;
+  const rulesets = new Set(ctx.records.map((r) => r.ruleset));
+  if (rulesets.size < 2 && !isActive(ctx.state.filters.get(RULESET))) return undefined;
+  return facetNode(ctx, def, ctx.records, '', false);
+}
+
+/**
+ * The Library's filter tree: the rulesets when there is a choice, then the types, each a value
+ * of the type filter holding its own facets, then the Tags. Each type lists only its own
+ * records' values, with counts of its own records, though a path two types share is one filter
+ * (docs/site.md#gallery "Filters"). A checked type's registry default filters start open, and
+ * so does every node with an active filter in it.
+ */
+export function filterTree(config: GalleryConfig, state: GalleryState, records: LibraryRecord[], index: MiniSearch<LibraryRecord>): TreeNode[] {
   const cache = new Map<string, LibraryRecord[]>();
   const others = (path: string) => {
     let hit = cache.get(path);
-    if (!hit) cache.set(path, (hit = withoutFilter(config, scoped, state, index, path)));
+    if (!hit) cache.set(path, (hit = withoutFilter(config, records, state, index, path)));
     return hit;
   };
-  const ctx: Context = { config, state, scoped, others };
-  const types = [...config.types.values()];
-  const single = config.scope.type !== undefined;
-  const defaults = new Set(single ? config.defaultFilters : []);
-  const tags = tagsNode(ctx, defaults);
-
-  if (single) {
-    const info = types[0];
-    const fields = info ? nest(ctx, info.facets, 0, ofType(scoped, info), '', defaults) : [];
-    return tags ? [...fields, tags] : fields;
-  }
-
+  const ctx: Context = { config, state, records, others };
   const selected = selectedValues(state.filters.get(TYPE));
+  const checked = [...config.types.values()].filter((info) => selected.includes(info.type.toLowerCase()));
+  const tags = tagsNode(ctx, new Set(checked.flatMap((info) => info.defaultFilters)));
   const typeCounts = others(TYPE);
   const nodes: TreeNode[] = [];
-  for (const info of types) {
-    const records = ofType(scoped, info);
+  const rulesets = rulesetNode(ctx);
+  if (rulesets) nodes.push(rulesets);
+  for (const info of config.types.values()) {
+    const own = ofType(records, info);
     const key = info.type.toLowerCase();
-    if (records.length === 0 && !selected.includes(key)) continue;
-    const children = nest(ctx, info.facets, 0, records, `${info.ruleset}/${info.type}:`, defaults);
+    if (own.length === 0 && !selected.includes(key)) continue;
+    const defaults = new Set(selected.includes(key) ? info.defaultFilters : []);
+    const children = nest(ctx, info.facets, 0, own, `${info.ruleset}/${info.type}:`, defaults);
     nodes.push({
       kind: 'type',
       id: `${info.ruleset}/${info.type}`,

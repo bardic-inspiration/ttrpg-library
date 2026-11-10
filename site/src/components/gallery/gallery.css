@@ -15,49 +15,57 @@
     color: var(--color-text-muted);
   }
 
-  .gallery__controls {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: end;
-    gap: var(--space-s);
-    font-family: var(--control-font);
-  }
-
   .gallery__search,
   .gallery__sort {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2xs);
+    font-family: var(--control-font);
   }
 
-  .gallery__search {
-    flex: 1 1 var(--filters-width);
-
-    & input {
-      flex: 1;
-      min-inline-size: 0;
-    }
+  .gallery__search input {
+    flex: 1;
+    min-inline-size: 0;
   }
 
-  /* Sidebar on wide screens, stacked on narrow ones, with no breakpoint. */
+  /*
+   * The filter menu (docs/site.md#gallery "Layout"): a sidebar beside the results on desktop; on
+   * phones and tablets a container under the search, closed until its toggle opens it. The
+   * breakpoint lives in tokens/components.css.
+   */
   .gallery__layout {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: var(--gallery-columns);
     align-items: start;
     gap: var(--grid-gap);
   }
 
+  .gallery__menu {
+    display: grid;
+    gap: var(--filters-gap);
+    min-inline-size: 0;
+  }
+
+  .gallery__filters-toggle {
+    display: var(--filters-toggle-display);
+    justify-self: start;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
   .gallery__filters {
-    flex: 1 1 var(--filters-width);
     display: grid;
     gap: var(--filters-gap);
     font-family: var(--control-font);
+
+    &:not([data-open]) {
+      display: var(--filters-closed-display);
+    }
   }
 
   .gallery__results {
-    flex: 999 1 0%;
-    min-inline-size: min(100%, calc(2 * var(--card-min-width)));
+    min-inline-size: 0;
     display: grid;
     gap: var(--space-s);
   }

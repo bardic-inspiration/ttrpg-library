@@ -48,11 +48,12 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(html).toMatch(/<img class="art-frame art-frame--image[^"]*" src="[^"]*cinder-hound\.webp" alt="Cinder Hound"/);
   });
 
-  it('links each tag to the type gallery filtered by it', async () => {
+  it('links each tag to the Library filtered by the type and the tag, and the type to the Library filtered by it', async () => {
     const html = await render('cinder-hound');
-    expect(html).toContain('/dnd-5e-2024/creature/?f.tags.theme=fire"');
-    expect(html).toContain('/dnd-5e-2024/creature/?f.tags.environment=underdark"');
-    expect(html).toContain('/dnd-5e-2024/creature/?f.tags.environment=mountains"');
+    expect(html).toContain('/?f.ruleset=dnd-5e-2024&amp;f.type=creature&amp;f.tags.theme=fire"');
+    expect(html).toContain('/?f.ruleset=dnd-5e-2024&amp;f.type=creature&amp;f.tags.environment=underdark"');
+    expect(html).toContain('/?f.ruleset=dnd-5e-2024&amp;f.type=creature&amp;f.tags.environment=mountains"');
+    expect(html).toContain('class="entry-detail__type" href="/?sort=stats.cr:asc&amp;f.ruleset=dnd-5e-2024&amp;f.type=creature"');
   });
 
   it('shows provenance with source issues linked to GitHub', async () => {
@@ -69,8 +70,8 @@ describe('detail helpers (docs/site.md#gallery, docs/site.md#detail-page)', () =
     const { entry } = lib.byId('cinder-hound');
     const chips = tagChips({ ...entry, tags: { world: 'Ash, Ember', lair: true } });
     expect(chips.map((c) => c.path)).toEqual([
-      'dnd-5e-2024/creature/?f.tags.world=Ash%2C%20Ember',
-      'dnd-5e-2024/creature/?f.tags.lair=true',
+      '?f.ruleset=dnd-5e-2024&f.type=creature&f.tags.world=Ash%2C%20Ember',
+      '?f.ruleset=dnd-5e-2024&f.type=creature&f.tags.lair=true',
     ]);
   });
 

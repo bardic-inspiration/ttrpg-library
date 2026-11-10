@@ -1,33 +1,25 @@
 ---
-// Header navigation (docs/site.md#pages-and-navigation): each ruleset, its types, and the about
-// page, from the type registry (docs/site.md#type-registry). The current page is marked for
-// assistive technology.
-import registry from '../../../config/types.json';
+// The top bar (docs/site.md#pages-and-navigation): Library, Rulesets, About, and Contribute,
+// which links to the repository. The current section is marked for assistive technology: the
+// Library on `/`, Rulesets on its page and every rules page.
+import { REPO_URL } from '../../../lib/site.ts';
 import { url } from '../lib/url';
 
-const rulesets = Object.entries(registry as Record<string, { label: string; types: Record<string, { plural: string }> }>).map(
-  ([id, config]) => ({
-    label: config.label,
-    path: `${id}/`,
-    types: Object.entries(config.types).map(([type, t]) => ({ label: t.plural, path: `${id}/${type}/` })),
-  }),
-);
 const here = Astro.url.pathname;
-const current = (path: string) => (here === url(path) ? 'page' : undefined);
+const rulesPage = here.startsWith(url()) && /^[^/]+\/rules\//.test(here.slice(url().length));
+type Current = 'page' | 'true' | undefined;
+const links: { label: string; href: string; current: Current }[] = [
+  { label: 'Library', href: url(), current: here === url() ? 'page' : undefined },
+  { label: 'Rulesets', href: url('rulesets/'), current: here === url('rulesets/') ? 'page' : rulesPage ? 'true' : undefined },
+  { label: 'About', href: url('about/'), current: here === url('about/') ? 'page' : undefined },
+  { label: 'Contribute', href: REPO_URL, current: undefined },
+];
 ---
-<nav class="site-nav" aria-label="Library">
+<nav class="site-nav" aria-label="Site">
   <ul class="site-nav__list">
-    {rulesets.map((ruleset) => (
-      <li class="site-nav__ruleset">
-        <a href={url(ruleset.path)} aria-current={current(ruleset.path)}>{ruleset.label}</a>
-        <ul class="site-nav__types">
-          {ruleset.types.map((type) => (
-            <li><a href={url(type.path)} aria-current={current(type.path)}>{type.label}</a></li>
-          ))}
-        </ul>
-      </li>
+    {links.map((link) => (
+      <li><a href={link.href} aria-current={link.current}>{link.label}</a></li>
     ))}
-    <li><a href={url('about/')} aria-current={current('about/')}>About</a></li>
   </ul>
 </nav>
 
@@ -37,28 +29,16 @@ const current = (path: string) => (here === url(path) ? 'page' : undefined);
       font-family: var(--font-ui);
     }
 
-    .site-nav__list,
-    .site-nav__types {
+    .site-nav__list {
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
-      gap: var(--space-xs);
+      gap: var(--space-s);
       padding: 0;
       list-style: none;
     }
 
-    .site-nav__ruleset {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: var(--space-xs);
-
-      & > a {
-        font-weight: var(--font-weight-strong);
-      }
-    }
-
-    .site-nav a[aria-current='page'] {
+    .site-nav a[aria-current] {
       color: var(--color-text);
       text-decoration: none;
     }

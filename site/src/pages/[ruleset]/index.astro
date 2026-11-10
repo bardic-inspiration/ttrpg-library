@@ -1,17 +1,21 @@
 ---
-// Every entry in one ruleset (docs/site.md#pages-and-navigation), one page per registered ruleset.
+// A ruleset's old gallery (docs/site.md#redirects): it redirects to the Library with the
+// ruleset filter set, one page per registered ruleset.
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
-import GalleryIsland from '../../components/gallery/GalleryIsland.astro';
+import { libraryQuery } from '../../lib/gallery/library-url';
+import type { Registry } from '../../lib/gallery/config';
+import { url } from '../../lib/url';
 import registry from '../../../../config/types.json';
 
 export const getStaticPaths = (() =>
-  Object.entries(registry).map(([ruleset, config]) => ({ params: { ruleset }, props: { label: config.label } }))) satisfies GetStaticPaths;
+  Object.entries(registry).map(([ruleset, config]) => ({
+    params: { ruleset },
+    props: { label: config.label, moved: `${url()}${libraryQuery(registry as unknown as Registry, ruleset)}` },
+  }))) satisfies GetStaticPaths;
 
-const { ruleset } = Astro.params;
-const { label } = Astro.props;
+const { label, moved } = Astro.props;
 ---
-<Base title={`${label} · TTRPG Content Library`}>
-  <h1>{label}</h1>
-  <GalleryIsland ruleset={ruleset} />
+<Base title={`${label} · TTRPG Content Library`} redirect={moved}>
+  <p>{label} entries are in the <a href={moved}>Library</a>.</p>
 </Base>

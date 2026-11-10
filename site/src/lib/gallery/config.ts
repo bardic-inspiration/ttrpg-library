@@ -1,7 +1,7 @@
-// What a gallery route offers (docs/site.md#pages-and-navigation, docs/site.md#gallery): its records, the filters
-// and sorts available, and the defaults, all read from the registry (docs/site.md#type-registry).
+// What the Library offers (docs/site.md#gallery): the filters and sorts available and the
+// defaults, all read from the registry (docs/site.md#type-registry).
 
-import type { Facet, LibraryRecord, Registry, TypeConfig } from '../../../../scripts/build-index/index.ts';
+import type { Facet, LibraryRecord, Registry } from '../../../../scripts/build-index/index.ts';
 import { phraseBook } from '../phrases.ts';
 import { typeAliases } from '../redirects.ts';
 
@@ -52,19 +52,10 @@ export interface SortKey {
   dir: 'asc' | 'desc';
 }
 
-/** A gallery route: `/`, `/<ruleset>/`, or `/<ruleset>/<type>/`. */
-export interface GalleryScope {
-  ruleset?: string;
-  type?: string;
-}
-
 export interface GalleryConfig {
-  scope: GalleryScope;
-  /** The `type` filter (all-types routes) and every facet of every type in scope, in registry order. */
+  /** The `ruleset` and `type` filters, then every facet of every type, in registry order. */
   filters: FilterDef[];
   defaultSort: SortKey;
-  /** Filters shown expanded before any is chosen. */
-  defaultFilters: string[];
   /** Per type, keyed `<ruleset>/<type>`: its label, card fields, and facets in registry order. */
   types: Map<string, TypeInfo>;
 }
@@ -75,18 +66,20 @@ export interface TypeInfo {
   label: string;
   cardFields: FilterDef[];
   facets: FilterDef[];
+  /** The registry's `defaultFilters`: nodes that start open while the type is checked. */
+  defaultFilters: string[];
+  /** The registry's `defaultSort`, which the redirect from the type's old gallery carries. */
+  defaultSort: SortKey;
 }
 
 /** The pseudo-paths every record has besides its facets (docs/site.md#gallery "Sort"). */
 export const NAME = 'name';
 export const CREATED = 'createdAt';
 export const TYPE = 'type';
+export const RULESET = 'ruleset';
 
-/**
- * Every route without a single type sorts by name and offers a type filter
- * (docs/site.md#pages-and-navigation, docs/site.md#gallery).
- */
-const ALL_TYPES_SORT: SortKey = { path: NAME, dir: 'asc' };
+/** The Library sorts by name until the reader picks a sort (docs/site.md#gallery "Sort"). */
+export const LIBRARY_SORT: SortKey = { path: NAME, dir: 'asc' };
 
 export function parseSortKey(value: string | undefined): SortKey | undefined {
   const match = /^(.+):(asc|desc)$/.exec(value ?? '');
@@ -108,38 +101,36 @@ const facetDef = (facet: Facet, ruleset: string, type: string, data: FacetData):
   return { ...rest, ...(labels ? { labels } : {}) };
 };
 
-/** The configuration for one gallery route. */
-export function galleryConfig(registry: Registry, scope: GalleryScope, data: FacetData = NO_FACET_DATA): GalleryConfig {
+/** The Library's configuration (docs/site.md#gallery): every ruleset and type in the registry. */
+export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DATA): GalleryConfig {
   const types = new Map<string, TypeInfo>();
   const filters = new Map<string, FilterDef>();
   const typeLabels: Record<string, string> = {};
-  let single: TypeConfig | undefined;
+  const rulesetLabels: Record<string, string> = {};
 
   for (const [rulesetId, ruleset] of Object.entries(registry)) {
-    if (scope.ruleset && scope.ruleset !== rulesetId) continue;
+    rulesetLabels[rulesetId] = ruleset.label;
     for (const [typeId, type] of Object.entries(ruleset.types)) {
-      if (scope.type && scope.type !== typeId) continue;
-      if (scope.type) single = type;
       typeLabels[typeId] = type.label;
       const facets = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data));
       const cardFields = ((type.cardFields as string[] | undefined) ?? [])
         .map((path) => facets.find((facet) => facet.path === path))
         .filter((facet): facet is FilterDef => facet !== undefined);
-      types.set(`${rulesetId}/${typeId}`, { ruleset: rulesetId, type: typeId, label: type.label, cardFields, facets });
+      types.set(`${rulesetId}/${typeId}`, {
+        ruleset: rulesetId,
+        type: typeId,
+        label: type.label,
+        cardFields,
+        facets,
+        defaultFilters: (type.defaultFilters as string[] | undefined) ?? [],
+        defaultSort: parseSortKey(type.defaultSort as string | undefined) ?? LIBRARY_SORT,
+      });
       for (const facet of facets) if (!filters.has(facet.path)) filters.set(facet.path, facet);
     }
   }
 
-  if (single) {
-    return {
-      scope,
-      filters: [...filters.values()],
-      defaultSort: parseSortKey(single.defaultSort as string | undefined) ?? { path: NAME, dir: 'asc' },
-      defaultFilters: (single.defaultFilters as string[] | undefined) ?? [],
-      types,
-    };
-  }
-  const aliases = typeAliases(registry, scope.ruleset);
+  const aliases = typeAliases(registry);
+  const rulesetFilter: FilterDef = { path: RULESET, label: 'Ruleset', kind: 'enum', order: Object.keys(rulesetLabels), labels: rulesetLabels };
   const typeFilter: FilterDef = {
     path: TYPE,
     label: 'Type',
@@ -148,18 +139,8 @@ export function galleryConfig(registry: Registry, scope: GalleryScope, data: Fac
     labels: typeLabels,
     ...(Object.keys(aliases).length > 0 && { aliases }),
   };
-  return {
-    scope,
-    filters: [typeFilter, ...filters.values()],
-    defaultSort: ALL_TYPES_SORT,
-    defaultFilters: [TYPE],
-    types,
-  };
+  return { filters: [rulesetFilter, typeFilter, ...filters.values()], defaultSort: LIBRARY_SORT, types };
 }
-
-/** The records a route shows before any filter. */
-export const inScope = (records: LibraryRecord[], scope: GalleryScope): LibraryRecord[] =>
-  records.filter((r) => (!scope.ruleset || r.ruleset === scope.ruleset) && (!scope.type || r.type === scope.type));
 
 const TAG_KEY = /^[a-z][a-z0-9-]*$/;
 
@@ -169,7 +150,7 @@ export const tagKey = (path: string): string | undefined => {
   return key !== undefined && TAG_KEY.test(key) ? key : undefined;
 };
 
-/** The definition of a filter path on this route: a known facet, `type`, or any tag key. */
+/** The definition of a filter path: a known facet, `ruleset`, `type`, or any tag key. */
 export function filterDef(config: GalleryConfig, path: string): FilterDef | undefined {
   const known = config.filters.find((f) => f.path === path);
   if (known) return known;
@@ -177,11 +158,11 @@ export function filterDef(config: GalleryConfig, path: string): FilterDef | unde
   return key === undefined ? undefined : { path, label: key.replace(/-/g, ' '), kind: 'enum' };
 }
 
-/** Sort choices: name, date added, then every facet on the route (docs/site.md#gallery). */
+/** Sort choices: name, date added, then every facet (docs/site.md#gallery). */
 export function sortChoices(config: GalleryConfig): { path: string; label: string }[] {
   return [
     { path: NAME, label: 'Name' },
     { path: CREATED, label: 'Date added' },
-    ...config.filters.filter((f) => f.path !== TYPE).map((f) => ({ path: f.path, label: f.label })),
+    ...config.filters.filter((f) => f.path !== TYPE && f.path !== RULESET).map((f) => ({ path: f.path, label: f.label })),
   ];
 }

@@ -18,7 +18,7 @@ export interface PrintSelection {
 /**
  * The entries a print query names. The `ids` form keeps the given order, and
  * reads a renamed type's old key as its current one (docs/site.md#redirects). The
- * gallery-query form reads the rest of the query as the home gallery's (`/`,
+ * gallery-query form reads the rest of the query as the Library's (`/`,
  * docs/site.md#gallery), so `f.type` narrows by type, and prints its results in its order.
  */
 export function selectEntries(query: PrintQuery, records: LibraryRecord[], registry: Registry): PrintSelection {
@@ -31,7 +31,7 @@ export function selectEntries(query: PrintQuery, records: LibraryRecord[], regis
       missing: query.ids.filter((_, i) => !byKey.has(ids[i]!)),
     };
   }
-  const gallery = galleryConfig(registry, {});
+  const gallery = galleryConfig(registry);
   const view = computeView(records, gallery, parseQuery(query.gallery, gallery), searchIndex(records));
   return { records: view.results, missing: [] };
 }

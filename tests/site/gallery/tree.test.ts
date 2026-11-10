@@ -34,13 +34,15 @@ beforeAll(async () => {
 });
 afterAll(() => rm(repo, { recursive: true, force: true }));
 
-const tree = (records: LibraryRecord[], config: GalleryConfig, query = '') =>
-  filterTree(config, parseQuery(query, config), computeView(records, config, parseQuery(query, config), searchIndex(records)).scoped, searchIndex(records));
+const tree = (records: LibraryRecord[], config: GalleryConfig, query = '') => filterTree(config, parseQuery(query, config), records, searchIndex(records));
+
+/** A node's label: a type's, a field's, or a facet's. */
+const labelOf = (n: TreeNode) => (n.kind === 'type' ? n.value.label : n.kind === 'field' ? n.label : n.def.label);
 
 /** The node reached by following labels: a type's, a field's, or a facet's. */
 function find(nodes: TreeNode[], ...labels: string[]): TreeNode | undefined {
   const [first, ...rest] = labels;
-  const node = nodes.find((n) => (n.kind === 'type' ? n.value.label : n.kind === 'field' ? n.label : n.def.label) === first);
+  const node = nodes.find((n) => labelOf(n) === first);
   if (!node || rest.length === 0) return node;
   return node.kind === 'type' || node.kind === 'field' ? find(node.children, ...rest) : undefined;
 }
@@ -53,7 +55,7 @@ const paths = (nodes: TreeNode[]): string[] =>
 
 describe('creature/air-elemental through Creature › Immunities › Conditions', () => {
   it('lists its condition immunities by name, as a ref facet over condition keys', () => {
-    const home = galleryConfig(reg, {}, data);
+    const home = galleryConfig(reg, data);
     const conditions = find(tree(elemental, home), 'Creature', 'Immunities', 'Conditions');
     expect(conditions?.kind).toBe('enum');
     expect(values(conditions).map((v) => v.label)).toEqual([
@@ -65,25 +67,26 @@ describe('creature/air-elemental through Creature › Immunities › Conditions'
   });
 
   it('filters by a condition, in the v1 URL form, and checks the value', () => {
-    const creature = galleryConfig(reg, { ruleset: 'dnd-5e-2024', type: 'creature' }, data);
+    const creature = galleryConfig(reg, data);
     const query = '?f.stats.immunities.conditions=condition%2Fpoisoned';
     const state = parseQuery(query, creature);
     expect(computeView(elemental, creature, state, searchIndex(elemental)).results.map((r) => r.id)).toEqual(['air-elemental']);
     expect(computeView(elemental, creature, parseQuery('?f.stats.immunities.conditions=condition%2Fblinded', creature), searchIndex(elemental)).results).toEqual([]);
-    const node = find(tree(elemental, creature, query), 'Immunities', 'Conditions');
+    const node = find(tree(elemental, creature, query), 'Creature', 'Immunities', 'Conditions');
     expect(node?.open).toBe(true);
     expect(values(node).find((v) => v.key === 'condition/poisoned')?.selected).toBe(true);
   });
 
-  it('starts a type route at its type’s facets, with the default filters open', () => {
-    const creature = galleryConfig(reg, { ruleset: 'dnd-5e-2024', type: 'creature' }, data);
-    const nodes = tree(elemental, creature);
-    expect(nodes.map((n) => (n.kind === 'field' ? n.label : n.kind === 'type' ? n.value.label : n.def.label))).toEqual([
-      'CR', 'Size', 'Creature type', 'Abilities', 'AC', 'HP', 'XP', 'Immunities',
-    ]);
-    expect(find(nodes, 'CR')?.open).toBe(true);
-    expect(find(nodes, 'Size')?.open).toBe(false);
-    expect(find(nodes, 'Abilities', 'STR')?.kind).toBe('range');
+  it('opens a checked type’s default filters, as its old gallery did', () => {
+    const library = galleryConfig(reg, data);
+    const closed = find(tree(elemental, library), 'Creature');
+    expect(closed?.kind === 'type' && closed.children.map(labelOf)).toEqual(['CR', 'Size', 'Creature type', 'Abilities', 'AC', 'HP', 'XP', 'Immunities']);
+    expect(find(tree(elemental, library), 'Creature', 'CR')?.open).toBe(false);
+    const nodes = tree(elemental, library, '?f.type=creature');
+    expect(find(nodes, 'Creature')?.open).toBe(true);
+    expect(find(nodes, 'Creature', 'CR')?.open).toBe(true);
+    expect(find(nodes, 'Creature', 'Size')?.open).toBe(false);
+    expect(find(nodes, 'Creature', 'Abilities', 'STR')?.kind).toBe('range');
   });
 });
 
@@ -95,11 +98,11 @@ describe('Equipment › Weapon › Martial › Melee', () => {
   ];
   let equipment: GalleryConfig;
   beforeAll(() => {
-    equipment = galleryConfig(reg, { ruleset: 'dnd-5e-2024', type: 'equipment' }, data);
+    equipment = galleryConfig(reg, data);
   });
 
   it('nests a groups facet’s values as the groups file nests them, pruned to groups with members', () => {
-    const groups = values(find(tree(gear, equipment), 'Group'));
+    const groups = values(find(tree(gear, equipment), 'Equipment', 'Group'));
     expect(groups.map((g) => g.label)).toEqual(['Weapon', 'Adventuring Gear']);
     const weapon = groups[0]!;
     expect(weapon.count).toBe(2);
@@ -118,7 +121,7 @@ describe('Equipment › Weapon › Martial › Melee', () => {
   });
 
   it('opens the groups down to a selected one', () => {
-    const groups = values(find(tree(gear, equipment, '?f.stats.group=martial-melee-weapons'), 'Group'));
+    const groups = values(find(tree(gear, equipment, '?f.stats.group=martial-melee-weapons'), 'Equipment', 'Group'));
     const martial = groups[0]!.children.find((g) => g.label === 'Martial')!;
     expect([groups[0]!.open, martial.open, martial.children[0]!.selected]).toEqual([true, true, true]);
   });
@@ -138,25 +141,41 @@ describe('every facet of every type', () => {
       }),
     );
 
-  it('appears in the tree under its type on `/`, and on its type’s route', () => {
-    const home = galleryConfig(reg, {}, data);
+  it('appears in the tree under its type', () => {
+    const home = galleryConfig(reg, data);
     const nodes = tree(full(), home);
     for (const [type, config] of Object.entries(reg['dnd-5e-2024']!.types)) {
       const node = nodes.find((n) => n.kind === 'type' && n.id === `dnd-5e-2024/${type}`);
       expect(node, type).toBeDefined();
       expect(paths(node?.kind === 'type' ? node.children : []), type).toEqual(config.facets.map((f) => f.path));
-      const own = tree(full(), galleryConfig(reg, { ruleset: 'dnd-5e-2024', type }, data));
-      expect(paths(own), type).toEqual([...config.facets.map((f) => f.path), 'tags.theme']);
     }
     expect(find(nodes, 'Tags', 'Theme')?.kind).toBe('enum');
+    // A tag a checked type lists among its default filters starts open too.
+    expect(find(nodes, 'Tags', 'Theme')?.open).toBe(false);
+    expect(find(tree(full(), home, '?f.type=creature'), 'Tags', 'Theme')?.open).toBe(true);
   });
 
   it('checks a type as the type filter, counting what checking it adds', () => {
-    const home = galleryConfig(reg, {}, data);
+    const home = galleryConfig(reg, data);
     const nodes = tree(full(), home, '?f.type=spell');
     const spell = nodes.find((n) => n.kind === 'type' && n.value.key === 'spell');
     const feat = nodes.find((n) => n.kind === 'type' && n.value.key === 'feat');
     expect(spell?.kind === 'type' && spell.value).toMatchObject({ selected: true, count: 1 });
     expect(feat?.kind === 'type' && feat.value).toMatchObject({ selected: false, count: 1 });
+  });
+
+  it('shows the Ruleset node only with more than one ruleset, or when it filters', () => {
+    const home = galleryConfig(reg, data);
+    expect(tree(full(), home).map((n) => n.id)).not.toContain('ruleset');
+    const filtered = tree(full(), home, '?f.ruleset=dnd-5e-2024');
+    expect(filtered[0]).toMatchObject({ kind: 'enum', id: 'ruleset', open: true });
+    expect(values(filtered[0])).toEqual([expect.objectContaining({ key: 'dnd-5e-2024', label: 'D&D 5e (SRD 5.2)', selected: true })]);
+    const other = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as Registry;
+    const two = [...full(), record({ id: 'stranger', ruleset: 'other' })];
+    const nodes = tree(two, galleryConfig(other, data));
+    expect(values(nodes[0]).map((v) => [v.label, v.count])).toEqual([
+      ['D&D 5e (SRD 5.2)', full().length],
+      ['Other', 1],
+    ]);
   });
 });
