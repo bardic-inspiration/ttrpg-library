@@ -8,11 +8,21 @@
     "level": 3,
     "school": "abjuration",
     "classes": [
-      "cleric",
-      "druid",
-      "ranger",
-      "sorcerer",
-      "wizard"
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/ranger"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

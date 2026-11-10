@@ -4,17 +4,17 @@
 
 import { present, whenPresent } from './display.ts';
 import { formatSpellLevel } from './format.ts';
-import { concat, countOf, joinWith, markdown, name, pluralOf, say, sayText, text, toMarkdown, toPlain, type Phrase } from './wording.ts';
+import { concat, countOf, joinWith, link, markdown, name, pluralOf, say, sayText, text, toMarkdown, toPlain, type Phrase } from './wording.ts';
 import type { SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 /**
- * "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at level 0. The level reads as
- * the gallery's `spell-level` format does.
+ * "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at level 0, as markdown with
+ * each class linked. The level reads as the gallery's `spell-level` format does.
  */
 export function levelLine(s: SpellStats): string {
   const school = name('school', s.school);
   const head = s.level === 0 ? say('spell.cantrip', { school }) : say('spell.leveled', { level: formatSpellLevel(s.level).replace(/^Level /, ''), school });
-  return toPlain(concat(head, ' (', joinWith(s.classes.map((c) => name('class', c)), ', '), ')'));
+  return toMarkdown(concat(head, ' (', joinWith(s.classes.map((c) => link(c.ref)), ', '), ')'));
 }
 
 /**

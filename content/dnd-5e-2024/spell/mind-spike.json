@@ -8,9 +8,15 @@
     "level": 2,
     "school": "divination",
     "classes": [
-      "sorcerer",
-      "warlock",
-      "wizard"
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

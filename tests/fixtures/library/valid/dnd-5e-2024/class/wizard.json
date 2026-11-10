@@ -1,0 +1,58 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "wizard",
+  "name": "Wizard",
+  "summary": "An abbreviated Wizard, the example library's stand-in; the full class is in content/.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "int"
+      ]
+    },
+    "hitDie": "d6",
+    "savingThrows": [
+      "wis",
+      "int"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "arcana",
+        "insight"
+      ]
+    },
+    "weapons": "Simple weapons",
+    "armor": "None",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/dagger",
+            "count": 2
+          }
+        ],
+        "gp": 5
+      },
+      {
+        "gp": 50
+      }
+    ],
+    "multiclass": "- Gain the Hit Point Die from the Core Wizard Traits table.",
+    "features": [
+      {
+        "ref": "class-feature/wizard-spellcasting"
+      }
+    ],
+    "subclassLevels": [
+      1
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

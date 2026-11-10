@@ -74,7 +74,8 @@ spell list is the spells that name it ([Classes](#classes)).
 item's `spells[].spell`) are "Casts" / "Cast by"; a background's `feat` is
 "Grants" / "Granted by", its `tool` "Tool proficiency" / "Backgrounds", and
 its equipment "Starting equipment" / "Starting equipment of", as a class's
-is; a class's `spells` are "Spells" / "Classes"; a subclass's `class` is
+is; a class's `spells` are "Spells" / "Classes", and a spell's `classes`
+"Classes" / "Spells"; a subclass's `class` is
 "Subclass of" / "Subclasses"; creature `gear` is "Gear" /
 "Carried by"; a creature's condition immunities are "Immune to" / "Immune
 creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
@@ -163,8 +164,9 @@ CR 0 when any trait or action deals damage, else 0), in-lair XP (the next CR
 row's), Initiative bonus and score, the hit die from size and HP from hit dice,
 saves, skills, passive Perception, each action's attack bonus, save DC, and
 damage (average, modifier, and display), and the Spellcasting DC and attack
-bonus. Items and spells derive nothing, except the ability modifiers and
-saves of an embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)).
+bonus. Items derive nothing, except the ability modifiers and saves of an
+embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)); spells
+derive those too, and their class keys, for the Classes filter ([Spells](#spells)).
 Classes derive their proficiency bonus and spell slots by level
 ([Classes](#classes)).
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
@@ -426,6 +428,11 @@ A field that takes a condition takes a `ConditionRef`: a creature's
 
 - The level line words the level as SRD 5.2 does: "Level 1 Evocation
   (Sorcerer, Wizard)", or "Evocation Cantrip (Sorcerer, Wizard)" at level 0.
+  `classes` are class refs (`ClassRef`), each printed as its class's name,
+  linked.
+- A spell derives `classes`, its class ids, for the Classes filter, which
+  reads them by the phrase book's `class` vocabulary until the filter tree
+  reads ref labels (#235).
 - A reaction or bonus action with a trigger reads "Reaction, which you take
   …" with the trigger rendered inline as rules text, so a spell name in it can
   be italic. A casting-time `note` prints after the unit: "Action (Overgrowth)
@@ -549,8 +556,12 @@ Its page (`class-page`) prints, in the SRD's order:
 
 An SRD class's spell list comes only from its spells' `classes`; a custom
 class adds existing spells through `spells`, which a spell's card doesn't
-print. Until the SRD import moves spell `classes` to class refs (#234), the
-list matches the enum value to the class's id.
+print. `tests/rulesets/dnd-5e-2024/srd-classes.test.ts` checks that each SRD
+class in the library derives its Features table and spell list as the SRD
+prints them (`tests/fixtures/srd/class-tables.json`). The SRD's spell entries
+and class lists disagree in two places, and the spell entry wins, since its
+card is reproduced as printed: *Phantasmal Force* names the Bard, Sorcerer, and
+Wizard, and *Mind Spike* the Sorcerer, whose lists omit them.
 
 Classes come only by request; they have no gap buckets.
 

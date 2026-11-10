@@ -8,9 +8,15 @@
     "level": 2,
     "school": "illusion",
     "classes": [
-      "bard",
-      "cleric",
-      "ranger"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/ranger"
+      }
     ],
     "castingTime": {
       "amount": 1,

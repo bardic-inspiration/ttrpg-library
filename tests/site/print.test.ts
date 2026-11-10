@@ -83,8 +83,8 @@ describe('selectEntries', () => {
 
   it('prints a gallery query’s results in its order', () => {
     const names = (q: string) => selectEntries(parsePrintQuery(q), records, reg).records.map((r) => r.name);
-    expect(names('?sort=name:asc')).toEqual(['Cinder Hound', 'Frost Lance', 'Wand of Frost Lances']);
-    expect(names('?sort=name:desc')).toEqual(['Wand of Frost Lances', 'Frost Lance', 'Cinder Hound']);
+    expect(names('?sort=name:asc')).toEqual(['Cinder Hound', 'Frost Lance', 'Sorcerer', 'Wand of Frost Lances', 'Wizard']);
+    expect(names('?sort=name:desc')).toEqual(['Wizard', 'Wand of Frost Lances', 'Sorcerer', 'Frost Lance', 'Cinder Hound']);
   });
 });
 

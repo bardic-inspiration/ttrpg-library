@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "wizard-spellcasting",
+  "name": "Spellcasting",
+  "stats": {
+    "levels": [
+      1
+    ],
+    "text": "As a student of arcane magic, you have learned to cast spells."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

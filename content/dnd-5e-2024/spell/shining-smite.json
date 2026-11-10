@@ -8,7 +8,9 @@
     "level": 2,
     "school": "transmutation",
     "classes": [
-      "paladin"
+      {
+        "ref": "class/paladin"
+      }
     ],
     "castingTime": {
       "amount": 1,

@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "sorcerer-spellcasting",
+  "name": "Spellcasting",
+  "stats": {
+    "levels": [
+      1
+    ],
+    "text": "Drawing from your innate magic, you can cast spells."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

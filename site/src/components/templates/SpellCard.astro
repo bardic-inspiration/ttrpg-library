@@ -28,7 +28,7 @@ const lines = [
 ];
 ---
 <StatBlock name={`${entry.name} spell`} type="spell" mode={mode}>
-  <StatBlockHeader name={entry.name} subtitle={levelLine(s)} level={level} />
+  <StatBlockHeader name={entry.name} subtitle={{ markdown: levelLine(s), refs }} level={level} />
   <PropertyList lines={lines} refs={refs} />
   <div class="spell-card__text">
     <RulesText text={s.effect} refs={refs} />

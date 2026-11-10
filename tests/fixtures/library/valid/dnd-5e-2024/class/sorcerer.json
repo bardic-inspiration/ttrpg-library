@@ -1,0 +1,58 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "sorcerer",
+  "name": "Sorcerer",
+  "summary": "An abbreviated Sorcerer, the example library's stand-in; the full class is in content/.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "cha"
+      ]
+    },
+    "hitDie": "d6",
+    "savingThrows": [
+      "con",
+      "cha"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "arcana",
+        "insight"
+      ]
+    },
+    "weapons": "Simple weapons",
+    "armor": "None",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/dagger",
+            "count": 2
+          }
+        ],
+        "gp": 5
+      },
+      {
+        "gp": 50
+      }
+    ],
+    "multiclass": "- Gain the Hit Point Die from the Core Sorcerer Traits table.",
+    "features": [
+      {
+        "ref": "class-feature/sorcerer-spellcasting"
+      }
+    ],
+    "subclassLevels": [
+      1
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "manual",
+      "srd": true
+    }
+  }
+}

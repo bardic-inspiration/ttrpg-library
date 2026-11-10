@@ -8,9 +8,15 @@
     "level": 7,
     "school": "transmutation",
     "classes": [
-      "bard",
-      "cleric",
-      "druid"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/druid"
+      }
     ],
     "castingTime": {
       "amount": 1,

@@ -8,10 +8,11 @@ import { frostLance, wandOfFrostLances } from '../helpers.ts';
 describe('spell card lines (docs/rulesets.md#spells)', async () => {
   const base = (await frostLance()).stats as SpellStats;
 
-  it('reads a cantrip as "<School> Cantrip"', () => {
-    expect(levelLine({ ...base, level: 0 })).toBe('Evocation Cantrip (Sorcerer, Wizard)');
-    expect(levelLine(base)).toBe('Level 1 Evocation (Sorcerer, Wizard)');
-    expect(levelLine({ ...base, level: 3, school: 'conjuration' })).toBe('Level 3 Conjuration (Sorcerer, Wizard)');
+  it('reads a cantrip as "<School> Cantrip", with each class linked', () => {
+    const classes = '({ref:class/sorcerer}, {ref:class/wizard})';
+    expect(levelLine({ ...base, level: 0 })).toBe(`Evocation Cantrip ${classes}`);
+    expect(levelLine(base)).toBe(`Level 1 Evocation ${classes}`);
+    expect(levelLine({ ...base, level: 3, school: 'conjuration' })).toBe(`Level 3 Conjuration ${classes}`);
   });
 
   it('formats casting time, with a reaction trigger and ritual', () => {

@@ -23,6 +23,10 @@ const temp = async (...args: Parameters<typeof tempLibrary>) => {
 describe('listEntryFiles', () => {
   it('lists entry files relative to the root', async () => {
     expect(await listEntryFiles(join(library, 'valid'))).toEqual([
+      'dnd-5e-2024/class-feature/sorcerer-spellcasting.json',
+      'dnd-5e-2024/class-feature/wizard-spellcasting.json',
+      'dnd-5e-2024/class/sorcerer.json',
+      'dnd-5e-2024/class/wizard.json',
       'dnd-5e-2024/creature/cinder-hound.json',
       'dnd-5e-2024/item/wand-of-frost-lances.json',
       'dnd-5e-2024/spell/frost-lance.json',
@@ -50,8 +54,8 @@ describe('validateLibrary', () => {
     expect(result.warnings).toEqual([]);
     const derived = Object.fromEntries(result.entries.map((e) => [e.entry.id, e.derived]));
     expect(derived['cinder-hound']).toMatchObject({ xp: 450, hp: { average: 32 } });
-    // Magic items and spells derive nothing in v1 without an embedded stat block (docs/rulesets.md#the-ruleset-module).
-    expect(derived['frost-lance']).toEqual({});
+    // Magic items derive nothing without an embedded stat block, and spells only their class keys (docs/rulesets.md#the-ruleset-module).
+    expect(derived['frost-lance']).toEqual({ classes: ['sorcerer', 'wizard'] });
     expect(derived['wand-of-frost-lances']).toEqual({});
   });
 
@@ -132,7 +136,7 @@ const INVALID: Record<string, RegExp> = {
   'spell-bad-level': /^stats\.level: must be <= 9/,
   'spell-unknown-school': /^stats\.school: must be one of/,
   'spell-no-classes': /^stats\.classes: must NOT have fewer than 1 items/,
-  'spell-unknown-class': /^stats\.classes\[0\]: must be one of/,
+  'spell-unknown-class': /^stats\.classes\[0\]: ref "class\/artificer" does not resolve/,
   'spell-bad-area-shape': /^stats\.range\.area\.shape: must be one of/,
   'spell-missing-effect': /^stats: missing required key "effect"/,
   'spell-concentration-not-timed': /^stats\.duration\.concentration: concentration needs a timed duration, not "instantaneous"/,
@@ -411,9 +415,13 @@ describe('references (docs/content-model.md#references)', () => {
       refBy: [],
     });
     expect(byId['frost-lance']).toMatchObject({
-      refs: [],
+      refs: [
+        { path: 'stats.classes[0]', key: 'class/sorcerer' },
+        { path: 'stats.classes[1]', key: 'class/wizard' },
+      ],
       refBy: [{ path: 'stats.spells[0].spell', key: 'item/wand-of-frost-lances' }],
     });
+    expect(byId['sorcerer']).toMatchObject({ refBy: [{ path: 'stats.classes[0]', key: 'spell/frost-lance' }] });
     expect(byId['cinder-hound']).toMatchObject({ refs: [], refBy: [] });
   });
 

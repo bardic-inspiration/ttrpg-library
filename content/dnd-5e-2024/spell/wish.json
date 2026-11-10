@@ -8,8 +8,12 @@
     "level": 9,
     "school": "conjuration",
     "classes": [
-      "sorcerer",
-      "wizard"
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

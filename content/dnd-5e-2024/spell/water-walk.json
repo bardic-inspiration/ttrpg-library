@@ -8,10 +8,18 @@
     "level": 3,
     "school": "transmutation",
     "classes": [
-      "cleric",
-      "druid",
-      "ranger",
-      "sorcerer"
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/ranger"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
     ],
     "castingTime": {
       "amount": 1,

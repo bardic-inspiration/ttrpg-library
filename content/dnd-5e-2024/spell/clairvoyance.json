@@ -8,10 +8,18 @@
     "level": 3,
     "school": "divination",
     "classes": [
-      "bard",
-      "cleric",
-      "sorcerer",
-      "wizard"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 10,

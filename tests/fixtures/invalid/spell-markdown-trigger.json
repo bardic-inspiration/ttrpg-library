@@ -7,10 +7,7 @@
   "stats": {
     "level": 1,
     "school": "evocation",
-    "classes": [
-      "sorcerer",
-      "wizard"
-    ],
+    "classes": [{ "ref": "class/sorcerer" }, { "ref": "class/wizard" }],
     "castingTime": {
       "amount": 1,
       "unit": "reaction",

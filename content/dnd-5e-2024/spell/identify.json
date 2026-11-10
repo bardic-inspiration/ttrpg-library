@@ -8,8 +8,12 @@
     "level": 1,
     "school": "divination",
     "classes": [
-      "bard",
-      "wizard"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

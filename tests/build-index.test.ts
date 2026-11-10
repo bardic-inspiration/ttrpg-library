@@ -38,7 +38,8 @@ describe('library.json records', () => {
   it('have exactly the docs/site.md#index-build keys, in order', async () => {
     const { errors, records } = await buildIndex(valid);
     expect(errors).toEqual([]);
-    expect(records).toHaveLength(3);
+    // The three example entries, and the two classes Frost Lance names.
+    expect(records).toHaveLength(5);
     for (const record of records) {
       expect(Object.keys(record)).toEqual([
         'id', 'ruleset', 'type', 'name', 'summary', 'url', 'image', 'facets', 'tags', 'createdAt', 'refs', 'refBy', 'search',
@@ -99,6 +100,7 @@ describe('library.json records', () => {
             creature: { label: 'C', plural: 'Cs', template: 't', facets: [{ path: 'stats.speed.fly', label: 'Fly', kind: 'range' }] },
             'item': { label: 'M', plural: 'Ms', template: 't', facets: [] },
             spell: { label: 'S', plural: 'Ss', template: 't', facets: [] },
+            class: { label: 'Cl', plural: 'Cls', template: 't', facets: [] },
           },
         },
       },
@@ -183,7 +185,7 @@ describe('the build', () => {
     const out = await tempDir();
     await writeIndex(valid, out, await buildIndex(valid));
     const library = JSON.parse(await readFile(join(out, 'library.json'), 'utf8')) as { id: string }[];
-    expect(library.map((r) => r.id)).toEqual(['cinder-hound', 'wand-of-frost-lances', 'frost-lance']);
+    expect(library.map((r) => r.id)).toEqual(['sorcerer', 'wizard', 'cinder-hound', 'wand-of-frost-lances', 'frost-lance']);
     for (const path of ['creature/cinder-hound.json', 'item/wand-of-frost-lances.json', 'spell/frost-lance.json']) {
       expect(await readFile(join(out, 'data/dnd-5e-2024', path), 'utf8')).toBe(await readFile(join(valid, 'dnd-5e-2024', path), 'utf8'));
     }

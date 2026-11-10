@@ -43,7 +43,7 @@ export function deriveClassLinked(id: string, stats: ClassStats, entries: readon
   }));
 
   const own = new Set((stats.spells ?? []).map((s) => s.ref));
-  const spells = entries.filter((e) => e.type === 'spell' && ((e.stats as SpellStats).classes.includes(id) || own.has(`spell/${e.id}`)));
+  const spells = entries.filter((e) => e.type === 'spell' && ((e.stats as SpellStats).classes.some((c) => c.ref === `class/${id}`) || own.has(`spell/${e.id}`)));
   const levels = [...new Set(spells.map((e) => (e.stats as SpellStats).level))].sort((a, b) => a - b);
   const spellList = levels.map((level) => ({
     level,

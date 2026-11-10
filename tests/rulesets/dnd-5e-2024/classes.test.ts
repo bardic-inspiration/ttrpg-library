@@ -144,9 +144,9 @@ describe('validation', () => {
 
   it('rejects a subclass whose class is missing or another type', async () => {
     const { messages } = await validate((entries) => {
-      byId(entries, 'subclass', 'draconic-sorcery').stats.class = { ref: 'class/wizard' };
+      byId(entries, 'subclass', 'draconic-sorcery').stats.class = { ref: 'class/artificer' };
     });
-    expect(messages).toContain('dnd-5e-2024/subclass/draconic-sorcery.json: stats.class: ref "class/wizard" does not resolve: no class has id "wizard"');
+    expect(messages).toContain('dnd-5e-2024/subclass/draconic-sorcery.json: stats.class: ref "class/artificer" does not resolve: no class has id "artificer"');
   });
 });
 

@@ -337,6 +337,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The hit die and casting progression read through the phrase book's `hitDie` ("D6") and `spellcastingProgression` ("Full", "Half", "Pact") vocabularies. | A value reads the same on a card, in a filter, and on its page | #233 |
 | The class fixtures are the SRD Sorcerer and Draconic Sorcery in full; the Warlock's, Paladin's, and Barbarian's cases are tested as derivations. Matching every SRD class's table and spell list is the import's (#234). | The Sorcerer holds most cases; the import transcribes the rest | #233 |
 | The SRD manifest lists components in their own `components` list by type, name, and parent key, and a name a parent prints twice is listed twice; coverage matches by count. | A key of type, name, and parent repeats for Improved Brutal Strike; a level in the record would duplicate the component's own data | #234 |
+| A spell's `classes` are class refs, and the Classes filter reads a derived list of class ids by the `class` vocabulary until the filter tree reads ref labels. | The spec's ref facet needs #235; a derived key list keeps the filter working meanwhile | #234 |
+| Where an SRD spell entry names a class whose printed list omits it (*Phantasmal Force*, *Mind Spike*), the class derives the spell, and the SRD check lists the case as an inconsistency. | P5: the spell card is reproduced as printed; the list is derived from it | #234 |
+| The example test library holds abbreviated Sorcerer and Wizard classes for Frost Lance, and `tempLibrary` adds a stand-in for each SRD caster class a test's spells name but its library lacks. | A spell's class refs must resolve; a stand-in brings no refs of its own | #234 |
 
 ### Wording
 

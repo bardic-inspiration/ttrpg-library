@@ -8,8 +8,12 @@
     "level": 8,
     "school": "abjuration",
     "classes": [
-      "cleric",
-      "wizard"
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

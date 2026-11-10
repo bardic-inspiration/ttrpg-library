@@ -8,10 +8,18 @@
     "level": 4,
     "school": "necromancy",
     "classes": [
-      "druid",
-      "sorcerer",
-      "warlock",
-      "wizard"
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

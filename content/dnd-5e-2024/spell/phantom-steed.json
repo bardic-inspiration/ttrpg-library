@@ -8,7 +8,9 @@
     "level": 3,
     "school": "illusion",
     "classes": [
-      "wizard"
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

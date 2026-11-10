@@ -8,11 +8,21 @@
     "level": 5,
     "school": "enchantment",
     "classes": [
-      "bard",
-      "cleric",
-      "druid",
-      "paladin",
-      "wizard"
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/paladin"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,

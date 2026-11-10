@@ -8,8 +8,12 @@
     "level": 3,
     "school": "evocation",
     "classes": [
-      "druid",
-      "ranger"
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/ranger"
+      }
     ],
     "castingTime": {
       "amount": 1,

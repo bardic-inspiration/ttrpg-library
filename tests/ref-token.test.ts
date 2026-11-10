@@ -37,7 +37,7 @@ describe('{ref:…} tokens in text (docs/content-model.md#references)', () => {
     const { errors, entries: valid } = await validateLibrary(await library(entries));
     expect(errors).toEqual([]);
     const byId = new Map(valid.map((e) => [e.entry.id, e]));
-    expect(byId.get('frost-lance')!.refs).toEqual([{ path: 'stats.effect', key: 'creature/cinder-hound' }]);
+    expect(byId.get('frost-lance')!.refs.filter((r) => r.path === 'stats.effect')).toEqual([{ path: 'stats.effect', key: 'creature/cinder-hound' }]);
     expect(byId.get('cinder-hound')!.refs).toEqual([{ path: 'description', key: 'item/wand-of-frost-lances' }]);
     expect(byId.get('cinder-hound')!.refBy).toEqual([{ path: 'stats.effect', key: 'spell/frost-lance' }]);
   });
@@ -101,7 +101,7 @@ describe('a {ref:…} token with display text (docs/content-model.md#references)
     const content = await library(await examples('The lance calls a {ref:creature/cinder-hound fire hound} to you.'));
     const { errors, entries: valid } = await validateLibrary(content);
     expect(errors).toEqual([]);
-    expect(valid.find((e) => e.entry.id === 'frost-lance')!.refs).toEqual([{ path: 'stats.effect', key: 'creature/cinder-hound' }]);
+    expect(valid.find((e) => e.entry.id === 'frost-lance')!.refs.filter((r) => r.path === 'stats.effect')).toEqual([{ path: 'stats.effect', key: 'creature/cinder-hound' }]);
     const { records } = await buildIndex(content);
     expect(records.find((r) => r.id === 'frost-lance')!.search).toContain('calls a fire hound to you');
     const refs = { names: new Map([['creature/zombie', 'Zombie']]), ruleset: 'dnd-5e-2024' };

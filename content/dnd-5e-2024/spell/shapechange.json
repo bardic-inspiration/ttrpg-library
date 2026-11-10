@@ -8,8 +8,12 @@
     "level": 9,
     "school": "transmutation",
     "classes": [
-      "druid",
-      "wizard"
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      }
     ],
     "castingTime": {
       "amount": 1,
