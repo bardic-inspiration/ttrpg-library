@@ -8,7 +8,9 @@ overlap.
 
 Sessions start with no memory of earlier ones. Decisions, follow-ups, and
 open questions go into the docs, the stage spec, issues, and PR descriptions,
-never only into a chat.
+never only into a chat. Because they do, a session can stay small: one issue,
+or one batch of an import stage, per session, and a new session for the next.
+A long session costs more on every turn as its context grows.
 
 ## Lanes
 
@@ -75,12 +77,19 @@ Every content session, routine or not, follows these:
 2. **Branch** from `main` as `dev/<short-description>`.
 3. **Write tests first** for new behavior, using Vitest suites and fixtures
    in `tests/`. Bug fixes come with a test that fails before the fix.
+   Before changing the shape of stored data, find every test and fixture that
+   builds entries of that type and fix them in one pass, not by rerunning the
+   suite until it passes. A test that validates library entries loads the
+   whole library, minus only the types its own fixtures stand in for, so a
+   new link in content can't leave its library unresolved.
 4. **Update the docs as you go.** In the same PR, update the `docs/` files
    that describe what changed, delete the part you built from the stage spec,
    and add a row to `docs/decisions.md` for each decision the PR makes (see
    "Rules"). A renamed heading means updating its citations; the link check
    catches any you miss.
-5. **Run the dev-lane checks** (below) before every push.
+5. **Run the dev-lane checks** (below) before every push. While iterating,
+   run only the affected test files (`npm test -- <path>`) and keep output to
+   the failures; the full suite runs once, before the push.
 6. **Open a PR** from the [`dev.md`](.github/PULL_REQUEST_TEMPLATE/dev.md)
    template, titled `<area>: <summary>`. Use the area label as `<area>`
    (`ui`, `ruleset`, `generation`, `ci`), or `docs`, `spec`, `scripts`, or
