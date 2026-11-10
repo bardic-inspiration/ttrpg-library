@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "rogue-uncanny-dodge",
+  "name": "Uncanny Dodge",
+  "stats": {
+    "levels": [
+      5
+    ],
+    "text": "When an attacker that you can see hits you with an attack roll, you can take a {ref:glossary/reaction} to halve the attack's damage against you (round down)."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

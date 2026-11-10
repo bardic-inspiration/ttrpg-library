@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "ranger-feral-senses",
+  "name": "Feral Senses",
+  "stats": {
+    "levels": [
+      18
+    ],
+    "text": "Your connection to the forces of nature grants you {ref:glossary/blindsight} with a range of 30 feet."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

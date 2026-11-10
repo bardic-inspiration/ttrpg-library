@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "tiefling-fiendish-legacy",
+  "name": "Fiendish Legacy",
+  "stats": {
+    "text": "You are the recipient of a legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of the chosen legacy.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a {ref:glossary/long-rest}. You can also cast the spell using any spell slots you have of the appropriate level.\n\n**Fiendish Legacies**\n\n| Legacy | Level 1 | Level 3 | Level 5 |\n|---|---|---|---|\n| Abyssal | You have {ref:glossary/resistance} to Poison damage. You also know the *{ref:spell/poison-spray}* cantrip. | *{ref:spell/ray-of-sickness}* | *{ref:spell/hold-person}* |\n| Chthonic | You have Resistance to Necrotic damage. You also know the *{ref:spell/chill-touch}* cantrip. | *{ref:spell/false-life}* | *{ref:spell/ray-of-enfeeblement}* |\n| Infernal | You have Resistance to Fire damage. You also know the *{ref:spell/fire-bolt}* cantrip. | *{ref:spell/hellish-rebuke}* | *{ref:spell/darkness}* |\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the legacy)."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

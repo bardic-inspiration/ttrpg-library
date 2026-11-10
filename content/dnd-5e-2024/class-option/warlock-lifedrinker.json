@@ -1,0 +1,20 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-lifedrinker",
+  "name": "Lifedrinker",
+  "stats": {
+    "prerequisite": "Level 9+ Warlock, {ref:class-option/warlock-pact-of-the-blade} Invocation",
+    "text": "Once per turn when you hit a creature with your pact weapon, you can deal an extra 1d6 Necrotic, Psychic, or Radiant damage (your choice) to the creature, and you can expend one of your {ref:glossary/hit-point-dice} to roll it and regain a number of {ref:glossary/hit-points} equal to the roll plus your Constitution modifier (minimum of 1 Hit Point)."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

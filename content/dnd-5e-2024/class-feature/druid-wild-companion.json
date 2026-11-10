@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "druid-wild-companion",
+  "name": "Wild Companion",
+  "stats": {
+    "levels": [
+      2
+    ],
+    "text": "You can summon a nature spirit that assumes an animal form to aid you. As a {ref:glossary/magic} action, you can expend a spell slot or a use of Wild Shape to cast the *{ref:spell/find-familiar}* spell without Material components.\n\nWhen you cast the spell in this way, the familiar is Fey and disappears when you finish a {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

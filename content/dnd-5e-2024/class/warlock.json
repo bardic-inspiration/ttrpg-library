@@ -1,0 +1,277 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "warlock",
+  "name": "Warlock",
+  "summary": "A spellcaster who gains Pact Magic and Eldritch Invocations from an otherworldly patron.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "cha"
+      ]
+    },
+    "hitDie": "d8",
+    "savingThrows": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "arcana",
+        "deception",
+        "history",
+        "intimidation",
+        "investigation",
+        "nature",
+        "religion"
+      ]
+    },
+    "weapons": "Simple weapons",
+    "armor": "Light armor",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/leather-armor"
+          },
+          {
+            "ref": "equipment/sickle"
+          },
+          {
+            "ref": "equipment/dagger",
+            "count": 2
+          },
+          {
+            "ref": "equipment/arcane-focus",
+            "note": "orb"
+          },
+          {
+            "ref": "equipment/book",
+            "note": "occult lore"
+          },
+          {
+            "ref": "equipment/scholars-pack"
+          }
+        ],
+        "gp": 15
+      },
+      {
+        "gp": 100
+      }
+    ],
+    "multiclass": "- Gain the following traits from the Core Warlock Traits table: Hit Point Die and training with Light armor.\n- Gain the Warlock's level 1 features, which are listed in the Warlock Features table. See the multiclassing rules in \"Character Creation\" to determine your available spell slots.",
+    "features": [
+      {
+        "ref": "class-feature/warlock-eldritch-invocations"
+      },
+      {
+        "ref": "class-feature/warlock-pact-magic"
+      },
+      {
+        "ref": "class-feature/warlock-magical-cunning"
+      },
+      {
+        "ref": "class-feature/warlock-warlock-subclass"
+      },
+      {
+        "ref": "class-feature/warlock-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/warlock-contact-patron"
+      },
+      {
+        "ref": "class-feature/warlock-mystic-arcanum"
+      },
+      {
+        "ref": "class-feature/warlock-epic-boon"
+      },
+      {
+        "ref": "class-feature/warlock-eldritch-master"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      6,
+      10,
+      14
+    ],
+    "columns": [
+      {
+        "name": "Eldritch Invocations",
+        "values": [
+          "1",
+          "3",
+          "3",
+          "3",
+          "5",
+          "5",
+          "6",
+          "6",
+          "7",
+          "7",
+          "7",
+          "8",
+          "8",
+          "8",
+          "9",
+          "9",
+          "9",
+          "10",
+          "10",
+          "10"
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "progression": "pact",
+      "cantrips": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prepared": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        10,
+        11,
+        11,
+        12,
+        12,
+        13,
+        13,
+        14,
+        14,
+        15,
+        15
+      ]
+    },
+    "optionLists": [
+      {
+        "name": "Eldritch Invocation Options",
+        "text": "Eldritch Invocation options appear in alphabetical order.",
+        "options": [
+          {
+            "ref": "class-option/warlock-agonizing-blast"
+          },
+          {
+            "ref": "class-option/warlock-armor-of-shadows"
+          },
+          {
+            "ref": "class-option/warlock-ascendant-step"
+          },
+          {
+            "ref": "class-option/warlock-devils-sight"
+          },
+          {
+            "ref": "class-option/warlock-devouring-blade"
+          },
+          {
+            "ref": "class-option/warlock-eldritch-mind"
+          },
+          {
+            "ref": "class-option/warlock-eldritch-smite"
+          },
+          {
+            "ref": "class-option/warlock-eldritch-spear"
+          },
+          {
+            "ref": "class-option/warlock-fiendish-vigor"
+          },
+          {
+            "ref": "class-option/warlock-gaze-of-two-minds"
+          },
+          {
+            "ref": "class-option/warlock-gift-of-the-depths"
+          },
+          {
+            "ref": "class-option/warlock-gift-of-the-protectors"
+          },
+          {
+            "ref": "class-option/warlock-investment-of-the-chain-master"
+          },
+          {
+            "ref": "class-option/warlock-lessons-of-the-first-ones"
+          },
+          {
+            "ref": "class-option/warlock-lifedrinker"
+          },
+          {
+            "ref": "class-option/warlock-mask-of-many-faces"
+          },
+          {
+            "ref": "class-option/warlock-master-of-myriad-forms"
+          },
+          {
+            "ref": "class-option/warlock-misty-visions"
+          },
+          {
+            "ref": "class-option/warlock-one-with-shadows"
+          },
+          {
+            "ref": "class-option/warlock-otherworldly-leap"
+          },
+          {
+            "ref": "class-option/warlock-pact-of-the-blade"
+          },
+          {
+            "ref": "class-option/warlock-pact-of-the-chain"
+          },
+          {
+            "ref": "class-option/warlock-pact-of-the-tome"
+          },
+          {
+            "ref": "class-option/warlock-repelling-blast"
+          },
+          {
+            "ref": "class-option/warlock-thirsting-blade"
+          },
+          {
+            "ref": "class-option/warlock-visions-of-distant-realms"
+          },
+          {
+            "ref": "class-option/warlock-whispers-of-the-grave"
+          },
+          {
+            "ref": "class-option/warlock-witch-sight"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

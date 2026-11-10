@@ -1,0 +1,182 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "cleric",
+  "name": "Cleric",
+  "summary": "A divine spellcaster who channels the power of a god or pantheon.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "wis"
+      ]
+    },
+    "hitDie": "d8",
+    "savingThrows": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "history",
+        "insight",
+        "medicine",
+        "persuasion",
+        "religion"
+      ]
+    },
+    "weapons": "Simple weapons",
+    "armor": "Light and Medium armor and Shields",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/chain-shirt"
+          },
+          {
+            "ref": "equipment/shield"
+          },
+          {
+            "ref": "equipment/mace"
+          },
+          {
+            "ref": "equipment/holy-symbol"
+          },
+          {
+            "ref": "equipment/priests-pack"
+          }
+        ],
+        "gp": 7
+      },
+      {
+        "gp": 110
+      }
+    ],
+    "multiclass": "- Gain the following traits from the Core Cleric Traits table: Hit Point Die and training with Light and Medium armor and {ref:equipment/shields}.\n- Gain the Cleric's level 1 features, which are listed in the Cleric Features table. See the multiclassing rules in \"Character Creation\" to determine your available spell slots.",
+    "features": [
+      {
+        "ref": "class-feature/cleric-spellcasting"
+      },
+      {
+        "ref": "class-feature/cleric-divine-order"
+      },
+      {
+        "ref": "class-feature/cleric-channel-divinity"
+      },
+      {
+        "ref": "class-feature/cleric-cleric-subclass"
+      },
+      {
+        "ref": "class-feature/cleric-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/cleric-sear-undead"
+      },
+      {
+        "ref": "class-feature/cleric-blessed-strikes"
+      },
+      {
+        "ref": "class-feature/cleric-divine-intervention"
+      },
+      {
+        "ref": "class-feature/cleric-improved-blessed-strikes"
+      },
+      {
+        "ref": "class-feature/cleric-epic-boon"
+      },
+      {
+        "ref": "class-feature/cleric-greater-divine-intervention"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      6,
+      17
+    ],
+    "columns": [
+      {
+        "name": "Channel Divinity",
+        "values": [
+          "—",
+          "2",
+          "2",
+          "2",
+          "2",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "4",
+          "4",
+          "4"
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "progression": "full",
+      "cantrips": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      "prepared": [
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        16,
+        17,
+        17,
+        18,
+        18,
+        19,
+        20,
+        21,
+        22
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

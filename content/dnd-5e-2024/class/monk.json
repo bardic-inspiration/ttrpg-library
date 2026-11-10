@@ -1,0 +1,218 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "monk",
+  "name": "Monk",
+  "summary": "An unarmored martial artist who fuels Focus abilities with Focus Points.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "dex",
+        "wis"
+      ],
+      "join": "and"
+    },
+    "hitDie": "d8",
+    "savingThrows": [
+      "str",
+      "dex"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "acrobatics",
+        "athletics",
+        "history",
+        "insight",
+        "religion",
+        "stealth"
+      ]
+    },
+    "weapons": "Simple weapons and Martial weapons that have the Light property",
+    "tools": "Choose one type of {ref:equipment/artisans-tools} or {ref:equipment/musical-instrument} (see \"Equipment\")",
+    "armor": "None",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/spear"
+          },
+          {
+            "ref": "equipment/dagger",
+            "count": 5
+          },
+          "{ref:equipment/artisans-tools} or {ref:equipment/musical-instrument} chosen for the tool proficiency above",
+          {
+            "ref": "equipment/explorers-pack"
+          }
+        ],
+        "gp": 11
+      },
+      {
+        "gp": 50
+      }
+    ],
+    "multiclass": "- Gain the Hit Point Die trait from the Core Monk Traits table.\n- Gain the Monk's level 1 features, which are listed in the Monk Features table.",
+    "features": [
+      {
+        "ref": "class-feature/monk-martial-arts"
+      },
+      {
+        "ref": "class-feature/monk-unarmored-defense"
+      },
+      {
+        "ref": "class-feature/monk-monks-focus"
+      },
+      {
+        "ref": "class-feature/monk-unarmored-movement"
+      },
+      {
+        "ref": "class-feature/monk-uncanny-metabolism"
+      },
+      {
+        "ref": "class-feature/monk-deflect-attacks"
+      },
+      {
+        "ref": "class-feature/monk-monk-subclass"
+      },
+      {
+        "ref": "class-feature/monk-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/monk-slow-fall"
+      },
+      {
+        "ref": "class-feature/monk-extra-attack"
+      },
+      {
+        "ref": "class-feature/monk-stunning-strike"
+      },
+      {
+        "ref": "class-feature/monk-empowered-strikes"
+      },
+      {
+        "ref": "class-feature/monk-evasion"
+      },
+      {
+        "ref": "class-feature/monk-acrobatic-movement"
+      },
+      {
+        "ref": "class-feature/monk-heightened-focus"
+      },
+      {
+        "ref": "class-feature/monk-self-restoration"
+      },
+      {
+        "ref": "class-feature/monk-deflect-energy"
+      },
+      {
+        "ref": "class-feature/monk-disciplined-survivor"
+      },
+      {
+        "ref": "class-feature/monk-perfect-focus"
+      },
+      {
+        "ref": "class-feature/monk-superior-defense"
+      },
+      {
+        "ref": "class-feature/monk-epic-boon"
+      },
+      {
+        "ref": "class-feature/monk-body-and-mind"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      6,
+      11,
+      17
+    ],
+    "columns": [
+      {
+        "name": "Martial Arts",
+        "values": [
+          "1d6",
+          "1d6",
+          "1d6",
+          "1d6",
+          "1d8",
+          "1d8",
+          "1d8",
+          "1d8",
+          "1d8",
+          "1d8",
+          "1d10",
+          "1d10",
+          "1d10",
+          "1d10",
+          "1d10",
+          "1d10",
+          "1d12",
+          "1d12",
+          "1d12",
+          "1d12"
+        ]
+      },
+      {
+        "name": "Focus Points",
+        "values": [
+          "—",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20"
+        ]
+      },
+      {
+        "name": "Unarmored Movement",
+        "values": [
+          "—",
+          "+10 ft.",
+          "+10 ft.",
+          "+10 ft.",
+          "+10 ft.",
+          "+15 ft.",
+          "+15 ft.",
+          "+15 ft.",
+          "+15 ft.",
+          "+20 ft.",
+          "+20 ft.",
+          "+20 ft.",
+          "+20 ft.",
+          "+25 ft.",
+          "+25 ft.",
+          "+25 ft.",
+          "+25 ft.",
+          "+30 ft.",
+          "+30 ft.",
+          "+30 ft."
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

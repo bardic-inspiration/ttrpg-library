@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "orc",
+  "name": "Orc",
+  "summary": "Humanoids with an adrenaline-fueled Dash, Darkvision, and Relentless Endurance.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "medium",
+        "height": "about 6–7 feet tall"
+      }
+    ],
+    "speed": 30,
+    "traits": [
+      {
+        "ref": "species-trait/orc-adrenaline-rush"
+      },
+      {
+        "ref": "species-trait/orc-darkvision"
+      },
+      {
+        "ref": "species-trait/orc-relentless-endurance"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "ranger-favored-enemy",
+  "name": "Favored Enemy",
+  "stats": {
+    "levels": [
+      1
+    ],
+    "text": "You always have the *{ref:spell/hunters-mark}* spell prepared. You can cast it twice without expending a spell slot, and you regain all expended uses of this ability when you finish a {ref:glossary/long-rest}.\n\nThe number of times you can cast the spell without a spell slot increases when you reach certain Ranger levels, as shown in the Favored Enemy column of the Ranger Features table."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

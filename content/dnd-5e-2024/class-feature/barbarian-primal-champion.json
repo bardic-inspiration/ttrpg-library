@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "barbarian-primal-champion",
+  "name": "Primal Champion",
+  "stats": {
+    "levels": [
+      20
+    ],
+    "text": "You embody primal power. Your Strength and Constitution scores increase by 4, to a maximum of 25."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

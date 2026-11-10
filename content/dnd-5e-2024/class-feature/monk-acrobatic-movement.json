@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "monk-acrobatic-movement",
+  "name": "Acrobatic Movement",
+  "stats": {
+    "levels": [
+      9
+    ],
+    "text": "While you aren't wearing armor or wielding a {ref:equipment/shield}, you gain the ability to move along vertical surfaces and across liquids on your turn without falling during the movement."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

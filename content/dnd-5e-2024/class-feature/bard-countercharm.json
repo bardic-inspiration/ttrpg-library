@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "bard-countercharm",
+  "name": "Countercharm",
+  "stats": {
+    "levels": [
+      7
+    ],
+    "text": "You can use musical notes or words of power to disrupt mind-influencing effects. If you or a creature within 30 feet of you fails a saving throw against an effect that applies the {ref:condition/charmed} or {ref:condition/frightened} condition, you can take a {ref:glossary/reaction} to cause the save to be rerolled, and the new roll has {ref:glossary/advantage}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

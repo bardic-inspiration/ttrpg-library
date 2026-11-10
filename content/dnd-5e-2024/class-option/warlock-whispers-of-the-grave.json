@@ -1,0 +1,20 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-whispers-of-the-grave",
+  "name": "Whispers of the Grave",
+  "stats": {
+    "prerequisite": "Level 7+ Warlock",
+    "text": "You can cast *{ref:spell/speak-with-dead}* without expending a spell slot."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

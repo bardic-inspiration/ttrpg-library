@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "monk-perfect-focus",
+  "name": "Perfect Focus",
+  "stats": {
+    "levels": [
+      15
+    ],
+    "text": "When you roll {ref:glossary/initiative} and don't use Uncanny Metabolism, you regain expended Focus Points until you have 4 if you have 3 or fewer."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

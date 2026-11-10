@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "ranger-tireless",
+  "name": "Tireless",
+  "stats": {
+    "levels": [
+      10
+    ],
+    "text": "Primal forces now help fuel you on your journeys, granting you the following benefits.\n\n***Temporary Hit Points.*** As a {ref:glossary/magic} action, you can give yourself a number of {ref:glossary/temporary-hit-points} equal to 1d8 plus your Wisdom modifier (minimum of 1). You can use this action a number of times equal to your Wisdom modifier (minimum of once), and you regain all expended uses when you finish a {ref:glossary/long-rest}.\n\n***Decrease Exhaustion.*** Whenever you finish a {ref:glossary/short-rest}, your {ref:condition/exhaustion} level, if any, decreases by 1."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

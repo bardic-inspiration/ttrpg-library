@@ -1,0 +1,43 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "tiefling",
+  "name": "Tiefling",
+  "summary": "Humanoids with a fiendish legacy that grants resistances and innate spells.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "medium",
+        "height": "about 4–7 feet tall"
+      },
+      {
+        "size": "small",
+        "height": "about 3–4 feet tall"
+      }
+    ],
+    "speed": 30,
+    "traits": [
+      {
+        "ref": "species-trait/tiefling-darkvision"
+      },
+      {
+        "ref": "species-trait/tiefling-fiendish-legacy"
+      },
+      {
+        "ref": "species-trait/tiefling-otherworldly-presence"
+      }
+    ],
+    "intro": "As a Tiefling, you have the following special traits."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

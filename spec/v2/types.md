@@ -78,11 +78,8 @@ the UI redesign lays out (#113).
 The component mechanism and every component type are built
 ([Components](../../docs/content-model.md#components),
 [Species](../../docs/rulesets.md#species),
-[Classes](../../docs/rulesets.md#classes)). What remains:
-
-- **In the SRD manifest** by type, exact name, and parent key
-  (`"parent": "class/barbarian"`), without tiers, so `srd-coverage` proves
-  each parent's components complete.
+[Classes](../../docs/rulesets.md#classes)), and so are their SRD manifest
+records ([SRD manifest and coverage](../../docs/content-model.md#srd-manifest-and-coverage)).
 
 ### Extension scope
 
@@ -133,16 +130,6 @@ SRD import (#234):
 - The subclass card shows its class, `stats.class` becomes an enum facet
   valued by key and shown by name, and subclasses sort by class, with the
   filter tree (#235).
-
-### SRD fidelity
-
-The new types' templates word the SRD's fixed sentences (a feat's "You gain
-the following benefits.", a species' trait intro, a class's "Becoming a
-<Class> …" bullets and spell list intro, "(see “Feats”)"), so entries store
-only what varies. Numbers in their text are authored and exempt from the
-literal-number check, as spell and item text is. The SRD manifest gets one
-tier for each new type: feats and backgrounds are `simple`, and species,
-classes, and subclasses are `complex`.
 
 ## Cases
 

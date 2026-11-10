@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "barbarian-instinctive-pounce",
+  "name": "Instinctive Pounce",
+  "stats": {
+    "levels": [
+      7
+    ],
+    "text": "As part of the {ref:glossary/bonus-action} you take to enter your Rage, you can move up to half your Speed."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

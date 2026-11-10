@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "cleric-divine-order",
+  "name": "Divine Order",
+  "stats": {
+    "levels": [
+      1
+    ],
+    "text": "You have dedicated yourself to one of the following sacred roles of your choice.\n\n***Protector.*** Trained for battle, you gain proficiency with Martial weapons and training with Heavy armor.\n\n***Thaumaturge.*** You know one extra cantrip from the Cleric spell list. In addition, your mystical connection to the divine gives you a bonus to your Intelligence (Arcana or Religion) checks. The bonus equals your Wisdom modifier (minimum of +1)."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

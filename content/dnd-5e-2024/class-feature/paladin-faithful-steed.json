@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "paladin-faithful-steed",
+  "name": "Faithful Steed",
+  "stats": {
+    "levels": [
+      5
+    ],
+    "text": "You can call on the aid of an otherworldly steed. You always have the *{ref:spell/find-steed}* spell prepared.\n\nYou can also cast the spell once without expending a spell slot, and you regain the ability to do so when you finish a {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

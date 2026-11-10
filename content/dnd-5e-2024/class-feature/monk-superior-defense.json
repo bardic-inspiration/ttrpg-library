@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "monk-superior-defense",
+  "name": "Superior Defense",
+  "stats": {
+    "levels": [
+      18
+    ],
+    "text": "At the start of your turn, you can expend 3 Focus Points to bolster yourself against harm for 1 minute or until you have the {ref:condition/incapacitated} condition. During that time, you have {ref:glossary/resistance} to all damage except Force damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
