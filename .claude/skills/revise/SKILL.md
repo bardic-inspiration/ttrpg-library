@@ -75,7 +75,7 @@ Then read every entry file the revision may touch, under `content/`.
   brief. The brief is the one the PR was generated from: the issues in the
   entry's `meta.source.issues`, or the bucket in `meta.source.gapFill`.
 
-An entry with `meta.source.srd` is an SRD entry, reproduced unmodified from
+An entry with `meta.source.srd` is an SRD entry, reproduced faithfully from
 SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)). Change it only to bring it closer to the SRD, such as a
 transcription fix. Don't apply any other change: reply (or, for a revise
 issue, ask on the issue with `needs-info`) that SRD entries stay as the SRD

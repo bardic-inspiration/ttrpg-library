@@ -211,7 +211,6 @@ export interface Tables {
   challengeRatings: ChallengeRatingRow[];
   sizes: Record<Size, { hitDie: number }>;
   abilities: Ability[];
-  abilityNames: Record<Ability, string>;
   skills: Record<string, Ability>;
   damageTypes: string[];
   creatureTypes: string[];

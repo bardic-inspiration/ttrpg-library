@@ -96,6 +96,29 @@ describe('rendering {ref:…} (docs/content-model.md#references, docs/site.md#te
   });
 });
 
+describe('a {ref:…} token with display text (docs/content-model.md#references)', () => {
+  it('resolves its key, renders and indexes its text, and works in a table cell', async () => {
+    const content = await library(await examples('The lance calls a {ref:creature/cinder-hound fire hound} to you.'));
+    const { errors, entries: valid } = await validateLibrary(content);
+    expect(errors).toEqual([]);
+    expect(valid.find((e) => e.entry.id === 'frost-lance')!.refs).toEqual([{ path: 'stats.effect', key: 'creature/cinder-hound' }]);
+    const { records } = await buildIndex(content);
+    expect(records.find((r) => r.id === 'frost-lance')!.search).toContain('calls a fire hound to you');
+    const refs = { names: new Map([['creature/zombie', 'Zombie']]), ruleset: 'dnd-5e-2024' };
+    expect(renderInlineMarkdown('{ref:creature/zombie risen dead}', refs)).toBe('<a class="ref-link" href="/dnd-5e-2024/creature/zombie/">risen dead</a>');
+    expect(renderMarkdown('| A | B |\n|---|---|\n| {ref:creature/zombie risen dead} | 1 |', refs)).toContain('>risen dead</a></td>');
+  });
+
+  it.each([
+    ['trailing space', '{ref:creature/cinder-hound }'],
+    ['leading space in the text', '{ref:creature/cinder-hound  fire hound}'],
+    ['a bad key', '{ref:cinder-hound fire hound}'],
+  ])('fails on %s', async (_label, token) => {
+    const { errors } = await validateLibrary(await library(await examples(`Summons a ${token}.`)));
+    expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/ref token .* is malformed; write \{ref:<type>\/<id>\} or \{ref:<type>\/<id> <text>\}/));
+  });
+});
+
 describe('a ref with a note (docs/content-model.md#references)', () => {
   it('resolves like any ref and reads as the name with the note in parentheses', async () => {
     const wand = await wandOfFrostLances();

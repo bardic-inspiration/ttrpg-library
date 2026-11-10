@@ -4,7 +4,7 @@ How to write a `feat` entry. The schema is `schemas/feat.schema.json` and
 [Feats](../../../docs/rulesets.md#feats) describes it. This file covers what
 the schema can't: category, names, power, prose, and links.
 
-These rules are for custom feats. An SRD feat is reproduced unmodified
+These rules are for custom feats. An SRD feat is reproduced faithfully
 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
 
 ## Tone and voice

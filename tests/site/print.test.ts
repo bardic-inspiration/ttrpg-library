@@ -102,7 +102,7 @@ describe('URLs', () => {
 describe('pageRules', () => {
   it('sets the chosen size and margin with the short attribution in every page’s footer', () => {
     const css = pageRules(size('a4'), ['Cinder Hound'], false);
-    expect(css).toMatch(/^@page \{ size: 210mm 297mm; margin: 12mm; @bottom-right \{ content: "Includes SRD 5\.2 material, CC-BY-4\.0";/);
+    expect(css).toMatch(/^@page \{ size: 210mm 297mm; margin: 12mm; @bottom-right \{ content: "Includes adapted SRD 5\.2 material, CC-BY-4\.0";/);
     expect(css).toContain(`"${SHORT_ATTRIBUTION}"`);
   });
 

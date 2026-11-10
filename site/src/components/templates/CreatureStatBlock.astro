@@ -52,7 +52,7 @@ const sections = [
 const legendary = s.legendaryActions;
 const legendaryItems = (legendary?.items ?? []).map((action, i) => actionBlock(action, d.legendaryActions.items[i], d));
 const skills = skillsLine(s, d);
-const gear = gearLine(s);
+const gear = gearLine(s, names);
 const core: PropertyLine[] = [
   { label: 'AC', value: acLine(s) },
   { label: 'Initiative', value: initiativeLine(d) },

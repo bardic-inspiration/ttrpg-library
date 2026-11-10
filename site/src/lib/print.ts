@@ -18,7 +18,7 @@ export interface PageSize {
 export const pageSizes: PageSize[] = config.pageSizes;
 
 /** The short SRD attribution (docs/licensing.md#srd-attribution) each printed page carries in its footer. */
-export const SHORT_ATTRIBUTION = 'Includes SRD 5.2 material, CC-BY-4.0';
+export const SHORT_ATTRIBUTION = 'Includes adapted SRD 5.2 material, CC-BY-4.0';
 
 /** The page size with this id, or the configured default for a missing or unknown id. */
 export function resolveSize(id: string | null | undefined, sizes: PageSize[] = pageSizes): PageSize {

@@ -12,7 +12,8 @@ import { validateLibrary } from '../../../scripts/validate/index.ts';
 import RulesPage from '../../../site/src/components/rules/RulesPage.astro';
 import EntryTemplate from '../../../site/src/components/templates/EntryTemplate.astro';
 import { equipmentLines, numberText, propertiesText, variantsTable } from '../../../site/src/lib/equipment.ts';
-import { baseItemSegments, subtitleLine } from '../../../site/src/lib/item.ts';
+import { baseItemPhrase, subtitleLine } from '../../../site/src/lib/item.ts';
+import { toPlain } from '../../../lib/wording/phrase.ts';
 import { loadLibrary, type Entry } from '../../../site/src/lib/library.ts';
 import { baseLookup, rulesContext, rulesData } from '../../../site/src/lib/rules.ts';
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
@@ -162,18 +163,18 @@ describe('base items (docs/rulesets.md#items)', () => {
 
   it.each(SRD)('%s reads "%s" word for word', async (id, words) => {
     const s = (await item(id)).stats as ItemStats;
-    expect(baseItemSegments(s.baseItem!, lookup).map((p) => p.text).join('')).toBe(words);
+    expect(toPlain(baseItemPhrase(s.baseItem!, lookup))).toBe(words);
   });
 
   it('links each qualifier and name, and leaves "Any", "or", and "Except" plain (item/adamantine-armor)', async () => {
     const s = (await item('adamantine-armor')).stats as ItemStats;
-    expect(baseItemSegments(s.baseItem!, lookup)).toEqual([
+    expect(baseItemPhrase(s.baseItem!, lookup)).toEqual([
       { text: 'Any ' },
-      { text: 'Medium', key: 'equipment/medium-armor' },
+      { ref: 'equipment/medium-armor', text: 'Medium' },
       { text: ' or ' },
-      { text: 'Heavy', key: 'equipment/heavy-armor' },
+      { ref: 'equipment/heavy-armor', text: 'Heavy' },
       { text: ', Except ' },
-      { text: 'Hide Armor', key: 'equipment/hide-armor' },
+      { ref: 'equipment/hide-armor', text: 'Hide Armor' },
     ]);
     expect(subtitleLine(s, lookup)).toBe('Armor (Any Medium or Heavy, Except Hide Armor), Uncommon');
   });

@@ -7,7 +7,7 @@ covers what the schemas can't: what makes a species, names, power, prose, and
 links.
 
 These rules are for custom species. An SRD species and its traits are
-reproduced unmodified ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
+reproduced faithfully ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
 
 ## Tone and voice
 

@@ -2,6 +2,7 @@
 // primitives, groups, and rules pages, read at build time. Validation has
 // already run in build:index, so the data here is known good.
 
+import { titleCase } from '../../../lib/wording/grammar.ts';
 import type { RefLabels, RulesetDefinition, RulesetModule } from '../../../rulesets/module.ts';
 import { GroupTree, byName, extensionPage, type PageBlock, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../../lib/rules.ts';
 import type { Links } from '../../../scripts/validate/refs.ts';
@@ -89,11 +90,7 @@ export function rulesContext(
  * A tag or type id as printed in brackets after a name: "area-of-effect" reads "Area of
  * Effect", "condition" reads "Condition".
  */
-export const tagLabel = (id: string): string =>
-  id
-    .split('-')
-    .map((word, i) => (i > 0 && ['and', 'of', 'the'].includes(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)))
-    .join(' ');
+export const tagLabel = (id: string): string => titleCase(id);
 
 /**
  * What a primitives block shows, by name: its type's primitives, and each cross-listed type's

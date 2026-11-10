@@ -201,14 +201,6 @@
     "wis",
     "cha"
   ],
-  "abilityNames": {
-    "str": "Strength",
-    "dex": "Dexterity",
-    "con": "Constitution",
-    "int": "Intelligence",
-    "wis": "Wisdom",
-    "cha": "Charisma"
-  },
   "skills": {
     "acrobatics": "dex",
     "animal-handling": "wis",

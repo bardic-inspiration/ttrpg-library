@@ -1,51 +1,43 @@
-// Text for the dnd-5e-2024 spell card in SRD 5.2 form (docs/rulesets.md#spells, docs/site.md#templates).
-// Spells have no derived values; every number here is authored and only
-// formatted. Optional fields display by presence alone (docs/content-model.md#situational-fields).
+// Text for the dnd-5e-2024 spell card (docs/rulesets.md#spells, docs/site.md#templates), worded
+// through the phrase book (docs/site.md#wording). Spells have no derived values; every number here
+// is authored and only formatted. Optional fields display by presence alone (docs/content-model.md#situational-fields).
 
 import { present, whenPresent } from './display.ts';
 import { formatSpellLevel } from './format.ts';
-import { escapeMarkdown } from './markdown.ts';
+import { concat, countOf, joinWith, markdown, name, pluralOf, say, sayText, text, toMarkdown, toPlain, type Phrase } from './wording.ts';
 import type { SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
-const capitalize = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-const titleCase = (s: string): string => s.split(/[\s-]+/).map(capitalize).join(' ');
-const plural = (n: number, unit: string): string => `${n} ${unit}${n === 1 ? '' : 's'}`;
-
 /**
- * "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at
- * level 0, as SRD 5.2 prints them. The level reads as the gallery's
- * `spell-level` format does.
+ * "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at level 0. The level reads as
+ * the gallery's `spell-level` format does.
  */
 export function levelLine(s: SpellStats): string {
-  const school = capitalize(s.school);
-  const head = s.level === 0 ? `${school} Cantrip` : `${formatSpellLevel(s.level)} ${school}`;
-  return `${head} (${s.classes.map(capitalize).join(', ')})`;
+  const school = name('school', s.school);
+  const head = s.level === 0 ? say('spell.cantrip', { school }) : say('spell.leveled', { level: formatSpellLevel(s.level).replace(/^Level /, ''), school });
+  return toPlain(concat(head, ' (', joinWith(s.classes.map((c) => name('class', c)), ', '), ')'));
 }
 
-const ACTION_UNITS: Record<string, string> = { action: 'Action', 'bonus-action': 'Bonus Action', reaction: 'Reaction' };
-
 /**
- * "Action", "Reaction, which you take when …", "10 minutes", with " or Ritual"
- * when `ritual` is true. Markdown, since `trigger` is a `Text` field.
+ * "Action", "Reaction, which you take when …", "10 minutes", with " or Ritual" when `ritual` is
+ * true. Markdown, since `trigger` is a `Text` field.
  */
 export function castingTimeLine(s: SpellStats): string {
   const { amount, unit, trigger, note } = s.castingTime;
-  const action = ACTION_UNITS[unit];
-  let line = action ? (amount === 1 ? action : `${amount} ${action}s`) : plural(amount, unit);
+  const word = name('castingUnit', unit);
+  const isAction = ['action', 'bonus-action', 'reaction'].includes(unit);
+  let line: Phrase = text(isAction ? (amount === 1 ? word : `${amount} ${pluralOf(word)}`) : countOf(amount, word));
   // A casting time the fields can't express, as printed (docs/content-model.md#srd-and-custom-entries, docs/rulesets.md#spells).
-  line += whenPresent(note, (n) => ` ${escapeMarkdown(n)}`) ?? '';
-  line += whenPresent(trigger, (t) => `, which you take ${t}`) ?? '';
-  return s.ritual ? `${line} or Ritual` : line;
+  if (present(note)) line = concat(line, ' ', note);
+  if (present(trigger)) line = say('spell.trigger', { time: line, trigger: markdown(trigger) });
+  return toMarkdown(s.ritual ? say('spell.ritual', { time: line }) : line);
 }
-
-const RANGE_KINDS: Record<string, string> = { self: 'Self', touch: 'Touch', sight: 'Sight', unlimited: 'Unlimited', special: 'Special' };
 
 /** "60 feet", "1 mile", "Self (15-foot Cone)". */
 export function rangeLine(s: SpellStats): string {
   const { kind, feet, miles, area } = s.range;
-  const distance = whenPresent(miles, (n) => plural(n, 'mile')) ?? `${feet} feet`;
-  const base = kind === 'distance' ? distance : (RANGE_KINDS[kind] ?? capitalize(kind));
-  return base + (whenPresent(area, (a) => ` (${a.size}-foot ${capitalize(a.shape)})`) ?? '');
+  const distance = whenPresent(miles, (n) => countOf(n, 'mile')) ?? `${feet} feet`;
+  const base = kind === 'distance' ? distance : name('rangeKind', kind);
+  return whenPresent(area, (a) => sayText('spell.area', { range: base, size: String(a.size), shape: name('areaShape', a.shape) })) ?? base;
 }
 
 /** "V, S, M (a sliver of ice)". The material reads as printed; `costGp` and `consumed` are data only (docs/rulesets.md#spells). */
@@ -54,21 +46,14 @@ export function componentsLine(s: SpellStats): string {
   const parts = [v && 'V', somatic && 'S'].filter((p): p is string => Boolean(p));
   const material = whenPresent(m, (mat) => `M (${mat.text})`);
   if (material) parts.push(material);
-  return parts.join(', ') || 'None';
+  return parts.join(', ') || sayText('spell.noComponents');
 }
-
-const DURATION_KINDS: Record<string, string> = {
-  instantaneous: 'Instantaneous',
-  'until-dispelled': 'Until dispelled',
-  'until-dispelled-or-triggered': 'Until dispelled or triggered',
-  special: 'Special',
-};
 
 /** "Instantaneous", "1 hour", "Up to 8 hours", "Concentration, up to 1 minute". */
 export function durationLine(s: SpellStats): string {
   const { kind, amount, unit, concentration, upTo } = s.duration;
-  if (kind !== 'timed') return DURATION_KINDS[kind] ?? titleCase(kind);
-  const span = plural(amount ?? 0, unit ?? '');
-  if (concentration) return `Concentration, up to ${span}`;
-  return present(upTo) ? `Up to ${span}` : span;
+  if (kind !== 'timed') return name('durationKind', kind);
+  const span = countOf(amount ?? 0, name('durationUnit', unit ?? ''));
+  if (concentration) return sayText('spell.concentration', { span });
+  return present(upTo) ? sayText('spell.upTo', { span }) : span;
 }

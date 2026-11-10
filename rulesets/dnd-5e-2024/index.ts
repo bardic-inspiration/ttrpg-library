@@ -1,15 +1,18 @@
 // The dnd-5e-2024 ruleset module (docs/rulesets.md#the-ruleset-module).
 
 import type { RulesetModule } from '../module.ts';
+import type { PhraseBook } from '../../lib/wording/book.ts';
 import { checkBackground, checkBackgroundLinks, checkCreature, checkFeat, checkItem, checkSpecies, checkSpell } from './checks.ts';
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
 import { refLabels } from './refs.ts';
 import definition from './ruleset.json' with { type: 'json' };
+import phrasesJson from './phrases.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
 import type { BackgroundStats, CreatureStats, EquipmentStats, FeatStats, ItemStats, SpeciesStats, SpellStats, Tables } from './types.ts';
 
 export const tables = tablesJson as Tables;
+export const phrases = phrasesJson as unknown as PhraseBook;
 
 export const ruleset: RulesetModule = {
   definition,
@@ -41,4 +44,5 @@ export const ruleset: RulesetModule = {
     return [];
   },
   refLabels,
+  phrases,
 };

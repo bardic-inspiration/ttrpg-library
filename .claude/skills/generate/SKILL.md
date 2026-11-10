@@ -45,7 +45,7 @@ line with no comma is a single string.
 
 A brief that asks for SRD content, by name or by description ("ten SRD
 creatures of CR 1 to 3"), is an **SRD request**: it is fulfilled with SRD
-entries reproduced unmodified from SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)). Any other brief, and every
+entries reproduced faithfully from SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)). Any other brief, and every
 gap-fill run, is fulfilled with custom entries.
 
 If a request can't be fulfilled as written (contradictory constraints, a type
@@ -129,7 +129,7 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
 
 ### SRD entries
 
-For an SRD request, transcribe each entry from SRD 5.2 unmodified ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries))
+For an SRD request, transcribe each entry faithfully from SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries))
 instead of following the guideline's tone, naming, and balance targets.
 Transcribe from `docs/SRD_CC_v5.2.pdf`, not from memory, and check each entry
 against it before pushing.
@@ -138,8 +138,11 @@ against it before pushing.
 - `stats` reproduce the SRD stat block: choose inputs so every derived value
   the template renders matches the SRD number. Where no input reaches it, set
   `adjust` or a damage `bonus` to match, with the reason "matches SRD".
-- Rules text is the SRD's text word for word, except that every derived
-  number is written as its token ([Text tokens](../../../docs/rulesets.md#text-tokens)), which renders the same value.
+- Rules text is transcribed from the SRD's text, keeping every rule and
+  sentence, with every derived number written as its token ([Text tokens](../../../docs/rulesets.md#text-tokens)),
+  which renders the same value. The house style may adapt form, and a print
+  cross-reference may become a link, but nothing that changes how the rule
+  plays ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)).
 - Fill every structured field the type defines from the SRD too (an item's
   `charges` and `spells`), and still keep every sentence of the rules text,
   even where it states the same thing ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)). Don't move a paragraph out of

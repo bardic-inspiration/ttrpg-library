@@ -1,0 +1,241 @@
+{
+  "$comment": "The dnd-5e-2024 phrase book (docs/site.md#wording): fixed sentences with {slot} holes, the display name of each enum value, and irregular plurals and articles.",
+  "sentences": {
+    "condition.intro": "While you have the {name} condition, you experience the following {effects}.",
+    "feat.heading": "{category} Feat",
+    "feat.headingWithPrerequisite": "{category} Feat (Prerequisite: {prerequisite})",
+    "feat.level": "Level {level}+",
+    "feat.benefits": "You gain the following benefits.",
+    "feat.repeatable": "Repeatable",
+    "background.feat": "{feat} (see “Feats”)",
+    "background.chooseTool": "Choose one kind of {tool}",
+    "species.intro": "As {species}, you have these special traits.",
+    "species.sizeChoice": "{sizes}, chosen when you select this species",
+    "species.speed": "{feet} feet",
+    "startingEquipment.choose": "Choose {letters}: {options}",
+    "startingEquipment.option": "({letter}) {items}",
+    "coins.gp": "{amount} GP",
+    "item.rarityVaries": "Rarity Varies",
+    "item.attunement": "Requires Attunement",
+    "item.attunementBy": "Requires Attunement {requirement}",
+    "item.any": "Any {targets}",
+    "item.except": "{base}, Except {items}",
+    "item.charges": "{max}; regains {recharge}",
+    "item.saveDc": "save DC {dc}",
+    "item.toHit": "{bonus} to hit",
+    "spell.cantrip": "{school} Cantrip",
+    "spell.leveled": "Level {level} {school}",
+    "spell.trigger": "{time}, which you take {trigger}",
+    "spell.ritual": "{time} or Ritual",
+    "spell.area": "{range} ({size}-foot {shape})",
+    "spell.concentration": "Concentration, up to {span}",
+    "spell.upTo": "Up to {span}",
+    "spell.noComponents": "None",
+    "creature.swarm": "Swarm of {size} {types}",
+    "creature.understands": "understands {languages} but can't speak",
+    "creature.understandsThem": "understands {languages} but can't speak them",
+    "creature.understandsIt": "understands {languages} but can't speak it",
+    "creature.telepathy": "telepathy {feet} ft.",
+    "creature.passivePerception": "Passive Perception {score}",
+    "creature.xp": "XP {xp}",
+    "creature.xpInLair": "XP {xp}, or {lair} in lair",
+    "creature.saveLabel": "{ability} Saving Throw:",
+    "creature.reach": "reach {feet} ft.",
+    "creature.range": "range {range} ft.",
+    "creature.damage": "{amount} {type} damage",
+    "creature.damageNote": "{amount} damage {note}",
+    "creature.rider": " plus {damage}",
+    "creature.conditionalRider": ", plus {damage} {condition}",
+    "creature.legendaryUses": "Legendary Action Uses: {uses}{lair}.",
+    "creature.usesInLair": " ({uses} in Lair)",
+    "creature.spellcasting": "The {name} casts one of the following spells, {components}using {ability} as the spellcasting ability{numbers}:",
+    "creature.noComponents": "requiring no {components} components and ",
+    "creature.spellSaveDc": "spell save DC {dc}",
+    "creature.spellAttack": "{bonus} to hit with spell attacks",
+    "creature.perDay": "{n}/Day",
+    "creature.perDayEach": "{n}/Day Each",
+    "equipment.dexArmor": "{ac} + Dex modifier",
+    "equipment.dexArmorMax": "{ac} + Dex modifier (max {max})",
+    "creature.typeLine": "{sizes} {kind}, {alignment}"
+  },
+  "vocabulary": {
+    "ability": {
+      "str": "Strength",
+      "dex": "Dexterity",
+      "con": "Constitution",
+      "int": "Intelligence",
+      "wis": "Wisdom",
+      "cha": "Charisma"
+    },
+    "skill": {
+      "acrobatics": "Acrobatics",
+      "animal-handling": "Animal Handling",
+      "arcana": "Arcana",
+      "athletics": "Athletics",
+      "deception": "Deception",
+      "history": "History",
+      "insight": "Insight",
+      "intimidation": "Intimidation",
+      "investigation": "Investigation",
+      "medicine": "Medicine",
+      "nature": "Nature",
+      "perception": "Perception",
+      "performance": "Performance",
+      "persuasion": "Persuasion",
+      "religion": "Religion",
+      "sleight-of-hand": "Sleight of Hand",
+      "stealth": "Stealth",
+      "survival": "Survival"
+    },
+    "size": {
+      "tiny": "Tiny",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "huge": "Huge",
+      "gargantuan": "Gargantuan"
+    },
+    "creatureType": {
+      "aberration": "Aberration",
+      "beast": "Beast",
+      "celestial": "Celestial",
+      "construct": "Construct",
+      "dragon": "Dragon",
+      "elemental": "Elemental",
+      "fey": "Fey",
+      "fiend": "Fiend",
+      "giant": "Giant",
+      "humanoid": "Humanoid",
+      "monstrosity": "Monstrosity",
+      "ooze": "Ooze",
+      "plant": "Plant",
+      "undead": "Undead"
+    },
+    "damageType": {
+      "acid": "Acid",
+      "bludgeoning": "Bludgeoning",
+      "cold": "Cold",
+      "fire": "Fire",
+      "force": "Force",
+      "lightning": "Lightning",
+      "necrotic": "Necrotic",
+      "piercing": "Piercing",
+      "poison": "Poison",
+      "psychic": "Psychic",
+      "radiant": "Radiant",
+      "slashing": "Slashing",
+      "thunder": "Thunder"
+    },
+    "school": {
+      "abjuration": "Abjuration",
+      "conjuration": "Conjuration",
+      "divination": "Divination",
+      "enchantment": "Enchantment",
+      "evocation": "Evocation",
+      "illusion": "Illusion",
+      "necromancy": "Necromancy",
+      "transmutation": "Transmutation"
+    },
+    "class": {
+      "bard": "Bard",
+      "cleric": "Cleric",
+      "druid": "Druid",
+      "paladin": "Paladin",
+      "ranger": "Ranger",
+      "sorcerer": "Sorcerer",
+      "warlock": "Warlock",
+      "wizard": "Wizard"
+    },
+    "itemCategory": {
+      "armor": "Armor",
+      "potion": "Potion",
+      "ring": "Ring",
+      "rod": "Rod",
+      "scroll": "Scroll",
+      "staff": "Staff",
+      "wand": "Wand",
+      "weapon": "Weapon",
+      "wondrous-item": "Wondrous Item"
+    },
+    "rarity": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare",
+      "very-rare": "Very Rare",
+      "legendary": "Legendary",
+      "artifact": "Artifact",
+      "varies": "Varies"
+    },
+    "featCategory": {
+      "origin": "Origin",
+      "general": "General",
+      "fighting-style": "Fighting Style",
+      "epic-boon": "Epic Boon"
+    },
+    "areaShape": {
+      "cone": "Cone",
+      "cube": "Cube",
+      "cylinder": "Cylinder",
+      "emanation": "Emanation",
+      "line": "Line",
+      "sphere": "Sphere"
+    },
+    "castingUnit": {
+      "action": "Action",
+      "bonus-action": "Bonus Action",
+      "reaction": "Reaction",
+      "minute": "minute",
+      "hour": "hour"
+    },
+    "durationUnit": {
+      "round": "round",
+      "minute": "minute",
+      "hour": "hour",
+      "day": "day"
+    },
+    "rangeKind": {
+      "self": "Self",
+      "touch": "Touch",
+      "sight": "Sight",
+      "unlimited": "Unlimited",
+      "special": "Special"
+    },
+    "durationKind": {
+      "instantaneous": "Instantaneous",
+      "until-dispelled": "Until dispelled",
+      "until-dispelled-or-triggered": "Until dispelled or triggered",
+      "special": "Special"
+    },
+    "speedMode": {
+      "burrow": "Burrow",
+      "climb": "Climb",
+      "fly": "Fly",
+      "swim": "Swim"
+    },
+    "sense": {
+      "blindsight": "Blindsight",
+      "darkvision": "Darkvision",
+      "tremorsense": "Tremorsense",
+      "truesight": "Truesight"
+    },
+    "recharge": {
+      "4-6": "Recharge 4–6",
+      "5-6": "Recharge 5–6",
+      "6": "Recharge 6",
+      "short-or-long-rest": "Recharge after a Short or Long Rest",
+      "long-rest": "Recharge after a Long Rest"
+    },
+    "attackKind": {
+      "melee-attack": "Melee Attack Roll:",
+      "ranged-attack": "Ranged Attack Roll:",
+      "melee-or-ranged-attack": "Melee or Ranged Attack Roll:"
+    }
+  },
+  "plurals": {
+    "undead": "undead",
+    "fey": "fey"
+  },
+  "articles": {
+    "hour": "an"
+  }
+}

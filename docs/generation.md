@@ -106,7 +106,7 @@ bucket, or an SRD import stage. Its steps:
 3. Write entries, with any new dependencies the brief implies. Prefer refs to
    library entries over plain text. Write inputs only, use tokens for derived
    values in prose, and use `adjust` only for a deliberate deviation, explained
-   in the PR body. For an SRD request, transcribe the SRD entries unmodified
+   in the PR body. For an SRD request, transcribe the SRD entries faithfully
    instead.
 4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
    `meta.source.issues` (or `meta.source.gapFill`), plus `meta.source.srd: true`

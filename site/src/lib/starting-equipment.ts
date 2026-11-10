@@ -1,34 +1,33 @@
-// Starting equipment as SRD 5.2 words it (docs/rulesets.md#starting-equipment), for classes and
-// backgrounds: lettered options, each a list of items and coins. The result is markdown, with each
-// ref a `{ref:…}` token, so it renders as the target's name linked to its rules anchor or page.
+// Starting equipment (docs/rulesets.md#starting-equipment), for classes and backgrounds: lettered
+// options, each a list of items and coins, worded through the phrase book. The result is markdown,
+// with each ref a `{ref:…}` token, so it renders as the target's name linked to its rules anchor or page.
 
 import type { StartingItem, StartingOption } from '../../../rulesets/dnd-5e-2024/types.ts';
-import { escapeMarkdown } from './markdown.ts';
+import { concat, joinWith, link, list, markdown, pluralLink, say, sayMarkdown, toMarkdown, withNote, type Phrase } from './wording.ts';
 
 /** One item: "Robe", "Parchment (10 sheets)", "2 Daggers", or text as written. */
-export function startingItem(item: StartingItem): string {
-  if (typeof item === 'string') return item;
-  const name = item.count === undefined ? `{ref:${item.ref}}` : `${item.count} {ref:${item.ref}}s`;
-  return item.note === undefined ? name : `${name} (${escapeMarkdown(item.note)})`;
+export function startingItem(item: StartingItem, names: Map<string, string> = new Map()): Phrase {
+  if (typeof item === 'string') return markdown(item);
+  const counted = item.count === undefined ? link(item.ref) : concat(`${item.count} `, pluralLink(item.ref, names));
+  return withNote(counted, item.note);
 }
 
+/** The option letters: "A or B", "A, B, or C". */
+const lettersFor = (n: number): string[] => Array.from({ length: n }, (_, i) => String.fromCharCode(65 + i));
+
 /**
- * The options, lettered: "Choose A or B: (A) Greataxe, 4 Handaxes, and 15 GP; or (B) 75 GP".
- * `and` joins an option's last part with "and", as the class chapter prints it; the background
- * chapter doesn't ("Robe, 8 GP").
+ * The options, lettered: "Choose A or B: (A) Greataxe, 4 Handaxes, Explorer's Pack, and 15 GP; or (B) 75 GP",
+ * every option's parts joined as an English list.
  */
-export function startingEquipment(options: StartingOption[], { and }: { and: boolean }): string {
-  const letters = options.map((_, i) => String.fromCharCode(65 + i));
-  const choose = letters.length === 2 ? letters.join(' or ') : `${letters.slice(0, -1).join(', ')}, or ${letters.at(-1)}`;
-  const parts = options.map((option, i) => {
-    const words = [...(option.items ?? []).map(startingItem), ...(option.gp === undefined ? [] : [`${option.gp} GP`])];
-    const joined =
-      and && words.length > 1
-        ? words.length === 2
-          ? words.join(' and ')
-          : `${words.slice(0, -1).join(', ')}, and ${words.at(-1)}`
-        : words.join(', ');
-    return `(${letters[i]}) ${joined}`;
-  });
-  return `Choose ${choose}: ${parts.slice(0, -1).join('; ')}; or ${parts.at(-1)}`;
+export function startingEquipment(options: StartingOption[], names: Map<string, string> = new Map()): string {
+  const letters = lettersFor(options.length);
+  const parts = options.map((option, i) =>
+    say('startingEquipment.option', {
+      letter: letters[i]!,
+      items: list([...(option.items ?? []).map((item) => startingItem(item, names)), ...(option.gp === undefined ? [] : [say('coins.gp', { amount: String(option.gp) })])], 'and'),
+    }),
+  );
+  return sayMarkdown('startingEquipment.choose', { letters: list(letters, 'or'), options: concat(joinWith(parts.slice(0, -1), '; '), parts.length > 1 ? '; or ' : '', parts.at(-1)!) });
 }
+
+export { toMarkdown };

@@ -3,6 +3,7 @@
 // derived value is computed in exactly one place.
 
 import type { RulesData } from '../lib/rules.ts';
+import type { PhraseBook } from '../lib/wording/book.ts';
 
 export interface Issue {
   level: 'error' | 'warning';
@@ -47,6 +48,8 @@ export interface RulesetModule {
    * resolved target's type and stats, or undefined for one whose stats failed their schema. Optional.
    */
   checkLinks?(type: string, stats: unknown, target: (key: string) => { type: string; stats: unknown } | undefined): Issue[];
+  /** The ruleset's phrase book (docs/site.md#wording): its fixed sentences and the display names of its enum values. */
+  phrases: PhraseBook;
   /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (docs/content-model.md#references). */
   refLabels(type: string, path: string): RefLabels;
 }

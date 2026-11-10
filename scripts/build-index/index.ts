@@ -7,7 +7,7 @@ import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promi
 import { dirname, join } from 'node:path';
 import { SITE_BASE } from '../../lib/site.ts';
 import { validateLibrary, type ValidationError, type ValidComponent, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
-import { objectRefs, REF_TOKEN, type Link } from '../validate/refs.ts';
+import { objectRefs, parseRefToken, REF_TOKEN, type Link } from '../validate/refs.ts';
 import { PROJECT_ROOT, RULESETS_ROOT } from '../validate/schema.ts';
 import { ruleNames } from '../../lib/rules.ts';
 import { plainText } from '../validate/text.ts';
@@ -19,6 +19,8 @@ export interface Facet {
   label: string;
   kind: 'range' | 'enum';
   format?: string;
+  /** A phrase book vocabulary whose display names the values read with (docs/site.md#wording). */
+  vocabulary?: string;
   order?: string[];
 }
 
@@ -122,7 +124,7 @@ const TOKEN = /\{[^{}]*\}/g;
 /**
  * The docs/site.md#index-build `search` text: action, trait, and spell names (a ref names its
  * target), then `description` and the rules text, with markup stripped and
- * each `{ref:…}` link read as its target's name.
+ * each `{ref:…}` link read as its display text or its target's name.
  */
 function searchText(item: Pick<ValidComponent, 'entry' | 'texts'>, schemas: SchemaSet, nameOf: Map<string, string>): string {
   const refNames = refOrTextValues(item.entry.stats, schemas).flatMap((value) => {
@@ -133,7 +135,14 @@ function searchText(item: Pick<ValidComponent, 'entry' | 'texts'>, schemas: Sche
   });
   // A {ref:…} link reads as its target's name; other tokens are dropped.
   const texts = item.texts.map(({ text }) =>
-    plainText(text.replace(REF_TOKEN, (_, key: string) => ` ${nameOf.get(key) ?? ''} `).replace(TOKEN, ' ')),
+    plainText(
+      text
+        .replace(REF_TOKEN, (_, inside: string) => {
+          const parsed = parseRefToken(inside);
+          return ` ${parsed?.text ?? (parsed ? nameOf.get(parsed.key) : undefined) ?? ''} `;
+        })
+        .replace(TOKEN, ' '),
+    ),
   );
   return [...names(item.entry.stats), ...refNames, ...texts].join(' ').replace(/\s+/g, ' ').trim();
 }

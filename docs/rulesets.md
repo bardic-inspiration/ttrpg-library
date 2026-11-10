@@ -43,6 +43,7 @@ adding a ruleset is adding a folder:
 |---|---|
 | `ruleset.json` | ID, label, SRD version, attribution key, list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
 | `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
+| `phrases.json` | The phrase book: the fixed sentences templates fill, the display name of each enum value, and irregular plurals and articles ([Wording](site.md#wording)) |
 | `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`) |
 | `tokens.ts` | Text tokens that render derived values inside prose |
 | `checks.ts` | Consistency checks a schema can't express |
@@ -86,7 +87,7 @@ from `types`, with whether it takes extensions:
   primitive at `rules/<type>/<id>.json`, holding `type`, `id`, `name`, and
   `stats` (`schemas/primitive.schema.json`). The path must match, and a
   primitive has no `summary`, `meta`, `tags`, `description`, or `image`: it
-  is an SRD rule, reproduced unmodified.
+  is an SRD rule, reproduced faithfully ([SRD and custom entries](content-model.md#srd-and-custom-entries)).
 - **Extensions** are custom rules: ordinary entries under
   `content/<ruleset>/<type>/`, whose `stats` validate against the same type
   schema as a primitive's. Only a type that takes extensions may have them,
@@ -141,7 +142,7 @@ rules pages in order. Each has an `id`, its URL segment, a `title`, and
 
 | Block | Shows |
 |---|---|
-| `{ "kind": "prose", "title", "text", "sections" }` | SRD chapter text that isn't a primitive, word for word, with nested sections; text that opens a page has no title |
+| `{ "kind": "prose", "title", "text", "sections" }` | SRD chapter text that isn't a primitive, transcribed faithfully, with nested sections; text that opens a page has no title |
 | `{ "kind": "primitives", "type", "crossList" }` | Every primitive of a type that has no groups, by name; with `crossList`, other rules types' primitives sit among them as "Name [Type]", linked to their own page, without being placed here |
 | `{ "kind": "group", "group": "<type>/<id>" }` | A group's tree: its section, then its members (a leaf) or the groups nested in it, with union groups last |
 
@@ -297,7 +298,7 @@ SRD 5.2:
   charges" for a variable cost) and its authored DC or attack bonus.
 
 **Base items.** `baseItem` is links to equipment, and the template words
-them, so every base item the SRD prints reads word for word:
+them, and every base item the SRD prints reads as printed:
 
 - `oneOf` lists items, printed as an English list joined by "or": "Glaive,
   Greatsword, Longsword, or Scimitar", or "Shield" alone.
@@ -492,15 +493,15 @@ and `note`, or text for anything else. The template letters the options and
 words the list (`site/src/lib/starting-equipment.ts`):
 
 - "Choose A or B: (A) …; or (B) 50 GP", and "Choose A, B, or C" with three.
-- A counted item prints its count first with an "s" added, "2 Daggers"; a
-  note prints in parentheses, "Parchment (10 sheets)"; coins print last, "8
-  GP".
-- A background's options join their parts with commas ("Robe, 8 GP"); a
-  class's join the last with "and" ("Explorer’s Pack, and 15 GP"), as the
-  SRD's two chapters print them.
-- A variant isn't a link target, so "20 Arrows" is text, and so is equipment
-  whose SRD name reads differently in a list: "Traveler's Clothes" is the
-  primitive "Clothes, Traveler's".
+- A counted item prints its count first, then its target's name in the
+  plural as the link's text, "2 Daggers"; a note prints in parentheses,
+  "Parchment (10 sheets)"; coins print last, "8 GP".
+- Each option's parts are an English list in the house style, for classes and
+  backgrounds alike: "Robe, and 8 GP", "Explorer’s Pack, and 15 GP"
+  ([Wording](site.md#wording)).
+- A variant isn't a link target, so "20 Arrows" is text. Equipment whose SRD
+  name reads differently in a list is a token with display text in a text
+  item: `{ref:equipment/clothes-travelers Traveler's Clothes}`.
 
 ### Embedded stat blocks
 
@@ -576,7 +577,7 @@ Balance isn't checked by CI; it's judged in review
 
 | To add or change | Touch |
 |---|---|
-| A content type | In `rulesets/<ruleset>/`: a schema, a `derive` function if it has formulas, checks if needed, a guideline, and the type in `ruleset.json`. Plus a registry entry and the request form's dropdown; a template only if the generic layout doesn't fit |
+| A content type | In `rulesets/<ruleset>/`: a schema, its sentences and vocabulary in `phrases.json`, a `derive` function if it has formulas, checks if needed, a guideline, and the type in `ruleset.json`. Plus a registry entry and the request form's dropdown; a template only if the generic layout doesn't fit |
 | A component type | In `rulesets/<ruleset>/`: a schema, the type under `components` in `ruleset.json` with its parent types, and a typed ref to it in each parent's schema ([Components](content-model.md#components)) |
 | A rules type | In `rulesets/<ruleset>/`: a schema, the type under `rules` in `ruleset.json`, its primitives under `rules/<type>/`, groups if it has them, and its place in `rules/pages.json`. A type that takes extensions also gets a registry entry and a guideline |
 | A ruleset | A new `rulesets/<ruleset>/` folder, registry entries, an attribution statement, and a licensing review ([licensing.md](licensing.md#new-rulesets)) |

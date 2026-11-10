@@ -33,10 +33,12 @@ interface RefToken {
   raw: string;
   key: string;
   id: string;
+  /** Display text, `{ref:<key> <text>}`, read in place of the target's name. */
+  display?: string;
 }
 
-/** A ref's name, or its id when the name isn't known (validation makes that rare). */
-const refName = (token: RefToken): string => current?.names.get(token.key) ?? token.id;
+/** A ref's display text or name, or its id when the name isn't known (validation makes that rare). */
+const refName = (token: RefToken): string => token.display ?? current?.names.get(token.key) ?? token.id;
 
 const refExtension: TokenizerAndRendererExtension = {
   name: 'ref',
@@ -46,9 +48,10 @@ const refExtension: TokenizerAndRendererExtension = {
     return i === -1 ? undefined : i;
   },
   tokenizer(src: string) {
-    const match = /^\{ref:([a-z][a-z0-9-]*)\/([a-z0-9]+(?:-[a-z0-9]+)*)\}/.exec(src);
+    const match = /^\{ref:([a-z][a-z0-9-]*)\/([a-z0-9]+(?:-[a-z0-9]+)*)(?: ([^{}\s][^{}]*[^{}\s]|[^{}\s]))?\}/.exec(src);
     if (!match) return undefined;
-    return { type: 'ref', raw: match[0], key: `${match[1]}/${match[2]}`, id: match[2] ?? '' } satisfies RefToken;
+    const display = match[3] === undefined ? {} : { display: match[3] };
+    return { type: 'ref', raw: match[0], key: `${match[1]}/${match[2]}`, id: match[2] ?? '', ...display } satisfies RefToken;
   },
   renderer(token) {
     const ref = token as unknown as RefToken;
@@ -109,7 +112,7 @@ const marked = new Marked({
  * reads as written: every character markdown could treat as syntax is
  * backslash-escaped.
  */
-export const escapeMarkdown = (text: string): string => text.replace(/[\\`*_[\]<>#~|!&]/g, (c) => `\\${c}`);
+export { escapeMarkdown } from '../../../lib/wording/phrase.ts';
 
 /** Renders with `refs` as the current link context, restoring the previous one after. */
 function withRefs(refs: TextRefs | undefined, render: () => string): string {

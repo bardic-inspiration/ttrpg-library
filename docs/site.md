@@ -34,18 +34,20 @@ Per type:
 
 A facet's `kind` is `range` (numbers) or `enum` (strings, string arrays,
 booleans); an omitted optional flag reads as `false`. Ordered enums (rarity,
-size) declare `"order": [...]`, so sorting is semantic. `format` is an optional
-display formatter:
+size) declare `"order": [...]`, so sorting is semantic. A facet's
+`vocabulary` names a phrase book vocabulary ([Wording](#wording)), and each
+value reads by its display name there, the same name its page shows:
+`"vocabulary": "skill"` reads `sleight-of-hand` as "Sleight of Hand", and a
+`rarity` facet also shows as a badge on cards. Otherwise `format` is an
+optional display formatter:
 
 - `cr` reads fractions ("1/8");
 - `spell-level` reads 0 as "Cantrip" and any other level as "Level 3";
-- `rarity` reads title case as SRD 5.2 prints it ("Very Rare");
-- `title` reads a slug in title case with hyphens as spaces ("Wondrous Item"),
-  matching the detail templates;
-- `ability` reads an ability key by its full name ("Intelligence").
+- `title` reads a slug with no vocabulary, such as an equipment group's id,
+  in title case ("Hand Tools").
 
-Without a `format`, a value reads as stored, which keeps tag values and free
-text as written.
+Without either, a value reads as stored, which keeps tag values and free text
+as written.
 
 ### Index build
 
@@ -325,9 +327,46 @@ indexes.
   table's modifiers and saves come from the derived values.
 - Template tests render components with Astro's container API.
 
+### Wording
+
+Every string a reader sees is **stored text**, written in an entry (rules text
+and lines kept as printed), or **composed text**, built by a template from
+structured fields: a subtitle, a labeled line, an intro sentence, a list of
+links. Stored text is rendered, never rewritten. Composed text is built only
+through the wording layer, for SRD and custom entries alike, so both read in
+one house style ([SRD and custom entries](content-model.md#srd-and-custom-entries)).
+
+- **`lib/wording/`** is ruleset-independent English, shared by the site, the
+  exporters, and the build:
+  - a **phrase** is composed text as a list of parts: plain text, markdown
+    already written (a `Text` field placed in a line), or a link by key with
+    optional display text. `toMarkdown` renders it for templates, links as
+    `{ref:…}` tokens; `toPlain` reads it for search and exports.
+  - **grammar:** one `titleCase` (minor words lowercase but first),
+    `capitalize`, `label` (a key as a sentence-case label), `list` ("A, B, and
+    C", or "or"), `plural` and `counted` ("y" to "ies", else "s", with the
+    phrase book's irregular ones), and `article` ("a" or "an" by first letter,
+    with exceptions).
+- **`rulesets/<ruleset>/phrases.json`**, the phrase book, holds the ruleset's
+  wording as data: each fixed sentence by key with `{slot}` holes
+  (`"condition.intro": "While you have the {name} condition, you experience
+  the following {effects}."`), the display name of each enum value by
+  vocabulary (`ability`, `skill`, `creatureType`, `rarity`, …), and its
+  irregular plurals and articles. `sentence` fails when a slot is missing or
+  unused, and a vocabulary lookup fails on an unknown value, so the book and
+  its callers can't drift. The ruleset module exports it as `phrases`.
+- **Composers** (`site/src/lib/<type>.ts`, through `site/src/lib/wording.ts`)
+  only compose: they pick fields, fill sentences, and look up names.
+  `tests/wording-layer.test.ts` fails when a module in `site/src/lib/` or a
+  template or rules component defines its own casing, list, plural, or
+  article helper, or holds a fixed sentence (four lowercase words in a row
+  in a string). Static page copy, such as the About page, is written, not
+  composed, and isn't checked.
+
 ## Where the rules live
 
 - `config/types.json`: the registry.
+- `lib/wording/` and `rulesets/<ruleset>/phrases.json`: the wording layer.
 - `scripts/build-index/`: the index builder.
 - `site/src/pages/`: routes. `site/src/components/`: the gallery, detail,
   print, and template components. `site/src/lib/`: their logic, including
@@ -339,5 +378,7 @@ indexes.
 |---|---|
 | A filter or sort on a tag | Nothing |
 | A filter or sort on a `stats` field | A facet in the registry |
-| A template for a type | A component in `site/src/components/templates/`, named in the registry |
+| A template for a type | A component in `site/src/components/templates/`, named in the registry, and a composer in `site/src/lib/` |
+| Wording for a type | Its sentences and vocabulary in `rulesets/<ruleset>/phrases.json` |
+| A filter that reads display names | `vocabulary` on its facet in the registry |
 | Data storage outside the repo | `scripts/build-index/`; the site keeps reading the same `library.json` shape |
