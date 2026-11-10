@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "orc-adrenaline-rush",
+  "name": "Adrenaline Rush",
+  "stats": {
+    "text": "You can take the {ref:glossary/dash} action as a {ref:glossary/bonus-action}. When you do so, you gain a number of {ref:glossary/temporary-hit-points} equal to your Proficiency Bonus.\n\nYou can use this trait a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Short or {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

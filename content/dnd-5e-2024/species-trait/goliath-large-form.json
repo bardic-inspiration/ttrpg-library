@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "goliath-large-form",
+  "name": "Large Form",
+  "stats": {
+    "text": "Starting at character level 5, you can change your size to Large as a {ref:glossary/bonus-action} if you're in a big enough space. This transformation lasts for 10 minutes or until you end it (no action required). For that duration, you have {ref:glossary/advantage} on Strength checks, and your Speed increases by 10 feet. Once you use this trait, you can't use it again until you finish a {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

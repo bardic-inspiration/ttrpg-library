@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "goliath-powerful-build",
+  "name": "Powerful Build",
+  "stats": {
+    "text": "You have {ref:glossary/advantage} on any ability check you make to end the {ref:condition/grappled} condition. You also count as one size larger when determining your carrying capacity."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

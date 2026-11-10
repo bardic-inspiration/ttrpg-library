@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "halfling-luck",
+  "name": "Luck",
+  "stats": {
+    "text": "When you roll a 1 on the d20 of a {ref:glossary/d20-test}, you can reroll the die, and you must use the new roll."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "goliath",
+  "name": "Goliath",
+  "summary": "Tall humanoids descended from giants, with a giant boon, Large Form, and Powerful Build.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "medium",
+        "height": "about 7–8 feet tall"
+      }
+    ],
+    "speed": 35,
+    "traits": [
+      {
+        "ref": "species-trait/goliath-giant-ancestry"
+      },
+      {
+        "ref": "species-trait/goliath-large-form"
+      },
+      {
+        "ref": "species-trait/goliath-powerful-build"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "human",
+  "name": "Human",
+  "summary": "Versatile humanoids with Heroic Inspiration, an extra skill, and an Origin feat.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "medium",
+        "height": "about 4–7 feet tall"
+      },
+      {
+        "size": "small",
+        "height": "about 2–4 feet tall"
+      }
+    ],
+    "speed": 30,
+    "traits": [
+      {
+        "ref": "species-trait/human-resourceful"
+      },
+      {
+        "ref": "species-trait/human-skillful"
+      },
+      {
+        "ref": "species-trait/human-versatile"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
