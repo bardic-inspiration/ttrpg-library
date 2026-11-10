@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species",
+  "id": "gnome",
+  "name": "Gnome",
+  "summary": "Small humanoids with Darkvision, cunning against magic, and Forest or Rock Gnome magic.",
+  "stats": {
+    "creatureType": "humanoid",
+    "sizes": [
+      {
+        "size": "small",
+        "height": "about 3–4 feet tall"
+      }
+    ],
+    "speed": 30,
+    "traits": [
+      {
+        "ref": "species-trait/gnome-darkvision"
+      },
+      {
+        "ref": "species-trait/gnome-gnomish-cunning"
+      },
+      {
+        "ref": "species-trait/gnome-gnomish-lineage"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

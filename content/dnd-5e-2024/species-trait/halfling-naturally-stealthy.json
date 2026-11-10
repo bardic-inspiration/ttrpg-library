@@ -1,0 +1,19 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "species-trait",
+  "id": "halfling-naturally-stealthy",
+  "name": "Naturally Stealthy",
+  "stats": {
+    "text": "You can take the {ref:glossary/hide} action even when you are obscured only by a creature that is at least one size larger than you."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
