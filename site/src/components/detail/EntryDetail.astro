@@ -1,7 +1,7 @@
 ---
 // The body of a detail page (docs/site.md#detail-page): art when the entry has it, name,
 // type, and summary; the type template; the description as lore; forward refs and
-// back-refs; tag chips into the filtered type gallery; and provenance. The
+// back-refs; tag chips into the Library, filtered; and provenance. The
 // page passes its export controls (an island) in the `export` slot.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
@@ -10,6 +10,8 @@ import { provenance, tagChips } from '../../lib/detail';
 import { renderMarkdown } from '../../lib/markdown';
 import { present } from '../../lib/display';
 import { url } from '../../lib/url';
+import { libraryQuery } from '../../lib/gallery/library-url';
+import type { Registry } from '../../lib/gallery/config';
 import registry from '../../../../config/types.json';
 import ArtFrame from '../templates/parts/ArtFrame.astro';
 import EntryTemplate from '../templates/EntryTemplate.astro';
@@ -47,7 +49,7 @@ const source = provenance(entry);
     )}
     <div class="entry-detail__intro">
       <h1>{entry.name}</h1>
-      <p><a class="entry-detail__type" href={url(`${entry.ruleset}/${entry.type}/`)}>{typeLabel}</a></p>
+      <p><a class="entry-detail__type" href={`${url()}${libraryQuery(registry as unknown as Registry, entry.ruleset, entry.type)}`}>{typeLabel}</a></p>
       <p class="entry-detail__summary">{entry.summary}</p>
       <slot name="export" />
     </div>

@@ -35,18 +35,7 @@ selection). Publishing homebrew for others is out of scope for v2.
 
 ## Design
 
-### Navigation
-
-The top bar is **Library | Rulesets | About | Contribute**.
-
-- **Library** is one gallery of all content. Its filters do the navigating,
-  so it replaces the per-ruleset and per-type galleries. Their old URLs
-  redirect to the Library with the matching filter set (P9).
-- **Rulesets** lists each ruleset's rules pages (the Glossary, Conditions,
-  and one page per equipment category) and its Extensions page
-  ([Rules pages](../../docs/site.md#rules-pages)).
-- **About** is v1's About page.
-- **Contribute** links to the repository for now.
+### Palette
 
 **One palette for the whole site.** v1's light and dark themes and the
 theme switch (System, Light, Dark) are removed. The palette itself is the
@@ -54,10 +43,6 @@ style redesign's (#114).
 
 ### Library
 
-- **Search** sits on top of the filter menu and works as in v1.
-- **The filter menu** is a sidebar on desktop. On phones and tablets it is a
-  collapsible container, closed by default, so results show on the first
-  screen.
 - **Cards** keep v1's content and their checkbox for multi-select.
 - **Export** is one Download button and one Print button. Each acts on the
   selection, or on the filtered results when nothing is selected, and opens
@@ -102,8 +87,6 @@ without splitting an action or trait.
 
 ## Done when
 
-- The top bar reads Library, Rulesets, About, Contribute, and the old gallery
-  routes redirect to the Library with their filter.
 - Rules pages and page types render as accordion sections with a table of
   contents, and an anchor link opens its section.
 - Print has no per-page mode.

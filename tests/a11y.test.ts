@@ -12,7 +12,7 @@ const record = (type: string, id: string, facets: Record<string, unknown>) => ({
 });
 
 describe('a11yPages (docs/styling.md#accessibility)', () => {
-  it('checks home, a filtered type gallery, one detail page per type with entries, and the print view', () => {
+  it('checks the Library, the Rulesets page, the Library filtered to a type, one detail page per type with entries, and the print view', () => {
     const pages = a11yPages([
       record('creature', 'cinder-hound', { 'stats.cr': 2, 'stats.size': ['medium'] }),
       record('creature', 'ash-wolf', { 'stats.cr': 1 }),
@@ -20,7 +20,8 @@ describe('a11yPages (docs/styling.md#accessibility)', () => {
     ]);
     expect(pages.map((p) => p.path)).toEqual([
       '',
-      'dnd-5e-2024/creature/?f.stats.cr=2..2',
+      'rulesets/',
+      '?f.type=creature&f.stats.cr=2..2',
       'dnd-5e-2024/creature/cinder-hound/',
       'dnd-5e-2024/spell/frost-lance/',
       'print/?ids=creature/cinder-hound,spell/frost-lance',
@@ -29,9 +30,7 @@ describe('a11yPages (docs/styling.md#accessibility)', () => {
   });
 
   it('filters by an enum facet value when the first facet is one', () => {
-    expect(a11yPages([record('item', 'wand', { 'stats.rarity': 'very-rare' })])[1]!.path).toBe(
-      'dnd-5e-2024/item/?f.stats.rarity=very-rare',
-    );
+    expect(a11yPages([record('item', 'wand', { 'stats.rarity': 'very-rare' })])[2]!.path).toBe('?f.type=item&f.stats.rarity=very-rare');
   });
 
   it('checks each rules page, then the Extensions page of a ruleset that has one', () => {
@@ -40,7 +39,7 @@ describe('a11yPages (docs/styling.md#accessibility)', () => {
       { ruleset: 'dnd-5e-2024', id: 'weapons', title: 'Weapons', extensions: true },
       { ruleset: 'fixture-rules', id: 'terms', title: 'Terms', extensions: false },
     ]);
-    expect(pages.slice(1)).toEqual([
+    expect(pages.slice(2)).toEqual([
       { label: 'rules page: Glossary', path: 'dnd-5e-2024/rules/glossary/' },
       { label: 'rules page: Weapons', path: 'dnd-5e-2024/rules/weapons/' },
       { label: 'rules page: Extensions', path: 'dnd-5e-2024/rules/extensions/' },
@@ -48,8 +47,11 @@ describe('a11yPages (docs/styling.md#accessibility)', () => {
     ]);
   });
 
-  it('checks only the home page of an empty library', () => {
-    expect(a11yPages([])).toEqual([{ label: 'home', path: '' }]);
+  it('checks only the Library and Rulesets pages of an empty library', () => {
+    expect(a11yPages([])).toEqual([
+      { label: 'Library', path: '' },
+      { label: 'Rulesets', path: 'rulesets/' },
+    ]);
   });
 });
 

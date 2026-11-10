@@ -76,7 +76,7 @@ describe('selectEntries', () => {
     expect(selection.records.map((r) => `${r.type}/${r.id}`)).toEqual(['creature/frost-lance']);
   });
 
-  it('reads a gallery query as the home gallery’s, with f.type narrowing by type', () => {
+  it('reads a gallery query as the Library’s, with f.type narrowing by type', () => {
     expect(selectEntries(parsePrintQuery('?f.type=spell'), records, reg).records.map((r) => r.id)).toEqual(['frost-lance']);
     expect(selectEntries(parsePrintQuery('?f.stats.cr=1..5'), records, reg).records.map((r) => r.id)).toEqual(['cinder-hound']);
   });

@@ -5,6 +5,7 @@ import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import { describe, expect, it } from 'vitest';
 import Base from '../../site/src/layouts/Base.astro';
+import { redirectScript } from '../../site/src/lib/redirects.ts';
 
 const ATTRIBUTION =
   'This work includes material from the System Reference Document 5.2 ("SRD 5.2") by Wizards of the Coast LLC, available at https://www.dndbeyond.com/srd. The SRD 5.2 is licensed under the Creative Commons Attribution 4.0 International License, available at https://creativecommons.org/licenses/by/4.0/legalcode. This site adapts that material: it is reformatted for the web and its wording is composed from structured data.';
@@ -46,18 +47,16 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     expect(footer.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ')).toContain(ATTRIBUTION);
   });
 
-  it('the header navigates to each ruleset, its types, and the about page', async () => {
+  it('the top bar reads Library, Rulesets, About, Contribute', async () => {
     const html = await renderBase({ title: 'Test' });
     const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
-    for (const [label, path] of <[string, string][]>[
-      ['D&amp;D 5e (SRD 5.2)', 'dnd-5e-2024/'],
-      ['Creatures', 'dnd-5e-2024/creature/'],
-      ['Items', 'dnd-5e-2024/item/'],
-      ['Spells', 'dnd-5e-2024/spell/'],
-      ['About', 'about/'],
-    ]) {
-      expect(nav).toMatch(new RegExp(`href="[^"]*/${path}"[^>]*>${label.replace(/[()]/g, '\\$&')}</a>`));
-    }
+    const links = [...nav.matchAll(/<a href="([^"]*)"[^>]*>([^<]*)<\/a>/g)].map((m) => [m[2], m[1]]);
+    expect(links).toEqual([
+      ['Library', '/'],
+      ['Rulesets', '/rulesets/'],
+      ['About', '/about/'],
+      ['Contribute', 'https://github.com/bardic-inspiration/ttrpg-library'],
+    ]);
   });
 
   it('writes Open Graph tags when a page gives them', async () => {
@@ -69,12 +68,12 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     expect(await renderBase({ title: 'Test' })).not.toContain('og:title');
   });
 
-  it('sends a moved page on, keeping its query and fragment (docs/site.md#redirects)', async () => {
+  it('sends a moved page on, adding its query and keeping its fragment (docs/site.md#redirects)', async () => {
     const to = '/ttrpg-library/dnd-5e-2024/item/wand-of-wonder/';
     const html = await renderBase({ title: 'Test', redirect: to });
     expect(html).toContain(`<meta http-equiv="refresh" content="0; url=${to}">`);
     expect(html).toContain(`<link rel="canonical" href="https://bardic-inspiration.github.io${to}">`);
-    expect(html).toContain(`location.replace("${to}" + location.search + location.hash);`);
+    expect(html).toContain(redirectScript(to));
     expect(html).toContain('<meta name="robots" content="noindex">');
     expect(await renderBase({ title: 'Test' })).not.toContain('http-equiv="refresh"');
   });

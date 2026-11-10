@@ -39,7 +39,7 @@ function parseRange(raw: string): FilterValue | undefined {
 
 /**
  * Reads a query string into gallery state. Unknown parameters, unknown sort
- * paths, filters on paths the route doesn't have, and malformed values are
+ * paths, filters on paths the Library doesn't have, and malformed values are
  * ignored.
  */
 export function parseQuery(search: string, config: GalleryConfig): GalleryState {
@@ -85,7 +85,7 @@ const encode = (text: string): string =>
 
 /**
  * Writes gallery state as a query string (with a leading `?`, or `''` for the
- * default view). Filters follow the route's filter order, then tags by key, so
+ * default view). Filters follow the Library's filter order, then tags by key, so
  * one view always has one URL. The default sort is left out.
  */
 export function toQuery(state: GalleryState, config: GalleryConfig): string {

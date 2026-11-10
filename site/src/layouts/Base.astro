@@ -26,6 +26,7 @@ import '../styles/overrides.css';
 import Footer from '../components/Footer.astro';
 import SiteNav from '../components/SiteNav.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import { redirectScript } from '../lib/redirects';
 import { themeBootstrapScript } from '../lib/theme';
 import { url } from '../lib/url';
 
@@ -35,7 +36,7 @@ interface Props {
   noindex?: boolean;
   /** Open Graph tags for link previews (docs/site.md#detail-page). `image` is a path under the site base. */
   og?: { title: string; description: string; image?: string; type?: 'website' | 'article' };
-  /** A path under the site base this page has moved to (docs/site.md#redirects): the page sends the reader there, keeping the query and fragment. */
+  /** A path under the site base this page has moved to, with any query (docs/site.md#redirects): the page sends the reader there, adding its own query and keeping the fragment. */
   redirect?: string;
 }
 
@@ -51,7 +52,7 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
     {redirect && (
       <>
         <link rel="canonical" href={absolute(redirect)} />
-        <script is:inline set:html={`location.replace(${JSON.stringify(redirect)} + location.search + location.hash);`} />
+        <script is:inline set:html={redirectScript(redirect)} />
         <meta http-equiv="refresh" content={`0; url=${redirect}`} />
       </>
     )}

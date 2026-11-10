@@ -55,7 +55,11 @@ on one page, and tests catch accessibility regressions.
   falls back to `--color-accent`. Tokens built on `--accent` are re-declared on
   `[data-type]` and `[data-rarity]`, so each element takes its own accent.
 - **Layout values are tokens too**: card minimum width, gaps, stat-block column
-  gap, and container-query breakpoints.
+  gap, and container-query breakpoints. The gallery's desktop breakpoint is a
+  media query in `tokens/components.css` that switches its layout knobs
+  (`--gallery-columns` and the filter menu's display), since a media query
+  can't read a custom property
+  ([Gallery](site.md#gallery) "Layout").
 
 ### Themes
 

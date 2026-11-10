@@ -26,8 +26,8 @@ Per type:
 | `guideline` | The type's guideline file ([generation.md](generation.md#guidelines)) |
 | `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts |
 | `cardFields` | Facets shown on gallery cards |
-| `defaultSort` | `<path>:<asc|desc>` |
-| `defaultFilters` | Filter tree nodes open by default on the type's own route; every other facet and tag stays in the tree, closed |
+| `defaultSort` | `<path>:<asc|desc>`: the sort the Library opens on from the type's old gallery URL and its detail page's type link ([Redirects](#redirects)) |
+| `defaultFilters` | Filter tree nodes that start open while the type is checked; every other facet and tag stays in the tree, closed |
 | `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, species, class, subclass), which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
@@ -115,17 +115,20 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 
 | Route | Content |
 |---|---|
-| `/` | All entries, with a type filter, sorted by name |
-| `/<ruleset>/` | All entries in the ruleset, with the same type filter and order |
-| `/<ruleset>/<type>/` | Gallery for one type, with its default facets and sort |
+| `/` | The Library: every entry in one gallery ([Gallery](#gallery)) |
+| `/<ruleset>/`, `/<ruleset>/<type>/` | Redirects to the Library with the matching filter ([Redirects](#redirects)) |
 | `/<ruleset>/<type>/<id>/` | Detail page |
+| `/rulesets/` | Each ruleset's rules pages and its Extensions page |
 | `/<ruleset>/rules/<page>/` | A rules page ([Rules pages](#rules-pages)) |
 | `/<ruleset>/rules/extensions/` | The ruleset's Extensions page |
 | `/print/` | Print view for one or many entries ([export.md](export.md#print)) |
 | `/about/` | What the library is, SRD attribution, licenses |
 | `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)) |
 
-The header carries ruleset and type navigation, built from the registry. The
+The top bar reads **Library | Rulesets | About | Contribute**
+(`site/src/components/SiteNav.astro`). Contribute links to the repository. The
+current page's link is marked `aria-current="page"`, and Rulesets is marked
+current on every rules page too. The
 footer carries the SRD 5.2 attribution statement on every page. The site is
 served under the base `/ttrpg-library/`
 ([architecture.md](architecture.md#technology)).
@@ -161,7 +164,8 @@ Each page in a ruleset's `rules/pages.json` builds at
 
 A ruleset with a rules type that takes extensions also builds an Extensions
 page at `/<ruleset>/rules/extensions/`: one searchable list per such type.
-Rules pages aren't in the header yet.
+The Rulesets page (`/rulesets/`) lists each ruleset's rules pages in
+`pages.json` order, then its Extensions page when it has one.
 
 A link to a primitive or group, from any entry or rules page, renders as its
 name linked to its anchor; refs carry the anchors' paths alongside the names
@@ -169,15 +173,29 @@ name linked to its anchor; refs carry the anchors' paths alongside the names
 
 ### Redirects
 
-A renamed type keeps its old URLs working (P9). The registry lists its
-earlier keys under `formerly`, such as `item`'s `["magic-item"]`, and from
-them:
+Old URLs keep working (P9). A redirect page has a `noindex` tag, a canonical
+link to the new page, a meta refresh for readers without JavaScript, and a
+script that sends the reader on with their own query added after the target's,
+so a parameter they brought wins, and the fragment kept
+(`redirectScript` in `site/src/lib/redirects.ts`).
 
-- **The old gallery and detail pages** are built as redirect pages:
-  `/<ruleset>/<old>/` and `/<ruleset>/<old>/<id>/` send the reader to the
-  same page under the current key, keeping the query and fragment, with a
-  `noindex` tag, a canonical link to the new page, and a meta refresh for
-  readers without JavaScript.
+**Old galleries.** The per-ruleset and per-type galleries are gone; their URLs
+redirect to the Library with the matching filter set
+(`site/src/lib/gallery/library-url.ts`):
+
+- `/<ruleset>/` to `/?f.ruleset=<ruleset>`.
+- `/<ruleset>/<type>/` to `/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<type>`,
+  so the view opens as the type's gallery did: its registry `defaultSort`
+  (left out when it is `name:asc`), and its `defaultFilters` open because the
+  type is checked. A detail page's type link goes to the same view.
+
+**Renamed types.** The registry lists a type's earlier keys under `formerly`,
+such as `item`'s `["magic-item"]`, and from them:
+
+- **The old pages** are built as redirect pages:
+  `/<ruleset>/<old>/<id>/` sends the reader to the same page under the
+  current key, and `/<ruleset>/<old>/` to the Library filtered to the current
+  type.
 - **Print and gallery queries** read an old key as the current one: an
   `ids` key such as `magic-item/wand-of-wonder`, and an old value of the
   `type` filter (`f.type=magic-item`).
@@ -188,12 +206,19 @@ the registry's former keys for the pages, print, and the gallery.
 
 ### Gallery
 
-**Loading.** The gallery is one Preact island (`site/src/components/gallery/`,
-logic in `site/src/lib/gallery/`) shared by `/`, `/<ruleset>/`, and
-`/<ruleset>/<type>/`. It fetches `library.json` once per page load, revalidated
-([Fresh data](#fresh-data)), and filters it in memory. Without JavaScript, the
-page shows a plain list of the route's entries by name, linked to their detail
-pages.
+**Loading.** The Library at `/` is one Preact island
+(`site/src/components/gallery/`, logic in `site/src/lib/gallery/`). It fetches
+`library.json` once per page load, revalidated ([Fresh data](#fresh-data)), and
+filters it in memory. Without JavaScript, the page shows a plain list of every
+entry by name, linked to its detail page.
+
+**Layout.** Search sits on top of the filter menu. On desktop, from a viewport
+of `64rem`, the menu is a sidebar beside the results and always shows. On
+phones and tablets it stacks above the results in a container closed by
+default, so results show on the first screen; a Filters button
+(`aria-expanded`) opens it. The breakpoint and the columns are tokens in
+`tokens/components.css` ([styling.md](styling.md#tokens)). Sort, the result
+count, and the set actions head the results.
 
 **Cards.** Each card shows art (only when the entry has it), name, type badge,
 `cardFields`, and summary. A boolean card field (concentration, ritual,
@@ -206,10 +231,12 @@ to four on wide screens.
 (`site/src/lib/gallery/tree.ts`): type, then field, then any subfield, then
 value, such as Creature › Immunities › Conditions › Poisoned.
 
-- **Types.** A route that spans types (`/`, `/<ruleset>/`) starts at its
-  types, each a checkbox for the type filter (`f.type`) with its count, and a
-  disclosure holding its facets. A type route starts at its own facets. A
-  type shows when the route has entries of it, or it's checked.
+- **Rulesets.** A Ruleset node, each ruleset a checkbox for the ruleset
+  filter (`f.ruleset`), comes first when the library holds more than one
+  ruleset, or the filter is active.
+- **Types.** Then the types, each a checkbox for the type filter (`f.type`)
+  with its count, and a disclosure holding its facets. A type shows when the
+  library has entries of it, or it's checked.
 - **Fields.** A type's facets follow in registry order. Facets whose paths
   share a field below `stats` or `derived` sit in a node named for it by the
   wording layer's `label`: `stats.immunities.damage` and
@@ -217,8 +244,8 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   Abilities. A field only one facet sits in adds no node, so `stats.ac.value`
   reads as AC. A facet shows when some entry of its type has a value for it,
   or it's active.
-- **Tags** follow the types as one Tags node, holding every tag key on the
-  route and any tag filtered on.
+- **Tags** follow the types as one Tags node, holding every tag key in the
+  library and any tag filtered on.
 - **Values.** An enum facet or tag lists its values vertically as checkboxes,
   each with its count: the entries of its type it matches under the search and
   every other active filter. Values come in declared order (ordered enums),
@@ -226,9 +253,9 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   has. A groups facet's values nest, each group with its own disclosure. A
   range facet's node holds min and max inputs, which accept fractions such as
   `1/8`.
-- **Open nodes.** On a type route, the registry's `defaultFilters` start open.
-  Every node holding an active filter starts open, down to the value. The
-  reader opens and closes the rest.
+- **Open nodes.** A checked type's registry `defaultFilters` start open, in
+  its node and, for a tag, in Tags. Every node holding an active filter starts
+  open, down to the value. The reader opens and closes the rest.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
   filter's value never matches it. A path two types share (`stats.level` on
   spells and feats) is one filter: each type lists its own entries' values, and
@@ -240,12 +267,11 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   Weapon › Martial › Martial Melee Weapons.
 
 **Sort.** By name, created date, or any facet, ascending or descending. Every
-facet of every type on the route is a sort choice, so CR is offered on `/` as
-well as on the creature gallery. Ordered enums sort by declared order, an array
+facet of every type is a sort choice, so CR is offered alongside name.
+Ordered enums sort by declared order, an array
 facet (size) by its first item. Ties break by name, then ruleset, type, and id,
 so the order never depends on `library.json` order. Entries missing the sort
-value go last in either direction. A type gallery starts on the registry's
-`defaultSort`; `/` and `/<ruleset>/` start on `name:asc`.
+value go last in either direction. The Library starts on `name:asc`.
 
 **Search.** MiniSearch over `name` (boost 3), `summary` (2), tag values (1.5),
 and `search` (1), with prefix and light fuzzy matching. Search narrows within
@@ -258,7 +284,7 @@ can be bookmarked or linked:
 Ranges use `min..max` (either side may be empty). Keys and values are
 URL-encoded, so a comma inside a value is `%2C` and a bare comma separates
 values. Enum values are case-folded. The type filter is `f.type`. Unknown
-parameters, filters on paths the route doesn't have, unknown sort paths, and
+parameters, filters on paths the Library doesn't have, unknown sort paths, and
 malformed values are ignored. The gallery rewrites the URL as the view changes,
 replacing the history entry, in one canonical form: filters in registry order,
 then tags by key, with the default sort and ignored parameters left out.
@@ -300,7 +326,9 @@ indexes.
 - Forward refs and back-refs as links
   ([content-model.md](content-model.md#references)); a page type's include
   its components' ([content-model.md](content-model.md#components)).
-- Tags as chips; a chip opens the type gallery filtered by that tag.
+- The type, linked to the Library filtered to it ([Redirects](#redirects)).
+- Tags as chips; a chip opens the Library filtered to the entry's ruleset,
+  type, and that tag.
 - A provenance line: created and updated dates, and source issues linked to
   GitHub.
 - Export controls below the summary, one per configured entry-scope exporter. A

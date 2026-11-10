@@ -2,7 +2,7 @@
 // over library.json records, so the island stays a thin view.
 
 import MiniSearch from 'minisearch';
-import { NAME, filterDef, inScope, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
+import { NAME, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
 
@@ -135,7 +135,7 @@ export function chips(def: FilterDef, scoped: LibraryRecord[], others: LibraryRe
     });
 }
 
-/** The lowest and highest value of a range filter among the route's records. */
+/** The lowest and highest value of a range filter among the records. */
 export function bounds(path: string, scoped: LibraryRecord[]): { min: number; max: number } | undefined {
   const values = scoped.map((r) => numberAt(r, path)).filter((n): n is number => n !== undefined);
   return values.length > 0 ? { min: Math.min(...values), max: Math.max(...values) } : undefined;
@@ -146,36 +146,34 @@ export const hasValues = (path: string, records: LibraryRecord[]): boolean =>
   records.some((r) => enumValues(valueAt(r, path)).length > 0);
 
 export interface GalleryView {
-  scoped: LibraryRecord[];
   results: LibraryRecord[];
   /** Whether results are in relevance order (a query is present) rather than the active sort. */
   byRelevance: boolean;
 }
 
-/** The records to show for a state: scope, then filters, then search; ordered by relevance or the sort. */
+/** The records to show for a state: filters, then search; ordered by relevance or the sort. */
 export function computeView(
   records: LibraryRecord[],
   config: GalleryConfig,
   state: GalleryState,
   index: MiniSearch<LibraryRecord>,
 ): GalleryView {
-  const scoped = inScope(records, config.scope);
-  const filtered = applyFilters(scoped, matchedFilters(config, state.filters));
+  const filtered = applyFilters(records, matchedFilters(config, state.filters));
   const hits = search(index, state.q);
-  if (hits === undefined) return { scoped, results: sortRecords(filtered, state.sort, config), byRelevance: false };
+  if (hits === undefined) return { results: sortRecords(filtered, state.sort, config), byRelevance: false };
   const byUrl = new Map(filtered.map((r) => [r.url, r]));
-  return { scoped, results: hits.map((id) => byUrl.get(id)).filter((r): r is LibraryRecord => r !== undefined), byRelevance: true };
+  return { results: hits.map((id) => byUrl.get(id)).filter((r): r is LibraryRecord => r !== undefined), byRelevance: true };
 }
 
 /** Records passing the search and every filter except one, for that filter's value counts. */
 export function withoutFilter(
   config: GalleryConfig,
-  scoped: LibraryRecord[],
+  records: LibraryRecord[],
   state: GalleryState,
   index: MiniSearch<LibraryRecord>,
   path: string,
 ): LibraryRecord[] {
-  const filtered = applyFilters(scoped, matchedFilters(config, state.filters), path);
+  const filtered = applyFilters(records, matchedFilters(config, state.filters), path);
   const hits = search(index, state.q);
   if (hits === undefined) return filtered;
   const ids = new Set(hits);

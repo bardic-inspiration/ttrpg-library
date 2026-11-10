@@ -35,3 +35,12 @@ export function currentKey(key: string, aliases: Record<string, string>): string
   const type = aliases[key.slice(0, slash)];
   return type === undefined ? key : `${type}${key.slice(slash)}`;
 }
+
+/**
+ * The inline script a redirect page runs (docs/site.md#redirects): it sends the reader to
+ * `to`, adding the page's own query after any query `to` carries, so a parameter the reader
+ * brought wins, and keeping the fragment.
+ */
+export function redirectScript(to: string): string {
+  return `var t=${JSON.stringify(to)},s=location.search;location.replace(t+(s?(t.indexOf("?")<0?s:"&"+s.slice(1)):"")+location.hash);`;
+}

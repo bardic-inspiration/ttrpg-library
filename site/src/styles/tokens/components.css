@@ -26,6 +26,10 @@
     --card-shadow: var(--shadow-card);
     --art-aspect: var(--ratio-art);
     --filters-width: var(--size-filters);
+    /* Below the desktop breakpoint (below), the filter menu stacks over the results, closed. */
+    --gallery-columns: minmax(0, 1fr);
+    --filters-toggle-display: inline-flex;
+    --filters-closed-display: none;
     --filters-gap: var(--space-s);
     --filter-count-text: var(--color-text-muted);
     --tree-indent: var(--space-s);
@@ -78,5 +82,20 @@
     --table-header-rule: var(--border-width-strong) solid var(--accent);
     --badge-border: var(--border-width) solid var(--accent);
     --badge-text: var(--accent);
+  }
+}
+
+/*
+ * The desktop breakpoint (docs/site.md#gallery "Layout"): from here up, the filter menu is a
+ * sidebar beside the results and always shows; phones and tablets get the collapsible container.
+ */
+@layer tokens {
+  @media (width >= 64rem) {
+    :root,
+    [data-theme] {
+      --gallery-columns: var(--filters-width) minmax(0, 1fr);
+      --filters-toggle-display: none;
+      --filters-closed-display: grid;
+    }
   }
 }
