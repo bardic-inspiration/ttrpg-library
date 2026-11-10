@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "ranger-relentless-hunter",
+  "name": "Relentless Hunter",
+  "stats": {
+    "levels": [
+      13
+    ],
+    "text": "Taking damage can't break your {ref:glossary/concentration} on *{ref:spell/hunters-mark}*."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

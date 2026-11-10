@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "rogue-steady-aim",
+  "name": "Steady Aim",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you give yourself {ref:glossary/advantage} on your next attack roll on the current turn. You can use this feature only if you haven't moved during this turn, and after you use it, your Speed is 0 until the end of the current turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

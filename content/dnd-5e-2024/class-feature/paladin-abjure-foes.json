@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "paladin-abjure-foes",
+  "name": "Abjure Foes",
+  "stats": {
+    "levels": [
+      9
+    ],
+    "text": "As a {ref:glossary/magic} action, you can expend one use of this class's Channel Divinity to overwhelm foes with awe. As you present your {ref:equipment/holy-symbol} or weapon, you can target a number of creatures equal to your Charisma modifier (minimum of one creature) that you can see within 60 feet of yourself. Each target must succeed on a Wisdom saving throw or have the {ref:condition/frightened} condition for 1 minute or until it takes any damage. While {ref:condition/frightened} in this way, a target can do only one of the following on its turns: move, take an action, or take a {ref:glossary/bonus-action}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

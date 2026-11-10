@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "rogue-devious-strikes",
+  "name": "Devious Strikes",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "You've practiced new ways to use your Sneak Attack deviously. The following effects are now among your Cunning Strike options.\n\n***Daze (Cost: 2d6).*** The target must succeed on a Constitution saving throw, or on its next turn, it can do only one of the following: move or take an action or a {ref:glossary/bonus-action}.\n\n***Knock Out (Cost: 6d6).*** The target must succeed on a Constitution saving throw, or it has the {ref:condition/unconscious} condition for 1 minute or until it takes any damage. The {ref:condition/unconscious} target repeats the save at the end of each of its turns, ending the effect on itself on a success.\n\n***Obscure (Cost: 3d6).*** The target must succeed on a Dexterity saving throw, or it has the {ref:condition/blinded} condition until the end of its next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

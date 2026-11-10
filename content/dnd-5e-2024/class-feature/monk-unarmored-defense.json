@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "monk-unarmored-defense",
+  "name": "Unarmored Defense",
+  "stats": {
+    "levels": [
+      1
+    ],
+    "text": "While you aren't wearing armor or wielding a {ref:equipment/shield}, your base {ref:glossary/armor-class} equals 10 plus your Dexterity and Wisdom modifiers."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

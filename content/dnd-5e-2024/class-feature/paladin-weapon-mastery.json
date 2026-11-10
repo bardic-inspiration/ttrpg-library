@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "paladin-weapon-mastery",
+  "name": "Weapon Mastery",
+  "stats": {
+    "levels": [
+      1
+    ],
+    "text": "Your training with weapons allows you to use the mastery properties of two kinds of weapons of your choice with which you have proficiency, such as Longswords and Javelins.\n\nWhenever you finish a {ref:glossary/long-rest}, you can change the kinds of weapons you chose. For example, you could switch to using the mastery properties of Halberds and Flails."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

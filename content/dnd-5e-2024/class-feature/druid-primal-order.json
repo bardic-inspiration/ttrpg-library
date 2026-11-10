@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "druid-primal-order",
+  "name": "Primal Order",
+  "stats": {
+    "levels": [
+      1
+    ],
+    "text": "You have dedicated yourself to one of the following sacred roles of your choice.\n\n***Magician.*** You know one extra cantrip from the Druid spell list. In addition, your mystical connection to nature gives you a bonus to your Intelligence (Arcana or Nature) checks. The bonus equals your Wisdom modifier (minimum bonus of +1).\n\n***Warden.*** Trained for battle, you gain proficiency with Martial weapons and training with Medium armor."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

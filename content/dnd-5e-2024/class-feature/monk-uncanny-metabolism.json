@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "monk-uncanny-metabolism",
+  "name": "Uncanny Metabolism",
+  "stats": {
+    "levels": [
+      2
+    ],
+    "text": "When you roll {ref:glossary/initiative}, you can regain all expended Focus Points. When you do so, roll your Martial Arts die, and regain a number of {ref:glossary/hit-points} equal to your Monk level plus the number rolled.\n\nOnce you use this feature, you can't use it again until you finish a {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

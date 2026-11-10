@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "ranger-foe-slayer",
+  "name": "Foe Slayer",
+  "stats": {
+    "levels": [
+      20
+    ],
+    "text": "The damage die of your *{ref:spell/hunters-mark}* is a d10 rather than a d6."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

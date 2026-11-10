@@ -1,0 +1,186 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "paladin",
+  "name": "Paladin",
+  "summary": "A holy warrior in heavy armor who smites foes and heals with Lay On Hands.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "str",
+        "cha"
+      ],
+      "join": "and"
+    },
+    "hitDie": "d10",
+    "savingThrows": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "athletics",
+        "insight",
+        "intimidation",
+        "medicine",
+        "persuasion",
+        "religion"
+      ]
+    },
+    "weapons": "Simple and Martial weapons",
+    "armor": "Light, Medium, and Heavy armor and Shields",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/chain-mail"
+          },
+          {
+            "ref": "equipment/shield"
+          },
+          {
+            "ref": "equipment/longsword"
+          },
+          {
+            "ref": "equipment/javelin",
+            "count": 6
+          },
+          {
+            "ref": "equipment/holy-symbol"
+          },
+          {
+            "ref": "equipment/priests-pack"
+          }
+        ],
+        "gp": 9
+      },
+      {
+        "gp": 150
+      }
+    ],
+    "multiclass": "- Gain the following traits from the Core Paladin Traits table: Hit Point Die, proficiency with Martial weapons, and training with Light and Medium armor and {ref:equipment/shields}.\n- Gain the Paladin's level 1 features, which are listed in the Paladin Features table. See the multiclassing rules in \"Character Creation\" to determine your available spell slots.",
+    "features": [
+      {
+        "ref": "class-feature/paladin-lay-on-hands"
+      },
+      {
+        "ref": "class-feature/paladin-spellcasting"
+      },
+      {
+        "ref": "class-feature/paladin-weapon-mastery"
+      },
+      {
+        "ref": "class-feature/paladin-fighting-style"
+      },
+      {
+        "ref": "class-feature/paladin-paladins-smite"
+      },
+      {
+        "ref": "class-feature/paladin-channel-divinity"
+      },
+      {
+        "ref": "class-feature/paladin-paladin-subclass"
+      },
+      {
+        "ref": "class-feature/paladin-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/paladin-extra-attack"
+      },
+      {
+        "ref": "class-feature/paladin-faithful-steed"
+      },
+      {
+        "ref": "class-feature/paladin-aura-of-protection"
+      },
+      {
+        "ref": "class-feature/paladin-abjure-foes"
+      },
+      {
+        "ref": "class-feature/paladin-aura-of-courage"
+      },
+      {
+        "ref": "class-feature/paladin-radiant-strikes"
+      },
+      {
+        "ref": "class-feature/paladin-restoring-touch"
+      },
+      {
+        "ref": "class-feature/paladin-aura-expansion"
+      },
+      {
+        "ref": "class-feature/paladin-epic-boon"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      7,
+      15,
+      20
+    ],
+    "columns": [
+      {
+        "name": "Channel Divinity",
+        "values": [
+          "—",
+          "—",
+          "2",
+          "2",
+          "2",
+          "2",
+          "2",
+          "2",
+          "2",
+          "2",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3"
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "progression": "half",
+      "prepared": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        6,
+        7,
+        7,
+        9,
+        9,
+        10,
+        10,
+        11,
+        11,
+        12,
+        12,
+        14,
+        14,
+        15,
+        15
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "fighter-action-surge",
+  "name": "Action Surge",
+  "stats": {
+    "levels": [
+      {
+        "level": 2,
+        "note": "one use"
+      },
+      {
+        "level": 17,
+        "note": "two uses"
+      }
+    ],
+    "text": "You can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action, except the {ref:glossary/magic} action.\n\nOnce you use this feature, you can't do so again until you finish a Short or {ref:glossary/long-rest}. Starting at level 17, you can use it twice before a rest but only once on a turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

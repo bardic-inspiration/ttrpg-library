@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "barbarian-brutal-strike",
+  "name": "Brutal Strike",
+  "stats": {
+    "levels": [
+      9
+    ],
+    "text": "If you use Reckless Attack, you can forgo any {ref:glossary/advantage} on one Strength-based attack roll of your choice on your turn. The chosen attack roll mustn't have {ref:glossary/disadvantage}. If the chosen attack roll hits, the target takes an extra 1d10 damage of the same type dealt by the weapon or {ref:glossary/unarmed-strike}, and you can cause one Brutal Strike effect of your choice. You have the following effect options.\n\n***Forceful Blow.*** The target is pushed 15 feet straight away from you. You can then move up to half your Speed straight toward the target without provoking {ref:glossary/opportunity-attacks}.\n\n***Hamstring Blow.*** The target's Speed is reduced by 15 feet until the start of your next turn. A target can be affected by only one Hamstring Blow at a time—the most recent one."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "paladin-restoring-touch",
+  "name": "Restoring Touch",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "When you use Lay On Hands on a creature, you can also remove one or more of the following conditions from the creature: Blinded, {ref:condition/charmed}, {ref:condition/deafened}, {ref:condition/frightened}, {ref:condition/paralyzed}, or {ref:condition/stunned}. You must expend 5 {ref:glossary/hit-points} from the healing pool of Lay On Hands for each of these conditions you remove; those points don't also restore Hit Points to the creature."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

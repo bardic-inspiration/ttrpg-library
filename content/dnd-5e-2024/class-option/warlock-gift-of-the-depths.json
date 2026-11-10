@@ -1,0 +1,20 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-gift-of-the-depths",
+  "name": "Gift of the Depths",
+  "stats": {
+    "prerequisite": "Level 5+ Warlock",
+    "text": "You can breathe underwater, and you gain a {ref:glossary/swim-speed} equal to your Speed.\n\nYou can also cast *{ref:spell/water-breathing}* once without expending a spell slot. You regain the ability to cast it in this way again when you finish a {ref:glossary/long-rest}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

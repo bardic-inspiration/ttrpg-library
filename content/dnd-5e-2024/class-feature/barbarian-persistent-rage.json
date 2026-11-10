@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "barbarian-persistent-rage",
+  "name": "Persistent Rage",
+  "stats": {
+    "levels": [
+      15
+    ],
+    "text": "When you roll {ref:glossary/initiative}, you can regain all expended uses of Rage. After you regain uses of Rage in this way, you can't do so again until you finish a {ref:glossary/long-rest}.\n\nIn addition, your Rage is so fierce that it now lasts for 10 minutes without you needing to do anything to extend it from round to round. Your Rage ends early if you have the {ref:condition/unconscious} condition (not just the {ref:condition/incapacitated} condition) or don Heavy armor."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

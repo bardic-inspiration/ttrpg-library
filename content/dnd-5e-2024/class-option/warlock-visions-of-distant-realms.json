@@ -1,0 +1,20 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-visions-of-distant-realms",
+  "name": "Visions of Distant Realms",
+  "stats": {
+    "prerequisite": "Level 9+ Warlock",
+    "text": "You can cast *{ref:spell/arcane-eye}* without expending a spell slot."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

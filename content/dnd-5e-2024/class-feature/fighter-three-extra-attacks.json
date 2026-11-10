@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "fighter-three-extra-attacks",
+  "name": "Three Extra Attacks",
+  "stats": {
+    "levels": [
+      20
+    ],
+    "text": "You can attack four times instead of once whenever you take the {ref:glossary/attack} action on your turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

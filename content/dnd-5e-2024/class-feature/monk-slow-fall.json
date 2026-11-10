@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "monk-slow-fall",
+  "name": "Slow Fall",
+  "stats": {
+    "levels": [
+      4
+    ],
+    "text": "You can take a {ref:glossary/reaction} when you fall to reduce any damage you take from the fall by an amount equal to five times your Monk level."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

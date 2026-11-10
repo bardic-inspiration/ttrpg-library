@@ -1,0 +1,20 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-option",
+  "id": "warlock-mask-of-many-faces",
+  "name": "Mask of Many Faces",
+  "stats": {
+    "prerequisite": "Level 2+ Warlock",
+    "text": "You can cast *{ref:spell/disguise-self}* without expending a spell slot."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

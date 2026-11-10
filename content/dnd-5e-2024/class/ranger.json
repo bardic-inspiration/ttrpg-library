@@ -1,0 +1,192 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "ranger",
+  "name": "Ranger",
+  "summary": "A wilderness warrior who mixes weapons with nature magic and marks a Favored Enemy.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "dex",
+        "wis"
+      ],
+      "join": "and"
+    },
+    "hitDie": "d10",
+    "savingThrows": [
+      "str",
+      "dex"
+    ],
+    "skills": {
+      "choose": 3,
+      "from": [
+        "animal-handling",
+        "athletics",
+        "insight",
+        "investigation",
+        "nature",
+        "perception",
+        "stealth",
+        "survival"
+      ]
+    },
+    "weapons": "Simple and Martial weapons",
+    "armor": "Light and Medium armor and Shields",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/studded-leather-armor"
+          },
+          {
+            "ref": "equipment/scimitar"
+          },
+          {
+            "ref": "equipment/shortsword"
+          },
+          {
+            "ref": "equipment/longbow"
+          },
+          "20 Arrows",
+          {
+            "ref": "equipment/quiver"
+          },
+          {
+            "ref": "equipment/druidic-focus",
+            "note": "sprig of mistletoe"
+          },
+          {
+            "ref": "equipment/explorers-pack"
+          }
+        ],
+        "gp": 7
+      },
+      {
+        "gp": 150
+      }
+    ],
+    "multiclass": "- Gain the following traits from the Core Ranger Traits table: Hit Point Die, proficiency with Martial weapons, proficiency in one skill of your choice from the Ranger's skill list, and training with Light and Medium armor and {ref:equipment/shields}.\n- Gain the Ranger's level 1 features, which are listed in the Ranger Features table. See the multiclassing rules in \"Character Creation\" to determine your available spell slots.",
+    "features": [
+      {
+        "ref": "class-feature/ranger-spellcasting"
+      },
+      {
+        "ref": "class-feature/ranger-favored-enemy"
+      },
+      {
+        "ref": "class-feature/ranger-weapon-mastery"
+      },
+      {
+        "ref": "class-feature/ranger-deft-explorer"
+      },
+      {
+        "ref": "class-feature/ranger-fighting-style"
+      },
+      {
+        "ref": "class-feature/ranger-ranger-subclass"
+      },
+      {
+        "ref": "class-feature/ranger-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/ranger-extra-attack"
+      },
+      {
+        "ref": "class-feature/ranger-roving"
+      },
+      {
+        "ref": "class-feature/ranger-expertise"
+      },
+      {
+        "ref": "class-feature/ranger-tireless"
+      },
+      {
+        "ref": "class-feature/ranger-relentless-hunter"
+      },
+      {
+        "ref": "class-feature/ranger-natures-veil"
+      },
+      {
+        "ref": "class-feature/ranger-precise-hunter"
+      },
+      {
+        "ref": "class-feature/ranger-feral-senses"
+      },
+      {
+        "ref": "class-feature/ranger-epic-boon"
+      },
+      {
+        "ref": "class-feature/ranger-foe-slayer"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      7,
+      11,
+      15
+    ],
+    "columns": [
+      {
+        "name": "Favored Enemy",
+        "values": [
+          "2",
+          "2",
+          "2",
+          "2",
+          "3",
+          "3",
+          "3",
+          "3",
+          "4",
+          "4",
+          "4",
+          "4",
+          "5",
+          "5",
+          "5",
+          "5",
+          "6",
+          "6",
+          "6",
+          "6"
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "progression": "half",
+      "prepared": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        6,
+        7,
+        7,
+        9,
+        9,
+        10,
+        10,
+        11,
+        11,
+        12,
+        12,
+        14,
+        14,
+        15,
+        15
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

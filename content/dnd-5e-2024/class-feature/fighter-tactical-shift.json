@@ -1,0 +1,22 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "fighter-tactical-shift",
+  "name": "Tactical Shift",
+  "stats": {
+    "levels": [
+      5
+    ],
+    "text": "Whenever you activate your Second Wind with a {ref:glossary/bonus-action}, you can move up to half your Speed without provoking {ref:glossary/opportunity-attacks}."
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}

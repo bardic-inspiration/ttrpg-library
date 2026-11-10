@@ -1,0 +1,197 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class",
+  "id": "druid",
+  "name": "Druid",
+  "summary": "A spellcaster of nature magic who can take the shapes of beasts with Wild Shape.",
+  "stats": {
+    "primaryAbility": {
+      "abilities": [
+        "wis"
+      ]
+    },
+    "hitDie": "d8",
+    "savingThrows": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "choose": 2,
+      "from": [
+        "animal-handling",
+        "arcana",
+        "insight",
+        "medicine",
+        "nature",
+        "perception",
+        "religion",
+        "survival"
+      ]
+    },
+    "weapons": "Simple weapons",
+    "tools": "{ref:equipment/herbalism-kit}",
+    "armor": "Light armor and Shields",
+    "equipment": [
+      {
+        "items": [
+          {
+            "ref": "equipment/leather-armor"
+          },
+          {
+            "ref": "equipment/shield"
+          },
+          {
+            "ref": "equipment/sickle"
+          },
+          {
+            "ref": "equipment/druidic-focus",
+            "note": "Quarterstaff"
+          },
+          {
+            "ref": "equipment/explorers-pack"
+          },
+          {
+            "ref": "equipment/herbalism-kit"
+          }
+        ],
+        "gp": 9
+      },
+      {
+        "gp": 50
+      }
+    ],
+    "multiclass": "- Gain the following traits from the Core Druid Traits table: Hit Point Die and training with Light armor and {ref:equipment/shields}.\n- Gain the Druid's level 1 features, which are listed in the Druid Features table. See the multiclassing rules in \"Character Creation\" to determine your available spell slots.",
+    "features": [
+      {
+        "ref": "class-feature/druid-spellcasting"
+      },
+      {
+        "ref": "class-feature/druid-druidic"
+      },
+      {
+        "ref": "class-feature/druid-primal-order"
+      },
+      {
+        "ref": "class-feature/druid-wild-shape"
+      },
+      {
+        "ref": "class-feature/druid-wild-companion"
+      },
+      {
+        "ref": "class-feature/druid-druid-subclass"
+      },
+      {
+        "ref": "class-feature/druid-ability-score-improvement"
+      },
+      {
+        "ref": "class-feature/druid-wild-resurgence"
+      },
+      {
+        "ref": "class-feature/druid-elemental-fury"
+      },
+      {
+        "ref": "class-feature/druid-improved-elemental-fury"
+      },
+      {
+        "ref": "class-feature/druid-beast-spells"
+      },
+      {
+        "ref": "class-feature/druid-epic-boon"
+      },
+      {
+        "ref": "class-feature/druid-archdruid"
+      }
+    ],
+    "subclassLevels": [
+      3,
+      6,
+      10,
+      14
+    ],
+    "columns": [
+      {
+        "name": "Wild Shape",
+        "values": [
+          "—",
+          "2",
+          "2",
+          "2",
+          "2",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "3",
+          "4",
+          "4",
+          "4",
+          "4"
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "progression": "full",
+      "cantrips": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prepared": [
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        16,
+        17,
+        17,
+        18,
+        18,
+        19,
+        20,
+        21,
+        22
+      ]
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-10",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        234
+      ],
+      "srd": true
+    }
+  }
+}
