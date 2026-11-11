@@ -1,9 +1,13 @@
 ---
-// A rules page (docs/site.md#rules-pages): its title, then its blocks in order (prose, a rules
-// type's primitives, with any cross-listed type's primitives among them as links, or a group's
-// tree), each primitive and group in an anchored section, and the extensions it lists at the bottom.
+// A rules page (docs/site.md#rules-pages), laid out as an accordion page
+// (docs/site.md#accordion-pages): its title, its untitled opening prose, its table of contents,
+// then its blocks in order (prose, a rules type's primitives, with any cross-listed type's
+// primitives among them as links, or a group's tree), each primitive and group in an anchored
+// section, and the extensions it lists at the bottom.
 import { entryPath } from '../../lib/library';
-import { blockPrimitives, pageExtensions, type RulesContext } from '../../lib/rules';
+import { EXTENSIONS_SECTION, blockPrimitives, pageContents, pageExtensions, type RulesContext } from '../../lib/rules';
+import Accordion from '../templates/parts/Accordion.astro';
+import TableOfContents from '../templates/parts/TableOfContents.astro';
 import type { RulesPage } from '../../../../lib/rules';
 import CrossListed from './CrossListed.astro';
 import GroupSection from './GroupSection.astro';
@@ -17,12 +21,18 @@ interface Props {
 }
 
 const { ctx, page } = Astro.props;
+// The opening prose, untitled, reads before the table of contents.
+const [first, ...rest] = page.blocks;
+const intro = first?.kind === 'prose' && !first.title ? first : undefined;
+const blocks = intro ? rest : page.blocks;
 const extensions = pageExtensions(ctx, page.id).map(({ entry }) => ({ name: entry.name, path: entryPath(entry), summary: entry.summary }));
 ---
 <article class="rules-page">
   <h1>{page.title}</h1>
-  {page.blocks.map((block) => {
-    if (block.kind === 'prose') return <ProseSection ctx={ctx} section={block} level={2} />;
+  {intro && <ProseSection ctx={ctx} section={intro} level={2} />}
+  <TableOfContents items={pageContents(ctx, page)} />
+  {blocks.map((block) => {
+    if (block.kind === 'prose') return <ProseSection ctx={ctx} section={block} level={2} top />;
     if (block.kind === 'primitives') {
       return blockPrimitives(ctx.data, block).map(({ primitive, cross }) =>
         cross ? <CrossListed ctx={ctx} primitive={primitive} level={2} /> : <PrimitiveSection ctx={ctx} primitive={primitive} level={2} />,
@@ -33,19 +43,27 @@ const extensions = pageExtensions(ctx, page.id).map(({ entry }) => ({ name: entr
     return tree && <GroupSection ctx={ctx} tree={tree} id={block.group.slice(slash + 1)} level={2} />;
   })}
   {extensions.length > 0 && (
-    <section class="rules-page__extensions" aria-labelledby="extensions-heading">
-      <h2 id="extensions-heading">Extensions</h2>
+    <Accordion class="rules-page__extensions" id={EXTENSIONS_SECTION} level={2}>
+      <Fragment slot="title">Extensions</Fragment>
       <SearchableList label="Search extensions" items={extensions} />
-    </section>
+    </Accordion>
   )}
 </article>
 
 <style>
   @layer components {
     .rules-page {
-      display: grid;
-      gap: var(--space-l);
       max-inline-size: var(--measure);
+
+      & > :global(* + *) {
+        margin-block-start: var(--space-l);
+      }
+
+      /* Accordion sections, and the cross-listed links among them, stack as one list (the
+         accordion's script sits after the first). */
+      & > :global(:is(.accordion, .rule--cross, script) + :is(.accordion, .rule--cross)) {
+        margin-block-start: 0;
+      }
     }
   }
 </style>

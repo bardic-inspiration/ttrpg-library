@@ -4,10 +4,11 @@
 
 import { titleCase } from '../../../lib/wording/grammar.ts';
 import type { RefLabels, RulesetDefinition, RulesetModule } from '../../../rulesets/module.ts';
-import { GroupTree, byName, extensionPage, type PageBlock, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../../lib/rules.ts';
+import { GroupTree, anchorId, byName, extensionPage, ruleKey, type PageBlock, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../../lib/rules.ts';
 import type { Links } from '../../../scripts/validate/refs.ts';
 import { allComponents, entryNames, linkAll, refPaths, refTargets, rulesetModule, type Entry, type LoadedEntry } from './library.ts';
 import type { RefTarget } from './refs.ts';
+import { sectionId, type TocItem } from './accordion.ts';
 
 const definitions = import.meta.glob<RulesetDefinition>('../../../rulesets/*/ruleset.json', { eager: true, import: 'default' });
 const ruleFiles = import.meta.glob<unknown>('../../../rulesets/*/rules/**/*.json', { eager: true, import: 'default' });
@@ -92,6 +93,16 @@ export function rulesContext(
  */
 export const tagLabel = (id: string): string => titleCase(id);
 
+/** A primitive that is only rules text (a weapon property), with an optional tag (a glossary term). */
+export const textOnly = (primitive: Primitive): boolean =>
+  typeof primitive.stats.text === 'string' && Object.keys(primitive.stats).every((k) => k === 'text' || k === 'tag');
+
+/** A primitive's heading: its name, with a text-only primitive's tag in brackets, "Attack [Action]". */
+export function primitiveTitle(primitive: Primitive): string {
+  const tag = primitive.stats.tag;
+  return textOnly(primitive) && typeof tag === 'string' ? `${primitive.name} [${tagLabel(tag)}]` : primitive.name;
+}
+
 /**
  * What a primitives block shows, by name: its type's primitives, and each cross-listed type's
  * primitives marked `cross`, which link to their own page instead of being shown here.
@@ -107,6 +118,33 @@ export function blockPrimitives(data: RulesData, block: Extract<PageBlock, { kin
 /** The extensions listed at the bottom of one rules page. */
 export const pageExtensions = (ctx: RulesContext, page: string): LoadedEntry[] =>
   ctx.extensions.filter(({ entry }) => extensionPage(ctx.data, entry) === page);
+
+/** The anchor of a rules page's Extensions section. */
+export const EXTENSIONS_SECTION = sectionId('Extensions');
+
+/**
+ * A rules page's table of contents (docs/site.md#accordion-pages), in page order: each titled
+ * prose section, each primitive (not a cross-listed one, which lives on its own page), each group
+ * with the groups nested in it, then Extensions when the page lists any.
+ */
+export function pageContents(ctx: RulesContext, page: RulesPage): TocItem[] {
+  const groupItem = (tree: GroupTree, id: string): TocItem => {
+    const children = tree.children(id).map((child) => groupItem(tree, child.id));
+    return { id: anchorId(ruleKey({ type: tree.type, id })), label: tree.byId.get(id)!.name, ...(children.length > 0 && { children }) };
+  };
+  const items = page.blocks.flatMap((block): TocItem[] => {
+    if (block.kind === 'prose') return block.title ? [{ id: sectionId(block.title), label: block.title }] : [];
+    if (block.kind === 'primitives') {
+      return blockPrimitives(ctx.data, block)
+        .filter(({ cross }) => !cross)
+        .map(({ primitive }) => ({ id: anchorId(ruleKey(primitive)), label: primitiveTitle(primitive) }));
+    }
+    const slash = block.group.indexOf('/');
+    const tree = ctx.data.groups.get(block.group.slice(0, slash));
+    return tree ? [groupItem(tree, block.group.slice(slash + 1))] : [];
+  });
+  return pageExtensions(ctx, page.id).length > 0 ? [...items, { id: EXTENSIONS_SECTION, label: 'Extensions' }] : items;
+}
 
 /**
  * Names, qualifiers, and category nouns of equipment keys, for wording an item's base item

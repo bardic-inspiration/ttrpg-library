@@ -38,4 +38,4 @@ const name = templateFor(types?.[entry.type]?.template);
 const Template = templates[name];
 ---
 <Template {...Astro.props} />
-{parts.length > 0 && !PLACES_COMPONENTS.includes(name) && <PageComponents components={parts} refs={{ names, ruleset: entry.ruleset, paths }} level={level + 1} />}
+{parts.length > 0 && !PLACES_COMPONENTS.includes(name) && <PageComponents components={parts} refs={{ names, ruleset: entry.ruleset, paths }} level={level + 1} mode={Astro.props.mode} />}

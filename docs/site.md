@@ -171,6 +171,53 @@ A link to a primitive or group, from any entry or rules page, renders as its
 name linked to its anchor; refs carry the anchors' paths alongside the names
 (`refPaths` in `site/src/lib/library.ts`).
 
+Each rules page is an accordion page ([Accordion pages](#accordion-pages)):
+its untitled opening prose, then its table of contents (`pageContents` in
+`site/src/lib/rules.ts`), then its sections. Each titled prose section, each
+primitive, and the Extensions list is a section; a prose section's own
+subsections show inside it. A group stays open, its heading, note, text, and
+links over its members' sections and the groups nested in it. A cross-listed
+primitive is a line among the sections, not a section. The contents list each
+titled prose section, each primitive (not a cross-listed one), each group with
+its subgroups nested under it, and Extensions.
+
+### Accordion pages
+
+Rules pages and page types (classes, subclasses, species, and any page type
+whose components render after its template) are long pages laid out as
+accordion sections with a jump-to table of contents
+(`site/src/components/templates/parts/`):
+
+- **A section** (`Accordion`) is a `<details>` that starts collapsed, its
+  heading inside the `<summary>`, which toggles it. Its id is its anchor:
+  `<type>-<id>` for a primitive, group, or component, and `section-<slug>` for
+  any other titled section (`sectionId` in `site/src/lib/accordion.ts`), such
+  as "Core Barbarian Traits" at `#section-core-barbarian-traits`.
+- **The table of contents** (`TableOfContents`) is a `nav` labeled
+  "Contents" after the page's opening, a list of links to the sections in
+  page order, with nested sections listed under their heading, in as many
+  columns as fit.
+- **A link to a section**, or to anything inside one, opens it and every
+  section around it, then scrolls to it: on load, on a new hash, and on a
+  click on a link to the hash already showing. This includes every link to a
+  primitive, group, or component, from any page. Without JavaScript, a
+  section still opens from its heading.
+- **Printing the page** from the browser opens every section first and closes
+  the ones that were closed afterwards.
+- **What stays open.** A page's untitled opening prose, a class's Features
+  table, a species' lines and opening sentence, and a heading that holds
+  sections (a group, a class's Class Features, an option list) with its
+  intro.
+- **Page types.** A class page's sections are its Core Traits, "Becoming a
+  …", each feature, each option, its spell list, and its subclasses; Class
+  Features and each option list are open headings over theirs, and nest
+  their features or options in the contents. A subclass page's sections are
+  its features, and a species page's its traits. Components that render after
+  a template are one section each.
+- **Print and PNG capture** use the same components with `mode` `print` or
+  `capture`: each section renders as a plain section with its heading, and
+  there is no table of contents.
+
 ### Redirects
 
 Old URLs keep working (P9). A redirect page has a `noindex` tag, a canonical
@@ -319,9 +366,13 @@ indexes.
   (`PageComponents`), unless its template places them itself
   (`PLACES_COMPONENTS` in `site/src/lib/template.ts`), as the species page
   prints its traits as titled paragraphs and the class and subclass pages
-  print their features and options in their own sections. The layout is basic until the UI
-  redesign (#237).
-  Print and PNG capture render them the same way.
+  print their features and options in their own sections. On screen a page
+  type is an accordion page ([Accordion pages](#accordion-pages)); print and
+  PNG capture show every section open, the species page's traits as titled
+  paragraphs.
+- A card entry's page has no sections to collapse. It is reached from the
+  Library, and the browser's Back returns to the results, since the Library
+  keeps its state in the URL ([Gallery](#gallery)).
 - `description` as lore, visually distinct from rules text.
 - Forward refs and back-refs as links
   ([content-model.md](content-model.md#references)); a page type's include

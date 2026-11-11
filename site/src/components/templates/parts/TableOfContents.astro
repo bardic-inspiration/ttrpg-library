@@ -1,0 +1,62 @@
+---
+// An accordion page's jump-to table of contents (docs/site.md#accordion-pages): a link to each
+// section, with the sections nested in one listed under it. A link opens its section and scrolls
+// to it. Shown on screen only.
+import type { TocItem } from '../../../lib/accordion';
+
+interface Props {
+  items: TocItem[];
+  /** Nested lists render with the same component. */
+  nested?: boolean;
+}
+
+const { items, nested = false } = Astro.props;
+---
+{nested ? (
+  <ul>
+    {items.map((item) => (
+      <li>
+        <a href={`#${item.id}`}>{item.label}</a>
+        {item.children && item.children.length > 0 && <Astro.self items={item.children} nested />}
+      </li>
+    ))}
+  </ul>
+) : (
+  items.length > 0 && (
+    <nav class="toc" aria-label="Contents">
+      <p class="toc__title" aria-hidden="true">Contents</p>
+      <Astro.self items={items} nested />
+    </nav>
+  )
+)}
+
+<style>
+  @layer components {
+    .toc {
+      display: grid;
+      gap: var(--space-3xs);
+    }
+
+    .toc__title {
+      font-weight: var(--font-weight-strong);
+    }
+
+    .toc > ul {
+      columns: var(--toc-column-width);
+      column-gap: var(--space-m);
+    }
+
+    .toc ul {
+      padding-inline-start: 0;
+      list-style: none;
+    }
+
+    .toc ul ul {
+      padding-inline-start: var(--space-s);
+    }
+
+    .toc li:not(:has(ul)) {
+      break-inside: avoid;
+    }
+  }
+</style>

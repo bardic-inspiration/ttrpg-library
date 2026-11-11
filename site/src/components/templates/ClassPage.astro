@@ -3,22 +3,27 @@
 // docs/site.md#templates), in the SRD's order: the Core Traits lines, "Becoming a <Class> …", the
 // Features table, each class feature as "Level 1: Rage" anchored at `#class-feature-<id>`, the
 // option lists with each option anchored at `#class-option-<id>`, the spell list, then the class's
-// subclasses. The layout is basic until the UI redesign (#237).
+// subclasses. On screen it is an accordion page (docs/site.md#accordion-pages): a table of
+// contents, then each section collapsed, except that Class Features and each option list keep
+// their heading and intro open over their features' or options' sections.
 import { anchorId } from '../../../../lib/rules';
 import type { ClassFeatureStats, ClassOptionStats, ClassStats, DerivedClass, LinkedClass } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { OPTION_REPEATABLE, classLines, classWords, featureHeading, featuresTable, optionLines, spellListTables } from '../../lib/class';
 import { renderInlineMarkdown } from '../../lib/markdown';
 import type { TemplateProps } from '../../lib/template';
 import { url } from '../../lib/url';
+import { sectionId, type TocItem } from '../../lib/accordion';
+import Accordion from './parts/Accordion.astro';
 import Heading from './parts/Heading.astro';
 import PropertyList from './parts/PropertyList.astro';
 import RulesText from './parts/RulesText.astro';
 import StatBlock from './parts/StatBlock.astro';
 import StatBlockHeader from './parts/StatBlockHeader.astro';
+import TableOfContents from './parts/TableOfContents.astro';
 
 type Props = TemplateProps;
 
-const { entry, derived, names, paths, mode, level = 2, components = [] } = Astro.props;
+const { entry, derived, names, paths, mode = 'screen', level = 2, components = [] } = Astro.props;
 const refs = { names, ruleset: entry.ruleset, paths };
 const s = entry.stats as ClassStats;
 const d = derived as unknown as DerivedClass & LinkedClass;
@@ -27,72 +32,89 @@ const byKey = new Map(components.map(({ entry: c }) => [`${c.type}/${c.id}`, c])
 const features = s.features.flatMap(({ ref }) => byKey.get(ref) ?? []);
 const optionLists = (s.optionLists ?? []).map((list) => ({ ...list, options: list.options.flatMap(({ ref }) => byKey.get(ref) ?? []) }));
 const subclasses = d.subclasses ?? [];
+const hasSpellList = (d.spellList?.length ?? 0) > 0;
+const component = (c: { type: string; id: string }) => anchorId(`${c.type}/${c.id}`);
+const contents: TocItem[] = [
+  { id: sectionId(words.coreTraits), label: words.coreTraits },
+  { id: sectionId(words.becoming), label: words.becoming },
+  {
+    id: sectionId(words.classFeatures),
+    label: words.classFeatures,
+    children: features.map((f) => ({ id: component(f), label: featureHeading(f.name, f.stats as ClassFeatureStats) })),
+  },
+  ...optionLists.map((list) => ({ id: sectionId(list.name), label: list.name, children: list.options.map((o) => ({ id: component(o), label: o.name })) })),
+  ...(hasSpellList ? [{ id: sectionId(words.spellList), label: words.spellList }] : []),
+  ...(subclasses.length > 0 ? [{ id: sectionId(words.subclasses), label: words.subclasses }] : []),
+];
 ---
 <StatBlock name={`${entry.name} class`} type="class" mode={mode}>
   <StatBlockHeader name={entry.name} subtitle="Class" level={level} />
-  <section class="class-section" aria-label={words.coreTraits}>
-    <Heading level={level + 1}>{words.coreTraits}</Heading>
+  {mode === 'screen' && <TableOfContents items={contents} />}
+  <Accordion class="class-section" id={sectionId(words.coreTraits)} level={level + 1} mode={mode}>
+    <Fragment slot="title">{words.coreTraits}</Fragment>
     <PropertyList lines={classLines(entry.name, s, names)} refs={refs} />
-  </section>
-  <section class="class-section">
-    <Heading level={level + 1}>{words.becoming}</Heading>
+  </Accordion>
+  <Accordion class="class-section" id={sectionId(words.becoming)} level={level + 1} mode={mode}>
+    <Fragment slot="title">{words.becoming}</Fragment>
     <Heading level={level + 2}>{words.levelOne}</Heading>
     <ul>{words.levelOneBullets.map((bullet) => <li>{bullet}</li>)}</ul>
     <Heading level={level + 2}>{words.multiclass}</Heading>
     <RulesText text={s.multiclass} refs={refs} />
-  </section>
+  </Accordion>
   {d.featureRows && <RulesText class="class-table" text={featuresTable(entry.name, s, d)} refs={refs} />}
-  <section class="class-section">
+  <section class="class-section" id={sectionId(words.classFeatures)}>
     <Heading level={level + 1}>{words.classFeatures}</Heading>
     <p>{words.featuresIntro}</p>
-    {features.map((feature) => (
-      <div class="class-feature" id={anchorId(`${feature.type}/${feature.id}`)} data-type={feature.type}>
-        <Heading level={level + 2}>{featureHeading(feature.name, feature.stats as ClassFeatureStats)}</Heading>
-        <RulesText text={(feature.stats as ClassFeatureStats).text} refs={refs} />
-      </div>
-    ))}
+    <div class="class-section__list">
+      {features.map((feature) => (
+        <Accordion class="class-feature" id={component(feature)} type={feature.type} level={level + 2} mode={mode}>
+          <Fragment slot="title">{featureHeading(feature.name, feature.stats as ClassFeatureStats)}</Fragment>
+          <RulesText text={(feature.stats as ClassFeatureStats).text} refs={refs} />
+        </Accordion>
+      ))}
+    </div>
   </section>
   {optionLists.map((list) => (
-    <section class="class-section">
+    <section class="class-section" id={sectionId(list.name)}>
       <Heading level={level + 1}>{list.name}</Heading>
       <RulesText text={list.text} refs={refs} />
-      {list.options.map((option) => {
-        const o = option.stats as ClassOptionStats;
-        return (
-          <div class="class-option" id={anchorId(`${option.type}/${option.id}`)} data-type={option.type}>
-            <Heading level={level + 2}>{option.name}</Heading>
-            {optionLines(o).map((line) => <p class="class-option__line" set:html={renderInlineMarkdown(line, refs)} />)}
-            <RulesText text={o.text} refs={refs} />
-            {o.repeatable && <RulesText label={OPTION_REPEATABLE} text={o.repeatable} refs={refs} />}
-          </div>
-        );
-      })}
+      <div class="class-section__list">
+        {list.options.map((option) => {
+          const o = option.stats as ClassOptionStats;
+          return (
+            <Accordion class="class-option" id={component(option)} type={option.type} level={level + 2} mode={mode}>
+              <Fragment slot="title">{option.name}</Fragment>
+              {optionLines(o).map((line) => <p class="class-option__line" set:html={renderInlineMarkdown(line, refs)} />)}
+              <RulesText text={o.text} refs={refs} />
+              {o.repeatable && <RulesText label={OPTION_REPEATABLE} text={o.repeatable} refs={refs} />}
+            </Accordion>
+          );
+        })}
+      </div>
     </section>
   ))}
-  {d.spellList && d.spellList.length > 0 && (
-    <section class="class-section">
-      <Heading level={level + 1}>{words.spellList}</Heading>
+  {hasSpellList && (
+    <Accordion class="class-section" id={sectionId(words.spellList)} level={level + 1} mode={mode}>
+      <Fragment slot="title">{words.spellList}</Fragment>
       <p>{words.spellListIntro}</p>
       {spellListTables(entry.name, d).map((md) => <RulesText class="class-table" text={md} refs={refs} />)}
-    </section>
+    </Accordion>
   )}
   {subclasses.length > 0 && (
-    <section class="class-section">
-      <Heading level={level + 1}>{words.subclasses}</Heading>
+    <Accordion class="class-section" id={sectionId(words.subclasses)} level={level + 1} mode={mode}>
+      <Fragment slot="title">{words.subclasses}</Fragment>
       <ul>{subclasses.map((key) => <li><a class="ref-link" href={url(`${entry.ruleset}/${key}/`)}>{names.get(key) ?? key}</a></li>)}</ul>
-    </section>
+    </Accordion>
   )}
 </StatBlock>
 
 <style>
   @layer components {
-    .class-section > :global(* + *),
-    .class-feature > :global(* + *),
-    .class-option > :global(* + *) {
+    section.class-section > :global(* + *) {
       margin-block-start: var(--space-2xs);
     }
 
-    .class-section ul {
+    :global(.class-section ul) {
       padding-inline-start: var(--space-m);
     }
 

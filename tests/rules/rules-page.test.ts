@@ -8,7 +8,9 @@ import RulesPage from '../../site/src/components/rules/RulesPage.astro';
 import EntryTemplate from '../../site/src/components/templates/EntryTemplate.astro';
 import { entryNames, refPaths, refTargets } from '../../site/src/lib/library.ts';
 import { renderMarkdown } from '../../site/src/lib/markdown.ts';
-import { textOf } from '../site/library-fixtures.ts';
+import { textOf, withoutContents } from '../site/library-fixtures.ts';
+import { openAround, sectionId } from '../../site/src/lib/accordion.ts';
+import { pageContents } from '../../site/src/lib/rules.ts';
 import { fixtureSite } from './fixture.ts';
 
 const { data, all, ctx } = await fixtureSite();
@@ -73,7 +75,7 @@ describe('links to rules', () => {
 describe('a rules page', () => {
   it('renders its prose, then every primitive of a type, each in an anchored section with its back-references', async () => {
     const html = await render(RulesPage, { ctx, page: page('glossary') });
-    const text = textOf(html);
+    const text = textOf(withoutContents(html));
     expect(text.trim()).toMatch(/^Glossary Conventions Terms are listed alphabetically\. Tags Some terms have tags\. Advantage/);
     expect(html).toContain('id="term-advantage"');
     expect(html).toContain('id="term-disadvantage"');
@@ -107,7 +109,65 @@ describe('a rules page', () => {
 
   it('lists its extensions at the bottom, searchable, linked to their cards', async () => {
     const html = await render(RulesPage, { ctx, page: page('tools') });
-    expect(html).toMatch(/<h2 id="extensions-heading">Extensions<\/h2>[\s\S]*<input type="search"[\s\S]*href="\/fixture-rules\/gear\/mallet\/">Mallet<\/a>/);
+    expect(html).toMatch(/<details class="accordion rules-page__extensions" id="section-extensions"><summary class="accordion__summary"><h2>Extensions<\/h2>[\s\S]*<input type="search"[\s\S]*href="\/fixture-rules\/gear\/mallet\/">Mallet<\/a>/);
+  });
+});
+
+describe('a rules page as an accordion page', () => {
+  it('lists its titled prose, its primitives, and its groups in a table of contents, but not a cross-listed primitive', () => {
+    expect(pageContents(ctx, page('glossary'))).toEqual([
+      { id: 'section-conventions', label: 'Conventions' },
+      { id: 'term-advantage', label: 'Advantage' },
+      { id: 'term-disadvantage', label: 'Disadvantage' },
+    ]);
+    expect(pageContents(ctx, page('tools'))).toEqual([
+      {
+        id: 'gear-tools',
+        label: 'Tools',
+        children: [
+          { id: 'gear-hand-tools', label: 'Hand Tools' },
+          { id: 'gear-big-tools', label: 'Big Tools' },
+          { id: 'gear-any-tools', label: 'Any Tools' },
+        ],
+      },
+      { id: 'section-extensions', label: 'Extensions' },
+    ]);
+  });
+
+  it('renders each titled prose section and primitive collapsed, its subsections inside it, after the table of contents', async () => {
+    const html = await render(RulesPage, { ctx, page: page('glossary') });
+    expect(html).toMatch(/<h1>Glossary<\/h1><nav class="toc" aria-label="Contents">[\s\S]*<a href="#term-advantage">Advantage<\/a>[\s\S]*<\/nav>/);
+    expect(html).toMatch(/<details class="accordion rule-prose" id="section-conventions"><summary class="accordion__summary"><h2>Conventions<\/h2><\/summary><div class="accordion__body">[\s\S]*<h3>Tags<\/h3>[\s\S]*<\/details>/);
+    expect(html).toContain('<details class="accordion rule" id="term-advantage" data-type="term"><summary class="accordion__summary"><h2>Advantage</h2></summary>');
+    expect(html).not.toMatch(/<details[^>]* open/);
+  });
+
+  it('keeps a group open over its members, each collapsed', async () => {
+    const html = await render(RulesPage, { ctx, page: page('tools') });
+    expect(html).toContain('<section class="rule-group" id="gear-hand-tools" data-type="gear"><h3>Hand Tools');
+    expect(html).toContain('<details class="accordion rule" id="gear-hammer" data-type="gear"><summary class="accordion__summary"><h4>Hammer</h4></summary>');
+  });
+});
+
+describe('the anchors of accordion pages', () => {
+  it('give a titled section a slug that keeps clear of `<type>-<id>` anchors', () => {
+    expect(sectionId('Food, Drink, and Lodging')).toBe('section-food-drink-and-lodging');
+    expect(sectionId('Becoming a Sorcerer …')).toBe('section-becoming-a-sorcerer');
+    expect(sectionId('Café')).toBe('section-cafe');
+  });
+
+  it('open the target and every accordion around it, and nothing else', () => {
+    const node = (tagName: string, parentElement: any = null) => ({ tagName, open: false, parentElement });
+    const outer = node('DETAILS');
+    const sibling = node('DETAILS');
+    const inner = node('DETAILS', node('DIV', outer));
+    const target = node('H4', inner);
+    openAround(target);
+    expect([outer.open, inner.open, sibling.open, target.open]).toEqual([true, true, false, false]);
+    const section = node('DETAILS');
+    openAround(section);
+    expect(section.open).toBe(true);
+    expect(() => openAround(null)).not.toThrow();
   });
 });
 

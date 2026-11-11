@@ -35,6 +35,10 @@
     --tree-indent: var(--space-s);
     --tree-chevron: var(--space-2xs);
 
+    /* Accordion pages: a section's chevron, and the table of contents' column width. */
+    --accordion-chevron: var(--space-2xs);
+    --toc-column-width: var(--size-card-min);
+
     /* Stat blocks. */
     --statblock-bg: var(--color-surface);
     --statblock-heading-font: var(--font-heading);

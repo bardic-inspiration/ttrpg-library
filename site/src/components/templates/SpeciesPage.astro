@@ -2,32 +2,53 @@
 // The dnd-5e-2024 species page (registry template `species-page`, docs/rulesets.md#species,
 // docs/site.md#templates): name, its Creature Type, Size, and Speed lines, the sentence that opens
 // its traits, then each trait, a component, as a bold-italic titled paragraph anchored at
-// `#species-trait-<id>`, in the species' order. The layout is basic until the UI redesign (#237).
+// `#species-trait-<id>`, in the species' order. On screen it is an accordion page
+// (docs/site.md#accordion-pages): a table of contents, then each trait collapsed, its name the
+// heading.
 import { anchorId } from '../../../../lib/rules';
 import type { SpeciesStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { speciesIntro, speciesLines } from '../../lib/species';
 import type { TemplateProps } from '../../lib/template';
+import { type TocItem } from '../../lib/accordion';
+import Accordion from './parts/Accordion.astro';
 import PropertyList from './parts/PropertyList.astro';
 import RulesText from './parts/RulesText.astro';
 import StatBlock from './parts/StatBlock.astro';
 import StatBlockHeader from './parts/StatBlockHeader.astro';
+import TableOfContents from './parts/TableOfContents.astro';
 
 type Props = TemplateProps;
 
-const { entry, names, paths, mode, level = 2, components = [] } = Astro.props;
+const { entry, names, paths, mode = 'screen', level = 2, components = [] } = Astro.props;
 const refs = { names, ruleset: entry.ruleset, paths };
 const s = entry.stats as SpeciesStats;
+const traits = components.map(({ entry: trait }) => ({ trait, id: anchorId(`${trait.type}/${trait.id}`), text: (trait.stats as { text: string }).text }));
+const contents: TocItem[] = traits.map(({ trait, id }) => ({ id, label: trait.name }));
 ---
 <StatBlock name={`${entry.name} species`} type="species" mode={mode}>
   <StatBlockHeader name={entry.name} subtitle="Species" level={level} />
   <PropertyList lines={speciesLines(s)} />
   <div class="species-traits">
     <p>{speciesIntro(entry.name, s)}</p>
-    {components.map(({ entry: trait }) => (
-      <div class="species-trait" id={anchorId(`${trait.type}/${trait.id}`)} data-type={trait.type}>
-        <RulesText label={trait.name} text={(trait.stats as { text: string }).text} refs={refs} />
-      </div>
-    ))}
+    {mode === 'screen' ? (
+      <>
+        <TableOfContents items={contents} />
+        <div>
+          {traits.map(({ trait, id, text }) => (
+            <Accordion class="species-trait" id={id} type={trait.type} level={level + 1}>
+              <Fragment slot="title">{trait.name}</Fragment>
+              <RulesText text={text} refs={refs} />
+            </Accordion>
+          ))}
+        </div>
+      </>
+    ) : (
+      traits.map(({ trait, id, text }) => (
+        <div class="species-trait" id={id} data-type={trait.type}>
+          <RulesText label={trait.name} text={text} refs={refs} />
+        </div>
+      ))
+    )}
   </div>
 </StatBlock>
 
