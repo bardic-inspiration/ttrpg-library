@@ -1,16 +1,17 @@
 ---
-// One primitive's section on its rules page (docs/site.md#rules-pages): its name as an anchored
-// heading, its rules, and its links. A link to the primitive lands on this
-// section. A type whose registry template has a body part here renders with
-// it (a condition's effects); a text-only one as paragraphs; any other renders its stats as labeled lines.
+// One primitive's section on its rules page (docs/site.md#rules-pages): an accordion section
+// (docs/site.md#accordion-pages) anchored at its key, its name the heading, holding its rules and
+// its links. A link to the primitive opens this section. A type whose registry template has a
+// body part here renders with it (a condition's effects); a text-only one as paragraphs; any
+// other renders its stats as labeled lines.
 import { anchorId, ruleKey, type Primitive } from '../../../../lib/rules';
 import type { ConditionStats, EquipmentStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { genericLines } from '../../lib/generic';
-import { tagLabel, type RulesContext } from '../../lib/rules';
+import { primitiveTitle, textOnly, type RulesContext } from '../../lib/rules';
 import registry from '../../../../config/types.json';
 import ConditionEffects from '../templates/parts/ConditionEffects.astro';
 import EquipmentBody from '../templates/parts/EquipmentBody.astro';
-import Heading from '../templates/parts/Heading.astro';
+import Accordion from '../templates/parts/Accordion.astro';
 import PropertyList from '../templates/parts/PropertyList.astro';
 import RulesText from '../templates/parts/RulesText.astro';
 import RefLinks from './RefLinks.astro';
@@ -27,13 +28,11 @@ const template = (registry as Record<string, { types: Record<string, { template?
 // The group is the section the primitive sits in, so it isn't repeated as a line.
 const skip = ctx.data.groups.has(primitive.type) ? ['group'] : [];
 const refs = { names: ctx.names, ruleset: ctx.data.ruleset, paths: ctx.paths };
-// A primitive that is only rules text (a weapon property), with an optional tag (a glossary
-// term), reads as paragraphs, its tag in brackets after its name: "Attack [Action]".
-const tag = typeof primitive.stats.tag === 'string' ? primitive.stats.tag : undefined;
-const onlyText = typeof primitive.stats.text === 'string' && Object.keys(primitive.stats).every((k) => k === 'text' || k === 'tag');
+// A text-only primitive reads as paragraphs, its tag in its heading.
+const onlyText = textOnly(primitive);
 ---
-<section class="rule" id={anchorId(key)} data-type={primitive.type}>
-  <Heading level={level}>{primitive.name}{onlyText && tag && ` [${tagLabel(tag)}]`}</Heading>
+<Accordion class="rule" id={anchorId(key)} type={primitive.type} level={level}>
+  <Fragment slot="title">{primitiveTitle(primitive)}</Fragment>
   {template === 'condition-card' ? (
     <ConditionEffects name={primitive.name} stats={primitive.stats as unknown as ConditionStats} refs={refs} />
   ) : template === 'equipment-card' ? (
@@ -44,13 +43,4 @@ const onlyText = typeof primitive.stats.text === 'string' && Object.keys(primiti
     <PropertyList lines={genericLines(primitive.stats, ctx.names, '', skip)} refs={refs} />
   )}
   <RefLinks ctx={ctx} key={key} />
-</section>
-
-<style>
-  @layer components {
-    .rule {
-      display: grid;
-      gap: var(--space-2xs);
-    }
-  }
-</style>
+</Accordion>

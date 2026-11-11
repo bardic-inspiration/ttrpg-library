@@ -16,6 +16,7 @@ import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { ClassStats, DerivedClass, LinkedClass } from '../../../rulesets/dnd-5e-2024/types.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
+import { withoutContents } from '../../site/library-fixtures.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const CONTENT = join(ROOT, 'content/dnd-5e-2024');
@@ -308,12 +309,32 @@ describe('the pages', async () => {
       '<h3>Sorcerer Spell List</h3>',
       '<caption>Cantrips (Level 0 Sorcerer Spells)</caption>',
       '<h3>Sorcerer Subclasses</h3>',
-    ].map((needle) => html.indexOf(needle));
+    ].map((needle) => withoutContents(html).indexOf(needle));
     expect(order.every((i) => i >= 0)).toBe(true);
     expect(order).toEqual([...order].sort((a, b) => a - b));
     expect(html).toContain('<p>As a Sorcerer, you gain the following class features when you reach the specified Sorcerer levels. These features are listed in the Sorcerer Features table.</p>');
     expect(html).toContain('<p class="class-option__line">Cost: 1 Sorcery Point</p>');
     expect(html).not.toContain('page-component');
+  });
+
+  it('shows the class page on screen as collapsed sections, with features and options nested in its table of contents', () => {
+    const toc = html.match(/<nav class="toc"[\s\S]*?<\/nav>/)![0];
+    expect(toc).toMatch(
+      /href="#section-core-sorcerer-traits">Core Sorcerer Traits<[\s\S]*href="#section-sorcerer-class-features">Sorcerer Class Features<\/a><ul><li><a href="#class-feature-sorcerer-spellcasting">Level 1: Spellcasting<[\s\S]*href="#section-metamagic-options">Metamagic Options<\/a><ul><li><a href="#class-option-sorcerer-careful-spell">Careful Spell<[\s\S]*href="#section-sorcerer-subclasses">/,
+    );
+    expect(html).toContain('<details class="accordion class-section" id="section-core-sorcerer-traits"><summary class="accordion__summary"><h3>Core Sorcerer Traits</h3></summary>');
+    expect(html).toContain('<details class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><summary class="accordion__summary"><h4>Level 1: Spellcasting</h4></summary>');
+    // A section holding features keeps its heading and intro open over them.
+    expect(html).toContain('<section class="class-section" id="section-sorcerer-class-features"><h3>Sorcerer Class Features</h3>');
+    // Every toc link lands on an id on the page.
+    for (const [, id] of toc.matchAll(/href="#([^"]+)"/g)) expect(html).toContain(`id="${id}"`);
+  });
+
+  it('prints the class page with every section open and no table of contents', async () => {
+    const printed = (await (await AstroContainer.create()).renderToString(EntryTemplate, { props: { ...sorcerer, names, paths, components: sorcerer.components, mode: 'print' } })).replace(/ data-astro-cid-\w+/g, '');
+    expect(printed).not.toContain('<details');
+    expect(printed).not.toContain('class="toc"');
+    expect(printed).toContain('<section class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><h4>Level 1: Spellcasting</h4>');
   });
 
   it('links a feature in the Features table to its anchor, and the class to its subclasses', () => {

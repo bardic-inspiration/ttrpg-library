@@ -1,0 +1,126 @@
+---
+// One section of an accordion page (docs/site.md#accordion-pages): on screen a disclosure that
+// starts collapsed, its heading the toggle; in print and capture a plain section with its
+// heading, so nothing is hidden. Its id is the section's anchor, and a link to it, or to
+// anything inside it, opens it and scrolls to it.
+import type { TemplateMode } from '../../../lib/template';
+import Heading from './Heading.astro';
+
+interface Props {
+  id?: string;
+  level: number;
+  mode?: TemplateMode;
+  /** A primitive's or component's type, for its accent. */
+  type?: string;
+  class?: string;
+}
+
+const { id, level, mode = 'screen', type, class: className } = Astro.props;
+---
+{mode === 'screen' ? (
+  <details class:list={['accordion', className]} id={id} data-type={type}>
+    <summary class="accordion__summary"><Heading level={level}><slot name="title" /></Heading></summary>
+    <div class="accordion__body"><slot /></div>
+  </details>
+) : (
+  <section class:list={['accordion', className]} id={id} data-type={type}>
+    <Heading level={level}><slot name="title" /></Heading>
+    <div class="accordion__body"><slot /></div>
+  </section>
+)}
+
+<script>
+  import { openAround } from '../../../lib/accordion';
+
+  // A link's target may sit in a collapsed section: open it, and the ones around it, then scroll
+  // to it. Runs on load, on every new hash, and on a click on a link to the hash already
+  // showing, which fires no hashchange.
+  const reveal = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
+    openAround(target);
+    target.scrollIntoView();
+  };
+  reveal();
+  addEventListener('hashchange', reveal);
+  document.addEventListener('click', (event) => {
+    const link = (event.target as Element | null)?.closest?.('a[href*="#"]');
+    if (link instanceof HTMLAnchorElement && link.pathname === location.pathname && link.hash !== '' && link.hash === location.hash) {
+      event.preventDefault();
+      reveal();
+    }
+  });
+
+  // Printing the page prints every section, then closes the ones that were closed.
+  let closed: HTMLDetailsElement[] = [];
+  addEventListener('beforeprint', () => {
+    closed = [...document.querySelectorAll<HTMLDetailsElement>('details.accordion:not([open])')];
+    for (const section of closed) section.open = true;
+  });
+  addEventListener('afterprint', () => {
+    for (const section of closed) section.open = false;
+    closed = [];
+  });
+</script>
+
+<style>
+  @layer components {
+    .accordion {
+      border-block-end: var(--border-width) solid var(--color-border);
+    }
+
+    /* A stat block already rules off its sections. */
+    :global(.statblock) > .accordion {
+      border-block-end: 0;
+    }
+
+    .accordion__summary {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2xs);
+      padding-block: var(--space-2xs);
+      cursor: pointer;
+      list-style: none;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      /* A chevron that points down when the section is open. */
+      &::before {
+        content: '';
+        flex: none;
+        inline-size: var(--accordion-chevron);
+        block-size: var(--accordion-chevron);
+        border-block-start: var(--border-width-strong) solid currentcolor;
+        border-inline-end: var(--border-width-strong) solid currentcolor;
+        transform: translateY(calc(var(--accordion-chevron) * -0.2)) rotate(45deg);
+        transition: transform var(--duration-quick);
+      }
+    }
+
+    details[open] > .accordion__summary::before {
+      transform: translateY(calc(var(--accordion-chevron) * -0.4)) rotate(135deg);
+    }
+
+    .accordion__body {
+      display: grid;
+      gap: var(--space-2xs);
+      padding-block-end: var(--space-s);
+    }
+
+    section.accordion {
+      border: 0;
+
+      & + section.accordion {
+        margin-block-start: var(--space-s);
+      }
+
+      & > .accordion__body {
+        padding: 0;
+        margin-block-start: var(--space-2xs);
+      }
+    }
+  }
+</style>

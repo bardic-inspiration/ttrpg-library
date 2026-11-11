@@ -14,5 +14,8 @@ export async function fixtureLibrary() {
 }
 
 /** Text of rendered HTML: tags dropped, whitespace collapsed. */
+/** An accordion page's markup without its table of contents (docs/site.md#accordion-pages). */
+export const withoutContents = (html: string): string => html.replace(/<nav class="toc"[\s\S]*?<\/nav>/, '');
+
 export const textOf = (html: string): string =>
   html.replace(/<[^>]+>/g, ' ').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/\s+/g, ' ').replace(/ ([.,;:)])/g, '$1').replace(/\( /g, '(');

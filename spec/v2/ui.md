@@ -29,6 +29,8 @@ selection). Publishing homebrew for others is out of scope for v2.
 - [Gallery](../../docs/site.md#gallery): the filter tree, sort, search, URL
   state, selection, and set actions.
 - [Detail page](../../docs/site.md#detail-page).
+- [Accordion pages](../../docs/site.md#accordion-pages): rules pages and page
+  types.
 - [Print](../../docs/export.md#print).
 - [CI checks](../../docs/workflow.md#ci-checks): the per-PR accessibility
   run.
@@ -49,16 +51,6 @@ style redesign's (#114).
   the device's own save or print dialog. v1's page size dropdown goes. The
   export flows themselves, including what Download offers and how print
   picks its layout, are designed in `export.md` (#115).
-
-### Entries and pages
-
-- **A card entry opens on its own detail page**, as in v1, and
-  back-navigation returns to the results.
-- **Page types** (classes, subclasses, species) and **rules pages** are long
-  pages laid out as accordion sections with a jump-to table of contents.
-  Sections start collapsed. A link to a section, including a link to a
-  primitive or component ([Components](../../docs/content-model.md#components)), opens it and scrolls
-  to it.
 
 ### Print
 
@@ -81,14 +73,11 @@ without splitting an action or trait.
 
 ## Cases
 
-- `creature/lich`: a long card entry on its detail page, at all three widths.
 - `spell/fireball` and `creature/lich`: printed together, stacked on the same
   page.
 
 ## Done when
 
-- Rules pages and page types render as accordion sections with a table of
-  contents, and an anchor link opens its section.
 - Print has no per-page mode.
 - The site has one set of color tokens, with no theme attribute or switch.
 - CI no longer runs the contrast test, and the docs describe the milestone

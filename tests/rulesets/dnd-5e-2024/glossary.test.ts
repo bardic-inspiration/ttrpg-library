@@ -12,7 +12,7 @@ import { renderMarkdown } from '../../../site/src/lib/markdown.ts';
 import { rulesContext, rulesData } from '../../../site/src/lib/rules.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
-import { textOf } from '../../site/library-fixtures.ts';
+import { textOf, withoutContents } from '../../site/library-fixtures.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const RULES = join(ROOT, 'rulesets/dnd-5e-2024/rules');
@@ -72,7 +72,7 @@ describe('the Glossary page', () => {
   it('opens with the conventions and abbreviations, then anchors every term at its alphabetical place', async () => {
     expect(data.pages[0]!.id).toBe('glossary');
     const html = await render(RulesPage, { ctx, page });
-    const text = textOf(html);
+    const text = textOf(withoutContents(html));
     expect(text.trim()).toMatch(/^Glossary Glossary Conventions The glossary uses the following conventions: Tags in Brackets\./);
     expect(text).toContain('AC Armor Class');
     expect(text).toMatch(/Rules Definitions Here are definitions of various rules\. Ability Check An ability check/);
@@ -81,7 +81,7 @@ describe('the Glossary page', () => {
   });
 
   it('prints a tag in brackets after the name', async () => {
-    const text = textOf(await render(RulesPage, { ctx, page }));
+    const text = textOf(withoutContents(await render(RulesPage, { ctx, page })));
     expect(text).toContain('Attack [Action] When you take the Attack action');
     expect(text).toContain('Cone [Area of Effect] A Cone is');
   });

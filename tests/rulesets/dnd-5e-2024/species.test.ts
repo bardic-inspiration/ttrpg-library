@@ -102,10 +102,13 @@ describe('the page', async () => {
   const names = entryNames(all, [data]);
   const paths = refPaths([data], all);
   const dragonborn = all.find(({ entry }) => entry.id === 'dragonborn')!;
-  const html = (await (await AstroContainer.create()).renderToString(EntryTemplate, { props: { ...dragonborn, names, paths, components: dragonborn.components } })).replace(
-    / data-astro-cid-\w+/g,
-    '',
-  );
+  const renderIn = async (mode: 'screen' | 'print') =>
+    (await (await AstroContainer.create()).renderToString(EntryTemplate, { props: { ...dragonborn, names, paths, components: dragonborn.components, mode } })).replace(
+      / data-astro-cid-\w+/g,
+      '',
+    );
+  const html = await renderIn('screen');
+  const printed = await renderIn('print');
 
   it('prints its lines and the opening sentence', () => {
     expect(html).toContain('<dt>Creature Type</dt><dd>Humanoid</dd><dt>Size</dt><dd>Medium (about 5–7 feet tall)</dd><dt>Speed</dt><dd>30 feet</dd>');
@@ -113,12 +116,21 @@ describe('the page', async () => {
   });
 
   it('prints each trait as a titled paragraph at its anchor, in order, and no generic sections', () => {
-    expect(html).toContain('<div class="species-trait" id="species-trait-dragonborn-darkvision" data-type="species-trait"><div class="rules-text"><p><em><strong>Darkvision.</strong></em> You have Darkvision');
-    const order = ['draconic-ancestry', 'breath-weapon', 'damage-resistance', 'darkvision', 'draconic-flight'].map((id) => html.indexOf(`id="species-trait-dragonborn-${id}"`));
+    expect(printed).toContain('<div class="species-trait" id="species-trait-dragonborn-darkvision" data-type="species-trait"><div class="rules-text"><p><em><strong>Darkvision.</strong></em> You have Darkvision');
+    const order = ['draconic-ancestry', 'breath-weapon', 'damage-resistance', 'darkvision', 'draconic-flight'].map((id) => printed.indexOf(`id="species-trait-dragonborn-${id}"`));
     expect(order).toEqual([...order].sort((a, b) => a - b));
     expect(order.every((i) => i > 0)).toBe(true);
-    expect(html).toContain('<caption>Draconic Ancestors</caption>');
-    expect(html).not.toContain('page-component');
+    expect(printed).toContain('<caption>Draconic Ancestors</caption>');
+    expect(printed).not.toContain('page-component');
+    expect(printed).not.toContain('<details');
+    expect(printed).not.toContain('class="toc"');
+  });
+
+  it('shows each trait on screen as a collapsed section at its anchor, after a table of contents', () => {
+    expect(html).toContain('<details class="accordion species-trait" id="species-trait-dragonborn-darkvision" data-type="species-trait"><summary class="accordion__summary"><h3>Darkvision</h3></summary>');
+    expect(html).not.toMatch(/<details[^>]* open/);
+    expect(html).toMatch(/<nav class="toc" aria-label="Contents">[\s\S]*<a href="#species-trait-dragonborn-draconic-ancestry">Draconic Ancestry<\/a>[\s\S]*<a href="#species-trait-dragonborn-draconic-flight">Draconic Flight<\/a>[\s\S]*<\/nav>/);
+    expect(html.indexOf('class="toc"')).toBeLessThan(html.indexOf('<details'));
   });
 
   it('lists a trait’s links on its species’ page, and names the trait from the other end', () => {

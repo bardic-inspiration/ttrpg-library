@@ -20,3 +20,14 @@ const label = `${primitive.name} [${tagLabel(primitive.type)}]`;
 <section class="rule rule--cross" data-type={primitive.type}>
   <Heading level={level}>{path ? <a href={url(path)}>{label}</a> : label}</Heading>
 </section>
+
+<style>
+  @layer components {
+    /* A line in the list of accordion sections, its name aligned with theirs. */
+    .rule--cross {
+      padding-block: var(--space-2xs);
+      padding-inline-start: calc(var(--accordion-chevron) + var(--space-2xs));
+      border-block-end: var(--border-width) solid var(--color-border);
+    }
+  }
+</style>

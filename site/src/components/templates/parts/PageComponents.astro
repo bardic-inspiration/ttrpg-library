@@ -1,49 +1,52 @@
 ---
 // A page type's components, after its template (docs/content-model.md#components, docs/site.md#templates):
 // each a section with its name as a heading and an anchor, `#<type>-<id>`, where a link to it
-// lands. Rules text alone reads as paragraphs; any other stats as labeled lines. The layout
-// is basic until the UI redesign's accordion pages (#237).
+// lands. Rules text alone reads as paragraphs; any other stats as labeled lines. On screen they
+// are an accordion page's sections (docs/site.md#accordion-pages): a table of contents, then each
+// component collapsed.
 import { anchorId } from '../../../../../lib/rules';
 import { genericLines } from '../../../lib/generic';
 import type { TextRefs } from '../../../lib/markdown';
-import Heading from './Heading.astro';
+import type { TemplateMode } from '../../../lib/template';
+import Accordion from './Accordion.astro';
 import PropertyList from './PropertyList.astro';
 import RulesText from './RulesText.astro';
+import TableOfContents from './TableOfContents.astro';
 
 interface Props {
   components: { entry: { type: string; id: string; name: string; stats: unknown } }[];
   refs: TextRefs;
   /** The components' heading level: one below the entry's name. */
   level: number;
+  mode?: TemplateMode;
 }
 
-const { components, refs, level } = Astro.props;
+const { components, refs, level, mode = 'screen' } = Astro.props;
+const id = (entry: { type: string; id: string }) => anchorId(`${entry.type}/${entry.id}`);
 const onlyText = (stats: unknown): stats is { text: string } =>
   typeof stats === 'object' && stats !== null && Object.keys(stats).length === 1 && typeof (stats as { text?: unknown }).text === 'string';
 ---
 <div class="page-components">
+  {mode === 'screen' && <TableOfContents items={components.map(({ entry }) => ({ id: id(entry), label: entry.name }))} />}
+  <div>
   {components.map(({ entry }) => (
-    <section class="page-component" id={anchorId(`${entry.type}/${entry.id}`)} data-type={entry.type}>
-      <Heading level={level}>{entry.name}</Heading>
+    <Accordion class="page-component" id={id(entry)} type={entry.type} level={level} mode={mode}>
+      <Fragment slot="title">{entry.name}</Fragment>
       {onlyText(entry.stats) ? (
         <RulesText text={entry.stats.text} refs={refs} />
       ) : (
         <PropertyList lines={genericLines(entry.stats, refs.names)} refs={refs} />
       )}
-    </section>
+    </Accordion>
   ))}
+  </div>
 </div>
 
 <style>
   @layer components {
-    .page-components,
-    .page-component {
+    .page-components {
       display: grid;
       gap: var(--space-s);
-    }
-
-    .page-component {
-      gap: var(--space-2xs);
     }
   }
 </style>
