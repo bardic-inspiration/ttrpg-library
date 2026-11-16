@@ -162,7 +162,7 @@ describe('checkLane docsOnly', () => {
 describe('isTestTextPath (docs/workflow.md#text-only-prs)', () => {
   it.each([
     'spec/v2/ui.md',
-    'spec/v2/style-package/README.md',
+    'spec/v2/export.md',
     '.claude/skills/generate/SKILL.md',
     'rulesets/dnd-5e-2024/guidelines/creature.md',
     'docs/routines.md',
@@ -173,7 +173,7 @@ describe('isTestTextPath (docs/workflow.md#text-only-prs)', () => {
 
   it.each([
     // Code, config, or files the build reads.
-    'spec/v2/style-package/site/tokens.css',
+    'spec/v2/tokens.css',
     '.claude/settings.json',
     '.claude/hooks/session-start.sh',
     '.claude/skills/generate/scripts/pick.ts',

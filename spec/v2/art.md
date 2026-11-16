@@ -1,6 +1,6 @@
 ---
 issue: 117
-depends: [style]
+depends: []
 ---
 
 # Art
@@ -8,8 +8,7 @@ depends: [style]
 ## Goal
 
 Fill entries' `image` field with public domain and openly licensed art that
-fits the style ([`style.md`](style.md)), through a repeatable workflow that
-can be tuned until it finds the right images. No generated art. It serves P1
+fits the site, through a repeatable workflow that can be tuned until it finds the right images. No generated art. It serves P1
 (files are the database), P5 and P9 (licensing and an original look), and P7
 (art is reviewed before it publishes).
 
