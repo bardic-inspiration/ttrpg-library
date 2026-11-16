@@ -40,8 +40,8 @@ selection). Publishing homebrew for others is out of scope for v2.
 ### Palette
 
 **One palette for the whole site.** v1's light and dark themes and the
-theme switch (System, Light, Dark) are removed. The palette itself is the
-style redesign's (#114).
+theme switch (System, Light, Dark) are removed, and v1's light palette
+stays.
 
 ### Library
 
@@ -85,6 +85,5 @@ without splitting an action or trait.
 
 ## Out of scope
 
-- Colors, type, and the visual style: the style redesign (#114).
 - The export flows: #115.
 - Publishing homebrew for others: the "Later (v3)" issue (#118).

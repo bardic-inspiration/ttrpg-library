@@ -367,7 +367,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Card entries keep their own detail pages with back-navigation. Long pages use accordion sections with a jump-to table of contents, and a link opens its section. | Compartmentalized pages; fast lookup within long pages | #113 |
 | Print stacks entries by default; the one-entry-per-page mode is removed. | Fewer pages for session prep | #113 |
 | Every UI PR shows screenshots at 390, 820, and 1440px. Accessibility moves from per-PR CI to one WCAG 2.2 AA review at the end of each milestone. | Layout is the per-PR risk; a per-PR accessibility run isn't needed. Changes how P10 is checked | #113 |
-| One palette for the whole site: no light and dark themes, and no theme switch. | One look to design, check, and print | #113 |
+| One palette for the whole site: no light and dark themes, and no theme switch. | One look to design, check, and print[^style] | #113 |
 | The Library is at `/`, Rulesets at `/rulesets/`, and Contribute links to the repository. | P9: the home URL keeps working and is the Library | #236 |
 | A `ruleset` filter (`f.ruleset`) joins the type filter; its node shows only with more than one ruleset, or when it filters. `/<ruleset>/` redirects to it. | The Library spans rulesets; with one ruleset the node is noise | #236 |
 | A type's old gallery redirects with its type and ruleset filters and its registry `defaultSort`, and a checked type opens its `defaultFilters`, so the old view survives the move. A detail page's type link goes to the same view. | P9: an old link opens the view it showed; the registry keys keep a use | #236 |
@@ -407,22 +407,15 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Translators are tested by an export-then-import round trip over the library and by each target's published schema in CI; real importers are checked by hand in the Testing backlog. | P8 | #116 |
 | The translator and export areas can be combined. | Translators are exporters behind Download | #115, #116 |
 
-### Style
-
-| Decision | Why | Source |
-|---|---|---|
-| The style feels like an early-20th-century architectural print, inspired by Frank Lloyd Wright's Wasmuth portfolio: early modern, innovative, and romantic. | An unconventional take on a fantasy sourcebook | #114 |
-| The owner's style package is the starting point: its light palette, Tenor Sans, Crimson Pro, and Josefin Sans (self-hosted), square corners, corner piers, the double page frame, and two ornaments. Its dark palette isn't used. | One palette (#113); self-hosting keeps captures faithful | #114 |
-| Every type and item rarity has its own art-glass accent. | Types stay distinct as v2 adds them | #114 |
-| Art is late-1800s and early-1900s public domain or CC book illustration and architectural drawing, lightly processed to monochrome or a tint. | Matches the style with art that is actually available | #114 |
-| Wright and the Wasmuth portfolio are inspiration only, never named on the site. | P9: an original look | #114 |
-
 ### Art
 
 | Decision | Why | Source |
 |---|---|---|
+| Art is late-1800s and early-1900s public domain or CC book illustration and architectural drawing, lightly processed to monochrome or a tint. | Art that is actually available | #117 |
 | Images stay in the repo under `assets/images/`; no external hosting. | Processed line art is small; P1 and PR review stay intact | #117 |
 | Art is lightly processed: cropped, monochrome, and tinted by CSS at display time. | One file serves every accent, and files stay small | #117 |
 | Art is used if its source marks it public domain, CC0, or CC-BY, or if the skill judges it public domain from creator and date (US publication before 1931, or a creator dead over 70 years), with the reasoning recorded. A denylist of protected collections and estates is never retrieved from. | Most wanted art predates 1931; some collections are protected regardless of age | #117 |
 | An `art` skill retrieves, checks, processes, and posts candidates. It is tuned on a `spike/` branch through a private claude.ai review page where the owner rates each candidate Good, OK, or Rejected with a note, and the next session updates the skill from the ratings. | Iteration narrows in on the right images without downloading or typing lists | #117 |
 | For the v2 build, the tuned skill opens a content PR with the Good-rated images. Later, art comes with content or is added afterwards; when content passes but its art is denied, the two are split and the request issue gets a comment. | Art has its own review criteria; P7 | #117 |
+
+[^style]: v2 planned a style redesign (#114, Milestone 6 #218) built from the owner's style package. It was scrapped before it was built: the site keeps v1's style, and v2 has no style area.
