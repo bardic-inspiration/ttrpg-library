@@ -73,7 +73,7 @@ describe('the Glossary page', () => {
     expect(data.pages[0]!.id).toBe('glossary');
     const html = await render(RulesPage, { ctx, page });
     const text = textOf(withoutContents(html));
-    expect(text.trim()).toMatch(/^Glossary Glossary Conventions The glossary uses the following conventions: Tags in Brackets\./);
+    expect(text.trim()).toMatch(/^Glossary Print Glossary Conventions The glossary uses the following conventions: Tags in Brackets\./);
     expect(text).toContain('AC Armor Class');
     expect(text).toMatch(/Rules Definitions Here are definitions of various rules\. Ability Check An ability check/);
     for (const t of terms) expect(html).toContain(`id="glossary-${t.id}"`);

@@ -67,6 +67,13 @@ export const ruleLinkables = (rules: RulesData[]): RefEntry[] =>
     })),
   ]);
 
+/**
+ * Whether a type is a page type: one that lists components (docs/content-model.md#components),
+ * shown as an accordion page. Every other entry type is a card.
+ */
+export const isPageType = (ruleset: string, type: string, moduleFor: (id: string) => RulesetModule = rulesetModule): boolean =>
+  (moduleFor(ruleset).definition.components ?? []).some((c) => c.parents.includes(type));
+
 /** Links among entries, primitives, and groups, by key. */
 export function linkAll(entries: Entry[], rules: RulesData[] = []): Map<string, Links> {
   return linkEntries([...entries.map((entry) => ({ ...entry, file: entryPath(entry) })), ...ruleLinkables(rules)]).links;

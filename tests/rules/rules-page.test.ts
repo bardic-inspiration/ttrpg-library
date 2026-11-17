@@ -76,7 +76,7 @@ describe('a rules page', () => {
   it('renders its prose, then every primitive of a type, each in an anchored section with its back-references', async () => {
     const html = await render(RulesPage, { ctx, page: page('glossary') });
     const text = textOf(withoutContents(html));
-    expect(text.trim()).toMatch(/^Glossary Conventions Terms are listed alphabetically\. Tags Some terms have tags\. Advantage/);
+    expect(text.trim()).toMatch(/^Glossary Print Conventions Terms are listed alphabetically\. Tags Some terms have tags\. Advantage/);
     expect(html).toContain('id="term-advantage"');
     expect(html).toContain('id="term-disadvantage"');
     // Advantage links Disadvantage in its text, and the note links Advantage.
@@ -105,6 +105,12 @@ describe('a rules page', () => {
     // Back-references: the note links the Hammer, the Hand Tools group, and the Ladder.
     expect(html).toMatch(/id="gear-hand-tools"[\s\S]*Referenced by[\s\S]*Field Notes/);
     expect(html).toMatch(/id="gear-ladder"[\s\S]*Used by[\s\S]*Field Notes/);
+  });
+
+  it('has Print after its title and no Download (docs/export.md#controls)', async () => {
+    const html = await render(RulesPage, { ctx, page: page('tools') });
+    expect(html).toMatch(/<\/h1>\s*<ul class="export-buttons"[^>]*data-page-print[^>]*hidden/);
+    expect(html).not.toContain('Download');
   });
 
   it('lists its extensions at the bottom, searchable, linked to their cards', async () => {
@@ -136,7 +142,7 @@ describe('a rules page as an accordion page', () => {
 
   it('renders each titled prose section and primitive collapsed, its subsections inside it, after the table of contents', async () => {
     const html = await render(RulesPage, { ctx, page: page('glossary') });
-    expect(html).toMatch(/<h1>Glossary<\/h1><nav class="toc" aria-label="Contents">[\s\S]*<a href="#term-advantage">Advantage<\/a>[\s\S]*<\/nav>/);
+    expect(html).toMatch(/<h1>Glossary<\/h1><ul class="export-buttons"[^>]*>[\s\S]*?<\/ul>(?:<script[^>]*><\/script>)?<nav class="toc" aria-label="Contents">[\s\S]*<a href="#term-advantage">Advantage<\/a>[\s\S]*<\/nav>/);
     expect(html).toMatch(/<details class="accordion rule-prose" id="section-conventions"><summary class="accordion__summary"><h2>Conventions<\/h2><\/summary><div class="accordion__body">[\s\S]*<h3>Tags<\/h3>[\s\S]*<\/details>/);
     expect(html).toContain('<details class="accordion rule" id="term-advantage" data-type="term"><summary class="accordion__summary"><h2>Advantage</h2></summary>');
     expect(html).not.toMatch(/<details[^>]* open/);

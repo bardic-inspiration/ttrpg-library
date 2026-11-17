@@ -1,6 +1,6 @@
 ---
 issue: 116
-depends: [export]
+depends: []
 ---
 
 # Translators
@@ -11,7 +11,7 @@ Move content between this library and the open TTRPG formats, in both
 directions: export entries for VTTs and other content sites, and import
 openly licensed content from them. Only open sources are covered; no
 licensed content is imported. It serves the data lane of the export design
-([`export.md`](export.md)), P5 and P9 (licensing), and P7 (every import is a
+([export.md](../../docs/export.md)), P5 and P9 (licensing), and P7 (every import is a
 reviewed PR).
 
 This area and export (#115) can be combined.
@@ -30,7 +30,7 @@ This area and export (#115) can be combined.
 Each translator is one module for one target format, with two sides:
 
 - **Export** maps an entry and its derived values to the target format. It
-  is an exporter, offered in Download's format menu ([`export.md`](export.md))
+  is an exporter, offered in Download's format menu ([Controls](../../docs/export.md#controls))
   for card entries and sets of them.
 - **Import** maps a file in the target format to library entries.
 

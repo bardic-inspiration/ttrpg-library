@@ -3,7 +3,8 @@
 // (docs/site.md#accordion-pages): its title, its untitled opening prose, its table of contents,
 // then its blocks in order (prose, a rules type's primitives, with any cross-listed type's
 // primitives among them as links, or a group's tree), each primitive and group in an anchored
-// section, and the extensions it lists at the bottom.
+// section, and the extensions it lists at the bottom. Its Print button prints the page with every
+// section open (docs/export.md#controls).
 import { entryPath } from '../../lib/library';
 import { EXTENSIONS_SECTION, blockPrimitives, pageContents, pageExtensions, type RulesContext } from '../../lib/rules';
 import Accordion from '../templates/parts/Accordion.astro';
@@ -13,6 +14,7 @@ import CrossListed from './CrossListed.astro';
 import GroupSection from './GroupSection.astro';
 import PrimitiveSection from './PrimitiveSection.astro';
 import ProseSection from './ProseSection.astro';
+import PagePrint from '../export/PagePrint.astro';
 import SearchableList from './SearchableList.astro';
 
 interface Props {
@@ -29,6 +31,7 @@ const extensions = pageExtensions(ctx, page.id).map(({ entry }) => ({ name: entr
 ---
 <article class="rules-page">
   <h1>{page.title}</h1>
+  <PagePrint />
   {intro && <ProseSection ctx={ctx} section={intro} level={2} />}
   <TableOfContents items={pageContents(ctx, page)} />
   {blocks.map((block) => {

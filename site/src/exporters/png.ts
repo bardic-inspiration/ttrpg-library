@@ -26,7 +26,8 @@ export const captureWidth = (entry: Entry, settings: PngSettings = config.png): 
 
 export const png: Exporter = {
   id: 'png',
-  label: 'Download PNG',
+  kind: 'download',
+  label: 'PNG',
   scopes: ['entry'],
   async run(items, options) {
     if (options.scope !== 'entry') throw new Error('PNG export offers entry scope only');

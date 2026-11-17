@@ -128,7 +128,8 @@ Target: WCAG 2.2 AA.
 - **Style guide.** `/styleguide/` (unlinked, `noindex`) renders from the test
   fixtures: every token as a swatch or sample; the type scale and typefaces;
   every template in each mode, with print previews in the wide and narrow print layouts; gallery
-  cards with and without art; and filter controls in their states. Edit a
+  cards with and without art; filter controls in their states; and the export
+  controls with Download's menu closed and open. Edit a
   token, and every affected
   surface updates under `npm run dev`.
 - **Stress fixtures:** a creature with legendary actions and spellcasting, a

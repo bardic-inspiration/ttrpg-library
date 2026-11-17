@@ -4,7 +4,7 @@ import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import { describe, expect, it } from 'vitest';
 import SetActions from '../../../site/src/components/gallery/SetActions.tsx';
-import { configuredExporters } from '../../../site/src/exporters/index.ts';
+import { configuredControls } from '../../../site/src/exporters/index.ts';
 import { bundleUrl, loadExportItems } from '../../../site/src/exporters/io.ts';
 import { setTarget, targetText } from '../../../site/src/lib/gallery/selection.ts';
 import { fixtureLibrary } from '../library-fixtures.ts';
@@ -83,12 +83,22 @@ describe('loadExportItems', () => {
 describe('SetActions', () => {
   const render = (target: ReturnType<typeof setTarget>) => renderToString(h(SetActions, { target, base: BASE }));
 
-  it('offers one button per configured set-scope exporter, naming its target', () => {
+  it('shows Print and Download, each naming its target (docs/export.md#controls)', () => {
     const html = render(setTarget(all, all, urls(a!, b!)));
-    const labels = configuredExporters('set').map((e) => e.label);
-    expect(labels.length).toBeGreaterThan(0);
-    for (const label of labels) expect(html).toContain(`${label}<span class="visually-hidden"> 2 selected</span>`);
-    expect(html).not.toContain('Download PNG');
+    expect(html).toContain('Print<span class="visually-hidden"> 2 selected</span>');
+    expect(html).toContain('Download<span class="visually-hidden"> 2 selected</span>');
+    expect(html.match(/<button/g)).toHaveLength(2 + configuredControls('set').downloads.length);
+  });
+
+  it('lists JSON and no PNG in the Download menu, which starts closed', () => {
+    const closed = render(setTarget(all, all, urls(a!, b!)));
+    expect(closed).toMatch(/aria-expanded="false"[^>]*aria-controls="set-actions-formats"/);
+    expect(closed).toMatch(/<ul id="set-actions-formats"[^>]*hidden/);
+    const open = renderToString(h(SetActions, { target: setTarget(all, all, urls(a!, b!)), base: BASE, open: true }));
+    expect(open).toMatch(/aria-expanded="true"/);
+    expect(open).not.toMatch(/<ul id="set-actions-formats"[^>]*hidden/);
+    const formats = [...open.matchAll(/class="export-buttons__format">([^<]+)</g)].map((m) => m[1]);
+    expect(formats).toEqual(['JSON']);
   });
 
   it('has no page size selector: the reader picks the paper in the print dialog (docs/export.md#print-layout)', () => {
@@ -99,7 +109,7 @@ describe('SetActions', () => {
 
   it('disables the actions when they would target nothing', () => {
     const html = render(setTarget(all, [], new Set()));
-    expect(html.match(/<button[^>]*disabled/g)).toHaveLength(configuredExporters('set').length);
+    expect(html.match(/<button[^>]*disabled/g)).toHaveLength(2); // Print and Download; the menu stays closed
     expect(render(setTarget(all, all, new Set()))).not.toMatch(/<button[^>]*disabled/);
   });
 
