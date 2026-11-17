@@ -179,3 +179,38 @@ describe('every facet of every type', () => {
     ]);
   });
 });
+
+describe('a path two types share (#296)', () => {
+  const records = (): LibraryRecord[] => [
+    record({ id: 'alert', type: 'feat', facets: { 'stats.category': 'origin', 'stats.level': 1 } }),
+    record({ id: 'bag', type: 'item', facets: { 'stats.category': 'wondrous' } }),
+    record({ id: 'fireball', type: 'spell', facets: { 'stats.level': 3 } }),
+  ];
+
+  it('opens and checks a category only under the type whose entries have it', () => {
+    const home = galleryConfig(reg, data);
+    const nodes = tree(records(), home, '?f.type=feat&f.stats.category=origin');
+    expect(find(nodes, 'Feat')?.open).toBe(true);
+    expect(find(nodes, 'Feat', 'Category')?.open).toBe(true);
+    expect(values(find(nodes, 'Feat', 'Category')).map((v) => [v.key, v.selected])).toEqual([['origin', true]]);
+    expect(find(nodes, 'Item')?.open).toBe(false);
+    expect(find(nodes, 'Item', 'Category')?.open).toBe(false);
+    expect(values(find(nodes, 'Item', 'Category')).map((v) => [v.key, v.selected])).toEqual([['wondrous', false]]);
+  });
+
+  it('keeps a selected value no entry has visible under every type, so it can be cleared', () => {
+    const home = galleryConfig(reg, data);
+    const nodes = tree(records(), home, '?f.stats.category=gone');
+    for (const type of ['Feat', 'Item']) expect(values(find(nodes, type, 'Category')).find((v) => v.key === 'gone')?.selected, type).toBe(true);
+  });
+
+  it('opens a shared range under a checked type only, and under every type when none is checked', () => {
+    const home = galleryConfig(reg, data);
+    const checked = tree(records(), home, '?f.type=spell&f.stats.level=2..');
+    expect(find(checked, 'Spell', 'Level')?.open).toBe(true);
+    expect(find(checked, 'Feat')?.open).toBe(false);
+    expect(find(checked, 'Feat', 'Prerequisite level')?.open).toBe(false);
+    const unchecked = tree(records(), home, '?f.stats.level=2..');
+    expect([find(unchecked, 'Spell', 'Level')?.open, find(unchecked, 'Feat', 'Prerequisite level')?.open]).toEqual([true, true]);
+  });
+});
