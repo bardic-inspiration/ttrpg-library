@@ -1,0 +1,78 @@
+# Content lane (docs/generation.md#requests). A routine imports the file and opens a content PR.
+name: Import request
+description: Ask a routine to import Creative Commons homebrew from a file in an open format.
+labels: [import]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A routine runs the format's translator on the file and opens a content PR
+        with the entries and a list of what it skipped. The license must be one
+        `config/licenses.json` accepts for imports (CC0 or CC-BY); any other is
+        rejected with a comment. Imported entries are custom, so an entry with an
+        SRD name is skipped.
+  - type: dropdown
+    id: format
+    attributes:
+      label: Format
+      description: The file's format.
+      options:
+        - open5e
+    validations:
+      required: true
+  - type: textarea
+    id: file
+    attributes:
+      label: File
+      description: Attach the file, or give a URL to it.
+    validations:
+      required: true
+  - type: input
+    id: work
+    attributes:
+      label: Work
+      description: The title of the work the file comes from, as ATTRIBUTION.md will credit it.
+    validations:
+      required: true
+  - type: input
+    id: author
+    attributes:
+      label: Author
+      description: Who to credit, as the work credits its author.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source URL
+      description: Where the work is published under its license.
+      placeholder: https://
+    validations:
+      required: true
+  - type: dropdown
+    id: license
+    attributes:
+      label: License
+      description: The work's license, by its id in `config/licenses.json`.
+      options:
+        - CC0-1.0
+        - CC-BY-2.0
+        - CC-BY-3.0
+        - CC-BY-4.0
+    validations:
+      required: true
+  - type: input
+    id: ruleset
+    attributes:
+      label: Ruleset
+      description: A ruleset id from `config/types.json`. Leave blank for the default.
+      placeholder: dnd-5e-2024
+    validations:
+      required: false
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Anything the routine should know, such as records to leave out.
+    validations:
+      required: false

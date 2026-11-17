@@ -38,3 +38,7 @@ The `search`, `download`, and `x` (close) icons derive from [Feather](https://fe
 ## Art
 
 `site/src/assets/sample-art.svg`, the sample art on the style guide's "card with art" state, is original to this repository and shares its license. No entry has art yet.
+
+## Imported works
+
+Entries imported from openly licensed works ([Imports](docs/generation.md#imports)). Each work's line names it, its author, where it's published, and its license, and notes how it was adapted.

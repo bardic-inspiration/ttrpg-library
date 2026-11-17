@@ -57,7 +57,7 @@ Every content session, routine or not, follows these:
 
 - Generate and revise content only through the `generate` and `revise`
   skills, and follow them exactly.
-- Routines take only `request` and `revise` issues.
+- Routines take only `request`, `import`, and `revise` issues.
 - **Never change an entry's `id` or move its file.**
 - **Never write a value the ruleset derives.** Write inputs, use tokens for
   derived numbers in prose, and use `adjust` only for a deliberate deviation

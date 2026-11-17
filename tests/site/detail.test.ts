@@ -65,6 +65,24 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(html).toContain(`href="https://github.com/bardic-inspiration/ttrpg-library/issues/${issue}"`);
   });
 
+  it('credits an imported entry\'s author, source, and license (docs/content-model.md#meta)', async () => {
+    const loaded = lib.byId('cinder-hound');
+    const license = { id: 'CC-BY-4.0', author: 'A. Author', url: 'https://example.com/hounds' };
+    const entry = { ...loaded.entry, meta: { createdAt: '2026-11-17', source: { kind: 'import', issues: [7], license } } };
+    expect(provenance(entry).credit).toEqual({
+      author: 'A. Author',
+      source: 'https://example.com/hounds',
+      license: 'Creative Commons Attribution 4.0 International',
+      licenseUrl: 'https://creativecommons.org/licenses/by/4.0/legalcode',
+    });
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(EntryDetail, { props: { loaded: { ...loaded, entry }, names: lib.names, targets: lib.targets } });
+    expect(textOf(html)).toContain('From #7. Adapted from a work by A. Author, licensed under Creative Commons Attribution 4.0 International.');
+    expect(html).toContain('href="https://example.com/hounds"');
+    expect(html).toContain('href="https://creativecommons.org/licenses/by/4.0/legalcode"');
+    expect(provenance(loaded.entry).credit).toBeUndefined();
+  });
+
   // #295: an implicit grid track is sized `auto`, so it grew to a wide table's min-content
   // width and the whole page scrolled sideways. A `minmax(0, 1fr)` track keeps every child
   // to the page's width, and a wide table scrolls inside its own box (docs/site.md#templates).

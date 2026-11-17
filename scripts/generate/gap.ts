@@ -1,4 +1,4 @@
-// The gap-fill picker (docs/generation.md#run-order step 5): chooses the type and gap bucket
+// The gap-fill picker (docs/generation.md#run-order step 6): chooses the type and gap bucket
 // (docs/generation.md#gap-buckets) a gap-fill run generates for. Counting lives in lib/buckets.ts.
 
 import { countBuckets, type Bucket, type GapAxis, type GapRecord } from '../../lib/buckets.ts';
@@ -15,7 +15,7 @@ export interface GapPick {
 }
 
 /**
- * The type and bucket with the fewest entries in a ruleset (docs/generation.md#run-order step 5).
+ * The type and bucket with the fewest entries in a ruleset (docs/generation.md#run-order step 6).
  * Ties between types go to the type with the fewest entries overall, then to
  * the first in config/types.json; ties within a type go to the first bucket in
  * `gapBuckets` order. Undefined when no type of the ruleset has gap buckets.

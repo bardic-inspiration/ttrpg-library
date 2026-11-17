@@ -56,6 +56,16 @@ describe('checkLane', () => {
     expect(result).toEqual({ lane: 'content', contentChanged: true, docsOnly: false, textOnly: false, milestone: false, errors: [] });
   });
 
+  it('passes a content PR that adds an import\'s line to ATTRIBUTION.md (docs/generation.md#imports)', () => {
+    const result = checkLane({
+      branch: 'gen/12-20261102',
+      paths: ['content/dnd-5e-2024/spell/bark-ward.json', 'ATTRIBUTION.md'],
+      labels: [],
+    });
+    expect(result.errors).toEqual([]);
+    expect(checkLane({ branch: 'gen/12-20261102', paths: ['README.md', 'ATTRIBUTION.md'], labels: [] }).errors[0]).toContain('README.md');
+  });
+
   it('fails a content PR that touches site/', () => {
     const result = checkLane({
       branch: 'gen/12-20261102',

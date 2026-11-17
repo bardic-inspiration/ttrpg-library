@@ -38,16 +38,17 @@ describe(DOC, () => {
     for (const prompt of onDemand) expect(prompt.startsWith(scheduled[0]!.trimEnd())).toBe(true);
   });
 
-  it('lists the seven docs/generation.md#run-order steps in order', () => {
+  it('lists the eight docs/generation.md#run-order steps in order', () => {
     const steps = [...section('Run order').matchAll(/^### (\d)\. (.+)$/gm)].map((m) => `${m[1]}. ${m[2]}`);
     expect(steps).toEqual([
       '1. Sync',
       '2. Revisions first',
       '3. Revise requests',
-      '4. Content requests',
-      '5. Gap-fill',
-      '6. Ambiguity',
-      '7. Stale claims',
+      '4. Import requests',
+      '5. Content requests',
+      '6. Gap-fill',
+      '7. Ambiguity',
+      '8. Stale claims',
     ]);
   });
 
@@ -60,8 +61,11 @@ describe(DOC, () => {
     return order.slice(start, next === -1 ? undefined : next);
   };
 
-  it('wires content requests to the generate skill', () => {
+  it('wires import and content requests to the generate skill, and imports to the import script', () => {
     expect(step(4)).toContain('`.claude/skills/generate/SKILL.md`');
+    expect(step(4)).toContain('`npm run import`');
+    expect(step(4)).toContain('`config/licenses.json`');
+    expect(step(5)).toContain('`.claude/skills/generate/SKILL.md`');
   });
 
   it('wires revisions and revise requests to the revise skill', () => {
@@ -70,10 +74,10 @@ describe(DOC, () => {
   });
 
   it('wires gap-fill to the picker and the generate skill', () => {
-    expect(step(5)).toContain('`npm run gap-fill`');
-    expect(step(5)).toContain('`.claude/skills/generate/SKILL.md`');
-    expect(step(5)).toContain('`defaults.gapFill.enabled`');
-    expect(step(5)).toContain('`defaults.gapFill.count`');
+    expect(step(6)).toContain('`npm run gap-fill`');
+    expect(step(6)).toContain('`.claude/skills/generate/SKILL.md`');
+    expect(step(6)).toContain('`defaults.gapFill.enabled`');
+    expect(step(6)).toContain('`defaults.gapFill.count`');
   });
 
   it('marks no step unavailable', () => {

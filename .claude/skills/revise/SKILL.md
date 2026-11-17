@@ -32,7 +32,7 @@ Exactly one of:
 If a revise issue can't be fulfilled as written (an ID that isn't in the
 library, a bare ID that more than one type has, an instruction that contradicts itself), don't edit anything:
 comment one question on the issue, add `needs-info`, remove `in-progress` if
-it has it, and stop ([Run order](../../../docs/generation.md#run-order) step 6).
+it has it, and stop ([Run order](../../../docs/generation.md#run-order) step 7).
 
 ## Pending comments
 
@@ -171,4 +171,4 @@ For review comments, after the push:
 
 For a revise issue, the PR's `Closes` line is the reply. Leave `in-progress`
 on the issue if it has it: an open linked PR is what keeps the claim alive
-([Run order](../../../docs/generation.md#run-order) step 7), and merging closes the issue.
+([Run order](../../../docs/generation.md#run-order) step 8), and merging closes the issue.

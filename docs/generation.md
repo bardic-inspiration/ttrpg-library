@@ -2,8 +2,8 @@
 
 ## Purpose
 
-How entries are requested, generated, and revised. Claude routines turn GitHub
-issues into entries and open one PR per batch, then revise the batch from the
+How entries are requested, generated, imported, and revised. Claude routines
+turn GitHub issues into entries and open one PR per batch, then revise the batch from the
 owner's review comments. The human role is request, review, and merge. SRD
 import stages use the same skills in sessions the owner starts.
 
@@ -22,6 +22,12 @@ every issue starts in a lane.
 - **Revise request** (`revise-request.yml`, label `revise`): the entries, one
   per line as `<type>/<id>` (or a bare `id` when only one type has it), and an
   instruction, both required. For changes to merged entries.
+- **Import request** (`import-request.yml`, label `import`): the format (a
+  dropdown of the translators that are built), the file (attached, or a URL),
+  the work's title, author, and source URL, and its license (a dropdown of the
+  ids `config/licenses.json` accepts for imports), all required; then ruleset
+  and notes, optional. For Creative Commons homebrew in an open format
+  ([Imports](#imports)).
 - Free-form issues with the `request` label are also accepted; the routine reads
   them against the defaults.
 - A brief that asks for SRD content (by name, or as "ten SRD creatures of CR 1
@@ -35,6 +41,7 @@ every issue starts in a lane.
 |---|---|
 | `request` | Open content request |
 | `revise` | Open revision request for merged entries |
+| `import` | Open import request |
 | `priority:high` | Picked before others |
 | `in-progress` | Claimed by a routine run |
 | `needs-info` | The routine asked a question on the issue; skipped until it's answered and the label removed |
@@ -53,29 +60,36 @@ never starved by new work. `docs/routines.md` writes it out for the routine.
    owner comments not yet handled ([Revisions](#revisions)) and run the
    `revise` skill. Push, reply, continue.
 3. **Revise requests.** Take open `revise` issues without `in-progress` or
-   `needs-info`, oldest first, claim each as in step 4, and run the `revise`
+   `needs-info`, oldest first, claim each as in step 5, and run the `revise`
    skill on each; each becomes a small PR.
-4. **Content requests.** Pick open `request` issues without `in-progress` or
+4. **Import requests.** Pick open `import` issues without `in-progress` or
+   `needs-info`, `priority:high` first, then oldest, and claim each as in
+   step 5. Run each through the import script in the `generate` skill
+   ([Imports](#imports)), and open one content PR for all of them, with a
+   skip list grouped by issue. An issue whose license isn't accepted is
+   rejected instead.
+5. **Content requests.** Pick open `request` issues without `in-progress` or
    `needs-info`, `priority:high` first, then oldest. Group them all into one
    batch; there is no batch size limit. Claim each with `in-progress` and a
    short comment.
-5. **Gap fill.** If no requests were picked and `gapFill.enabled`, choose the
+6. **Gap fill.** If no content requests were picked and `gapFill.enabled`, choose the
    type and bucket with the fewest entries and generate `gapFill.count` entries
    for it. Ties go to the type with the fewest entries overall, then to the type
    listed first in `config/types.json`; within a type, to the first bucket in
    `gapBuckets` order, first axis outermost. `npm run gap-fill` makes this
    choice among the types of `defaults.ruleset` and prints the type and bucket
    label, as in `spell stats.level=0..0&stats.school=abjuration`.
-6. **Ambiguity.** If a request can't be fulfilled as written (contradictory
+7. **Ambiguity.** If a request can't be fulfilled as written (contradictory
    constraints, unknown type), comment one question on the issue, add
    `needs-info`, remove `in-progress`, and move on.
-7. **Stale claims.** An `in-progress` issue with no open linked PR after 24
+8. **Stale claims.** An `in-progress` issue with no open linked PR after 24
    hours is treated as unclaimed.
 
 A manual run may name issues, or pass an inline request (type, count, brief,
 tags) handled as if it were an issue but without one. It still does steps 1–3,
-but step 4 takes only what it was given: named issues must be open `request`
-issues without `needs-info`, and any other is reported and left alone. It never
+but steps 4 and 5 take only what it was given: named issues must be open
+`import` or `request` issues without `needs-info`, and any other is reported
+and left alone. An inline request is always a content request. It never
 gap-fills. An ambiguous inline request has no issue to ask on, so the run
 reports the question instead.
 
@@ -90,7 +104,7 @@ checks the file and applies it to a request.
 
 **Gap fill is off** (`gapFill.enabled: false`) until v2 is built, so routines
 take `request` issues only. Every entry generated in the v1 shape is one more
-for v2's schema changes to migrate. Run-order step 5 skips while it's off.
+for v2's schema changes to migrate. Run-order step 6 skips while it's off.
 
 ### The generate skill
 
@@ -233,6 +247,44 @@ PR body, joins one `<path>=<value>` per axis with `&`, in axis order, with bins
 as `min..max`: `stats.cr=2..4`, `stats.level=1..3&stats.school=evocation`.
 With `f.` before each path, a label is a gallery query that shows the bucket.
 
+### Imports
+
+An import request brings an author's openly licensed homebrew into the
+library from a file in an open format. Its entries are custom entries, and
+every content rule applies to them.
+
+- **Licensing.** The issue's license must be one `config/licenses.json`
+  accepts for imports ([Source allowlist](licensing.md#source-allowlist)):
+  CC0 or CC-BY. Any other, NC, ND, and SA included, is rejected: the routine
+  comments why, removes `in-progress`, and makes no entries.
+- **The import script.** `npm run import -- --issue <n> --format <id> --file
+  <path> --work <title> --author <name> --url <source> --license <id>`
+  (`--ruleset` and `--date` optional) runs the format's translator's import
+  side ([Translators](export.md#translators)) on the file, with names
+  resolved against the library and its rules, so the content's mentions of
+  library entries become links. It writes each entry to `content/` with
+  `meta.source.kind: import`, the issue, and `meta.source.license` (the
+  license id, author, and source URL), `tags` of `defaults.tags` plus
+  `author`, and a drafted `summary` the run rewrites. It appends the work's
+  line to `ATTRIBUTION.md` ([Imported works](licensing.md#imported-works)),
+  and prints the issue's skip-list section. It exits 2 with the reason when
+  the issue is rejected: a license not accepted, an unknown format, a ruleset
+  the format doesn't map, or a file that isn't JSON.
+- **What it skips.** Everything the translator can't map, by record and
+  field; and a whole record whose name is an SRD name of any type (from the
+  ruleset's [SRD manifest](content-model.md#srd-manifest-and-coverage)), a
+  name or id the library or the batch already has in that type, or a
+  blocklisted term. Skipping never renames a record.
+- **What the run adds.** The `generate` skill rewrites each drafted summary
+  as the type's one-line factual summary, and removes any entry that uses an
+  SRD proper noun, which no list holds, adding it to the skip list. Then it
+  validates the batch like any other.
+- **The PR.** One content PR for every import issue in the run, on
+  `gen/import-<issue-numbers>-<YYYYMMDD>`, with the content PR template's
+  "Skipped on import" section: one `#### #<n>: <work>` section per issue,
+  each a table of record, field, and reason. A content PR may change
+  `ATTRIBUTION.md` for these lines ([Lane rules](workflow.md#lane-rules)).
+
 ### SRD import
 
 The full SRD import bypassed requests: each stage was a sub-issue of its
@@ -257,10 +309,10 @@ exists, and that it names both skills and both branch formats.
 - `.claude/skills/generate/`, `revise/`, and `srd-import/`: the skills.
 - `rulesets/<ruleset>/guidelines/`: the guidelines.
 - `config/defaults.json` and `scripts/generate/` (defaults, the gap-fill
-  picker); `lib/buckets.ts` counts entries per bucket and builds labels.
+  picker); `scripts/import/` (the import script) and `config/licenses.json`; `lib/buckets.ts` counts entries per bucket and builds labels.
 - `docs/routines.md`: the prompts, schedule, and run order.
-- `.github/ISSUE_TEMPLATE/content-request.yml`, `revise-request.yml`, and
-  `.github/PULL_REQUEST_TEMPLATE/content.md`.
+- `.github/ISSUE_TEMPLATE/content-request.yml`, `revise-request.yml`,
+  `import-request.yml`, and `.github/PULL_REQUEST_TEMPLATE/content.md`.
 
 ## Extending
 

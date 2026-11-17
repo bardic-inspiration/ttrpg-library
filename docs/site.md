@@ -391,7 +391,9 @@ indexes.
 - Tags as chips; a chip opens the Library filtered to the entry's ruleset,
   type, and that tag.
 - A provenance line: created and updated dates, and source issues linked to
-  GitHub.
+  GitHub. An imported entry's line adds "Adapted from a work by <author>",
+  linked to the source, "licensed under <license>", linked to its legal code
+  ([Meta](content-model.md#meta)).
 - Export controls below the summary: Print and Download, or Print alone on a
   page type ([Controls](export.md#controls)). A Preact island renders them once
   hydrated, since every export needs JavaScript; a failed export shows a

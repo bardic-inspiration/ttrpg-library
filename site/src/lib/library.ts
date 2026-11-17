@@ -18,7 +18,11 @@ export interface Entry {
   stats: unknown;
   tags?: Record<string, unknown>;
   image?: string;
-  meta: { createdAt: string; updatedAt?: string; source: { kind: string; issues?: number[]; gapFill?: string; srd?: true } };
+  meta: {
+    createdAt: string;
+    updatedAt?: string;
+    source: { kind: string; issues?: number[]; gapFill?: string; srd?: true; license?: { id: string; author: string; url: string } };
+  };
 }
 
 export interface LoadedEntry {

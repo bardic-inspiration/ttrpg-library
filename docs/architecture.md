@@ -75,7 +75,7 @@ schemas/primitive.schema.json, rules-*.schema.json   rules data files (rulesets.
 rulesets/module.ts                       the contract every ruleset module meets
 rulesets/<ruleset>/                      everything ruleset-specific (rulesets.md)
 lib/                                     ruleset-independent helpers for scripts and the site
-config/                                  types.json, defaults.json, export.json, blocklist.json
+config/                                  types.json, defaults.json, export.json, blocklist.json, licenses.json
 scripts/
   validate/        the validator CLI and checks
   lane/            lane rules for the lane CI job
@@ -83,6 +83,7 @@ scripts/
   build-index/     content to library.json, data copies, export bundles
   pr-summary/      the job summary for changed entries
   generate/        request defaults and the gap-fill picker
+  import/          the import script: an import issue's file to entries
   srd-coverage/    SRD manifest records the library lacks
   srd-extract/     SRD PDF text extraction for import sessions (Python; not run in CI)
   serve/, a11y/, snapshots/, browser/   serving and browser checks of the built site
@@ -110,6 +111,7 @@ npm scripts:
 | `a11y` | Axe checks against the built site |
 | `snapshots` | On-demand screenshots at 390, 820, and 1440px |
 | `gap-fill` | Print the type and bucket gap fill would take |
+| `import` | Import one import issue's file into `content/` ([Imports](generation.md#imports)) |
 | `srd-coverage` | List the SRD entries the library lacks |
 
 ### Terms
