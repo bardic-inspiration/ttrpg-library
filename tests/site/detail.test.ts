@@ -78,6 +78,25 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(rule).toContain('display: grid;');
     expect(rule).toMatch(/grid-template-columns:\s*minmax\(0,\s*1fr\);/);
   });
+
+  // #299: a property line's label column took its widest label ("Saving Throw Proficiencies"),
+  // so at 320px the values column couldn't fit its longest word. The label column now starts at
+  // its min-content width and grows to max-content only while the values still fit.
+  it('lets property-line labels wrap before the values overflow', () => {
+    const source = readFileSync(new URL('../../site/src/components/templates/parts/PropertyList.astro', import.meta.url), 'utf8');
+    const rule = source.match(/\.property-list \{([^}]*)/)?.[1] ?? '';
+    expect(rule).toMatch(/grid-template-columns:\s*minmax\(min-content,\s*max-content\)\s+minmax\(min-content,\s*1fr\);/);
+  });
+
+  // #299: "Antipathy/Sympathy" has no break point, so its heading set the page's width at 320px.
+  it('lets the name break after a slash', async () => {
+    const loaded = lib.byId('cinder-hound');
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(EntryDetail, {
+      props: { loaded: { ...loaded, entry: { ...loaded.entry, name: 'Cinder/Ash Hound' } }, names: lib.names, targets: lib.targets },
+    });
+    expect(html).toMatch(/<h1[^>]*>Cinder\/<wbr[^>]*>Ash Hound<\/h1>/);
+  });
 });
 
 describe('detail helpers (docs/site.md#gallery, docs/site.md#detail-page)', () => {
