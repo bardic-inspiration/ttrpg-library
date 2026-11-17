@@ -55,7 +55,9 @@ repo. No external hosting.
   Collections, the Rijksmuseum, and the British Library's Flickr
   collection.
 - **What can be used:**
-  - anything its source marks public domain, CC0, or CC-BY;
+  - anything its source marks with a license on the source allowlist's
+    `art` kind: public domain, CC0, or CC-BY
+    ([Source allowlist](translators.md#source-allowlist));
   - anything the skill judges public domain from its creator and date:
     published in the United States before 1931, or by a creator who died
     more than 70 years ago (before 1956). The reasoning is recorded with

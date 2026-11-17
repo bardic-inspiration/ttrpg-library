@@ -431,6 +431,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | An escape DC or an ability check's DC in imported prose is authored (`{dc=<n>}`); any other DC an ability derives becomes `{dc:<ability>}`. | The text token rules (docs/rulesets.md#text-tokens) | #246 |
 | Legendary actions don't import from Open5e, which has no field for their uses; an item whose rarity varies doesn't export, since Open5e has no such rarity; a weapon whose record doesn't say melee or ranged doesn't import. Each is listed. | Never guess a required value | #246 |
 | An exported magic item or equipment without a size takes Open5e's default, Tiny, and a magic item's weight `0.000`, as Open5e gives its SRD items. | The schema requires a size; this matches Open5e's own data | #246 |
+| Licenses for outside material come from one source allowlist, `config/licenses.json`, keyed by kind (`import`, `art`), extended by a dev PR rather than decided case by case. Imports take CC0 and CC-BY in any version; NC, ND, and SA works are rejected. | CC-BY-4.0 content can't take NC, ND, or SA material; matches the art rule (#117) | #247 |
+| An imported entry sets `meta.source.kind: import` and a `meta.source.license` block (allowlist id, author, source URL), and each source gets an adapted-work line in `ATTRIBUTION.md`. | CC-BY requires credit and notice of modification; provenance stays on the entry | #247 |
 
 ### Art
 
