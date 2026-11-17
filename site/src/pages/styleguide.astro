@@ -1,6 +1,6 @@
 ---
 // The style guide (docs/styling.md#refinement-workflow): every token, the type scale and typefaces,
-// controls, badges, and templates, in both themes side by side. Not linked
+// controls, badges, and templates, in the site's one palette. Not linked
 // in navigation and kept out of search indexes. Edit a token under
 // `npm run dev` and every surface here updates at once.
 //
@@ -13,7 +13,6 @@ import { pageSizes } from '../lib/print';
 import SearchIcon from '../icons/Search';
 import FilterIcon from '../icons/Filter';
 import SortIcon from '../icons/Sort';
-import ThemeIcon from '../icons/Theme';
 import DownloadIcon from '../icons/Download';
 import PrintIcon from '../icons/Print';
 import CloseIcon from '../icons/Close';
@@ -28,7 +27,7 @@ import { searchIndex } from '../lib/gallery/view';
 import registryJson from '../../../config/types.json';
 import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { PROJECT_ROOT } from '../../../scripts/validate/schema.ts';
-import { readTokens, resolveToken, themeTokens, tokensIn, type TokenDecl } from '../lib/design-tokens';
+import { readTokens, resolveToken, tokensIn, type TokenDecl } from '../lib/design-tokens';
 import { entryNames as namesOf, loadLibrary, type Entry } from '../lib/library';
 import { readFileSync } from 'node:fs';
 import primitivesCss from '../styles/tokens/primitives.css?raw';
@@ -40,8 +39,7 @@ const semantic = readTokens(semanticCss);
 const content = readTokens(contentCss);
 const components = readTokens(componentsCss);
 const all: TokenDecl[] = [...readTokens(primitivesCss), ...semantic, ...content, ...components];
-const light = themeTokens(all, 'light');
-const dark = themeTokens(all, 'dark');
+const palette = tokensIn(all, 'base');
 const names = (decls: TokenDecl[], test: RegExp) =>
   [...new Set(decls.filter((d) => d.scope !== 'other' && test.test(d.name)).map((d) => d.name))];
 
@@ -60,7 +58,7 @@ const rarities = contentTokens.filter((n) => n.startsWith('--rarity-')).map((n) 
 const label = (slug: string) => slug.replace(/-/g, ' ');
 
 const icons = [
-  ['Search', SearchIcon], ['Filter', FilterIcon], ['Sort', SortIcon], ['Theme', ThemeIcon],
+  ['Search', SearchIcon], ['Filter', FilterIcon], ['Sort', SortIcon],
   ['Download', DownloadIcon], ['Print', PrintIcon], ['Close', CloseIcon],
 ] as const;
 
@@ -91,9 +89,7 @@ const modes = ['screen', 'capture'] as const;
 <Base title="Style guide · TTRPG Content Library" noindex>
   <h1>Style guide</h1>
   <p class="measure">
-    Every token and rendered state on one page. The header toggle switches the
-    whole page; the samples below also show both themes side by side. To change
-    what you see, edit <code>site/src/styles/tokens/</code> (docs/styling.md#refinement-workflow).
+    Every token and rendered state on one page. To change what you see, edit <code>site/src/styles/tokens/</code> (docs/styling.md#refinement-workflow).
   </p>
 
   <section class="sg-section" aria-labelledby="sg-colors">
@@ -104,7 +100,7 @@ const modes = ['screen', 'capture'] as const;
         <li class="sg-swatch">
           <span class="sg-swatch__chip" style={`background: var(${name})`}></span>
           <code>{name}</code>
-          <small>{resolveToken(light, name)} / {resolveToken(dark, name)}</small>
+          <small>{resolveToken(palette, name)}</small>
         </li>
       ))}
     </ul>
@@ -114,7 +110,7 @@ const modes = ['screen', 'capture'] as const;
         <li class="sg-swatch">
           <span class="sg-swatch__chip" style={`background: var(${name})`}></span>
           <code>{name}</code>
-          <small>{resolveToken(light, name)} / {resolveToken(dark, name)}</small>
+          <small>{resolveToken(palette, name)}</small>
         </li>
       ))}
     </ul>
@@ -141,7 +137,7 @@ const modes = ['screen', 'capture'] as const;
     <h2 id="sg-scales">Spacing, radii, shadows, durations</h2>
     <ul class="sg-list">
       {spaceTokens.map((name) => (
-        <li><span class="sg-bar" style={`inline-size: var(${name})`}></span><code>{name}</code> <small>{resolveToken(light, name)}</small></li>
+        <li><span class="sg-bar" style={`inline-size: var(${name})`}></span><code>{name}</code> <small>{resolveToken(palette, name)}</small></li>
       ))}
     </ul>
     <ul class="sg-swatches">
@@ -154,7 +150,7 @@ const modes = ['screen', 'capture'] as const;
     </ul>
     <ul class="sg-list">
       {durationTokens.map((name) => (
-        <li><code>{name}</code> <small>{resolveToken(light, name)} (0ms with reduced motion)</small></li>
+        <li><code>{name}</code> <small>{resolveToken(palette, name)} (0ms with reduced motion)</small></li>
       ))}
     </ul>
   </section>
@@ -170,74 +166,69 @@ const modes = ['screen', 'capture'] as const;
   </section>
 
   <section class="sg-section" aria-labelledby="sg-samples">
-    <h2 id="sg-samples">Samples in both themes</h2>
-    <div class="sg-themes">
-      {(['light', 'dark'] as const).map((theme) => (
-        <div class="sg-theme" data-theme={theme}>
-          <h3>{theme === 'light' ? 'Light' : 'Dark'}</h3>
-          <p>Body text with a <a href="#sg-samples">link</a> and <span class="sg-muted">muted text</span>.</p>
+    <h2 id="sg-samples">Samples</h2>
+    <div class="sg-samples">
+      <p>Body text with a <a href="#sg-samples">link</a> and <span class="sg-muted">muted text</span>.</p>
 
-          <h4>Controls</h4>
-          <div class="cluster">
-            <button type="button">Button</button>
-            <button type="button" aria-pressed="true">Active</button>
-            <button type="button" class="sg-focused">Focused</button>
-            <button type="button" aria-label="Close"><CloseIcon /></button>
-          </div>
-          <div class="cluster">
-            <label>Search <input type="search" placeholder="Name, tag, or text" /></label>
-            <label><input type="checkbox" checked /> Selected</label>
-          </div>
+      <h3>Controls</h3>
+      <div class="cluster">
+        <button type="button">Button</button>
+        <button type="button" aria-pressed="true">Active</button>
+        <button type="button" class="sg-focused">Focused</button>
+        <button type="button" aria-label="Close"><CloseIcon /></button>
+      </div>
+      <div class="cluster">
+        <label>Search <input type="search" placeholder="Name, tag, or text" /></label>
+        <label><input type="checkbox" checked /> Selected</label>
+      </div>
 
-          <h4>Icons</h4>
-          <ul class="cluster sg-row sg-icons">
-            {icons.map(([name, IconComponent]) => <li><IconComponent /><small>{name}</small></li>)}
-          </ul>
+      <h3>Icons</h3>
+      <ul class="cluster sg-row sg-icons">
+        {icons.map(([name, IconComponent]) => <li><IconComponent /><small>{name}</small></li>)}
+      </ul>
 
-          <h4>Type and rarity badges</h4>
-          <ul class="cluster sg-row">
-            {types.map((type) => <li class="sg-badge" data-type={type}>{label(type)}</li>)}
-          </ul>
-          <ul class="cluster sg-row">
-            {rarities.map((rarity) => <li class="sg-badge" data-rarity={rarity}>{label(rarity)}</li>)}
-          </ul>
+      <h3>Type and rarity badges</h3>
+      <ul class="cluster sg-row">
+        {types.map((type) => <li class="sg-badge" data-type={type}>{label(type)}</li>)}
+      </ul>
+      <ul class="cluster sg-row">
+        {rarities.map((rarity) => <li class="sg-badge" data-rarity={rarity}>{label(rarity)}</li>)}
+      </ul>
 
-          <h4>Gallery cards</h4>
-          <ul class="sg-cards">
-            {fixtures.records.map((record, i) => (
-              <li>
-                <Card
-                  record={record}
-                  typeLabel={cardInfo(record).label}
-                  cardFields={cardInfo(record).cardFields}
-                  imageSrc={i === 0 ? sampleArt.src : undefined}
-                  selected={i === 1}
-                  onSelect={noop}
-                />
-              </li>
-            ))}
-          </ul>
+      <h3>Gallery cards</h3>
+      <ul class="sg-cards">
+        {fixtures.records.map((record, i) => (
+          <li>
+            <Card
+              record={record}
+              typeLabel={cardInfo(record).label}
+              cardFields={cardInfo(record).cardFields}
+              imageSrc={i === 0 ? sampleArt.src : undefined}
+              selected={i === 1}
+              onSelect={noop}
+            />
+          </li>
+        ))}
+      </ul>
 
-          <h4>Filter controls</h4>
-          <div class="sg-filters">
-            {filterStates.map(({ title, nodes, filters }) => (
-              <>
-                <h5>{title}</h5>
-                <FilterTree nodes={nodes} filters={filters} onEnum={noop} onRange={noop} />
-              </>
-            ))}
-          </div>
+      <h3>Filter controls</h3>
+      <div class="sg-filters">
+        {filterStates.map(({ title, nodes, filters }) => (
+          <>
+            <h4>{title}</h4>
+            <FilterTree nodes={nodes} filters={filters} onEnum={noop} onRange={noop} />
+          </>
+        ))}
+      </div>
 
-          {fixtureEntries.map(({ entry, derived }) =>
-            modes.map((mode) => (
-              <>
-                <h4>{entry.name}: {mode}</h4>
-                <EntryTemplate entry={entry} derived={derived} names={entryNames} mode={mode} level={5} />
-              </>
-            )),
-          )}
-        </div>
-      ))}
+      {fixtureEntries.map(({ entry, derived }) =>
+        modes.map((mode) => (
+          <>
+            <h3>{entry.name}: {mode}</h3>
+            <EntryTemplate entry={entry} derived={derived} names={entryNames} mode={mode} level={4} />
+          </>
+        )),
+      )}
     </div>
   </section>
 
@@ -245,7 +236,7 @@ const modes = ['screen', 'capture'] as const;
     <h2 id="sg-print">Print previews</h2>
     <p class="measure">
       Each template in <code>print</code> mode at each page size, at the page's
-      width inside its margins, with the light tokens print always uses. Density
+      width inside its margins. Density
       per size is in <code>tokens/print.css</code>; sizes and margins are in
       <code>config/export.json</code>.
     </p>
@@ -256,7 +247,6 @@ const modes = ['screen', 'capture'] as const;
           {fixtureEntries.map((loaded) => (
             <div
               class="sg-print"
-              data-theme="light"
               data-page-size={size.id}
               style={`inline-size: calc(${size.width} - 2 * ${size.margin})`}
             >
@@ -365,13 +355,7 @@ const modes = ['screen', 'capture'] as const;
       }
     }
 
-    .sg-themes {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--page-width) / 3)), 1fr));
-      gap: var(--grid-gap);
-    }
-
-    .sg-theme {
+    .sg-samples {
       display: grid;
       align-content: start;
       gap: var(--space-s);

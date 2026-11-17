@@ -58,7 +58,7 @@ computed numbers, so translators read `derived` rather than recomputing.
 - The detail page builds the capture source: a `<template
   data-capture="<id>">` (`components/detail/CaptureSource.astro`) holding the
   art when present, the template in `capture` mode, and the short SRD
-  attribution as a footer, all under `data-theme="light"`. As a `<template>`,
+  attribution as a footer. As a `<template>`,
   it is inert and outside the accessibility tree. At export,
   `site/src/lib/capture.ts` clones it into an off-screen host, waits for fonts
   and art, captures it, and removes the host; `html-to-image` loads only then.

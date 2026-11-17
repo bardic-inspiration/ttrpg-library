@@ -9,7 +9,7 @@ assignees: ""
 ## What to change
 
 <!-- What looks or behaves wrong, and where: page, template, mode (screen,
-capture, print), page size, theme. A screenshot helps. -->
+capture, print), page size. A screenshot helps. -->
 
 ## Desired result
 

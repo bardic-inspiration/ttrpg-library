@@ -1,20 +1,12 @@
 /*
- * Semantic tokens (docs/styling.md#themes): what each role looks like, per theme.
- * Components read these, never the primitives. Edit this file to change what a
- * role looks like in light or dark.
+ * Semantic tokens (docs/styling.md#palette): what each role looks like. The
+ * site has one palette. Components read these, never the primitives. Edit this
+ * file to change what a role looks like.
  *
- * A theme is a block of tokens under [data-theme="…"]. The attribute sits on
- * <html> (set by the theme toggle), or on any element to scope a theme to it,
- * as the style guide's side-by-side view does. With no choice stored, the
- * prefers-color-scheme block follows the system. The dark blocks apply on
- * screen only, so print always renders with the light tokens.
- *
- * tests/contrast.test.ts checks the docs/styling.md#accessibility contrast pairs in both themes, and
- * that the system-dark block matches the explicit dark block.
+ * tests/contrast.test.ts checks the docs/styling.md#accessibility contrast pairs.
  */
 @layer tokens {
-  :root,
-  [data-theme='light'] {
+  :root {
     color-scheme: light;
     --color-bg: var(--parchment-100);
     --color-surface: var(--parchment-50);
@@ -26,40 +18,8 @@
     --color-focus: var(--blue-700);
   }
 
-  @media screen and (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']) {
-      color-scheme: dark;
-      --color-bg: var(--night-900);
-      --color-surface: var(--night-800);
-      --color-text: var(--bone-100);
-      --color-text-muted: var(--bone-400);
-      --color-accent: var(--red-300);
-      --color-border: var(--night-600);
-      --color-control-border: var(--night-400);
-      --color-focus: var(--blue-300);
-    }
-  }
-
-  @media screen {
-    [data-theme='dark'] {
-      color-scheme: dark;
-      --color-bg: var(--night-900);
-      --color-surface: var(--night-800);
-      --color-text: var(--bone-100);
-      --color-text-muted: var(--bone-400);
-      --color-accent: var(--red-300);
-      --color-border: var(--night-600);
-      --color-control-border: var(--night-400);
-      --color-focus: var(--blue-300);
-    }
-  }
-
-  /*
-   * Roles shared by both themes. Repeated on [data-theme] so tokens built
-   * from theme colors (--focus-ring) re-resolve inside a scoped theme.
-   */
-  :root,
-  [data-theme] {
+  /* Type, space, shape, motion, and focus roles. */
+  :root {
     --font-heading: var(--family-serif-sc);
     --font-body: var(--family-serif);
     --font-ui: var(--family-sans);

@@ -1,7 +1,6 @@
 ---
 // Page shell (docs/site.md#pages-and-navigation, docs/styling.md#styling-system). Loads the fonts and the global styles in
-// cascade-layer order, applies a stored theme before first paint, and wraps
-// every page in the header, main column, and footer.
+// cascade-layer order, and wraps every page in the header, main column, and footer.
 import '@fontsource/alegreya/400.css';
 import '@fontsource/alegreya/400-italic.css';
 import '@fontsource/alegreya/500.css';
@@ -25,9 +24,7 @@ import '../styles/utilities.css';
 import '../styles/overrides.css';
 import Footer from '../components/Footer.astro';
 import SiteNav from '../components/SiteNav.astro';
-import ThemeToggle from '../components/ThemeToggle.astro';
 import { redirectScript } from '../lib/redirects';
-import { themeBootstrapScript } from '../lib/theme';
 import { url } from '../lib/url';
 
 interface Props {
@@ -67,14 +64,12 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
         {og.image && <meta property="og:image" content={absolute(og.image)} />}
       </>
     )}
-    <script is:inline set:html={themeBootstrapScript()} />
   </head>
   <body>
     <header class="site-header">
       <div class="site-header__inner">
         <a class="site-header__home" href={url()}>TTRPG Content Library</a>
         <SiteNav />
-        <ThemeToggle />
       </div>
     </header>
     <main class="site-main">

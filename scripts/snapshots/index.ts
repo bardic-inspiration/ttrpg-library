@@ -5,7 +5,7 @@
 import { detailPath, firstOfEachType, type IndexRecord } from '../a11y/index.ts';
 
 export interface SnapshotPage {
-  /** File name stem; the theme and `.png` are appended. */
+  /** File name stem; `.png` is appended. */
   file: string;
   /** Path under the site base. */
   path: string;

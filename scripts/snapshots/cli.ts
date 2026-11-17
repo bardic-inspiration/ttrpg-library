@@ -1,7 +1,6 @@
 // `npm run snapshots [label]` (docs/styling.md#refinement-workflow): serves the built site
 // (site/dist) under the site base and captures full-page screenshots of the
-// pages snapshotPages picks, in the light and dark themes, into the
-// git-ignored snapshots/<label>/ folder. Not a CI gate. Run `npm run build`
+// pages snapshotPages picks into the git-ignored snapshots/<label>/ folder. Not a CI gate. Run `npm run build`
 // first.
 
 import { mkdir, readFile } from 'node:fs/promises';
@@ -33,23 +32,21 @@ const browser = await launchChromium();
 let failures = 0;
 
 try {
-  for (const theme of ['light', 'dark'] as const) {
-    const context = await browser.newContext({ colorScheme: theme, viewport: { width: 1280, height: 800 } });
-    for (const page of pages) {
-      const tab = await context.newPage();
-      const response = await tab.goto(server.url + page.path, { waitUntil: 'networkidle' });
-      const file = join(out, `${page.file}-${theme}.png`);
-      if (!response?.ok()) {
-        failures++;
-        console.log(`✗ ${page.path || '/'} (${theme}): HTTP ${response?.status() ?? 'no response'}`);
-      } else {
-        await tab.screenshot({ path: file, fullPage: true });
-        console.log(`✓ ${relative(PROJECT_ROOT, file)}`);
-      }
-      await tab.close();
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  for (const page of pages) {
+    const tab = await context.newPage();
+    const response = await tab.goto(server.url + page.path, { waitUntil: 'networkidle' });
+    const file = join(out, `${page.file}.png`);
+    if (!response?.ok()) {
+      failures++;
+      console.log(`✗ ${page.path || '/'}: HTTP ${response?.status() ?? 'no response'}`);
+    } else {
+      await tab.screenshot({ path: file, fullPage: true });
+      console.log(`✓ ${relative(PROJECT_ROOT, file)}`);
     }
-    await context.close();
+    await tab.close();
   }
+  await context.close();
 } finally {
   await browser.close();
   await server.close();

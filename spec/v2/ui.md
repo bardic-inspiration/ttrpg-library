@@ -37,12 +37,6 @@ selection). Publishing homebrew for others is out of scope for v2.
 
 ## Design
 
-### Palette
-
-**One palette for the whole site.** v1's light and dark themes and the
-theme switch (System, Light, Dark) are removed, and v1's light palette
-stays.
-
 ### Library
 
 - **Cards** keep v1's content and their checkbox for multi-select.
@@ -65,7 +59,6 @@ stays.
 
 ## Done when
 
-- The site has one set of color tokens, with no theme attribute or switch.
 - CI no longer runs the contrast test, and the docs describe the milestone
   review.
 
