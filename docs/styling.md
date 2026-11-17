@@ -91,11 +91,11 @@ on one page, and tests catch accessibility regressions.
 
 Target: WCAG 2.2 AA.
 
-- **Contrast.** `tests/contrast.test.ts` parses `semantic.css` and
-  `content.css`, resolving `var()` through `primitives.css`, and
-  checks the declared pairs: text, muted text, accent, and every type and
-  rarity color on `--color-bg` and `--color-surface` at 4.5:1 or more;
-  `--color-control-border` and `--color-focus` at 3:1 or more.
+- **Contrast.** Text, muted text, accent, and every type and rarity color
+  reach 4.5:1 or more on `--color-bg` and `--color-surface`;
+  `--color-control-border` and `--color-focus` reach 3:1 or more. No unit test
+  checks the pairs: axe checks rendered contrast on milestone PRs, and the
+  milestone review checks the pairs ([Milestone review](workflow.md#milestone-review)).
 - **Color is never the only signal.** Rarity, type, and concentration and
   ritual badges always carry a text label.
 - **Keyboard.** Every control is reachable and operable by keyboard, in visual
@@ -105,7 +105,8 @@ Target: WCAG 2.2 AA.
   Filter groups use `fieldset` and `legend`. Art takes alt text from the entry
   name.
 - **Motion.** Transitions use duration tokens, which become `0ms` under
-  `prefers-reduced-motion: reduce`; the contrast suite checks every one.
+  `prefers-reduced-motion: reduce`; `tests/site/motion.test.ts` checks every
+  one.
 - **Zoom and reflow.** Layouts work at 320 CSS px wide and at 200% zoom without
   horizontal scrolling. Data tables scroll inside their own box.
 - **Automated check.** `npm run a11y` runs axe-core through Playwright on the
@@ -119,6 +120,8 @@ Target: WCAG 2.2 AA.
   with `/opt/pw-browsers/chromium` if that fails and the path exists, as in
   cloud sessions. CI runs it only on the PR that closes a milestone
   ([Milestone PRs](workflow.md#milestone-prs)).
+- **Milestone review.** Everything axe can't check is reviewed by a human once
+  per milestone against WCAG 2.2 AA ([Milestone review](workflow.md#milestone-review)).
 
 ### Refinement workflow
 
@@ -132,11 +135,12 @@ Target: WCAG 2.2 AA.
   long item, a cantrip and a 9th-level spell, a very long name, and an
   entry with many tags. Layouts are judged against the hard cases.
 - **Snapshots on demand.** `npm run snapshots [label]` captures the style guide,
-  the home page, and one detail page per type from the built site, at
-  1280 × 800 full-page, into the git-ignored `snapshots/<label>/` folder as
-  `<page>.png`. A label is one plain folder name; without one
-  it's the current UTC time. It's not a CI gate, so deliberate design changes
-  never fight a failing snapshot test.
+  the home page, and one detail page per type from the built site, full-page
+  at 390, 820, and 1440px wide (an 800px viewport height), into the git-ignored
+  `snapshots/<label>/` folder as `<page>-<width>.png`. These are the widths a
+  UI PR shows ([UI screenshots](workflow.md#ui-screenshots)). A label is one
+  plain folder name; without one it's the current UTC time. It's not a CI
+  gate, so deliberate design changes never fight a failing snapshot test.
 - **UI changes are dev work**, on `dev/` branches, labeled `ui` automatically.
   Routines never touch `site/`; the lane check rejects it.
 
@@ -144,7 +148,7 @@ Target: WCAG 2.2 AA.
 
 - `site/src/styles/`: the layers and `tokens/`.
 - `stylelint.config.mjs` and `tests/stylelint.test.ts`.
-- `tests/contrast.test.ts`, `tests/site/palette.test.ts`, and
+- `tests/site/motion.test.ts`, `tests/site/palette.test.ts`, and
   `site/src/lib/design-tokens.ts`.
 - `scripts/a11y/`, `scripts/snapshots/`, and `scripts/browser/`.
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { defaultLabel, isValidLabel, snapshotPages } from '../scripts/snapshots/index.ts';
+import { SNAPSHOT_WIDTHS, defaultLabel, isValidLabel, snapshotFile, snapshotPages } from '../scripts/snapshots/index.ts';
 
 const record = (ruleset: string, type: string, id: string) => ({
   id,
@@ -32,6 +32,17 @@ describe('snapshotPages (docs/styling.md#refinement-workflow)', () => {
 
   it('captures only home and the style guide for an empty library', () => {
     expect(snapshotPages([]).map((p) => p.file)).toEqual(['home', 'styleguide']);
+  });
+});
+
+describe('snapshot widths (docs/styling.md#refinement-workflow)', () => {
+  it('captures phone, tablet, and desktop widths', () => {
+    expect(SNAPSHOT_WIDTHS).toEqual([390, 820, 1440]);
+  });
+
+  it('names each capture by its page and width', () => {
+    expect(snapshotFile({ file: 'home', path: '' }, 390)).toBe('home-390.png');
+    expect(snapshotFile({ file: 'dnd-5e-2024-spell', path: 'dnd-5e-2024/spell/x/' }, 1440)).toBe('dnd-5e-2024-spell-1440.png');
   });
 });
 

@@ -58,7 +58,7 @@ and the gallery in [site.md](site.md); CI and lanes in
 | Fonts | Alegreya, Alegreya SC, Alegreya Sans (OFL) via `@fontsource` | No external font requests |
 | UI icons | Lucide (ISC), inlined SVG | A handful of control icons |
 | CSS lint | Stylelint | Forbids literal design values outside `tokens/` |
-| Tests | Vitest; Playwright with axe-core | Unit suites and contrast; accessibility checks on built pages |
+| Tests | Vitest; Playwright with axe-core | Unit suites; accessibility checks and screenshots of built pages |
 
 The site is served from `https://bardic-inspiration.github.io/ttrpg-library/`.
 Astro's `base` is `/ttrpg-library/`, held in `lib/site.ts`, and every internal
@@ -106,9 +106,9 @@ npm scripts:
 | `dev` | Run the site locally |
 | `check` | Types, `astro check`, Stylelint, and the link check |
 | `links` | The link check alone |
-| `test` | Vitest, including contrast |
+| `test` | Vitest |
 | `a11y` | Axe checks against the built site |
-| `snapshots` | On-demand visual captures |
+| `snapshots` | On-demand screenshots at 390, 820, and 1440px |
 | `gap-fill` | Print the type and bucket gap fill would take |
 | `srd-coverage` | List the SRD entries the library lacks |
 

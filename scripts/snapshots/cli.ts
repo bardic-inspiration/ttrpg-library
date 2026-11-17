@@ -1,7 +1,7 @@
 // `npm run snapshots [label]` (docs/styling.md#refinement-workflow): serves the built site
 // (site/dist) under the site base and captures full-page screenshots of the
-// pages snapshotPages picks into the git-ignored snapshots/<label>/ folder. Not a CI gate. Run `npm run build`
-// first.
+// pages snapshotPages picks, at each of SNAPSHOT_WIDTHS, into the git-ignored
+// snapshots/<label>/ folder. Not a CI gate. Run `npm run build` first.
 
 import { mkdir, readFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
@@ -9,7 +9,7 @@ import { launchChromium } from '../browser/index.ts';
 import type { IndexRecord } from '../a11y/index.ts';
 import { serveSite } from '../serve/index.ts';
 import { PROJECT_ROOT } from '../validate/schema.ts';
-import { defaultLabel, isValidLabel, snapshotPages } from './index.ts';
+import { SNAPSHOT_WIDTHS, defaultLabel, isValidLabel, snapshotFile, snapshotPages } from './index.ts';
 
 const DIST = join(PROJECT_ROOT, 'site/dist');
 
@@ -32,28 +32,30 @@ const browser = await launchChromium();
 let failures = 0;
 
 try {
-  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
-  for (const page of pages) {
-    const tab = await context.newPage();
-    const response = await tab.goto(server.url + page.path, { waitUntil: 'networkidle' });
-    const file = join(out, `${page.file}.png`);
-    if (!response?.ok()) {
-      failures++;
-      console.log(`✗ ${page.path || '/'}: HTTP ${response?.status() ?? 'no response'}`);
-    } else {
-      await tab.screenshot({ path: file, fullPage: true });
-      console.log(`✓ ${relative(PROJECT_ROOT, file)}`);
+  for (const width of SNAPSHOT_WIDTHS) {
+    const context = await browser.newContext({ viewport: { width, height: 800 } });
+    for (const page of pages) {
+      const tab = await context.newPage();
+      const response = await tab.goto(server.url + page.path, { waitUntil: 'networkidle' });
+      const file = join(out, snapshotFile(page, width));
+      if (!response?.ok()) {
+        failures++;
+        console.log(`✗ ${page.path || '/'} at ${width}px: HTTP ${response?.status() ?? 'no response'}`);
+      } else {
+        await tab.screenshot({ path: file, fullPage: true });
+        console.log(`✓ ${relative(PROJECT_ROOT, file)}`);
+      }
+      await tab.close();
     }
-    await tab.close();
+    await context.close();
   }
-  await context.close();
 } finally {
   await browser.close();
   await server.close();
 }
 
 if (failures) {
-  console.error(`\n${failures} page(s) could not be captured.`);
+  console.error(`\n${failures} snapshot(s) could not be captured.`);
   process.exit(1);
 }
-console.log(`\n${pages.length * 2} snapshots in ${relative(PROJECT_ROOT, out)}/.`);
+console.log(`\n${pages.length * SNAPSHOT_WIDTHS.length} snapshots in ${relative(PROJECT_ROOT, out)}/.`);

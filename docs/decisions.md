@@ -387,6 +387,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The table of contents lists every top-level section, with a group's subgroups and a class's features and options nested under their heading, and leaves out cross-listed primitives. Titled sections that aren't a primitive, group, or component are anchored at `section-<slug>`. | Jumps straight to what a DM looks up; a cross-listed primitive lives on its own page; the prefix keeps clear of `<type>-<id>` anchors | #237 |
 | A class's Features table, a page's untitled opening prose, and a species' lines stay outside the sections. | They're the overview a reader opens the page for | #237 |
 | At narrow widths a property line's label wraps before its value overflows, and an entry's heading may break after a slash ("Antipathy/" then "Sympathy"), not mid-word. | WCAG reflow at 320px; a break at the slash keeps both words whole | #299 |
+| The token contrast test is removed, not kept on demand: axe checks rendered contrast on milestone PRs, and the milestone review checks the token pairs. Its reduced-motion checks aren't contrast and stay in `npm test` as `tests/site/motion.test.ts`. | The spec takes contrast out of CI; an unrun test rots | #239 |
+| `npm run snapshots` captures each page at 390, 820, and 1440px wide (800px high, full-page) as `<page>-<width>.png`, replacing the single 1280 × 800 capture. | One command gives a UI PR its screenshots; the spec sets only the widths | #239 |
+| The milestone review is filed by the session that opens the milestone PR, as a `test` issue under the Testing backlog with Pages, Checks, and Done when, as #267 and #288 were. | Keeps the reviews alike and filed when the milestone's scope is fresh | #239 |
 
 ### Export
 

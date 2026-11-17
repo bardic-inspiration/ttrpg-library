@@ -95,7 +95,8 @@ Every content session, routine or not, follows these:
    (`ui`, `ruleset`, `generation`, `ci`), or `docs`, `spec`, `scripts`, or
    `config` where none fits. PRs are squash-merged with the title as the
    commit message, so `git log` on `main` reads one line per change. Link
-   the issue with `Closes #N`.
+   the issue with `Closes #N`. A `ui` PR adds screenshots at 390, 820, and
+   1440px ([UI screenshots](docs/workflow.md#ui-screenshots)).
 7. **Watch it to green.** Fix red CI and conflicts on the same branch, and
    answer review comments.
 
@@ -168,7 +169,7 @@ The npm scripts are listed in
 | Build the index and the site | `npm run build` |
 | Types, `astro check`, Stylelint, links | `npm run check` |
 | Cited docs, headings, and links resolve | `npm run links` |
-| Unit tests, including contrast | `npm test` (one file: `npm test -- <path>`) |
+| Unit tests | `npm test` (one file: `npm test -- <path>`) |
 | Accessibility checks on the built site | `npm run a11y` |
 | Run the site locally | `npm run dev` |
 
@@ -177,8 +178,9 @@ The npm scripts are listed in
 
 - **Content:** `npm run validate` and `npm run build`.
 - **Dev:** those two, then `npm run check` and `npm test`. The PR that
-  closes a milestone also runs `npm run a11y` and gets the `milestone` label
-  ([Milestone PRs](docs/workflow.md#milestone-prs)).
+  closes a milestone also runs `npm run a11y`, gets the `milestone` label
+  ([Milestone PRs](docs/workflow.md#milestone-prs)), and files the
+  milestone's accessibility review ([Milestone review](docs/workflow.md#milestone-review)).
 - **Docs-only** (only root Markdown, `docs/` other than `docs/routines.md`,
   and the dev and Markdown issue templates;
   [Docs-only PRs](docs/workflow.md#docs-only-prs)): CI runs only the lane

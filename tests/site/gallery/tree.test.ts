@@ -1,4 +1,4 @@
-// The filter tree (docs/site.md#gallery "Filters"), on spec/v2/ui.md's cases: `creature/air-elemental`
+// The filter tree (docs/site.md#gallery "Filters"), on the pilot's hard cases (#235): `creature/air-elemental`
 // through Creature › Immunities › Conditions, and Equipment › Weapon › Martial › Melee.
 import { readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
