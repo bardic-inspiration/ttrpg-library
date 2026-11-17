@@ -92,7 +92,7 @@ const INVALID: Record<string, RegExp> = {
   'bad-id': /^id: must match pattern/,
   'short-summary': /^summary: must NOT have fewer than 10 characters/,
   'bad-date': /^meta\.createdAt: must match format "date"/,
-  'bad-source-kind': /^meta\.source\.kind: must be one of "routine", "revise", "manual"/,
+  'bad-source-kind': /^meta\.source\.kind: must be one of "routine", "revise", "manual", "import"/,
   'nested-tag': /^tags\.theme: must match a schema in anyOf/,
   'bad-tag-key': /^tags: property name must be valid/,
   'unknown-ruleset': /unknown ruleset "pathfinder-2e"/,
@@ -296,6 +296,41 @@ describe('situational fields (docs/content-model.md#situational-fields)', () => 
     none.meta.source.srd = false;
     const { errors } = await validateLibrary((await temp([none])).content);
     expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/^meta\.source\.srd: must be equal to constant/));
+  });
+
+  describe('imported entries (docs/content-model.md#meta, docs/licensing.md#source-allowlist)', () => {
+    const imported = async (license?: Record<string, unknown>) => {
+      const entry = await cinderHound();
+      entry.meta.source = { kind: 'import', issues: [7], ...(license ? { license } : {}) };
+      return entry;
+    };
+    const messages = async (entry: Record<string, any>) =>
+      (await validateLibrary((await temp([entry])).content)).errors.map((e) => e.message);
+    const LICENSE = { id: 'CC-BY-4.0', author: 'A. Author', url: 'https://example.com/hounds' };
+
+    it('accepts an import with a license on the import allowlist', async () => {
+      expect(await messages(await imported(LICENSE))).toEqual([]);
+      expect(await messages(await imported({ ...LICENSE, id: 'CC0-1.0' }))).toEqual([]);
+    });
+
+    it('requires the license block on an import', async () => {
+      expect(await messages(await imported())).toContainEqual(expect.stringMatching(/^meta\.source: missing required key "license"/));
+    });
+
+    it('rejects a license the allowlist doesn\'t accept for imports', async () => {
+      for (const id of ['CC-BY-SA-4.0', 'public-domain']) {
+        expect(await messages(await imported({ ...LICENSE, id }))).toContainEqual(expect.stringMatching(new RegExp(`^meta\\.source\\.license\\.id: "${id}" isn't a license`)));
+      }
+    });
+
+    it('rejects the license block on any other kind, and the SRD marker on an import', async () => {
+      const routine = await cinderHound();
+      routine.meta.source.license = LICENSE;
+      expect(await messages(routine)).not.toEqual([]);
+      const srd = await imported(LICENSE);
+      srd.meta.source.srd = true;
+      expect(await messages(srd)).not.toEqual([]);
+    });
   });
 
   it('keeps required fields valid at 0, false, and empty', async () => {

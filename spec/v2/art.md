@@ -57,7 +57,7 @@ repo. No external hosting.
 - **What can be used:**
   - anything its source marks with a license on the source allowlist's
     `art` kind: public domain, CC0, or CC-BY
-    ([Source allowlist](translators.md#source-allowlist));
+    ([Source allowlist](../../docs/licensing.md#source-allowlist));
   - anything the skill judges public domain from its creator and date:
     published in the United States before 1931, or by a creator who died
     more than 70 years ago (before 1956). The reasoning is recorded with

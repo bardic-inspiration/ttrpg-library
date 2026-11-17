@@ -17,6 +17,7 @@ import {
 import type { RulesData } from '../../lib/rules.ts';
 import { groupProblem, loadRules } from './rules.ts';
 import { termMatcher } from '../../lib/text.ts';
+import { accepts, checkLicenses, type Licenses } from '../../lib/licenses.ts';
 import { checkBlocklist, checkMarkdown, checkPlaceholders, loadBlocklist, stringsIn } from './text.ts';
 import { listEntryFiles } from './walk.ts';
 
@@ -84,6 +85,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const registry = options.registry ?? (await loadRegistry());
   const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
   const blocklist = termMatcher(await loadBlocklist(PROJECT_ROOT));
+  const licenses = await loadLicenses(PROJECT_ROOT);
   const rulesets = new Map<string, LoadedRuleset | undefined>();
   const heads: EntryHead[] = [];
   const entries: Omit<ValidEntry, 'refs' | 'refBy'>[] = [];
@@ -131,6 +133,11 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     for (const { path, text } of envelopeResult.texts) for (const message of checkMarkdown(path, text)) error(file, message);
     for (const message of checkBlocklist(entry, blocklist)) error(file, message);
     for (const message of checkPlaceholders(entry)) error(file, message);
+    // An imported entry's license is one the source allowlist accepts for imports (docs/licensing.md#source-allowlist).
+    const license = (entry.meta as { source?: { license?: { id: string } } }).source?.license;
+    if (license && !accepts(licenses, 'import', license.id)) {
+      error(file, `meta.source.license.id: "${license.id}" isn't a license config/licenses.json accepts for imports (${licenses.kinds.import?.join(', ')})`);
+    }
     const srd = (entry.meta as { source?: { srd?: true } }).source?.srd === true;
     heads.push({
       file,
@@ -260,4 +267,12 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       return { ...c, ...linksOf(c), parent: entryKey(parent) };
     });
   return { files, errors: pick('error'), warnings: pick('warning'), entries: withLinks, components: validComponents, rules };
+}
+
+/** config/licenses.json (docs/licensing.md#source-allowlist), checked. */
+export async function loadLicenses(root: string): Promise<Licenses> {
+  const data: unknown = JSON.parse(await readFile(join(root, 'config/licenses.json'), 'utf8'));
+  const problems = checkLicenses(data);
+  if (problems.length > 0) throw new Error(`config/licenses.json: ${problems.join('; ')}`);
+  return data as Licenses;
 }

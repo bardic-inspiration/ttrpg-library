@@ -10,6 +10,12 @@ export const LANE_PREFIXES: Record<Lane, readonly string[]> = {
 const CONTENT_PATHS = ['content/', 'assets/images/'];
 
 /**
+ * Paths outside content that a content PR may also change: an import's credit line in
+ * ATTRIBUTION.md (docs/generation.md#imports). A dev PR changes them freely.
+ */
+const CONTENT_LANE_EXTRAS = ['ATTRIBUTION.md'];
+
+/**
  * Paths no code or test reads, so a PR that changes only these skips the
  * content and dev checks (docs/workflow.md#docs-only-prs): Markdown at the repo
  * root, `docs/**`, and the issue and dev PR templates. A file that a test or
@@ -97,10 +103,10 @@ export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
       `Branch "${branch}" is under a prefix that can't merge (${REJECTED_PREFIXES.join(', ')}). Open the PR from a new branch.`,
     );
   } else if (lane === 'content') {
-    const outside = paths.filter((path) => !isContentPath(path));
+    const outside = paths.filter((path) => !isContentPath(path) && !CONTENT_LANE_EXTRAS.includes(path));
     if (outside.length > 0) {
       errors.push(
-        `A content-lane PR may change only content/** and assets/images/**. Outside those:\n${list(outside)}`,
+        `A content-lane PR may change only content/**, assets/images/**, and ${CONTENT_LANE_EXTRAS.join(', ')}. Outside those:\n${list(outside)}`,
       );
     }
   } else if (needsMigrationLabel({ branch, paths, labels })) {

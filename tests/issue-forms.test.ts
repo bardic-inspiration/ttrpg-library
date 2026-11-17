@@ -90,6 +90,40 @@ describe('revise-request.yml', () => {
   });
 });
 
+describe('import-request.yml (docs/generation.md#requests)', () => {
+  it('adds the import label', async () => {
+    const form = await load('import-request.yml');
+    expect(form.name).toBeTruthy();
+    expect(form.description).toBeTruthy();
+    expect(form.labels).toEqual(['import']);
+  });
+
+  it('has the import issue\'s fields, kinds, and required flags', async () => {
+    const form = await load('import-request.yml');
+    const shape = inputs(form).map((f) => [f.attributes.label, f.type, f.validations?.required ?? false]);
+    expect(shape).toEqual([
+      ['Format', 'dropdown', true],
+      ['File', 'textarea', true],
+      ['Work', 'input', true],
+      ['Author', 'input', true],
+      ['Source URL', 'input', true],
+      ['License', 'dropdown', true],
+      ['Ruleset', 'input', false],
+      ['Notes', 'textarea', false],
+    ]);
+    const ids = inputs(form).map((f) => f.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('offers exactly the built translators and the licenses accepted for imports', async () => {
+    const form = await load('import-request.yml');
+    const { TRANSLATORS } = await import('../scripts/import/index.ts');
+    expect(field(form, 'Format').attributes.options).toEqual(Object.keys(TRANSLATORS));
+    const licenses = JSON.parse(await readFile(join(ROOT, 'config/licenses.json'), 'utf8')) as { kinds: Record<string, string[]> };
+    expect(field(form, 'License').attributes.options).toEqual(licenses.kinds.import);
+  });
+});
+
 describe('config.yml', () => {
   it('keeps blank issues off', async () => {
     const config = parse(await readFile(join(DIR, 'config.yml'), 'utf8'));

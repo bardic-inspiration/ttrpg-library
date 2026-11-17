@@ -21,7 +21,7 @@ within the one repo, not by convention.
 | | Content lane | Dev lane |
 |---|---|---|
 | Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, stage spec |
-| Paths it may change | `content/**`, `assets/images/**` | Everything else; content paths with the `migration` label, which the labeler adds |
+| Paths it may change | `content/**`, `assets/images/**`, `ATTRIBUTION.md` | Everything else; content paths with the `migration` label, which the labeler adds |
 | Branch prefixes | `gen/`, `revise/` (routines), `manual/` (hand-made entries) | `dev/`, `dependabot/`, or any branch without a content prefix (such as a web-editor `<user>-patch-1`) |
 | Opened by | Routines, or the owner for `manual/`, or a session the owner starts for SRD work | The owner, or a Claude session the owner starts |
 | Lane label (auto) | `content` | `dev` |
@@ -40,8 +40,8 @@ reads as two visibly distinct streams: "Add/Revise …" for content and
 generation run, so it's reviewed as behavior (`generation`), not as content. So
 are the skills, the defaults file, and the routine prompts.
 
-**Routines work only the content lane.** They take only `request` and `revise`
-issues and push only `gen/` and `revise/` branches. Dev issues are worked in
+**Routines work only the content lane.** They take only `request`, `import`,
+and `revise` issues and push only `gen/` and `revise/` branches. Dev issues are worked in
 sessions the owner starts, on `dev/` branches.
 
 ### Lane rules
@@ -51,9 +51,10 @@ The `lane` job enforces these:
 - A PR's lane comes from its branch prefix: `gen/`, `revise/`, and `manual/` are
   content; every other branch is dev. `spike/` branches get no lane and fail, so
   a spike can't merge.
-- A content PR fails if it changes any path outside `content/**` and
-  `assets/images/**`, so routines can't alter schemas, guidelines, config, or
-  the site, even by accident.
+- A content PR fails if it changes any path outside `content/**`,
+  `assets/images/**`, and `ATTRIBUTION.md`, so routines can't alter schemas,
+  guidelines, config, or the site, even by accident. `ATTRIBUTION.md` is
+  there for an import's credit line ([Imports](generation.md#imports)).
 - A dev PR that changes `content/**` or `assets/images/**` gets the `migration`
   label from the labeler, and fails without it. The label keeps every content
   change made by code visible in review, and needs no manual step. A migration

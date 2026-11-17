@@ -33,6 +33,15 @@ describe('.github/PULL_REQUEST_TEMPLATE/content.md', () => {
     expect(template).toMatch(/^\| Name \| Type \| Summary field \| Summary \|$/m);
     expect(template).toMatch(/^## Warnings$/m);
     expect(template).toMatch(/^## Gap fill$/m);
+    expect(template).toMatch(/^## Skipped on import$/m);
     expect(template).toMatch(/^Closes #/m);
+  });
+
+  it('runs import batches through the import script (docs/generation.md#imports)', () => {
+    const skill = read(SKILL);
+    expect(skill).toContain('`npm run import -- --issue <n>');
+    expect(skill).toContain('`gen/import-<issue-numbers>-<YYYYMMDD>`');
+    expect(skill).toContain('`ATTRIBUTION.md`');
+    expect(skill).toContain('SRD proper noun');
   });
 });

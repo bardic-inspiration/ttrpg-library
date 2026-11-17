@@ -1,8 +1,8 @@
 # Routines
 
 Routines are scheduled or on-demand Claude Code sessions that work the
-content lane: they turn `request` and `revise` issues into content PRs and
-answer review comments on them. This file holds the canonical prompts, the
+content lane: they turn `request`, `import`, and `revise` issues into content
+PRs and answer review comments on them. This file holds the canonical prompts, the
 schedule, and the run order every run follows. [Generation](generation.md) is the source of
 truth; where this file and the spec disagree, the spec wins and this file is
 fixed.
@@ -38,8 +38,8 @@ Create each routine as a scheduled task in Claude Code on the web (see the
   on-demand run, the [on-demand prompt](#on-demand-prompt) with its inputs
   filled in.
 
-Routines work only the content lane ([Work lanes](workflow.md#work-lanes)). They take only `request` and
-`revise` issues, never dev-lane issues (bugs, features, UI refinement). They
+Routines work only the content lane ([Work lanes](workflow.md#work-lanes)). They take only `request`,
+`import`, and `revise` issues, never dev-lane issues (bugs, features, UI refinement). They
 push only to `gen/` and `revise/` branches, named as the `generate` and
 `revise` skills say. A cloud session is assigned a branch of its own; a
 routine never pushes to it, or to `main` (`CLAUDE.md`).
@@ -47,7 +47,7 @@ routine never pushes to it, or to `main` (`CLAUDE.md`).
 ## Scheduled prompt
 
 ```text
-Run the content routine for this repository. Read docs/routines.md on main and follow its "Run order" section exactly, step by step. Work only the content lane: take only `request` and `revise` issues, push only `gen/` and `revise/` branches, and never push to main or to this session's assigned branch. If a step fails in a way you can't recover from, stop and report which step and why. End with a short report: PRs opened or updated, issues claimed, questions asked, and steps skipped.
+Run the content routine for this repository. Read docs/routines.md on main and follow its "Run order" section exactly, step by step. Work only the content lane: take only `request`, `import`, and `revise` issues, push only `gen/` and `revise/` branches, and never push to main or to this session's assigned branch. If a step fails in a way you can't recover from, stop and report which step and why. End with a short report: PRs opened or updated, issues claimed, questions asked, and steps skipped.
 ```
 
 ## On-demand prompt
@@ -58,7 +58,7 @@ line, an on-demand run is the same as a scheduled run.
 Named issues:
 
 ```text
-Run the content routine for this repository. Read docs/routines.md on main and follow its "Run order" section exactly, step by step. Work only the content lane: take only `request` and `revise` issues, push only `gen/` and `revise/` branches, and never push to main or to this session's assigned branch. If a step fails in a way you can't recover from, stop and report which step and why. End with a short report: PRs opened or updated, issues claimed, questions asked, and steps skipped.
+Run the content routine for this repository. Read docs/routines.md on main and follow its "Run order" section exactly, step by step. Work only the content lane: take only `request`, `import`, and `revise` issues, push only `gen/` and `revise/` branches, and never push to main or to this session's assigned branch. If a step fails in a way you can't recover from, stop and report which step and why. End with a short report: PRs opened or updated, issues claimed, questions asked, and steps skipped.
 
 Issues: #12, #14
 ```
@@ -66,7 +66,7 @@ Issues: #12, #14
 Inline request:
 
 ```text
-Run the content routine for this repository. Read docs/routines.md on main and follow its "Run order" section exactly, step by step. Work only the content lane: take only `request` and `revise` issues, push only `gen/` and `revise/` branches, and never push to main or to this session's assigned branch. If a step fails in a way you can't recover from, stop and report which step and why. End with a short report: PRs opened or updated, issues claimed, questions asked, and steps skipped.
+Run the content routine for this repository. Read docs/routines.md on main and follow its "Run order" section exactly, step by step. Work only the content lane: take only `request`, `import`, and `revise` issues, push only `gen/` and `revise/` branches, and never push to main or to this session's assigned branch. If a step fails in a way you can't recover from, stop and report which step and why. End with a short report: PRs opened or updated, issues claimed, questions asked, and steps skipped.
 
 Inline request: type: spell; count: 3; brief: frost-themed utility spells for levels 1 to 3; tags: theme: winter
 ```
@@ -99,26 +99,44 @@ pending comments.
 ### 3. Revise requests
 
 Take open `revise` issues without `needs-info`, and without `in-progress`
-unless the claim is stale (step 7), oldest first. Claim each as step 4 does:
+unless the claim is stale (step 8), oldest first. Claim each as step 5 does:
 add the `in-progress` label and comment that this run has picked it up. Then
 run the `revise` skill (`.claude/skills/revise/SKILL.md`) on each issue in
 turn. Each becomes its own small PR on a `revise/` branch, or a question on
 the issue if it can't be fulfilled as written. An on-demand run takes these
 too, whatever its inputs ([Run order](generation.md#run-order)).
 
-### 4. Content requests
+### 4. Import requests
+
+Pick the batch:
+
+- **Scheduled run, or on-demand with no inputs:** open `import` issues
+  without `needs-info`, and without `in-progress` unless the claim is stale
+  (step 8). Take `priority:high` issues first, then oldest first, and add
+  every picked issue to the batch.
+- **On-demand with named issues:** only the named `import` issues, each open
+  and without `needs-info`.
+- **On-demand with an inline request:** none.
+
+Claim each picked issue as step 5 does. Then run the `generate` skill
+(`.claude/skills/generate/SKILL.md`) on the batch as an import batch. It runs
+`npm run import` on each issue's file, rejects an issue whose license
+`config/licenses.json` doesn't accept for imports, and opens one content PR
+for the rest, with a skip list grouped by issue ([Imports](generation.md#imports)).
+
+### 5. Content requests
 
 Pick the batch:
 
 - **Scheduled run, or on-demand with no inputs:** open `request` issues
   without `needs-info`, and without `in-progress` unless the claim is stale
-  (step 7). Take `priority:high` issues first, then oldest first. Resolve
+  (step 8). Take `priority:high` issues first, then oldest first. Resolve
   each issue's count as the `generate` skill says (`defaults.count` when
   blank), and add every picked issue to the batch: there is no batch size
   limit.
-- **On-demand with named issues:** only the named issues. Each must be an
-  open `request` issue without `needs-info`; report any other and leave it
-  alone.
+- **On-demand with named issues:** only the named `request` issues (step 4
+  took the named `import` issues). Report a named issue that isn't an open
+  `import` or `request` issue without `needs-info`, and leave it alone.
 - **On-demand with an inline request:** the inline request alone, as if it
   were an issue but without one.
 
@@ -127,16 +145,16 @@ run has picked it up. Then run the `generate` skill
 (`.claude/skills/generate/SKILL.md`) on the batch. It writes the entries,
 validates them, and opens the content PR, or reports why it couldn't.
 
-### 5. Gap-fill
+### 6. Gap-fill
 
-Only if no requests were picked in step 4 and `defaults.gapFill.enabled` is
+Only if no content requests were picked in step 5 and `defaults.gapFill.enabled` is
 true. An on-demand run with named issues or an inline request never
 gap-fills.
 
 Run `npm run gap-fill`. It reads `site/public/library.json` (built in step
 1) and `config/types.json`, and prints the type and gap bucket with the
 fewest entries among the types of `defaults.ruleset`, breaking ties as [Run order](generation.md#run-order)
-step 5 says, as one line: the type, a space, and the bucket label ([Gap buckets](generation.md#gap-buckets)),
+step 6 says, as one line: the type, a space, and the bucket label ([Gap buckets](generation.md#gap-buckets)),
 as in `spell stats.level=0..0&stats.school=abjuration`. Use that choice
 as printed; don't pick a bucket by eye. If it exits with an error, skip
 gap-fill and report its message.
@@ -146,7 +164,7 @@ that type and bucket label as a gap bucket, for `defaults.gapFill.count`
 entries. It writes the entries, validates them, and opens the content PR on
 a `gen/` branch.
 
-### 6. Ambiguity
+### 7. Ambiguity
 
 If a request can't be fulfilled as written (contradictory constraints, an
 unknown type or ruleset), comment a single question on the issue, add
@@ -154,8 +172,8 @@ unknown type or ruleset), comment a single question on the issue, add
 skill does this for requests in its batch. For an inline request, report the
 question instead.
 
-### 7. Stale claims
+### 8. Stale claims
 
 An `in-progress` issue with no open linked PR after 24 hours is treated as
-unclaimed, so step 3 or 4 may pick it again. Check this while picking in
-steps 3 and 4.
+unclaimed, so step 3, 4, or 5 may pick it again. Check this while picking in
+steps 3 to 5.

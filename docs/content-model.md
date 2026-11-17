@@ -60,10 +60,19 @@ with a schema file and a registry entry. Anything else fails as unknown.
 ### Meta
 
 `meta` records when an entry was created and revised, and where it came from:
-the source kind (`routine`, `revise`, or `manual`), the issues it fulfilled, the
-gap bucket that produced it ([generation.md](generation.md#gap-buckets)), and
+the source kind (`routine`, `revise`, `manual`, or `import`), the issues it
+fulfilled, the gap bucket that produced it ([generation.md](generation.md#gap-buckets)), and
 whether it's an SRD entry. It shows on the detail page as a provenance line and
 `meta.createdAt` is sortable, but meta isn't a tag.
+
+An imported entry ([Imports](generation.md#imports)) has
+`meta.source.kind: import` and a `meta.source.license` block: `id`, the
+license's id in `config/licenses.json`; `author`; and `url`, where the work is
+published. The block is required on an import and allowed nowhere else, and
+the validator fails an `id` the [source allowlist](licensing.md#source-allowlist)
+doesn't accept for imports. An imported entry is custom, so it never sets
+`meta.source.srd`. Its provenance line credits the author, linked to the
+source, and the license by name, linked to its legal code.
 
 ### Text fields
 

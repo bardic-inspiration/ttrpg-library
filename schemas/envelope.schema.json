@@ -42,11 +42,25 @@
           "additionalProperties": false,
           "required": ["kind"],
           "properties": {
-            "kind": { "description": "\"routine\" for a generated entry, \"revise\" for a revision, \"manual\" for a hand-made entry.", "enum": ["routine", "revise", "manual"] },
+            "kind": { "description": "\"routine\" for a generated entry, \"revise\" for a revision, \"manual\" for a hand-made entry, \"import\" for an imported one.", "enum": ["routine", "revise", "manual", "import"] },
             "issues": { "description": "The issues the entry fulfilled.", "type": "array", "items": { "type": "integer", "minimum": 1 } },
             "gapFill": { "description": "The gap bucket's label, when gap fill created the entry.", "type": "string", "minLength": 1 },
-            "srd": { "description": "Set on an SRD entry, reproduced unmodified from SRD 5.2; omitted on a custom entry.", "const": true }
-          }
+            "srd": { "description": "Set on an SRD entry, reproduced unmodified from SRD 5.2; omitted on a custom entry.", "const": true },
+            "license": {
+              "description": "An imported entry's source and license (docs/content-model.md#meta): required on an import, and only there.",
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "author", "url"],
+              "properties": {
+                "id": { "description": "The license's id in config/licenses.json, accepted for imports.", "type": "string", "minLength": 1 },
+                "author": { "description": "The work's author, as credited.", "type": "string", "minLength": 1, "maxLength": 120 },
+                "url": { "description": "Where the source work is published.", "type": "string", "pattern": "^https?://\\S+$" }
+              }
+            }
+          },
+          "if": { "properties": { "kind": { "const": "import" } } },
+          "then": { "required": ["license"], "not": { "required": ["srd"] } },
+          "else": { "not": { "required": ["license"] } }
         }
       }
     }

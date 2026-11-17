@@ -1,6 +1,6 @@
 ---
 name: generate
-description: Generate new library entries for a content request issue, an inline request, or a gap-fill bucket, validate them, and open a content PR. Generic across types and rulesets. Use from a routine run (docs/generation.md#run-order steps 4 and 5) or when asked to fulfil a `request` issue. Not for revisions; those use the revise skill.
+description: Generate new library entries for a content request issue, an import issue, an inline request, or a gap-fill bucket, validate them, and open a content PR. Generic across types and rulesets. Use from a routine run (docs/generation.md#run-order steps 4 to 6) or when asked to fulfil a `request` or `import` issue. Not for revisions; those use the revise skill.
 ---
 
 # Generate
@@ -12,7 +12,7 @@ batch.
 
 The routine run that calls this skill has already synced `main`, picked the
 batch, and claimed each issue with the `in-progress` label ([Run order](../../../docs/generation.md#run-order) steps 1, 4,
-5). This skill starts after that.
+5, and 6). This skill starts after that.
 
 `defaults.<key>` below means that key of `config/defaults.json`.
 
@@ -25,10 +25,15 @@ One batch, from exactly one of these sources:
   (`Type`, `Count`, `Brief`, `Tags`, `Ruleset`); `_No response_` means the
   field was left blank. A free-form `request` issue is read for the same
   fields in its prose ([Requests](../../../docs/generation.md#requests)).
+- **Import issues.** One or more open `import` issues, an import batch
+  ([Imports](../../../docs/generation.md#imports)). An import-request form body has one `### <label>` heading per
+  field (`Format`, `File`, `Work`, `Author`, `Source URL`, `License`,
+  `Ruleset`, `Notes`). An import batch is never mixed with content requests;
+  it follows "Import batches" below in place of steps 2 to 4.
 - **Inline request.** Type, count, brief, and tags given directly by a manual
   run, with no issue ([Run order](../../../docs/generation.md#run-order)).
 - **Gap bucket.** A type and a bucket label such as `stats.cr=2..4`, chosen by
-  the run ([Run order](../../../docs/generation.md#run-order) step 5, [Gap buckets](../../../docs/generation.md#gap-buckets)), with a count of `defaults.gapFill.count`. The
+  the run ([Run order](../../../docs/generation.md#run-order) step 6, [Gap buckets](../../../docs/generation.md#gap-buckets)), with a count of `defaults.gapFill.count`. The
   brief is to fill that bucket: every entry's values must fall in it.
 - **SRD import stage.** A stage issue of the full SRD import ([SRD import](../../../docs/generation.md#srd-import)), worked
   in a session the owner starts. The batch is SRD entries of one type and
@@ -51,7 +56,7 @@ gap-fill run, is fulfilled with custom entries.
 If a request can't be fulfilled as written (contradictory constraints, a type
 or ruleset not in `config/types.json`), don't generate it: comment one
 question on the issue, add `needs-info`, remove `in-progress`, and leave it
-out of the batch ([Run order](../../../docs/generation.md#run-order) step 6).
+out of the batch ([Run order](../../../docs/generation.md#run-order) step 7).
 
 ## Step 1: Read
 
@@ -171,9 +176,43 @@ against it before pushing.
   ([Templates](../../../docs/site.md#templates)).
 - Set `meta.source.srd` to `true` (step 4).
 
+### Import batches
+
+For an import batch, the import script writes the entries; don't write their
+stats by hand. For each issue, in order:
+
+1. Get the file: save the attachment or the URL's file under the session's
+   scratch directory, never under `content/`.
+2. Run `npm run import -- --issue <n> --format <Format> --file <path>
+   --work "<Work>" --author "<Author>" --url <Source URL> --license <License>`,
+   adding `--ruleset <Ruleset>` when the issue gives one.
+3. **Rejected** (exit code 2): comment the printed reason on the issue,
+   remove `in-progress`, and leave it out of the batch. A rejected license is
+   final; any other reason (a missing file, a format the issue misnamed) is a
+   `needs-info` question instead ([Run order](../../../docs/generation.md#run-order) step 7).
+4. **Imported:** keep the printed skip-list section for the PR body. The
+   script wrote the entries under `content/`, `meta`, and the work's line in
+   `ATTRIBUTION.md`.
+5. Rewrite each new entry's drafted `summary` as one plain, factual line for
+   the entry, in the type's voice. Don't change its `name`, `stats`, or
+   `description`, except to turn a plain mention of a library entry into a
+   link the script missed.
+6. Read each new entry for SRD proper nouns (a specific person, place, or
+   thing named in the SRD), which the script can't detect. Delete an entry
+   that uses one, and add a row for it to the issue's skip-list section with
+   the reason "It uses an SRD proper noun".
+
+Then validate the batch (step 5). An import entry that fails validation and
+can't be fixed without changing what the work says is deleted and added to
+its issue's skip list, not rewritten.
+
 Never modify, rename, or move an existing entry. This skill only adds files.
 
 ## Step 4: Meta and tags
+
+An import batch skips this step: the import script sets `meta.source.kind`
+to `"import"`, with `meta.source.issues` and `meta.source.license`, and
+`tags` to `defaults.tags` plus `author`.
 
 Set on every entry in the batch, including dependencies:
 
@@ -207,12 +246,15 @@ Once it passes, keep every warning it prints; they go in the PR body.
 1. Branch from `main`:
    - issues: `gen/<issue-numbers>-<YYYYMMDD>`, numbers ascending and joined
      by `-` (`gen/12-14-20261102`);
+   - import issues: `gen/import-<issue-numbers>-<YYYYMMDD>`
+     (`gen/import-31-20261102`);
    - gap fill: `gen/gap-<type>-<YYYYMMDD>` (`gen/gap-spell-20261102`);
    - inline request: `gen/inline-<type>-<YYYYMMDD>`;
    - SRD import stage: `gen/srd-<stage>-<type>-<YYYYMMDD>`, adding `-2`,
      `-3` for more PRs the same day.
-2. Stage only the new files under `content/`. A content PR that changes
-   anything else fails the `lane` check ([Lane rules](../../../docs/workflow.md#lane-rules)).
+2. Stage only the new files under `content/`, and for an import batch,
+   `ATTRIBUTION.md`. A content PR that changes anything else fails the `lane`
+   check ([Lane rules](../../../docs/workflow.md#lane-rules)).
 3. Commit with the message `Add <n> <type> entries` (a mixed-type batch:
    `Add <n> entries`), where `<n>` counts every new entry, dependencies
    included.
@@ -225,13 +267,15 @@ Once it passes, keep every warning it prints; they go in the PR body.
      `bonus` with its reason. "None" if there are none.
    - **Gap fill:** the bucket label, for a gap-fill run. Delete the section
      otherwise.
+   - **Skipped on import:** for an import batch, each issue's skip-list
+     section, in issue order. Delete the section otherwise.
    - One `Closes #<n>` line per fulfilled issue. Delete the line for a
      gap-fill or inline run. An SRD import stage uses `Refs #<stage>`,
      except the PR that finishes the stage, which uses `Closes #<stage>`.
 
 The `content` label is applied from the branch prefix ([Lane rules](../../../docs/workflow.md#lane-rules)); don't add
 labels to the PR. Leave `in-progress` on the issues: an open linked PR is
-what keeps the claim alive ([Run order](../../../docs/generation.md#run-order) step 7), and merging closes them.
+what keeps the claim alive ([Run order](../../../docs/generation.md#run-order) step 8), and merging closes them.
 
 Review comments on the PR are handled by the `revise` skill on a later run,
 not here.

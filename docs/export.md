@@ -189,8 +189,8 @@ A translator is one module for one target format, in
   the entry types it covers. The exporter loads the translator only when a
   download runs.
 - **Import** maps a file in the target format to library entries, inputs
-  only, without `summary` or `meta`: the import flow writes those and opens
-  the content PR. Names in structured fields resolve against the target
+  only, without `summary` or `meta`: the import script writes those, and a
+  routine opens the content PR ([Imports](generation.md#imports)). Names in structured fields resolve against the target
   ruleset's entries and rules (`ImportContext`).
 
 **What doesn't translate** is skipped and reported, never guessed. Each side

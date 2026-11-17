@@ -105,6 +105,12 @@ const nameParts = entry.name.split('/');
           ))}.
         </>
       )}
+      {source.credit && (
+        <>
+          {' '}Adapted from <a href={source.credit.source}>a work by {source.credit.author}</a>, licensed under{' '}
+          <a href={source.credit.licenseUrl}>{source.credit.license}</a>.
+        </>
+      )}
     </small>
   </p>
 </article>
