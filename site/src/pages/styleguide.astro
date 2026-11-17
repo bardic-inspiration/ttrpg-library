@@ -9,7 +9,13 @@
 import Base from '../layouts/Base.astro';
 import EntryTemplate from '../components/templates/EntryTemplate.astro';
 import PrintEntry from '../components/print/PrintEntry.astro';
-import { pageSizes } from '../lib/print';
+
+// The two print layouts (docs/export.md#print-layout), each previewed at a
+// sample page's width inside its margin from tokens/print.css.
+const printLayouts = [
+  { id: 'wide', label: 'Wide page: US Letter', width: 'calc(8.5in - 2 * 0.5in)' },
+  { id: 'narrow', label: 'Narrow page: 4 × 6 in card', width: 'calc(4in - 2 * 0.3in)' },
+];
 import SearchIcon from '../icons/Search';
 import FilterIcon from '../icons/Filter';
 import SortIcon from '../icons/Sort';
@@ -235,20 +241,20 @@ const modes = ['screen', 'capture'] as const;
   <section class="sg-section" aria-labelledby="sg-print">
     <h2 id="sg-print">Print previews</h2>
     <p class="measure">
-      Each template in <code>print</code> mode at each page size, at the page's
-      width inside its margins. Density
-      per size is in <code>tokens/print.css</code>; sizes and margins are in
-      <code>config/export.json</code>.
+      Each template in <code>print</code> mode in each print layout, at a
+      sample page's width inside its margins. The layout follows the printed
+      page's width; density, margins, and the breakpoint are in
+      <code>tokens/print.css</code>.
     </p>
-    {pageSizes.map((size) => (
+    {printLayouts.map((layout) => (
       <>
-        <h3>{size.label}</h3>
+        <h3>{layout.label}</h3>
         <div class="sg-print-row">
           {fixtureEntries.map((loaded) => (
             <div
               class="sg-print"
-              data-page-size={size.id}
-              style={`inline-size: calc(${size.width} - 2 * ${size.margin})`}
+              data-print-layout={layout.id}
+              style={`inline-size: ${layout.width}`}
             >
               <PrintEntry loaded={loaded} names={entryNames} level={4} />
             </div>

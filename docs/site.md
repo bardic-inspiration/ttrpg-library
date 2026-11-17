@@ -348,8 +348,8 @@ then tags by key, with the default sort and ignored parameters left out.
 - Cards have a checkbox. Selection lives in the page, not the URL. A selected
   entry that the filters hide stays selected and is counted in "N selected".
 - Beside the result count there is one button per configured exporter that
-  offers set scope, in config order, with a page size selector beside one that
-  takes it ([export.md](export.md#exporter-interface)).
+  offers set scope, in config order
+  ([export.md](export.md#exporter-interface)).
 - An action targets the selection when anything is selected: the selected
   results in the gallery's order, then selected entries the filters hide, in
   index order. Otherwise it targets the whole filtered set in the gallery's

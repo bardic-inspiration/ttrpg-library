@@ -40,7 +40,7 @@ on one page, and tests catch accessibility regressions.
 | `tokens/semantic.css` | Meanings mapped to primitives: `--color-bg`, `--color-text`, `--color-accent`, `--font-heading`, `--space-card`, … | What a role looks like |
 | `tokens/components.css` | Per-component knobs that default to semantic tokens: `--statblock-rule-color`, `--card-min-width`, `--grid-gap`, `--table-*`, … | One component's look without touching its code |
 | `tokens/content.css` | Data-driven accents: one variable per entry type and item rarity | Type and rarity colors |
-| `tokens/print.css` | Print and capture sizing per page size | Print density per page size |
+| `tokens/print.css` | Print sizing and margins for the wide and narrow print layouts, and the page-width breakpoint between them ([Print layout](export.md#print-layout)) | Print density, margins, or the breakpoint |
 
 - **Components use only semantic, component, and content tokens**, never
   primitives or literal values. A color, font, size, spacing, radius, shadow, or
@@ -127,7 +127,7 @@ Target: WCAG 2.2 AA.
 
 - **Style guide.** `/styleguide/` (unlinked, `noindex`) renders from the test
   fixtures: every token as a swatch or sample; the type scale and typefaces;
-  every template in each mode, with print previews at each page size; gallery
+  every template in each mode, with print previews in the wide and narrow print layouts; gallery
   cards with and without art; and filter controls in their states. Edit a
   token, and every affected
   surface updates under `npm run dev`.
@@ -161,7 +161,6 @@ Target: WCAG 2.2 AA.
 | A type or rarity color | `tokens/content.css` |
 | Fonts or the type scale | `tokens/primitives.css` (families and scale) and `semantic.css` (roles) |
 | Card size, grid density, gaps | `tokens/components.css` |
-| Print density per page size | `tokens/print.css` |
-| Page sizes and margins | `config/export.json` |
+| Print density, margins, or the page-width breakpoint | `tokens/print.css` |
 | Stat-block structure or order | The template's parts in `site/src/components/templates/` |
 | A quick experiment | `overrides.css`, then move the result into tokens or the component |

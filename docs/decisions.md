@@ -167,7 +167,6 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | JSON is the native format: the raw entry, inputs only. | P1 | #1, #54 |
 | PNG is a DOM capture of the template, from an inert capture source, in light theme, with a short attribution footer. | Discord and VTTs | #1, #55 |
 | PDF is the browser's print of print CSS, not an image. The print view fetches per-entry print fragments. | Vector text and multi-page stat blocks; P11 | #1, #51, #56 |
-| Page sizes are Letter (default), A4, Half-Letter, and 4×6, configured as data. | P4 | #1 |
 | Every printed page carries the short attribution and the entry name; the full statement prints after the last entry. Print has no art. | The full statement doesn't fit a 4×6 margin | #56 |
 | A failed export does nothing and says so in a status region. | | #54, #58 |
 
@@ -399,6 +398,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | No dynamic API in v2. The data lane is file downloads, with translators for VTT and site formats; the static entry files and `library.json` stay as an informal read-only feed. | Targets import files; P1 | #115 |
 | One-click PDF is dropped; Print uses the device's print dialog. | Same number of steps in practice; fewer controls | #115 |
 | Print layout adapts to the paper chosen in the print dialog, replacing the page size choice. | The size dropdown is gone | #115 |
+| Print has two layouts split at one breakpoint, 6.5in of printed page width: wide (two columns, 9.5pt, 0.5in margin) and narrow (one column, 8pt, 0.3in margin). The narrow layout takes v1's 4 × 6 density, so Half-Letter prints slightly smaller than v1's. The breakpoint and margins live in `tokens/print.css`. | One breakpoint gives the spec's two layouts; 6.5in falls between narrow pages and wide pages' printable widths, however a browser measures; `@page` margins can sit in a width media query, so a card keeps a narrow margin | #243 |
+| A stale `size` parameter in a print URL is ignored. | Old links still print | #243 |
 | Download opens a small format menu (PNG, JSON, translators), offering only the formats for its scope. | A save dialog's file-type list works only in Chromium | #115 |
 | Page types and rules pages get Print, not Download; printing one expands every section. | Download is for card entries | #115 |
 

@@ -1,12 +1,13 @@
 // The print view island (docs/export.md#print) on `/print/`. It loads the entries
-// the URL names as print fragments, injects the `@page` rules for the chosen
-// size, and opens the print dialog once fonts load. Entries stack onto shared
-// pages. A page-size selector lets the reader adjust and print again. Any entry that
-// can't be found or loaded fails the run with a message and no dialog.
+// the URL names as print fragments, injects the `@page` footer, and opens the
+// print dialog once fonts load. The reader picks the paper there, and the
+// layout follows its width (docs/export.md#print-layout). Entries stack onto
+// shared pages. A Print button prints again. Any entry that can't be found or
+// loaded fails the run with a message and no dialog.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import registryJson from '../../../../config/types.json' with { type: 'json' };
 import type { Registry } from '../../lib/gallery/config.ts';
-import { pageRules, pageSizes, resolveSize } from '../../lib/print.ts';
+import { pageRules } from '../../lib/print.ts';
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
 import { loadPrintRun, type PrintRun } from '../../lib/print-run.ts';
 import PrintIcon from '../../icons/Print.tsx';
@@ -22,30 +23,25 @@ const STYLE_ID = 'print-page-rules';
 
 export default function PrintView({ base }: PrintViewProps) {
   const [run, setRun] = useState<PrintRun | undefined>();
-  const [size, setSize] = useState(() => resolveSize(undefined));
   const printed = useRef(false);
 
   useEffect(() => {
-    loadPrintRun(window.location.search, base, registry, fetchFresh).then((loaded) => {
-      setSize(loaded.size);
-      setRun(loaded);
-    });
+    loadPrintRun(window.location.search, base, registry, fetchFresh).then(setRun);
   }, [base]);
 
   const fragments = run?.ok ? run.fragments : [];
 
-  // Page rules and density follow the size.
+  // The page footer, once the entries are in.
   useEffect(() => {
     if (!run?.ok) return;
-    document.documentElement.dataset.pageSize = size.id;
     let style = document.getElementById(STYLE_ID);
     if (!style) {
       style = document.createElement('style');
       style.id = STYLE_ID;
       document.head.append(style);
     }
-    style.textContent = pageRules(size);
-  }, [run, size]);
+    style.textContent = pageRules();
+  }, [run]);
 
   // Open the print dialog once, when the entries are in and fonts have loaded.
   useEffect(() => {
@@ -54,25 +50,9 @@ export default function PrintView({ base }: PrintViewProps) {
     document.fonts.ready.then(() => window.print());
   }, [run]);
 
-  const chooseSize = (id: string) => {
-    const next = resolveSize(id);
-    setSize(next);
-    const params = new URLSearchParams(window.location.search);
-    params.set('size', next.id);
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}${window.location.hash}`);
-  };
-
   return (
     <div class="print-view">
       <div class="print-view__controls">
-        <label class="print-view__field">
-          <span>Page size</span>
-          <select value={size.id} onChange={(event) => chooseSize((event.target as HTMLSelectElement).value)}>
-            {pageSizes.map((option) => (
-              <option key={option.id} value={option.id}>{option.label}</option>
-            ))}
-          </select>
-        </label>
         <button type="button" class="print-view__print" disabled={!run?.ok} onClick={() => window.print()}>
           <PrintIcon />
           Print

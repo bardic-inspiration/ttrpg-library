@@ -43,8 +43,6 @@ export interface ExportOptions {
   scope: ExportScope;
   /** The site base URL, ending in `/` (`url()` in site/src/lib/url.ts). */
   base: string;
-  /** A page size id from config/export.json, for exporters that take one. */
-  pageSize?: string;
   /** Defaults to the browser's fetch, a Blob download, the current time, an html-to-image capture, and a new tab. */
   io?: Partial<ExportIO>;
 }
@@ -53,7 +51,5 @@ export interface Exporter {
   id: string;
   label: string;
   scopes: ExportScope[];
-  /** Whether the exporter takes a page size, so its control comes with a page size selector. */
-  pageSize?: boolean;
   run(items: ExportItem[], options: ExportOptions): Promise<void>;
 }
