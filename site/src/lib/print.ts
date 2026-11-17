@@ -61,28 +61,17 @@ export const printUrl = (base: string, keys: string[], size?: string): string =>
 export const cssString = (text: string): string =>
   `"${text.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/[\n\r\f]/g, ' ')}"`;
 
-/** The named page an entry prints on, so its footer can carry its name. */
-export const pageName = (index: number): string => `entry-${index + 1}`;
-
 const FOOTER_BOX = 'font-family: var(--font-ui); font-size: var(--print-footer-size); color: var(--color-text-muted);';
 
 /**
- * The `@page` rules for a print run: the chosen size and margin, the short
- * attribution in every page's footer, and, unless entries are packed
- * (continuous), one named page per entry whose footer adds the entry's name.
- * The site footer, with the full attribution, prints on the last entry's
- * page, so it never forces a page of its own.
+ * The `@page` rule for a print run: the chosen size and margin, with the short
+ * attribution in every page's footer. Entries stack onto shared pages, so the
+ * footer names no entry; the site footer, with the full attribution, prints
+ * after the last entry.
  */
-export function pageRules(size: PageSize, names: string[], continuous: boolean): string {
-  const rules = [
+export function pageRules(size: PageSize): string {
+  return (
     `@page { size: ${size.width} ${size.height}; margin: ${size.margin}; ` +
-      `@bottom-right { content: ${cssString(SHORT_ATTRIBUTION)}; ${FOOTER_BOX} } }`,
-  ];
-  if (!continuous) {
-    names.forEach((name, i) => {
-      rules.push(`@page ${pageName(i)} { @bottom-left { content: ${cssString(name)}; ${FOOTER_BOX} } }`);
-    });
-    if (names.length > 0) rules.push(`.site-footer { page: ${pageName(names.length - 1)}; }`);
-  }
-  return rules.join('\n');
+    `@bottom-right { content: ${cssString(SHORT_ATTRIBUTION)}; ${FOOTER_BOX} } }`
+  );
 }

@@ -52,14 +52,6 @@ stays.
   export flows themselves, including what Download offers and how print
   picks its layout, are designed in `export.md` (#115).
 
-### Print
-
-Print stacks the entries it is given, one after another, packed onto as few
-pages as they fill. v1's mode that starts each entry on a new page is
-removed, and so is the footer that names each page's entry; the footer
-carries the attribution only. Long entries still flow onto following pages
-without splitting an action or trait.
-
 ### Testing
 
 - **Layout is checked on every UI PR.** The PR includes screenshots at
@@ -71,14 +63,8 @@ without splitting an action or trait.
   run already runs only on milestone PRs:
   [Milestone PRs](../../docs/workflow.md#milestone-prs).)
 
-## Cases
-
-- `spell/fireball` and `creature/lich`: printed together, stacked on the same
-  page.
-
 ## Done when
 
-- Print has no per-page mode.
 - The site has one set of color tokens, with no theme attribute or switch.
 - CI no longer runs the contrast test, and the docs describe the milestone
   review.

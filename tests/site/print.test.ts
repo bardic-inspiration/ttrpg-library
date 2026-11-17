@@ -101,28 +101,21 @@ describe('URLs', () => {
 
 describe('pageRules', () => {
   it('sets the chosen size and margin with the short attribution in every page’s footer', () => {
-    const css = pageRules(size('a4'), ['Cinder Hound'], false);
+    const css = pageRules(size('a4'));
     expect(css).toMatch(/^@page \{ size: 210mm 297mm; margin: 12mm; @bottom-right \{ content: "Includes adapted SRD 5\.2 material, CC-BY-4\.0";/);
     expect(css).toContain(`"${SHORT_ATTRIBUTION}"`);
   });
 
-  it('gives each entry a named page whose footer carries its name, with the site footer on the last', () => {
-    const css = pageRules(size('letter'), ['Cinder Hound', 'Frost Lance'], false);
-    expect(css).toContain('@page entry-1 { @bottom-left { content: "Cinder Hound";');
-    expect(css).toContain('@page entry-2 { @bottom-left { content: "Frost Lance";');
-    expect(css).toContain('.site-footer { page: entry-2; }');
-  });
-
-  it('packs entries onto shared pages in continuous mode, with only the attribution in the footer', () => {
-    const css = pageRules(size('card-4x6'), ['Cinder Hound', 'Frost Lance'], true);
+  it('stacks entries on shared pages: one page rule, no named pages, the footer carrying only the attribution', () => {
+    const css = pageRules(size('card-4x6'));
     expect(css).toMatch(/^@page \{ size: 4in 6in; margin: 0\.25in;/);
-    expect(css).not.toContain('entry-1');
+    expect(css.match(/@page/g)).toHaveLength(1);
+    expect(css).not.toContain('@bottom-left');
     expect(css).not.toContain('.site-footer');
   });
 
-  it('escapes names as CSS strings', () => {
+  it('escapes footer text as CSS strings', () => {
     expect(cssString('The "Ash" \\ Hound\n')).toBe('"The \\"Ash\\" \\\\ Hound "');
-    expect(pageRules(size('letter'), ['Say "hi"'], false)).toContain('content: "Say \\"hi\\"";');
   });
 });
 
