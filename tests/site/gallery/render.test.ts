@@ -69,6 +69,14 @@ describe('Gallery', () => {
     );
   });
 
+  it('keeps a facet\'s values a list, named by its toggle, so each value is a list item (axe listitem)', () => {
+    const html = render({ initialQuery: '?f.type=creature' });
+    const lists = html.match(/<ul class="tree__values"[^>]*>/g) ?? [];
+    expect(lists.length).toBeGreaterThan(0);
+    for (const list of lists) expect(list).not.toMatch(/\brole=/);
+    expect(html).toContain('<ul class="tree__values" id="filter-dnd-5e-2024-creature-stats-creatureType-panel" aria-labelledby="filter-dnd-5e-2024-creature-stats-creatureType-toggle">');
+  });
+
   it('puts the search above the filter menu, which a toggle opens on phones and tablets', () => {
     const html = render({});
     expect(html).toMatch(/class="gallery__menu"><div class="gallery__search" role="search">.*<button type="button" class="gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters">.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
