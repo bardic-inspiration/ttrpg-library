@@ -1,8 +1,8 @@
-// The print view and print export (docs/export.md#print, docs/export.md#exporter-interface): query parsing, page
-// size resolution, entry selection, the injected `@page` rules, loading a run,
-// the print fragment, and the print exporter.
+// The print view and print export (docs/export.md#print, docs/export.md#exporter-interface): query parsing,
+// entry selection, the injected `@page` rules, the width breakpoint, loading a
+// run, the print fragment, and the print exporter.
 import { describe, expect, it } from 'vitest';
-import config from '../../config/export.json' with { type: 'json' };
+import { readFile } from 'node:fs/promises';
 import { print } from '../../site/src/exporters/print.ts';
 import type { ExportItem } from '../../site/src/exporters/types.ts';
 import { loadPrintRun, selectEntries } from '../../site/src/lib/print-run.ts';
@@ -11,10 +11,8 @@ import {
   cssString,
   fragmentUrl,
   pageRules,
-  pageSizes,
   parsePrintQuery,
   printUrl,
-  resolveSize,
 } from '../../site/src/lib/print.ts';
 import { fixtureRecords, record, registry } from './gallery/helpers.ts';
 import { fixtureLibrary } from './library-fixtures.ts';
@@ -23,27 +21,15 @@ const BASE = '/ttrpg-library/';
 const records = await fixtureRecords();
 const reg = await registry();
 const lib = await fixtureLibrary();
-const size = (id: string) => resolveSize(id);
-
-describe('page sizes (docs/export.md#print, docs/export.md#export-config)', () => {
-  it('come from config/export.json', () => {
-    expect(pageSizes).toEqual(config.pageSizes);
-  });
-
-  it('resolve by id, falling back to the default for a missing or unknown id', () => {
-    expect(resolveSize('a4').id).toBe('a4');
-    expect(resolveSize('card-4x6').id).toBe('card-4x6');
-    expect(resolveSize(undefined).id).toBe('letter');
-    expect(resolveSize(null).id).toBe('letter');
-    expect(resolveSize('tabloid').id).toBe('letter');
-  });
-});
 
 describe('parsePrintQuery', () => {
-  it('reads <type>/<id> keys in order, without repeats or blanks, and the size', () => {
-    const query = parsePrintQuery('?ids=spell/frost-lance,creature/cinder-hound,spell/frost-lance,,&size=a4');
+  it('reads <type>/<id> keys in order, without repeats or blanks', () => {
+    const query = parsePrintQuery('?ids=spell/frost-lance,creature/cinder-hound,spell/frost-lance,,');
     expect(query.ids).toEqual(['spell/frost-lance', 'creature/cinder-hound']);
-    expect(query.size.id).toBe('a4');
+  });
+
+  it('takes no page size: the query carries none', () => {
+    expect(Object.keys(parsePrintQuery('?ids=a'))).toEqual(['ids', 'gallery']);
   });
 
   it('accepts percent-encoded commas between ids', () => {
@@ -51,15 +37,32 @@ describe('parsePrintQuery', () => {
   });
 
   it('keeps the rest of the query as the gallery query when ids is absent', () => {
-    const query = parsePrintQuery('?f.type=spell&size=half-letter&sort=name:asc');
+    const query = parsePrintQuery('?f.type=spell&sort=name:asc');
     expect(query.ids).toBeUndefined();
-    expect(query.size.id).toBe('half-letter');
     expect(query.gallery).toBe('f.type=spell&sort=name:asc');
   });
+});
 
-  it('defaults the size when it is missing or unknown', () => {
-    expect(parsePrintQuery('?ids=a').size.id).toBe('letter');
-    expect(parsePrintQuery('?ids=a&size=legal').size.id).toBe('letter');
+describe('print layout by printed page width (docs/export.md#print-layout)', async () => {
+  const tokens = await readFile(new URL('../../site/src/styles/tokens/print.css', import.meta.url), 'utf8');
+  const queries = [...tokens.matchAll(/@media ([^{]+)\{/g)].map((m) => m[1]!.trim());
+
+  it('switches layout at one width breakpoint, kept in tokens/print.css', () => {
+    expect(queries).toEqual(['print and (width < 6.5in)']);
+    expect(tokens).not.toContain('data-page-size');
+  });
+
+  it('sets two columns on a wide page and one with smaller type on a narrow one', () => {
+    const value = (name: string) => Number(tokens.match(new RegExp(`--print-${name}:\\s*([\\d.]+)`))?.[1]);
+    expect(value('wide-columns')).toBe(2);
+    expect(value('narrow-columns')).toBe(1);
+    expect(value('narrow-font-size')).toBeLessThan(value('wide-font-size'));
+  });
+
+  it('gives a narrow page a narrower margin', () => {
+    const narrow = tokens.slice(tokens.indexOf('@media print'));
+    expect(tokens.slice(0, tokens.indexOf('@media print'))).toMatch(/@page \{\s*margin: 0\.5in;/);
+    expect(narrow).toMatch(/@page \{\s*margin: 0\.3in;/);
   });
 });
 
@@ -81,6 +84,12 @@ describe('selectEntries', () => {
     expect(selectEntries(parsePrintQuery('?f.stats.cr=1..5'), records, reg).records.map((r) => r.id)).toEqual(['cinder-hound']);
   });
 
+  it('ignores a stale size parameter from an older print link', () => {
+    const ids = (q: string) => selectEntries(parsePrintQuery(q), records, reg).records.map((r) => r.id);
+    expect(ids('?ids=spell/frost-lance&size=a4')).toEqual(['frost-lance']);
+    expect(ids('?f.type=spell&size=card-4x6')).toEqual(ids('?f.type=spell'));
+  });
+
   it('prints a gallery query’s results in its order', () => {
     const names = (q: string) => selectEntries(parsePrintQuery(q), records, reg).records.map((r) => r.name);
     expect(names('?sort=name:asc')).toEqual(['Cinder Hound', 'Frost Lance', 'Sorcerer', 'Wand of Frost Lances', 'Wizard']);
@@ -93,22 +102,21 @@ describe('URLs', () => {
     expect(fragmentUrl(BASE, record({ id: 'cinder-hound' }))).toBe('/ttrpg-library/print/dnd-5e-2024/creature/cinder-hound/');
   });
 
-  it('build a print view URL with ids and an optional size', () => {
-    expect(printUrl(BASE, ['creature/cinder-hound', 'spell/frost-lance'], 'a4')).toBe('/ttrpg-library/print/?ids=creature/cinder-hound,spell/frost-lance&size=a4');
-    expect(printUrl(BASE, ['creature/cinder-hound'])).toBe('/ttrpg-library/print/?ids=creature/cinder-hound');
+  it('build a print view URL with ids and no size', () => {
+    expect(printUrl(BASE, ['creature/cinder-hound', 'spell/frost-lance'])).toBe('/ttrpg-library/print/?ids=creature/cinder-hound,spell/frost-lance');
   });
 });
 
 describe('pageRules', () => {
-  it('sets the chosen size and margin with the short attribution in every page’s footer', () => {
-    const css = pageRules(size('a4'));
-    expect(css).toMatch(/^@page \{ size: 210mm 297mm; margin: 12mm; @bottom-right \{ content: "Includes adapted SRD 5\.2 material, CC-BY-4\.0";/);
+  it('puts the short attribution in every page’s footer and sets no page size or margin', () => {
+    const css = pageRules();
+    expect(css).toMatch(/^@page \{ @bottom-right \{ content: "Includes adapted SRD 5\.2 material, CC-BY-4\.0";/);
     expect(css).toContain(`"${SHORT_ATTRIBUTION}"`);
+    expect(css).not.toMatch(/[{;]\s*(size|margin):/);
   });
 
   it('stacks entries on shared pages: one page rule, no named pages, the footer carrying only the attribution', () => {
-    const css = pageRules(size('card-4x6'));
-    expect(css).toMatch(/^@page \{ size: 4in 6in; margin: 0\.25in;/);
+    const css = pageRules();
     expect(css.match(/@page/g)).toHaveLength(1);
     expect(css).not.toContain('@bottom-left');
     expect(css).not.toContain('.site-footer');
@@ -135,12 +143,12 @@ describe('loadPrintRun', () => {
     return { fetch, fetched };
   };
 
-  it('fetches only the named entries’ fragments, in order, at the chosen size', async () => {
+  it('fetches only the named entries’ fragments, in order', async () => {
     const { fetch, fetched } = site();
-    const run = await loadPrintRun('?ids=spell/frost-lance,creature/cinder-hound&size=half-letter', BASE, reg, fetch);
+    const run = await loadPrintRun('?ids=spell/frost-lance,creature/cinder-hound', BASE, reg, fetch);
     expect(run.ok).toBe(true);
     if (!run.ok) return;
-    expect(run.size.id).toBe('half-letter');
+    expect('size' in run).toBe(false);
     expect(run.fragments.map((f) => f.record.id)).toEqual(['frost-lance', 'cinder-hound']);
     expect(run.fragments[0]!.html).toContain('data-id="frost-lance"');
     expect(fetched).toEqual([
@@ -190,15 +198,15 @@ describe('print exporter (docs/export.md#exporter-interface, docs/export.md#prin
     return { urls, io: { open: (url: string) => void urls.push(url) } };
   };
 
-  it('offers entry and set scope and takes a page size', () => {
+  it('offers entry and set scope and takes no page size', () => {
     expect(print.scopes).toEqual(['entry', 'set']);
-    expect(print.pageSize).toBe(true);
+    expect('pageSize' in print).toBe(false);
   });
 
-  it('opens the print view for one entry at the chosen size', async () => {
+  it('opens the print view for one entry', async () => {
     const fake = opened();
-    await print.run([item('cinder-hound')], { scope: 'entry', base: BASE, pageSize: 'card-4x6', io: fake.io });
-    expect(fake.urls).toEqual(['/ttrpg-library/print/?ids=creature/cinder-hound&size=card-4x6']);
+    await print.run([item('cinder-hound')], { scope: 'entry', base: BASE, io: fake.io });
+    expect(fake.urls).toEqual(['/ttrpg-library/print/?ids=creature/cinder-hound']);
   });
 
   it('opens the print view for a set, in order', async () => {

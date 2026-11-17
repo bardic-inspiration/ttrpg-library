@@ -26,8 +26,12 @@ can be combined.
   scopes, and controls.
 - [JSON](../../docs/export.md#json), [PNG](../../docs/export.md#png), and
   [Print](../../docs/export.md#print).
-- [Export config](../../docs/export.md#export-config): page sizes and PNG
-  settings.
+- [Print layout](../../docs/export.md#print-layout): built by the pilot
+  (#243). The print view takes no page size; the layout follows the printed
+  page's width, with one breakpoint at 6.5in between the wide layout (Letter,
+  A4: two columns) and the narrow one (Half-Letter, 4 × 6: one column, smaller
+  type).
+- [Export config](../../docs/export.md#export-config): PNG settings.
 
 ## Design
 
@@ -52,16 +56,6 @@ or on the filtered results when nothing is selected.
 
 Printing a page type or a rules page prints all its sections expanded.
 
-### Print layout
-
-The print view no longer takes a page size. The reader picks the paper in
-the print dialog, and the layout adapts to the printed page's width: the
-two-column stat-block layout on a wide page such as Letter or A4, and one
-column with smaller type on a narrow page such as Half-Letter or a 4 × 6
-card. The page sizes in `config/export.json` give way to the width
-breakpoints between those layouts, kept as print tokens. Entries stack, as
-the UI design sets out.
-
 ### Formats
 
 - **JSON** stays v1's raw-file export: one entry's file, or an array for a
@@ -79,8 +73,7 @@ stable URLs, an informal read-only feed for anything that fetches by URL.
 
 ## Cases
 
-- `creature/lich`: Download › PNG captures it at the wide width; Print fits
-  it in two columns on Letter and one column on a 4 × 6 card.
+- `creature/lich`: Download › PNG captures it at the wide width.
 - `spell/fireball` and `creature/lich`, selected in the Library: Download ›
   JSON saves both as one array, and the menu offers no PNG.
 
@@ -88,8 +81,6 @@ stable URLs, an informal read-only feed for anything that fetches by URL.
 
 - Detail pages and the Library show only Print and Download, and Download's
   menu lists exactly the formats that offer its scope.
-- The print view has no page size control or `size` parameter, and its
-  layout switches between one and two columns by printed page width.
 - Page types and rules pages have Print and no Download, and print with
   every section expanded.
 

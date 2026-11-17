@@ -5,7 +5,7 @@
 import { galleryConfig, type LibraryRecord, type Registry } from './gallery/config.ts';
 import { parseQuery } from './gallery/state.ts';
 import { computeView, searchIndex } from './gallery/view.ts';
-import { fragmentUrl, parsePrintQuery, type PageSize, type PrintQuery } from './print.ts';
+import { fragmentUrl, parsePrintQuery, type PrintQuery } from './print.ts';
 import { currentKey, typeAliases } from './redirects.ts';
 
 export interface PrintSelection {
@@ -42,7 +42,7 @@ export interface PrintFragment {
   html: string;
 }
 
-export type PrintRun = { ok: true; size: PageSize; fragments: PrintFragment[] } | { ok: false; size: PageSize; message: string };
+export type PrintRun = { ok: true; fragments: PrintFragment[] } | { ok: false; message: string };
 
 type Fetch = (url: string) => Promise<{ ok: boolean; status: number; text(): Promise<string> }>;
 
@@ -54,8 +54,7 @@ type Fetch = (url: string) => Promise<{ ok: boolean; status: number; text(): Pro
  */
 export async function loadPrintRun(search: string, base: string, registry: Registry, load: Fetch): Promise<PrintRun> {
   const query = parsePrintQuery(search);
-  const { size } = query;
-  const fail = (message: string): PrintRun => ({ ok: false, size, message });
+  const fail = (message: string): PrintRun => ({ ok: false, message });
   const index = await load(`${base}library.json`).catch(() => undefined);
   if (!index?.ok) return fail('The library couldn’t be loaded. Try reloading the page.');
   const { records, missing } = selectEntries(query, JSON.parse(await index.text()) as LibraryRecord[], registry);
@@ -69,5 +68,5 @@ export async function loadPrintRun(search: string, base: string, registry: Regis
   );
   const failed = records.filter((_, i) => fragments[i] === undefined);
   if (failed.length > 0) return fail(`${failed.map((r) => r.name).join(', ')} couldn’t be loaded. Try reloading the page.`);
-  return { ok: true, size, fragments: fragments as PrintFragment[] };
+  return { ok: true, fragments: fragments as PrintFragment[] };
 }

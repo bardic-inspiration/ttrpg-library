@@ -1,44 +1,63 @@
 /*
- * Print and capture sizing per page size (docs/styling.md#styling-system, docs/export.md#print). Edit this
- * file to change print density. The page dimensions and margins themselves
- * live in config/export.json. `--print-columns` sets the stat block in two
- * columns on Letter and A4 and one on the smaller sizes.
+ * Print sizing by printed page width (docs/styling.md#styling-system, docs/export.md#print-layout).
+ * Edit this file to change print density, margins, or the breakpoint. The
+ * reader picks the paper in the print dialog; a page narrower than the
+ * breakpoint (Half-Letter, a 4 × 6 card) gets the narrow layout, one column
+ * with smaller type, and a wider one (Letter, A4) the wide layout, the stat
+ * block in two columns. A media query can't read a custom property, so the
+ * breakpoint is written once here, in the `@media` rule below.
+ *
+ * `[data-print-layout='narrow']` sets the narrow layout on screen, for the
+ * style guide's previews.
  */
 @layer tokens {
-  :root,
-  [data-page-size='letter'] {
-    --print-font-size: 9.5pt;
-    --print-small-size: 8.5pt;
-    --print-section-size: 11pt;
-    --print-heading-size: 15pt;
-    --print-footer-size: 7pt;
-    --print-columns: 2;
+  :root {
+    --print-wide-font-size: 9.5pt;
+    --print-wide-small-size: 8.5pt;
+    --print-wide-section-size: 11pt;
+    --print-wide-heading-size: 15pt;
+    --print-wide-footer-size: 7pt;
+    --print-wide-columns: 2;
+    --print-narrow-font-size: 8pt;
+    --print-narrow-small-size: 7pt;
+    --print-narrow-section-size: 9pt;
+    --print-narrow-heading-size: 11pt;
+    --print-narrow-footer-size: 6pt;
+    --print-narrow-columns: 1;
+    --print-font-size: var(--print-wide-font-size);
+    --print-small-size: var(--print-wide-small-size);
+    --print-section-size: var(--print-wide-section-size);
+    --print-heading-size: var(--print-wide-heading-size);
+    --print-footer-size: var(--print-wide-footer-size);
+    --print-columns: var(--print-wide-columns);
   }
 
-  [data-page-size='a4'] {
-    --print-font-size: 9.5pt;
-    --print-small-size: 8.5pt;
-    --print-section-size: 11pt;
-    --print-heading-size: 15pt;
-    --print-footer-size: 7pt;
-    --print-columns: 2;
+  [data-print-layout='narrow'] {
+    --print-font-size: var(--print-narrow-font-size);
+    --print-small-size: var(--print-narrow-small-size);
+    --print-section-size: var(--print-narrow-section-size);
+    --print-heading-size: var(--print-narrow-heading-size);
+    --print-footer-size: var(--print-narrow-footer-size);
+    --print-columns: var(--print-narrow-columns);
   }
 
-  [data-page-size='half-letter'] {
-    --print-font-size: 8.5pt;
-    --print-small-size: 7.5pt;
-    --print-section-size: 9.5pt;
-    --print-heading-size: 12pt;
-    --print-footer-size: 6.5pt;
-    --print-columns: 1;
+  @page {
+    margin: 0.5in;
   }
 
-  [data-page-size='card-4x6'] {
-    --print-font-size: 8pt;
-    --print-small-size: 7pt;
-    --print-section-size: 9pt;
-    --print-heading-size: 11pt;
-    --print-footer-size: 6pt;
-    --print-columns: 1;
+  /* The breakpoint: printed page width. Letter and A4 are wider, Half-Letter and 4 × 6 narrower. */
+  @media print and (width < 6.5in) {
+    :root {
+      --print-font-size: var(--print-narrow-font-size);
+      --print-small-size: var(--print-narrow-small-size);
+      --print-section-size: var(--print-narrow-section-size);
+      --print-heading-size: var(--print-narrow-heading-size);
+      --print-footer-size: var(--print-narrow-footer-size);
+      --print-columns: var(--print-narrow-columns);
+    }
+
+    @page {
+      margin: 0.3in;
+    }
   }
 }

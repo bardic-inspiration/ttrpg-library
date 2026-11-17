@@ -18,13 +18,12 @@ interface Exporter {
   id: string;                         // "json", "png", "print"
   label: string;                      // button text
   scopes: Array<"entry" | "set">;     // single entry, filtered or selected set, or both
-  pageSize?: boolean;                 // takes a page size, so its control gets a page size selector
   run(items: Array<{ entry: Entry; derived: Derived }>, options: ExportOptions): Promise<void>;
 }
 ```
 
-- `ExportOptions` carries the scope, the site base URL (ending in `/`), and the
-  chosen page size for an exporter that takes one, plus optional injected
+- `ExportOptions` carries the scope and the site base URL (ending in `/`), plus
+  optional injected
   browser IO (fetch, download, clock, capture, open a page), so exporters are
   testable without a DOM.
 - The registry (`site/src/exporters/index.ts`) maps the ids in
@@ -69,12 +68,13 @@ computed numbers, so translators read `derived` rather than recomputing.
 
 ### Print
 
-- `/print/?ids=spell/a,creature/b&size=letter` or
-  `/print/?<gallery query>&size=letter` renders entries in `print` mode. `ids`
+- `/print/?ids=spell/a,creature/b` or `/print/?<gallery query>` renders
+  entries in `print` mode. It takes no page size; the reader picks the paper in
+  the print dialog ([Print layout](#print-layout)). `ids`
   lists `<type>/<id>` keys and prints them in the given order, ignoring repeats.
   Without `ids`, the query is read as the Library's, with the gallery's own
   parsing and filtering, so `f.type` narrows by type, and results print in the
-  gallery's order. A missing or unknown `size` is the default.
+  gallery's order.
 - **Print fragments.** The build emits each entry's print fragment at
   `print/<ruleset>/<type>/<id>/`: the template in `print` mode
   (`components/print/PrintEntry.astro`) as bare markup. The print view
@@ -83,12 +83,9 @@ computed numbers, so translators read `derived` rather than recomputing.
   their fragments, and inserts them. Page weight follows the selection, not the
   library. If an id names no entry, a fragment fails to load, or nothing
   matches, the page shows a message and the print dialog doesn't open.
-- The print view injects an `@page { size; margin }` rule for the chosen size at
-  runtime, since `@page` can't be toggled by class, and sets `data-page-size` on
-  `<html>` for the density tokens. Its page size selector changes the size in
-  place and in the URL.
-- Letter and A4 use the two-column 5.2 stat-block layout; Half-Letter and 4×6
-  use one column with smaller type.
+- The print view injects the `@page` footer rule at runtime. It sets no page
+  size, so the paper chosen in the dialog holds. Its Print button opens the
+  dialog again.
 - Entries stack, one after another, packed onto as few pages as they fill.
   Long stat blocks flow onto following pages with `break-inside: avoid` on
   actions and traits, so no action is split.
@@ -99,15 +96,32 @@ computed numbers, so translators read `derived` rather than recomputing.
 - The reader saves as PDF from the browser's print dialog, which opens once the
   entries are in and fonts load.
 - The print exporter (entry and set scope) opens the print view in a new tab
-  with `?ids=…&size=…`, or in the same tab if the browser blocks it. On the
-  detail page, its control has a page size selector, defaulting to the
-  configured default.
+  with `?ids=…`, or in the same tab if the browser blocks it.
+
+### Print layout
+
+The layout follows the printed page's width, which the reader sets by picking
+the paper in the print dialog. `tokens/print.css` holds both layouts and the
+one breakpoint between them, `@media print and (width < 6.5in)`:
+
+| Layout | Pages | Stat block | Body type | Margin |
+|---|---|---|---|---|
+| Wide | 6.5in and wider: US Letter, A4 | Two columns | 9.5pt | 0.5in |
+| Narrow | Under 6.5in: US Half-Letter, a 4 × 6 in card | One column | 8pt | 0.3in |
+
+- The breakpoint sits between the widest narrow page (Half-Letter, 5.5in) and
+  the narrowest wide page's printable width (A4 inside its margins, about
+  7.3in), so a page lands on the same side whether a browser measures the page
+  or the area inside its margins. Chromium measures the page.
+- The `@page` margins are in `tokens/print.css` beside the breakpoint, since a
+  narrow card wants a narrower margin. A media query can't read a custom
+  property, so the breakpoint is written once, as that `@media` rule.
+- On screen the print view shows the wide layout. The style guide previews
+  each layout by setting `data-print-layout` on a preview.
 
 ### Export config
 
-`config/export.json` holds the page sizes (id, label, width, height, margin,
-columns, and which is the default: US Letter, A4, US Half-Letter, and a 4 × 6 in
-card), the PNG settings (`scale`, `width`, and `wideWidth`), and `exporters`,
+`config/export.json` holds the PNG settings (`scale`, `width`, and `wideWidth`), and `exporters`,
 the exporter ids in button order. An id joins the list in the PR that adds its
 module.
 
@@ -123,5 +137,5 @@ module.
 
 | To add | Touch |
 |---|---|
-| A page size | One row in `config/export.json` |
+| A print density, margin, or breakpoint | `tokens/print.css` ([Print layout](#print-layout)) |
 | An export format or translator | One exporter module, listed in `config/export.json` |

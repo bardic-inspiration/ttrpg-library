@@ -40,13 +40,8 @@ const served = (...ids: string[]) =>
   Object.fromEntries(ids.map((id) => [rawFileUrl(BASE, lib.byId(id).entry), raw(id)]));
 
 describe('config/export.json (docs/export.md#export-config)', () => {
-  it('has the four page sizes with exactly one default', () => {
-    expect(config.pageSizes.map((s) => s.id)).toEqual(['letter', 'a4', 'half-letter', 'card-4x6']);
-    expect(config.pageSizes.filter((s) => 'default' in s && s.default).map((s) => s.id)).toEqual(['letter']);
-    for (const size of config.pageSizes) {
-      expect([1, 2]).toContain(size.columns);
-      for (const length of [size.width, size.height, size.margin]) expect(length).toMatch(/^\d+(\.\d+)?(in|mm)$/);
-    }
+  it('holds no page sizes: the reader picks the paper in the print dialog (docs/export.md#print-layout)', () => {
+    expect(Object.keys(config)).toEqual(['png', 'exporters']);
   });
 
   it('has PNG settings', () => {

@@ -91,8 +91,10 @@ describe('SetActions', () => {
     expect(html).not.toContain('Download PNG');
   });
 
-  it('puts a page size selector beside an exporter that takes one', () => {
-    expect(render(setTarget(all, all, new Set()))).toContain('Page size for Print');
+  it('has no page size selector: the reader picks the paper in the print dialog (docs/export.md#print-layout)', () => {
+    const html = render(setTarget(all, all, new Set()));
+    expect(html).not.toContain('<select');
+    expect(html).not.toContain('Page size');
   });
 
   it('disables the actions when they would target nothing', () => {
