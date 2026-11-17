@@ -34,6 +34,8 @@ interface Context {
   records: LibraryRecord[];
   /** Records passing the search and every filter but one path's, by path. */
   others: (path: string) => LibraryRecord[];
+  /** How many types list a facet at a path. */
+  owners: (path: string) => number;
 }
 
 const ofType = (records: LibraryRecord[], info: TypeInfo) => records.filter((r) => r.ruleset === info.ruleset && r.type === info.type);
@@ -69,29 +71,47 @@ function groupValues(def: FilterDef, scoped: LibraryRecord[], others: LibraryRec
   return build(undefined);
 }
 
-/** One facet's node, or none when no record of the type has a value for it and it isn't active. */
-function facetNode(ctx: Context, def: FilterDef, records: LibraryRecord[], idPrefix: string, open: boolean): TreeNode | undefined {
+const keysAt = (path: string, records: LibraryRecord[]) => new Set(records.flatMap((r) => enumValues(valueAt(r, path)).map((v) => v.key)));
+
+/** Whether a value, or a group nested in it, is selected. */
+const holdsSelected = (values: ValueNode[]): boolean => values.some((v) => v.selected || holdsSelected(v.children));
+
+/**
+ * One facet's node, or none when no record of the type has a value for it and it isn't active.
+ * On a path two types share, an enum filter shows checked, and opens the node, only under the
+ * types whose entries have a selected value, or under each when none has it (a stale link). A
+ * shared range opens only under a checked type, or under each when no type is checked: `claims`.
+ */
+function facetNode(ctx: Context, def: FilterDef, records: LibraryRecord[], idPrefix: string, open: boolean, claims = true): TreeNode | undefined {
   const active = ctx.state.filters.get(def.path);
   if (!isActive(active) && !hasValues(def.path, records)) return undefined;
   const id = `${idPrefix}${def.path}`;
-  const isOpen = open || isActive(active);
-  if (def.kind === 'range') return { kind: 'range', id, def, open: isOpen, bounds: bounds(def.path, records) };
+  if (def.kind === 'range') {
+    const opens = isActive(active) && (claims || ctx.owners(def.path) < 2);
+    return { kind: 'range', id, def, open: open || opens, bounds: bounds(def.path, records) };
+  }
   const scopeOf = (list: LibraryRecord[]) => {
     const types = new Set(records.map((r) => `${r.ruleset}/${r.type}`));
     return list.filter((r) => types.has(`${r.ruleset}/${r.type}`));
   };
   const others = scopeOf(ctx.others(def.path));
+  let own = active;
+  if (!def.groups && active?.kind === 'enum') {
+    const here = keysAt(def.path, records);
+    const anywhere = keysAt(def.path, ctx.records);
+    own = { kind: 'enum', values: active.values.filter((key) => here.has(key) || !anywhere.has(key)) };
+  }
   const values = def.groups
     ? groupValues(def, records, others, active)
-    : chips(def, records, others, active).map((chip) => ({
+    : chips(def, records, others, own).map((chip) => ({
         key: chip.key,
         label: displayValue(def, chip.stored),
         count: chip.count,
-        selected: selectedValues(active).includes(chip.key),
+        selected: selectedValues(own).includes(chip.key),
         open: false,
         children: [],
       }));
-  return { kind: 'enum', id, def, open: isOpen, values };
+  return { kind: 'enum', id, def, open: open || holdsSelected(values), values };
 }
 
 const isOpen = (nodes: TreeNode[]) => nodes.some((n) => n.open);
@@ -101,7 +121,15 @@ const isOpen = (nodes: TreeNode[]) => nodes.some((n) => n.open);
  * `stats.immunities.damage` and `stats.immunities.conditions`, sit in a node named for it
  * (Immunities). A field only one facet sits in adds no node, so `stats.ac.value` reads as AC.
  */
-function nest(ctx: Context, facets: FilterDef[], depth: number, records: LibraryRecord[], idPrefix: string, defaults: Set<string>): TreeNode[] {
+function nest(
+  ctx: Context,
+  facets: FilterDef[],
+  depth: number,
+  records: LibraryRecord[],
+  idPrefix: string,
+  defaults: Set<string>,
+  claims: boolean,
+): TreeNode[] {
   const segments = (def: FilterDef) => def.path.split('.');
   const fieldOf = (def: FilterDef) => {
     const parts = segments(def);
@@ -120,12 +148,12 @@ function nest(ctx: Context, facets: FilterDef[], depth: number, records: Library
       if (done.has(field)) continue;
       done.add(field);
       const inside = facets.filter((f) => fieldOf(f) === field);
-      const children = nest(ctx, inside, depth + 1, records, idPrefix, defaults);
+      const children = nest(ctx, inside, depth + 1, records, idPrefix, defaults, claims);
       if (children.length === 0) continue;
       out.push({ kind: 'field', id: `${idPrefix}${field}`, label: label(field.split('.').at(-1) ?? field), open: isOpen(children), children });
       continue;
     }
-    const node = facetNode(ctx, def, records, idPrefix, defaults.has(def.path));
+    const node = facetNode(ctx, def, records, idPrefix, defaults.has(def.path), claims);
     if (node) out.push(node);
   }
   return out;
@@ -164,8 +192,9 @@ function rulesetNode(ctx: Context): TreeNode | undefined {
  * The Library's filter tree: the rulesets when there is a choice, then the types, each a value
  * of the type filter holding its own facets, then the Tags. Each type lists only its own
  * records' values, with counts of its own records, though a path two types share is one filter
- * (docs/site.md#gallery "Filters"). A checked type's registry default filters start open, and
- * so does every node with an active filter in it.
+ * (docs/site.md#gallery "Filters"). A type counts its entries among the results. A checked
+ * type's registry default filters start open, and so does every node with an active filter of
+ * its own in it.
  */
 export function filterTree(config: GalleryConfig, state: GalleryState, records: LibraryRecord[], index: MiniSearch<LibraryRecord>): TreeNode[] {
   const cache = new Map<string, LibraryRecord[]>();
@@ -174,11 +203,13 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
     if (!hit) cache.set(path, (hit = withoutFilter(config, records, state, index, path)));
     return hit;
   };
-  const ctx: Context = { config, state, records, others };
+  const owners = (path: string) => [...config.types.values()].filter((info) => info.facets.some((f) => f.path === path)).length;
+  const ctx: Context = { config, state, records, others, owners };
   const selected = selectedValues(state.filters.get(TYPE));
   const checked = [...config.types.values()].filter((info) => selected.includes(info.type.toLowerCase()));
   const tags = tagsNode(ctx, new Set(checked.flatMap((info) => info.defaultFilters)));
-  const typeCounts = others(TYPE);
+  // A type counts its entries among the results, so checking one type leaves the rest at 0.
+  const shown = others('');
   const nodes: TreeNode[] = [];
   const rulesets = rulesetNode(ctx);
   if (rulesets) nodes.push(rulesets);
@@ -187,14 +218,15 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
     const key = info.type.toLowerCase();
     if (own.length === 0 && !selected.includes(key)) continue;
     const defaults = new Set(selected.includes(key) ? info.defaultFilters : []);
-    const children = nest(ctx, info.facets, 0, own, `${info.ruleset}/${info.type}:`, defaults);
+    const claims = selected.length === 0 || selected.includes(key);
+    const children = nest(ctx, info.facets, 0, own, `${info.ruleset}/${info.type}:`, defaults, claims);
     nodes.push({
       kind: 'type',
       id: `${info.ruleset}/${info.type}`,
       value: {
         key,
         label: info.label,
-        count: ofType(typeCounts, info).length,
+        count: ofType(shown, info).length,
         selected: selected.includes(key),
         open: false,
         children: [],

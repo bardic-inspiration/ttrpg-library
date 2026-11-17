@@ -282,7 +282,8 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   filter (`f.ruleset`), comes first when the library holds more than one
   ruleset, or the filter is active.
 - **Types.** Then the types, each a checkbox for the type filter (`f.type`)
-  with its count, and a disclosure holding its facets. A type shows when the
+  with its count, the entries of it among the results (so checking one type
+  leaves the others at 0), and a disclosure holding its facets. A type shows when the
   library has entries of it, or it's checked.
 - **Fields.** A type's facets follow in registry order. Facets whose paths
   share a field below `stats` or `derived` sit in a node named for it by the
@@ -303,10 +304,16 @@ value, such as Creature › Immunities › Conditions › Poisoned.
 - **Open nodes.** A checked type's registry `defaultFilters` start open, in
   its node and, for a tag, in Tags. Every node holding an active filter starts
   open, down to the value. The reader opens and closes the rest.
+- **A shared path** stays in its own type's part of the tree. An enum value
+  shows checked, and opens its node, only under the types whose entries have
+  it, so checking Feat › Category › Origin leaves Item › Category closed; a
+  selected value no entry has shows under each type, so it can be cleared. A
+  shared range opens only under a checked type, or under each type when none
+  is checked.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
   filter's value never matches it. A path two types share (`stats.level` on
   spells and feats) is one filter: each type lists its own entries' values, and
-  checking one checks it under both.
+  a value checked under one applies to both.
 - The tree's ref names and groups come from the build: the gallery island
   passes the names of every ref a ref facet holds, and each grouped type's
   groups (`site/src/lib/gallery/facet-data.ts`). A category reads by its
