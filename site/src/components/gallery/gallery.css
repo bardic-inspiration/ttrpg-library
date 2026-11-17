@@ -88,26 +88,6 @@
     gap: var(--space-3xs);
   }
 
-  .set-actions__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2xs);
-    padding: 0;
-    list-style: none;
-  }
-
-  .set-actions__item {
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: var(--space-3xs);
-  }
-
-  .set-actions__button {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3xs);
-  }
-
   .set-actions__status {
     color: var(--color-text-muted);
   }

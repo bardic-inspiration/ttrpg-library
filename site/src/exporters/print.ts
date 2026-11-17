@@ -8,6 +8,7 @@ import type { Exporter } from './types.ts';
 
 export const print: Exporter = {
   id: 'print',
+  kind: 'print',
   label: 'Print',
   scopes: ['entry', 'set'],
   async run(items, options) {

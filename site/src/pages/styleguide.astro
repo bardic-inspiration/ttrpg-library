@@ -5,7 +5,8 @@
 // `npm run dev` and every surface here updates at once.
 //
 // Gallery cards, filter controls, and templates come from the example test
-// fixtures (docs/styling.md#refinement-workflow). Print previews at each page size join with the exports.
+// fixtures (docs/styling.md#refinement-workflow), and the export controls show Download's menu
+// closed and open (docs/export.md#controls).
 import Base from '../layouts/Base.astro';
 import EntryTemplate from '../components/templates/EntryTemplate.astro';
 import PrintEntry from '../components/print/PrintEntry.astro';
@@ -22,6 +23,8 @@ import SortIcon from '../icons/Sort';
 import DownloadIcon from '../icons/Download';
 import PrintIcon from '../icons/Print';
 import CloseIcon from '../icons/Close';
+import ExportButtons from '../components/export/ExportButtons';
+import { configuredControls } from '../exporters/index';
 import Card from '../components/gallery/Card';
 import { FilterTree } from '../components/gallery/Filters';
 import '../components/gallery/gallery.css';
@@ -186,6 +189,12 @@ const modes = ['screen', 'capture'] as const;
       <div class="cluster">
         <label>Search <input type="search" placeholder="Name, tag, or text" /></label>
         <label><input type="checkbox" checked /> Selected</label>
+      </div>
+
+      <h3>Export controls</h3>
+      <div class="cluster sg-exports">
+        <ExportButtons controls={configuredControls('entry')} run={noop} menuId="sg-formats-closed" />
+        <ExportButtons controls={configuredControls('entry')} run={noop} menuId="sg-formats-open" open />
       </div>
 
       <h3>Icons</h3>
@@ -404,6 +413,12 @@ const modes = ['screen', 'capture'] as const;
 
     .sg-row {
       padding: 0;
+    }
+
+    /* Room for the open Download menu, which sits below its button. */
+    .sg-exports {
+      align-items: start;
+      padding-block-end: var(--space-2xl);
     }
 
     .sg-cards {

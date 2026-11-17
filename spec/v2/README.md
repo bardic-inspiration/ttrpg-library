@@ -20,7 +20,7 @@ The design for v2 that isn't built yet. Its shape was decided in #197.
 One file per area, named by its short name, in the design order #110 sets:
 `linking.md` (#111), `types.md` (#112), `ui.md` (#113), `export.md` (#115),
 `translators.md` (#116), `art.md` (#117). Every area's design session has
-written its file, and `linking.md`, `types.md`, and `ui.md` are built and gone.
+written its file, and `linking.md`, `types.md`, `ui.md`, and `export.md` are built and gone.
 `wording.md` (#273) was added during the build, when the types showed the
 need for one wording system.
 

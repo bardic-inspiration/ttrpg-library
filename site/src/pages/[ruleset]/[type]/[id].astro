@@ -8,7 +8,7 @@ import Base from '../../../layouts/Base.astro';
 import CaptureSource from '../../../components/detail/CaptureSource.astro';
 import EntryDetail from '../../../components/detail/EntryDetail.astro';
 import ExportControls from '../../../components/detail/ExportControls';
-import { entryNames, loadEntries, refPaths, refTargets, type LoadedEntry } from '../../../lib/library';
+import { entryNames, isPageType, loadEntries, refPaths, refTargets, type LoadedEntry } from '../../../lib/library';
 import { loadRules } from '../../../lib/rules';
 import { formerTypes } from '../../../lib/redirects';
 import type { RefTarget } from '../../../lib/refs';
@@ -42,6 +42,8 @@ export const getStaticPaths = (() => {
 }) satisfies GetStaticPaths;
 
 const props = Astro.props;
+// A page type prints and has no Download, so it needs no PNG capture source (docs/export.md#controls).
+const page = !props.moved && isPageType(props.loaded.entry.ruleset, props.loaded.entry.type);
 ---
 {props.moved ? (
   <Base title={`${props.moved.name} · TTRPG Content Library`} redirect={props.moved.to}>
@@ -58,8 +60,14 @@ const props = Astro.props;
     }}
   >
     <EntryDetail loaded={props.loaded} names={props.names} paths={props.paths} targets={props.targets}>
-      <ExportControls slot="export" client:load item={{ entry: props.loaded.entry, derived: props.loaded.derived }} base={url()} />
+      <ExportControls
+        slot="export"
+        client:load
+        item={{ entry: props.loaded.entry, derived: props.loaded.derived }}
+        base={url()}
+        page={page}
+      />
     </EntryDetail>
-    <CaptureSource loaded={props.loaded} names={props.names} paths={props.paths} />
+    {!page && <CaptureSource loaded={props.loaded} names={props.names} paths={props.paths} />}
   </Base>
 )}

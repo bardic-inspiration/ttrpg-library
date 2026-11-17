@@ -161,6 +161,9 @@ Each page in a ruleset's `rules/pages.json` builds at
 - **Its extensions**, at the bottom: the extensions whose primitives would
   sit on this page, by type or by group, in a list with a search box that
   narrows it as you type, each linked to its card.
+- **A Print button** after its title, which prints the page with every
+  section open, and no Download ([Controls](export.md#controls)). The
+  Extensions page has none.
 
 A ruleset with a rules type that takes extensions also builds an Extensions
 page at `/<ruleset>/rules/extensions/`: one searchable list per such type.
@@ -347,15 +350,14 @@ then tags by key, with the default sort and ignored parameters left out.
 
 - Cards have a checkbox. Selection lives in the page, not the URL. A selected
   entry that the filters hide stays selected and is counted in "N selected".
-- Beside the result count there is one button per configured exporter that
-  offers set scope, in config order
-  ([export.md](export.md#exporter-interface)).
+- Beside the result count are Print and Download
+  ([Controls](export.md#controls)); Download's menu offers the set-scope
+  formats, JSON now.
 - An action targets the selection when anything is selected: the selected
   results in the gallery's order, then selected entries the filters hide, in
   index order. Otherwise it targets the whole filtered set in the gallery's
   order. Each button's accessible name says which ("Print 3 selected",
-  "Download JSON 12 entries"), and buttons are disabled when they'd target
-  nothing.
+  "Download 12 entries"), and both are disabled when they'd target nothing.
 - An action first fetches the export bundles of its entries. If any fails to
   load, nothing runs, and a polite status region says so.
 
@@ -389,9 +391,10 @@ indexes.
   type, and that tag.
 - A provenance line: created and updated dates, and source issues linked to
   GitHub.
-- Export controls below the summary, one per configured entry-scope exporter. A
-  Preact island renders them once hydrated, since every export needs
-  JavaScript; a failed export shows a message in a polite status region.
+- Export controls below the summary: Print and Download, or Print alone on a
+  page type ([Controls](export.md#controls)). A Preact island renders them once
+  hydrated, since every export needs JavaScript; a failed export shows a
+  message in a polite status region.
 - `<title>` and Open Graph tags (name, summary, and art when present).
 
 ### Templates

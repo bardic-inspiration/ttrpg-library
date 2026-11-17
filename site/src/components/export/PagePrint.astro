@@ -1,0 +1,29 @@
+---
+// A rules page's Print button (docs/export.md#controls). A rules page isn't an entry, so it has no
+// print view: Print opens the browser's print dialog for the page itself, and
+// the accordion opens every section before it prints
+// (docs/site.md#accordion-pages). It needs JavaScript, so it stays hidden until
+// the script shows it.
+import { h } from 'preact';
+import { renderToString } from 'preact-render-to-string';
+import PrintIcon from '../../icons/Print';
+import './export-buttons.css';
+
+// The shared icon, rendered here to markup, so the page ships no Preact for one button.
+const icon = renderToString(h(PrintIcon, null));
+---
+<ul class="export-buttons" aria-label="Export" data-page-print hidden>
+  <li class="export-buttons__item">
+    <button type="button" class="export-buttons__button">
+      <Fragment set:html={icon} />
+      Print
+    </button>
+  </li>
+</ul>
+
+<script>
+  for (const controls of document.querySelectorAll<HTMLElement>('[data-page-print]')) {
+    controls.querySelector('button')?.addEventListener('click', () => print());
+    controls.hidden = false;
+  }
+</script>

@@ -1,7 +1,7 @@
 // The exporter interface (docs/export.md#exporter-interface). Each exporter is a module in this
 // folder, listed by id in config/export.json; the detail page and the gallery
-// build their export controls from that list, so adding an exporter needs no
-// gallery code.
+// build their Print and Download controls from that list, so adding an
+// exporter needs no gallery code.
 import type { Entry } from '../lib/library.ts';
 
 export type ExportScope = 'entry' | 'set';
@@ -47,8 +47,16 @@ export interface ExportOptions {
   io?: Partial<ExportIO>;
 }
 
+/**
+ * `print` is the Print button; each `download` exporter is a format in the
+ * Download button's menu (docs/export.md#controls).
+ */
+export type ExportKind = 'print' | 'download';
+
 export interface Exporter {
   id: string;
+  kind: ExportKind;
+  /** The Print button's text, or the format's name in the Download menu ("PNG", "JSON"). */
   label: string;
   scopes: ExportScope[];
   run(items: ExportItem[], options: ExportOptions): Promise<void>;

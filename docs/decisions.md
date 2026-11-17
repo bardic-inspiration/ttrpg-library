@@ -400,6 +400,10 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Print layout adapts to the paper chosen in the print dialog, replacing the page size choice. | The size dropdown is gone | #115 |
 | Print has two layouts split at one breakpoint, 6.5in of printed page width: wide (two columns, 9.5pt, 0.5in margin) and narrow (one column, 8pt, 0.3in margin). The narrow layout takes v1's 4 × 6 density, so Half-Letter prints slightly smaller than v1's. The breakpoint and margins live in `tokens/print.css`. | One breakpoint gives the spec's two layouts; 6.5in falls between narrow pages and wide pages' printable widths, however a browser measures; `@page` margins can sit in a width media query, so a card keeps a narrow margin | #243 |
 | A stale `size` parameter in a print URL is ignored. | Old links still print | #243 |
+| Exporters are of two kinds, `print` (the Print button) and `download` (a format in Download's menu); Download's formats follow `config/export.json` order, now PNG then JSON. | The controls are data-driven, so a translator is one more `download` module (P4); the order matches the stage spec's "PNG, JSON, translators" | #244 |
+| Download's menu is a disclosure (a button with `aria-expanded` over a list of buttons), not an ARIA menu. | A short list of formats needs no roving focus; Escape and focus leaving close it | #244 |
+| A page type prints through the print view; a rules page, which isn't an entry and has no print fragment, prints the page itself with the browser's print, its accordion opening every section first. The Extensions page has no Print. | The print view already renders a page type with every section open; a rules page already opens its sections on print | #244 |
+| A page type's detail page has no PNG capture source. | It has no Download, so the source would be dead weight (P11) | #244 |
 | Download opens a small format menu (PNG, JSON, translators), offering only the formats for its scope. | A save dialog's file-type list works only in Chromium | #115 |
 | Page types and rules pages get Print, not Download; printing one expands every section. | Download is for card entries | #115 |
 

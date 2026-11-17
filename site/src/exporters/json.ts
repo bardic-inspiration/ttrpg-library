@@ -20,7 +20,8 @@ export function dateStamp(date: Date): string {
 
 export const json: Exporter = {
   id: 'json',
-  label: 'Download JSON',
+  kind: 'download',
+  label: 'JSON',
   scopes: ['entry', 'set'],
   async run(items, options) {
     const io = resolveIO(options);
