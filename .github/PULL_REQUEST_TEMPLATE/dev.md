@@ -24,7 +24,7 @@ Delete if there are none. -->
 
 ## Screenshots
 
-<!-- ui PRs: what changed, in both themes where colors changed. -->
+<!-- ui PRs: what changed. -->
 
 ## Migration notes
 

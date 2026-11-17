@@ -8,7 +8,7 @@ assignees: ""
 
 ## What happened
 
-<!-- For a site bug: the URL (with query string), browser, and theme. For a
+<!-- For a site bug: the URL (with query string) and browser. For a
 validation bug: the entry and the validator output. -->
 
 ## Expected

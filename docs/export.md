@@ -58,7 +58,7 @@ computed numbers, so translators read `derived` rather than recomputing.
 - The detail page builds the capture source: a `<template
   data-capture="<id>">` (`components/detail/CaptureSource.astro`) holding the
   art when present, the template in `capture` mode, and the short SRD
-  attribution as a footer, all under `data-theme="light"`. As a `<template>`,
+  attribution as a footer. As a `<template>`,
   it is inert and outside the accessibility tree. At export,
   `site/src/lib/capture.ts` clones it into an off-screen host, waits for fonts
   and art, captures it, and removes the host; `html-to-image` loads only then.
@@ -89,15 +89,13 @@ computed numbers, so translators read `derived` rather than recomputing.
   place and in the URL.
 - Letter and A4 use the two-column 5.2 stat-block layout; Half-Letter and 4×6
   use one column with smaller type.
-- Each entry starts on a new page by default; a "continuous" toggle packs
-  entries. Long stat blocks flow onto following pages with `break-inside: avoid`
-  on actions and traits, so no action is split.
-- Each page's footer, in the `@page` bottom margin, carries the entry name and
-  the short SRD attribution. Each entry prints on its own named page, so its
-  footer can name it; in continuous mode the footer carries the attribution
-  only. The site footer, with the full statement, prints after the last entry,
-  on that entry's page. The header and the print controls don't print, and print
-  has no art.
+- Entries stack, one after another, packed onto as few pages as they fill.
+  Long stat blocks flow onto following pages with `break-inside: avoid` on
+  actions and traits, so no action is split.
+- Each page's footer, in the `@page` bottom margin, carries the short SRD
+  attribution only; it names no entry. The site footer, with the full
+  statement, prints after the last entry. The header and the print controls
+  don't print, and print has no art.
 - The reader saves as PDF from the browser's print dialog, which opens once the
   entries are in and fonts load.
 - The print exporter (entry and set scope) opens the print view in a new tab

@@ -146,6 +146,6 @@ npm scripts:
 Each topic doc has its own "Extending" section: types, rulesets, and formulas
 in [rulesets.md](rulesets.md#extending); fields and art in
 [content-model.md](content-model.md#extending); filters and templates in
-[site.md](site.md#extending); visual changes and themes in
+[site.md](site.md#extending); visual changes and the palette in
 [styling.md](styling.md#extending); exporters and page sizes in
 [export.md](export.md#extending).

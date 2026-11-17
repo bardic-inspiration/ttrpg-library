@@ -106,10 +106,10 @@ describe('PNG capture source (docs/export.md#png, docs/styling.md#styling-system
     return container.renderToString(CaptureSource, { props: { loaded, names: lib.names } });
   }
 
-  it('renders the template in capture mode with light tokens inside an inert <template>', async () => {
+  it('renders the template in capture mode inside an inert <template>', async () => {
     const html = await render(lib.byId('cinder-hound'));
     expect(html).toMatch(/^\s*<template data-capture="cinder-hound"[ >]/);
-    expect(html).toMatch(/class="capture[^"]*"[^>]*data-theme="light"/);
+    expect(html).toMatch(/<div class="capture[^"]*"/);
     expect(html).toContain('data-mode="capture"');
     expect(html).toContain('Includes adapted SRD 5.2 material, CC-BY-4.0');
     expect(html).not.toContain('data-wide');

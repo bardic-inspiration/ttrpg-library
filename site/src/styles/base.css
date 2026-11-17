@@ -11,12 +11,6 @@
     line-height: var(--leading-body);
   }
 
-  /* A scoped theme paints its own surface, like <html> does. */
-  [data-theme] {
-    background: var(--color-bg);
-    color: var(--color-text);
-  }
-
   body {
     font-size: var(--text-body);
   }

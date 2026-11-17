@@ -34,10 +34,6 @@
     gap: var(--space-l);
   }
 
-  .print-view__entries:not([data-continuous]) .print-view__entry + .print-view__entry {
-    break-before: page;
-  }
-
   @media print {
     .print-view__controls,
     .print-view__status {
@@ -48,7 +44,7 @@
       display: block;
     }
 
-    .print-view__entries[data-continuous] .print-view__entry + .print-view__entry {
+    .print-view__entry + .print-view__entry {
       margin-block-start: var(--space-m);
     }
   }

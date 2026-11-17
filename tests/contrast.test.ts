@@ -3,7 +3,7 @@
 // a pair fails this suite.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { readTokens, resolveToken, themeTokens, tokensIn, type Theme } from '../site/src/lib/design-tokens.ts';
+import { readTokens, resolveToken, tokensIn } from '../site/src/lib/design-tokens.ts';
 
 const read = (file: string) => readTokens(readFileSync(new URL(`../site/src/styles/tokens/${file}`, import.meta.url), 'utf8'));
 const primitives = read('primitives.css');
@@ -39,8 +39,8 @@ describe('contrast ratio', () => {
   });
 });
 
-describe.each<Theme>(['light', 'dark'])('%s theme contrast (docs/styling.md#accessibility)', (theme) => {
-  const tokens = themeTokens(all, theme);
+describe('palette contrast (docs/styling.md#accessibility)', () => {
+  const tokens = tokensIn(all, 'base');
 
   it('declares every type and rarity color from docs/styling.md#styling-system', () => {
     for (const name of ['--accent-creature', '--accent-item', '--accent-spell', '--rarity-common', '--rarity-uncommon', '--rarity-rare', '--rarity-very-rare', '--rarity-legendary', '--rarity-artifact']) {
@@ -58,22 +58,6 @@ describe.each<Theme>(['light', 'dark'])('%s theme contrast (docs/styling.md#acce
   }
 });
 
-describe('theme blocks (docs/styling.md#themes)', () => {
-  it.each([['semantic.css', semantic], ['content.css', content]] as const)(
-    '%s: the system-dark block declares exactly the explicit dark tokens',
-    (_, decls) => {
-      expect(Object.fromEntries(tokensIn(decls, 'system-dark'))).toEqual(Object.fromEntries(tokensIn(decls, 'dark')));
-    },
-  );
-
-  it.each([['semantic.css', semantic], ['content.css', content]] as const)(
-    '%s: light and dark declare the same tokens',
-    (_, decls) => {
-      expect([...tokensIn(decls, 'dark').keys()].sort()).toEqual([...tokensIn(decls, 'light').keys()].sort());
-    },
-  );
-});
-
 describe('reduced motion (docs/styling.md#accessibility)', () => {
   it('sets every duration primitive to 0ms under prefers-reduced-motion', () => {
     const durations = [...tokensIn(primitives, 'base').keys()].filter((n) => n.startsWith('--duration-'));
@@ -83,7 +67,7 @@ describe('reduced motion (docs/styling.md#accessibility)', () => {
   });
 
   it('defines every semantic duration through a duration primitive', () => {
-    const tokens = themeTokens(all, 'light');
+    const tokens = tokensIn(all, 'base');
     const durations = [...tokens.keys()].filter((n) => /^--duration-/.test(n));
     for (const name of durations) expect(resolveToken(tokens, name), name).toMatch(/^\d+ms$/);
     for (const [name, value] of tokensIn(semantic, 'base')) {

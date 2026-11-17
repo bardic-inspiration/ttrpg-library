@@ -2,13 +2,9 @@
  * Component tokens (docs/styling.md#tokens): per-component knobs that default to
  * semantic tokens. Edit one to change a component's look without touching its
  * code. Layout values (card width, gaps, columns) live here too.
- *
- * The block also applies on [data-theme] so a theme scoped to an element
- * re-resolves these from that theme's semantic tokens.
  */
 @layer tokens {
-  :root,
-  [data-theme] {
+  :root {
     /* Page shell. */
     --page-width: var(--content-width);
     --page-gutter: var(--space-s);
@@ -95,8 +91,7 @@
  */
 @layer tokens {
   @media (width >= 64rem) {
-    :root,
-    [data-theme] {
+    :root {
       --gallery-columns: var(--filters-width) minmax(0, 1fr);
       --filters-toggle-display: none;
       --filters-closed-display: grid;

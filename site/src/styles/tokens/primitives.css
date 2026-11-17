@@ -5,33 +5,21 @@
  */
 @layer tokens {
   :root {
-    /* Palette: warm paper and ink for light, night and bone for dark. */
+    /* Palette: warm paper and ink. */
     --parchment-50: #fffaf0;
     --parchment-100: #f6f0e1;
     --parchment-400: #b9ab90;
     --ink-400: #857865;
     --ink-600: #5b5246;
     --ink-900: #1f1a14;
-    --night-400: #8a7f6e;
-    --night-600: #4a4238;
-    --night-800: #211e1a;
-    --night-900: #161412;
-    --bone-100: #ede5d5;
-    --bone-400: #b3a892;
 
-    /* Hues: -700 reads on light surfaces, -300 on dark ones. */
+    /* Hues: -700 reads on the paper surfaces. */
     --red-700: #8a1c1c;
-    --red-300: #e8806a;
     --violet-700: #6b3fa0;
-    --violet-300: #c4a3f0;
     --sea-700: #1f5f8b;
-    --sea-300: #7fb8e0;
     --green-700: #2f6b2f;
-    --green-300: #8fcf8f;
     --amber-700: #9a5200;
-    --amber-300: #f0b060;
     --blue-700: #1d4ed8;
-    --blue-300: #93b4ff;
 
     /* Font families: the Alegreya superfamily, self-hosted (docs/architecture.md#technology). */
     --family-serif: 'Alegreya', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
