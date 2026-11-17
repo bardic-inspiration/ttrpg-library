@@ -27,7 +27,7 @@ within the one repo, not by convention.
 | Lane label (auto) | `content` | `dev` |
 | Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`), `migration` (`content/**`, `assets/images/**`) |
 | Issue templates and labels | Content request (`request`), revise request (`revise`) ([generation.md](generation.md#requests)) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
-| PR template | `content.md`, filled by the routine | `dev.md`: what and why, decisions, testing, screenshots for `ui`, migration notes |
+| PR template | `content.md`, filled by the routine | `dev.md`: what and why, decisions, testing, screenshots for `ui` ([UI screenshots](#ui-screenshots)), migration notes |
 | PR title | `Add <n> <type> entries`, `Revise <ids>: <reason>` | `<area>: <summary>`, such as `ui: tighten stat-block spacing` |
 | CI | Content checks | Full checks |
 | Review focus | Balance, tone, originality, licensing | Code, design, behavior, docs accuracy |
@@ -137,6 +137,33 @@ by hand. It gets every check whatever its paths, so it is never docs-only or
 text-only, and it adds the `a11y` job: `npm run a11y` against the built site
 ([Accessibility](styling.md#accessibility)). Adding the label re-runs
 `validate`. Other PRs don't run the accessibility checks.
+
+### Milestone review
+
+Each build milestone ends with one comprehensive accessibility review against
+WCAG 2.2 AA, by a human with a keyboard and a screen reader. The session that
+opens the milestone PR files it as a `test` issue under the Testing backlog,
+titled `Milestone <n> WCAG 2.2 AA review: <what it added>`, with:
+
+- **Pages:** the entries and pages that show what the milestone added.
+- **Checks:** a checklist of what axe can't prove, such as heading order,
+  table headers, link names out of context, keyboard order and focus, reflow
+  at 320px and 200% zoom, and the token contrast pairs when the milestone
+  changed colors ([Accessibility](styling.md#accessibility)).
+- **Done when:** each box is checked by a human, and anything found is filed as
+  a `ui` issue.
+
+Like every Testing backlog check, it doesn't block the milestone or the next
+task ([Testing backlog](../AGENTS.md#testing-backlog)).
+
+### UI screenshots
+
+A PR that changes the site (the `ui` label) shows its layout in the dev
+template's Screenshots section, at phone (390px), tablet (820px), and desktop
+(1440px) widths, taken with Playwright. `npm run build` then
+`npm run snapshots <label>` captures the standard pages at all three
+([Refinement workflow](styling.md#refinement-workflow)); add any page the PR
+changes that it doesn't cover. Screenshots aren't a CI check.
 
 ### Link check
 

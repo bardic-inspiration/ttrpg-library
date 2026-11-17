@@ -1,6 +1,6 @@
 ---
 issue: 115
-depends: [ui]
+depends: []
 ---
 
 # Export
@@ -14,7 +14,7 @@ three places they go:
 - **Digital files** for viewing and sharing in chat channels.
 - **Paper copies** for the table.
 
-It serves the UI's "export is easy" criterion ([`ui.md`](ui.md)), P1 (no
+It serves the UI's "export is easy" criterion (#113), P1 (no
 runtime services), and P11 (weight follows the selection).
 
 This area and format translators ([`translators.md`](translators.md), #116)
@@ -34,7 +34,8 @@ can be combined.
 ### Controls
 
 Every place that exports has at most two buttons, **Print** and
-**Download**, as the UI design sets out.
+**Download**, as the UI design (#113) set out. Each acts on the selection,
+or on the filtered results when nothing is selected.
 
 - **Print** opens the print view, which opens the device's print dialog, as
   in v1. A PDF is saved from that dialog.

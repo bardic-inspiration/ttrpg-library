@@ -3,7 +3,8 @@
  * site has one palette. Components read these, never the primitives. Edit this
  * file to change what a role looks like.
  *
- * tests/contrast.test.ts checks the docs/styling.md#accessibility contrast pairs.
+ * The milestone accessibility review checks the docs/styling.md#accessibility
+ * contrast pairs.
  */
 @layer tokens {
   :root {

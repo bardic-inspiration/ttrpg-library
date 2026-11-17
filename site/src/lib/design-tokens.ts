@@ -1,5 +1,5 @@
-// Reads the design-token files (docs/styling.md#tokens) so the contrast tests (docs/styling.md#accessibility)
-// and the style guide (docs/styling.md#refinement-workflow) see exactly what the browser sees. Each custom
+// Reads the design-token files (docs/styling.md#tokens) so the reduced-motion tests (docs/styling.md#accessibility),
+// the palette test, and the style guide (docs/styling.md#refinement-workflow) see exactly what the browser sees. Each custom
 // property is classified by the block it sits in, and var() references
 // resolve through the primitives to a literal value.
 

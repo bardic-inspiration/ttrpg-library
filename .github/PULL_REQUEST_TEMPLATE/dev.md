@@ -24,7 +24,9 @@ Delete if there are none. -->
 
 ## Screenshots
 
-<!-- ui PRs: what changed. -->
+<!-- ui PRs: what changed, at 390, 820, and 1440px, taken with Playwright
+(`npm run build`, then `npm run snapshots <label>`; docs/workflow.md "UI
+screenshots"). -->
 
 ## Migration notes
 
