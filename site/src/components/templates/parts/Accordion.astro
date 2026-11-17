@@ -104,8 +104,10 @@ const { id, level, mode = 'screen', type, class: className } = Astro.props;
       transform: translateY(calc(var(--accordion-chevron) * -0.4)) rotate(135deg);
     }
 
+    /* One column as wide as the section: an `auto` track would grow to a wide table's width. */
     .accordion__body {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       gap: var(--space-2xs);
       padding-block-end: var(--space-s);
     }
