@@ -44,8 +44,10 @@ const onlyText = (stats: unknown): stats is { text: string } =>
 
 <style>
   @layer components {
+    /* One column as wide as the page: an `auto` track would grow to a wide table's width. */
     .page-components {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       gap: var(--space-s);
     }
   }

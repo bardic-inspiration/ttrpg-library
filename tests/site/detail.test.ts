@@ -1,4 +1,5 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import EntryDetail from '../../site/src/components/detail/EntryDetail.astro';
 import { provenance, tagChips } from '../../site/src/lib/detail.ts';
@@ -62,6 +63,20 @@ describe('detail page (docs/site.md#detail-page)', () => {
     const html = await render('cinder-hound');
     expect(textOf(html)).toContain(`Added ${meta.createdAt}. From #${issue}.`);
     expect(html).toContain(`href="https://github.com/bardic-inspiration/ttrpg-library/issues/${issue}"`);
+  });
+
+  // #295: an implicit grid track is sized `auto`, so it grew to a wide table's min-content
+  // width and the whole page scrolled sideways. A `minmax(0, 1fr)` track keeps every child
+  // to the page's width, and a wide table scrolls inside its own box (docs/site.md#templates).
+  it.each([
+    ['detail/EntryDetail.astro', 'entry-detail'],
+    ['templates/parts/Accordion.astro', 'accordion__body'],
+    ['templates/parts/PageComponents.astro', 'page-components'],
+  ])('%s sizes .%s to its container, never to a wide table', (file, name) => {
+    const source = readFileSync(new URL(`../../site/src/components/${file}`, import.meta.url), 'utf8');
+    const rule = source.match(new RegExp(`\\.${name} \\{([^}]*)\\}`))?.[1] ?? '';
+    expect(rule).toContain('display: grid;');
+    expect(rule).toMatch(/grid-template-columns:\s*minmax\(0,\s*1fr\);/);
   });
 });
 

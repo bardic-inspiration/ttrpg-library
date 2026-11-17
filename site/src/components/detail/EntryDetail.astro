@@ -109,8 +109,10 @@ const source = provenance(entry);
 
 <style>
   @layer components {
+    /* One column as wide as the page: an `auto` track would grow to a wide table's width. */
     .entry-detail {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       gap: var(--space-l);
       max-inline-size: var(--measure);
     }
