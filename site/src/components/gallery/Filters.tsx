@@ -158,7 +158,7 @@ function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
   return (
     <li class="tree__node" data-active={active || undefined}>
       <Disclosure id={node.id} label={node.def.label} open={open} toggle={shared.toggle} />
-      <ul class="tree__values" id={panel} hidden={!open} role="group" aria-labelledby={`${idFor(node.id)}-toggle`}>
+      <ul class="tree__values" id={panel} hidden={!open} aria-labelledby={`${idFor(node.id)}-toggle`}>
         {node.values.map((value) => (
           <Value key={value.key} id={node.id} value={value} onToggle={onToggle} shared={shared} />
         ))}
