@@ -39,6 +39,8 @@ const links = loaded.components
 const linkGroups = [...links.forward, ...links.back];
 const chips = tagChips(entry);
 const source = provenance(entry);
+// A slash isn't a break point, so "Antipathy/Sympathy" could set a phone page's width.
+const nameParts = entry.name.split('/');
 ---
 <article class="entry-detail" data-type={entry.type}>
   <header class="entry-detail__header">
@@ -48,7 +50,7 @@ const source = provenance(entry);
       </div>
     )}
     <div class="entry-detail__intro">
-      <h1>{entry.name}</h1>
+      <h1>{nameParts.map((part, i) => <>{i > 0 && <>/<wbr /></>}{part}</>)}</h1>
       <p><a class="entry-detail__type" href={`${url()}${libraryQuery(registry as unknown as Registry, entry.ruleset, entry.type)}`}>{typeLabel}</a></p>
       <p class="entry-detail__summary">{entry.summary}</p>
       <slot name="export" />

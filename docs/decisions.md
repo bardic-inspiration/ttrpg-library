@@ -386,6 +386,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Every primitive and component is its own section, and so is each titled prose section at a page's top level, with its subsections inside. A group, Class Features, and an option list stay open as a heading over their members' sections. | One section per thing a link targets, so a link opens only what it points at; a group heading and its intro are context, not content | #237 |
 | The table of contents lists every top-level section, with a group's subgroups and a class's features and options nested under their heading, and leaves out cross-listed primitives. Titled sections that aren't a primitive, group, or component are anchored at `section-<slug>`. | Jumps straight to what a DM looks up; a cross-listed primitive lives on its own page; the prefix keeps clear of `<type>-<id>` anchors | #237 |
 | A class's Features table, a page's untitled opening prose, and a species' lines stay outside the sections. | They're the overview a reader opens the page for | #237 |
+| At narrow widths a property line's label wraps before its value overflows, and an entry's heading may break after a slash ("Antipathy/" then "Sympathy"), not mid-word. | WCAG reflow at 320px; a break at the slash keeps both words whole | #299 |
 
 ### Export
 
