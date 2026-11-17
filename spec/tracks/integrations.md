@@ -3,7 +3,7 @@ issue: 116
 depends: []
 ---
 
-# Translators
+# Integrations
 
 ## Goal
 
@@ -16,7 +16,8 @@ imported: the library transcribes it from the official SRD PDF
 ([export.md](../../docs/export.md)), P5 and P9 (licensing), and P7 (every import is a
 reviewed PR).
 
-This area and export (#115) can be combined.
+The Integrations track (#315) carries this on from v2, which built the
+framework, the Open5e translator, and the import flow.
 
 ## Current
 

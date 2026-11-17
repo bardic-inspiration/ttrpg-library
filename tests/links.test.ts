@@ -51,6 +51,17 @@ describe('checkLinks', () => {
     ]);
   });
 
+  it('checks citations of the stage spec and the track specs in code', () => {
+    const files = repo({
+      'spec/tracks/images.md': '# Images\n\n## Design\n',
+      'tests/a.ts': '// spec/tracks/images.md#design\n// spec/tracks/images.md#gone\n// spec/v2/art.md#design\n',
+    });
+    expect(checkLinks(files, (path) => files.has(path))).toEqual([
+      'tests/a.ts:2: spec/tracks/images.md#gone: no such heading',
+      'tests/a.ts:3: spec/v2/art.md#design: no such file',
+    ]);
+  });
+
   it('fails on a missing heading', () => {
     const files = repo({ 'docs/content-model.md': DOC, 'scripts/a.ts': '\n// docs/content-model.md#gone\n' });
     expect(checkLinks(files, (path) => files.has(path))).toEqual([

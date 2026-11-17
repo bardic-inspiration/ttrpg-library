@@ -8,8 +8,9 @@ assignees: ""
 
 ## What
 
-<!-- The change, and the docs or stage spec (spec/v2/) section it implements.
-If neither covers it yet, the first step is a stage spec change. For a milestone with more than
+<!-- The change, and the docs, stage spec (spec/v2/), or track spec
+(spec/tracks/) section it implements. If none covers it yet, the first step is
+a spec change. For a milestone with more than
 one PR, list the tasks; each becomes a sub-issue. -->
 
 ## Done when

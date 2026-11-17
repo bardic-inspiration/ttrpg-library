@@ -6,6 +6,7 @@ import { checkAreas, SECTIONS, type AreaFile } from './stage-spec.ts';
 // spec/v2/README.md "Area files" and "Checks"; issue #197.
 const ROOT = join(import.meta.dirname, '..');
 const SPEC = 'spec/v2';
+const TRACKS = 'spec/tracks';
 
 const area = (name: string, text: string): AreaFile => ({ name, text });
 const doc = (frontMatter: string, body: string) => `---\n${frontMatter}\n---\n\n${body}`;
@@ -96,18 +97,19 @@ describe('checkAreas', () => {
   });
 });
 
-describe(SPEC, () => {
-  const files = readdirSync(join(ROOT, SPEC))
+const entryExists = (key: string) => {
+  const [type, id] = key.split('/');
+  return readdirSync(join(ROOT, 'content')).some((ruleset) =>
+    existsSync(join(ROOT, 'content', ruleset, type!, `${id}.json`)),
+  );
+};
+
+const areaFiles = (dir: string) =>
+  readdirSync(join(ROOT, dir))
     .filter((name) => name.endsWith('.md') && name !== 'README.md')
-    .map((name) => area(name.slice(0, -3), readFileSync(join(ROOT, SPEC, name), 'utf8')));
+    .map((name) => area(name.slice(0, -3), readFileSync(join(ROOT, dir, name), 'utf8')));
 
-  const entryExists = (key: string) => {
-    const [type, id] = key.split('/');
-    return readdirSync(join(ROOT, 'content')).some((ruleset) =>
-      existsSync(join(ROOT, 'content', ruleset, type!, `${id}.json`)),
-    );
-  };
-
+describe(SPEC, () => {
   it('has a README', () => {
     expect(existsSync(join(ROOT, SPEC, 'README.md'))).toBe(true);
   });
@@ -119,6 +121,17 @@ describe(SPEC, () => {
   });
 
   it('every area file passes the checks', () => {
-    expect(checkAreas(files, entryExists)).toEqual([]);
+    expect(checkAreas(areaFiles(SPEC), entryExists)).toEqual([]);
+  });
+});
+
+// spec/tracks/README.md "Track files": the same shape, checked the same way.
+describe(TRACKS, () => {
+  it('has a README', () => {
+    expect(existsSync(join(ROOT, TRACKS, 'README.md'))).toBe(true);
+  });
+
+  it('every track file passes the checks', () => {
+    expect(checkAreas(areaFiles(TRACKS), entryExists)).toEqual([]);
   });
 });

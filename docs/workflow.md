@@ -171,8 +171,8 @@ changes that it doesn't cover. Screenshots aren't a CI check.
 Docs are cited by file and heading ([docs/README.md](README.md#headings-and-citations)).
 `npm run links` (`scripts/links/`) scans every tracked text file and fails on:
 
-- a citation `docs/<file>.md#<heading>` or `spec/v2/<file>.md#<heading>` whose
-  file or heading doesn't exist;
+- a citation `docs/<file>.md#<heading>`, `spec/v2/<file>.md#<heading>`, or
+  `spec/tracks/<file>.md#<heading>` whose file or heading doesn't exist;
 - a relative Markdown link, in a Markdown file, whose target or heading doesn't
   exist;
 - a section-number citation (`§` and a number).

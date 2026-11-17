@@ -2,8 +2,9 @@
 
 How work is done in this repo, by agents or humans. [`docs/`](docs/README.md)
 describes *what is built*, including CI, lanes, labels, and repository
-settings, and [`spec/v2/`](spec/v2/README.md) holds the design that isn't
-built yet. This file covers *how to work*, and defers to them wherever they
+settings. The v2 stage spec, [`spec/v2/`](spec/v2/README.md), and the
+development tracks' specs, [`spec/tracks/`](spec/tracks/README.md), hold the
+design that isn't built yet. This file covers *how to work*, and defers to them wherever they
 overlap.
 
 Sessions start with no memory of earlier ones. Decisions, follow-ups, and
@@ -35,8 +36,9 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
     [`docs/decisions.md`](docs/decisions.md) and record the choice in the
     PR's "Decisions" section. The owner's merge confirms it.
   - If it would, stop that item and ask (the user, or on the issue). Fix the
-    stage spec before writing code that depends on it. For v2 design, the question
-    goes into the area's "Open questions" in [`spec/v2/`](spec/v2/README.md)
+    stage spec before writing code that depends on it. For v2 or track
+    design, the question goes into the area's or track's "Open questions"
+    in [`spec/v2/`](spec/v2/README.md) or [`spec/tracks/`](spec/tracks/README.md)
     through a small PR. Carry on with the items that are clear.
 - **Record decisions where they're made.** A PR that makes a decision lists
   it under "Decisions" and adds its row to
@@ -107,7 +109,8 @@ prefix, so a spike can't merge. Record what you learned, then close the PR.
 ## Tracking work
 
 Each milestone is a tracking issue holding its "done when" and its tasks as
-ordered sub-issues. GitHub's milestone feature isn't used. Content issues
+ordered sub-issues. So is each development track ("Tracks" below), which has
+no end of its own. GitHub's milestone feature isn't used. Content issues
 follow [Requests](docs/generation.md#requests).
 
 A dev issue states what to do, the docs or stage spec section it implements,
@@ -132,6 +135,14 @@ area. An approved design can be amended at any time by a small PR to it that
 the owner merges. Each build milestone starts with a pilot task on its area's
 hardest cases, which is expected to turn up amendments.
 
+### Tracks
+
+A development track is ongoing work outside a version's build, such as
+Integrations (#315) and Images (#316), which v2 deferred. Its unbuilt design
+is one file in [`spec/tracks/`](spec/tracks/README.md). Everything this file
+says about the stage spec applies to a track's file too: a task deletes the
+part it builds, and an open question there stops that part.
+
 ### Testing backlog
 
 Checks that need a human or a live service, such as repository settings
@@ -144,8 +155,9 @@ a pending manual check never blocks a milestone or the next task.
 
 ### Dev Queue
 
-Milestone issues, in milestone order, and their sub-issues (GitHub's order)
-are one queue. Work beyond v2 goes under the "Later (v3)" issue (#118),
+Milestone issues, in milestone order, then track issues, in the order
+[`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
+sub-issues (GitHub's order) are one queue. Work beyond v2 goes under the "Later (v3)" issue (#118),
 outside the queue.
 
 - **Place** every new dev issue with `sub_issue_write`. Put it before the

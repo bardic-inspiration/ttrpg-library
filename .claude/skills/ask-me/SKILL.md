@@ -39,7 +39,7 @@ use this skill.
 
 1. **Read what's already there first.** Skim the request, any linked issue,
    and the docs it touches (`AGENTS.md`, plus the docs sections the
-   issue cites, and `spec/v2/` for unbuilt design) before asking anything — never ask a question the existing
+   issue cites, and `spec/v2/` and `spec/tracks/` for unbuilt design) before asking anything — never ask a question the existing
    material already answers.
 
 2. **Ask one question at a time.**

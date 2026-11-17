@@ -152,7 +152,7 @@ describe('Open5e schema and field names (docs/export.md#open5e)', () => {
   });
 });
 
-describe('Open5e pilot cases (spec/v2/translators.md "Cases")', () => {
+describe('Open5e pilot cases (spec/tracks/integrations.md "Cases")', () => {
   it('exports creature/lich with the numbers Open5e gives the SRD lich', async () => {
     const { record, out } = exportOne('creature/lich');
     const srd = await fixture('creatures-lich.json');

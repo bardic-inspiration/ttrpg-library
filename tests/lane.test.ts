@@ -171,7 +171,7 @@ describe('checkLane docsOnly', () => {
 
 describe('isTestTextPath (docs/workflow.md#text-only-prs)', () => {
   it.each([
-    'spec/v2/translators.md',
+    'spec/tracks/integrations.md',
     'spec/v2/README.md',
     '.claude/skills/generate/SKILL.md',
     'rulesets/dnd-5e-2024/guidelines/creature.md',
@@ -199,7 +199,7 @@ describe('isTestTextPath (docs/workflow.md#text-only-prs)', () => {
 
 describe('checkLane textOnly', () => {
   it('is true when every path is docs or Markdown only tests read, and at least one is the latter', () => {
-    const result = checkLane({ branch: 'dev/spec', paths: ['spec/v2/translators.md', 'docs/decisions.md'], labels: [] });
+    const result = checkLane({ branch: 'dev/spec', paths: ['spec/tracks/integrations.md', 'docs/decisions.md'], labels: [] });
     expect(result).toMatchObject({ docsOnly: false, textOnly: true });
   });
 
@@ -209,7 +209,7 @@ describe('checkLane textOnly', () => {
   });
 
   it('is false when any path is code', () => {
-    const result = checkLane({ branch: 'dev/spec', paths: ['spec/v2/translators.md', 'site/src/pages/index.astro'], labels: [] });
+    const result = checkLane({ branch: 'dev/spec', paths: ['spec/tracks/integrations.md', 'site/src/pages/index.astro'], labels: [] });
     expect(result.textOnly).toBe(false);
   });
 });
@@ -223,7 +223,7 @@ describe('checkLane milestone (docs/workflow.md#milestone-prs)', () => {
   it('gives a milestone PR every check, whatever its paths', () => {
     const docs = checkLane({ branch: 'dev/x', paths: ['docs/decisions.md'], labels: ['milestone'] });
     expect(docs).toMatchObject({ docsOnly: false, textOnly: false, milestone: true });
-    const text = checkLane({ branch: 'dev/x', paths: ['spec/v2/translators.md'], labels: ['milestone'] });
+    const text = checkLane({ branch: 'dev/x', paths: ['spec/tracks/integrations.md'], labels: ['milestone'] });
     expect(text).toMatchObject({ docsOnly: false, textOnly: false, milestone: true });
   });
 
