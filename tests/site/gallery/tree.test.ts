@@ -155,13 +155,18 @@ describe('every facet of every type', () => {
     expect(find(tree(full(), home, '?f.type=creature'), 'Tags', 'Theme')?.open).toBe(true);
   });
 
-  it('checks a type as the type filter, counting what checking it adds', () => {
+  it('checks a type as the type filter, counting the entries of each type it shows', () => {
     const home = galleryConfig(reg, data);
+    const typeValue = (nodes: TreeNode[], key: string) => {
+      const node = nodes.find((n) => n.kind === 'type' && n.value.key === key);
+      return node?.kind === 'type' ? node.value : undefined;
+    };
+    expect(typeValue(tree(full(), home), 'feat')).toMatchObject({ selected: false, count: 1 });
+    // Checking Spells hides every other type, so they count 0 before any spell facet is set (#296).
     const nodes = tree(full(), home, '?f.type=spell');
-    const spell = nodes.find((n) => n.kind === 'type' && n.value.key === 'spell');
-    const feat = nodes.find((n) => n.kind === 'type' && n.value.key === 'feat');
-    expect(spell?.kind === 'type' && spell.value).toMatchObject({ selected: true, count: 1 });
-    expect(feat?.kind === 'type' && feat.value).toMatchObject({ selected: false, count: 1 });
+    expect(typeValue(nodes, 'spell')).toMatchObject({ selected: true, count: 1 });
+    expect(typeValue(nodes, 'feat')).toMatchObject({ selected: false, count: 0 });
+    expect(typeValue(nodes, 'item')).toMatchObject({ selected: false, count: 0 });
   });
 
   it('shows the Ruleset node only with more than one ruleset, or when it filters', () => {

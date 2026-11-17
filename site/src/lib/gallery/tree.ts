@@ -192,7 +192,7 @@ function rulesetNode(ctx: Context): TreeNode | undefined {
  * The Library's filter tree: the rulesets when there is a choice, then the types, each a value
  * of the type filter holding its own facets, then the Tags. Each type lists only its own
  * records' values, with counts of its own records, though a path two types share is one filter
- * (docs/site.md#gallery "Filters"). A checked
+ * (docs/site.md#gallery "Filters"). A type counts its entries among the results. A checked
  * type's registry default filters start open, and so does every node with an active filter of
  * its own in it.
  */
@@ -208,7 +208,8 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
   const selected = selectedValues(state.filters.get(TYPE));
   const checked = [...config.types.values()].filter((info) => selected.includes(info.type.toLowerCase()));
   const tags = tagsNode(ctx, new Set(checked.flatMap((info) => info.defaultFilters)));
-  const typeCounts = others(TYPE);
+  // A type counts its entries among the results, so checking one type leaves the rest at 0.
+  const shown = others('');
   const nodes: TreeNode[] = [];
   const rulesets = rulesetNode(ctx);
   if (rulesets) nodes.push(rulesets);
@@ -225,7 +226,7 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
       value: {
         key,
         label: info.label,
-        count: ofType(typeCounts, info).length,
+        count: ofType(shown, info).length,
         selected: selected.includes(key),
         open: false,
         children: [],

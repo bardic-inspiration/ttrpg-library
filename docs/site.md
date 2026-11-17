@@ -282,7 +282,8 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   filter (`f.ruleset`), comes first when the library holds more than one
   ruleset, or the filter is active.
 - **Types.** Then the types, each a checkbox for the type filter (`f.type`)
-  with its count, and a disclosure holding its facets. A type shows when the
+  with its count, the entries of it among the results (so checking one type
+  leaves the others at 0), and a disclosure holding its facets. A type shows when the
   library has entries of it, or it's checked.
 - **Fields.** A type's facets follow in registry order. Facets whose paths
   share a field below `stats` or `derived` sit in a node named for it by the
