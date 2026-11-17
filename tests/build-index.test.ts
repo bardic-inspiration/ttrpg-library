@@ -205,18 +205,20 @@ describe('the build', () => {
     }
   });
 
-  it('writes each entry’s export bundle, the entry with its derived values, beside the raw copy', async () => {
+  it('writes each entry’s export bundle, the entry with its derived values and its links\' names, beside the raw copy', async () => {
     const out = await tempDir();
     await writeIndex(valid, out, await buildIndex(valid));
     for (const path of ['creature/cinder-hound', 'item/wand-of-frost-lances', 'spell/frost-lance']) {
       const entry = JSON.parse(await readFile(join(valid, 'dnd-5e-2024', `${path}.json`), 'utf8')) as { type: string; stats: unknown };
-      const bundle = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024', `${path}.export.json`), 'utf8')) as unknown;
-      expect(bundle).toEqual({ entry, derived: ruleset.derive(entry.type, entry.stats) });
+      const bundle = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024', `${path}.export.json`), 'utf8')) as Record<string, unknown>;
+      expect(bundle).toEqual({ entry, derived: ruleset.derive(entry.type, entry.stats), names: expect.any(Object) });
     }
     const creature = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024/creature/cinder-hound.export.json'), 'utf8')) as {
       derived: { xp: number };
     };
     expect(creature.derived.xp).toBe(450);
+    const spell = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024/spell/frost-lance.export.json'), 'utf8')) as { names: Record<string, string> };
+    expect(spell.names).toMatchObject({ 'class/sorcerer': 'Sorcerer', 'class/wizard': 'Wizard' });
   });
 
   it('removes the copy of a deleted entry', async () => {

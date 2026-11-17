@@ -3,12 +3,22 @@
 // build their Print and Download controls from that list, so adding an
 // exporter needs no gallery code.
 import type { Entry } from '../lib/library.ts';
+import type { Skip } from '../translators/types.ts';
 
 export type ExportScope = 'entry' | 'set';
 
 export interface ExportItem {
   entry: Entry;
   derived: Record<string, unknown>;
+  /** The names of the entries and rules it links to, by `<type>/<id>`, for formats that write links as names. */
+  names?: Record<string, string>;
+}
+
+/** What a download left out (docs/export.md#translators), shown on the site after it. */
+export interface ExportReport {
+  /** False when nothing in the scope could be exported, so no file downloaded. */
+  downloaded: boolean;
+  skipped: Skip[];
 }
 
 /** A file handed to the browser to save. */
@@ -59,5 +69,8 @@ export interface Exporter {
   /** The Print button's text, or the format's name in the Download menu ("PNG", "JSON"). */
   label: string;
   scopes: ExportScope[];
-  run(items: ExportItem[], options: ExportOptions): Promise<void>;
+  /** The entry types it offers on an entry's page; every type when absent. A set export skips and reports the rest. */
+  types?: string[];
+  /** Resolves with a report when the format can't carry everything (docs/export.md#translators). */
+  run(items: ExportItem[], options: ExportOptions): Promise<ExportReport | void>;
 }

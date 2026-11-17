@@ -5,6 +5,7 @@ import { renderToString } from 'preact-render-to-string';
 import { describe, expect, it } from 'vitest';
 import ExportControls from '../../site/src/components/detail/ExportControls.tsx';
 import ExportButtons from '../../site/src/components/export/ExportButtons.tsx';
+import ExportReport, { reportStatus } from '../../site/src/components/export/ExportReport.tsx';
 import PagePrint from '../../site/src/components/export/PagePrint.astro';
 import { configuredControls, controlsFor, modules } from '../../site/src/exporters/index.ts';
 import { isPageType } from '../../site/src/lib/library.ts';
@@ -20,14 +21,19 @@ describe('export controls (docs/export.md#controls)', () => {
   it('splits exporters into Print and Download\'s formats', () => {
     const entry = configuredControls('entry');
     expect(entry.print?.id).toBe('print');
-    expect(ids(entry.downloads)).toEqual(['png', 'json']);
-    expect(entry.downloads.map((e) => e.label)).toEqual(['PNG', 'JSON']);
+    expect(ids(entry.downloads)).toEqual(['png', 'json', 'open5e']);
+    expect(entry.downloads.map((e) => e.label)).toEqual(['PNG', 'JSON', 'Open5e']);
   });
 
-  it('offers a set JSON and no PNG', () => {
+  it('offers a set JSON and Open5e, and no PNG', () => {
     const set = configuredControls('set');
     expect(set.print?.id).toBe('print');
-    expect(ids(set.downloads)).toEqual(['json']);
+    expect(ids(set.downloads)).toEqual(['json', 'open5e']);
+  });
+
+  it('offers a translator only on the entry types it covers (docs/export.md#translators)', () => {
+    expect(ids(configuredControls('entry', { type: 'creature' }).downloads)).toEqual(['png', 'json', 'open5e']);
+    expect(ids(configuredControls('entry', { type: 'feat' }).downloads)).toEqual(['png', 'json']);
   });
 
   it('leaves Download out on request', () => {
@@ -51,7 +57,7 @@ describe('the detail page\'s controls', () => {
     expect(buttons(html).slice(0, 2)).toEqual(['Print', 'Download']);
     expect(html).toMatch(/aria-expanded="false"[^>]*aria-controls="export-formats-cinder-hound"/);
     expect(html).toMatch(/<ul id="export-formats-cinder-hound"[^>]*hidden/);
-    expect(formats(html)).toEqual(['PNG', 'JSON']);
+    expect(formats(html)).toEqual(['PNG', 'JSON', 'Open5e']);
     expect(html).toContain('role="status"');
   });
 
@@ -72,7 +78,7 @@ describe('the Download menu', () => {
     const html = renderToString(h(ExportButtons, { controls: configuredControls('entry'), run: () => {}, menuId: 'm', open: true }));
     expect(html).toMatch(/aria-expanded="true"/);
     expect(html).not.toMatch(/<ul id="m"[^>]*hidden/);
-    expect(formats(html)).toEqual(['PNG', 'JSON']);
+    expect(formats(html)).toEqual(['PNG', 'JSON', 'Open5e']);
   });
 
   it('stays closed while the controls are disabled', () => {
@@ -94,5 +100,30 @@ describe('a rules page\'s Print', () => {
     expect(html).toMatch(/<ul class="export-buttons"[^>]*data-page-print[^>]*hidden/);
     expect(buttons(html)).toEqual(['Print']);
     expect(html).not.toContain('Download');
+  });
+});
+
+describe('the export report (docs/export.md#controls)', () => {
+  const skipped = [
+    { entry: 'creature/cinder-hound', path: 'summary', reason: 'Open5e has no field for a summary.' },
+    { entry: 'creature/cinder-hound', path: 'stats.traits[0].text', reason: 'The link to Fire became plain text.' },
+    { entry: 'feat/grappler', path: '', reason: 'Open5e doesn\'t cover the feat type, so it isn\'t exported.' },
+  ];
+
+  it('says how many things didn\'t carry over, or that nothing downloaded', () => {
+    expect(reportStatus('Open5e', { downloaded: true, skipped })).toBe('Downloaded Open5e. 3 things didn\'t carry over.');
+    expect(reportStatus('Open5e', { downloaded: true, skipped: skipped.slice(0, 1) })).toBe('Downloaded Open5e. 1 thing didn\'t carry over.');
+    expect(reportStatus('Open5e', { downloaded: true, skipped: [] })).toBe('');
+    expect(reportStatus('Open5e', { downloaded: false, skipped })).toBe('Nothing here exports as Open5e.');
+  });
+
+  it('lists each skip under its entry\'s name, in a disclosure', () => {
+    const names = new Map([['creature/cinder-hound', 'Cinder Hound']]);
+    const html = renderToString(h(ExportReport, { report: { downloaded: true, skipped }, names }));
+    expect(html).toMatch(/^<details class="export-report"><summary>What didn't carry over<\/summary>/);
+    expect(html).toContain('<span class="export-report__entry">Cinder Hound</span>');
+    expect(html).toContain('<span class="export-report__entry">feat/grappler</span>');
+    expect(html).toContain('<code>stats.traits[0].text</code> The link to Fire became plain text.');
+    expect(renderToString(h(ExportReport, { report: { downloaded: true, skipped: [] }, names }))).toBe('');
   });
 });

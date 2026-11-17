@@ -6,6 +6,7 @@ import config from '../../config/export.json' with { type: 'json' };
 import { configuredExporters, exportersFor, modules } from '../../site/src/exporters/index.ts';
 import { rawFileUrl } from '../../site/src/exporters/io.ts';
 import { dateStamp, json } from '../../site/src/exporters/json.ts';
+import { open5e } from '../../site/src/exporters/open5e.ts';
 import type { ExportFile, ExportItem } from '../../site/src/exporters/types.ts';
 import { fixtureLibrary } from './library-fixtures.ts';
 
@@ -119,5 +120,38 @@ describe('JSON export (docs/export.md#json)', () => {
 
   it('pads the date stamp', () => {
     expect(dateStamp(new Date(2027, 0, 5))).toBe('20270105');
+  });
+});
+
+describe('Open5e export (docs/export.md#open5e)', () => {
+  const withNames = (id: string): ExportItem => ({ ...item(id), names: { 'class/sorcerer': 'Sorcerer', 'class/wizard': 'Wizard' } });
+
+  it('downloads one entry as <id>.open5e.json and reports what it left out', async () => {
+    const { io, downloads } = fakeIO({});
+    const report = await open5e.run([withNames('frost-lance')], { scope: 'entry', base: BASE, io });
+    expect(downloads.map((d) => d.name)).toEqual(['frost-lance.open5e.json']);
+    const file = JSON.parse(downloads[0]!.data as string) as { spells: { name: string; classes: { name: string }[] }[] };
+    expect(file.spells[0]!.name).toBe('Frost Lance');
+    expect(file.spells[0]!.classes.map((c) => c.name)).toEqual(['Sorcerer', 'Wizard']);
+    expect(report).toEqual({ downloaded: true, skipped: expect.arrayContaining([{ entry: 'spell/frost-lance', path: 'summary', reason: 'Open5e has no field for a summary.' }]) });
+  });
+
+  it('downloads a set as one dated file, skipping the types it doesn\'t cover', async () => {
+    const { io, downloads } = fakeIO({});
+    const report = await open5e.run([item('cinder-hound'), item('sorcerer')], { scope: 'set', base: BASE, io });
+    expect(downloads.map((d) => d.name)).toEqual(['library-20261102.open5e.json']);
+    expect(Object.keys(JSON.parse(downloads[0]!.data as string))).toEqual(['creatures']);
+    expect(report?.skipped).toContainEqual({ entry: 'class/sorcerer', path: '', reason: 'Open5e doesn\'t cover the class type, so it isn\'t exported.' });
+  });
+
+  it('downloads nothing when nothing in the scope exports', async () => {
+    const { io, downloads } = fakeIO({});
+    const report = await open5e.run([item('sorcerer')], { scope: 'set', base: BASE, io });
+    expect(downloads).toEqual([]);
+    expect(report?.downloaded).toBe(false);
+  });
+
+  it('is offered for the types the translator covers', () => {
+    expect(open5e.types).toEqual(['creature', 'spell', 'item', 'condition', 'equipment']);
   });
 });

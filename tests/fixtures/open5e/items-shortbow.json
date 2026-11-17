@@ -1,0 +1,74 @@
+{
+  "key": "srd-2024_shortbow",
+  "name": "Shortbow",
+  "desc": "A shortbow.",
+  "category": {
+    "name": "Weapon",
+    "key": "weapon"
+  },
+  "weapon": {
+    "name": "Shortbow",
+    "key": "srd-2024_shortbow",
+    "damage_type": {
+      "name": "Piercing",
+      "key": "piercing"
+    },
+    "damage_dice": "1d6",
+    "properties": [
+      {
+        "property": {
+          "name": "Ammunition",
+          "type": null,
+          "desc": "You can use a weapon that has the Ammunition property to make a ranged attack only if you have ammunition to fire from it. The type of ammunition required is specified with the weapon's range. Each attack expends one piece of ammunition. Drawing the ammunition is part of the attack (you need a free hand to load a one-handed weapon). After a fight, you can spend 1 minute to recover half the ammunition (round down) you used in the fight; the rest is lost."
+        },
+        "detail": "Range 80/320; Arrow"
+      },
+      {
+        "property": {
+          "name": "Two-Handed",
+          "type": null,
+          "desc": "A Two-Handed weapon requires two hands when you attack with it."
+        },
+        "detail": null
+      },
+      {
+        "property": {
+          "name": "Vex",
+          "type": "Mastery",
+          "desc": "If you hit a creature with this weapon and deal damage to the creature, you have Advantage on your next attack roll against that creature before the end of your next turn."
+        },
+        "detail": null
+      }
+    ],
+    "is_simple": true,
+    "is_martial": false,
+    "is_improvised": false,
+    "distance_unit": "feet"
+  },
+  "armor": null,
+  "size": {
+    "name": "Tiny",
+    "key": "tiny"
+  },
+  "weight": "2.000",
+  "weight_unit": "lb",
+  "cost": "25.00",
+  "document": {
+    "name": "System Reference Document 5.2",
+    "key": "srd-2024",
+    "type": "SOURCE",
+    "display_name": "5e 2024 Rules",
+    "publisher": {
+      "name": "Wizards of the Coast",
+      "key": "wizards-of-the-coast"
+    },
+    "gamesystem": {
+      "name": "5th Edition 2024",
+      "key": "5e-2024"
+    },
+    "permalink": "https://dnd.wizards.com/resources/systems-reference-document"
+  },
+  "crossreferences": {
+    "to": []
+  }
+}
