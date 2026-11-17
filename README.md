@@ -18,14 +18,19 @@ The site is static: no accounts, no servers.
 
 ## Where it's going
 
-v1 is complete. v2 is designed in [`spec/v2/`](spec/v2/README.md):
+v1 is complete. v2 is finishing with a final review
+([`spec/v2/`](spec/v2/README.md)). It brings:
 
 - **The full SRD 5.2 rules base**, as linked data that your own content can
   build on.
-- **A redesigned interface** for fast lookup and one-button export, styled
-  after early twentieth-century architectural prints.
-- **Import and export for open TTRPG formats**, for VTTs and other sites.
-- **Public domain and openly licensed art** on entries.
+- **A redesigned interface** for fast lookup and one-button export.
+- **Import and export with Open5e.**
+
+Two development tracks carry on past v2 ([`spec/tracks/`](spec/tracks/README.md)):
+
+- **Integrations:** import and export for more open TTRPG formats, for VTTs
+  and other sites.
+- **Images:** public domain and openly licensed art on entries.
 
 ## Contributing
 

@@ -3,7 +3,7 @@ issue: 117
 depends: []
 ---
 
-# Art
+# Images
 
 ## Goal
 
@@ -11,6 +11,9 @@ Fill entries' `image` field with public domain and openly licensed art that
 fits the site, through a repeatable workflow that can be tuned until it finds the right images. No generated art. It serves P1
 (files are the database), P5 and P9 (licensing and an original look), and P7
 (art is reviewed before it publishes).
+
+The Images track (#316) carries this on from v2, which deferred it before any
+of it was built.
 
 ## Current
 
@@ -114,7 +117,7 @@ the processing.
 
 ### Publishing art
 
-- **The v2 build:** once tuned, the skill opens a content PR with the
+- **The first art PR:** once tuned, the skill opens a content PR with the
   Good-rated images, setting each entry's `image` and recording its
   provenance. The owner reviews and merges it.
 - **Later content:** art can come with new content or be added to existing

@@ -232,6 +232,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Gap fill is off until v2 is built; routines take `request` issues only. | Entries made in the v1 shape would only add to v2's schema migrations | #95, #109 |
 | Text-only PRs (docs plus Markdown only tests read: the stage spec, skills, and guidelines) skip validate, build, and the type and style checks, and run the tests. `dev-checks` runs alongside `content-checks`. | Fast feedback where the build can't change | #212 |
 | The SRD import's PDF extraction is a committed Python module, `scripts/srd-extract/`, which stage converters import; the converters stay in scratch. CI only compiles it. | Four stages rebuilt the same extraction and rediscovered its edge cases; pdfplumber has no TypeScript equivalent, and CI never reads the PDF | #234 |
+| v2 concludes in its current state: Milestone 8 ends at the translator framework, Open5e, and the import flow, and Milestone 9 becomes a final code and docs review (#317) before close-out (#255). The rest of `translators.md` and all of `art.md` move to ongoing development tracks, Integrations (#315) and Images (#316). | v2 is usable without them, and neither needs a version boundary to continue | #220, #221 |
+| A development track is a tracking issue with no end, and its unbuilt design is one file in `spec/tracks/`, in the area-file shape and checked by the same test and link check. Tracks join the dev queue after the last milestone, Integrations then Images. | The stage spec is removed at close-out, so deferred design needs a home that outlives v2; the order keeps v2 first and the old milestone order | #315, #316 |
+| Milestone 8's WCAG 2.2 AA review is folded into Milestone 9's, since #220 closed without a milestone PR. | One review covers what the last two milestones added | #220, #221 |
 
 ### Linking
 

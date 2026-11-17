@@ -93,6 +93,7 @@ tests/                                   Vitest suites and fixtures
 .github/                                 workflows, labeler, issue and PR templates, Dependabot
 docs/                                    these docs (README.md is the index)
 spec/v2/                                 the v2 stage spec: design not yet built
+spec/tracks/                             development tracks' specs: ongoing design not yet built
 AGENTS.md, CLAUDE.md, README.md          working guide and repo intro
 LICENSE, LICENSE-CONTENT, ATTRIBUTION.md licensing (licensing.md)
 ```
@@ -137,6 +138,8 @@ npm scripts:
 - **Routine:** a scheduled or on-demand Claude run that works content issues.
 - **Lane:** the kind of a PR, content or dev, set by its branch prefix.
 - **Stage spec:** `spec/v2/`, the design not yet built.
+- **Track:** ongoing development outside a version's build, with a tracking
+  issue and its unbuilt design in `spec/tracks/`.
 
 ## Where the rules live
 

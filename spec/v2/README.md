@@ -22,7 +22,13 @@ One file per area, named by its short name, in the design order #110 sets:
 `translators.md` (#116), `art.md` (#117). Every area's design session has
 written its file, and `linking.md`, `types.md`, `ui.md`, and `export.md` are built and gone.
 `wording.md` (#273) was added during the build, when the types showed the
-need for one wording system.
+need for one wording system, and is built and gone too.
+
+v2 concludes without building the rest of `translators.md` or any of
+`art.md`. They moved to ongoing development tracks in
+[`spec/tracks/`](../tracks/README.md): `integrations.md` (#315) and
+`images.md` (#316). Only this README is left, so the stage is finished, and
+close-out (#255) removes the folder.
 
 ## Status
 
