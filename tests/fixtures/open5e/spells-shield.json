@@ -1,0 +1,63 @@
+{
+  "key": "srd-2024_shield",
+  "document": {
+    "name": "System Reference Document 5.2",
+    "key": "srd-2024",
+    "type": "SOURCE",
+    "display_name": "5e 2024 Rules",
+    "publisher": {
+      "name": "Wizards of the Coast",
+      "key": "wizards-of-the-coast"
+    },
+    "gamesystem": {
+      "name": "5th Edition 2024",
+      "key": "5e-2024"
+    },
+    "permalink": "https://dnd.wizards.com/resources/systems-reference-document"
+  },
+  "casting_options": [],
+  "school": {
+    "name": "Abjuration",
+    "key": "abjuration"
+  },
+  "classes": [
+    {
+      "name": "Sorcerer",
+      "key": "srd-2024_sorcerer"
+    },
+    {
+      "name": "Wizard",
+      "key": "srd-2024_wizard"
+    }
+  ],
+  "range_unit": "feet",
+  "shape_size_unit": "feet",
+  "name": "Shield",
+  "desc": "An imperceptible barrier of magical force protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from Magic Missile.",
+  "level": 1,
+  "higher_level": "",
+  "target_type": "creature",
+  "range_text": "Self",
+  "range": 0,
+  "ritual": false,
+  "casting_time": "reaction",
+  "reaction_condition": "which you take when you are hit by an attack roll or targeted by the Magic Missile spell",
+  "verbal": true,
+  "somatic": true,
+  "material": false,
+  "material_specified": "",
+  "material_cost": null,
+  "material_consumed": false,
+  "target_count": 1,
+  "saving_throw_ability": "",
+  "attack_roll": false,
+  "damage_roll": "",
+  "damage_types": [],
+  "duration": "1 round",
+  "shape_type": null,
+  "shape_size": null,
+  "concentration": false,
+  "crossreferences": {
+    "to": []
+  }
+}

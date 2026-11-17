@@ -1,0 +1,27 @@
+{
+  "key": "a5e-ag_bloodied",
+  "document": {
+    "name": "Adventurer's Guide",
+    "key": "a5e-ag",
+    "type": "SOURCE",
+    "display_name": "Adventurer's Guide",
+    "publisher": {
+      "name": "EN Publishing",
+      "key": "en-publishing"
+    },
+    "gamesystem": {
+      "name": "Advanced 5th Edition",
+      "key": "a5e"
+    },
+    "permalink": "https://a5esrd.com/a5esrd"
+  },
+  "icon": null,
+  "descriptions": [
+    {
+      "desc": "* A creature is bloodied when reduced to half its hit points or less.",
+      "document": "a5e-ag",
+      "gamesystem": "a5e"
+    }
+  ],
+  "name": "Bloodied"
+}

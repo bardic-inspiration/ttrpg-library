@@ -73,8 +73,9 @@ Two flags change what a facet's values are:
 2. It writes `site/public/library.json`, the index, and copies each entry's raw
    JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export. Beside each
    copy it writes the entry's export bundle, `<id>.export.json`:
-   `{ "entry": …, "derived": … }`, as an exporter receives it
-   ([export.md](export.md#exporter-interface)).
+   `{ "entry": …, "derived": …, "names": … }`, as an exporter receives it
+   ([export.md](export.md#exporter-interface)). `names` holds the name of each
+   entry and rule the entry links to, by `<type>/<id>`.
 3. Astro builds static pages, reading the full entries and derived values at
    build time.
 

@@ -2,25 +2,27 @@
 // exporters, in menu order, by id. Exporting places show Print and Download (docs/export.md#controls).
 import config from '../../../config/export.json' with { type: 'json' };
 import { json } from './json.ts';
+import { open5e } from './open5e.ts';
 import { png } from './png.ts';
 import { print } from './print.ts';
 import type { ExportScope, Exporter } from './types.ts';
 
-export const modules: Record<string, Exporter> = { json, png, print };
+export const modules: Record<string, Exporter> = { json, open5e, png, print };
 
-/** The exporters named by `ids`, in order. An unknown id is a build error. */
-export function exportersFor(ids: string[], scope?: ExportScope): Exporter[] {
+/** The exporters named by `ids`, in order, optionally only those offering `scope`, and `type` on an entry's page. An unknown id is a build error. */
+export function exportersFor(ids: string[], scope?: ExportScope, type?: string): Exporter[] {
   return ids
     .map((id) => {
       const exporter = modules[id];
       if (!exporter) throw new Error(`config/export.json lists unknown exporter "${id}"`);
       return exporter;
     })
-    .filter((exporter) => !scope || exporter.scopes.includes(scope));
+    .filter((exporter) => !scope || exporter.scopes.includes(scope))
+    .filter((exporter) => type === undefined || !exporter.types || exporter.types.includes(type));
 }
 
-/** The configured exporters, optionally only those offering `scope`. */
-export const configuredExporters = (scope?: ExportScope): Exporter[] => exportersFor(config.exporters, scope);
+/** The configured exporters, optionally only those offering `scope`, and `type` on an entry's page. */
+export const configuredExporters = (scope?: ExportScope, type?: string): Exporter[] => exportersFor(config.exporters, scope, type);
 
 /** What an exporting place shows: at most a Print button and a Download menu (docs/export.md#controls). */
 export interface ExportControlSet {
@@ -40,8 +42,8 @@ export function controlsFor(exporters: Exporter[], { download = true }: { downlo
   };
 }
 
-/** The configured controls for `scope`. */
-export const configuredControls = (scope: ExportScope, options?: { download?: boolean }): ExportControlSet =>
-  controlsFor(configuredExporters(scope), options);
+/** The configured controls for `scope`; an entry's page passes its `type`. */
+export const configuredControls = (scope: ExportScope, options?: { download?: boolean; type?: string }): ExportControlSet =>
+  controlsFor(configuredExporters(scope, options?.type), options);
 
-export type { CaptureRequest, ExportItem, ExportKind, ExportOptions, ExportScope, Exporter } from './types.ts';
+export type { CaptureRequest, ExportItem, ExportKind, ExportOptions, ExportReport, ExportScope, Exporter } from './types.ts';

@@ -60,3 +60,7 @@ export async function loadExportItems(
     }),
   );
 }
+
+/** The names of the entries and rules `refs` link to, by `<type>/<id>`, as an export bundle carries them. */
+export const linkNames = (refs: { key: string }[], names: Map<string, string>): Record<string, string> =>
+  Object.fromEntries(refs.flatMap(({ key }) => (names.has(key) ? [[key, names.get(key)!]] : [])));

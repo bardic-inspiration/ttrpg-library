@@ -3,8 +3,9 @@
 ## Purpose
 
 Getting entries out of the library: JSON as the native data, PNG for Discord
-and VTTs, and print-ready pages for PDF. Exporters are pluggable, so format
-translators can be added without gallery changes.
+and VTTs, print-ready pages for PDF, and format translators that move entries
+to and from other platforms' formats, starting with Open5e. Exporters are
+pluggable, so a translator is added without gallery changes.
 
 There is no dynamic API. The data lane is file downloads; the static per-entry
 files (`data/<ruleset>/<type>/<id>.json`) and `library.json` stay published at
@@ -23,7 +24,13 @@ interface Exporter {
   kind: "print" | "download";         // the Print button, or a format in Download's menu
   label: string;                      // "Print", or the format's name: "PNG", "JSON"
   scopes: Array<"entry" | "set">;     // single entry, filtered or selected set, or both
-  run(items: Array<{ entry: Entry; derived: Derived }>, options: ExportOptions): Promise<void>;
+  types?: string[];                   // the entry types it offers on an entry's page; all when absent
+  run(items: Array<{ entry: Entry; derived: Derived; names?: Names }>, options: ExportOptions): Promise<ExportReport | void>;
+}
+
+interface ExportReport {
+  downloaded: boolean;                // false when nothing in the scope exported
+  skipped: Skip[];                    // what the format left out (Translators)
 }
 ```
 
@@ -36,11 +43,16 @@ interface Exporter {
   build error.
 - The detail page and the gallery build their [controls](#controls) from the
   exporters that offer the scope they need (`configuredControls` in the
-  registry). The detail page has its entry and derived values at build time; a
-  gallery set action fetches them from each entry's export bundle
+  registry); the detail page also passes its entry's type, so an exporter with
+  `types` appears only on those entries' pages. The detail page has its entry,
+  derived values, and the names of the entries and rules it links to at build
+  time; a gallery set action fetches them from each entry's export bundle
   ([site.md](site.md#index-build)). Every exporter receives real items in either
   scope.
-- A failed export does nothing and says so in a polite status region.
+- A failed export does nothing and says so in a polite status region. An
+  exporter that resolves with a report gets a status line saying how many
+  things didn't carry over, or that nothing in the scope exports, and the
+  report below it ([Controls](#controls)).
 
 ### Controls
 
@@ -58,8 +70,8 @@ nothing is selected.
 
 | Where | Print | Download |
 |---|---|---|
-| A card entry's detail page | The print view | PNG, JSON |
-| The Library, for the selection or the filtered results | The print view | JSON |
+| A card entry's detail page | The print view | PNG, JSON, and Open5e for the types it covers |
+| The Library, for the selection or the filtered results | The print view | JSON, Open5e |
 | A page type's page (class, subclass, species) | The print view | None |
 | A rules page | The browser's print of the page | None |
 
@@ -72,12 +84,18 @@ nothing is selected.
   (`components/export/PagePrint.astro`, a small script with no Preact) opens the
   browser's print dialog for the page, and the accordion opens every section
   before it prints ([Accordion pages](site.md#accordion-pages)).
+- **The export report.** After a download that left something out, the status
+  line says "Downloaded Open5e. 12 things didn't carry over." and a closed
+  disclosure, "What didn't carry over" (`components/export/ExportReport.tsx`),
+  lists each skip under its entry's name: the field's path, then the reason.
+  When nothing in the scope exports, nothing downloads, and the status says
+  "Nothing here exports as Open5e." with the same list.
 - Every control needs JavaScript: the detail page's and the Library's render
   once their island hydrates, and a rules page's stays hidden until its script
   runs. None of them print.
 
-Format translators (Foundry VTT, Open5e, and others) are further exporters that
-map an entry and its derived values to the target format. Most targets store
+Format translators are further exporters that map an entry and its derived
+values to the target format ([Translators](#translators)). Most targets store
 computed numbers, so translators read `derived` rather than recomputing.
 
 ### JSON
@@ -159,10 +177,117 @@ one breakpoint between them, `@media print and (width < 6.5in)`:
 - On screen the print view shows the wide layout. The style guide previews
   each layout by setting `data-print-layout` on a preview.
 
+### Translators
+
+A translator is one module for one target format, in
+`site/src/translators/<target>/`, with two sides (`Translator` in
+`site/src/translators/types.ts`):
+
+- **Export** maps entries, their derived values, and the names of what they
+  link to into one file in the target format. It's offered as a `download`
+  exporter in `site/src/exporters/`, for card entries and sets, and only on
+  the entry types it covers. The exporter loads the translator only when a
+  download runs.
+- **Import** maps a file in the target format to library entries, inputs
+  only, without `summary` or `meta`: the import flow writes those and opens
+  the content PR. Names in structured fields resolve against the target
+  ruleset's entries and rules (`ImportContext`).
+
+**What doesn't translate** is skipped and reported, never guessed. Each side
+returns a list of skips, each `{ entry, path, reason }`: the entry
+(`<type>/<id>`, or on import the record's name), where in it (empty for the
+whole entry), and why.
+
+- Export lists everything the file leaves out or changes: a field the target
+  has no place for, a link that became plain text, an entry type it doesn't
+  cover, and anything that won't read back the same. The site shows the list
+  after the download ([Controls](#controls)).
+- Import lists everything it skipped: a record it can't read, a name that
+  matches no entry, and a number that disagrees with what the ruleset derives
+  from the imported inputs. The ruleset wins: import writes no `adjust`.
+
+**Tests, in CI** (`tests/translators/`):
+
+- **Round trip.** For every library entry a translator covers, export then
+  import returns the same name, text fields, and `stats`, except where the
+  export reported a skip: every difference must sit at, inside, or around a
+  reported path.
+- **Target schema.** Every exported record validates against the target's
+  published schema, vendored beside the translator.
+- **Field names.** Every field the export writes appears in a record taken
+  from the target by hand (`tests/fixtures/<target>/`), or is named by its
+  schema.
+- Loading exported files into each target by hand is a Testing backlog issue.
+
+### Open5e
+
+The first translator (`site/src/translators/open5e/`) maps `dnd-5e-2024`
+entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
+
+- **Types:** creature to `Creature`, spell to `Spell`, item to `MagicItem`,
+  condition to `Condition`, and equipment to `Item`, with its weapon and
+  armor summaries. Page types, rules pages, and every other type aren't
+  covered: Download doesn't offer them, and a set export skips and lists them.
+- **The file** is one object of record lists keyed by Open5e endpoint:
+  `{ "creatures": […], "spells": […], "magicitems": […], "conditions": […],
+  "items": […] }`, with only the lists that have records. Entry scope
+  downloads `<id>.open5e.json`, set scope `library-<YYYYMMDD>.open5e.json`.
+  Import also takes a single record, a list of records, or a page of API
+  results (`{ "results": […] }`), telling a lone record's type by its fields.
+- **The document.** Every record names the library as its Open5e document,
+  `ttrpg-library`, and is keyed `ttrpg-library_<id>`, as Open5e keys a
+  document's records.
+- **Links, on export:** a `{ref:…}` token in text becomes its display text
+  or its target's name, and each is reported. A structured ref becomes the
+  name in Open5e's field for it: a spell's classes, a creature's condition
+  immunities, the spells in a creature's Spellcasting, a weapon's
+  properties and mastery. A ref with no Open5e field (gear, an item's spells
+  and base item) is reported.
+- **Links, on import:** a name in a structured field becomes a ref when it
+  exactly matches the name of one entry or rule of that type in the ruleset.
+  Names in prose stay plain text. Each unresolved name is listed; a
+  Spellcasting spell keeps its name as text.
+- **Derived values, on export:** export reads `derived` for AC, hit points
+  and the hit dice formula, save and skill bonuses, initiative, passive
+  Perception, proficiency bonus, CR and XP, and each attack's bonus and
+  damage. Traits and actions are their SRD 5.2 stat block text, as the site
+  composes it (`actionBlock`, `spellcastingBlock`), with tokens rendered as
+  numbers; attacks also fill Open5e's structured `attacks`.
+- **Derived values, on import:** import writes inputs only. A hit dice
+  string becomes `hitDice`; a save, skill, or initiative bonus becomes a
+  proficiency or expertise, worked out from the ability modifier and PB. An
+  action's text becomes a structured attack or save when it parses and,
+  rendered again, reproduces its source; otherwise it stays as text and is
+  listed. An attack's ability is the one whose modifier and PB give its
+  bonus, and a save's the one that gives its DC; when several do, Strength
+  for a melee attack, Dexterity for a ranged one, Constitution for a save,
+  then table order. In a creature's prose, a damage roll whose average
+  matches becomes `{dmg:…}`, and a DC becomes `{dc:<ability>}`, except an
+  escape DC or an ability check's, which stay `{dc=<n>}`
+  ([Text tokens](rulesets.md#text-tokens)).
+- **Not carried:** `summary`, `description`, `tags`, and `image`; a
+  creature's extra sizes, swarm, descriptors, gear, lair, speed and senses
+  notes, condition immunity notes, and legendary action uses and intro (so
+  its legendary actions don't import); an item whose rarity varies (not
+  exported), its base item, charges, spells, and curse; embedded stat blocks;
+  and any `adjust`. Each is reported where it occurs.
+- **Defaults Open5e requires:** an item without a size exports Open5e's
+  default, Tiny, and a magic item a weight of `0.000`, as Open5e gives its
+  SRD items.
+- **Schema** (`open5e.schema.json`, `schema.ts`): Open5e's OpenAPI component
+  schemas for these records, copied from `https://api.open5e.com/schema/`.
+  Where the live API and the schema disagree, the export follows the live
+  API, and the check applies a listed correction (`CORRECTIONS`), each backed
+  by a fixture in `tests/fixtures/open5e/`: nulls for related records a
+  record lacks, integer speeds listing only the creature's, a skill list of
+  only proficient skills, an action's cross-references as an object, and
+  readOnly fields the live records leave out (`is_magic_item`, a weapon's
+  `is_melee`, a condition's `crossreferences`), which the export still writes.
+
 ### Export config
 
 `config/export.json` holds the PNG settings (`scale`, `width`, and `wideWidth`), and `exporters`,
-the exporter ids. Their order is the order of Download's formats. An id joins the list in the PR that adds its
+the exporter ids: Print, PNG, JSON, and Open5e. Their order is the order of Download's formats. An id joins the list in the PR that adds its
 module.
 
 ## Where the rules live
@@ -170,6 +295,8 @@ module.
 - `config/export.json`.
 - `site/src/exporters/`: the interface (`types.ts`), registry, IO, and one
   module per exporter.
+- `site/src/translators/`: the translator interface (`types.ts`) and one
+  folder per target; `site/src/components/export/ExportReport.tsx`.
 - `site/src/lib/capture.ts`, `print.ts`, `print-run.ts`;
   `site/src/components/export/` (Print and Download),
   `site/src/components/detail/`, and `site/src/components/print/`.
@@ -179,4 +306,5 @@ module.
 | To add | Touch |
 |---|---|
 | A print density, margin, or breakpoint | `tokens/print.css` ([Print layout](#print-layout)) |
-| An export format or translator | One `download` exporter module, listed in `config/export.json`; it joins Download's menu wherever it offers the scope |
+| An export format | One `download` exporter module, listed in `config/export.json`; it joins Download's menu wherever it offers the scope |
+| A translator | A folder in `site/src/translators/` with its export and import sides, its schema, and fixtures from the target in `tests/fixtures/<target>/`; an exporter that wraps it, with `types`; its round-trip, schema, and field-name tests ([Translators](#translators)) |

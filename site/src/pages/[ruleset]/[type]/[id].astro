@@ -8,6 +8,7 @@ import Base from '../../../layouts/Base.astro';
 import CaptureSource from '../../../components/detail/CaptureSource.astro';
 import EntryDetail from '../../../components/detail/EntryDetail.astro';
 import ExportControls from '../../../components/detail/ExportControls';
+import { linkNames } from '../../../exporters/io';
 import { entryNames, isPageType, loadEntries, refPaths, refTargets, type LoadedEntry } from '../../../lib/library';
 import { loadRules } from '../../../lib/rules';
 import { formerTypes } from '../../../lib/redirects';
@@ -63,7 +64,7 @@ const page = !props.moved && isPageType(props.loaded.entry.ruleset, props.loaded
       <ExportControls
         slot="export"
         client:load
-        item={{ entry: props.loaded.entry, derived: props.loaded.derived }}
+        item={{ entry: props.loaded.entry, derived: props.loaded.derived, names: linkNames(props.loaded.refs, props.names) }}
         base={url()}
         page={page}
       />

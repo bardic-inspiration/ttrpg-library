@@ -1,0 +1,43 @@
+{
+  "key": "poisoned",
+  "document": {
+    "name": "5e Core Concepts",
+    "key": "core",
+    "type": "MISC",
+    "display_name": "5e Core",
+    "publisher": {
+      "name": "Open5e",
+      "key": "open5e"
+    },
+    "gamesystem": {
+      "name": "5th Edition 2014",
+      "key": "5e-2014"
+    },
+    "permalink": "https://dnd.wizards.com/resources/systems-reference-document"
+  },
+  "icon": {
+    "name": "Poisoned",
+    "key": "elderberry_poisoned",
+    "file_url": "/static/img/object_icons/elderberry-inn-icons/conditions/poisoned.svg",
+    "alt_text": "An icon representing the Poisoned condition. A simple black-and-white drawing of a bottle with a stopper and a skull on its front.",
+    "attribution": "Designed with love by Anaislalovi (@anaislalovi) for Elderberry Inn."
+  },
+  "descriptions": [
+    {
+      "desc": "* A poisoned creature has disadvantage on attack rolls and ability checks.",
+      "document": "a5e-ag",
+      "gamesystem": "a5e"
+    },
+    {
+      "desc": "A poisoned creature has disadvantage on attack rolls and ability checks.",
+      "document": "srd-2014",
+      "gamesystem": "5e-2014"
+    },
+    {
+      "desc": "While you have the Poisoned condition, you experience the following effect. \n* Ability Checks and Attacks Affected. You have Disadvantage on attack rolls and ability checks.",
+      "document": "srd-2024",
+      "gamesystem": "5e-2024"
+    }
+  ],
+  "name": "Poisoned"
+}

@@ -1,0 +1,22 @@
+/* Styles for the export report (docs/styling.md#styling-system: a Preact island's styles sit in
+   one stylesheet beside its components). */
+@layer components {
+  .export-report {
+    font-size: var(--text-small);
+  }
+
+  .export-report__entries,
+  .export-report__skips {
+    display: grid;
+    gap: var(--space-3xs);
+    padding-inline-start: var(--space-s);
+  }
+
+  .export-report__entry {
+    font-weight: var(--font-weight-label);
+  }
+
+  .export-report code {
+    overflow-wrap: anywhere;
+  }
+}

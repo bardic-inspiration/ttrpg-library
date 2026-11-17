@@ -2,12 +2,13 @@
 // Download, built from the configured set-scope exporters. Each runs on the
 // selection, or on the whole filtered set when nothing is selected. The
 // entries' export bundles are fetched first; if any fails, nothing runs and the
-// status message says so.
+// status message says so. What a format left out is listed below the status.
 import { useState } from 'preact/hooks';
-import { configuredControls, type Exporter } from '../../exporters/index.ts';
+import { configuredControls, type ExportReport as Report, type Exporter } from '../../exporters/index.ts';
 import { loadExportItems } from '../../exporters/io.ts';
 import { targetText, type SetTarget } from '../../lib/gallery/selection.ts';
 import ExportButtons from '../export/ExportButtons.tsx';
+import ExportReport, { reportStatus } from '../export/ExportReport.tsx';
 
 export interface SetActionsProps {
   target: SetTarget;
@@ -20,14 +21,20 @@ export interface SetActionsProps {
 export default function SetActions({ target, base, open }: SetActionsProps) {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
+  const [report, setReport] = useState<Report | undefined>();
   const empty = target.records.length === 0;
 
   const run = async (exporter: Exporter) => {
     setBusy(true);
     setStatus('');
+    setReport(undefined);
     try {
       const items = await loadExportItems(base, target.records);
-      await exporter.run(items, { scope: 'set', base });
+      const result = await exporter.run(items, { scope: 'set', base });
+      if (result) {
+        setReport(result);
+        setStatus(reportStatus(exporter.label, result));
+      }
     } catch {
       setStatus(`${exporter.label} failed. Try again.`);
     } finally {
@@ -48,6 +55,7 @@ export default function SetActions({ target, base, open }: SetActionsProps) {
       <p class="set-actions__status" role="status">
         {status}
       </p>
+      {report && <ExportReport report={report} names={new Map(target.records.map((r) => [`${r.type}/${r.id}`, r.name]))} />}
     </div>
   );
 }

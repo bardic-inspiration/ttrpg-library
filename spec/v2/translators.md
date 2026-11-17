@@ -20,21 +20,14 @@ This area and export (#115) can be combined.
 
 ## Current
 
-- [Exporter interface](../../docs/export.md#exporter-interface): format
-  translators are planned as further exporters that read `derived`.
+- [Translators](../../docs/export.md#translators): the two-way module
+  interface, skip reports, and the round-trip, schema, and field-name tests.
+- [Open5e](../../docs/export.md#open5e): the first translator, export and
+  import, built. Its import side runs as a script in the import flow below.
 - [Requests](../../docs/generation.md#requests): the issue kinds routines
   take.
 
 ## Design
-
-### Two-way modules
-
-Each translator is one module for one target format, with two sides:
-
-- **Export** maps an entry and its derived values to the target format. It
-  is an exporter, offered in Download's format menu ([Controls](../../docs/export.md#controls))
-  for card entries and sets of them.
-- **Import** maps a file in the target format to library entries.
 
 ### Targets
 
@@ -47,38 +40,6 @@ In build order, each an open, documented format with openly licensed data:
 
 Fantasy Grounds, Roll20, and D&D Beyond are left out: their formats are
 closed, or they import nothing.
-
-### Open5e mapping
-
-- **Types:** creature, spell, item, condition, and equipment (weapons and
-  armor). Page types (class, subclass, species) and rules pages aren't
-  covered. Export doesn't offer them, and import skips and lists them.
-- **Links, on export:** a `{ref:type/id}` token in text becomes the entry's
-  plain name. A structured ref becomes the name or key in Open5e's field for
-  it, such as a spell's class list or a creature's condition immunities.
-  Each ref that becomes plain text is reported.
-- **Links, on import:** a name in a structured field becomes a ref when it
-  exactly matches the name of a library entry in the target ruleset. Names in
-  prose stay plain text, since linking prose would mean guessing. Each
-  unresolved name is listed.
-- **Derived values, on export:** export reads `derived` to fill Open5e's
-  numeric fields: AC, hit points and the hit dice string, save and skill
-  bonuses, attack bonus, save DC, and CR and XP. Tokens in prose render as
-  their numbers.
-- **Derived values, on import:** import writes inputs only:
-  - A hit dice string such as `42d8+126` becomes `hitDice: 42`.
-  - Each save or skill bonus becomes `proficient` or `expertise`, worked
-    out from the ability modifier and PB.
-  - An attack line ("+N to hit, reach X ft.") becomes a structured action.
-  - A number in prose becomes a token.
-
-  The last two apply only where the parsed number matches the derived value
-  exactly. Anything else stays as it is and is listed as a mismatch.
-- **Meta:** `meta` isn't exported. The round trip compares `stats`, the
-  names, and the text fields.
-- **Field names:** the build checks them against a live Open5e response, or
-  against fixture files taken from the API by hand, since a routine session
-  may not reach `api.open5e.com`.
 
 ### Import flow
 
@@ -119,28 +80,6 @@ publishing their own content on the platform comes in a later version.
 - **Docs to update when built:** `docs/generation.md` (Requests, Labels,
   Run order), `docs/routines.md`, and `AGENTS.md` "Content rules", which
   today says routines take only `request` and `revise` issues.
-
-### What doesn't translate
-
-What one side can't represent is skipped and reported, never guessed:
-
-- **Import** lists everything skipped in the content PR.
-- **Export** lists everything dropped on the site after the download, such
-  as a link that became plain text or a field the target has no place for.
-- **Mismatched numbers:** when an imported number disagrees with what the
-  ruleset derives from the imported inputs, the ruleset wins. Import writes
-  no `adjust`, and the PR lists the mismatch. `adjust` is kept for deliberate
-  deviations, and an upstream number isn't one.
-
-### Testing
-
-- **Round trip, in CI:** for every library entry a translator covers,
-  export then import returns the same entry, apart from what the export
-  reported as dropped.
-- **Target schemas, in CI:** exported files validate against each target's
-  published schema, where one exists.
-- **Real importers, by hand:** loading the files into each target is a
-  Testing backlog issue.
 
 ## Cases
 

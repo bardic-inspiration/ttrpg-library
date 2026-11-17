@@ -1,0 +1,43 @@
+{
+  "key": "srd-2024_boots-of-levitation",
+  "name": "Boots of Levitation",
+  "desc": "While you wear these boots, you can cast Levitate on yourself.",
+  "category": {
+    "name": "Wondrous Item",
+    "key": "wondrous-item"
+  },
+  "rarity": {
+    "name": "Rare",
+    "key": "rare",
+    "rank": 3
+  },
+  "weapon": null,
+  "armor": null,
+  "size": {
+    "name": "Tiny",
+    "key": "tiny"
+  },
+  "weight": "0.000",
+  "weight_unit": "lb",
+  "cost": "0.00",
+  "requires_attunement": true,
+  "attunement_detail": null,
+  "document": {
+    "name": "System Reference Document 5.2",
+    "key": "srd-2024",
+    "type": "SOURCE",
+    "display_name": "5e 2024 Rules",
+    "publisher": {
+      "name": "Wizards of the Coast",
+      "key": "wizards-of-the-coast"
+    },
+    "gamesystem": {
+      "name": "5th Edition 2024",
+      "key": "5e-2024"
+    },
+    "permalink": "https://dnd.wizards.com/resources/systems-reference-document"
+  },
+  "crossreferences": {
+    "to": []
+  }
+}

@@ -90,7 +90,7 @@ describe('SetActions', () => {
     expect(html.match(/<button/g)).toHaveLength(2 + configuredControls('set').downloads.length);
   });
 
-  it('lists JSON and no PNG in the Download menu, which starts closed', () => {
+  it('lists JSON and Open5e, and no PNG, in the Download menu, which starts closed', () => {
     const closed = render(setTarget(all, all, urls(a!, b!)));
     expect(closed).toMatch(/aria-expanded="false"[^>]*aria-controls="set-actions-formats"/);
     expect(closed).toMatch(/<ul id="set-actions-formats"[^>]*hidden/);
@@ -98,7 +98,7 @@ describe('SetActions', () => {
     expect(open).toMatch(/aria-expanded="true"/);
     expect(open).not.toMatch(/<ul id="set-actions-formats"[^>]*hidden/);
     const formats = [...open.matchAll(/class="export-buttons__format">([^<]+)</g)].map((m) => m[1]);
-    expect(formats).toEqual(['JSON']);
+    expect(formats).toEqual(['JSON', 'Open5e']);
   });
 
   it('has no page size selector: the reader picks the paper in the print dialog (docs/export.md#print-layout)', () => {

@@ -71,6 +71,8 @@ export interface BuildResult {
 export interface ExportBundle {
   entry: ValidEntry['entry'];
   derived: Record<string, unknown>;
+  /** The names of the entries and rules the entry links to, by `<type>/<id>`, for translators that write links as names. */
+  names: Record<string, string>;
 }
 
 export interface BuildOptions extends ValidateOptions {
@@ -224,7 +226,11 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
     warnings,
     records,
     files: sorted.map((item) => item.file),
-    bundles: sorted.map(({ entry, derived }) => ({ entry, derived })),
+    bundles: sorted.map(({ entry, derived, refs }) => ({
+      entry,
+      derived,
+      names: Object.fromEntries(refs.flatMap(({ key }) => (nameOf.has(key) ? [[key, nameOf.get(key)!]] : []))),
+    })),
   };
 }
 

@@ -1,4 +1,4 @@
 {
   "png": { "scale": 2, "width": 420, "wideWidth": 840 },
-  "exporters": ["print", "png", "json"]
+  "exporters": ["print", "png", "json", "open5e"]
 }
