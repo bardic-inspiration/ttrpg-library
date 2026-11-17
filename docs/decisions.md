@@ -417,6 +417,10 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | What doesn't translate is skipped and reported: in the content PR on import, and on the site after the download on export. | Never guess a mapping | #116 |
 | Translators are tested by an export-then-import round trip over the library and by each target's published schema in CI; real importers are checked by hand in the Testing backlog. | P8 | #116 |
 | The translator and export areas can be combined. | Translators are exporters behind Download | #115, #116 |
+| Import is for authoring compatibility: an author's Creative Commons homebrew comes in as custom entries. Non-CC content is rejected, and SRD content isn't imported from any target. | SRD entries come from the official PDF (P5); an author's own non-CC work on written consent is later (#118) | #245 |
+| Import issues have their own template and `import` label, and a run-order step after revise requests and before content requests. Like content requests, they're batched into one content PR, with the skip list grouped by issue. | Fewer PRs to review; each issue's skips stay readable | #245 |
+| When an imported number disagrees with what the ruleset derives, the ruleset wins: import writes no `adjust` and lists the mismatch. | `adjust` is for deliberate deviations (P3) | #245 |
+| Open5e covers creature, spell, item, condition, and equipment. Structured refs map to its fields, and refs in text become plain names, reported. Import resolves only exact names in structured fields, and writes inputs from its derived numbers. | Never guess a mapping | #245 |
 
 ### Art
 
