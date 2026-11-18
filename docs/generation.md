@@ -14,8 +14,9 @@ import stages use the same skills in sessions the owner starts.
 GitHub issues are the request queue. Issue templates set blank issues off, so
 every issue starts in a lane.
 
-- **Content request** (`.github/ISSUE_TEMPLATE/content-request.yml`, label
-  `request`): type (condition, creature, equipment, item, or spell), count (a 1–10 dropdown,
+- **Content request**
+  ([`.github/ISSUE_TEMPLATE/content-request.yml`](../.github/ISSUE_TEMPLATE/content-request.yml),
+  label `request`): type (the form lists every type in `config/types.json`), count (a 1–10 dropdown,
   since issue forms have no number field; a free-form request may ask for
   more), brief, tags (one `key: value` per line, comma-separated for lists),
   and ruleset. Blank fields take the values in `config/defaults.json`.
@@ -102,9 +103,9 @@ leaves out, and request tags merge over default tags. `count` and
 trust, and no batch has a size limit. `scripts/generate/defaults.ts` loads and
 checks the file and applies it to a request.
 
-**Gap fill is off** (`gapFill.enabled: false`) until v2 is built, so routines
-take `request` issues only. Every entry generated in the v1 shape is one more
-for v2's schema changes to migrate. Run-order step 6 skips while it's off.
+**Gap fill is off** (`gapFill.enabled: false`) until v2 is built. Every entry
+generated in the v1 shape is one more for v2's schema changes to migrate.
+Run-order step 6 skips while it's off.
 
 ### The generate skill
 
@@ -260,25 +261,28 @@ every content rule applies to them.
 - **The import script.** `npm run import -- --issue <n> --format <id> --file
   <path> --work <title> --author <name> --url <source> --license <id>`
   (`--ruleset` and `--date` optional) runs the format's translator's import
-  side ([Translators](export.md#translators)) on the file, with names
-  resolved against the library and its rules, so the content's mentions of
-  library entries become links. It writes each entry to `content/` with
+  side ([Translators](export.md#translators)) on the file. Names in
+  structured fields resolve against the library and its rules and become
+  refs; names in text stay plain. It writes each entry to `content/` with
   `meta.source.kind: import`, the issue, and `meta.source.license` (the
   license id, author, and source URL), `tags` of `defaults.tags` plus
   `author`, and a drafted `summary` the run rewrites. It appends the work's
   line to `ATTRIBUTION.md` ([Imported works](licensing.md#imported-works)),
   and prints the issue's skip-list section. It exits 2 with the reason when
-  the issue is rejected: a license not accepted, an unknown format, a ruleset
-  the format doesn't map, or a file that isn't JSON.
+  the issue is rejected: an `--issue` that isn't a positive integer, a
+  license not accepted, an unknown format, a ruleset the format doesn't map,
+  or a file that isn't JSON.
 - **What it skips.** Everything the translator can't map, by record and
   field; and a whole record whose name is an SRD name of any type (from the
   ruleset's [SRD manifest](content-model.md#srd-manifest-and-coverage)), a
   name or id the library or the batch already has in that type, or a
   blocklisted term. Skipping never renames a record.
 - **What the run adds.** The `generate` skill rewrites each drafted summary
-  as the type's one-line factual summary, and removes any entry that uses an
-  SRD proper noun, which no list holds, adding it to the skip list. Then it
-  validates the batch like any other.
+  as the type's one-line factual summary, links the mentions of library
+  entries and rules in each entry's text
+  ([References](content-model.md#references)), and removes any entry that
+  uses an SRD proper noun, which no list holds, adding it to the skip list.
+  Then it validates the batch like any other.
 - **The PR.** One content PR for every import issue in the run, on
   `gen/import-<issue-numbers>-<YYYYMMDD>`, with the content PR template's
   "Skipped on import" section: one `#### #<n>: <work>` section per issue,
@@ -289,24 +293,28 @@ every content rule applies to them.
 
 The full SRD import bypassed requests: each stage was a sub-issue of its
 milestone, without the `request` label, so routines never took it, worked in
-sessions the owner started. SRD entry upkeep (link passes, corrections, review)
-works the same way. A session runs the `generate` skill on a batch picked from
+sessions the owner started. Every stage is done. SRD entry upkeep (link
+passes, corrections, review) works the same way, with its issue under the
+current milestone or a track issue ([Dev Queue](../AGENTS.md#dev-queue)),
+through the `generate` and `revise` skills. A stage session ran the
+`generate` skill on a batch picked from
 `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress`
 claim, on branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs
-that day). The PR uses `content.md` and says `Refs #<stage>`; the PR that
-finishes the stage uses `Closes #<stage>`.
+that day). The PR used `content.md` and said `Refs #<stage>`; the PR that
+finished the stage used `Closes #<stage>`.
 
-The session follows `.claude/skills/srd-import/SKILL.md`, which wraps the
-`generate` and `revise` skills: one batch per type, transcription from the PDF's
-text layer, verification against the PDF through the templates, format-fix
-issues for gaps, and a link pass once a stage's batches merge (a
-`revise/<stage>-<YYYYMMDD>` PR turning plain-text mentions of library entries
-into links). A test checks that every path and npm script the skill names
-exists, and that it names both skills and both branch formats.
+The stage sessions followed the `srd-import` skill, archived for the record
+at `.claude/archive/srd-import/SKILL.md`, which wrapped the `generate` and
+`revise` skills: one batch per type, transcription from the PDF's text layer,
+verification against the PDF through the templates, format-fix dev issues for
+gaps (a fix's PR added no entries; they came in the next batch), and a link
+pass once a stage's batches merged (a `revise/<stage>-<YYYYMMDD>` PR turning
+plain-text mentions of library entries into links).
 
 ## Where the rules live
 
-- `.claude/skills/generate/`, `revise/`, and `srd-import/`: the skills.
+- `.claude/skills/generate/` and `revise/`: the skills.
+- `.claude/archive/srd-import/`: the archived SRD import workflow.
 - `rulesets/<ruleset>/guidelines/`: the guidelines.
 - `config/defaults.json` and `scripts/generate/` (defaults, the gap-fill
   picker); `scripts/import/` (the import script) and `config/licenses.json`; `lib/buckets.ts` counts entries per bucket and builds labels.

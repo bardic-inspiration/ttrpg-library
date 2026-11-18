@@ -8,21 +8,7 @@
 import { parseArgs } from 'node:util';
 import { loadDefaults } from '../generate/defaults.ts';
 import { loadRegistry, PROJECT_ROOT } from '../validate/schema.ts';
-import {
-  checkManifest,
-  componentCoverage,
-  coverage,
-  formatReport,
-  loadComponentHeads,
-  loadComponentTypes,
-  loadEntryHeads,
-  loadManifest,
-  loadRuleHeads,
-  loadRulesTypes,
-  rulesCoverage,
-  TIERS,
-  type Tier,
-} from './coverage.ts';
+import { checkManifest, componentCoverage, coverage, formatReport, loadLibraryHeads, loadManifest, loadRulesetTypes, rulesCoverage, TIERS, type Tier } from './coverage.ts';
 
 const { values } = parseArgs({
   options: { type: { type: 'string' }, tier: { type: 'string' }, ruleset: { type: 'string' } },
@@ -30,8 +16,7 @@ const { values } = parseArgs({
 
 const ruleset = values.ruleset ?? (await loadDefaults()).ruleset;
 const types = Object.keys((await loadRegistry())[ruleset]?.types ?? {});
-const rulesTypes = types.length === 0 ? [] : await loadRulesTypes(PROJECT_ROOT, ruleset);
-const componentTypes = types.length === 0 ? [] : await loadComponentTypes(PROJECT_ROOT, ruleset);
+const { rulesTypes, componentTypes } = types.length === 0 ? { rulesTypes: [], componentTypes: [] } : await loadRulesetTypes(ruleset);
 const usage: string[] = [];
 if (types.length === 0) usage.push(`unknown ruleset "${ruleset}"`);
 const allTypes = [...new Set([...types, ...rulesTypes, ...componentTypes.map((c) => c.type)])];
@@ -49,9 +34,14 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-const entries = await loadEntryHeads(PROJECT_ROOT, ruleset);
+// An entry that fails validation isn't counted, so it would read as missing; fail instead, as build:index does.
+const library = await loadLibraryHeads(ruleset);
+if (library.errors.length > 0) {
+  console.error(`srd-coverage: ${library.errors.length} validation errors; run npm run validate.`);
+  process.exit(1);
+}
 const filter = { type: values.type, tier: values.tier as Tier | undefined };
 // Component and rules records have no tier, so --tier leaves them out.
-const components = values.tier ? undefined : componentCoverage(manifest, await loadComponentHeads(PROJECT_ROOT, ruleset), { type: values.type });
-const rules = values.tier ? undefined : rulesCoverage(manifest, await loadRuleHeads(PROJECT_ROOT, ruleset), { type: values.type });
-console.log(formatReport(coverage(manifest, entries, filter), rules, components));
+const components = values.tier ? undefined : componentCoverage(manifest, library.components, { type: values.type });
+const rules = values.tier ? undefined : rulesCoverage(manifest, library.rules, { type: values.type });
+console.log(formatReport(coverage(manifest, library.entries, filter), rules, components));

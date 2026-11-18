@@ -3,7 +3,7 @@
 // reads that text back into structured actions where its numbers match what the ruleset derives
 // from the imported inputs.
 
-import { crRow, deriveDamage, diceAverage, signed } from '../../../../rulesets/dnd-5e-2024/derive.ts';
+import { attackBonus, crRow, deriveAction, diceAverage, saveDc, signed } from '../../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import { renderTokens } from '../../../../rulesets/dnd-5e-2024/tokens.ts';
 import type {
@@ -27,6 +27,8 @@ import { DOCUMENT, keyOf, summary, type Record5e } from './document.ts';
 import {
   abilityFor,
   basisOf,
+  DAMAGE_ALT,
+  DAMAGE_NAMES,
   PREFER,
   plainRefs,
   reportRefs,
@@ -39,14 +41,8 @@ import {
   type CreatureBasis,
 } from './text.ts';
 
-const ABILITY_NAMES: Record<Ability, string> = {
-  str: 'strength',
-  dex: 'dexterity',
-  con: 'constitution',
-  int: 'intelligence',
-  wis: 'wisdom',
-  cha: 'charisma',
-};
+/** Open5e's key for each ability: its name in the phrase book, lowercase (`strength`). */
+const ABILITY_NAMES = Object.fromEntries(tables.abilities.map((a) => [a, word('ability', a).toLowerCase()])) as Record<Ability, string>;
 const SKILL_KEY = (skill: string): string => skill.replace(/-/g, '_');
 const SENSES = ['blindsight', 'darkvision', 'tremorsense', 'truesight'] as const;
 const SPEEDS = ['fly', 'swim', 'climb', 'burrow'] as const;
@@ -61,9 +57,6 @@ const ACTION_TYPE: Record<Exclude<ListName, 'traits'>, string> = {
 
 const vocabularyKey = (vocabulary: string, display: string): string | undefined =>
   Object.entries(phrases.vocabulary[vocabulary] ?? {}).find(([, v]) => v === display)?.[0];
-
-const DAMAGE_TYPE = new Map(tables.damageTypes.map((t) => [t.charAt(0).toUpperCase() + t.slice(1), t]));
-const DAMAGE_ALT = [...DAMAGE_TYPE.keys()].join('|');
 
 const basisFrom = (d: DerivedCreature): CreatureBasis => ({ mods: d.abilityMods, pb: d.pb });
 
@@ -81,8 +74,8 @@ const preferFor = (kind: ActionKind): Ability[] => (kind === 'save' ? PREFER.sav
 /** The ability import reads from an attack bonus or a save DC. */
 const actionAbilityFor = (kind: ActionKind, value: number, basis: CreatureBasis): Ability | undefined =>
   kind === 'save'
-    ? abilityFor(value, (a) => 8 + basis.pb + basis.mods[a], PREFER.save)
-    : abilityFor(value, (a) => basis.pb + basis.mods[a], preferFor(kind));
+    ? abilityFor(value, (a) => saveDc(basis.pb, basis.mods[a]), PREFER.save)
+    : abilityFor(value, (a) => attackBonus(basis.pb, basis.mods[a]), preferFor(kind));
 
 const PROSE = ['text', 'onHit', 'onFailure', 'onSuccess', 'onFailureOrSuccess'] as const;
 
@@ -351,11 +344,11 @@ function readDamage(text: string, actionAbility: Ability | undefined, basis: Cre
     if (ability === null) return 'mismatch';
     const damage: Damage = { dice };
     if (ability) damage.ability = ability;
-    damage.type = DAMAGE_TYPE.get(type)!;
+    damage.type = DAMAGE_NAMES.get(type)!;
     return { damage, rest: text.slice(raw.length) };
   }
   const flat = FLAT.exec(text);
-  if (flat) return { damage: { amount: Number(flat[1]), type: DAMAGE_TYPE.get(flat[2] ?? '')! }, rest: text.slice(flat[0].length) };
+  if (flat) return { damage: { amount: Number(flat[1]), type: DAMAGE_NAMES.get(flat[2] ?? '')! }, rest: text.slice(flat[0].length) };
   return undefined;
 }
 
@@ -401,15 +394,7 @@ const loose = (text: string): string => text.replace(/\*/g, '').replace(/ Hit: /
 
 /** An action's stat block text from its imported inputs, to check a parse against its source. */
 function renderAction(action: Action, basis: CreatureBasis): string {
-  const derived: DerivedAction = {
-    damage: (action.damage ?? []).map((d) =>
-      d.dice === undefined ? { modifier: 0, average: d.amount ?? 0, display: String(d.amount ?? 0) } : deriveDamage(d.dice, d.ability, d.bonus ?? 0, basis.mods),
-    ),
-  };
-  const base = basis.pb + (action.ability ? basis.mods[action.ability] : 0);
-  if (action.kind === 'save') derived.saveDc = 8 + base;
-  else if (action.kind !== 'other') derived.attackBonus = base;
-  return actionBlock(action, derived, { pb: basis.pb, abilityMods: basis.mods } as DerivedCreature).body;
+  return actionBlock(action, deriveAction(action, basis.pb, basis.mods), { pb: basis.pb, abilityMods: basis.mods } as DerivedCreature).body;
 }
 
 /** One Open5e action or trait as a library action: structured when its text reads back exactly, else as text. */
@@ -513,12 +498,13 @@ function readSpellcasting(
   const numbers = (match[4] ?? '').split(', ');
   const dc = numbers.map((n) => /^spell save DC (\d+)$/.exec(n)?.[1]).find(Boolean);
   const attack = numbers.map((n) => /^([+\-−]\d+) to hit with spell attacks$/.exec(n)?.[1]).find(Boolean);
-  const base = basis.pb + basis.mods[ability];
+  const derivedDc = saveDc(basis.pb, basis.mods[ability]);
+  const derivedBonus = attackBonus(basis.pb, basis.mods[ability]);
   if (dc === undefined) sc.noSaveDc = true;
-  else if (Number(dc) !== 8 + base) skips.add('stats.spellcasting', `Its save DC ${dc} isn't what the ruleset derives (${8 + base}); the ruleset's is kept.`);
+  else if (Number(dc) !== derivedDc) skips.add('stats.spellcasting', `Its save DC ${dc} isn't what the ruleset derives (${derivedDc}); the ruleset's is kept.`);
   if (attack !== undefined) {
     sc.includeAttack = true;
-    if (signedNumber(attack) !== base) skips.add('stats.spellcasting', `Its attack bonus ${attack} isn't what the ruleset derives (${signed(base)}); the ruleset's is kept.`);
+    if (signedNumber(attack) !== derivedBonus) skips.add('stats.spellcasting', `Its attack bonus ${attack} isn't what the ruleset derives (${signed(derivedBonus)}); the ruleset's is kept.`);
   }
   const notes: string[] = [];
   for (const line of lines) {

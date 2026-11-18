@@ -1,11 +1,12 @@
 // The gallery's set actions (docs/site.md#gallery "Selection", docs/export.md#controls): Print and
 // Download, built from the configured set-scope exporters. Each runs on the
-// selection, or on the whole filtered set when nothing is selected. The
-// entries' export bundles are fetched first; if any fails, nothing runs and the
-// status message says so. What a format left out is listed below the status.
+// selection, or on the whole filtered set when nothing is selected. Unless the
+// exporter reads only the entries' keys, their export bundles are fetched first;
+// if any fails, nothing runs and the status message says so. What a format left
+// out is listed below the status.
 import { useState } from 'preact/hooks';
 import { configuredControls, type ExportReport as Report, type Exporter } from '../../exporters/index.ts';
-import { loadExportItems } from '../../exporters/io.ts';
+import { runSetExport } from '../../exporters/io.ts';
 import { targetText, type SetTarget } from '../../lib/gallery/selection.ts';
 import ExportButtons from '../export/ExportButtons.tsx';
 import ExportReport, { reportStatus } from '../export/ExportReport.tsx';
@@ -29,8 +30,7 @@ export default function SetActions({ target, base, open }: SetActionsProps) {
     setStatus('');
     setReport(undefined);
     try {
-      const items = await loadExportItems(base, target.records);
-      const result = await exporter.run(items, { scope: 'set', base });
+      const result = await runSetExport(exporter, target.records, { scope: 'set', base });
       if (result) {
         setReport(result);
         setStatus(reportStatus(exporter.label, result));

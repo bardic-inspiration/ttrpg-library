@@ -19,6 +19,12 @@ import { ACTION_LISTS } from './types.ts';
 
 export const abilityMod = (score: number): number => Math.floor((score - 10) / 2);
 
+/** An attack bonus: PB plus the ability modifier, plus any adjustment. */
+export const attackBonus = (pb: number, mod: number, adjust = 0): number => pb + mod + adjust;
+
+/** A save DC: 8 plus the attack bonus with the same ability and adjustment. */
+export const saveDc = (pb: number, mod: number, adjust = 0): number => 8 + attackBonus(pb, mod, adjust);
+
 const proficiencyMultiplier = (proficiency: Proficiency | undefined): number =>
   proficiency === 'expertise' ? 2 : proficiency === 'proficient' ? 1 : 0;
 
@@ -65,7 +71,8 @@ export function deriveDamage(
   return { modifier, average, display: `${average} (${withModifier(dice, modifier)})` };
 }
 
-function deriveAction(action: Action, pb: number, mods: Record<Ability, number>): DerivedAction {
+/** An action's damage, and its attack bonus or save DC when it has an ability. */
+export function deriveAction(action: Action, pb: number, mods: Record<Ability, number>): DerivedAction {
   const derived: DerivedAction = {
     damage: (action.damage ?? []).map((d: Damage) =>
       d.dice === undefined
@@ -74,9 +81,9 @@ function deriveAction(action: Action, pb: number, mods: Record<Ability, number>)
     ),
   };
   if (action.ability && action.kind !== 'other') {
-    const base = pb + mods[action.ability] + (action.adjust ?? 0);
-    if (action.kind === 'save') derived.saveDc = 8 + base;
-    else derived.attackBonus = base;
+    const mod = mods[action.ability];
+    if (action.kind === 'save') derived.saveDc = saveDc(pb, mod, action.adjust);
+    else derived.attackBonus = attackBonus(pb, mod, action.adjust);
   }
   return derived;
 }
@@ -148,8 +155,8 @@ export function deriveCreature(stats: CreatureStats, tables: Tables): DerivedCre
   };
   if (stats.lair && next) derived.xpInLair = next.xp;
   if (stats.spellcasting) {
-    const base = pb + mods[stats.spellcasting.ability] + (stats.spellcasting.adjust ?? 0);
-    derived.spellcasting = { dc: 8 + base, attackBonus: base };
+    const { ability, adjust } = stats.spellcasting;
+    derived.spellcasting = { dc: saveDc(pb, mods[ability], adjust), attackBonus: attackBonus(pb, mods[ability], adjust) };
   }
   return derived;
 }

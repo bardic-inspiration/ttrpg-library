@@ -161,16 +161,6 @@
       "necromancy": "Necromancy",
       "transmutation": "Transmutation"
     },
-    "class": {
-      "bard": "Bard",
-      "cleric": "Cleric",
-      "druid": "Druid",
-      "paladin": "Paladin",
-      "ranger": "Ranger",
-      "sorcerer": "Sorcerer",
-      "warlock": "Warlock",
-      "wizard": "Wizard"
-    },
     "itemCategory": {
       "armor": "Armor",
       "potion": "Potion",

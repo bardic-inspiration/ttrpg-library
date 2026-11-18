@@ -1,7 +1,7 @@
-// Which pages `npm run a11y` checks (docs/styling.md#accessibility), read from the built
-// library.json: the Library, the Rulesets page, the Library filtered to a type and a facet, one
-// detail page per type that has an entry, and the print view (docs/export.md#print) showing
-// those same entries. A type with no entries has no detail page to check yet. Then every rules
+// Which pages `npm run a11y` checks (docs/styling.md#accessibility): the Library and the Rulesets
+// and About pages, then, read from the built library.json, the Library filtered to a type and a
+// facet, one detail page per type that has an entry, and the print view (docs/export.md#print)
+// showing those same entries. A type with no entries has no detail page to check yet. Then every rules
 // page (docs/site.md#rules-pages), and the Extensions page of a ruleset that has one.
 
 export interface IndexRecord {
@@ -45,6 +45,7 @@ export function a11yPages(records: IndexRecord[], rulesPages: RulesPageRef[] = [
   const pages: A11yPage[] = [
     { label: 'Library', path: '' },
     { label: 'Rulesets', path: 'rulesets/' },
+    { label: 'About', path: 'about/' },
   ];
   const first = records[0];
   if (first) {

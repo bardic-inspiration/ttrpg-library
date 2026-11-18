@@ -1,6 +1,6 @@
 // Former type keys (docs/site.md#redirects): old URLs, print keys, and type filters keep working.
 import { describe, expect, it } from 'vitest';
-import { galleryConfig } from '../../site/src/lib/gallery/config.ts';
+import { NO_FACET_DATA, galleryConfig } from '../../site/src/lib/gallery/config.ts';
 import { parseQuery } from '../../site/src/lib/gallery/state.ts';
 import { selectEntries } from '../../site/src/lib/print-run.ts';
 import { parsePrintQuery } from '../../site/src/lib/print.ts';
@@ -26,7 +26,7 @@ describe('former type keys', () => {
   });
 
   it('let an old print key print the entry', () => {
-    const selection = selectEntries(parsePrintQuery('?ids=magic-item/wand-of-frost-lances'), records, reg);
+    const selection = selectEntries(parsePrintQuery('?ids=magic-item/wand-of-frost-lances'), records, reg, NO_FACET_DATA);
     expect(selection.records.map((r) => `${r.type}/${r.id}`)).toEqual(['item/wand-of-frost-lances']);
     expect(selection.missing).toEqual([]);
   });
@@ -34,7 +34,7 @@ describe('former type keys', () => {
   it('let an old type filter select the renamed type', () => {
     const home = galleryConfig(reg);
     expect(parseQuery('?f.type=magic-item', home).filters.get('type')).toEqual({ kind: 'enum', values: ['item'] });
-    expect(selectEntries(parsePrintQuery('?f.type=magic-item'), records, reg).records.map((r) => r.id)).toEqual([
+    expect(selectEntries(parsePrintQuery('?f.type=magic-item'), records, reg, NO_FACET_DATA).records.map((r) => r.id)).toEqual([
       'wand-of-frost-lances',
     ]);
   });

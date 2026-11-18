@@ -19,9 +19,10 @@ const CONTENT_LANE_EXTRAS = ['ATTRIBUTION.md'];
  * Paths no code or test reads, so a PR that changes only these skips the
  * content and dev checks (docs/workflow.md#docs-only-prs): Markdown at the repo
  * root, `docs/**`, and the issue and dev PR templates. A file that a test or
- * script reads (`docs/routines.md`, the content PR template) stays code.
+ * script reads (`docs/routines.md`, `ATTRIBUTION.md`, which `npm run import`
+ * rewrites, the content PR template) stays code.
  */
-const DOCS_EXCEPTIONS = ['docs/routines.md'];
+const DOCS_EXCEPTIONS = ['docs/routines.md', 'ATTRIBUTION.md'];
 
 export function isDocsPath(path: string): boolean {
   if (DOCS_EXCEPTIONS.includes(path)) return false;
@@ -35,11 +36,14 @@ export function isDocsPath(path: string): boolean {
  * Markdown that tests read but no build, type, or style check does, so a PR
  * that changes only these and docs skips `content-checks` and runs only the
  * tests and the link check (docs/workflow.md#text-only-prs): the stage spec,
- * the skills, the guidelines, `docs/routines.md`, and the content PR template.
+ * the skills, the guidelines, `docs/routines.md`, `ATTRIBUTION.md`, and the
+ * content PR template.
  */
+const TEST_TEXT_FILES = ['docs/routines.md', 'ATTRIBUTION.md', '.github/PULL_REQUEST_TEMPLATE/content.md'];
+
 export function isTestTextPath(path: string): boolean {
   if (!path.endsWith('.md')) return false;
-  if (path === 'docs/routines.md' || path === '.github/PULL_REQUEST_TEMPLATE/content.md') return true;
+  if (TEST_TEXT_FILES.includes(path)) return true;
   if (path.startsWith('spec/') || path.startsWith('.claude/skills/')) return true;
   return /^rulesets\/[^/]+\/guidelines\/[^/]+\.md$/.test(path);
 }

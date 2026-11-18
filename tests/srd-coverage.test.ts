@@ -1,15 +1,14 @@
-import { describe, expect, it } from 'vitest';
+import { readFile, readdir, rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
   checkManifest,
   componentCoverage,
   coverage,
   formatReport,
-  loadComponentHeads,
-  loadComponentTypes,
-  loadEntryHeads,
+  loadLibraryHeads,
   loadManifest,
-  loadRuleHeads,
-  loadRulesTypes,
+  loadRulesetTypes,
   rulesCoverage,
   type ComponentHead,
   type EntryHead,
@@ -17,6 +16,7 @@ import {
   type RuleHead,
 } from '../scripts/srd-coverage/coverage.ts';
 import { loadRegistry, PROJECT_ROOT } from '../scripts/validate/schema.ts';
+import { FIXTURES, tempLibrary } from './helpers.ts';
 
 // docs/content-model.md#srd-manifest-and-coverage (SRD manifest and coverage); issue #130.
 const R = 'dnd-5e-2024';
@@ -234,11 +234,64 @@ describe('checkManifest', () => {
   });
 });
 
+// What coverage reads comes from the validator, as the import's names do (docs/content-model.md#srd-manifest-and-coverage).
+describe('the library heads', () => {
+  const temps: string[] = [];
+  afterEach(async () => {
+    await Promise.all(temps.splice(0).map((dir) => rm(dir, { recursive: true, force: true })));
+  });
+  const fixtures = async (...dirs: string[]) =>
+    (
+      await Promise.all(
+        dirs.map(async (dir) =>
+          Promise.all((await readdir(join(FIXTURES, dir))).sort().map(async (f) => JSON.parse(await readFile(join(FIXTURES, dir, f), 'utf8')))),
+        ),
+      )
+    ).flat();
+
+  it('give each SRD component the parent the validator found, and the rules data from the validator', async () => {
+    const entries = await fixtures('species', 'species-trait');
+    const lib = await tempLibrary(entries);
+    temps.push(lib.repo);
+    const heads = await loadLibraryHeads(R, lib.content);
+    expect(heads.errors).toEqual([]);
+    expect(heads.entries).toEqual([
+      { type: 'species', name: 'Dragonborn', srd: true },
+      { type: 'species', name: 'Tiefling', srd: true },
+    ]);
+    expect(heads.components).toContainEqual({ type: 'species-trait', name: 'Darkvision', parent: 'species/dragonborn' });
+    expect(heads.components).toContainEqual({ type: 'species-trait', name: 'Darkvision', parent: 'species/tiefling' });
+    expect(heads.components).toHaveLength(entries.length - 2);
+    expect(heads.rules).toContainEqual({ type: 'condition', name: 'Poisoned' });
+    expect(heads.rules).toContainEqual({ type: 'equipment', name: 'Martial Weapons', group: true });
+  });
+
+  it('carry the validator\'s errors, since an entry that fails isn\'t counted', async () => {
+    const [dragonborn, ...rest] = await fixtures('species', 'species-trait');
+    const lib = await tempLibrary([{ ...dragonborn, stats: {} }, ...rest]);
+    temps.push(lib.repo);
+    const heads = await loadLibraryHeads(R, lib.content);
+    expect(heads.errors.length).toBeGreaterThan(0);
+    expect(heads.entries.map((e) => e.name)).toEqual(['Tiefling']);
+  });
+
+  it('read the ruleset\'s rules and component types from its module', async () => {
+    const { rulesTypes, componentTypes } = await loadRulesetTypes(R);
+    expect(rulesTypes).toEqual(['glossary', 'condition', 'equipment', 'weapon-property', 'mastery-property']);
+    expect(componentTypes).toContainEqual({ type: 'species-trait', parents: ['species'] });
+  });
+});
+
 describe(`rulesets/${R}/srd-manifest.json`, () => {
+  // The library, validated once for the tests that read it.
+  let heads: ReturnType<typeof loadLibraryHeads> | undefined;
+  const library = () => (heads ??= loadLibraryHeads(R));
+
   it('is valid and lists every SRD 5.2 entry of each type', async () => {
     const file = await loadManifest(PROJECT_ROOT, R);
     const types = Object.keys((await loadRegistry())[R]!.types);
-    expect(checkManifest(file, R, types, await loadRulesTypes(PROJECT_ROOT, R), await loadComponentTypes(PROJECT_ROOT, R))).toEqual([]);
+    const { rulesTypes, componentTypes } = await loadRulesetTypes(R);
+    expect(checkManifest(file, R, types, rulesTypes, componentTypes)).toEqual([]);
     const count = (type: string, tier?: string) => file.entries.filter((r) => r.type === type && (!tier || r.tier === tier)).length;
     expect({
       creature: count('creature'),
@@ -275,18 +328,19 @@ describe(`rulesets/${R}/srd-manifest.json`, () => {
       'weapon-property': count('weapon-property'),
       'mastery-property': count('mastery-property'),
     }).toEqual({ glossary: 140, condition: 15, equipment: 180, groups: 22, 'weapon-property': 10, 'mastery-property': 8 });
-    const result = rulesCoverage(file, await loadRuleHeads(PROJECT_ROOT, R));
+    const result = rulesCoverage(file, (await library()).rules);
     expect(result.groups.flatMap((g) => g.missing)).toEqual([]);
     expect(result.unlisted).toEqual([]);
   });
 
   it('covers every SRD entry in the library', async () => {
-    const entries = await loadEntryHeads(PROJECT_ROOT, R);
+    const { errors, entries, components } = await library();
+    expect(errors).toEqual([]);
     const result = coverage(await loadManifest(PROJECT_ROOT, R), entries);
     expect(result.unlisted).toEqual([]);
     const missing = result.groups.reduce((n, g) => n + g.missing.length, 0);
     const total = result.groups.reduce((n, g) => n + g.total, 0);
     expect(total - missing).toBe(entries.filter((e) => e.srd).length);
-    expect(componentCoverage(await loadManifest(PROJECT_ROOT, R), await loadComponentHeads(PROJECT_ROOT, R)).unlisted).toEqual([]);
+    expect(componentCoverage(await loadManifest(PROJECT_ROOT, R), components).unlisted).toEqual([]);
   });
 });

@@ -91,19 +91,22 @@ const featureLevels = (features: { ref: string }[], target: LinkTarget): { ref: 
     return found?.type === 'class-feature' ? [{ ref, index, levels: (found.stats as ClassFeatureStats).levels.map(levelOf) }] : [];
   });
 
+/** Features listed in level order, by each feature's first level. */
+const levelOrder = (features: ReturnType<typeof featureLevels>): Issue[] =>
+  features.flatMap((f, i): Issue[] => {
+    const before = features[i - 1];
+    return before && f.levels[0]! < before.levels[0]!
+      ? [{ level: 'error', path: `stats.features[${f.index}]`, message: `${f.ref} at level ${f.levels[0]} is listed after ${before.ref} at level ${before.levels[0]}; features are in level order` }]
+      : [];
+  });
+
 /**
  * A class's features are in level order, its first subclass level is a feature's level, and
  * (warnings) it has a level 1 feature and no empty level.
  */
 export function checkClassLinks(stats: ClassStats, target: LinkTarget): Issue[] {
-  const issues: Issue[] = [];
   const features = featureLevels(stats.features, target);
-  for (const [i, f] of features.entries()) {
-    const before = features[i - 1];
-    if (before && f.levels[0]! < before.levels[0]!) {
-      issues.push({ level: 'error', path: `stats.features[${f.index}]`, message: `${f.ref} at level ${f.levels[0]} is listed after ${before.ref} at level ${before.levels[0]}; features are in level order` });
-    }
-  }
+  const issues = levelOrder(features);
   const first = stats.subclassLevels[0]!;
   if (!features.some((f) => f.levels[0] === first)) {
     issues.push({ level: 'error', path: 'stats.subclassLevels[0]', message: `no feature is described at level ${first}, the first subclass level; it is the level of the class's subclass feature` });
@@ -115,13 +118,16 @@ export function checkClassLinks(stats: ClassStats, target: LinkTarget): Issue[] 
   return issues;
 }
 
-/** Each of a subclass's feature levels is one of its class's subclass levels, and each subclass level has a feature. */
+/**
+ * A subclass's features are in level order, each of their levels is one of its class's subclass
+ * levels, and each subclass level has a feature.
+ */
 export function checkSubclassLinks(stats: SubclassStats, target: LinkTarget): Issue[] {
-  const parent = target(stats.class.ref);
-  if (parent?.type !== 'class') return [];
-  const allowed = (parent.stats as ClassStats).subclassLevels;
   const features = featureLevels(stats.features, target);
-  const issues: Issue[] = [];
+  const issues = levelOrder(features);
+  const parent = target(stats.class.ref);
+  if (parent?.type !== 'class') return issues;
+  const allowed = (parent.stats as ClassStats).subclassLevels;
   for (const f of features) {
     const outside = f.levels.filter((level) => !allowed.includes(level));
     if (outside.length > 0) {

@@ -2,7 +2,7 @@
 // temporary link, the clock, opening a page, and a DOM capture of the detail page's capture
 // source (loaded only when a capture runs).
 import { fetchFresh } from '../lib/fetch-fresh.ts';
-import type { ExportFile, ExportIO, ExportItem, ExportOptions } from './types.ts';
+import type { EntryKey, ExportFile, ExportIO, ExportItem, ExportOptions, ExportReport, Exporter } from './types.ts';
 
 export function downloadFile(file: ExportFile): void {
   const blob = typeof file.data === 'string' ? new Blob([file.data], { type: file.type }) : file.data;
@@ -59,6 +59,15 @@ export async function loadExportItems(
       return JSON.parse(await response.text()) as ExportItem;
     }),
   );
+}
+
+/**
+ * Runs a set export on these entries (docs/export.md#exporter-interface): a keys-only exporter on
+ * their keys alone, any other on their export bundles, fetched first, so it runs on all or none.
+ */
+export async function runSetExport(exporter: Exporter, entries: EntryKey[], options: ExportOptions): Promise<ExportReport | void> {
+  if (exporter.keysOnly) return exporter.run(entries.map(({ ruleset, type, id }) => ({ entry: { ruleset, type, id } })), options);
+  return exporter.run(await loadExportItems(options.base, entries, resolveIO(options).fetch), options);
 }
 
 /** The names of the entries and rules `refs` link to, by `<type>/<id>`, as an export bundle carries them. */

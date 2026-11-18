@@ -3,8 +3,9 @@ import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { buildIndex, loadRegistryFile, writeIndex } from '../scripts/build-index/index.ts';
-import { isFlag, refOrTextValues, type Schema } from '../scripts/build-index/schema-walk.ts';
+import { buildIndex, writeIndex } from '../scripts/build-index/index.ts';
+import { loadRegistry } from '../scripts/validate/schema.ts';
+import { isFlag, refAndTextValues, type Schema } from '../scripts/build-index/schema-walk.ts';
 import { plainText } from '../scripts/validate/text.ts';
 import { ruleset } from '../rulesets/dnd-5e-2024/index.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
@@ -70,7 +71,7 @@ describe('library.json records', () => {
   });
 
   it('lift facets in registry order, from the registry only', async () => {
-    const registry = await loadRegistryFile();
+    const registry = await loadRegistry();
     const { records } = await buildIndex(valid);
     for (const record of records) {
       const paths = registry[record.ruleset]!.types[record.type]!.facets.map((f) => f.path);
@@ -109,7 +110,6 @@ describe('library.json records', () => {
       registry: {
         'dnd-5e-2024': {
           label: 'x',
-          attribution: 'srd-5.2',
           types: {
             creature: { label: 'C', plural: 'Cs', template: 't', facets: [{ path: 'stats.speed.fly', label: 'Fly', kind: 'range' }] },
             'item': { label: 'M', plural: 'Ms', template: 't', facets: [] },
@@ -172,6 +172,18 @@ describe('search text', () => {
     expect(search).toContain('Iron Collar');
     expect(search).not.toContain('spell/frost-lance');
   });
+
+  it('names every ref by its target, whatever its field: a background finds its feat and equipment', async () => {
+    const files = ['feat/magic-initiate.json', 'background/acolyte.json'];
+    const entries = await Promise.all(files.map(async (file) => JSON.parse(await readFile(join(FIXTURES, file), 'utf8'))));
+    const lib = await temp(entries);
+    const { errors, records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
+    expect(errors).toEqual([]);
+    // A FeatRef and EquipmentRefs, none of them RefOrText; the feat's note is a qualifier, not a name.
+    expect(records.find((r) => r.id === 'acolyte')!.search).toBe(
+      "Magic Initiate Calligrapher's Supplies Calligrapher's Supplies Book Holy Symbol Parchment Robe",
+    );
+  });
 });
 
 describe('the build', () => {
@@ -192,6 +204,8 @@ describe('the build', () => {
     const result = spawnSync('npx', ['tsx', join(ROOT, 'scripts/build-index/cli.ts'), lib.content, out], { encoding: 'utf8', cwd: ROOT });
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('validation errors');
+    // Each error names its file from the repo root (docs/content-model.md#validation).
+    expect(result.stderr).toContain('content/dnd-5e-2024/creature/cinder-hound.json: stats: missing required key "cr"');
     expect(await readdir(out)).toEqual([]);
   });
 
@@ -243,7 +257,7 @@ const REQUEST_ONLY = ['background', 'class', 'species', 'subclass'];
 
 describe('the type registry', () => {
   it('registers every content type, and every rules type that takes extensions, with the docs/site.md#type-registry keys', async () => {
-    const registry = await loadRegistryFile();
+    const registry = await loadRegistry();
     const extensionTypes = (ruleset.definition.rules ?? []).filter((r) => r.extensions).map((r) => r.type);
     expect(Object.keys(registry['dnd-5e-2024']!.types).sort()).toEqual([...ruleset.definition.types, ...extensionTypes].sort());
     for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
@@ -261,7 +275,7 @@ describe('the type registry', () => {
   });
 
   it('declares each ordered enum in the schema order', async () => {
-    const registry = await loadRegistryFile();
+    const registry = await loadRegistry();
     const types = registry['dnd-5e-2024']!.types;
     const creature = await readSchema('creature.schema.json');
     const item = await readSchema('item.schema.json');
@@ -274,7 +288,7 @@ describe('the type registry', () => {
   // docs/generation.md#gap-buckets: every axis is a facet of its type; bins sit on range facets, ascending
   // and disjoint; categorical values sit on enum facets and are values the schema allows.
   it('gives every content type gap buckets whose axes are its facets, and a rules extension or request-only type none', async () => {
-    const registry = await loadRegistryFile();
+    const registry = await loadRegistry();
     const extensionTypes = new Set((ruleset.definition.rules ?? []).map((r) => r.type));
     for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
       // Gap fill never adds a rules extension or a request-only type (docs/generation.md#gap-buckets).
@@ -317,7 +331,21 @@ describe('the type registry', () => {
 describe('schema walk', () => {
   it('finds values at RefOrText fields, through $ref and nested objects', async () => {
     const stats = { spellcasting: { ability: 'cha', atWill: ['Light'], perDay: { '1': [{ ref: 'spell/x' }] } }, gear: ['Rope'], actions: [{ name: 'Bite' }] };
-    expect(refOrTextValues(stats, await schemaSet('creature'))).toEqual([['Light'], [{ ref: 'spell/x' }], ['Rope']].flat());
+    expect(refAndTextValues(stats, await schemaSet('creature'))).toEqual([['Light'], [{ ref: 'spell/x' }], ['Rope']].flat());
+  });
+
+  it('finds every ref, whatever its field, but plain text only at RefOrText fields', async () => {
+    const stats = {
+      feat: { ref: 'feat/magic-initiate', note: 'Cleric' },
+      tool: { ref: 'equipment/calligraphers-supplies' },
+      skills: ['insight'],
+      equipment: [{ items: [{ ref: 'equipment/book', note: 'prayers' }, '20 Arrows'], gp: 8 }, { gp: 50 }],
+    };
+    expect(refAndTextValues(stats, await schemaSet('background'))).toEqual([
+      { ref: 'feat/magic-initiate', note: 'Cleric' },
+      { ref: 'equipment/calligraphers-supplies' },
+      { ref: 'equipment/book', note: 'prayers' },
+    ]);
   });
 
   it('tells an optional flag from a required boolean', async () => {

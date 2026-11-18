@@ -102,7 +102,13 @@ Target: WCAG 2.2 AA.
   order. Focus is always visible through a shared `--focus-ring`. Escape closes
   popovers.
 - **Semantics.** The gallery's result count is announced in a polite live region.
-  Filter groups use `fieldset` and `legend`. Art takes alt text from the entry
+  The filter tree, in a section labelled "Filters", is a nested list of
+  disclosure buttons, each with `aria-expanded` and `aria-controls` naming the
+  panel it opens. A type, or a value that holds groups, pairs its checkbox with
+  its own button, named "<type> filters" or "Groups in <value>". A facet's
+  values are a list labelled by its button, each a labelled checkbox whose
+  count reads as "<n> entries"; a range facet's Min and Max inputs are a
+  `role="group"` labelled by its button. Art takes alt text from the entry
   name.
 - **Motion.** Transitions use duration tokens, which become `0ms` under
   `prefers-reduced-motion: reduce`; `tests/site/motion.test.ts` checks every
@@ -112,13 +118,14 @@ Target: WCAG 2.2 AA.
 - **Automated check.** `npm run a11y` runs axe-core through Playwright on the
   built site and fails on any
   serious or critical violation. It serves `site/dist` under the site base and
-  picks its pages from `library.json`: the home page, the first record's type
-  gallery filtered by its first facet value, the first detail page of each type
-  that has an entry, the print view of those entries, checked once loaded
-  (with `window.print` stubbed), and every rules page in each ruleset's
-  `rules/pages.json`, plus its Extensions page when it has one. It launches Playwright's Chromium, and retries
-  with `/opt/pw-browsers/chromium` if that fails and the path exists, as in
-  cloud sessions. CI runs it only on the PR that closes a milestone
+  checks the Library (the home page), the Rulesets page, and the About page.
+  From `library.json` it adds the Library filtered to the first record's type
+  and its first facet value, the first detail page of each type that has an
+  entry, and the print view of those entries, checked once loaded (with
+  `window.print` stubbed). Then it checks every rules page in each ruleset's
+  `rules/pages.json`, plus its Extensions page when it has one. It launches
+  Playwright's Chromium, and retries with `/opt/pw-browsers/chromium` if that
+  fails and the path exists, as in cloud sessions. CI runs it only on the PR that closes a milestone
   ([Milestone PRs](workflow.md#milestone-prs)).
 - **Milestone review.** Everything axe can't check is reviewed by a human once
   per milestone against WCAG 2.2 AA ([Milestone review](workflow.md#milestone-review)).

@@ -1,7 +1,7 @@
 // Consistency checks a JSON schema can't express (docs/rulesets.md#consistency-checks). They run
 // after the schema stage, so `stats` already has the shape in types.ts.
 
-import { deriveCreature } from './derive.ts';
+import { attackBonus, deriveCreature, saveDc } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
 import type { Action, BackgroundStats, CreatureStats, DerivedAction, DerivedCreature, FeatStats, ItemStats, SpeciesStats, SpellStats, Tables } from './types.ts';
 import { ACTION_LISTS } from './types.ts';
@@ -79,10 +79,10 @@ export function checkCreature(stats: CreatureStats, tables: Tables): Issue[] {
       if ((token.kind === 'atk' || token.kind === 'dc') && token.adjust !== 0) {
         warning(path, `token ${match.raw} adjusts the formula by ${token.adjust}; confirm the deviation`);
       }
-      if (token.kind === 'atk' && derived.pb + derived.abilityMods[token.ability] + token.adjust > MAX_ATTACK_BONUS) {
+      if (token.kind === 'atk' && attackBonus(derived.pb, derived.abilityMods[token.ability], token.adjust) > MAX_ATTACK_BONUS) {
         warning(path, `token ${match.raw} renders an attack bonus of ${renderToken(token, derived)}, above +${MAX_ATTACK_BONUS}`);
       }
-      if (token.kind === 'dc' && 8 + derived.pb + derived.abilityMods[token.ability] + token.adjust > MAX_SAVE_DC) {
+      if (token.kind === 'dc' && saveDc(derived.pb, derived.abilityMods[token.ability], token.adjust) > MAX_SAVE_DC) {
         warning(path, `token ${match.raw} renders ${renderToken(token, derived)}, above DC ${MAX_SAVE_DC}`);
       }
     }

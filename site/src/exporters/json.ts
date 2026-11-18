@@ -3,9 +3,9 @@
 // Set scope fetches each raw file and downloads one array as
 // `library-<YYYYMMDD>.json`, dated by the reader's local clock.
 import { rawFileUrl, resolveIO } from './io.ts';
-import type { ExportIO, ExportItem, Exporter } from './types.ts';
+import type { EntryKey, ExportIO, KeyExporter } from './types.ts';
 
-async function rawFile(io: ExportIO, base: string, item: ExportItem): Promise<string> {
+async function rawFile(io: ExportIO, base: string, item: { entry: EntryKey }): Promise<string> {
   const url = rawFileUrl(base, item.entry);
   const response = await io.fetch(url);
   if (!response.ok) throw new Error(`Fetching ${url} failed with status ${response.status}`);
@@ -18,11 +18,12 @@ export function dateStamp(date: Date): string {
   return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}`;
 }
 
-export const json: Exporter = {
+export const json: KeyExporter = {
   id: 'json',
   kind: 'download',
   label: 'JSON',
   scopes: ['entry', 'set'],
+  keysOnly: true,
   async run(items, options) {
     const io = resolveIO(options);
     if (options.scope === 'entry') {

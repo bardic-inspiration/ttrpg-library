@@ -7,6 +7,7 @@ import { buildIndex } from '../scripts/build-index/index.ts';
 import { validateLibrary } from '../scripts/validate/index.ts';
 import { renderInlineMarkdown, renderMarkdown } from '../site/src/lib/markdown.ts';
 import { refOrTextName } from '../site/src/lib/refs.ts';
+import { plainRefs, textRefs } from '../site/src/translators/open5e/text.ts';
 import { cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
 
 const temps: string[] = [];
@@ -116,6 +117,17 @@ describe('a {ref:…} token with display text (docs/content-model.md#references)
   ])('fails on %s', async (_label, token) => {
     const { errors } = await validateLibrary(await library(await examples(`Summons a ${token}.`)));
     expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/ref token .* is malformed; write \{ref:<type>\/<id>\} or \{ref:<type>\/<id> <text>\}/));
+  });
+
+  it.each([
+    ['trailing space', '{ref:creature/cinder-hound }'],
+    ['leading space in the text', '{ref:creature/cinder-hound  fire hound}'],
+    ['a bad key', '{ref:cinder-hound fire hound}'],
+  ])('reads a token with %s as written, as the site and the Open5e export parse it', (_label, token) => {
+    const names = { 'creature/cinder-hound': 'Cinder Hound' };
+    expect(renderInlineMarkdown(token, { names: new Map(Object.entries(names)), ruleset: 'dnd-5e-2024' })).toBe(token);
+    expect(plainRefs(token, names)).toBe(token);
+    expect(textRefs(token)).toEqual([]);
   });
 });
 

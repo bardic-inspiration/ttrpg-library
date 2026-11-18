@@ -27,6 +27,11 @@ if (missing.length > 0) {
   console.error(`Missing ${missing.map((k) => `--${k}`).join(', ')}.`);
   process.exit(1);
 }
+if (!/^[1-9]\d*$/.test(values.issue!)) {
+  console.error(`--issue "${values.issue}" isn't an issue number; give the import issue's number as a positive integer, such as 123.`);
+  process.exit(2);
+}
+const issue = Number(values.issue);
 const defaults = await loadDefaults();
 const ruleset = values.ruleset ?? defaults.ruleset;
 let file: unknown;
@@ -38,7 +43,7 @@ try {
 }
 const outcome = runImport(
   {
-    issue: Number(values.issue),
+    issue,
     format: values.format!,
     file,
     work: values.work!,
@@ -65,4 +70,4 @@ if (outcome.entries.length > 0) {
   const attribution = join(PROJECT_ROOT, 'ATTRIBUTION.md');
   await writeFile(attribution, addAttribution(await readFile(attribution, 'utf8'), outcome.attribution));
 }
-console.log(`\n${skipListSection(Number(values.issue), values.work!, outcome.skipped)}`);
+console.log(`\n${skipListSection(issue, values.work!, outcome.skipped)}`);

@@ -1,6 +1,8 @@
 // Reads a type's raw `stats` schema alongside an entry, for the two things the
-// index needs the schema for (docs/content-model.md#references, docs/content-model.md#situational-fields, docs/site.md#index-build): which values sit at
+// index needs the schema for (docs/content-model.md#references, docs/content-model.md#situational-fields, docs/site.md#index-build): which plain strings sit at
 // `RefOrText` fields, and whether an omitted facet is an optional flag.
+
+import { isRef } from '../validate/refs.ts';
 
 export type Schema = { [key: string]: unknown };
 
@@ -63,15 +65,21 @@ function childNodes(nodes: Node[], key: string | number): Node[] {
 }
 
 /**
- * Every value in schema-valid `stats` that sits at a `RefOrText` field (docs/content-model.md#references):
- * a ref object or a plain string, in document order.
+ * Every value in schema-valid `stats` that names something (docs/content-model.md#references), in
+ * document order: each ref object, whatever its field (`RefOrText` or a typed ref such as `FeatRef`),
+ * and each plain string at a `RefOrText` field.
  */
-export function refOrTextValues(stats: unknown, set: SchemaSet): unknown[] {
+export function refAndTextValues(stats: unknown, set: SchemaSet): unknown[] {
   const out: unknown[] = [];
   const visit = (data: unknown, nodes: Node[]) => {
+    // The schemas allow the ref shape only where a field holds a ref, as the validator's link check assumes.
+    if (isRef(data)) {
+      out.push(data);
+      return;
+    }
     const all = nodes.flatMap((node) => applicable(node, set));
     if (isRefOrText(all)) {
-      out.push(data);
+      if (typeof data === 'string') out.push(data);
       return;
     }
     if (Array.isArray(data)) data.forEach((item, i) => visit(item, childNodes(all, i)));

@@ -1,5 +1,5 @@
 // PNG export (docs/export.md#png, docs/export.md#export-config). Captures the detail page's capture
-// source (the type template in `capture` mode, with the light tokens) at a
+// source (the art when present, the type template in `capture` mode, and the short SRD attribution) at a
 // fixed CSS width from config/export.json and the configured scale, and
 // downloads it as `<id>.png`. Entry scope only.
 import config from '../../../config/export.json' with { type: 'json' };

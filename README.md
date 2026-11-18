@@ -1,16 +1,18 @@
 # TTRPG Content Library
 
-A free, browsable library of original D&D 5e content built on the SRD 5.2:
-creatures, magic items, and spells. It's made for DMs who look things up and
-prep sessions, on a phone at the table or a laptop at a desk.
+A free, browsable library of D&D 5e content built on the SRD 5.2: its rules,
+classes and subclasses, species, backgrounds, feats, spells, creatures, and
+magic items, with original entries alongside. It's made for DMs who look
+things up and prep sessions, on a phone at the table or a laptop at a desk.
 
 **Browse it:** https://bardic-inspiration.github.io/ttrpg-library/
 
 ## What you can do
 
 - **Look things up.** Browse, filter, and search entries.
-- **Take entries with you.** Export any entry as JSON, PNG, or a print-ready
-  page.
+- **Take entries with you.** Print any entry or rules page, and download most
+  entries as JSON or PNG. Creatures, spells, and magic items also download for
+  Open5e. Classes, subclasses, and species only print.
 - **Know what's what.** SRD 5.2 entries are reproduced as published, and
   original entries are kept separate.
 
@@ -19,7 +21,7 @@ The site is static: no accounts, no servers.
 ## Where it's going
 
 v1 is complete. v2 is finishing with a final review
-([`spec/v2/`](spec/v2/README.md)). It brings:
+([`spec/v2/`](spec/v2/README.md)). It brought:
 
 - **The full SRD 5.2 rules base**, as linked data that your own content can
   build on.

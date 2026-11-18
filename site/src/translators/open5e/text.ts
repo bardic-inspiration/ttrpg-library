@@ -2,12 +2,12 @@
 // target's plain name, and each one is reported. On import, prose stays as written, except that a
 // creature's damage and DC numbers become tokens where they match what the ruleset derives.
 
-import { abilityMod, diceAverage } from '../../../../rulesets/dnd-5e-2024/derive.ts';
+import { abilityMod, diceAverage, saveDc } from '../../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import type { Ability } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { replaceRefTokens, textRefs as findRefs } from '../../../../scripts/validate/refs.ts';
 import type { Skip } from '../types.ts';
 
-const REF = /\{ref:([a-z][a-z0-9-]*\/[a-z0-9]+(?:-[a-z0-9]+)*)(?: ([^{}]+))?\}/g;
 
 /** A skip list for one entry, so callers only name the path and the reason. */
 export class Skips {
@@ -21,13 +21,13 @@ export class Skips {
 }
 
 /** The ref keys of `{ref:…}` tokens in a text, in order. */
-export const textRefs = (text: string): string[] => [...text.matchAll(REF)].map((m) => m[1] ?? '');
+export const textRefs = (text: string): string[] => findRefs(text, '').refs.map((r) => r.ref);
 
 const nameOf = (key: string, names: Record<string, string>): string => names[key] ?? key.slice(key.indexOf('/') + 1);
 
 /** `text` with each `{ref:…}` token as its display text or target's name. Reports nothing. */
 export const plainRefs = (text: string, names: Record<string, string>): string =>
-  text.replace(REF, (_, key: string, display?: string) => display ?? nameOf(key, names));
+  replaceRefTokens(text, (token) => token.text ?? nameOf(token.key, names));
 
 /** Reports each `{ref:…}` token in `text`, at `path`, as a link that became plain text. */
 export function reportRefs(text: string | undefined, names: Record<string, string>, skips: Skips, path: string): void {
@@ -69,8 +69,10 @@ export function abilityFor(target: number, of: (ability: Ability) => number, pre
 /** The abilities a tie prefers: Strength for a melee attack, Dexterity for a ranged one, Constitution for a save DC. */
 export const PREFER = { melee: ['str', 'dex'], ranged: ['dex', 'str'], save: ['con'] } satisfies Record<string, Ability[]>;
 
-const DAMAGE_NAMES = new Map(tables.damageTypes.map((t) => [t.charAt(0).toUpperCase() + t.slice(1), t]));
-const DAMAGE_ALT = [...DAMAGE_NAMES.keys()].join('|');
+/** Each damage type by its printed name, `Fire` to `fire`. */
+export const DAMAGE_NAMES = new Map(tables.damageTypes.map((t) => [t.charAt(0).toUpperCase() + t.slice(1), t]));
+/** The printed damage type names as regex alternatives. */
+export const DAMAGE_ALT = [...DAMAGE_NAMES.keys()].join('|');
 /** `11 (2d10)`, `15 (3d6 + 5)`, `4 (1d8 − 1)`, then an optional ` Fire damage`. */
 const DAMAGE_TOKEN = new RegExp(`(\\d+) \\((\\d+d\\d+)(?: ([+\\-−]) (\\d+))?\\)(?: (${DAMAGE_ALT}) damage)?`, 'g');
 const DC = /\bDC (\d+)\b/g;
@@ -103,7 +105,7 @@ export function tokenizeCreatureText(text: string, basis: CreatureBasis, skips: 
   return damaged.replace(DC, (raw, n: string, at: number, whole: string) => {
     // An escape DC and an ability check's DC are the author's (docs/rulesets.md#text-tokens).
     const authored = /escape $/.test(whole.slice(0, at)) || /^ \w+ \(\w[\w ]*\) check/.test(whole.slice(at + raw.length));
-    const ability = authored ? undefined : abilityFor(Number(n), (a) => 8 + basis.pb + basis.mods[a], PREFER.save);
+    const ability = authored ? undefined : abilityFor(Number(n), (a) => saveDc(basis.pb, basis.mods[a]), PREFER.save);
     return ability ? `{dc:${ability}}` : `{dc=${n}}`;
   });
 }

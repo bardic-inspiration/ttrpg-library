@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { abilityMod, deriveCreature, diceAverage } from '../../../rulesets/dnd-5e-2024/derive.ts';
+import { abilityMod, attackBonus, deriveCreature, diceAverage, saveDc } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { CreatureStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 import { cinderHound } from '../../helpers.ts';
@@ -35,6 +35,13 @@ describe('the example cinder hound', () => {
 describe('deriveCreature', () => {
   it('computes ability modifiers by floor((score - 10) / 2)', () => {
     expect([1, 8, 9, 10, 11, 30].map(abilityMod)).toEqual([-5, -1, -1, 0, 0, 10]);
+  });
+
+  it('adds PB, the modifier, and any adjustment for an attack bonus, and 8 more for a save DC', () => {
+    expect(attackBonus(2, 3)).toBe(5);
+    expect(attackBonus(2, -1, 1)).toBe(2);
+    expect(saveDc(2, 3)).toBe(13);
+    expect(saveDc(6, 5, -2)).toBe(17);
   });
 
   it('floors dice averages', () => {

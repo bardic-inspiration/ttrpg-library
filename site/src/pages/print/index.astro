@@ -5,6 +5,7 @@
 // In print, only the entries and the site footer's full SRD attribution show.
 import Base from '../../layouts/Base.astro';
 import PrintView from '../../components/print/PrintView';
+import { libraryFacetData } from '../../lib/gallery/facet-data';
 import { url } from '../../lib/url';
 // Imported for its styles (and the templates' styles), which the fragments rely on.
 import PrintEntry from '../../components/print/PrintEntry.astro';
@@ -14,7 +15,7 @@ void PrintEntry;
 <Base title="Print · TTRPG Content Library" noindex>
   <h1 class="print-page__title">Print</h1>
   <noscript><p>The print view needs JavaScript to load its entries.</p></noscript>
-  <PrintView client:load base={url()} />
+  <PrintView client:load base={url()} facetData={libraryFacetData()} />
 </Base>
 
 <style>

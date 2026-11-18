@@ -26,7 +26,7 @@ within the one repo, not by convention.
 | Opened by | Routines, or the owner for `manual/`, or a session the owner starts for SRD work | The owner, or a Claude session the owner starts |
 | Lane label (auto) | `content` | `dev` |
 | Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`), `migration` (`content/**`, `assets/images/**`) |
-| Issue templates and labels | Content request (`request`), revise request (`revise`) ([generation.md](generation.md#requests)) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
+| Issue templates and labels | Content request (`request`), import request (`import`), revise request (`revise`) ([generation.md](generation.md#requests)) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
 | PR template | `content.md`, filled by the routine | `dev.md`: what and why, decisions, testing, screenshots for `ui` ([UI screenshots](#ui-screenshots)), migration notes |
 | PR title | `Add <n> <type> entries`, `Revise <ids>: <reason>` | `<area>: <summary>`, such as `ui: tighten stat-block spacing` |
 | CI | Content checks | Full checks |
@@ -90,11 +90,16 @@ metadata and changed paths; it never checks out or runs PR code.
    `lane`): set up the latest Node 22 release (`check-latest`, so a runner's
    older cached patch can't fail Astro's engine check) with npm cache,
    `npm ci`, `npm run validate`, and `npm run build`. When content changed,
-   `scripts/pr-summary/` writes the job summary: changed entries with name,
-   type, summary field, and summary; for creatures, the derived HP, AC, attack
-   bonuses, DCs, and average damage per action; every warning, including every
-   formula adjustment; and new back-links. The built site is uploaded as an
-   artifact for 7 days.
+   `scripts/pr-summary/` writes the job summary from the validator's result
+   for the PR: a table of the changed entries with name (a component's as
+   "Parent › Name"), type, summary field (read as its facet reads it), and
+   summary, a removed entry's read from the merge base; for each changed
+   creature, its AC, derived HP, and each action's attack bonus, DC, and
+   damage with its average; every warning the validator reports, which
+   includes every formula adjustment; and the new back-links, each link from a
+   changed entry to a target its merge-base version didn't link to, labeled
+   as the target's page labels it, without the links among a page's own parts.
+   The built site is uploaded as an artifact for 7 days.
 3. **`dev-checks`** (dev lane, not docs-only, after `lane`, alongside
    `content-checks`): `npm run check` (types, `astro check`, Stylelint, the link
    check) and `npm test`. A text-only PR skips `npm run check`.
@@ -112,10 +117,12 @@ types and tests; a milestone PR gets every check.
 ### Docs-only PRs
 
 A PR is docs-only when it changes at least one path and every changed path is
-one no code, test, or build reads: a Markdown file at the repo root, anything
-under `docs/` except `docs/routines.md`, a Markdown issue template, or
-`.github/PULL_REQUEST_TEMPLATE/dev.md`. It runs only the `lane` job, so the lane
-rules and the link check still apply. The list is `isDocsPath` in
+one no code, test, or build reads: a Markdown file at the repo root other than
+`ATTRIBUTION.md`, anything under `docs/` except `docs/routines.md`, a Markdown
+issue template, or `.github/PULL_REQUEST_TEMPLATE/dev.md`. It runs only the
+`lane` job, so the lane rules and the link check still apply. `ATTRIBUTION.md`
+is left out because `npm run import` rewrites it and a test checks the result
+([Imports](generation.md#imports)). The list is `isDocsPath` in
 `scripts/lane/`. When a test, script, or the build starts reading one of these
 paths, remove it from the list in the same PR.
 
@@ -124,7 +131,8 @@ paths, remove it from the list in the same PR.
 A PR is text-only when it isn't docs-only and every changed path is docs or
 Markdown that tests read but no build, type, or style check does: anything under
 `spec/`, `.claude/skills/`, or `rulesets/*/guidelines/` ending in `.md`,
-`docs/routines.md`, and `.github/PULL_REQUEST_TEMPLATE/content.md`. It skips
+`docs/routines.md`, `ATTRIBUTION.md`, and
+`.github/PULL_REQUEST_TEMPLATE/content.md`. It skips
 `content-checks`, and `dev-checks` runs only `npm test`; the lane job's link
 check still applies. The list is `isTestTextPath` in `scripts/lane/`. When the
 build, `validate`, or a type or style check starts reading one of these paths,
@@ -137,7 +145,8 @@ The PR that closes a milestone's last task carries the `milestone` label, added
 by hand. It gets every check whatever its paths, so it is never docs-only or
 text-only, and it adds the `a11y` job: `npm run a11y` against the built site
 ([Accessibility](styling.md#accessibility)). Adding the label re-runs
-`validate`. Other PRs don't run the accessibility checks.
+`validate`. Other PRs don't run the accessibility checks; UI work outside a
+milestone waits for the next one ([Milestone review](#milestone-review)).
 
 ### Milestone review
 
@@ -156,6 +165,15 @@ titled `Milestone <n> WCAG 2.2 AA review: <what it added>`, with:
 
 Like every Testing backlog check, it doesn't block the milestone or the next
 task ([Testing backlog](../AGENTS.md#testing-backlog)).
+
+UI work that isn't part of a milestone, such as a track's, gets no milestone
+PR, so it waits for the next milestone's review
+([Accessibility review backlog](../AGENTS.md#accessibility-review-backlog)).
+The session that opens its `ui` PR files a `test` issue under the
+Accessibility review backlog, titled `Accessibility review: <what it added>`,
+with the PR and the same Pages and Checks. The next milestone review takes up
+every open backlog issue: it lists their pages and checks with its own, and
+they close with it.
 
 ### UI screenshots
 

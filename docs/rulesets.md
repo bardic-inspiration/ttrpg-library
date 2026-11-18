@@ -4,10 +4,10 @@
 
 Everything specific to a ruleset: its schemas, rules tables, derived values,
 text tokens, consistency checks, and how its types print. The one ruleset is
-`dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0), with three content types,
-`creature`, `item`, and `spell`, and the rules types `glossary`, `condition`,
-`equipment`, `weapon-property`, and `mastery-property`. What every entry shares is in
-[content-model.md](content-model.md).
+`dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0). Its content, rules, and
+component types are listed in
+[`ruleset.json`](../rulesets/dnd-5e-2024/ruleset.json). What every entry
+shares is in [content-model.md](content-model.md).
 
 ## Behavior
 
@@ -41,7 +41,7 @@ adding a ruleset is adding a folder:
 
 | File | Purpose |
 |---|---|
-| `ruleset.json` | ID, label, SRD version, attribution key, list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
+| `ruleset.json` | ID, list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
 | `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
 | `phrases.json` | The phrase book: the fixed sentences templates fill, the display name of each enum value, and irregular plurals and articles ([Wording](site.md#wording)) |
 | `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`, classes' in `classes.ts`) |
@@ -166,11 +166,13 @@ saves, skills, passive Perception, each action's attack bonus, save DC, and
 damage (average, modifier, and display), and the Spellcasting DC and attack
 bonus. Items derive nothing, except the ability modifiers and saves of an
 embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)); spells
-derive those too, and their class keys, for the Classes filter ([Spells](#spells)).
+derive those too.
 Classes derive their proficiency bonus and spell slots by level
 ([Classes](#classes)).
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
-`tables.json`, which cites the SRD section it comes from.
+`tables.json`, which cites the SRD section it comes from. The attack bonus and
+save DC are one helper each, `attackBonus` and `saveDc`, which actions,
+Spellcasting, text tokens, the checks, and the Open5e importer share.
 
 ### Shared definitions
 
@@ -658,6 +660,7 @@ warnings below on an SRD entry.
 | Class | An SRD class lists no `spells` | error |
 | Class | No feature at level 1, or a level after 1 with neither a feature nor a subclass level | warning |
 | Class feature | `levels` ascend | error |
+| Subclass | `features` are in level order, by each feature's first level | error |
 | Subclass | Each feature's levels are its class's subclass levels, and each subclass level has a feature | error |
 
 Balance isn't checked by CI; it's judged in review
@@ -680,5 +683,5 @@ Balance isn't checked by CI; it's judged in review
 | A content type | In `rulesets/<ruleset>/`: a schema, its sentences and vocabulary in `phrases.json`, a `derive` function if it has formulas, checks if needed, a guideline, and the type in `ruleset.json`. Plus a registry entry and the request form's dropdown; a template only if the generic layout doesn't fit |
 | A component type | In `rulesets/<ruleset>/`: a schema, the type under `components` in `ruleset.json` with its parent types, and a typed ref to it in each parent's schema ([Components](content-model.md#components)) |
 | A rules type | In `rulesets/<ruleset>/`: a schema, the type under `rules` in `ruleset.json`, its primitives under `rules/<type>/`, groups if it has them, and its place in `rules/pages.json`. A type that takes extensions also gets a registry entry and a guideline |
-| A ruleset | A new `rulesets/<ruleset>/` folder, registry entries, an attribution statement, and a licensing review ([licensing.md](licensing.md#new-rulesets)) |
+| A ruleset | A new `rulesets/<ruleset>/` folder, registry entries (its display `label` among them), an attribution statement, and a licensing review ([licensing.md](licensing.md#new-rulesets)) |
 | A rules formula or table | `tables.json` or `derive.ts`; every entry picks it up on the next build |

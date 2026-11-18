@@ -50,7 +50,8 @@ settled by editing it, not case by case.
   its `name` and the `url` of its legal code.
 - `kinds` lists the ids accepted for each kind of material: `import`
   (imported entries) takes `CC0-1.0`, `CC-BY-2.0`, `CC-BY-3.0`, and
-  `CC-BY-4.0`; `art` (images, not yet built) takes those and
+  `CC-BY-4.0`; `art` (images for the `image` field, which the
+  [Images](../spec/tracks/images.md) track sources) takes those and
   `public-domain`. NC, ND, and SA works can't be relicensed under the
   library's CC-BY-4.0, so no kind takes them.
 
@@ -91,8 +92,10 @@ The blocklist is the minimum. The guidelines' naming rules and the SRD rules
 ### New rulesets
 
 Another ruleset needs its own licensing review and attribution statement before
-it's added. Each ruleset's `attribution` key in `config/types.json` points to
-its statement.
+it's added. The statement is text, not configuration: the dev PR that adds the
+ruleset writes it into `ATTRIBUTION.md` and wherever its licensing review says
+it must show, as the SRD statement shows in the site footer, on `/about/`, and
+in short form on PNG captures and printed pages.
 
 ## Where the rules live
 
@@ -107,5 +110,5 @@ its statement.
 |---|---|
 | A blocked term | `config/blocklist.json`, base form only |
 | A license or a kind of material | `config/licenses.json`, as a dev PR with a row in `docs/decisions.md`; an `import` license also goes in `import-request.yml`'s dropdown |
-| A ruleset | A licensing review, an attribution statement in `ATTRIBUTION.md`, and its `attribution` key |
+| A ruleset | A licensing review, and its attribution statement in `ATTRIBUTION.md` and where the review says it shows ([New rulesets](#new-rulesets)) |
 | Art or another third-party asset | Its credit in `ATTRIBUTION.md` |

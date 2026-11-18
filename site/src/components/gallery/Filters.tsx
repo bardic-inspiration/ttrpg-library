@@ -1,7 +1,7 @@
 // The filter tree (docs/site.md#gallery "Filters", docs/styling.md#accessibility): a nested
 // accordion of disclosure buttons, with values as checkboxes that keep their counts and range
 // facets as min and max inputs inside their node. The tree's shape comes from lib/gallery/tree.ts.
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import type { FilterDef } from '../../lib/gallery/config.ts';
 import type { FilterValue } from '../../lib/gallery/state.ts';
 import type { TreeNode, ValueNode } from '../../lib/gallery/tree.ts';
@@ -167,7 +167,11 @@ function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
   );
 }
 
-/** A range facet's min and max inputs, which accept fractions such as `1/8`. */
+/**
+ * A range facet's min and max inputs, which accept fractions such as `1/8`. Each bound commits only
+ * text that parses or is empty, so typing `1/8` or `1.5` passes through `1/` and `1.` without
+ * clearing the filter, and keeps the other bound as the filter holds it.
+ */
 function Range({
   id,
   def,
@@ -183,47 +187,58 @@ function Range({
 }) {
   const current = value?.kind === 'range' ? value : { min: undefined, max: undefined };
   const show = (n: number | undefined) => (n === undefined ? '' : formatValue(n, def.format === 'cr' ? 'cr' : undefined));
-  const [min, setMin] = useState(show(current.min));
-  const [max, setMax] = useState(show(current.max));
-  // Follow the state when it changes from outside the inputs (a cleared filter).
-  useEffect(() => setMin(show(current.min)), [current.min]);
-  useEffect(() => setMax(show(current.max)), [current.max]);
-  const commit = (nextMin: string, nextMax: string) => onChange(parseNumber(nextMin), parseNumber(nextMax));
   const base = idFor(id);
   return (
     <div class="tree__range" role="group" aria-labelledby={`${base}-toggle`}>
-      <span class="tree__bound">
-        <label for={`${base}-min`}>Min</label>
-        <input
-          id={`${base}-min`}
-          type="text"
-          inputMode="decimal"
-          size={4}
-          value={min}
-          placeholder={bounds ? show(bounds.min) : ''}
-          onInput={(e) => {
-            const next = (e.currentTarget as HTMLInputElement).value;
-            setMin(next);
-            commit(next, max);
-          }}
-        />
-      </span>
-      <span class="tree__bound">
-        <label for={`${base}-max`}>Max</label>
-        <input
-          id={`${base}-max`}
-          type="text"
-          inputMode="decimal"
-          size={4}
-          value={max}
-          placeholder={bounds ? show(bounds.max) : ''}
-          onInput={(e) => {
-            const next = (e.currentTarget as HTMLInputElement).value;
-            setMax(next);
-            commit(min, next);
-          }}
-        />
-      </span>
+      <Bound id={`${base}-min`} label="Min" value={current.min} placeholder={bounds ? show(bounds.min) : ''} show={show} onCommit={(min) => onChange(min, current.max)} />
+      <Bound id={`${base}-max`} label="Max" value={current.max} placeholder={bounds ? show(bounds.max) : ''} show={show} onCommit={(max) => onChange(current.min, max)} />
     </div>
+  );
+}
+
+/**
+ * One bound's input. Its text is the reader's while it has focus; otherwise it shows the filter's
+ * value, following it when the filter changes from outside (a cleared filter) and when focus leaves.
+ */
+function Bound({
+  id,
+  label,
+  value,
+  placeholder,
+  show,
+  onCommit,
+}: {
+  id: string;
+  label: string;
+  value: number | undefined;
+  placeholder: string;
+  show: (n: number | undefined) => string;
+  onCommit: (n: number | undefined) => void;
+}) {
+  const [text, setText] = useState(show(value));
+  const input = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (input.current !== document.activeElement) setText(show(value));
+  }, [value]);
+  return (
+    <span class="tree__bound">
+      <label for={id}>{label}</label>
+      <input
+        ref={input}
+        id={id}
+        type="text"
+        inputMode="decimal"
+        size={4}
+        value={text}
+        placeholder={placeholder}
+        onInput={(e) => {
+          const next = (e.currentTarget as HTMLInputElement).value;
+          setText(next);
+          const n = parseNumber(next);
+          if (n !== undefined || next.trim() === '') onCommit(n);
+        }}
+        onBlur={() => setText(show(value))}
+      />
+    </span>
   );
 }

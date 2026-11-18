@@ -1,5 +1,6 @@
 // The import script (docs/generation.md#imports): a fixture Open5e file on an import issue gives
 // valid entries and a skip list; a license off the allowlist is rejected; custom-entry rules skip.
+import { spawnSync } from 'node:child_process';
 import { cp, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -131,4 +132,29 @@ describe('import script (docs/generation.md#imports)', () => {
     );
     expect(skipListSection(8, 'Other', [])).toBe('#### #8: Other\n\nNothing skipped.\n');
   });
+});
+
+describe('import CLI (docs/generation.md#imports)', () => {
+  // The file doesn't exist, so a run that gets past the issue check stops at reading it and writes nothing.
+  const run = (issue: string) =>
+    spawnSync(
+      'npx',
+      ['tsx', join(PROJECT_ROOT, 'scripts/import/cli.ts'), `--issue=${issue}`, '--format', 'open5e', '--file', join(FIXTURES, 'import/missing.json'),
+        '--work', 'W', '--author', 'A', '--url', 'https://example.com', '--license', 'CC-BY-4.0'],
+      { encoding: 'utf8', cwd: PROJECT_ROOT },
+    );
+
+  it('exits 2 when --issue isn\'t a positive integer', () => {
+    for (const issue of ['#123', '0', '-4', '1.5', '12abc', '1e3']) {
+      const result = run(issue);
+      expect(result.status, issue).toBe(2);
+      expect(result.stderr, issue).toContain(`--issue "${issue}" isn't an issue number`);
+    }
+  }, 60_000);
+
+  it('takes a positive integer --issue', () => {
+    const result = run('123');
+    expect(result.stderr).not.toContain('--issue');
+    expect(result.stderr).toMatch(/isn't JSON/);
+  }, 20_000);
 });

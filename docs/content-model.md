@@ -412,16 +412,25 @@ type, name, and parent (the entry that lists the component), counting
 repeats, and prints the missing ones as "Parent › Name" and any SRD component
 the manifest lacks. `--type` (a type, a component type, or a rules type),
 `--tier`, and `--ruleset` narrow it; `--tier` leaves the component and rules
-records out. A test checks that the manifest is valid, that its per-type
-counts are the expected ones, that every SRD entry and component in the
-library is in it, and that the rules data holds every rules record and no other.
+records out. It reads the library through the validator, as the build does,
+so a component's parent and the rules data are the validator's, and the
+ruleset's rules and component types come from its module. While validation
+has errors it fails and reports nothing, since an entry that fails validation
+would read as missing. A test checks that the manifest is valid, that its
+per-type counts are the expected ones, that every SRD entry and component in
+the library is in it, and that the rules data holds every rules record and no
+other.
 
 ### Validation
 
 `npm run validate` checks every entry: the envelope and `stats` schemas, then
 consistency checks a schema can't express. **Errors** fail CI; **warnings**
 appear in local output and the PR's job summary but don't block. Derived values
-are never checked, because they are never stored.
+are never checked, because they are never stored. Each error and warning
+names its file by its path from the repo root, the content root's parent:
+`content/<ruleset>/<type>/<id>.json` for an entry, and
+`rulesets/<ruleset>/rules/…` for rules data
+([Rules data](rulesets.md#rules-data)).
 
 Checks for every type and ruleset:
 
@@ -449,7 +458,8 @@ nothing invalid reaches the site.
   envelope.
 - `scripts/validate/`: the CLI, the schema stage, the checks for every type,
   the text checks (`text.ts`), and ref resolution and back-references
-  (`refs.ts`).
+  (`refs.ts`). `refs.ts` also holds the one `{ref:…}` token parser, which the
+  index, the site's renderer, and the translators read tokens through.
 - `lib/text.ts`: name normalization and the blocklist matcher.
   `lib/table-title.ts`: what counts as a table title, shared by the validator
   and the renderer.

@@ -1,6 +1,6 @@
 // Text for the dnd-5e-2024 creature stat block in SRD 5.2 form (docs/rulesets.md#creatures),
-// built from stored inputs and derived values. Styling arrives with the
-// templates in milestone 3; this is the content. Optional fields display by
+// built from stored inputs and derived values. CreatureStatBlock.astro styles
+// it; this is the content. Optional fields display by
 // presence alone (docs/content-model.md#situational-fields), through ./display.ts. Action bodies are
 // markdown: stored text fields (`Text`, docs/content-model.md#text-fields) go in as written after
 // tokens render, plain fields are escaped, and labels such as "Hit:" are
@@ -21,6 +21,7 @@ import type {
   CreatureStats,
   DerivedAction,
   DerivedCreature,
+  DerivedStatBlock,
   RefOrText,
 } from '../../../rulesets/dnd-5e-2024/types.ts';
 
@@ -66,7 +67,8 @@ export function speedLine(s: CreatureStats): string {
   return parts.join(', ');
 }
 
-export function abilityRows(s: CreatureStats, d: DerivedCreature) {
+/** The ability table's rows, for a creature or an embedded stat block, from its scores and derived modifiers and saves. */
+export function abilityRows(s: Pick<CreatureStats, 'abilities'>, d: DerivedStatBlock) {
   return tables.abilities.map((ability) => ({
     ability: ability.toUpperCase(),
     score: s.abilities[ability],

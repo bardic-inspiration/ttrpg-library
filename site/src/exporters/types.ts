@@ -63,7 +63,10 @@ export interface ExportOptions {
  */
 export type ExportKind = 'print' | 'download';
 
-export interface Exporter {
+/** An entry's key parts: all a keys-only exporter reads of it. */
+export type EntryKey = Pick<Entry, 'ruleset' | 'type' | 'id'>;
+
+interface ExporterBase {
   id: string;
   kind: ExportKind;
   /** The Print button's text, or the format's name in the Download menu ("PNG", "JSON"). */
@@ -71,6 +74,20 @@ export interface Exporter {
   scopes: ExportScope[];
   /** The entry types it offers on an entry's page; every type when absent. A set export skips and reports the rest. */
   types?: string[];
+}
+
+/** An exporter that reads each entry in full, so a set action fetches the entries' export bundles first. */
+export interface ItemExporter extends ExporterBase {
+  keysOnly?: false;
   /** Resolves with a report when the format can't carry everything (docs/export.md#translators). */
   run(items: ExportItem[], options: ExportOptions): Promise<ExportReport | void>;
 }
+
+/** An exporter that reads only each entry's ruleset, type, and id, so a set action fetches nothing first. */
+export interface KeyExporter extends ExporterBase {
+  keysOnly: true;
+  run(items: Array<{ entry: EntryKey }>, options: ExportOptions): Promise<ExportReport | void>;
+}
+
+/** An exporter declares with `keysOnly` whether it needs entries' items (docs/export.md#exporter-interface). */
+export type Exporter = ItemExporter | KeyExporter;

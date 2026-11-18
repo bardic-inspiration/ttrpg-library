@@ -153,6 +153,16 @@ aggregate related checks into one issue with a checklist where possible. Keep
 them under a "Testing backlog" issue, outside the dev queue's pick order, so
 a pending manual check never blocks a milestone or the next task.
 
+### Accessibility review backlog
+
+UI work gets its accessibility review at the end of its milestone, in the
+milestone review ([Milestone review](docs/workflow.md#milestone-review)). UI
+work that isn't part of a milestone, such as a track's, is flagged for the
+next one: the session that opens its `ui` PR files an issue for it under an
+"Accessibility review backlog" issue. Like the Testing backlog, it sits
+outside the dev queue's pick order and blocks nothing. The next milestone
+review takes up every open issue in it.
+
 ### Dev Queue
 
 Milestone issues, in milestone order, then track issues, in the order
@@ -193,11 +203,12 @@ The npm scripts are listed in
   closes a milestone also runs `npm run a11y`, gets the `milestone` label
   ([Milestone PRs](docs/workflow.md#milestone-prs)), and files the
   milestone's accessibility review ([Milestone review](docs/workflow.md#milestone-review)).
-- **Docs-only** (only root Markdown, `docs/` other than `docs/routines.md`,
-  and the dev and Markdown issue templates;
+- **Docs-only** (only root Markdown other than `ATTRIBUTION.md`, `docs/`
+  other than `docs/routines.md`, and the dev and Markdown issue templates;
   [Docs-only PRs](docs/workflow.md#docs-only-prs)): CI runs only the lane
   rules and the link check, so run `npm run links`.
 - **Text-only** (docs plus Markdown under `spec/`, `.claude/skills/`, or the
-  guidelines, `docs/routines.md`, or the content PR template;
+  guidelines, `docs/routines.md`, `ATTRIBUTION.md`, or the content PR
+  template;
   [Text-only PRs](docs/workflow.md#text-only-prs)): `npm run links` and
   `npm test`.

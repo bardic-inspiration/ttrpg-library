@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { checkComponents, checkImage, checkPath, checkUniqueness, type ComponentListing, type EntryHead, type FileIssue } from './library.ts';
 import { entryKey, linkEntries, objectRefs, REF_TOKEN, type Link, type RefEntry } from './refs.ts';
 import {
@@ -22,12 +22,17 @@ import { checkBlocklist, checkMarkdown, checkPlaceholders, loadBlocklist, string
 import { listEntryFiles } from './walk.ts';
 
 export interface ValidationError {
+  /**
+   * The file, by its path from the repo root (the content root's parent): `content/<ruleset>/<type>/<id>.json`
+   * for an entry, `rulesets/<ruleset>/rules/…` for rules data.
+   */
   file: string;
   message: string;
 }
 
 /** An entry that passed the schema stage, with its derived values. */
 export interface ValidEntry {
+  /** Its file under the content root, such as `dnd-5e-2024/creature/cinder-hound.json`. */
   file: string;
   entry: EntryHead & { summary: string; stats: unknown; [key: string]: unknown };
   derived: Record<string, unknown>;
@@ -50,6 +55,7 @@ export interface ValidComponent extends Omit<ValidEntry, 'entry'> {
 }
 
 export interface ValidationResult {
+  /** Every entry file, under the content root. */
   files: string[];
   errors: ValidationError[];
   warnings: ValidationError[];
@@ -78,6 +84,9 @@ export interface ValidateOptions {
 export async function validateLibrary(root: string, options: ValidateOptions = {}): Promise<ValidationResult> {
   const assetsRoot = options.assetsRoot ?? dirname(resolve(root));
   const files = await listEntryFiles(root);
+  // Issues name an entry's file from the repo root, as they do a rules file (`rulesets/<id>/…`).
+  const contentDir = basename(resolve(root));
+  const repoPath = (file: string) => `${contentDir}/${file}`;
   const issues: FileIssue[] = [];
   const error = (file: string, message: string) => issues.push({ level: 'error', file, message });
   const envelope = await loadEnvelopeValidator();
@@ -106,10 +115,11 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     rules.push(loaded.data);
   }
 
-  for (const file of files) {
+  for (const contentFile of files) {
+    const file = repoPath(contentFile);
     let data: unknown;
     try {
-      data = JSON.parse(await readFile(join(root, file), 'utf8'));
+      data = JSON.parse(await readFile(join(root, contentFile), 'utf8'));
     } catch (e) {
       error(file, `invalid JSON: ${(e as Error).message}`);
       continue;
@@ -152,7 +162,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     const linked: RefEntry = { file, ruleset: entry.ruleset, type: entry.type, id: entry.id };
     if (typeof entry.description === 'string') linked.description = entry.description;
     linkable.push(linked);
-    const pathError = checkPath({ ...entry, file });
+    const pathError = checkPath({ ...entry, file: contentFile });
     if (pathError) error(file, pathError);
     issues.push(...(await checkImage({ ...entry, file }, assetsRoot)));
 
@@ -211,7 +221,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     }
     linked.stats = entry.stats;
     const valid = {
-      file,
+      file: contentFile,
       derived: ruleset.module.derive(entry.type, entry.stats, rulesData),
       texts: [...envelopeResult.texts, ...statsResult.texts],
     };
@@ -235,17 +245,17 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     const srd = (entry.meta as { source?: { srd?: true } } | undefined)?.source?.srd === true;
     for (const issue of checkLinks(entry.type, entry.stats, target)) {
       if (srd && issue.level === 'warning') continue;
-      issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
+      issues.push({ level: issue.level, file: repoPath(file), message: `${issue.path}: ${issue.message}` });
     }
   }
 
   // Each component's parent is the one entry whose stats list it by ref (docs/content-model.md#components).
   const listedBy = new Map<string, { file: string; type: string; id: string }[]>();
   for (const { file, entry } of entries) {
-    for (const { ref } of objectRefs(entry.stats)) listedBy.set(ref, [...(listedBy.get(ref) ?? []), { file, type: entry.type, id: entry.id }]);
+    for (const { ref } of objectRefs(entry.stats)) listedBy.set(ref, [...(listedBy.get(ref) ?? []), { file: repoPath(file), type: entry.type, id: entry.id }]);
   }
   const listings: ComponentListing[] = components.map(({ file, entry, parents }) => ({
-    file,
+    file: repoPath(file),
     type: entry.type,
     id: entry.id,
     name: entry.name,
@@ -261,7 +271,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const linksOf = (e: { entry: { type: string; id: string } }) => links.get(entryKey(e.entry)) ?? { refs: [], refBy: [] };
   const withLinks = entries.map((e) => ({ ...e, ...linksOf(e) }));
   const validComponents = components
-    .filter((c) => !badComponents.has(c.file))
+    .filter((c) => !badComponents.has(repoPath(c.file)))
     .map(({ parents: _, ...c }) => {
       const parent = listedBy.get(entryKey(c.entry))![0]!;
       return { ...c, ...linksOf(c), parent: entryKey(parent) };

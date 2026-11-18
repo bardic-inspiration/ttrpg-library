@@ -54,8 +54,8 @@ describe('links to rules', () => {
     note.stats.text = 'See {ref:term/inspiration}.';
     note.stats.gear = [{ ref: 'gear/rope' }];
     const errors = await errorsWith({ [NOTE]: note });
-    expect(errors).toContain(`fixture-rules/note/field-notes.json: stats.text: ref "term/inspiration" does not resolve: no term has id "inspiration"`);
-    expect(errors).toContain(`fixture-rules/note/field-notes.json: stats.gear[0]: ref "gear/rope" does not resolve: no gear has id "rope"`);
+    expect(errors).toContain(`content/fixture-rules/note/field-notes.json: stats.text: ref "term/inspiration" does not resolve: no term has id "inspiration"`);
+    expect(errors).toContain(`content/fixture-rules/note/field-notes.json: stats.gear[0]: ref "gear/rope" does not resolve: no gear has id "rope"`);
   });
 
   it('fail on a missing target in a primitive’s or a group’s text', async () => {
@@ -127,9 +127,9 @@ describe('the key space (docs/rulesets.md#rules-data)', () => {
       'content/fixture-rules/gear/hand-tools.json': { ...mallet, id: 'hand-tools', name: 'Hand Tool Kit' },
       'content/fixture-rules/gear/ladder-two.json': { ...mallet, id: 'ladder-two', name: 'ladder' },
     });
-    expect(errors).toContain('fixture-rules/gear/hammer.json: id "hammer" is already used by rulesets/fixture-rules/rules/gear/hammer.json');
-    expect(errors).toContain('fixture-rules/gear/hand-tools.json: id "hand-tools" is already used by rulesets/fixture-rules/rules/gear-groups.json');
-    expect(errors).toContain('fixture-rules/gear/ladder-two.json: name "ladder" is already used by rulesets/fixture-rules/rules/gear/ladder.json');
+    expect(errors).toContain('content/fixture-rules/gear/hammer.json: id "hammer" is already used by rulesets/fixture-rules/rules/gear/hammer.json');
+    expect(errors).toContain('content/fixture-rules/gear/hand-tools.json: id "hand-tools" is already used by rulesets/fixture-rules/rules/gear-groups.json');
+    expect(errors).toContain('content/fixture-rules/gear/ladder-two.json: name "ladder" is already used by rulesets/fixture-rules/rules/gear/ladder.json');
   });
 });
 
@@ -138,7 +138,7 @@ describe('extensions', () => {
     const mallet = await fixtureJson(MALLET);
     mallet.meta.source.srd = true;
     expect(await errorsWith({ [MALLET]: mallet })).toContain(
-      'fixture-rules/gear/mallet.json: meta.source.srd: an extension is custom; the SRD rules are kept in the ruleset as primitives',
+      'content/fixture-rules/gear/mallet.json: meta.source.srd: an extension is custom; the SRD rules are kept in the ruleset as primitives',
     );
   });
 
@@ -148,14 +148,14 @@ describe('extensions', () => {
       'content/fixture-rules/term/luck.json': { ...mallet, type: 'term', id: 'luck', name: 'Luck', stats: { text: 'Luck.' } },
     });
     expect(errors).toContain(
-      'fixture-rules/term/luck.json: type: "term" is a rules type that takes no extensions; its rules are kept in rulesets/fixture-rules/rules/',
+      'content/fixture-rules/term/luck.json: type: "term" is a rules type that takes no extensions; its rules are kept in rulesets/fixture-rules/rules/',
     );
   });
 
   it('name a leaf group, as primitives do', async () => {
     const mallet = await fixtureJson(MALLET);
     mallet.stats.group = 'any-tools';
-    expect(await errorsWith({ [MALLET]: mallet })).toContain('fixture-rules/gear/mallet.json: stats.group: "any-tools" has groups in it; name a group with none');
+    expect(await errorsWith({ [MALLET]: mallet })).toContain('content/fixture-rules/gear/mallet.json: stats.group: "any-tools" has groups in it; name a group with none');
   });
 });
 

@@ -16,8 +16,8 @@ Validation reads it only to confirm a ruleset and type are registered, and it
 never decides whether a field displays; the schema does
 ([content-model.md](content-model.md#situational-fields)).
 
-Per ruleset: a `label` and an `attribution` key ([licensing.md](licensing.md)).
-Per type:
+Per ruleset: a `label`, its display name in the Library's ruleset filter,
+on the Rulesets page, and in the redirects from its old pages. Per type:
 
 | Key | Purpose |
 |---|---|
@@ -87,15 +87,18 @@ path, or `null`), `facets`, `tags` (or `{}`), `createdAt`, `refs`, `refBy`, and
 - `facets` holds the registry's facet paths in registry order, read from
   `stats` and the derived values. A facet whose optional value is omitted is
   left out, except an optional flag, which reads as `false`.
-- `search` holds action, trait, and spell names plus `description` and rules
-  text with markup stripped. Names are every `name` in `stats` and every value
-  at a `RefOrText` field, a ref read as its target's name. Rules text is every
-  markdown-subset field, with markdown and ruleset tokens removed and each
-  `{ref:…}` token read as its target's name.
+- `search` holds the names in `stats` plus `description` and rules text with
+  markup stripped. Names are every `name` in `stats` (actions, traits), every
+  ref in `stats` read as its target's name, whatever its field (`RefOrText`
+  or a typed ref, such as a background's feat and equipment), and every plain
+  string at a `RefOrText` field. Rules text is every markdown-subset field,
+  with markdown and ruleset tokens removed and each `{ref:…}` token read as
+  its target's name.
 
 A component ([content-model.md](content-model.md#components)) has no record,
 raw file, or export bundle. Its parent's `search` adds each component's name
-and the same names and text, in the order the parent lists them.
+and the same names and text, in the order the parent lists them, so the
+parent's own refs to its components aren't read a second time.
 
 Records are sorted by ruleset, type, then `id`, and the file is written without
 timestamps, so two builds of the same content are byte-identical. The index
@@ -304,7 +307,10 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   by name (ref facets), or alphabetically, plus any selected value no entry
   has. A groups facet's values nest, each group with its own disclosure. A
   range facet's node holds min and max inputs, which accept fractions such as
-  `1/8`.
+  `1/8` and decimals. Each filters as the reader types, whenever its text reads
+  as a number or is empty, so `1/` and `1.` on the way to `1/8` and `1.5`
+  change nothing. While an input has focus its text stays as typed; when focus
+  leaves, it shows the filter's value (`0.125` reads `1/8` for CR).
 - **Open nodes.** A checked type's registry `defaultFilters` start open, in
   its node and, for a tag, in Tags. Every node holding an active filter starts
   open, down to the value. The reader opens and closes the rest.
@@ -359,8 +365,11 @@ then tags by key, with the default sort and ignored parameters left out.
   index order. Otherwise it targets the whole filtered set in the gallery's
   order. Each button's accessible name says which ("Print 3 selected",
   "Download 12 entries"), and both are disabled when they'd target nothing.
-- An action first fetches the export bundles of its entries. If any fails to
-  load, nothing runs, and a polite status region says so.
+- An action whose exporter reads entries in full, such as Open5e, first
+  fetches the export bundles of its entries. If any fails to load, nothing
+  runs, and a polite status region says so. Print and JSON read only the
+  entries' keys, so they fetch no bundles
+  ([Exporter interface](export.md#exporter-interface)).
 
 **Scale.** The index is loaded once and filtered in memory, sized for a few
 thousand entries. Past about 2,000, revisit the index size and prebuilt search
@@ -440,7 +449,7 @@ indexes.
   its column; the page never does. A titled table puts its title in a
   `<caption>` above the headers, in the heading font and bold. The box is
   focusable and labeled "Table: " plus the title, or the column headers when
-  there's none. One style in `base.css` serves every template, mode, and theme:
+  there's none. One style in `base.css` serves every template and mode:
   headers in the heading font over an accent rule, thin rules between rows, no
   striping, and wrapping cell text, except that a one-word cell such as `9–10`
   stays on one line. Its knobs are the `--table-*` tokens; print and capture

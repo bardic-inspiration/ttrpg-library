@@ -8,10 +8,10 @@ import { dirname, join } from 'node:path';
 import { SITE_BASE } from '../../lib/site.ts';
 import { validateLibrary, type ValidationError, type ValidComponent, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
 import { objectRefs, parseRefToken, REF_TOKEN, type Link } from '../validate/refs.ts';
-import { PROJECT_ROOT, RULESETS_ROOT } from '../validate/schema.ts';
+import { loadRegistry, RULESETS_ROOT } from '../validate/schema.ts';
 import { ruleNames } from '../../lib/rules.ts';
 import { plainText } from '../validate/text.ts';
-import { isFlag, refOrTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
+import { isFlag, refAndTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
 
 /** One facet in config/types.json (docs/site.md#type-registry). */
 export interface Facet {
@@ -37,7 +37,7 @@ export interface TypeConfig {
 }
 
 /** config/types.json (docs/site.md#type-registry). */
-export type Registry = Record<string, { label: string; attribution: string; types: Record<string, TypeConfig> }>;
+export type Registry = Record<string, { label: string; types: Record<string, TypeConfig> }>;
 
 /** One record of library.json, in the docs/site.md#index-build shape and key order. */
 export interface LibraryRecord {
@@ -78,9 +78,6 @@ export interface ExportBundle {
 export interface BuildOptions extends ValidateOptions {
   registry?: Registry;
 }
-
-export const loadRegistryFile = async (): Promise<Registry> =>
-  JSON.parse(await readFile(join(PROJECT_ROOT, 'config/types.json'), 'utf8')) as Registry;
 
 /** A ruleset's raw schemas, for the facets and search text that read them. */
 async function loadSchemas(ruleset: string, rulesetsRoot: string): Promise<{ files: Map<string, Schema> }> {
@@ -136,15 +133,21 @@ function names(value: unknown): string[] {
 const TOKEN = /\{[^{}]*\}/g;
 
 /**
- * The docs/site.md#index-build `search` text: action, trait, and spell names (a ref names its
- * target), then `description` and the rules text, with markup stripped and
- * each `{ref:…}` link read as its display text or its target's name.
+ * The docs/site.md#index-build `search` text: the names in `stats` (every ref names its target),
+ * then `description` and the rules text, with markup stripped and
+ * each `{ref:…}` link read as its display text or its target's name. A ref to one of `own`, the
+ * entry's components, is left to that component's part of the text, which starts with its name.
  */
-function searchText(item: Pick<ValidComponent, 'entry' | 'texts'>, schemas: SchemaSet, nameOf: Map<string, string>): string {
-  const refNames = refOrTextValues(item.entry.stats, schemas).flatMap((value) => {
+function searchText(
+  item: Pick<ValidComponent, 'entry' | 'texts'>,
+  schemas: SchemaSet,
+  nameOf: Map<string, string>,
+  own: ReadonlySet<string> = new Set(),
+): string {
+  const refNames = refAndTextValues(item.entry.stats, schemas).flatMap((value) => {
     if (typeof value === 'string') return [value];
-    const ref = (value as { ref?: unknown }).ref;
-    const name = typeof ref === 'string' ? nameOf.get(ref) : undefined;
+    const { ref } = value as { ref: string };
+    const name = own.has(ref) ? undefined : nameOf.get(ref);
     return name ? [name] : [];
   });
   // A {ref:…} link reads as its target's name; other tokens are dropped.
@@ -170,7 +173,7 @@ const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 export async function buildIndex(root: string, options: BuildOptions = {}): Promise<BuildResult> {
   const { errors, warnings, entries, components, rules } = await validateLibrary(root, options);
   if (errors.length > 0) return { errors, warnings, records: [], files: [], bundles: [] };
-  const registry = options.registry ?? (await loadRegistryFile());
+  const registry = options.registry ?? (await loadRegistry());
   const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
 
   // A {ref:…} link reads as its target's name in search text, whether the target is an entry or a primitive.
@@ -199,9 +202,10 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
     const files = loaded.files;
     const schemasOf = (type: string): SchemaSet => ({ root: files.get(`${type}.schema.json`) ?? {}, files });
     const schemas = schemasOf(entry.type);
+    const parts = componentsOf(entry);
     const search = [
-      searchText(item, schemas, nameOf),
-      ...componentsOf(entry).map((c) => `${c.entry.name} ${searchText(c, schemasOf(c.entry.type), nameOf)}`),
+      searchText(item, schemas, nameOf, new Set(parts.map((c) => `${c.entry.type}/${c.entry.id}`))),
+      ...parts.map((c) => `${c.entry.name} ${searchText(c, schemasOf(c.entry.type), nameOf)}`),
     ].join(' ').replace(/\s+/g, ' ').trim();
     const config = registry[entry.ruleset]?.types[entry.type];
     const meta = entry.meta as { createdAt: string };

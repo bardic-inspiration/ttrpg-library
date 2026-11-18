@@ -52,39 +52,39 @@ describe('validation', () => {
     const basics = await fixtureJson(BASICS);
     const errors = await errorsWith({ [BASICS]: { ...basics, summary: 'A chapter with a summary.' } });
     // Like an entry that fails its envelope, it isn't a link target, so links to it fail too.
-    expect(errors).toContain('fixture-rules/chapter/handbook-basics.json: summary: unknown key');
+    expect(errors).toContain('content/fixture-rules/chapter/handbook-basics.json: summary: unknown key');
   });
 
   it('needs no registry entry, but a schema and a listing in ruleset.json', async () => {
     const ruleset = await fixtureJson(RULESET);
     expect(await errorsWith({ 'rulesets/fixture-rules/schemas/chapter.schema.json': null })).toContain(
-      'fixture-rules/chapter/handbook-basics.json: type: component type "chapter" for fixture-rules has no schema; it needs schemas/chapter.schema.json',
+      'content/fixture-rules/chapter/handbook-basics.json: type: component type "chapter" for fixture-rules has no schema; it needs schemas/chapter.schema.json',
     );
     const errors = await errorsWith({ [RULESET]: { ...ruleset, components: undefined } });
-    expect(errors).toContain('fixture-rules/chapter/handbook-basics.json: (entry): missing required key "summary"');
+    expect(errors).toContain('content/fixture-rules/chapter/handbook-basics.json: (entry): missing required key "summary"');
   });
 
   it('fails on a component no parent lists, or that two parents list', async () => {
     const handbook = await fixtureJson(HANDBOOK);
     const pocket = await fixtureJson('content/fixture-rules/manual/pocket-guide.json');
     expect(await errorsWith({ [HANDBOOK]: { ...handbook, stats: { chapters: [{ ref: 'chapter/handbook-basics' }] } } })).toContain(
-      'fixture-rules/chapter/handbook-advanced.json: chapter/handbook-advanced is listed by no parent; a manual lists it by ref in its stats',
+      'content/fixture-rules/chapter/handbook-advanced.json: chapter/handbook-advanced is listed by no parent; a manual lists it by ref in its stats',
     );
     pocket.stats.chapters.push({ ref: 'chapter/handbook-basics' });
     expect(await errorsWith({ 'content/fixture-rules/manual/pocket-guide.json': pocket })).toContain(
-      'fixture-rules/chapter/handbook-basics.json: chapter/handbook-basics is listed by manual/handbook and manual/pocket-guide; a component has exactly one parent',
+      'content/fixture-rules/chapter/handbook-basics.json: chapter/handbook-basics is listed by manual/handbook and manual/pocket-guide; a component has exactly one parent',
     );
   });
 
   it('fails on a parent of a type that may not list it, or a component listed twice', async () => {
     const ruleset = await fixtureJson(RULESET);
     expect(await errorsWith({ [RULESET]: { ...ruleset, components: [{ type: 'chapter', parents: ['note'] }] } })).toContain(
-      'fixture-rules/chapter/handbook-basics.json: chapter/handbook-basics is listed by manual/handbook, but only a note may list a chapter',
+      'content/fixture-rules/chapter/handbook-basics.json: chapter/handbook-basics is listed by manual/handbook, but only a note may list a chapter',
     );
     const handbook = await fixtureJson(HANDBOOK);
     handbook.stats.chapters.push({ ref: 'chapter/handbook-basics' });
     expect(await errorsWith({ [HANDBOOK]: handbook })).toEqual([
-      'fixture-rules/chapter/handbook-basics.json: chapter/handbook-basics is listed more than once by manual/handbook',
+      'content/fixture-rules/chapter/handbook-basics.json: chapter/handbook-basics is listed more than once by manual/handbook',
     ]);
   });
 
@@ -97,13 +97,13 @@ describe('validation', () => {
       'content/fixture-rules/chapter/basics-again.json': { ...basics, id: 'basics-again', name: 'Again' },
       'content/fixture-rules/chapter/handbook-basics-17.json': { ...basics, id: 'handbook-basics-17' },
     });
-    expect(errors).toEqual(['fixture-rules/chapter/basics-again.json: id "basics-again" must start with its parent\'s id, "handbook-"']);
+    expect(errors).toEqual(['content/fixture-rules/chapter/basics-again.json: id "basics-again" must start with its parent\'s id, "handbook-"']);
     const repeated = await errorsWith({
       [HANDBOOK]: { ...handbook, stats: { chapters: [...handbook.stats.chapters.slice(0, 2), { ref: 'chapter/handbook-basics-again' }] } },
       'content/fixture-rules/chapter/handbook-basics-again.json': { ...basics, id: 'handbook-basics-again' },
     });
     expect(repeated).toEqual([
-      'fixture-rules/chapter/handbook-basics-again.json: name "Basics" is already used by fixture-rules/chapter/handbook-basics.json in the same parent; a name printed again at a later level adds the level to its id ("handbook-basics-17")',
+      'content/fixture-rules/chapter/handbook-basics-again.json: name "Basics" is already used by content/fixture-rules/chapter/handbook-basics.json in the same parent; a name printed again at a later level adds the level to its id ("handbook-basics-17")',
     ]);
   });
 
@@ -111,7 +111,7 @@ describe('validation', () => {
     const handbook = await fixtureJson(HANDBOOK);
     handbook.stats.text = 'Start with {ref:chapter/handbook-intro}.';
     expect(await errorsWith({ [HANDBOOK]: handbook })).toContain(
-      'fixture-rules/manual/handbook.json: stats.text: ref "chapter/handbook-intro" does not resolve: no chapter has id "handbook-intro"',
+      'content/fixture-rules/manual/handbook.json: stats.text: ref "chapter/handbook-intro" does not resolve: no chapter has id "handbook-intro"',
     );
   });
 });

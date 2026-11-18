@@ -1,7 +1,10 @@
 // What the filter tree reads from the build besides library.json (docs/site.md#gallery "Filters"):
 // the names a ref facet's values read by, and the groups a groups facet nests its values in.
 
+import registryJson from '../../../../config/types.json' with { type: 'json' };
 import type { GroupTree, RulesData, RulesGroup } from '../../../../lib/rules.ts';
+import { entryNames, loadEntries, type LoadedEntry } from '../library.ts';
+import { loadRules } from '../rules.ts';
 import type { FacetData, GroupInfo, Registry } from './config.ts';
 
 interface Source {
@@ -73,3 +76,11 @@ export function facetData(registry: Registry, entries: Source[], names: Map<stri
   out.names = Object.fromEntries(Object.entries(out.names).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
   return out;
 }
+
+/**
+ * The whole library's facet data, at build time: what the Library's island and the print view,
+ * which reads a gallery query (docs/export.md#print), are given. Pass the rules and entries a page
+ * has already loaded.
+ */
+export const libraryFacetData = (rules: RulesData[] = loadRules(), all: LoadedEntry[] = loadEntries(rules)): FacetData =>
+  facetData(registryJson as unknown as Registry, all, entryNames(all, rules), rules);

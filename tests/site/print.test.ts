@@ -5,7 +5,9 @@ import { describe, expect, it } from 'vitest';
 import { readFile } from 'node:fs/promises';
 import { print } from '../../site/src/exporters/print.ts';
 import type { ExportItem } from '../../site/src/exporters/types.ts';
+import { facetData } from '../../site/src/lib/gallery/facet-data.ts';
 import { loadPrintRun, selectEntries } from '../../site/src/lib/print-run.ts';
+import { loadRules } from '../../site/src/lib/rules.ts';
 import {
   SHORT_ATTRIBUTION,
   cssString,
@@ -21,6 +23,9 @@ const BASE = '/ttrpg-library/';
 const records = await fixtureRecords();
 const reg = await registry();
 const lib = await fixtureLibrary();
+// The facet data the build gives the print view: ref names and every grouped type's groups.
+const rules = loadRules();
+const data = facetData(reg, lib.all, lib.names, rules);
 
 describe('parsePrintQuery', () => {
   it('reads <type>/<id> keys in order, without repeats or blanks', () => {
@@ -68,32 +73,52 @@ describe('print layout by printed page width (docs/export.md#print-layout)', asy
 
 describe('selectEntries', () => {
   it('keeps the order of ids and reports ids no entry has', () => {
-    const selection = selectEntries(parsePrintQuery('?ids=spell/frost-lance,spell/nope,creature/cinder-hound'), records, reg);
+    const selection = selectEntries(parsePrintQuery('?ids=spell/frost-lance,spell/nope,creature/cinder-hound'), records, reg, data);
     expect(selection.records.map((r) => r.id)).toEqual(['frost-lance', 'cinder-hound']);
     expect(selection.missing).toEqual(['spell/nope']);
   });
 
   it('tells apart entries of different types that share an id (docs/content-model.md#ids-and-names)', () => {
     const twin = { ...records.find((r) => r.id === 'frost-lance')!, type: 'creature', name: 'Frost Lance', url: '/ttrpg-library/dnd-5e-2024/creature/frost-lance/' };
-    const selection = selectEntries(parsePrintQuery('?ids=creature/frost-lance'), [...records, twin], reg);
+    const selection = selectEntries(parsePrintQuery('?ids=creature/frost-lance'), [...records, twin], reg, data);
     expect(selection.records.map((r) => `${r.type}/${r.id}`)).toEqual(['creature/frost-lance']);
   });
 
   it('reads a gallery query as the Library’s, with f.type narrowing by type', () => {
-    expect(selectEntries(parsePrintQuery('?f.type=spell'), records, reg).records.map((r) => r.id)).toEqual(['frost-lance']);
-    expect(selectEntries(parsePrintQuery('?f.stats.cr=1..5'), records, reg).records.map((r) => r.id)).toEqual(['cinder-hound']);
+    expect(selectEntries(parsePrintQuery('?f.type=spell'), records, reg, data).records.map((r) => r.id)).toEqual(['frost-lance']);
+    expect(selectEntries(parsePrintQuery('?f.stats.cr=1..5'), records, reg, data).records.map((r) => r.id)).toEqual(['cinder-hound']);
   });
 
   it('ignores a stale size parameter from an older print link', () => {
-    const ids = (q: string) => selectEntries(parsePrintQuery(q), records, reg).records.map((r) => r.id);
+    const ids = (q: string) => selectEntries(parsePrintQuery(q), records, reg, data).records.map((r) => r.id);
     expect(ids('?ids=spell/frost-lance&size=a4')).toEqual(['frost-lance']);
     expect(ids('?f.type=spell&size=card-4x6')).toEqual(ids('?f.type=spell'));
   });
 
   it('prints a gallery query’s results in its order', () => {
-    const names = (q: string) => selectEntries(parsePrintQuery(q), records, reg).records.map((r) => r.name);
+    const names = (q: string) => selectEntries(parsePrintQuery(q), records, reg, data).records.map((r) => r.name);
     expect(names('?sort=name:asc')).toEqual(['Cinder Hound', 'Frost Lance', 'Sorcerer', 'Wand of Frost Lances', 'Wizard']);
     expect(names('?sort=name:desc')).toEqual(['Wizard', 'Wand of Frost Lances', 'Sorcerer', 'Frost Lance', 'Cinder Hound']);
+  });
+
+  it('matches a group filter by the groups in it, as the gallery does (docs/site.md#gallery "Filters")', () => {
+    const gear = [
+      record({ id: 'longsword-plus', type: 'equipment', facets: { 'stats.group': 'martial-melee-weapons' } }),
+      record({ id: 'sling-plus', type: 'equipment', facets: { 'stats.group': 'simple-ranged-weapons' } }),
+    ];
+    const ids = (q: string) => selectEntries(parsePrintQuery(q), gear, reg, data).records.map((r) => r.id);
+    expect(ids('?f.stats.group=martial-weapons')).toEqual(['longsword-plus']);
+    expect(ids('?f.stats.group=weapons')).toEqual(['longsword-plus', 'sling-plus']);
+  });
+
+  it('sorts by a ref facet by its targets’ names, in the gallery’s order', () => {
+    const subclasses = [
+      record({ id: 'path-of-a', type: 'subclass', name: 'Path of A', facets: { 'stats.class': 'class/aardvark' } }),
+      record({ id: 'path-of-z', type: 'subclass', name: 'Path of Z', facets: { 'stats.class': 'class/zebra' } }),
+    ];
+    const names = { names: { 'class/aardvark': 'Zealot', 'class/zebra': 'Abjurer' }, groups: {} };
+    const ids = selectEntries(parsePrintQuery('?sort=stats.class:asc'), subclasses, reg, names).records.map((r) => r.id);
+    expect(ids).toEqual(['path-of-z', 'path-of-a']);
   });
 });
 
@@ -128,10 +153,10 @@ describe('pageRules', () => {
 });
 
 describe('loadPrintRun', () => {
-  const site = (overrides: Record<string, string | undefined> = {}) => {
+  const site = (overrides: Record<string, string | undefined> = {}, index = records) => {
     const files: Record<string, string | undefined> = {
-      [`${BASE}library.json`]: JSON.stringify(records),
-      ...Object.fromEntries(records.map((r) => [fragmentUrl(BASE, r), `<article class="print-entry" data-id="${r.id}"></article>`])),
+      [`${BASE}library.json`]: JSON.stringify(index),
+      ...Object.fromEntries(index.map((r) => [fragmentUrl(BASE, r), `<article class="print-entry" data-id="${r.id}"></article>`])),
       ...overrides,
     };
     const fetched: string[] = [];
@@ -145,7 +170,7 @@ describe('loadPrintRun', () => {
 
   it('fetches only the named entries’ fragments, in order', async () => {
     const { fetch, fetched } = site();
-    const run = await loadPrintRun('?ids=spell/frost-lance,creature/cinder-hound', BASE, reg, fetch);
+    const run = await loadPrintRun('?ids=spell/frost-lance,creature/cinder-hound', BASE, reg, data, fetch);
     expect(run.ok).toBe(true);
     if (!run.ok) return;
     expect('size' in run).toBe(false);
@@ -158,20 +183,29 @@ describe('loadPrintRun', () => {
     ]);
   });
 
+  it('reads a gallery query with the facet data it’s given, so a group filter prints its entries', async () => {
+    const gear = [
+      record({ id: 'longsword-plus', type: 'equipment', facets: { 'stats.group': 'martial-melee-weapons' } }),
+      record({ id: 'rope-plus', type: 'equipment', facets: { 'stats.group': 'adventuring-gear' } }),
+    ];
+    const run = await loadPrintRun('?f.stats.group=martial-weapons', BASE, reg, data, site({}, gear).fetch);
+    expect(run.ok && run.fragments.map((f) => f.record.id)).toEqual(['longsword-plus']);
+  });
+
   it('fails with a message when an id has no entry', async () => {
-    const run = await loadPrintRun('?ids=creature/cinder-hound,creature/nope', BASE, reg, site().fetch);
+    const run = await loadPrintRun('?ids=creature/cinder-hound,creature/nope', BASE, reg, data, site().fetch);
     expect(run).toMatchObject({ ok: false, message: 'No entry matches “creature/nope”.' });
   });
 
   it('fails with a message when a fragment fails to load', async () => {
-    const run = await loadPrintRun('?ids=creature/cinder-hound,spell/frost-lance', BASE, reg, site({ [fragmentUrl(BASE, records.find((r) => r.id === 'frost-lance')!)]: undefined }).fetch);
+    const run = await loadPrintRun('?ids=creature/cinder-hound,spell/frost-lance', BASE, reg, data, site({ [fragmentUrl(BASE, records.find((r) => r.id === 'frost-lance')!)]: undefined }).fetch);
     expect(run).toMatchObject({ ok: false, message: 'Frost Lance couldn’t be loaded. Try reloading the page.' });
   });
 
   it('fails with a message when the index fails to load, or nothing matches', async () => {
-    expect(await loadPrintRun('?ids=a', BASE, reg, site({ [`${BASE}library.json`]: undefined }).fetch)).toMatchObject({ ok: false });
-    expect(await loadPrintRun('?ids=', BASE, reg, site().fetch)).toMatchObject({ ok: false, message: 'No entries to print.' });
-    expect(await loadPrintRun('?q=zzzzqqq', BASE, reg, site().fetch)).toMatchObject({ ok: false, message: 'No entries to print.' });
+    expect(await loadPrintRun('?ids=a', BASE, reg, data, site({ [`${BASE}library.json`]: undefined }).fetch)).toMatchObject({ ok: false });
+    expect(await loadPrintRun('?ids=', BASE, reg, data, site().fetch)).toMatchObject({ ok: false, message: 'No entries to print.' });
+    expect(await loadPrintRun('?q=zzzzqqq', BASE, reg, data, site().fetch)).toMatchObject({ ok: false, message: 'No entries to print.' });
   });
 });
 

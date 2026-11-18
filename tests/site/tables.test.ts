@@ -1,7 +1,6 @@
 // Pipe tables in text fields (docs/content-model.md#tables-in-text, docs/site.md#templates): the SRD entries that print
 // a table validate with it, and it renders as one site-wide table on the
 // card, the detail page, the print view, and the PNG capture.
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, it } from 'vitest';
@@ -12,24 +11,21 @@ import PrintEntry from '../../site/src/components/print/PrintEntry.astro';
 import EntryTemplate from '../../site/src/components/templates/EntryTemplate.astro';
 import { entryNames, loadLibrary, refTargets, type Entry } from '../../site/src/lib/library.ts';
 import { renderMarkdown } from '../../site/src/lib/markdown.ts';
-import { tempLibrary } from '../helpers.ts';
 import { textOf } from './library-fixtures.ts';
 
-const FILES = [
-  'dnd-5e-2024/spell/confusion.json',
-  'dnd-5e-2024/item/belt-of-giant-strength.json',
-  'dnd-5e-2024/item/staff-of-healing.json',
-  // Staff of Healing refs these
-  'dnd-5e-2024/spell/cure-wounds.json',
-  'dnd-5e-2024/spell/lesser-restoration.json',
-  'dnd-5e-2024/spell/mass-cure-wounds.json',
+/** The SRD entries that print a table, as `<type>/<id>`, with the header cells and first row of their first table. */
+const cases: [string, string[], string[]][] = [
+  ['spell/confusion', ['1d10', 'Behavior for the Turn'], ['1', expect.stringContaining("The target doesn't take an action") as unknown as string]],
+  ['item/belt-of-giant-strength', ['Belt', 'Str.', 'Rarity'], ['Belt of Giant Strength (hill)', '21', 'Rare']],
+  ['item/staff-of-healing', ['Spell', 'Charge Cost'], ['Cure Wounds', '1 charge per spell level (maximum 4 for a level 4 spell)']],
 ];
-const entries = await Promise.all(
-  FILES.map(async (f) => JSON.parse(await readFile(join(PROJECT_ROOT, 'content', f), 'utf8')) as Entry),
-);
-const all = loadLibrary(entries);
-const names = entryNames(all);
-const byId = (id: string) => all.find(({ entry }) => entry.id === id)!;
+
+// The whole library, so a link added to one of them still resolves (AGENTS.md "Dev workflow").
+const library = await validateLibrary(join(PROJECT_ROOT, 'content'));
+const entries = [...library.entries, ...library.components].map(({ entry }) => entry as unknown as Entry);
+const all = loadLibrary(entries, library.rules);
+const names = entryNames(all, library.rules);
+const byKey = (key: string) => all.find(({ entry }) => `${entry.type}/${entry.id}` === key)!;
 
 /** The header cells and the first body row of the first table in `html`. */
 function firstTable(html: string): { header: string[]; firstRow: string[] } {
@@ -41,10 +37,10 @@ function firstTable(html: string): { header: string[]; firstRow: string[] } {
 }
 
 describe('SRD entries with tables (docs/content-model.md#tables-in-text, docs/content-model.md#srd-and-custom-entries)', () => {
-  it('validate with their tables', async () => {
-    const { content } = await tempLibrary(entries);
-    const { errors } = await validateLibrary(content);
-    expect(errors).toEqual([]);
+  it('validate with their tables, in the whole library', () => {
+    expect(library.errors).toEqual([]);
+    const valid = new Set(library.entries.map(({ entry }) => `${entry.type}/${entry.id}`));
+    expect(cases.map(([key]) => key).filter((key) => !valid.has(key))).toEqual([]);
   });
 });
 
@@ -104,14 +100,8 @@ describe('table rendering (docs/site.md#templates)', () => {
     });
   });
 
-  const cases: [string, string[], string[]][] = [
-    ['confusion', ['1d10', 'Behavior for the Turn'], ['1', expect.stringContaining("The target doesn't take an action") as unknown as string]],
-    ['belt-of-giant-strength', ['Belt', 'Str.', 'Rarity'], ['Belt of Giant Strength (hill)', '21', 'Rare']],
-    ['staff-of-healing', ['Spell', 'Charge Cost'], ['Cure Wounds', '1 charge per spell level (maximum 4 for a level 4 spell)']],
-  ];
-
-  describe.each(cases)('%s', (id, header, firstRow) => {
-    const { entry, derived } = byId(id);
+  describe.each(cases)('%s', (key, header, firstRow) => {
+    const { entry, derived } = byKey(key);
 
     it.each(['screen', 'capture'])('renders its table on the card in %s mode', async (mode) => {
       const container = await AstroContainer.create();
@@ -121,13 +111,13 @@ describe('table rendering (docs/site.md#templates)', () => {
 
     it('renders its table on the detail page', async () => {
       const container = await AstroContainer.create();
-      const html = await container.renderToString(EntryDetail, { props: { loaded: byId(id), names, targets: refTargets(all) } });
+      const html = await container.renderToString(EntryDetail, { props: { loaded: byKey(key), names, targets: refTargets(all, library.rules) } });
       expect(firstTable(html)).toEqual({ header, firstRow });
     });
 
     it('renders its table in the print view', async () => {
       const container = await AstroContainer.create();
-      const html = await container.renderToString(PrintEntry, { props: { loaded: byId(id), names } });
+      const html = await container.renderToString(PrintEntry, { props: { loaded: byKey(key), names } });
       expect(firstTable(html)).toEqual({ header, firstRow });
     });
   });

@@ -12,6 +12,7 @@
 
 import { Marked, type Token, type TokenizerAndRendererExtension, type Tokens } from 'marked';
 import { tableTitleAt } from '../../../lib/table-title.ts';
+import { leadingRefToken } from '../../../scripts/validate/refs.ts';
 import { url } from './url.ts';
 
 const escapeHtml = (text: string): string =>
@@ -48,10 +49,10 @@ const refExtension: TokenizerAndRendererExtension = {
     return i === -1 ? undefined : i;
   },
   tokenizer(src: string) {
-    const match = /^\{ref:([a-z][a-z0-9-]*)\/([a-z0-9]+(?:-[a-z0-9]+)*)(?: ([^{}\s][^{}]*[^{}\s]|[^{}\s]))?\}/.exec(src);
-    if (!match) return undefined;
-    const display = match[3] === undefined ? {} : { display: match[3] };
-    return { type: 'ref', raw: match[0], key: `${match[1]}/${match[2]}`, id: match[2] ?? '', ...display } satisfies RefToken;
+    const token = leadingRefToken(src);
+    if (!token) return undefined;
+    const display = token.text === undefined ? {} : { display: token.text };
+    return { type: 'ref', raw: token.raw, key: token.key, id: token.key.slice(token.key.indexOf('/') + 1), ...display } satisfies RefToken;
   },
   renderer(token) {
     const ref = token as unknown as RefToken;

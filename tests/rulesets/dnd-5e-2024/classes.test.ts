@@ -80,7 +80,7 @@ describe('validation', () => {
       s.columns[0].values.pop();
       s.features.push({ ref: 'class-option/sorcerer-careful-spell' });
     });
-    const file = 'dnd-5e-2024/class/sorcerer.json';
+    const file = 'content/dnd-5e-2024/class/sorcerer.json';
     expect(messages).toContain(`${file}: stats.primaryAbility: must NOT be valid`);
     expect(messages).toContain(`${file}: stats.savingThrows: must NOT have more than 2 items`);
     expect(messages).toContain(`${file}: stats.columns[0].values: must NOT have fewer than 20 items`);
@@ -93,8 +93,8 @@ describe('validation', () => {
       s.primaryAbility.abilities.push('con');
       s.spellcasting.prepared.push(23);
     });
-    expect(messages).toContain('dnd-5e-2024/class/sorcerer.json: stats.primaryAbility: missing required key "join"');
-    expect(messages).toContain('dnd-5e-2024/class/sorcerer.json: stats.spellcasting.prepared: must NOT have more than 20 items');
+    expect(messages).toContain('content/dnd-5e-2024/class/sorcerer.json: stats.primaryAbility: missing required key "join"');
+    expect(messages).toContain('content/dnd-5e-2024/class/sorcerer.json: stats.spellcasting.prepared: must NOT have more than 20 items');
   });
 
   it('rejects features out of level order, a first subclass level with no feature, and levels that descend', async () => {
@@ -104,10 +104,10 @@ describe('validation', () => {
       s.subclassLevels = [4, 3, 14, 18];
       byId(entries, 'class-feature', 'sorcerer-metamagic').stats.levels = [10, 2];
     });
-    const file = 'dnd-5e-2024/class/sorcerer.json';
+    const file = 'content/dnd-5e-2024/class/sorcerer.json';
     expect(messages).toContain(`${file}: stats.features[1]: class-feature/sorcerer-innate-sorcery at level 1 is listed after class-feature/sorcerer-font-of-magic at level 2; features are in level order`);
     expect(messages).toContain(`${file}: stats.subclassLevels: subclass levels 4, 3, 14, 18 must ascend`);
-    expect(messages).toContain('dnd-5e-2024/class-feature/sorcerer-metamagic.json: stats.levels: levels 10, 2 must ascend');
+    expect(messages).toContain('content/dnd-5e-2024/class-feature/sorcerer-metamagic.json: stats.levels: levels 10, 2 must ascend');
   });
 
   it('rejects an SRD class that lists spells, and allows a custom one', async () => {
@@ -115,7 +115,7 @@ describe('validation', () => {
       byId(entries, 'class', 'sorcerer').stats.spells = [{ ref: 'spell/fireball' }];
     });
     expect(srd.messages).toContain(
-      "dnd-5e-2024/class/sorcerer.json: stats.spells: an SRD class's spell list is derived from its spells' classes; only a custom class lists spells",
+      "content/dnd-5e-2024/class/sorcerer.json: stats.spells: an SRD class's spell list is derived from its spells' classes; only a custom class lists spells",
     );
     const custom = await validate((entries) => {
       const sorcerer = byId(entries, 'class', 'sorcerer');
@@ -129,30 +129,40 @@ describe('validation', () => {
     const { warns } = await validate((entries) => {
       for (const e of entries.filter((e) => ['class', 'class-feature', 'class-option', 'subclass'].includes(e.type))) delete e.meta.source.srd;
     });
-    expect(warns).toContain('dnd-5e-2024/class/sorcerer.json: stats.features: no feature or subclass level at level 9, 11, 13, 15');
+    expect(warns).toContain('content/dnd-5e-2024/class/sorcerer.json: stats.features: no feature or subclass level at level 9, 11, 13, 15');
     const { warns: noFirst } = await validate((entries) => {
       const sorcerer = byId(entries, 'class', 'sorcerer');
       delete sorcerer.meta.source.srd;
       byId(entries, 'class-feature', 'sorcerer-spellcasting').stats.levels = [2];
       byId(entries, 'class-feature', 'sorcerer-innate-sorcery').stats.levels = [2];
     });
-    expect(noFirst).toContain('dnd-5e-2024/class/sorcerer.json: stats.features: no feature at level 1');
+    expect(noFirst).toContain('content/dnd-5e-2024/class/sorcerer.json: stats.features: no feature at level 1');
   });
 
   it("rejects a subclass feature off its class's subclass levels, and a subclass level with no feature", async () => {
     const { messages } = await validate((entries) => {
       byId(entries, 'class-feature', 'draconic-sorcery-dragon-wings').stats.levels = [13];
     });
-    const file = 'dnd-5e-2024/subclass/draconic-sorcery.json';
+    const file = 'content/dnd-5e-2024/subclass/draconic-sorcery.json';
     expect(messages).toContain(`${file}: stats.features[3]: class-feature/draconic-sorcery-dragon-wings is at level 13, not one of class/sorcerer's subclass levels (3, 6, 14, 18)`);
     expect(messages).toContain(`${file}: stats.features: no feature at subclass level 14 of class/sorcerer`);
+  });
+
+  it('rejects subclass features out of level order', async () => {
+    const { messages } = await validate((entries) => {
+      const s = byId(entries, 'subclass', 'draconic-sorcery').stats;
+      [s.features[2], s.features[3]] = [s.features[3], s.features[2]];
+    });
+    expect(messages).toEqual([
+      'content/dnd-5e-2024/subclass/draconic-sorcery.json: stats.features[3]: class-feature/draconic-sorcery-elemental-affinity at level 6 is listed after class-feature/draconic-sorcery-dragon-wings at level 14; features are in level order',
+    ]);
   });
 
   it('rejects a subclass whose class is missing or another type', async () => {
     const { messages } = await validate((entries) => {
       byId(entries, 'subclass', 'draconic-sorcery').stats.class = { ref: 'class/artificer' };
     });
-    expect(messages).toContain('dnd-5e-2024/subclass/draconic-sorcery.json: stats.class: ref "class/artificer" does not resolve: no class has id "artificer"');
+    expect(messages).toContain('content/dnd-5e-2024/subclass/draconic-sorcery.json: stats.class: ref "class/artificer" does not resolve: no class has id "artificer"');
   });
 });
 

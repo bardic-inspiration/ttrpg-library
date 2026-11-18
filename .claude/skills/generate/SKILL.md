@@ -38,8 +38,9 @@ One batch, from exactly one of these sources:
 - **SRD import stage.** A stage issue of the full SRD import ([SRD import](../../../docs/generation.md#srd-import)), worked
   in a session the owner starts. The batch is SRD entries of one type and
   tier, picked from `npm run srd-coverage -- --type <type> --tier <tier>`.
-  It is an SRD request; don't claim the issue with `in-progress`. The
-  session around it follows `.claude/skills/srd-import/SKILL.md`.
+  It is an SRD request; don't claim the issue with `in-progress`. The full
+  import is done; the session workflow its stages followed is archived at
+  `.claude/archive/srd-import/SKILL.md`.
 
 Resolve each request against `config/defaults.json` as
 `scripts/generate/defaults.ts` (`applyDefaults`) does: a blank field takes
@@ -130,7 +131,7 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
   No non-SRD proper nouns anywhere ([Blocklist](../../../docs/licensing.md#blocklist)).
 - **Situational fields.** Omit an optional field that doesn't apply; never
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` ([Situational fields](../../../docs/content-model.md#situational-fields)).
-- Don't add `image` (no art in v1).
+- Don't add `image`. Art is the Images track's work (#316), not this skill's.
 
 ### SRD entries
 
@@ -194,9 +195,10 @@ stats by hand. For each issue, in order:
    script wrote the entries under `content/`, `meta`, and the work's line in
    `ATTRIBUTION.md`.
 5. Rewrite each new entry's drafted `summary` as one plain, factual line for
-   the entry, in the type's voice. Don't change its `name`, `stats`, or
-   `description`, except to turn a plain mention of a library entry into a
-   link the script missed.
+   the entry, in the type's voice. The script links only names in structured
+   fields, so link each mention of a library entry or rule in the entry's
+   text by **Text** above. Don't change its `name`, `stats`, or
+   `description` otherwise.
 6. Read each new entry for SRD proper nouns (a specific person, place, or
    thing named in the SRD), which the script can't detect. Delete an entry
    that uses one, and add a row for it to the issue's skip-list section with

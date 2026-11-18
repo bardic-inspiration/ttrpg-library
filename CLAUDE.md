@@ -48,13 +48,25 @@ find a task's parent with `get_parent`.
 
 ## Configuration and skills
 
-- [`.claude/settings.json`](.claude/settings.json) pre-approves the npm
-  scripts and read-only git, and blocks force-pushes and reading `.env`
-  files.
+- [`.claude/settings.json`](.claude/settings.json) pre-approves every npm
+  script, with its arguments where it takes them, and read-only git, and
+  blocks force-pushes and reading `.env` files.
+  [`tests/settings.test.ts`](tests/settings.test.ts) checks the scripts
+  against `package.json`, so a new script needs its rule.
+- The force-push block denies a `git push` with `--force` (any
+  `--force-...` variant too) or `-f` anywhere in its arguments, `-fu`
+  included, and one with a `+<refspec>`. A rule's `*` matches any text,
+  spaces included, and each command of a compound line is checked on its
+  own. The patterns don't match other spellings, such as a combined flag
+  with `f` after its first letter (`-uf`), an option before `push`
+  (`git -C <dir> push -f`), `--mirror`, or a push run from a script or an
+  alias. The block is a backstop: the rule against rewriting pushed
+  history ([`AGENTS.md`](AGENTS.md) "Rules") holds without it.
 - [`.claude/hooks/session-start.sh`](.claude/hooks/session-start.sh)
   installs dependencies when a cloud session starts.
-- [`srd-import`](.claude/skills/srd-import/SKILL.md) is the session
-  workflow for SRD import stages and upkeep of SRD entries.
+- [`srd-import`](.claude/archive/srd-import/SKILL.md), the SRD import's
+  session workflow, is archived in `.claude/archive/` for the record, since
+  the import is done. An archived skill doesn't load.
 - [`ask-me`](.claude/skills/ask-me/SKILL.md) interviews the user when a goal
   is still fuzzy. [`grill-me`](.claude/skills/grill-me/SKILL.md)
   stress-tests a plan before it's built.
