@@ -6,6 +6,7 @@ export type Ability = 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha';
 export type Proficiency = 'proficient' | 'expertise';
 export type Size = 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'gargantuan';
 
+/** A link with an optional note (`Ref` in common.schema.json). */
 export interface Ref {
   ref: string;
   /** A qualifier printed in parentheses after the name: "Fireball (level 5 version)". */
@@ -174,12 +175,6 @@ export interface ItemSpell {
   maxChargeCost?: number;
   saveDc?: number;
   attackBonus?: number;
-}
-
-/** A link with an optional note (`Ref` in common.schema.json). */
-export interface Ref {
-  ref: string;
-  note?: string;
 }
 
 /** An item's base equipment (docs/rulesets.md#items): a list of items, or any of some groups. */
