@@ -145,7 +145,8 @@ The PR that closes a milestone's last task carries the `milestone` label, added
 by hand. It gets every check whatever its paths, so it is never docs-only or
 text-only, and it adds the `a11y` job: `npm run a11y` against the built site
 ([Accessibility](styling.md#accessibility)). Adding the label re-runs
-`validate`. Other PRs don't run the accessibility checks.
+`validate`. Other PRs don't run the accessibility checks; UI work outside a
+milestone waits for the next one ([Milestone review](#milestone-review)).
 
 ### Milestone review
 
@@ -164,6 +165,15 @@ titled `Milestone <n> WCAG 2.2 AA review: <what it added>`, with:
 
 Like every Testing backlog check, it doesn't block the milestone or the next
 task ([Testing backlog](../AGENTS.md#testing-backlog)).
+
+UI work that isn't part of a milestone, such as a track's, gets no milestone
+PR, so it waits for the next milestone's review
+([Accessibility review backlog](../AGENTS.md#accessibility-review-backlog)).
+The session that opens its `ui` PR files a `test` issue under the
+Accessibility review backlog, titled `Accessibility review: <what it added>`,
+with the PR and the same Pages and Checks. The next milestone review takes up
+every open backlog issue: it lists their pages and checks with its own, and
+they close with it.
 
 ### UI screenshots
 

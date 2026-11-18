@@ -405,6 +405,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The milestone review is filed by the session that opens the milestone PR, as a `test` issue under the Testing backlog with Pages, Checks, and Done when, as #267 and #288 were. | Keeps the reviews alike and filed when the milestone's scope is fresh | #239 |
 | A range input filters only on text that reads as a number or is empty, keeping the other bound as filtered. Its text isn't rewritten while it has focus, and shows the filter's value once focus leaves. | Typing `1/8` or `1.5` passes through text that doesn't parse; once the reader leaves, the box says what filters | #319 |
 | Component behavior in the browser (typing, focus) is tested by rendering with Preact into a small fake DOM, `tests/site/dom.ts`, rather than a DOM library. | The filter inputs need only elements, events, and focus, and no new dependency | #319 |
+| UI work gets its accessibility review at the end of its milestone. UI work outside a milestone, such as a track's, is flagged for the next one: the session that opens its `ui` PR files a `test` issue under the Accessibility review backlog, a tracking issue kept like the Testing backlog, and the next milestone review takes up every open one. | Tracks have no milestones, so their UI would get neither the a11y job nor a review; one repo-wide rule, not case by case | #319 |
+| The milestone review stays a Testing backlog check; the Accessibility review backlog holds only UI work waiting for a review. | The review is a human check like the rest of the Testing backlog; the backlog is what the next review covers | #319 |
 
 ### Export
 
