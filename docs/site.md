@@ -365,8 +365,11 @@ then tags by key, with the default sort and ignored parameters left out.
   index order. Otherwise it targets the whole filtered set in the gallery's
   order. Each button's accessible name says which ("Print 3 selected",
   "Download 12 entries"), and both are disabled when they'd target nothing.
-- An action first fetches the export bundles of its entries. If any fails to
-  load, nothing runs, and a polite status region says so.
+- An action whose exporter reads entries in full, such as Open5e, first
+  fetches the export bundles of its entries. If any fails to load, nothing
+  runs, and a polite status region says so. Print and JSON read only the
+  entries' keys, so they fetch no bundles
+  ([Exporter interface](export.md#exporter-interface)).
 
 **Scale.** The index is loaded once and filtered in memory, sized for a few
 thousand entries. Past about 2,000, revisit the index size and prebuilt search

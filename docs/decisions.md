@@ -420,6 +420,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Download opens a small format menu (PNG, JSON, translators), offering only the formats for its scope. | A save dialog's file-type list works only in Chromium | #115 |
 | Page types and rules pages get Print, not Download; printing one expands every section. | Download is for card entries | #115 |
 | The print view is given the build's facet data by the helper the Library's island uses, `libraryFacetData`, and a print run takes it as a required argument, with no empty default. | P3; the empty default is what lost the groups and ref names from a print view's gallery query | #319 |
+| An exporter declares `keysOnly` when it reads only entries' ruleset, type, and id, and a set action then runs it on the gallery's records without fetching export bundles. Print and JSON declare it; JSON fetches its raw files itself. | P11: Print needs only keys, and JSON fetched every bundle and then every raw file | #319 |
 
 ### Translators
 

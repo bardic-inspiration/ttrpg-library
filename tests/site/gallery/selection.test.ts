@@ -4,8 +4,8 @@ import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import { describe, expect, it } from 'vitest';
 import SetActions from '../../../site/src/components/gallery/SetActions.tsx';
-import { configuredControls } from '../../../site/src/exporters/index.ts';
-import { bundleUrl, loadExportItems } from '../../../site/src/exporters/io.ts';
+import { configuredControls, modules } from '../../../site/src/exporters/index.ts';
+import { bundleUrl, loadExportItems, rawFileUrl, runSetExport } from '../../../site/src/exporters/io.ts';
 import { setTarget, targetText } from '../../../site/src/lib/gallery/selection.ts';
 import { fixtureLibrary } from '../library-fixtures.ts';
 import { record } from './helpers.ts';
@@ -77,6 +77,63 @@ describe('loadExportItems', () => {
     const [first] = Object.keys(served);
     const partial = Object.fromEntries(Object.entries(served).filter(([url]) => url !== first));
     await expect(loadExportItems(BASE, entries.map(({ entry }) => entry), fetchFrom(partial))).rejects.toThrow(/404/);
+  });
+});
+
+describe('runSetExport (docs/export.md#exporter-interface)', () => {
+  const entries = ['frost-lance', 'cinder-hound'].map((id) => lib.byId(id).entry);
+  /** The gallery's records carry each entry's key, not the entry. */
+  const records = entries.map((entry) => record({ id: entry.id, type: entry.type, name: entry.name }));
+  const bundles = Object.fromEntries(
+    ['frost-lance', 'cinder-hound'].map((id) => lib.byId(id)).map(({ entry, derived }) => [bundleUrl(BASE, entry), JSON.stringify({ entry, derived })]),
+  );
+  const raws = Object.fromEntries(entries.map((entry) => [rawFileUrl(BASE, entry), JSON.stringify(entry)]));
+  const io = (files: Record<string, string>) => {
+    const fetched: string[] = [];
+    const opened: string[] = [];
+    return {
+      fetched,
+      opened,
+      io: {
+        fetch: async (url: string) => {
+          fetched.push(url);
+          return { ok: url in files, status: url in files ? 200 : 404, text: async () => files[url] ?? '' };
+        },
+        open: (url: string) => void opened.push(url),
+        download: () => {},
+        now: () => new Date(2026, 10, 2),
+      },
+    };
+  };
+
+  it('marks Print and JSON as reading only entries’ keys, and the rest as reading them in full', () => {
+    const keysOnly = Object.values(modules).filter((exporter) => exporter.keysOnly).map((exporter) => exporter.id);
+    expect(keysOnly.sort()).toEqual(['json', 'print']);
+  });
+
+  it('runs Print on the records’ keys, fetching no bundle', async () => {
+    const fake = io(bundles);
+    await runSetExport(modules.print!, records, { scope: 'set', base: BASE, io: fake.io });
+    expect(fake.fetched).toEqual([]);
+    expect(fake.opened).toEqual(['/ttrpg-library/print/?ids=spell/frost-lance,creature/cinder-hound']);
+  });
+
+  it('runs JSON on the records’ keys, fetching only the raw files', async () => {
+    const fake = io(raws);
+    await runSetExport(modules.json!, records, { scope: 'set', base: BASE, io: fake.io });
+    expect(fake.fetched).toEqual(Object.keys(raws));
+  });
+
+  it('fetches the bundles first for an exporter that reads entries in full', async () => {
+    const fake = io(bundles);
+    const report = await runSetExport(modules.open5e!, records, { scope: 'set', base: BASE, io: fake.io });
+    expect(fake.fetched).toEqual(Object.keys(bundles));
+    expect(report).toMatchObject({ downloaded: true });
+  });
+
+  it('runs nothing when a bundle fails to load', async () => {
+    const fake = io({});
+    await expect(runSetExport(modules.open5e!, records, { scope: 'set', base: BASE, io: fake.io })).rejects.toThrow(/404/);
   });
 });
 

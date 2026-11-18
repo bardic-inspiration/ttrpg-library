@@ -25,7 +25,9 @@ interface Exporter {
   label: string;                      // "Print", or the format's name: "PNG", "JSON"
   scopes: Array<"entry" | "set">;     // single entry, filtered or selected set, or both
   types?: string[];                   // the entry types it offers on an entry's page; all when absent
+  keysOnly?: boolean;                 // true: it reads only each entry's ruleset, type, and id
   run(items: Array<{ entry: Entry; derived: Derived; names?: Names }>, options: ExportOptions): Promise<ExportReport | void>;
+  // a keysOnly exporter's items are Array<{ entry: { ruleset; type; id } }>
 }
 
 interface ExportReport {
@@ -47,8 +49,13 @@ interface ExportReport {
   `types` appears only on those entries' pages. The detail page has its entry,
   derived values, and the names of the entries and rules it links to at build
   time; a gallery set action fetches them from each entry's export bundle
-  ([site.md](site.md#index-build)). Every exporter receives real items in either
-  scope.
+  ([site.md](site.md#index-build)), so an exporter that reads entries receives
+  real items in either scope (`runSetExport` in `site/src/exporters/io.ts`).
+- **Keys only.** An exporter that reads nothing of an entry but its ruleset,
+  type, and id declares `keysOnly: true`, and a set action runs it on the
+  gallery's records with no bundle fetched. Print (which only builds the print
+  view's URL) and JSON (which fetches the raw files itself) are keys-only;
+  PNG and Open5e read entries in full.
 - A failed export does nothing and says so in a polite status region. An
   exporter that resolves with a report gets a status line saying how many
   things didn't carry over, or that nothing in the scope exports, and the
