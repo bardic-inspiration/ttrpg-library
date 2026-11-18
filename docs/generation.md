@@ -261,9 +261,9 @@ every content rule applies to them.
 - **The import script.** `npm run import -- --issue <n> --format <id> --file
   <path> --work <title> --author <name> --url <source> --license <id>`
   (`--ruleset` and `--date` optional) runs the format's translator's import
-  side ([Translators](export.md#translators)) on the file, with names
-  resolved against the library and its rules, so the content's mentions of
-  library entries become links. It writes each entry to `content/` with
+  side ([Translators](export.md#translators)) on the file. Names in
+  structured fields resolve against the library and its rules and become
+  refs; names in text stay plain. It writes each entry to `content/` with
   `meta.source.kind: import`, the issue, and `meta.source.license` (the
   license id, author, and source URL), `tags` of `defaults.tags` plus
   `author`, and a drafted `summary` the run rewrites. It appends the work's
@@ -278,9 +278,11 @@ every content rule applies to them.
   name or id the library or the batch already has in that type, or a
   blocklisted term. Skipping never renames a record.
 - **What the run adds.** The `generate` skill rewrites each drafted summary
-  as the type's one-line factual summary, and removes any entry that uses an
-  SRD proper noun, which no list holds, adding it to the skip list. Then it
-  validates the batch like any other.
+  as the type's one-line factual summary, links the mentions of library
+  entries and rules in each entry's text
+  ([References](content-model.md#references)), and removes any entry that
+  uses an SRD proper noun, which no list holds, adding it to the skip list.
+  Then it validates the batch like any other.
 - **The PR.** One content PR for every import issue in the run, on
   `gen/import-<issue-numbers>-<YYYYMMDD>`, with the content PR template's
   "Skipped on import" section: one `#### #<n>: <work>` section per issue,

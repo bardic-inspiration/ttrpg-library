@@ -194,9 +194,10 @@ stats by hand. For each issue, in order:
    script wrote the entries under `content/`, `meta`, and the work's line in
    `ATTRIBUTION.md`.
 5. Rewrite each new entry's drafted `summary` as one plain, factual line for
-   the entry, in the type's voice. Don't change its `name`, `stats`, or
-   `description`, except to turn a plain mention of a library entry into a
-   link the script missed.
+   the entry, in the type's voice. The script links only names in structured
+   fields, so link each mention of a library entry or rule in the entry's
+   text by **Text** above. Don't change its `name`, `stats`, or
+   `description` otherwise.
 6. Read each new entry for SRD proper nouns (a specific person, place, or
    thing named in the SRD), which the script can't detect. Delete an entry
    that uses one, and add a row for it to the issue's skip-list section with
