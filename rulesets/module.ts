@@ -14,9 +14,6 @@ export interface Issue {
 
 export interface RulesetDefinition {
   id: string;
-  label: string;
-  srdVersion: string;
-  attribution: string;
   types: string[];
   /** Rules types, whose primitives are kept in rules/ (docs/rulesets.md#rules-data). Omitted for none. */
   rules?: { type: string; extensions: boolean }[];

@@ -16,8 +16,8 @@ Validation reads it only to confirm a ruleset and type are registered, and it
 never decides whether a field displays; the schema does
 ([content-model.md](content-model.md#situational-fields)).
 
-Per ruleset: a `label` and an `attribution` key ([licensing.md](licensing.md)).
-Per type:
+Per ruleset: a `label`, its display name in the Library's ruleset filter,
+on the Rulesets page, and in the redirects from its old pages. Per type:
 
 | Key | Purpose |
 |---|---|

@@ -37,7 +37,7 @@ export interface TypeConfig {
 }
 
 /** config/types.json (docs/site.md#type-registry). */
-export type Registry = Record<string, { label: string; attribution: string; types: Record<string, TypeConfig> }>;
+export type Registry = Record<string, { label: string; types: Record<string, TypeConfig> }>;
 
 /** One record of library.json, in the docs/site.md#index-build shape and key order. */
 export interface LibraryRecord {

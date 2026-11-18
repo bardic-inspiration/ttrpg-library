@@ -110,7 +110,6 @@ describe('library.json records', () => {
       registry: {
         'dnd-5e-2024': {
           label: 'x',
-          attribution: 'srd-5.2',
           types: {
             creature: { label: 'C', plural: 'Cs', template: 't', facets: [{ path: 'stats.speed.fly', label: 'Fly', kind: 'range' }] },
             'item': { label: 'M', plural: 'Ms', template: 't', facets: [] },

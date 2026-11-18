@@ -351,6 +351,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Search text reads every ref in `stats` by its target's name, whatever its field, and plain text only at `RefOrText` fields; a parent's refs to its own components aren't read again, since each component's part of the text starts with its name. | Typed refs added nothing, so "magic initiate" didn't find Acolyte; a name read twice adds no match | #319 |
 | A subclass's features are checked for level order by each feature's first level, with the class's check and message, whether or not its class resolves. | P3: one rule for both lists; the order doesn't depend on the class | #319 |
 | `srd-coverage` reads the library through `validateLibrary()`, and the ruleset's rules and component types through its module, instead of re-reading the files; it fails while validation has errors, as `build:index` does. | P3: one reading of components' parents and the rules data; P2: an entry that fails validation would otherwise read as missing | #319 |
+| `ruleset.json` drops `label`, `srdVersion`, and `attribution`, and `config/types.json` drops `attribution`: nothing read them. A ruleset's display label is the registry's, and its attribution statement is written where it shows rather than looked up by key. | P3: one label, and no key that claims a lookup nothing makes; a key-driven statement would be machinery for a single ruleset, whose licensing review sets the wording and placement anyway | #319 |
 
 ### Wording
 
