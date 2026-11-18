@@ -30,4 +30,11 @@ describe('validate CLI', () => {
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('error');
   });
+
+  it('names each file by its path from the repo root, as the error carries it', async () => {
+    const lib = await tempLibrary([await cinderHound()]);
+    temps.push(lib.repo);
+    await writeFile(join(lib.content, 'dnd-5e-2024/creature/cinder-hound.json'), '{');
+    expect(run(lib.content).stderr).toMatch(/^error {3}content\/dnd-5e-2024\/creature\/cinder-hound\.json: invalid JSON/m);
+  });
 });

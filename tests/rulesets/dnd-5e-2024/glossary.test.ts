@@ -115,7 +115,7 @@ describe('links to glossary terms', () => {
     const { repo, content } = await tempLibrary([{ ...mired, type: 'glossary', id: 'luck', name: 'Luck', stats: { text: 'Luck is luck.' } }]);
     temps.push(repo);
     expect((await validateLibrary(content)).errors.map((e) => `${e.file}: ${e.message}`)).toEqual([
-      'dnd-5e-2024/glossary/luck.json: type: "glossary" is a rules type that takes no extensions; its rules are kept in rulesets/dnd-5e-2024/rules/',
+      'content/dnd-5e-2024/glossary/luck.json: type: "glossary" is a rules type that takes no extensions; its rules are kept in rulesets/dnd-5e-2024/rules/',
     ]);
   });
 });

@@ -235,6 +235,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | v2 concludes in its current state: Milestone 8 ends at the translator framework, Open5e, and the import flow, and Milestone 9 becomes a final code and docs review (#317) before close-out (#255). The rest of `translators.md` and all of `art.md` move to ongoing development tracks, Integrations (#315) and Images (#316). | v2 is usable without them, and neither needs a version boundary to continue | #220, #221 |
 | A development track is a tracking issue with no end, and its unbuilt design is one file in `spec/tracks/`, in the area-file shape and checked by the same test and link check. Tracks join the dev queue after the last milestone, Integrations then Images. | The stage spec is removed at close-out, so deferred design needs a home that outlives v2; the order keeps v2 first and the old milestone order | #315, #316 |
 | Milestone 8's WCAG 2.2 AA review is folded into Milestone 9's, since #220 closed without a milestone PR. | One review covers what the last two milestones added | #220, #221 |
+| Validation issues name each file by its path from the repo root, taken as the content root's parent as the image check already takes it: `content/…` for an entry, `rulesets/…` for rules data. An entry's own `file` stays under the content root, where the build copies it from. | Entry and rules issues used different roots, so `validate` printed `content/rulesets/…` and `build:index` dropped `content/`; one root lets both print the path as carried | #319 |
 
 ### Linking
 

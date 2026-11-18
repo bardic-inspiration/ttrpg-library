@@ -421,7 +421,11 @@ library is in it, and that the rules data holds every rules record and no other.
 `npm run validate` checks every entry: the envelope and `stats` schemas, then
 consistency checks a schema can't express. **Errors** fail CI; **warnings**
 appear in local output and the PR's job summary but don't block. Derived values
-are never checked, because they are never stored.
+are never checked, because they are never stored. Each error and warning
+names its file by its path from the repo root, the content root's parent:
+`content/<ruleset>/<type>/<id>.json` for an entry, and
+`rulesets/<ruleset>/rules/…` for rules data
+([Rules data](rulesets.md#rules-data)).
 
 Checks for every type and ruleset:
 

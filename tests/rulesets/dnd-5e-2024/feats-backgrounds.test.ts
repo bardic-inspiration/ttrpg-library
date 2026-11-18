@@ -69,9 +69,9 @@ describe('validation', () => {
       delete byId(entries, 'grappler').stats.benefits;
       byId(entries, 'magic-initiate').stats.category = 'heroic';
     });
-    expect(messages).toContain('dnd-5e-2024/feat/savage-attacker.json: stats: must match exactly one schema in oneOf');
-    expect(messages).toContain('dnd-5e-2024/feat/grappler.json: stats: must match exactly one schema in oneOf');
-    expect(messages).toContain('dnd-5e-2024/feat/magic-initiate.json: stats.category: must be one of "origin", "general", "fighting-style", "epic-boon"');
+    expect(messages).toContain('content/dnd-5e-2024/feat/savage-attacker.json: stats: must match exactly one schema in oneOf');
+    expect(messages).toContain('content/dnd-5e-2024/feat/grappler.json: stats: must match exactly one schema in oneOf');
+    expect(messages).toContain('content/dnd-5e-2024/feat/magic-initiate.json: stats.category: must be one of "origin", "general", "fighting-style", "epic-boon"');
   });
 
   it('warns on a custom feat whose prerequisite breaks its category’s pattern, but not on an SRD one', async () => {
@@ -85,8 +85,8 @@ describe('validation', () => {
       byId(entries, 'magic-initiate').stats.prerequisite = 'Spellcasting Feature';
     });
     expect(warns).toEqual([
-      'dnd-5e-2024/feat/grappler.json: stats.level: a general feat has a prerequisite of level 4 or more',
-      'dnd-5e-2024/feat/savage-attacker.json: stats.level: an origin feat has no prerequisite, since a background grants it at level 1',
+      'content/dnd-5e-2024/feat/grappler.json: stats.level: a general feat has a prerequisite of level 4 or more',
+      'content/dnd-5e-2024/feat/savage-attacker.json: stats.level: an origin feat has no prerequisite, since a background grants it at level 1',
     ]);
   });
 
@@ -97,9 +97,9 @@ describe('validation', () => {
       acolyte.stats.skills = ['insight', 'insight'];
       byId(entries, 'soldier').stats.feat = { ref: 'spell/fireball' };
     });
-    expect(messages).toContain('dnd-5e-2024/background/acolyte.json: stats.abilities: must NOT have fewer than 3 items');
-    expect(messages).toContain('dnd-5e-2024/background/acolyte.json: stats.skills: must NOT have duplicate items (items ## 0 and 1 are identical)');
-    expect(messages).toContain('dnd-5e-2024/background/soldier.json: stats.feat.ref: must match pattern "^feat/[a-z0-9]+(-[a-z0-9]+)*$"');
+    expect(messages).toContain('content/dnd-5e-2024/background/acolyte.json: stats.abilities: must NOT have fewer than 3 items');
+    expect(messages).toContain('content/dnd-5e-2024/background/acolyte.json: stats.skills: must NOT have duplicate items (items ## 0 and 1 are identical)');
+    expect(messages).toContain('content/dnd-5e-2024/background/soldier.json: stats.feat.ref: must match pattern "^feat/[a-z0-9]+(-[a-z0-9]+)*$"');
   });
 
   it('rejects a background whose feat isn’t an origin feat, or whose last option isn’t coins', async () => {
@@ -108,8 +108,8 @@ describe('validation', () => {
       byId(entries, 'soldier').stats.equipment[1].items = ['A Spear'];
     });
     expect(messages.sort()).toEqual([
-      'dnd-5e-2024/background/acolyte.json: stats.feat: feat/grappler is a general feat; a background grants an origin feat',
-      'dnd-5e-2024/background/soldier.json: stats.equipment[1]: the last option is coins only, the alternative to the package',
+      'content/dnd-5e-2024/background/acolyte.json: stats.feat: feat/grappler is a general feat; a background grants an origin feat',
+      'content/dnd-5e-2024/background/soldier.json: stats.equipment[1]: the last option is coins only, the alternative to the package',
     ]);
   });
 
@@ -119,7 +119,7 @@ describe('validation', () => {
       custom(soldier);
       soldier.stats.equipment[1].gp = 60;
     });
-    expect(warns).toEqual(['dnd-5e-2024/background/soldier.json: stats.equipment[1].gp: the coin option is 50 GP in every SRD background']);
+    expect(warns).toEqual(['content/dnd-5e-2024/background/soldier.json: stats.equipment[1].gp: the coin option is 50 GP in every SRD background']);
   });
 });
 

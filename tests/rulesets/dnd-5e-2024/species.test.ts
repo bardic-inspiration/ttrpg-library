@@ -58,9 +58,9 @@ describe('validation', () => {
       byId(entries, 'tiefling').stats.sizes.push({ size: 'large', height: 'about 8 feet tall' });
       byId(entries, 'tiefling').stats.traits.push({ ref: 'feat/alert' });
     });
-    expect(messages).toContain('dnd-5e-2024/species/dragonborn.json: stats.speed: speed 32 is not a multiple of 5');
-    expect(messages).toContain('dnd-5e-2024/species/tiefling.json: stats.sizes: must NOT have more than 2 items');
-    expect(messages).toContain('dnd-5e-2024/species/tiefling.json: stats.traits[3].ref: must match pattern "^species-trait/[a-z0-9]+(-[a-z0-9]+)*$"');
+    expect(messages).toContain('content/dnd-5e-2024/species/dragonborn.json: stats.speed: speed 32 is not a multiple of 5');
+    expect(messages).toContain('content/dnd-5e-2024/species/tiefling.json: stats.sizes: must NOT have more than 2 items');
+    expect(messages).toContain('content/dnd-5e-2024/species/tiefling.json: stats.traits[3].ref: must match pattern "^species-trait/[a-z0-9]+(-[a-z0-9]+)*$"');
   });
 
   it('rejects a trait no species lists, a trait with a summary, and a missing trait', async () => {
@@ -71,11 +71,11 @@ describe('validation', () => {
       byId(entries, 'tiefling-darkvision').summary = 'A trait with a summary.';
     });
     expect(messages).toContain(
-      'dnd-5e-2024/species-trait/dragonborn-darkvision.json: species-trait/dragonborn-darkvision is listed by no parent; a species lists it by ref in its stats',
+      'content/dnd-5e-2024/species-trait/dragonborn-darkvision.json: species-trait/dragonborn-darkvision is listed by no parent; a species lists it by ref in its stats',
     );
-    expect(messages).toContain('dnd-5e-2024/species-trait/tiefling-darkvision.json: summary: unknown key');
+    expect(messages).toContain('content/dnd-5e-2024/species-trait/tiefling-darkvision.json: summary: unknown key');
     expect(messages).toContain(
-      'dnd-5e-2024/species/dragonborn.json: stats.traits[4]: ref "species-trait/dragonborn-scales" does not resolve: no species-trait has id "dragonborn-scales"',
+      'content/dnd-5e-2024/species/dragonborn.json: stats.traits[4]: ref "species-trait/dragonborn-scales" does not resolve: no species-trait has id "dragonborn-scales"',
     );
   });
 });

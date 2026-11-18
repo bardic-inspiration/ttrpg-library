@@ -62,8 +62,18 @@ describe('validateLibrary', () => {
   it('reports a file that is not valid JSON', async () => {
     const result = await validateLibrary(join(library, 'broken'));
     expect(result.errors).toHaveLength(1);
-    expect(result.errors[0]?.file).toBe('dnd-5e-2024/creature/sample.json');
+    // From the content root's parent, as every issue names its file.
+    expect(result.errors[0]?.file).toBe('broken/dnd-5e-2024/creature/sample.json');
     expect(result.errors[0]?.message).toMatch(/^invalid JSON/);
+  });
+
+  it('names each file by its path from the repo root, the content root\'s parent', async () => {
+    const { content } = await temp([await cinderHound()]);
+    await writeFile(join(content, 'dnd-5e-2024/creature/cinder-hound.json'), '{');
+    const result = await validateLibrary(content);
+    expect(result.errors.map((e) => e.file)).toEqual(['content/dnd-5e-2024/creature/cinder-hound.json']);
+    // An entry's own file stays under the content root, where the build copies it from.
+    expect(result.files).toEqual(['dnd-5e-2024/creature/cinder-hound.json']);
   });
 });
 
@@ -349,7 +359,7 @@ describe('library checks (docs/content-model.md#validation, all types)', () => {
     const { content } = await temp([{ path: 'dnd-5e-2024/creature/hound.json', entry: await cinderHound() }]);
     const { errors } = await validateLibrary(content);
     expect(errors).toEqual([
-      { file: 'dnd-5e-2024/creature/hound.json', message: expect.stringMatching(/must be content\/dnd-5e-2024\/creature\/cinder-hound\.json/) },
+      { file: 'content/dnd-5e-2024/creature/hound.json', message: expect.stringMatching(/must be content\/dnd-5e-2024\/creature\/cinder-hound\.json/) },
     ]);
   });
 
@@ -371,7 +381,7 @@ describe('library checks (docs/content-model.md#validation, all types)', () => {
     const result = await validateLibrary(content);
     expect(result.errors).toEqual([]);
     expect(result.warnings).toEqual([
-      { file: 'dnd-5e-2024/creature/cinder-hounds.json', message: expect.stringMatching(/close to "Cinder Hound"/) },
+      { file: 'content/dnd-5e-2024/creature/cinder-hounds.json', message: expect.stringMatching(/close to "Cinder Hound"/) },
     ]);
   });
 
@@ -383,7 +393,7 @@ describe('library checks (docs/content-model.md#validation, all types)', () => {
     expect(result.errors).toEqual([]);
     expect(result.warnings).toEqual([]);
     const near = await validateLibrary((await temp([spell, creature, nearCreature, await wandOfFrostLances()])).content);
-    expect(near.warnings.map((w) => w.file)).toEqual(['dnd-5e-2024/creature/frost-lances.json']);
+    expect(near.warnings.map((w) => w.file)).toEqual(['content/dnd-5e-2024/creature/frost-lances.json']);
   });
 
   it('skips the near-duplicate warning when both entries are SRD entries (docs/content-model.md#ids-and-names)', async () => {
@@ -486,7 +496,7 @@ describe('references (docs/content-model.md#references)', () => {
     const { errors } = await validateLibrary(content);
     expect(errors).toEqual([
       {
-        file: 'dnd-5e-2024/item/wand-of-frost-lances.json',
+        file: 'content/dnd-5e-2024/item/wand-of-frost-lances.json',
         message: 'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: no spell has id "frost-lance"',
       },
     ]);
@@ -497,7 +507,7 @@ describe('references (docs/content-model.md#references)', () => {
     spell.stats.level = 12;
     const { content } = await temp([spell, await wandOfFrostLances()]);
     const { errors } = await validateLibrary(content);
-    expect(errors).toEqual([{ file: 'dnd-5e-2024/spell/frost-lance.json', message: expect.stringMatching(/^stats\.level:/) }]);
+    expect(errors).toEqual([{ file: 'content/dnd-5e-2024/spell/frost-lance.json', message: expect.stringMatching(/^stats\.level:/) }]);
   });
 
   it('fails a ref into another ruleset', async () => {
@@ -612,7 +622,7 @@ describe('spell warnings (docs/rulesets.md#consistency-checks)', () => {
     const { content } = await temp([spell]);
     const { errors, warnings } = await validateLibrary(content);
     expect(errors).toEqual([]);
-    expect(warnings).toEqual([{ file: 'dnd-5e-2024/spell/frost-lance.json', message: 'stats.ritual: a cantrip is marked ritual; confirm it' }]);
+    expect(warnings).toEqual([{ file: 'content/dnd-5e-2024/spell/frost-lance.json', message: 'stats.ritual: a cantrip is marked ritual; confirm it' }]);
   });
 
   it('allows concentration on a timed duration and a trigger on a reaction', async () => {

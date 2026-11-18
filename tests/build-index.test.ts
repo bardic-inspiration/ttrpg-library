@@ -204,6 +204,8 @@ describe('the build', () => {
     const result = spawnSync('npx', ['tsx', join(ROOT, 'scripts/build-index/cli.ts'), lib.content, out], { encoding: 'utf8', cwd: ROOT });
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('validation errors');
+    // Each error names its file from the repo root (docs/content-model.md#validation).
+    expect(result.stderr).toContain('content/dnd-5e-2024/creature/cinder-hound.json: stats: missing required key "cr"');
     expect(await readdir(out)).toEqual([]);
   });
 
