@@ -392,6 +392,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The token contrast test is removed, not kept on demand: axe checks rendered contrast on milestone PRs, and the milestone review checks the token pairs. Its reduced-motion checks aren't contrast and stay in `npm test` as `tests/site/motion.test.ts`. | The spec takes contrast out of CI; an unrun test rots | #239 |
 | `npm run snapshots` captures each page at 390, 820, and 1440px wide (800px high, full-page) as `<page>-<width>.png`, replacing the single 1280 × 800 capture. | One command gives a UI PR its screenshots; the spec sets only the widths | #239 |
 | The milestone review is filed by the session that opens the milestone PR, as a `test` issue under the Testing backlog with Pages, Checks, and Done when, as #267 and #288 were. | Keeps the reviews alike and filed when the milestone's scope is fresh | #239 |
+| A range input filters only on text that reads as a number or is empty, keeping the other bound as filtered. Its text isn't rewritten while it has focus, and shows the filter's value once focus leaves. | Typing `1/8` or `1.5` passes through text that doesn't parse; once the reader leaves, the box says what filters | #319 |
+| Component behavior in the browser (typing, focus) is tested by rendering with Preact into a small fake DOM, `tests/site/dom.ts`, rather than a DOM library. | The filter inputs need only elements, events, and focus, and no new dependency | #319 |
 
 ### Export
 

@@ -304,7 +304,10 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   by name (ref facets), or alphabetically, plus any selected value no entry
   has. A groups facet's values nest, each group with its own disclosure. A
   range facet's node holds min and max inputs, which accept fractions such as
-  `1/8`.
+  `1/8` and decimals. Each filters as the reader types, whenever its text reads
+  as a number or is empty, so `1/` and `1.` on the way to `1/8` and `1.5`
+  change nothing. While an input has focus its text stays as typed; when focus
+  leaves, it shows the filter's value (`0.125` reads `1/8` for CR).
 - **Open nodes.** A checked type's registry `defaultFilters` start open, in
   its node and, for a tag, in Tags. Every node holding an active filter starts
   open, down to the value. The reader opens and closes the rest.
