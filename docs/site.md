@@ -55,8 +55,9 @@ Two flags change what a facet's values are:
   The index lifts each as its key (`condition/poisoned`), and the gallery
   reads it by its target's name and sorts by that name, in values and in
   sorted records. A creature's `stats.immunities.conditions`, a spell's
-  `stats.classes`, a background's `stats.feat`, and a subclass's
-  `stats.class` are ref facets.
+  `stats.classes`, a background's `stats.feat`, a subclass's
+  `stats.class`, and equipment's `stats.weapon.properties` and
+  `stats.weapon.mastery` are ref facets.
 - **`groups`:** the values are the type's leaf groups
   ([Rules groups](rulesets.md#rules-groups)), offered nested as the groups
   file nests them. Choosing a group matches every leaf group in it, and a

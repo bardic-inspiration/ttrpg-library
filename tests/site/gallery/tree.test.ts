@@ -127,6 +127,58 @@ describe('Equipment › Weapon › Martial › Melee', () => {
   });
 });
 
+describe('a custom weapon through Equipment › Weapon › Property and Mastery', () => {
+  const reefKnife: Entry = {
+    ruleset: 'dnd-5e-2024',
+    type: 'equipment',
+    id: 'reef-knife',
+    name: 'Reef Knife',
+    summary: 'A short coral-hilted blade for cutting nets underwater.',
+    stats: {
+      group: 'martial-melee-weapons',
+      cost: { amount: 4, unit: 'gp' },
+      weight: 1,
+      weapon: {
+        damage: { dice: '1d4', type: 'slashing' },
+        properties: [{ ref: 'weapon-property/finesse' }, { ref: 'weapon-property/light' }],
+        mastery: { ref: 'mastery-property/nick' },
+      },
+    },
+    meta: { createdAt: '2026-11-18', source: { kind: 'manual' } },
+  } as unknown as Entry;
+  let config: GalleryConfig;
+  let records: LibraryRecord[];
+  let knifeRepo: string;
+  beforeAll(async () => {
+    const all = loadLibrary([reefKnife], rules);
+    config = galleryConfig(reg, facetData(reg, all, entryNames(all, rules), rules));
+    const lib = await tempLibrary([reefKnife]);
+    knifeRepo = lib.repo;
+    const built = await buildIndex(lib.content, { assetsRoot: lib.repo });
+    expect(built.errors).toEqual([]);
+    records = built.records;
+  });
+  afterAll(() => rm(knifeRepo, { recursive: true, force: true }));
+
+  it('lists its properties and mastery by name, as ref facets beside its damage type', () => {
+    const weapon = find(tree(records, config), 'Equipment', 'Weapon');
+    expect(weapon?.kind === 'field' && weapon.children.map(labelOf)).toEqual(['Damage type', 'Property', 'Mastery']);
+    expect(values(find(tree(records, config), 'Equipment', 'Weapon', 'Property')).map((v) => [v.label, v.key])).toEqual([
+      ['Finesse', 'weapon-property/finesse'],
+      ['Light', 'weapon-property/light'],
+    ]);
+    expect(values(find(tree(records, config), 'Equipment', 'Weapon', 'Mastery')).map((v) => [v.label, v.key])).toEqual([['Nick', 'mastery-property/nick']]);
+  });
+
+  it('filters by a property and by a mastery', () => {
+    const ids = (query: string) => computeView(records, config, parseQuery(query, config), searchIndex(records)).results.map((r) => r.id);
+    expect(ids('?f.stats.weapon.properties=weapon-property%2Ffinesse')).toEqual(['reef-knife']);
+    expect(ids('?f.stats.weapon.properties=weapon-property%2Fheavy')).toEqual([]);
+    expect(ids('?f.stats.weapon.mastery=mastery-property%2Fnick')).toEqual(['reef-knife']);
+    expect(ids('?f.stats.weapon.mastery=mastery-property%2Fsap')).toEqual([]);
+  });
+});
+
 describe('every facet of every type', () => {
   /** A record of each type with a value for every facet. */
   const full = (): LibraryRecord[] =>
