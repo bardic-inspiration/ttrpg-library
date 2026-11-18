@@ -3,10 +3,11 @@
 // rules data's primitives and equipment groups (docs/rulesets.md#rules-data), and the page types'
 // components by parent (docs/content-model.md#components).
 
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { objectRefs } from '../validate/refs.ts';
-import { listEntryFiles } from '../validate/walk.ts';
+import { typedGroups } from '../../lib/rules.ts';
+import { validateLibrary, type ValidationError } from '../validate/index.ts';
+import { loadRuleset, PROJECT_ROOT } from '../validate/schema.ts';
 
 export const TIERS = ['complex', 'simple'] as const;
 export type Tier = (typeof TIERS)[number];
@@ -296,62 +297,38 @@ export async function loadManifest(root: string, ruleset: string): Promise<Manif
   return JSON.parse(await readFile(join(root, 'rulesets', ruleset, 'srd-manifest.json'), 'utf8')) as Manifest;
 }
 
-interface RawEntry {
-  type: string;
-  id: string;
-  name: string;
-  stats?: unknown;
-  meta?: { source?: { srd?: boolean } };
+/** What coverage reads from the library, all through the validator, as the import does (docs/generation.md#imports). */
+export interface LibraryHeads {
+  /** The ruleset's entries, without components. */
+  entries: EntryHead[];
+  /** The ruleset's SRD components, each with its parent: the entry whose stats list it by ref. */
+  components: ComponentHead[];
+  /** The ruleset's primitives and groups. */
+  rules: RuleHead[];
+  /** The validator's errors. An entry that fails isn't counted, so coverage is read only without them. */
+  errors: ValidationError[];
 }
 
-async function loadRaw(root: string, ruleset: string): Promise<RawEntry[]> {
-  const dir = join(root, 'content', ruleset);
-  const files = await listEntryFiles(dir);
-  return Promise.all(files.map(async (file) => JSON.parse(await readFile(join(dir, file), 'utf8')) as RawEntry));
+const isSrd = (meta: unknown) => (meta as { source?: { srd?: unknown } } | undefined)?.source?.srd === true;
+
+/** Validates the library under `content` and reads what coverage matches from the result. */
+export async function loadLibraryHeads(ruleset: string, content = join(PROJECT_ROOT, 'content')): Promise<LibraryHeads> {
+  const { errors, entries, components, rules } = await validateLibrary(content);
+  const data = rules.find((r) => r.ruleset === ruleset);
+  return {
+    entries: entries.filter(({ entry }) => entry.ruleset === ruleset).map(({ entry }) => ({ type: entry.type, name: entry.name, srd: isSrd(entry.meta) })),
+    components: components
+      .filter(({ entry }) => entry.ruleset === ruleset && isSrd(entry.meta))
+      .map(({ entry, parent }) => ({ type: entry.type, name: entry.name, parent })),
+    rules: data
+      ? [...data.primitives.map(({ type, name }) => ({ type, name })), ...typedGroups(data).map(({ type, name }) => ({ type, name, group: true as const }))]
+      : [],
+    errors,
+  };
 }
 
-/** Reads the type, name, and SRD marker of every entry under `content/<ruleset>/`, without components. */
-export async function loadEntryHeads(root: string, ruleset: string): Promise<EntryHead[]> {
-  const componentTypes = new Set((await loadComponentTypes(root, ruleset)).map((c) => c.type));
-  return (await loadRaw(root, ruleset))
-    .filter((entry) => !componentTypes.has(entry.type))
-    .map((entry) => ({ type: entry.type, name: entry.name, srd: entry.meta?.source?.srd === true }));
-}
-
-/** The SRD components under `content/<ruleset>/`, each with its parent: the entry whose stats list it by ref. */
-export async function loadComponentHeads(root: string, ruleset: string): Promise<ComponentHead[]> {
-  const componentTypes = new Set((await loadComponentTypes(root, ruleset)).map((c) => c.type));
-  const raw = await loadRaw(root, ruleset);
-  const parentOf = new Map<string, string>();
-  for (const entry of raw.filter((e) => !componentTypes.has(e.type))) {
-    for (const { ref } of objectRefs(entry.stats)) parentOf.set(ref, `${entry.type}/${entry.id}`);
-  }
-  return raw
-    .filter((e) => componentTypes.has(e.type) && e.meta?.source?.srd === true)
-    .map((e) => ({ type: e.type, name: e.name, parent: parentOf.get(`${e.type}/${e.id}`) ?? '' }));
-}
-
-/** The ruleset's component types and their parent types, from its ruleset.json. */
-export async function loadComponentTypes(root: string, ruleset: string): Promise<{ type: string; parents: string[] }[]> {
-  const definition = JSON.parse(await readFile(join(root, 'rulesets', ruleset, 'ruleset.json'), 'utf8')) as { components?: { type: string; parents: string[] }[] };
-  return definition.components ?? [];
-}
-
-/** The ruleset's rules types, from its ruleset.json. */
-export async function loadRulesTypes(root: string, ruleset: string): Promise<string[]> {
-  const definition = JSON.parse(await readFile(join(root, 'rulesets', ruleset, 'ruleset.json'), 'utf8')) as { rules?: { type: string }[] };
-  return (definition.rules ?? []).map((r) => r.type);
-}
-
-/** The type and name of every primitive and group under `rulesets/<ruleset>/rules/`. */
-export async function loadRuleHeads(root: string, ruleset: string): Promise<RuleHead[]> {
-  const dir = join(root, 'rulesets', ruleset, 'rules');
-  const heads: RuleHead[] = [];
-  for (const type of await loadRulesTypes(root, ruleset)) {
-    const files = (await readdir(join(dir, type)).catch(() => [] as string[])).filter((f) => f.endsWith('.json')).sort();
-    for (const file of files) heads.push({ type, name: (JSON.parse(await readFile(join(dir, type, file), 'utf8')) as { name: string }).name });
-    const groups = await readFile(join(dir, `${type}-groups.json`), 'utf8').catch(() => undefined);
-    if (groups) for (const g of JSON.parse(groups) as { name: string }[]) heads.push({ type, name: g.name, group: true });
-  }
-  return heads;
+/** The ruleset's rules types and component types (with their parent types), from its module's definition. */
+export async function loadRulesetTypes(ruleset: string): Promise<{ rulesTypes: string[]; componentTypes: { type: string; parents: string[] }[] }> {
+  const definition = (await loadRuleset(ruleset))?.module.definition;
+  return { rulesTypes: (definition?.rules ?? []).map((r) => r.type), componentTypes: definition?.components ?? [] };
 }

@@ -412,9 +412,14 @@ type, name, and parent (the entry that lists the component), counting
 repeats, and prints the missing ones as "Parent › Name" and any SRD component
 the manifest lacks. `--type` (a type, a component type, or a rules type),
 `--tier`, and `--ruleset` narrow it; `--tier` leaves the component and rules
-records out. A test checks that the manifest is valid, that its per-type
-counts are the expected ones, that every SRD entry and component in the
-library is in it, and that the rules data holds every rules record and no other.
+records out. It reads the library through the validator, as the build does,
+so a component's parent and the rules data are the validator's, and the
+ruleset's rules and component types come from its module. While validation
+has errors it fails and reports nothing, since an entry that fails validation
+would read as missing. A test checks that the manifest is valid, that its
+per-type counts are the expected ones, that every SRD entry and component in
+the library is in it, and that the rules data holds every rules record and no
+other.
 
 ### Validation
 

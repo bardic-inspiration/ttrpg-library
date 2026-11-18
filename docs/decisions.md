@@ -350,6 +350,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | `types.md` is removed with Milestone 4. Its last unbuilt part, the facets over refs (condition immunities, spell classes, a background's feat, a subclass's class), moves to `ui.md`'s filter tree, which builds them (#235). | The types are built; what remains is the filter tree's work | #216 |
 | Search text reads every ref in `stats` by its target's name, whatever its field, and plain text only at `RefOrText` fields; a parent's refs to its own components aren't read again, since each component's part of the text starts with its name. | Typed refs added nothing, so "magic initiate" didn't find Acolyte; a name read twice adds no match | #319 |
 | A subclass's features are checked for level order by each feature's first level, with the class's check and message, whether or not its class resolves. | P3: one rule for both lists; the order doesn't depend on the class | #319 |
+| `srd-coverage` reads the library through `validateLibrary()`, and the ruleset's rules and component types through its module, instead of re-reading the files; it fails while validation has errors, as `build:index` does. | P3: one reading of components' parents and the rules data; P2: an entry that fails validation would otherwise read as missing | #319 |
 
 ### Wording
 
