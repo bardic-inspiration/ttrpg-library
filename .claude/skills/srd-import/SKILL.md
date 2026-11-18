@@ -1,17 +1,18 @@
 ---
 name: srd-import
-description: Import SRD 5.2 entries into the library for an SRD import stage (docs/generation.md#srd-import), and manage SRD entries already imported, such as a link pass, a correction, or the QA/QC review. Covers picking batches, transcribing from the SRD PDF, verifying against it, filing format gaps, and the PRs. Use in a session the owner starts for an import stage or for SRD entry upkeep. Entry rules come from the generate and revise skills; this skill is the session workflow around them.
+description: Import SRD 5.2 entries into the library for an SRD import stage (docs/generation.md#srd-import), and manage SRD entries already imported, such as a link pass, a correction, or a review. Covers picking batches, transcribing from the SRD PDF, verifying against it, filing format gaps, and the PRs. Use in a session the owner starts for an import stage or for SRD entry upkeep. Entry rules come from the generate and revise skills; this skill is the session workflow around them.
 ---
 
 # SRD import
 
 How a session imports SRD content and keeps it right. [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) and
-[Requests](../../../docs/generation.md#requests) are the source of truth. The `generate` skill
+[SRD import](../../../docs/generation.md#srd-import) are the source of truth. The `generate` skill
 (`.claude/skills/generate/SKILL.md`, "SRD entries") holds the rules for
 writing each entry, and the `revise` skill
 (`.claude/skills/revise/SKILL.md`) holds the rules for changing one. Follow
 both exactly; this skill adds the workflow that makes a large import
-consistent.
+consistent. The full import is done: `npm run srd-coverage` reports no
+missing records.
 
 **Priority.** Consistent, streamlined machinery beats exact typographic
 matching. If matching a detail of the SRD would take a per-entry workaround
@@ -22,14 +23,19 @@ update [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-en
 
 ## Inputs
 
-- **A stage issue** under the import's milestone issue, without the `request` label.
-  Don't claim it with `in-progress`.
-- **Upkeep** of imported entries: a link pass, a `revise` issue about an SRD
-  entry, or the QA/QC review issue.
+- **A stage issue** of an SRD import, without the `request` label.
+- **Upkeep** of imported entries: a link pass, a correction, or a review, as
+  an issue without the `request` label, or a `revise` issue about an SRD
+  entry.
+
+An issue without the `request` label goes in the dev queue: under the current
+milestone or a track issue, before the first issue that waits for it
+(`AGENTS.md` "Dev Queue"). Routines never take it; don't claim it with
+`in-progress`.
 
 ## Step 1: Read
 
-- The stage issue and its comments, and [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries), [Rulesets](../../../docs/rulesets.md), and [SRD import](../../../docs/generation.md#srd-import).
+- The issue and its comments, and [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries), [Rulesets](../../../docs/rulesets.md), and [SRD import](../../../docs/generation.md#srd-import).
 - `rulesets/dnd-5e-2024/srd-manifest.json`: every SRD entry with its type and
   tier.
 - For each type in the stage: its schema in
@@ -45,7 +51,7 @@ update [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-en
 Run `npm run srd-coverage -- --type <type> --tier <tier>` for the stage's
 tier. One batch is every missing entry of one type: batches are separated by
 type, never by count, and have no size limit ([Defaults](../../../docs/generation.md#defaults)). Work the types in
-dependency order: spells first, then magic items and creatures, which refer
+dependency order: spells first, then items and creatures, which refer
 to spells.
 
 ## Step 3: Survey the batch for format gaps
@@ -56,12 +62,14 @@ senses), tables, embedded stat blocks, and any structured field the type
 defines. List each form the schema or the template can't hold.
 
 - A gap that recurs with a fixed shape is a **format fix**: file a dev issue
-  under Milestone 7, placed before the stage (`AGENTS.md` "Dev Queue"), and
-  fix it in a dev PR that may add the entries that motivated it ([Requests](../../../docs/generation.md#requests)).
+  in the dev queue, under the current milestone or a track issue, before the
+  issue that waits for it (`AGENTS.md` "Dev Queue"). Its dev PR doesn't add
+  the entries that motivated it.
 - A one-off detail goes in the nearest free-text field as printed ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)); it
   isn't a gap.
 - Entries blocked on a format fix wait for it. Import the rest of the batch
-  now; the blocked ones come in with the fix or the next batch of that type.
+  now; the blocked ones come in with the next batch of that type, once the
+  fix merges.
 
 ## Step 4: Transcribe from the PDF
 
@@ -219,9 +227,7 @@ issue.
 To add a later batch of the same type to an open PR, first check that the PR
 is still open: a merged PR's branch takes no more work. Branch from `main`
 with the next suffix (`-2`) and open a new PR, and say in its body which PR
-it follows. A format-fix dev PR that adds entries gets the `migration` label
-from the labeler, and the `lane` job waits for it ([Lane rules](../../../docs/workflow.md#lane-rules)), so it needs no
-manual label change.
+it follows.
 
 **Order batches by what they link to.** A batch whose entries ref a type that
 is still in an open PR (backgrounds and their feats, subclasses and their
@@ -271,9 +277,8 @@ entry ("a shield", "the light"). What the pass covers, and the traps:
 - **A format fix that changes how existing entries are stored** migrates
   them in its dev PR, which gets the `migration` label automatically
   ([Work lanes](../../../docs/workflow.md#work-lanes)).
-- **The QA/QC review** of Milestone 7 rechecks every SRD entry: Step 6
-  across the whole library, plus a look at the built site. Each problem it
-  finds goes in one PR per type, one commit per kind of problem.
+- **A review** rechecks every SRD entry: Step 6 across the whole library,
+  plus a look at the built site. Each problem it finds goes in one PR per
+  type, one commit per kind of problem.
 - **Done.** A stage is done when `npm run srd-coverage` reports no missing
-  entries of its tier and its link pass has merged. Milestone 7 is done when
-  every stage is done and every format-fix issue is closed.
+  entries of its tier and its link pass has merged.

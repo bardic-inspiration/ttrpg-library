@@ -293,8 +293,10 @@ every content rule applies to them.
 
 The full SRD import bypassed requests: each stage was a sub-issue of its
 milestone, without the `request` label, so routines never took it, worked in
-sessions the owner started. SRD entry upkeep (link passes, corrections, review)
-works the same way. A session runs the `generate` skill on a batch picked from
+sessions the owner started. Every stage is done. SRD entry upkeep (link
+passes, corrections, review) works the same way, with its issue under the
+current milestone or a track issue ([Dev Queue](../AGENTS.md#dev-queue)).
+A session runs the `generate` skill on a batch picked from
 `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress`
 claim, on branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs
 that day). The PR uses `content.md` and says `Refs #<stage>`; the PR that
@@ -303,7 +305,8 @@ finishes the stage uses `Closes #<stage>`.
 The session follows `.claude/skills/srd-import/SKILL.md`, which wraps the
 `generate` and `revise` skills: one batch per type, transcription from the PDF's
 text layer, verification against the PDF through the templates, format-fix
-issues for gaps, and a link pass once a stage's batches merge (a
+dev issues for gaps (a fix's PR adds no entries; they come in the next
+batch), and a link pass once a stage's batches merge (a
 `revise/<stage>-<YYYYMMDD>` PR turning plain-text mentions of library entries
 into links). A test checks that every path and npm script the skill names
 exists, and that it names both skills and both branch formats.
