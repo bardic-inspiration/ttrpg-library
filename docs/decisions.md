@@ -236,6 +236,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A development track is a tracking issue with no end, and its unbuilt design is one file in `spec/tracks/`, in the area-file shape and checked by the same test and link check. Tracks join the dev queue after the last milestone, Integrations then Images. | The stage spec is removed at close-out, so deferred design needs a home that outlives v2; the order keeps v2 first and the old milestone order | #315, #316 |
 | Milestone 8's WCAG 2.2 AA review is folded into Milestone 9's, since #220 closed without a milestone PR. | One review covers what the last two milestones added | #220, #221 |
 | Validation issues name each file by its path from the repo root, taken as the content root's parent as the image check already takes it: `content/…` for an entry, `rulesets/…` for rules data. An entry's own `file` stays under the content root, where the build copies it from. | Entry and rules issues used different roots, so `validate` printed `content/rulesets/…` and `build:index` dropped `content/`; one root lets both print the path as carried | #319 |
+| Every npm script is pre-approved in `.claude/settings.json`, `dev` included, and a test checks the rules against `package.json`. A script that takes arguments gets a `:*` prefix rule. | An unattended routine must never stop at a permission prompt, and CLAUDE.md says every script is pre-approved; P8 | #319 |
 
 ### Linking
 

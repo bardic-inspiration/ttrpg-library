@@ -48,9 +48,11 @@ find a task's parent with `get_parent`.
 
 ## Configuration and skills
 
-- [`.claude/settings.json`](.claude/settings.json) pre-approves the npm
-  scripts and read-only git, and blocks force-pushes and reading `.env`
-  files.
+- [`.claude/settings.json`](.claude/settings.json) pre-approves every npm
+  script, with its arguments where it takes them, and read-only git, and
+  blocks force-pushes and reading `.env` files.
+  [`tests/settings.test.ts`](tests/settings.test.ts) checks the scripts
+  against `package.json`, so a new script needs its rule.
 - [`.claude/hooks/session-start.sh`](.claude/hooks/session-start.sh)
   installs dependencies when a cloud session starts.
 - [`srd-import`](.claude/skills/srd-import/SKILL.md) is the session
