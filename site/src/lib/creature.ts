@@ -21,6 +21,7 @@ import type {
   CreatureStats,
   DerivedAction,
   DerivedCreature,
+  DerivedStatBlock,
   RefOrText,
 } from '../../../rulesets/dnd-5e-2024/types.ts';
 
@@ -66,7 +67,8 @@ export function speedLine(s: CreatureStats): string {
   return parts.join(', ');
 }
 
-export function abilityRows(s: CreatureStats, d: DerivedCreature) {
+/** The ability table's rows, for a creature or an embedded stat block, from its scores and derived modifiers and saves. */
+export function abilityRows(s: Pick<CreatureStats, 'abilities'>, d: DerivedStatBlock) {
   return tables.abilities.map((ability) => ({
     ability: ability.toUpperCase(),
     score: s.abilities[ability],

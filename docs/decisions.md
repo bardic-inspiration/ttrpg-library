@@ -452,6 +452,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A rejected license is final; an unknown format, a ruleset the format doesn't map, or an unreadable file is a `needs-info` question. Import batches go on `gen/import-<issue-numbers>-<YYYYMMDD>` and the run-order steps after revise requests renumber (import 4, content 5, gap fill 6, ambiguity 7, stale claims 8). | Only the license is outside the author's control to fix; the prefix keeps the import PR apart from the content-request PR the same run opens | #247 |
 | `public-domain`'s legal-code URL is Creative Commons' Public Domain Mark 1.0, the one id with no license text of its own. | Every allowlist id lists a URL | #247 |
 | Translators read `{ref:…}` tokens with the validator's parser, so one the validator calls malformed stays as written in an export and isn't reported as a link, as the site's renderer leaves it. | P3: one parser; only invalid text reads differently | #319 |
+| Open5e's ability keys (`strength`) are the phrase book's ability names in lowercase, rather than a table of their own. | P3: the names are the phrase book's; the vendored Open5e schema check catches a mismatch | #319 |
 
 ### Art
 

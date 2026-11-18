@@ -27,6 +27,8 @@ import { DOCUMENT, keyOf, summary, type Record5e } from './document.ts';
 import {
   abilityFor,
   basisOf,
+  DAMAGE_ALT,
+  DAMAGE_NAMES,
   PREFER,
   plainRefs,
   reportRefs,
@@ -39,14 +41,8 @@ import {
   type CreatureBasis,
 } from './text.ts';
 
-const ABILITY_NAMES: Record<Ability, string> = {
-  str: 'strength',
-  dex: 'dexterity',
-  con: 'constitution',
-  int: 'intelligence',
-  wis: 'wisdom',
-  cha: 'charisma',
-};
+/** Open5e's key for each ability: its name in the phrase book, lowercase (`strength`). */
+const ABILITY_NAMES = Object.fromEntries(tables.abilities.map((a) => [a, word('ability', a).toLowerCase()])) as Record<Ability, string>;
 const SKILL_KEY = (skill: string): string => skill.replace(/-/g, '_');
 const SENSES = ['blindsight', 'darkvision', 'tremorsense', 'truesight'] as const;
 const SPEEDS = ['fly', 'swim', 'climb', 'burrow'] as const;
@@ -61,9 +57,6 @@ const ACTION_TYPE: Record<Exclude<ListName, 'traits'>, string> = {
 
 const vocabularyKey = (vocabulary: string, display: string): string | undefined =>
   Object.entries(phrases.vocabulary[vocabulary] ?? {}).find(([, v]) => v === display)?.[0];
-
-const DAMAGE_TYPE = new Map(tables.damageTypes.map((t) => [t.charAt(0).toUpperCase() + t.slice(1), t]));
-const DAMAGE_ALT = [...DAMAGE_TYPE.keys()].join('|');
 
 const basisFrom = (d: DerivedCreature): CreatureBasis => ({ mods: d.abilityMods, pb: d.pb });
 
@@ -351,11 +344,11 @@ function readDamage(text: string, actionAbility: Ability | undefined, basis: Cre
     if (ability === null) return 'mismatch';
     const damage: Damage = { dice };
     if (ability) damage.ability = ability;
-    damage.type = DAMAGE_TYPE.get(type)!;
+    damage.type = DAMAGE_NAMES.get(type)!;
     return { damage, rest: text.slice(raw.length) };
   }
   const flat = FLAT.exec(text);
-  if (flat) return { damage: { amount: Number(flat[1]), type: DAMAGE_TYPE.get(flat[2] ?? '')! }, rest: text.slice(flat[0].length) };
+  if (flat) return { damage: { amount: Number(flat[1]), type: DAMAGE_NAMES.get(flat[2] ?? '')! }, rest: text.slice(flat[0].length) };
   return undefined;
 }
 

@@ -69,8 +69,10 @@ export function abilityFor(target: number, of: (ability: Ability) => number, pre
 /** The abilities a tie prefers: Strength for a melee attack, Dexterity for a ranged one, Constitution for a save DC. */
 export const PREFER = { melee: ['str', 'dex'], ranged: ['dex', 'str'], save: ['con'] } satisfies Record<string, Ability[]>;
 
-const DAMAGE_NAMES = new Map(tables.damageTypes.map((t) => [t.charAt(0).toUpperCase() + t.slice(1), t]));
-const DAMAGE_ALT = [...DAMAGE_NAMES.keys()].join('|');
+/** Each damage type by its printed name, `Fire` to `fire`. */
+export const DAMAGE_NAMES = new Map(tables.damageTypes.map((t) => [t.charAt(0).toUpperCase() + t.slice(1), t]));
+/** The printed damage type names as regex alternatives. */
+export const DAMAGE_ALT = [...DAMAGE_NAMES.keys()].join('|');
 /** `11 (2d10)`, `15 (3d6 + 5)`, `4 (1d8 − 1)`, then an optional ` Fire damage`. */
 const DAMAGE_TOKEN = new RegExp(`(\\d+) \\((\\d+d\\d+)(?: ([+\\-−]) (\\d+))?\\)(?: (${DAMAGE_ALT}) damage)?`, 'g');
 const DC = /\bDC (\d+)\b/g;
