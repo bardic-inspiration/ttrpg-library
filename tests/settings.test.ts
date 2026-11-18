@@ -1,5 +1,6 @@
 // The Claude Code settings (CLAUDE.md "Configuration and skills"): every npm script is pre-approved,
-// with the arguments the docs give it, so an unattended routine never stops at a permission prompt.
+// with the arguments the docs give it, so an unattended routine never stops at a permission prompt,
+// and the force-push spellings CLAUDE.md lists are blocked.
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -65,4 +66,38 @@ describe('.claude/settings.json allow rules', () => {
   ])('pre-approve %s, with its arguments', (command) => {
     expect(allowed(command)).toBe(true);
   });
+});
+
+describe('.claude/settings.json deny rules', () => {
+  const denied = (command: string) => deny.some((rule) => bashRuleMatches(rule, command));
+
+  it.each([
+    'git push --force',
+    'git push --force origin dev/x',
+    'git push --force-with-lease origin dev/x',
+    'git push -f origin dev/x',
+    'git push origin dev/x --force',
+    'git push origin dev/x --force-with-lease',
+    'git push origin dev/x --force-with-lease=dev/x:abc123',
+    'git push -u origin dev/x --force-if-includes --force-with-lease',
+    'git push origin dev/x -f',
+    'git push origin dev/x -fu',
+    'git push origin +dev/x',
+    'git push origin +HEAD:dev/x',
+  ])('block %s', (command) => {
+    expect(denied(command)).toBe(true);
+  });
+
+  it.each([
+    'git push',
+    'git push -u origin dev/x',
+    'git push origin dev/x --follow-tags',
+    'git push origin dev/fix-force',
+    'git push origin HEAD:refs/heads/dev/x-f',
+  ])(
+    'leave %s alone',
+    (command) => {
+      expect(denied(command)).toBe(false);
+    },
+  );
 });

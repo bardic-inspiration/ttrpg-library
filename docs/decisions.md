@@ -237,6 +237,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Milestone 8's WCAG 2.2 AA review is folded into Milestone 9's, since #220 closed without a milestone PR. | One review covers what the last two milestones added | #220, #221 |
 | Validation issues name each file by its path from the repo root, taken as the content root's parent as the image check already takes it: `content/…` for an entry, `rulesets/…` for rules data. An entry's own `file` stays under the content root, where the build copies it from. | Entry and rules issues used different roots, so `validate` printed `content/rulesets/…` and `build:index` dropped `content/`; one root lets both print the path as carried | #319 |
 | Every npm script is pre-approved in `.claude/settings.json`, `dev` included, and a test checks the rules against `package.json`. A script that takes arguments gets a `:*` prefix rule. | An unattended routine must never stop at a permission prompt, and CLAUDE.md says every script is pre-approved; P8 | #319 |
+| The force-push block adds wildcard rules for `--force` and `-f` after other arguments and for a `+<refspec>`, and CLAUDE.md says which spellings it doesn't catch. | Permission rules are patterns, so no list names every spelling; the block is a backstop for the no-rewrite rule, and saying how far it goes keeps sessions from leaning on it | #319 |
 
 ### Linking
 
