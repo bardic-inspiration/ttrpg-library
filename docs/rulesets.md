@@ -381,7 +381,8 @@ value and "—" where none does.
 
 **Derived:** `category` (the group's root) and `costGp`, the cost in gold
 pieces, which the gallery sorts and filters by. Custom equipment has facets
-for category, group, cost, and weapon damage type, and no gap buckets.
+for category, group, cost, and a weapon's damage type, properties, and
+mastery, and no gap buckets.
 
 ### Glossary
 

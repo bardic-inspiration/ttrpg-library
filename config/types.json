@@ -87,7 +87,9 @@
         "facets": [
           { "path": "stats.group", "label": "Group", "kind": "enum", "format": "title", "groups": true },
           { "path": "derived.costGp", "label": "Cost (GP)", "kind": "range" },
-          { "path": "stats.weapon.damage.type", "label": "Damage type", "kind": "enum", "vocabulary": "damageType" }
+          { "path": "stats.weapon.damage.type", "label": "Damage type", "kind": "enum", "vocabulary": "damageType" },
+          { "path": "stats.weapon.properties", "label": "Property", "kind": "enum", "ref": true },
+          { "path": "stats.weapon.mastery", "label": "Mastery", "kind": "enum", "ref": true }
         ],
         "cardFields": ["stats.group", "derived.costGp"],
         "defaultSort": "derived.costGp:asc",
