@@ -5,6 +5,11 @@ description: Import SRD 5.2 entries into the library for an SRD import stage (do
 
 # SRD import
 
+> **Archived.** The SRD import is done, so this skill is kept here for the
+> record and no longer loads. SRD entry upkeep goes through the `generate`
+> and `revise` skills, with its issues in the dev queue (`AGENTS.md` "Dev
+> Queue", [SRD import](../../../docs/generation.md#srd-import)).
+
 How a session imports SRD content and keeps it right. [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) and
 [SRD import](../../../docs/generation.md#srd-import) are the source of truth. The `generate` skill
 (`.claude/skills/generate/SKILL.md`, "SRD entries") holds the rules for

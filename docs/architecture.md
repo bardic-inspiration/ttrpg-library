@@ -89,7 +89,7 @@ scripts/
   serve/, a11y/, snapshots/, browser/   serving and browser checks of the built site
 site/                                    the Astro project (site.md)
 tests/                                   Vitest suites and fixtures
-.claude/                                 session settings, hooks, and skills
+.claude/                                 session settings, hooks, skills, and archived skills
 .github/                                 workflows, labeler, issue and PR templates, Dependabot
 docs/                                    these docs (README.md is the index)
 spec/v2/                                 the v2 stage spec: design not yet built

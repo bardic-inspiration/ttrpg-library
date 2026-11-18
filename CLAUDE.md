@@ -64,8 +64,9 @@ find a task's parent with `get_parent`.
   history ([`AGENTS.md`](AGENTS.md) "Rules") holds without it.
 - [`.claude/hooks/session-start.sh`](.claude/hooks/session-start.sh)
   installs dependencies when a cloud session starts.
-- [`srd-import`](.claude/skills/srd-import/SKILL.md) is the session
-  workflow for SRD import stages and upkeep of SRD entries.
+- [`srd-import`](.claude/archive/srd-import/SKILL.md), the SRD import's
+  session workflow, is archived in `.claude/archive/` for the record, since
+  the import is done. An archived skill doesn't load.
 - [`ask-me`](.claude/skills/ask-me/SKILL.md) interviews the user when a goal
   is still fuzzy. [`grill-me`](.claude/skills/grill-me/SKILL.md)
   stress-tests a plan before it's built.

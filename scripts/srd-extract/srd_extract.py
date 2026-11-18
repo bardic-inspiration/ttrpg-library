@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Text extraction from the SRD PDF for SRD import sessions (.claude/skills/srd-import/SKILL.md, step 4).
+"""Text extraction from the SRD PDF for SRD import sessions (.claude/archive/srd-import/SKILL.md, step 4).
 
 Reads docs/SRD_CC_v5.2.pdf with pdfplumber and gives what a session transcribes from:
 

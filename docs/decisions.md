@@ -246,6 +246,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The PR job summary is built as `workflow.md` documents it, from the validator's result for the PR: the summary field read as its facet reads it, a dnd-5e-2024 creature's AC, derived HP, and each action's attack bonus, DC, and damage with its average, every warning the library has, and the new back-links. | The owner's choice over trimming the doc, for less overhead and staleness risk; every warning, since a near-duplicate name warns on the older entry's file | #319 |
 | A new back-link is a link from a changed entry or component to a target its merge-base version didn't link to, read from the base file's refs without validating it, labeled as the target's page labels it, and leaving out the links among a page's own parts. | The base isn't validated with the PR's code, which a migration would fail; a page shows its own parts itself | #319 |
 | With the SRD import done, a format-fix issue and an SRD upkeep issue (a link pass, a correction, a review) go in the dev queue under the current milestone or a track issue, placed like any dev issue. An upkeep issue has no `request` label, so routines never take it. | The import's milestone is closed, and the Dev Queue already places every issue | #319 |
+| The `srd-import` skill is archived to `.claude/archive/srd-import/`, kept for the record outside `.claude/skills/` so it no longer loads, and its test is retired. SRD entry upkeep goes through the `generate` and `revise` skills. | The SRD import is done | #319 |
 
 ### Linking
 

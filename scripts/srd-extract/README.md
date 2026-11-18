@@ -1,7 +1,7 @@
 # srd-extract
 
 Text extraction from `docs/SRD_CC_v5.2.pdf` for SRD import sessions
-([the `srd-import` skill](../../.claude/skills/srd-import/SKILL.md), step 4). It
+([the archived `srd-import` skill](../../.claude/archive/srd-import/SKILL.md), step 4). It
 holds the rules every stage needs: reading order by baseline and column,
 styles from fonts, paragraphs, rejoined line-end hyphens, dropped soft
 hyphens, and linking mentions of rules. A stage's converter, which turns these
