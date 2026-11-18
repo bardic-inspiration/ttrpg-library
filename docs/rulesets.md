@@ -168,7 +168,9 @@ bonus. Items derive nothing, except the ability modifiers and saves of an
 embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)); spells
 derive those too.
 Classes derive their proficiency bonus and spell slots by level
-([Classes](#classes)).
+([Classes](#classes)). Feats derive `repeatable`, whether the feat has a
+`repeatable` note, and species derive `sizes`, the list of their sizes'
+names; both feed the Library's facets.
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
 `tables.json`, which cites the SRD section it comes from. The attack bonus and
 save DC are one helper each, `attackBonus` and `saveDc`, which actions,

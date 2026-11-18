@@ -461,6 +461,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | `public-domain`'s legal-code URL is Creative Commons' Public Domain Mark 1.0, the one id with no license text of its own. | Every allowlist id lists a URL | #247 |
 | Translators read `{ref:…}` tokens with the validator's parser, so one the validator calls malformed stays as written in an export and isn't reported as a link, as the site's renderer leaves it. | P3: one parser; only invalid text reads differently | #319 |
 | Open5e's ability keys (`strength`) are the phrase book's ability names in lowercase, rather than a table of their own. | P3: the names are the phrase book's; the vendored Open5e schema check catches a mismatch | #319 |
+| The index reads `{ref:…}` tokens through `replaceRefTokens`, and search text drops a malformed one as it drops every other token. | P3: one parser. A malformed token fails validation, so no index is built from one; its key isn't words | #322 |
 
 ### Art
 

@@ -35,10 +35,18 @@ const fixtures = async () => [
  * their components stay out, since the fixtures stand in for the Sorcerer and Draconic Sorcery.
  */
 const FIXTURE_TYPES = new Set(['class', 'class-feature', 'class-option', 'subclass']);
-const withSpells = async () => [
+const loadWithSpells = async () => [
   ...(await fixtures()),
   ...(await Promise.all((await readdir(CONTENT)).filter((type) => !FIXTURE_TYPES.has(type)).map((type) => dir(join(CONTENT, type))))).flat(),
 ];
+/** Read once per file; each caller gets its own copy, so a test's changes stay its own. */
+let library: ReturnType<typeof loadWithSpells> | undefined;
+const withSpells = async () => structuredClone(await (library ??= loadWithSpells()));
+/**
+ * Each validation test writes and validates the whole library, once or twice, which takes a few
+ * seconds alone and more when other test files share the machine; Vitest's 5 s default is too tight.
+ */
+const VALIDATION_TIMEOUT = 30_000;
 
 const temps: string[] = [];
 afterEach(async () => {
@@ -46,7 +54,7 @@ afterEach(async () => {
 });
 
 async function validate(change: (entries: Record<string, any>[]) => Record<string, any>[] | void = () => {}) {
-  let entries: Record<string, any>[] = structuredClone(await withSpells());
+  let entries: Record<string, any>[] = await withSpells();
   entries = change(entries) ?? entries;
   const lib = await tempLibrary(entries);
   temps.push(lib.repo);
@@ -55,7 +63,7 @@ async function validate(change: (entries: Record<string, any>[]) => Record<strin
 }
 const byId = (entries: Record<string, any>[], type: string, id: string) => entries.find((e) => e.type === type && e.id === id)!;
 
-describe('validation', () => {
+describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
   it('passes the fixtures, with each feature and option on its parent', async () => {
     const result = await validate();
     expect(result.messages).toEqual([]);

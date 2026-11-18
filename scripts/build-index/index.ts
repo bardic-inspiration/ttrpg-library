@@ -7,7 +7,7 @@ import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promi
 import { dirname, join } from 'node:path';
 import { SITE_BASE } from '../../lib/site.ts';
 import { validateLibrary, type ValidationError, type ValidComponent, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
-import { objectRefs, parseRefToken, REF_TOKEN, type Link } from '../validate/refs.ts';
+import { objectRefs, replaceRefTokens, type Link } from '../validate/refs.ts';
 import { loadRegistry, RULESETS_ROOT } from '../validate/schema.ts';
 import { ruleNames } from '../../lib/rules.ts';
 import { plainText } from '../validate/text.ts';
@@ -150,16 +150,10 @@ function searchText(
     const name = own.has(ref) ? undefined : nameOf.get(ref);
     return name ? [name] : [];
   });
-  // A {ref:…} link reads as its target's name; other tokens are dropped.
+  // A {ref:…} link reads as its display text or its target's name; other tokens, a malformed
+  // {ref:…} among them, are dropped.
   const texts = item.texts.map(({ text }) =>
-    plainText(
-      text
-        .replace(REF_TOKEN, (_, inside: string) => {
-          const parsed = parseRefToken(inside);
-          return ` ${parsed?.text ?? (parsed ? nameOf.get(parsed.key) : undefined) ?? ''} `;
-        })
-        .replace(TOKEN, ' '),
-    ),
+    plainText(replaceRefTokens(text, (token) => ` ${token.text ?? nameOf.get(token.key) ?? ''} `).replace(TOKEN, ' ')),
   );
   return [...names(item.entry.stats), ...refNames, ...texts].join(' ').replace(/\s+/g, ' ').trim();
 }
