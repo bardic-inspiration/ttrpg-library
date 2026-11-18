@@ -247,6 +247,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A new back-link is a link from a changed entry or component to a target its merge-base version didn't link to, read from the base file's refs without validating it, labeled as the target's page labels it, and leaving out the links among a page's own parts. | The base isn't validated with the PR's code, which a migration would fail; a page shows its own parts itself | #319 |
 | With the SRD import done, a format-fix issue and an SRD upkeep issue (a link pass, a correction, a review) go in the dev queue under the current milestone or a track issue, placed like any dev issue. An upkeep issue has no `request` label, so routines never take it. | The import's milestone is closed, and the Dev Queue already places every issue | #319 |
 | The `srd-import` skill is archived to `.claude/archive/srd-import/`, kept for the record outside `.claude/skills/` so it no longer loads, and its test is retired. SRD entry upkeep goes through the `generate` and `revise` skills. | The SRD import is done | #319 |
+| At close-out, `spec/v2/` is removed. Its file template, section meanings, and checks move to `spec/tracks/README.md`; `tests/stage-spec.test.ts` keeps its name and checks only `spec/tracks/`; the link check no longer recognizes `spec/v2/` citations. | The stage is finished when only its README is left, and the tracks must not depend on a removed folder | #255 |
+| Gap fill is on again. | It was off only so no entry was made in the v1 shape before v2's schemas were built, and they are | #109, #255 |
 
 ### Linking
 

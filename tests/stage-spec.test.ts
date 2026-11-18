@@ -3,9 +3,8 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { checkAreas, SECTIONS, type AreaFile } from './stage-spec.ts';
 
-// spec/v2/README.md "Area files" and "Checks"; issue #197.
+// spec/tracks/README.md "Track files" and "Checks"; issues #197 and #255.
 const ROOT = join(import.meta.dirname, '..');
-const SPEC = 'spec/v2';
 const TRACKS = 'spec/tracks';
 
 const area = (name: string, text: string): AreaFile => ({ name, text });
@@ -109,26 +108,15 @@ const areaFiles = (dir: string) =>
     .filter((name) => name.endsWith('.md') && name !== 'README.md')
     .map((name) => area(name.slice(0, -3), readFileSync(join(ROOT, dir, name), 'utf8')));
 
-describe(SPEC, () => {
-  it('has a README', () => {
-    expect(existsSync(join(ROOT, SPEC, 'README.md'))).toBe(true);
-  });
-
-  it('README lists the template sections in order', () => {
-    const readme = readFileSync(join(ROOT, SPEC, 'README.md'), 'utf8');
-    const listed = [...readme.matchAll(/^## (.+)$/gm)].map((m) => m[1]!).filter((h) => (SECTIONS as readonly string[]).includes(h));
-    expect(listed).toEqual([...SECTIONS]);
-  });
-
-  it('every area file passes the checks', () => {
-    expect(checkAreas(areaFiles(SPEC), entryExists)).toEqual([]);
-  });
-});
-
-// spec/tracks/README.md "Track files": the same shape, checked the same way.
 describe(TRACKS, () => {
   it('has a README', () => {
     expect(existsSync(join(ROOT, TRACKS, 'README.md'))).toBe(true);
+  });
+
+  it('README lists the template sections in order', () => {
+    const readme = readFileSync(join(ROOT, TRACKS, 'README.md'), 'utf8');
+    const listed = [...readme.matchAll(/^## (.+)$/gm)].map((m) => m[1]!).filter((h) => (SECTIONS as readonly string[]).includes(h));
+    expect(listed).toEqual([...SECTIONS]);
   });
 
   it('every track file passes the checks', () => {
