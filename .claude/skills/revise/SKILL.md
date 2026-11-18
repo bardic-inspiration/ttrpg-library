@@ -148,7 +148,7 @@ the round changed, dropped, or regenerated, comma-separated.
     type's `summaryField`, and the summary.
   - **Warnings:** every validator warning, and every `adjust` or damage
     `bonus` the revision added, with its reason. "None" if there are none.
-  - Delete the **Gap fill** section.
+  - Delete the **Gap fill** and **Skipped on import** sections.
   - `Closes #<issue>`.
 
 The `content` label is applied from the branch prefix ([Lane rules](../../../docs/workflow.md#lane-rules)); don't add

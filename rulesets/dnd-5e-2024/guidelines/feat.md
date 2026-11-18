@@ -70,7 +70,7 @@ against that category's SRD feats.
   the SRD words it ("Strength or Dexterity 13+"). Don't write "Level 4+" or
   "Prerequisite:"; the template does.
 - Rules text uses the markdown subset only. Numbers are written as they read;
-  feats derive nothing.
+  a feat derives only `repeatable`, from its `repeatable` paragraph.
 
 ## Dependencies and SRD references
 

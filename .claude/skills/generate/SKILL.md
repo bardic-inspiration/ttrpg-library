@@ -130,7 +130,7 @@ slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
   No non-SRD proper nouns anywhere ([Blocklist](../../../docs/licensing.md#blocklist)).
 - **Situational fields.** Omit an optional field that doesn't apply; never
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` ([Situational fields](../../../docs/content-model.md#situational-fields)).
-- Don't add `image` (no art in v1).
+- Don't add `image`. Art is the Images track's work (#316), not this skill's.
 
 ### SRD entries
 
