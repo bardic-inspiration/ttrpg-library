@@ -193,11 +193,12 @@ The npm scripts are listed in
   closes a milestone also runs `npm run a11y`, gets the `milestone` label
   ([Milestone PRs](docs/workflow.md#milestone-prs)), and files the
   milestone's accessibility review ([Milestone review](docs/workflow.md#milestone-review)).
-- **Docs-only** (only root Markdown, `docs/` other than `docs/routines.md`,
-  and the dev and Markdown issue templates;
+- **Docs-only** (only root Markdown other than `ATTRIBUTION.md`, `docs/`
+  other than `docs/routines.md`, and the dev and Markdown issue templates;
   [Docs-only PRs](docs/workflow.md#docs-only-prs)): CI runs only the lane
   rules and the link check, so run `npm run links`.
 - **Text-only** (docs plus Markdown under `spec/`, `.claude/skills/`, or the
-  guidelines, `docs/routines.md`, or the content PR template;
+  guidelines, `docs/routines.md`, `ATTRIBUTION.md`, or the content PR
+  template;
   [Text-only PRs](docs/workflow.md#text-only-prs)): `npm run links` and
   `npm test`.

@@ -112,10 +112,12 @@ types and tests; a milestone PR gets every check.
 ### Docs-only PRs
 
 A PR is docs-only when it changes at least one path and every changed path is
-one no code, test, or build reads: a Markdown file at the repo root, anything
-under `docs/` except `docs/routines.md`, a Markdown issue template, or
-`.github/PULL_REQUEST_TEMPLATE/dev.md`. It runs only the `lane` job, so the lane
-rules and the link check still apply. The list is `isDocsPath` in
+one no code, test, or build reads: a Markdown file at the repo root other than
+`ATTRIBUTION.md`, anything under `docs/` except `docs/routines.md`, a Markdown
+issue template, or `.github/PULL_REQUEST_TEMPLATE/dev.md`. It runs only the
+`lane` job, so the lane rules and the link check still apply. `ATTRIBUTION.md`
+is left out because `npm run import` rewrites it and a test checks the result
+([Imports](generation.md#imports)). The list is `isDocsPath` in
 `scripts/lane/`. When a test, script, or the build starts reading one of these
 paths, remove it from the list in the same PR.
 
@@ -124,7 +126,8 @@ paths, remove it from the list in the same PR.
 A PR is text-only when it isn't docs-only and every changed path is docs or
 Markdown that tests read but no build, type, or style check does: anything under
 `spec/`, `.claude/skills/`, or `rulesets/*/guidelines/` ending in `.md`,
-`docs/routines.md`, and `.github/PULL_REQUEST_TEMPLATE/content.md`. It skips
+`docs/routines.md`, `ATTRIBUTION.md`, and
+`.github/PULL_REQUEST_TEMPLATE/content.md`. It skips
 `content-checks`, and `dev-checks` runs only `npm test`; the lane job's link
 check still applies. The list is `isTestTextPath` in `scripts/lane/`. When the
 build, `validate`, or a type or style check starts reading one of these paths,

@@ -121,7 +121,6 @@ describe('isDocsPath (docs/workflow.md#docs-only-prs)', () => {
     'AGENTS.md',
     'CLAUDE.md',
     'README.md',
-    'ATTRIBUTION.md',
     'docs/decisions.md',
     'docs/SRD_CC_v5.2.pdf',
     '.github/ISSUE_TEMPLATE/bug-report.md',
@@ -133,6 +132,8 @@ describe('isDocsPath (docs/workflow.md#docs-only-prs)', () => {
   it.each([
     // Read by tests, so a change to them is checked as code.
     'docs/routines.md',
+    // scripts/import rewrites it, and tests/import.test.ts checks the result.
+    'ATTRIBUTION.md',
     '.claude/skills/generate/SKILL.md',
     '.github/PULL_REQUEST_TEMPLATE/content.md',
     '.github/ISSUE_TEMPLATE/content-request.yml',
@@ -177,6 +178,7 @@ describe('isTestTextPath (docs/workflow.md#text-only-prs)', () => {
     'rulesets/dnd-5e-2024/guidelines/creature.md',
     'docs/routines.md',
     '.github/PULL_REQUEST_TEMPLATE/content.md',
+    'ATTRIBUTION.md',
   ])('treats %s as Markdown only tests read', (path) => {
     expect(isTestTextPath(path)).toBe(true);
   });
