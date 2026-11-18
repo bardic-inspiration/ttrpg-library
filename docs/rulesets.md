@@ -170,7 +170,9 @@ derive those too, and their class keys, for the Classes filter ([Spells](#spells
 Classes derive their proficiency bonus and spell slots by level
 ([Classes](#classes)).
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
-`tables.json`, which cites the SRD section it comes from.
+`tables.json`, which cites the SRD section it comes from. The attack bonus and
+save DC are one helper each, `attackBonus` and `saveDc`, which actions,
+Spellcasting, text tokens, the checks, and the Open5e importer share.
 
 ### Shared definitions
 

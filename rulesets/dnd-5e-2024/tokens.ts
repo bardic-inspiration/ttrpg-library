@@ -2,7 +2,7 @@
 // The validator parses them; templates render them from the same derivations
 // as the stat block.
 
-import { deriveDamage, printMinus, signed } from './derive.ts';
+import { attackBonus, deriveDamage, printMinus, saveDc, signed } from './derive.ts';
 import type { Ability, DerivedCreature, Tables } from './types.ts';
 
 export type Token =
@@ -114,9 +114,9 @@ export function renderToken(token: Token, derived: DerivedCreature): string {
     case 'mod':
       return signed(derived.abilityMods[token.ability]);
     case 'atk':
-      return signed(derived.pb + derived.abilityMods[token.ability] + token.adjust);
+      return signed(attackBonus(derived.pb, derived.abilityMods[token.ability], token.adjust));
     case 'dc':
-      return `DC ${8 + derived.pb + derived.abilityMods[token.ability] + token.adjust}`;
+      return `DC ${saveDc(derived.pb, derived.abilityMods[token.ability], token.adjust)}`;
     case 'authored-dc':
       return `DC ${token.value}`;
     case 'dmg': {

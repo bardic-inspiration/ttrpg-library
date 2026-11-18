@@ -3,7 +3,7 @@
 // reads that text back into structured actions where its numbers match what the ruleset derives
 // from the imported inputs.
 
-import { crRow, deriveAction, diceAverage, signed } from '../../../../rulesets/dnd-5e-2024/derive.ts';
+import { attackBonus, crRow, deriveAction, diceAverage, saveDc, signed } from '../../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import { renderTokens } from '../../../../rulesets/dnd-5e-2024/tokens.ts';
 import type {
@@ -81,8 +81,8 @@ const preferFor = (kind: ActionKind): Ability[] => (kind === 'save' ? PREFER.sav
 /** The ability import reads from an attack bonus or a save DC. */
 const actionAbilityFor = (kind: ActionKind, value: number, basis: CreatureBasis): Ability | undefined =>
   kind === 'save'
-    ? abilityFor(value, (a) => 8 + basis.pb + basis.mods[a], PREFER.save)
-    : abilityFor(value, (a) => basis.pb + basis.mods[a], preferFor(kind));
+    ? abilityFor(value, (a) => saveDc(basis.pb, basis.mods[a]), PREFER.save)
+    : abilityFor(value, (a) => attackBonus(basis.pb, basis.mods[a]), preferFor(kind));
 
 const PROSE = ['text', 'onHit', 'onFailure', 'onSuccess', 'onFailureOrSuccess'] as const;
 
@@ -505,12 +505,13 @@ function readSpellcasting(
   const numbers = (match[4] ?? '').split(', ');
   const dc = numbers.map((n) => /^spell save DC (\d+)$/.exec(n)?.[1]).find(Boolean);
   const attack = numbers.map((n) => /^([+\-−]\d+) to hit with spell attacks$/.exec(n)?.[1]).find(Boolean);
-  const base = basis.pb + basis.mods[ability];
+  const derivedDc = saveDc(basis.pb, basis.mods[ability]);
+  const derivedBonus = attackBonus(basis.pb, basis.mods[ability]);
   if (dc === undefined) sc.noSaveDc = true;
-  else if (Number(dc) !== 8 + base) skips.add('stats.spellcasting', `Its save DC ${dc} isn't what the ruleset derives (${8 + base}); the ruleset's is kept.`);
+  else if (Number(dc) !== derivedDc) skips.add('stats.spellcasting', `Its save DC ${dc} isn't what the ruleset derives (${derivedDc}); the ruleset's is kept.`);
   if (attack !== undefined) {
     sc.includeAttack = true;
-    if (signedNumber(attack) !== base) skips.add('stats.spellcasting', `Its attack bonus ${attack} isn't what the ruleset derives (${signed(base)}); the ruleset's is kept.`);
+    if (signedNumber(attack) !== derivedBonus) skips.add('stats.spellcasting', `Its attack bonus ${attack} isn't what the ruleset derives (${signed(derivedBonus)}); the ruleset's is kept.`);
   }
   const notes: string[] = [];
   for (const line of lines) {

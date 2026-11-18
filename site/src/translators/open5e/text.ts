@@ -2,7 +2,7 @@
 // target's plain name, and each one is reported. On import, prose stays as written, except that a
 // creature's damage and DC numbers become tokens where they match what the ruleset derives.
 
-import { abilityMod, diceAverage } from '../../../../rulesets/dnd-5e-2024/derive.ts';
+import { abilityMod, diceAverage, saveDc } from '../../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import type { Ability } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import type { Skip } from '../types.ts';
@@ -103,7 +103,7 @@ export function tokenizeCreatureText(text: string, basis: CreatureBasis, skips: 
   return damaged.replace(DC, (raw, n: string, at: number, whole: string) => {
     // An escape DC and an ability check's DC are the author's (docs/rulesets.md#text-tokens).
     const authored = /escape $/.test(whole.slice(0, at)) || /^ \w+ \(\w[\w ]*\) check/.test(whole.slice(at + raw.length));
-    const ability = authored ? undefined : abilityFor(Number(n), (a) => 8 + basis.pb + basis.mods[a], PREFER.save);
+    const ability = authored ? undefined : abilityFor(Number(n), (a) => saveDc(basis.pb, basis.mods[a]), PREFER.save);
     return ability ? `{dc:${ability}}` : `{dc=${n}}`;
   });
 }
