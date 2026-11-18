@@ -263,12 +263,6 @@ entry ("a shield", "the light"). What the pass covers, and the traps:
   summary, a merged italic run) is fixed in the same PR, in a commit of its
   own.
 
-A new link can break a dev test that loads a few entries by file and
-validates them alone (`tests/site/tables.test.ts`), and content-lane CI
-doesn't run the tests. So run `npm test` before pushing a link pass too, and
-if a test's fixture list no longer resolves, file the fix as a dev issue
-rather than skipping the link.
-
 ## Managing SRD entries
 
 - **Corrections** only bring an entry closer to the SRD ([Revisions](../../../docs/generation.md#revisions)). An
