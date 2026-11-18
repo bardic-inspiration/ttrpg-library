@@ -2,7 +2,7 @@
 // against library.json, reusing the gallery's filtering for the gallery-query
 // form, and fetches each entry's print fragment.
 
-import { galleryConfig, type LibraryRecord, type Registry } from './gallery/config.ts';
+import { galleryConfig, type FacetData, type LibraryRecord, type Registry } from './gallery/config.ts';
 import { parseQuery } from './gallery/state.ts';
 import { computeView, searchIndex } from './gallery/view.ts';
 import { fragmentUrl, parsePrintQuery, type PrintQuery } from './print.ts';
@@ -19,9 +19,11 @@ export interface PrintSelection {
  * The entries a print query names. The `ids` form keeps the given order, and
  * reads a renamed type's old key as its current one (docs/site.md#redirects). The
  * gallery-query form reads the rest of the query as the Library's (`/`,
- * docs/site.md#gallery), so `f.type` narrows by type, and prints its results in its order.
+ * docs/site.md#gallery), so `f.type` narrows by type, and prints its results in its order. It needs
+ * the build's facet data, as the Library's island has it: a group filter matches by its groups, and
+ * a ref facet sorts by its targets' names.
  */
-export function selectEntries(query: PrintQuery, records: LibraryRecord[], registry: Registry): PrintSelection {
+export function selectEntries(query: PrintQuery, records: LibraryRecord[], registry: Registry, data: FacetData): PrintSelection {
   if (query.ids) {
     const byKey = new Map(records.map((record) => [`${record.type}/${record.id}`, record]));
     const aliases = typeAliases(registry);
@@ -31,7 +33,7 @@ export function selectEntries(query: PrintQuery, records: LibraryRecord[], regis
       missing: query.ids.filter((_, i) => !byKey.has(ids[i]!)),
     };
   }
-  const gallery = galleryConfig(registry);
+  const gallery = galleryConfig(registry, data);
   const view = computeView(records, gallery, parseQuery(query.gallery, gallery), searchIndex(records));
   return { records: view.results, missing: [] };
 }
@@ -50,14 +52,14 @@ type Fetch = (url: string) => Promise<{ ok: boolean; status: number; text(): Pro
  * Loads a print run: reads the query, resolves its entries against
  * library.json, and fetches each entry's fragment. Any unknown id or failed
  * fetch fails the run with a message, so the print dialog never opens on a
- * partial set.
+ * partial set. `data` is the build's facet data, for the gallery-query form.
  */
-export async function loadPrintRun(search: string, base: string, registry: Registry, load: Fetch): Promise<PrintRun> {
+export async function loadPrintRun(search: string, base: string, registry: Registry, data: FacetData, load: Fetch): Promise<PrintRun> {
   const query = parsePrintQuery(search);
   const fail = (message: string): PrintRun => ({ ok: false, message });
   const index = await load(`${base}library.json`).catch(() => undefined);
   if (!index?.ok) return fail('The library couldn’t be loaded. Try reloading the page.');
-  const { records, missing } = selectEntries(query, JSON.parse(await index.text()) as LibraryRecord[], registry);
+  const { records, missing } = selectEntries(query, JSON.parse(await index.text()) as LibraryRecord[], registry, data);
   if (missing.length > 0) return fail(`No entry matches ${missing.map((key) => `“${key}”`).join(', ')}.`);
   if (records.length === 0) return fail('No entries to print.');
   const fragments = await Promise.all(

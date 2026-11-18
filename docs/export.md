@@ -132,7 +132,10 @@ computed numbers, so translators read `derived` rather than recomputing.
   lists `<type>/<id>` keys and prints them in the given order, ignoring repeats.
   Without `ids`, the query is read as the Library's, with the gallery's own
   parsing and filtering, so `f.type` narrows by type, and results print in the
-  gallery's order.
+  gallery's order. The page is given the build's facet data, as the Library's
+  island is (`libraryFacetData` in `site/src/lib/gallery/facet-data.ts`), so
+  a group filter matches every group in it and a ref facet sorts by its
+  targets' names ([site.md](site.md#gallery)).
 - **Print fragments.** The build emits each entry's print fragment at
   `print/<ruleset>/<type>/<id>/`: the template in `print` mode
   (`components/print/PrintEntry.astro`) as bare markup. The print view

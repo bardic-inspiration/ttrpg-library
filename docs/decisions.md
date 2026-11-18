@@ -412,6 +412,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A page type's detail page has no PNG capture source. | It has no Download, so the source would be dead weight (P11) | #244 |
 | Download opens a small format menu (PNG, JSON, translators), offering only the formats for its scope. | A save dialog's file-type list works only in Chromium | #115 |
 | Page types and rules pages get Print, not Download; printing one expands every section. | Download is for card entries | #115 |
+| The print view is given the build's facet data by the helper the Library's island uses, `libraryFacetData`, and a print run takes it as a required argument, with no empty default. | P3; the empty default is what lost the groups and ref names from a print view's gallery query | #319 |
 
 ### Translators
 

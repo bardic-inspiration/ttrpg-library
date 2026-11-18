@@ -6,7 +6,7 @@
 // loaded fails the run with a message and no dialog.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import registryJson from '../../../../config/types.json' with { type: 'json' };
-import type { Registry } from '../../lib/gallery/config.ts';
+import type { FacetData, Registry } from '../../lib/gallery/config.ts';
 import { pageRules } from '../../lib/print.ts';
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
 import { loadPrintRun, type PrintRun } from '../../lib/print-run.ts';
@@ -16,18 +16,20 @@ import './print-view.css';
 export interface PrintViewProps {
   /** The site base URL, ending in `/`. */
   base: string;
+  /** Ref targets' names and grouped types' groups, from the build, for a gallery query (docs/site.md#gallery "Filters"). */
+  facetData: FacetData;
 }
 
 const registry = registryJson as unknown as Registry;
 const STYLE_ID = 'print-page-rules';
 
-export default function PrintView({ base }: PrintViewProps) {
+export default function PrintView({ base, facetData }: PrintViewProps) {
   const [run, setRun] = useState<PrintRun | undefined>();
   const printed = useRef(false);
 
   useEffect(() => {
-    loadPrintRun(window.location.search, base, registry, fetchFresh).then(setRun);
-  }, [base]);
+    loadPrintRun(window.location.search, base, registry, facetData, fetchFresh).then(setRun);
+  }, [base, facetData]);
 
   const fragments = run?.ok ? run.fragments : [];
 
