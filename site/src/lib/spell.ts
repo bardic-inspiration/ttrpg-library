@@ -4,7 +4,7 @@
 
 import { present, whenPresent } from './display.ts';
 import { formatSpellLevel } from './format.ts';
-import { concat, countOf, joinWith, link, markdown, name, pluralOf, say, sayText, text, toMarkdown, toPlain, type Phrase } from './wording.ts';
+import { concat, countOf, joinWith, link, markdown, name, pluralOf, say, sayText, text, toMarkdown, type Phrase } from './wording.ts';
 import type { SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 /**
