@@ -2,13 +2,12 @@
 
 How work is done in this repo, by agents or humans. [`docs/`](docs/README.md)
 describes *what is built*, including CI, lanes, labels, and repository
-settings. The v2 stage spec, [`spec/v2/`](spec/v2/README.md), and the
-development tracks' specs, [`spec/tracks/`](spec/tracks/README.md), hold the
-design that isn't built yet. This file covers *how to work*, and defers to them wherever they
+settings. The development tracks' specs, [`spec/tracks/`](spec/tracks/README.md),
+hold the design that isn't built yet. This file covers *how to work*, and defers to them wherever they
 overlap.
 
 Sessions start with no memory of earlier ones. Decisions, follow-ups, and
-open questions go into the docs, the stage spec, issues, and PR descriptions,
+open questions go into the docs, the track specs, issues, and PR descriptions,
 never only into a chat. Because they do, a session can stay small: one issue,
 or one batch of an import stage, per session, and a new session for the next.
 A long session costs more on every turn as its context grows.
@@ -21,31 +20,30 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
   Routines open these PRs on `gen/` and `revise/` branches, using the
   `generate` and `revise` skills ([`docs/generation.md`](docs/generation.md)). Hand-made
   entries go on `manual/` branches.
-- **Development:** everything else, including the docs and the stage spec, on
+- **Development:** everything else, including the docs and the track specs, on
   `dev/<short-description>` branches. A dev PR touches content only as a
   deliberate migration; the labeler adds the `migration` label to it.
 
 ## Rules
 
 - **Never push to `main`.** Every change is a PR.
-- **Don't invent behavior.** When the docs or the stage spec are silent,
+- **Don't invent behavior.** When the docs or a track spec are silent,
   ambiguous, or wrong,
   ask whether a different reasonable choice would change behavior that
   something else depends on.
   - If it wouldn't, decide by the principles in
     [`docs/decisions.md`](docs/decisions.md) and record the choice in the
     PR's "Decisions" section. The owner's merge confirms it.
-  - If it would, stop that item and ask (the user, or on the issue). Fix the
-    stage spec before writing code that depends on it. For v2 or track
-    design, the question goes into the area's or track's "Open questions"
-    in [`spec/v2/`](spec/v2/README.md) or [`spec/tracks/`](spec/tracks/README.md)
-    through a small PR. Carry on with the items that are clear.
+  - If it would, stop that item and ask (the user, or on the issue). For track
+    design, the question goes into the track's "Open questions" in
+    [`spec/tracks/`](spec/tracks/README.md) through a small PR, before any
+    code that depends on it. Carry on with the items that are clear.
 - **Record decisions where they're made.** A PR that makes a decision lists
   it under "Decisions" and adds its row to
   [`docs/decisions.md`](docs/decisions.md) in the same PR.
 - **A dev PR that changes behavior updates the docs in the same PR.** It
   describes what now exists in `docs/`, and deletes the part it built from
-  the stage spec, so `main` is complete after every merge.
+  its track spec, so `main` is complete after every merge.
 - **One issue per PR.** Out-of-scope work becomes an issue, not a `TODO`
   or a drive-by change. An issue that lists several items gets one PR, not
   one per item (see "Tracking work").
@@ -75,7 +73,7 @@ Every content session, routine or not, follows these:
 
 ## Dev workflow
 
-1. **Read** the task and the docs and stage spec sections it touches.
+1. **Read** the task and the docs and track spec sections it touches.
 2. **Branch** from `main` as `dev/<short-description>`.
 3. **Write tests first** for new behavior, using Vitest suites and fixtures
    in `tests/`. Bug fixes come with a test that fails before the fix.
@@ -85,7 +83,7 @@ Every content session, routine or not, follows these:
    whole library, minus only the types its own fixtures stand in for, so a
    new link in content can't leave its library unresolved.
 4. **Update the docs as you go.** In the same PR, update the `docs/` files
-   that describe what changed, delete the part you built from the stage spec,
+   that describe what changed, delete the part you built from the track spec,
    and add a row to `docs/decisions.md` for each decision the PR makes (see
    "Rules"). A renamed heading means updating its citations; the link check
    catches any you miss.
@@ -113,7 +111,7 @@ ordered sub-issues. So is each development track ("Tracks" below), which has
 no end of its own. GitHub's milestone feature isn't used. Content issues
 follow [Requests](docs/generation.md#requests).
 
-A dev issue states what to do, the docs or stage spec section it implements,
+A dev issue states what to do, the docs or track spec section it implements,
 and how to tell it's done.
 
 Bundle small related dev issues (a few lines each, same area) into one issue
@@ -128,20 +126,13 @@ items that are ready, and add the others as commits once they're decided, or
 in a follow-up PR if the first has merged. Split an item into its own
 sub-issue and PR only when it's too large to review alongside the others.
 
-### Stage spec
-
-The v2 design lives in [`spec/v2/`](spec/v2/README.md), one file per design
-area. An approved design can be amended at any time by a small PR to it that
-the owner merges. Each build milestone starts with a pilot task on its area's
-hardest cases, which is expected to turn up amendments.
-
 ### Tracks
 
 A development track is ongoing work outside a version's build, such as
 Integrations (#315) and Images (#316), which v2 deferred. Its unbuilt design
-is one file in [`spec/tracks/`](spec/tracks/README.md). Everything this file
-says about the stage spec applies to a track's file too: a task deletes the
-part it builds, and an open question there stops that part.
+is one file in [`spec/tracks/`](spec/tracks/README.md). An approved design can
+be amended at any time by a small PR to it that the owner merges. A task
+deletes the part it builds, and an open question there stops that part.
 
 ### Testing backlog
 

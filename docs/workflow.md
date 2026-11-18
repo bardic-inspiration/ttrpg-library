@@ -20,7 +20,7 @@ within the one repo, not by convention.
 
 | | Content lane | Dev lane |
 |---|---|---|
-| Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, stage spec |
+| Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, track specs |
 | Paths it may change | `content/**`, `assets/images/**`, `ATTRIBUTION.md` | Everything else; content paths with the `migration` label, which the labeler adds |
 | Branch prefixes | `gen/`, `revise/` (routines), `manual/` (hand-made entries) | `dev/`, `dependabot/`, or any branch without a content prefix (such as a web-editor `<user>-patch-1`) |
 | Opened by | Routines, or the owner for `manual/`, or a session the owner starts for SRD work | The owner, or a Claude session the owner starts |
@@ -189,8 +189,8 @@ changes that it doesn't cover. Screenshots aren't a CI check.
 Docs are cited by file and heading ([docs/README.md](README.md#headings-and-citations)).
 `npm run links` (`scripts/links/`) scans every tracked text file and fails on:
 
-- a citation `docs/<file>.md#<heading>`, `spec/v2/<file>.md#<heading>`, or
-  `spec/tracks/<file>.md#<heading>` whose file or heading doesn't exist;
+- a citation `docs/<file>.md#<heading>` or `spec/tracks/<file>.md#<heading>`
+  whose file or heading doesn't exist;
 - a relative Markdown link, in a Markdown file, whose target or heading doesn't
   exist;
 - a section-number citation (`§` and a number).

@@ -1,7 +1,7 @@
 import { parse } from 'yaml';
 
-// spec/v2/README.md "Area files" and "Checks": the shape every area file of
-// the stage spec keeps, and the references it makes that must resolve.
+// spec/tracks/README.md "Track files" and "Checks": the shape every track file
+// keeps, and the references it makes that must resolve.
 
 /** The area template's sections, in order. Goal and Design are required. */
 export const SECTIONS = [
@@ -104,7 +104,7 @@ function findCycle(graph: Map<string, string[]>): string[] | undefined {
   return undefined;
 }
 
-/** One message per problem across the stage spec's area files. */
+/** One message per problem across the track files. */
 export function checkAreas(files: AreaFile[], entryExists: (key: string) => boolean): string[] {
   const areas = new Set(files.map((f) => f.name));
   const problems = files.flatMap((file) => checkFile(file, areas, entryExists));

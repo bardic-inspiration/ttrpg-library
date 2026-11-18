@@ -18,11 +18,11 @@ const base = (): Defaults => ({
 describe('config/defaults.json', () => {
   it('matches the defaults docs/generation.md#defaults describes', async () => {
     const file = JSON.parse(await readFile(join(ROOT, 'config/defaults.json'), 'utf8'));
-    expect(file).toEqual({ ...base(), gapFill: { enabled: false, count: 3 } });
+    expect(file).toEqual(base());
   });
 
-  it('keeps gap fill off until v2 is built (#109)', async () => {
-    expect((await loadDefaults()).gapFill.enabled).toBe(false);
+  it('has gap fill on now that v2 is built (#255)', async () => {
+    expect((await loadDefaults()).gapFill.enabled).toBe(true);
   });
 
   it('passes its own checks and loads', async () => {
