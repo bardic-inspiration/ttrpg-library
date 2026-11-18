@@ -1,22 +1,21 @@
-// A range facet's min and max inputs (docs/site.md#gallery "Filters"), rendered into a DOM and typed
+// @vitest-environment happy-dom
+// A range facet's min and max inputs (docs/site.md#gallery "Filters"), rendered into happy-dom and typed
 // into as a reader does: fractions and decimals pass through text that doesn't parse yet ("1/", "1."),
 // which must neither clear the filter nor be rewritten under the reader's cursor.
 import { h, render } from 'preact';
 import { useState } from 'preact/hooks';
 import { act } from 'preact/test-utils';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { FilterTree, idFor } from '../../../site/src/components/gallery/Filters.tsx';
 import type { FilterDef } from '../../../site/src/lib/gallery/config.ts';
 import type { FilterValue } from '../../../site/src/lib/gallery/state.ts';
 import type { TreeNode } from '../../../site/src/lib/gallery/tree.ts';
-import { FakeDocument, replaceValue, typeInto, type FakeElement } from '../dom.ts';
 
 const CR: FilterDef = { path: 'stats.cr', label: 'CR', kind: 'range', format: 'cr' };
 const HP: FilterDef = { path: 'derived.hp.average', label: 'HP', kind: 'range' };
 const node = (def: FilterDef): TreeNode => ({ kind: 'range', id: def.path, def, open: true, bounds: { min: 0, max: 30 } });
 
-let doc: FakeDocument;
-let root: FakeElement;
+let root: HTMLElement;
 /** Every filter value committed, in order, as the gallery's state would hold it; undefined clears it. */
 let commits: Array<{ min?: number; max?: number } | undefined>;
 let clear: () => void;
@@ -41,26 +40,35 @@ function Harness() {
   });
 }
 
-const input = (def: FilterDef, bound: 'min' | 'max') => doc.getElementById(`${idFor(def.path)}-${bound}`)!;
+const input = (def: FilterDef, bound: 'min' | 'max') =>
+  document.getElementById(`${idFor(def.path)}-${bound}`) as HTMLInputElement;
+/** Types at the end of a text input's value, firing one `input`, as one keystroke does. */
+const typeInto = (el: HTMLInputElement, text: string) => {
+  el.value += text;
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+};
+/** Replaces a text input's whole value, as selecting it and typing or deleting does, firing one `input`. */
+const replaceValue = (el: HTMLInputElement, text: string) => {
+  el.value = text;
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+};
 /** Types one character per keystroke, letting the page render between keystrokes as a browser does. */
-const typed = (el: FakeElement, text: string) => {
+const typed = (el: HTMLInputElement, text: string) => {
   for (const char of text) act(() => typeInto(el, char));
 };
-const replaced = (el: FakeElement, text: string) => act(() => replaceValue(el, text));
-const focus = (el: FakeElement) => act(() => el.focus());
-const blur = (el: FakeElement) => act(() => el.blur());
+const replaced = (el: HTMLInputElement, text: string) => act(() => replaceValue(el, text));
+const focus = (el: HTMLInputElement) => act(() => el.focus());
+const blur = (el: HTMLInputElement) => act(() => el.blur());
 
 beforeEach(() => {
-  doc = new FakeDocument();
-  vi.stubGlobal('document', doc);
-  root = doc.body.appendChild(doc.createElement('div'));
+  root = document.body.appendChild(document.createElement('div'));
   commits = [];
-  act(() => render(h(Harness, {}), root as unknown as HTMLElement));
+  act(() => render(h(Harness, {}), root));
 });
 
 afterEach(() => {
-  act(() => render(null, root as unknown as HTMLElement));
-  vi.unstubAllGlobals();
+  act(() => render(null, root));
+  root.remove();
 });
 
 describe('range inputs (docs/site.md#gallery "Filters")', () => {

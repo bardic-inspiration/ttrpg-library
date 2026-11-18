@@ -58,7 +58,7 @@ and the gallery in [site.md](site.md); CI and lanes in
 | Fonts | Alegreya, Alegreya SC, Alegreya Sans (OFL) via `@fontsource` | No external font requests |
 | UI icons | Lucide (ISC), inlined SVG | A handful of control icons |
 | CSS lint | Stylelint | Forbids literal design values outside `tokens/` |
-| Tests | Vitest; Playwright with axe-core | Unit suites, with a small fake DOM (`tests/site/dom.ts`) for components' typing and focus; accessibility checks and screenshots of built pages |
+| Tests | Vitest; Playwright with axe-core | Unit suites, with happy-dom as the environment of a component test file that types and moves focus; accessibility checks and screenshots of built pages |
 
 The site is served from `https://bardic-inspiration.github.io/ttrpg-library/`.
 Astro's `base` is `/ttrpg-library/`, held in `lib/site.ts`, and every internal
