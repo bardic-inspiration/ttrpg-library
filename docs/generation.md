@@ -268,8 +268,9 @@ every content rule applies to them.
   `author`, and a drafted `summary` the run rewrites. It appends the work's
   line to `ATTRIBUTION.md` ([Imported works](licensing.md#imported-works)),
   and prints the issue's skip-list section. It exits 2 with the reason when
-  the issue is rejected: a license not accepted, an unknown format, a ruleset
-  the format doesn't map, or a file that isn't JSON.
+  the issue is rejected: an `--issue` that isn't a positive integer, a
+  license not accepted, an unknown format, a ruleset the format doesn't map,
+  or a file that isn't JSON.
 - **What it skips.** Everything the translator can't map, by record and
   field; and a whole record whose name is an SRD name of any type (from the
   ruleset's [SRD manifest](content-model.md#srd-manifest-and-coverage)), a
