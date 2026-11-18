@@ -102,7 +102,13 @@ Target: WCAG 2.2 AA.
   order. Focus is always visible through a shared `--focus-ring`. Escape closes
   popovers.
 - **Semantics.** The gallery's result count is announced in a polite live region.
-  Filter groups use `fieldset` and `legend`. Art takes alt text from the entry
+  The filter tree, in a section labelled "Filters", is a nested list of
+  disclosure buttons, each with `aria-expanded` and `aria-controls` naming the
+  panel it opens. A type, or a value that holds groups, pairs its checkbox with
+  its own button, named "<type> filters" or "Groups in <value>". A facet's
+  values are a list labelled by its button, each a labelled checkbox whose
+  count reads as "<n> entries"; a range facet's Min and Max inputs are a
+  `role="group"` labelled by its button. Art takes alt text from the entry
   name.
 - **Motion.** Transitions use duration tokens, which become `0ms` under
   `prefers-reduced-motion: reduce`; `tests/site/motion.test.ts` checks every
