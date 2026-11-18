@@ -148,6 +148,16 @@ describe('validation', () => {
     expect(messages).toContain(`${file}: stats.features: no feature at subclass level 14 of class/sorcerer`);
   });
 
+  it('rejects subclass features out of level order', async () => {
+    const { messages } = await validate((entries) => {
+      const s = byId(entries, 'subclass', 'draconic-sorcery').stats;
+      [s.features[2], s.features[3]] = [s.features[3], s.features[2]];
+    });
+    expect(messages).toEqual([
+      'dnd-5e-2024/subclass/draconic-sorcery.json: stats.features[3]: class-feature/draconic-sorcery-elemental-affinity at level 6 is listed after class-feature/draconic-sorcery-dragon-wings at level 14; features are in level order',
+    ]);
+  });
+
   it('rejects a subclass whose class is missing or another type', async () => {
     const { messages } = await validate((entries) => {
       byId(entries, 'subclass', 'draconic-sorcery').stats.class = { ref: 'class/artificer' };

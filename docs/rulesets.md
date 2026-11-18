@@ -658,6 +658,7 @@ warnings below on an SRD entry.
 | Class | An SRD class lists no `spells` | error |
 | Class | No feature at level 1, or a level after 1 with neither a feature nor a subclass level | warning |
 | Class feature | `levels` ascend | error |
+| Subclass | `features` are in level order, by each feature's first level | error |
 | Subclass | Each feature's levels are its class's subclass levels, and each subclass level has a feature | error |
 
 Balance isn't checked by CI; it's judged in review
