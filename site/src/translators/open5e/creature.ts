@@ -3,7 +3,7 @@
 // reads that text back into structured actions where its numbers match what the ruleset derives
 // from the imported inputs.
 
-import { crRow, deriveDamage, diceAverage, signed } from '../../../../rulesets/dnd-5e-2024/derive.ts';
+import { crRow, deriveAction, diceAverage, signed } from '../../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import { renderTokens } from '../../../../rulesets/dnd-5e-2024/tokens.ts';
 import type {
@@ -401,15 +401,7 @@ const loose = (text: string): string => text.replace(/\*/g, '').replace(/ Hit: /
 
 /** An action's stat block text from its imported inputs, to check a parse against its source. */
 function renderAction(action: Action, basis: CreatureBasis): string {
-  const derived: DerivedAction = {
-    damage: (action.damage ?? []).map((d) =>
-      d.dice === undefined ? { modifier: 0, average: d.amount ?? 0, display: String(d.amount ?? 0) } : deriveDamage(d.dice, d.ability, d.bonus ?? 0, basis.mods),
-    ),
-  };
-  const base = basis.pb + (action.ability ? basis.mods[action.ability] : 0);
-  if (action.kind === 'save') derived.saveDc = 8 + base;
-  else if (action.kind !== 'other') derived.attackBonus = base;
-  return actionBlock(action, derived, { pb: basis.pb, abilityMods: basis.mods } as DerivedCreature).body;
+  return actionBlock(action, deriveAction(action, basis.pb, basis.mods), { pb: basis.pb, abilityMods: basis.mods } as DerivedCreature).body;
 }
 
 /** One Open5e action or trait as a library action: structured when its text reads back exactly, else as text. */

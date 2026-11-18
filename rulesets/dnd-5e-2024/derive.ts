@@ -65,7 +65,8 @@ export function deriveDamage(
   return { modifier, average, display: `${average} (${withModifier(dice, modifier)})` };
 }
 
-function deriveAction(action: Action, pb: number, mods: Record<Ability, number>): DerivedAction {
+/** An action's damage, and its attack bonus or save DC when it has an ability. */
+export function deriveAction(action: Action, pb: number, mods: Record<Ability, number>): DerivedAction {
   const derived: DerivedAction = {
     damage: (action.damage ?? []).map((d: Damage) =>
       d.dice === undefined
