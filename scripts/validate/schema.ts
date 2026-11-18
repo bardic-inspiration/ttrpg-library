@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { Ajv2020, type ErrorObject, type ValidateFunction } from 'ajv/dist/2020.js';
 import addFormatsModule from 'ajv-formats';
 import type { RulesetModule } from '../../rulesets/module.ts';
+import type { Registry } from '../build-index/index.ts';
 
 // ajv-formats ships CommonJS; under NodeNext its default import is the module object.
 const addFormats = addFormatsModule as unknown as typeof addFormatsModule.default;
@@ -172,9 +173,9 @@ export async function loadRuleset(id: string, rulesetsRoot: string = RULESETS_RO
   return { module: ruleset, stats };
 }
 
-/** config/types.json: which rulesets and types the registry knows (docs/site.md#type-registry). */
-export async function loadRegistry(): Promise<Record<string, { types: Record<string, unknown> }>> {
-  return (await readJson(join(PROJECT_ROOT, 'config/types.json'))) as Record<string, { types: Record<string, unknown> }>;
+/** config/types.json (docs/site.md#type-registry): the rulesets and types it registers, and each type's display keys. */
+export async function loadRegistry(): Promise<Registry> {
+  return (await readJson(join(PROJECT_ROOT, 'config/types.json'))) as Registry;
 }
 
 export { readJson };

@@ -1,5 +1,6 @@
 import { join } from 'node:path';
-import { buildIndex, loadRegistryFile } from '../../../scripts/build-index/index.ts';
+import { buildIndex } from '../../../scripts/build-index/index.ts';
+import { loadRegistry } from '../../../scripts/validate/schema.ts';
 import type { LibraryRecord, Registry } from '../../../site/src/lib/gallery/config.ts';
 import { FIXTURES } from '../../helpers.ts';
 
@@ -10,7 +11,7 @@ export async function fixtureRecords(): Promise<LibraryRecord[]> {
   return records;
 }
 
-export const registry = (): Promise<Registry> => loadRegistryFile();
+export const registry = (): Promise<Registry> => loadRegistry();
 
 /** A record with only what a test sets; the rest is filler. */
 export function record(overrides: Partial<LibraryRecord> & { id: string }): LibraryRecord {

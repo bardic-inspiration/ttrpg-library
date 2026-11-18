@@ -3,7 +3,8 @@ import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { buildIndex, loadRegistryFile, writeIndex } from '../scripts/build-index/index.ts';
+import { buildIndex, writeIndex } from '../scripts/build-index/index.ts';
+import { loadRegistry } from '../scripts/validate/schema.ts';
 import { isFlag, refAndTextValues, type Schema } from '../scripts/build-index/schema-walk.ts';
 import { plainText } from '../scripts/validate/text.ts';
 import { ruleset } from '../rulesets/dnd-5e-2024/index.ts';
@@ -70,7 +71,7 @@ describe('library.json records', () => {
   });
 
   it('lift facets in registry order, from the registry only', async () => {
-    const registry = await loadRegistryFile();
+    const registry = await loadRegistry();
     const { records } = await buildIndex(valid);
     for (const record of records) {
       const paths = registry[record.ruleset]!.types[record.type]!.facets.map((f) => f.path);
@@ -257,7 +258,7 @@ const REQUEST_ONLY = ['background', 'class', 'species', 'subclass'];
 
 describe('the type registry', () => {
   it('registers every content type, and every rules type that takes extensions, with the docs/site.md#type-registry keys', async () => {
-    const registry = await loadRegistryFile();
+    const registry = await loadRegistry();
     const extensionTypes = (ruleset.definition.rules ?? []).filter((r) => r.extensions).map((r) => r.type);
     expect(Object.keys(registry['dnd-5e-2024']!.types).sort()).toEqual([...ruleset.definition.types, ...extensionTypes].sort());
     for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
@@ -275,7 +276,7 @@ describe('the type registry', () => {
   });
 
   it('declares each ordered enum in the schema order', async () => {
-    const registry = await loadRegistryFile();
+    const registry = await loadRegistry();
     const types = registry['dnd-5e-2024']!.types;
     const creature = await readSchema('creature.schema.json');
     const item = await readSchema('item.schema.json');
@@ -288,7 +289,7 @@ describe('the type registry', () => {
   // docs/generation.md#gap-buckets: every axis is a facet of its type; bins sit on range facets, ascending
   // and disjoint; categorical values sit on enum facets and are values the schema allows.
   it('gives every content type gap buckets whose axes are its facets, and a rules extension or request-only type none', async () => {
-    const registry = await loadRegistryFile();
+    const registry = await loadRegistry();
     const extensionTypes = new Set((ruleset.definition.rules ?? []).map((r) => r.type));
     for (const [type, config] of Object.entries(registry['dnd-5e-2024']!.types)) {
       // Gap fill never adds a rules extension or a request-only type (docs/generation.md#gap-buckets).

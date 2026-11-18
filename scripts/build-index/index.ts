@@ -8,7 +8,7 @@ import { dirname, join } from 'node:path';
 import { SITE_BASE } from '../../lib/site.ts';
 import { validateLibrary, type ValidationError, type ValidComponent, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
 import { objectRefs, parseRefToken, REF_TOKEN, type Link } from '../validate/refs.ts';
-import { PROJECT_ROOT, RULESETS_ROOT } from '../validate/schema.ts';
+import { loadRegistry, RULESETS_ROOT } from '../validate/schema.ts';
 import { ruleNames } from '../../lib/rules.ts';
 import { plainText } from '../validate/text.ts';
 import { isFlag, refAndTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
@@ -78,9 +78,6 @@ export interface ExportBundle {
 export interface BuildOptions extends ValidateOptions {
   registry?: Registry;
 }
-
-export const loadRegistryFile = async (): Promise<Registry> =>
-  JSON.parse(await readFile(join(PROJECT_ROOT, 'config/types.json'), 'utf8')) as Registry;
 
 /** A ruleset's raw schemas, for the facets and search text that read them. */
 async function loadSchemas(ruleset: string, rulesetsRoot: string): Promise<{ files: Map<string, Schema> }> {
@@ -176,7 +173,7 @@ const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 export async function buildIndex(root: string, options: BuildOptions = {}): Promise<BuildResult> {
   const { errors, warnings, entries, components, rules } = await validateLibrary(root, options);
   if (errors.length > 0) return { errors, warnings, records: [], files: [], bundles: [] };
-  const registry = options.registry ?? (await loadRegistryFile());
+  const registry = options.registry ?? (await loadRegistry());
   const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
 
   // A {ref:…} link reads as its target's name in search text, whether the target is an entry or a primitive.
