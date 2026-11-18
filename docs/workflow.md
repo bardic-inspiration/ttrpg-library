@@ -26,7 +26,7 @@ within the one repo, not by convention.
 | Opened by | Routines, or the owner for `manual/`, or a session the owner starts for SRD work | The owner, or a Claude session the owner starts |
 | Lane label (auto) | `content` | `dev` |
 | Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`), `migration` (`content/**`, `assets/images/**`) |
-| Issue templates and labels | Content request (`request`), revise request (`revise`) ([generation.md](generation.md#requests)) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
+| Issue templates and labels | Content request (`request`), import request (`import`), revise request (`revise`) ([generation.md](generation.md#requests)) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
 | PR template | `content.md`, filled by the routine | `dev.md`: what and why, decisions, testing, screenshots for `ui` ([UI screenshots](#ui-screenshots)), migration notes |
 | PR title | `Add <n> <type> entries`, `Revise <ids>: <reason>` | `<area>: <summary>`, such as `ui: tighten stat-block spacing` |
 | CI | Content checks | Full checks |
