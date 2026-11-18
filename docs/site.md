@@ -449,7 +449,7 @@ indexes.
   its column; the page never does. A titled table puts its title in a
   `<caption>` above the headers, in the heading font and bold. The box is
   focusable and labeled "Table: " plus the title, or the column headers when
-  there's none. One style in `base.css` serves every template, mode, and theme:
+  there's none. One style in `base.css` serves every template and mode:
   headers in the heading font over an accent rule, thin rules between rows, no
   striping, and wrapping cell text, except that a one-word cell such as `9–10`
   stays on one line. Its knobs are the `--table-*` tokens; print and capture

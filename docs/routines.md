@@ -4,8 +4,8 @@ Routines are scheduled or on-demand Claude Code sessions that work the
 content lane: they turn `request`, `import`, and `revise` issues into content
 PRs and answer review comments on them. This file holds the canonical prompts, the
 schedule, and the run order every run follows. [Generation](generation.md) is the source of
-truth; where this file and the spec disagree, the spec wins and this file is
-fixed.
+truth; where this file and `generation.md` disagree, `generation.md` wins and
+this file is fixed.
 
 The prompts below are short on purpose. They tell the run to follow
 [Run order](#run-order) in this file, which the run reads from `main`, so a

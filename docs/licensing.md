@@ -50,7 +50,8 @@ settled by editing it, not case by case.
   its `name` and the `url` of its legal code.
 - `kinds` lists the ids accepted for each kind of material: `import`
   (imported entries) takes `CC0-1.0`, `CC-BY-2.0`, `CC-BY-3.0`, and
-  `CC-BY-4.0`; `art` (images, not yet built) takes those and
+  `CC-BY-4.0`; `art` (images for the `image` field, which the
+  [Images](../spec/tracks/images.md) track sources) takes those and
   `public-domain`. NC, ND, and SA works can't be relicensed under the
   library's CC-BY-4.0, so no kind takes them.
 

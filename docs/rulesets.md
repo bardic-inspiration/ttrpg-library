@@ -166,7 +166,7 @@ saves, skills, passive Perception, each action's attack bonus, save DC, and
 damage (average, modifier, and display), and the Spellcasting DC and attack
 bonus. Items derive nothing, except the ability modifiers and saves of an
 embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)); spells
-derive those too, and their class keys, for the Classes filter ([Spells](#spells)).
+derive those too.
 Classes derive their proficiency bonus and spell slots by level
 ([Classes](#classes)).
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
