@@ -14,8 +14,9 @@ import stages use the same skills in sessions the owner starts.
 GitHub issues are the request queue. Issue templates set blank issues off, so
 every issue starts in a lane.
 
-- **Content request** (`.github/ISSUE_TEMPLATE/content-request.yml`, label
-  `request`): type (condition, creature, equipment, item, or spell), count (a 1–10 dropdown,
+- **Content request**
+  ([`.github/ISSUE_TEMPLATE/content-request.yml`](../.github/ISSUE_TEMPLATE/content-request.yml),
+  label `request`): type (the form lists every type in `config/types.json`), count (a 1–10 dropdown,
   since issue forms have no number field; a free-form request may ask for
   more), brief, tags (one `key: value` per line, comma-separated for lists),
   and ruleset. Blank fields take the values in `config/defaults.json`.
