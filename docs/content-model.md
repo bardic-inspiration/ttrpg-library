@@ -453,7 +453,8 @@ nothing invalid reaches the site.
   envelope.
 - `scripts/validate/`: the CLI, the schema stage, the checks for every type,
   the text checks (`text.ts`), and ref resolution and back-references
-  (`refs.ts`).
+  (`refs.ts`). `refs.ts` also holds the one `{ref:…}` token parser, which the
+  index, the site's renderer, and the translators read tokens through.
 - `lib/text.ts`: name normalization and the blocklist matcher.
   `lib/table-title.ts`: what counts as a table title, shared by the validator
   and the renderer.

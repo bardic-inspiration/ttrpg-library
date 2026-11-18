@@ -5,9 +5,9 @@
 import { abilityMod, diceAverage, saveDc } from '../../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../../rulesets/dnd-5e-2024/index.ts';
 import type { Ability } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { replaceRefTokens, textRefs as findRefs } from '../../../../scripts/validate/refs.ts';
 import type { Skip } from '../types.ts';
 
-const REF = /\{ref:([a-z][a-z0-9-]*\/[a-z0-9]+(?:-[a-z0-9]+)*)(?: ([^{}]+))?\}/g;
 
 /** A skip list for one entry, so callers only name the path and the reason. */
 export class Skips {
@@ -21,13 +21,13 @@ export class Skips {
 }
 
 /** The ref keys of `{ref:…}` tokens in a text, in order. */
-export const textRefs = (text: string): string[] => [...text.matchAll(REF)].map((m) => m[1] ?? '');
+export const textRefs = (text: string): string[] => findRefs(text, '').refs.map((r) => r.ref);
 
 const nameOf = (key: string, names: Record<string, string>): string => names[key] ?? key.slice(key.indexOf('/') + 1);
 
 /** `text` with each `{ref:…}` token as its display text or target's name. Reports nothing. */
 export const plainRefs = (text: string, names: Record<string, string>): string =>
-  text.replace(REF, (_, key: string, display?: string) => display ?? nameOf(key, names));
+  replaceRefTokens(text, (token) => token.text ?? nameOf(token.key, names));
 
 /** Reports each `{ref:…}` token in `text`, at `path`, as a link that became plain text. */
 export function reportRefs(text: string | undefined, names: Record<string, string>, skips: Skips, path: string): void {

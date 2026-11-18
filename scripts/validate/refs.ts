@@ -66,14 +66,40 @@ export const REF_TOKEN = /\{ref:([^{}]*)\}/g;
 /** What a `{ref:…}` token must hold: a type and an id, then optionally a space and display text. */
 const REF_KEY = /^[a-z][a-z0-9-]*\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
-/** A token's inside split into its key and optional display text; undefined when malformed. */
-export function parseRefToken(inside: string): { key: string; text?: string } | undefined {
+/** A well-formed `{ref:…}` token: its key, `<type>/<id>`, and its display text, if any. */
+export interface RefToken {
+  key: string;
+  text?: string;
+}
+
+/**
+ * A token's inside split into its key and optional display text; undefined when malformed. The
+ * one parser of `{ref:…}` tokens: the validator, the index, the site's renderer, and the
+ * translators all read a token through it.
+ */
+export function parseRefToken(inside: string): RefToken | undefined {
   const space = inside.indexOf(' ');
   const key = space === -1 ? inside : inside.slice(0, space);
   const text = space === -1 ? undefined : inside.slice(space + 1);
   if (!REF_KEY.test(key) || (text !== undefined && text.trim() !== text) || text === '') return undefined;
   return text === undefined ? { key } : { key, text };
 }
+
+const REF_TOKEN_START = new RegExp(`^${REF_TOKEN.source}`);
+
+/** The well-formed `{ref:…}` token `text` starts with, with its raw text; undefined when it starts with none. */
+export function leadingRefToken(text: string): (RefToken & { raw: string }) | undefined {
+  const match = REF_TOKEN_START.exec(text);
+  const token = match ? parseRefToken(match[1] ?? '') : undefined;
+  return match && token ? { raw: match[0], ...token } : undefined;
+}
+
+/** `text` with each well-formed `{ref:…}` token replaced by `replace`'s result, and a malformed one left as written. */
+export const replaceRefTokens = (text: string, replace: (token: RefToken) => string): string =>
+  text.replace(REF_TOKEN, (raw, inside: string) => {
+    const token = parseRefToken(inside);
+    return token ? replace(token) : raw;
+  });
 
 /** A `{ref:…}` token whose inside isn't `<type>/<id>`. */
 export interface MalformedRef {
