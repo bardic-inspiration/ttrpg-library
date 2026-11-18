@@ -82,11 +82,6 @@
     &:hover {
       background: var(--color-bg);
     }
-
-    &[aria-pressed='true'] {
-      background: var(--control-active-bg);
-      color: var(--control-active-text);
-    }
   }
 
   input[type='checkbox'],

@@ -56,9 +56,6 @@ export interface Member {
   stats: unknown;
 }
 
-/** The Extensions page's URL segment, which no rules page may take. */
-export const EXTENSIONS_PAGE = 'extensions';
-
 export const ruleKey = (item: { type: string; id: string }): string => `${item.type}/${item.id}`;
 
 /** The anchor of a primitive's or group's section on its page: `<type>-<id>`, so two types on a page can't collide. */

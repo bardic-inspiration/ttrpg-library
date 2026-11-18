@@ -22,7 +22,6 @@ import FilterIcon from '../icons/Filter';
 import SortIcon from '../icons/Sort';
 import DownloadIcon from '../icons/Download';
 import PrintIcon from '../icons/Print';
-import CloseIcon from '../icons/Close';
 import ExportButtons from '../components/export/ExportButtons';
 import { configuredControls } from '../exporters/index';
 import Card from '../components/gallery/Card';
@@ -68,7 +67,7 @@ const label = (slug: string) => slug.replace(/-/g, ' ');
 
 const icons = [
   ['Search', SearchIcon], ['Filter', FilterIcon], ['Sort', SortIcon],
-  ['Download', DownloadIcon], ['Print', PrintIcon], ['Close', CloseIcon],
+  ['Download', DownloadIcon], ['Print', PrintIcon],
 ] as const;
 
 // Cards, filters, and templates render the example fixtures, which have one entry per type.
@@ -182,9 +181,7 @@ const modes = ['screen', 'capture'] as const;
       <h3>Controls</h3>
       <div class="cluster">
         <button type="button">Button</button>
-        <button type="button" aria-pressed="true">Active</button>
         <button type="button" class="sg-focused">Focused</button>
-        <button type="button" aria-label="Close"><CloseIcon /></button>
       </div>
       <div class="cluster">
         <label>Search <input type="search" placeholder="Name, tag, or text" /></label>

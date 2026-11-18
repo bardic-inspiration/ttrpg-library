@@ -3,7 +3,6 @@
 
 import { phrases } from '../../../rulesets/dnd-5e-2024/index.ts';
 import {
-  article as articleFor,
   concat,
   link,
   counted as countedWith,
@@ -50,9 +49,6 @@ export const pluralLink = (ref: string, names: Map<string, string>): Phrase => {
   const target = names.get(ref);
   return target === undefined ? concat(link(ref), 's') : link(ref, pluralOf(target));
 };
-
-/** "a" or "an", with the phrase book's exceptions. */
-export const articleOf = (word: string): 'a' | 'an' => articleFor(word, phrases.articles);
 
 /** "a Dragonborn", "an Elf". */
 export const withArticle = (word: string): Phrase => withArticleFor(word, phrases.articles);

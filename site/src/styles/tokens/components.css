@@ -61,8 +61,6 @@
     --control-radius: var(--radius-control);
     --control-padding-block: var(--space-3xs);
     --control-padding-inline: var(--space-2xs);
-    --control-active-bg: var(--color-accent);
-    --control-active-text: var(--color-surface);
     --chip-radius: var(--radius-chip);
 
     /* Badges. */

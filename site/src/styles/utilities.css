@@ -11,10 +11,6 @@
     white-space: nowrap;
   }
 
-  .flow > * + * {
-    margin-block-start: var(--space-s);
-  }
-
   .cluster {
     display: flex;
     flex-wrap: wrap;
