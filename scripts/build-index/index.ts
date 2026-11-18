@@ -11,7 +11,7 @@ import { objectRefs, parseRefToken, REF_TOKEN, type Link } from '../validate/ref
 import { PROJECT_ROOT, RULESETS_ROOT } from '../validate/schema.ts';
 import { ruleNames } from '../../lib/rules.ts';
 import { plainText } from '../validate/text.ts';
-import { isFlag, refOrTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
+import { isFlag, refAndTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
 
 /** One facet in config/types.json (docs/site.md#type-registry). */
 export interface Facet {
@@ -136,15 +136,21 @@ function names(value: unknown): string[] {
 const TOKEN = /\{[^{}]*\}/g;
 
 /**
- * The docs/site.md#index-build `search` text: action, trait, and spell names (a ref names its
- * target), then `description` and the rules text, with markup stripped and
- * each `{ref:…}` link read as its display text or its target's name.
+ * The docs/site.md#index-build `search` text: the names in `stats` (every ref names its target),
+ * then `description` and the rules text, with markup stripped and
+ * each `{ref:…}` link read as its display text or its target's name. A ref to one of `own`, the
+ * entry's components, is left to that component's part of the text, which starts with its name.
  */
-function searchText(item: Pick<ValidComponent, 'entry' | 'texts'>, schemas: SchemaSet, nameOf: Map<string, string>): string {
-  const refNames = refOrTextValues(item.entry.stats, schemas).flatMap((value) => {
+function searchText(
+  item: Pick<ValidComponent, 'entry' | 'texts'>,
+  schemas: SchemaSet,
+  nameOf: Map<string, string>,
+  own: ReadonlySet<string> = new Set(),
+): string {
+  const refNames = refAndTextValues(item.entry.stats, schemas).flatMap((value) => {
     if (typeof value === 'string') return [value];
-    const ref = (value as { ref?: unknown }).ref;
-    const name = typeof ref === 'string' ? nameOf.get(ref) : undefined;
+    const { ref } = value as { ref: string };
+    const name = own.has(ref) ? undefined : nameOf.get(ref);
     return name ? [name] : [];
   });
   // A {ref:…} link reads as its target's name; other tokens are dropped.
@@ -199,9 +205,10 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
     const files = loaded.files;
     const schemasOf = (type: string): SchemaSet => ({ root: files.get(`${type}.schema.json`) ?? {}, files });
     const schemas = schemasOf(entry.type);
+    const parts = componentsOf(entry);
     const search = [
-      searchText(item, schemas, nameOf),
-      ...componentsOf(entry).map((c) => `${c.entry.name} ${searchText(c, schemasOf(c.entry.type), nameOf)}`),
+      searchText(item, schemas, nameOf, new Set(parts.map((c) => `${c.entry.type}/${c.entry.id}`))),
+      ...parts.map((c) => `${c.entry.name} ${searchText(c, schemasOf(c.entry.type), nameOf)}`),
     ].join(' ').replace(/\s+/g, ' ').trim();
     const config = registry[entry.ruleset]?.types[entry.type];
     const meta = entry.meta as { createdAt: string };

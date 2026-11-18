@@ -87,15 +87,18 @@ path, or `null`), `facets`, `tags` (or `{}`), `createdAt`, `refs`, `refBy`, and
 - `facets` holds the registry's facet paths in registry order, read from
   `stats` and the derived values. A facet whose optional value is omitted is
   left out, except an optional flag, which reads as `false`.
-- `search` holds action, trait, and spell names plus `description` and rules
-  text with markup stripped. Names are every `name` in `stats` and every value
-  at a `RefOrText` field, a ref read as its target's name. Rules text is every
-  markdown-subset field, with markdown and ruleset tokens removed and each
-  `{ref:…}` token read as its target's name.
+- `search` holds the names in `stats` plus `description` and rules text with
+  markup stripped. Names are every `name` in `stats` (actions, traits), every
+  ref in `stats` read as its target's name, whatever its field (`RefOrText`
+  or a typed ref, such as a background's feat and equipment), and every plain
+  string at a `RefOrText` field. Rules text is every markdown-subset field,
+  with markdown and ruleset tokens removed and each `{ref:…}` token read as
+  its target's name.
 
 A component ([content-model.md](content-model.md#components)) has no record,
 raw file, or export bundle. Its parent's `search` adds each component's name
-and the same names and text, in the order the parent lists them.
+and the same names and text, in the order the parent lists them, so the
+parent's own refs to its components aren't read a second time.
 
 Records are sorted by ruleset, type, then `id`, and the file is written without
 timestamps, so two builds of the same content are byte-identical. The index

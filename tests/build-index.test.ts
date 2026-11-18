@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildIndex, loadRegistryFile, writeIndex } from '../scripts/build-index/index.ts';
-import { isFlag, refOrTextValues, type Schema } from '../scripts/build-index/schema-walk.ts';
+import { isFlag, refAndTextValues, type Schema } from '../scripts/build-index/schema-walk.ts';
 import { plainText } from '../scripts/validate/text.ts';
 import { ruleset } from '../rulesets/dnd-5e-2024/index.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
@@ -172,6 +172,18 @@ describe('search text', () => {
     expect(search).toContain('Iron Collar');
     expect(search).not.toContain('spell/frost-lance');
   });
+
+  it('names every ref by its target, whatever its field: a background finds its feat and equipment', async () => {
+    const files = ['feat/magic-initiate.json', 'background/acolyte.json'];
+    const entries = await Promise.all(files.map(async (file) => JSON.parse(await readFile(join(FIXTURES, file), 'utf8'))));
+    const lib = await temp(entries);
+    const { errors, records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
+    expect(errors).toEqual([]);
+    // A FeatRef and EquipmentRefs, none of them RefOrText; the feat's note is a qualifier, not a name.
+    expect(records.find((r) => r.id === 'acolyte')!.search).toBe(
+      "Magic Initiate Calligrapher's Supplies Calligrapher's Supplies Book Holy Symbol Parchment Robe",
+    );
+  });
 });
 
 describe('the build', () => {
@@ -317,7 +329,21 @@ describe('the type registry', () => {
 describe('schema walk', () => {
   it('finds values at RefOrText fields, through $ref and nested objects', async () => {
     const stats = { spellcasting: { ability: 'cha', atWill: ['Light'], perDay: { '1': [{ ref: 'spell/x' }] } }, gear: ['Rope'], actions: [{ name: 'Bite' }] };
-    expect(refOrTextValues(stats, await schemaSet('creature'))).toEqual([['Light'], [{ ref: 'spell/x' }], ['Rope']].flat());
+    expect(refAndTextValues(stats, await schemaSet('creature'))).toEqual([['Light'], [{ ref: 'spell/x' }], ['Rope']].flat());
+  });
+
+  it('finds every ref, whatever its field, but plain text only at RefOrText fields', async () => {
+    const stats = {
+      feat: { ref: 'feat/magic-initiate', note: 'Cleric' },
+      tool: { ref: 'equipment/calligraphers-supplies' },
+      skills: ['insight'],
+      equipment: [{ items: [{ ref: 'equipment/book', note: 'prayers' }, '20 Arrows'], gp: 8 }, { gp: 50 }],
+    };
+    expect(refAndTextValues(stats, await schemaSet('background'))).toEqual([
+      { ref: 'feat/magic-initiate', note: 'Cleric' },
+      { ref: 'equipment/calligraphers-supplies' },
+      { ref: 'equipment/book', note: 'prayers' },
+    ]);
   });
 
   it('tells an optional flag from a required boolean', async () => {

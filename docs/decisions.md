@@ -344,6 +344,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Where an SRD spell entry names a class whose printed list omits it (*Phantasmal Force*, *Mind Spike*), the class derives the spell, and the SRD check lists the case as an inconsistency. | P5: the spell card is reproduced as printed; the list is derived from it | #234 |
 | The example test library holds abbreviated Sorcerer and Wizard classes for Frost Lance, and `tempLibrary` adds a stand-in for each SRD caster class a test's spells name but its library lacks. | A spell's class refs must resolve; a stand-in brings no refs of its own | #234 |
 | `types.md` is removed with Milestone 4. Its last unbuilt part, the facets over refs (condition immunities, spell classes, a background's feat, a subclass's class), moves to `ui.md`'s filter tree, which builds them (#235). | The types are built; what remains is the filter tree's work | #216 |
+| Search text reads every ref in `stats` by its target's name, whatever its field, and plain text only at `RefOrText` fields; a parent's refs to its own components aren't read again, since each component's part of the text starts with its name. | Typed refs added nothing, so "magic initiate" didn't find Acolyte; a name read twice adds no match | #319 |
 
 ### Wording
 
