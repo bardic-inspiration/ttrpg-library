@@ -90,11 +90,16 @@ metadata and changed paths; it never checks out or runs PR code.
    `lane`): set up the latest Node 22 release (`check-latest`, so a runner's
    older cached patch can't fail Astro's engine check) with npm cache,
    `npm ci`, `npm run validate`, and `npm run build`. When content changed,
-   `scripts/pr-summary/` writes the job summary: changed entries with name,
-   type, summary field, and summary; for creatures, the derived HP, AC, attack
-   bonuses, DCs, and average damage per action; every warning, including every
-   formula adjustment; and new back-links. The built site is uploaded as an
-   artifact for 7 days.
+   `scripts/pr-summary/` writes the job summary from the validator's result
+   for the PR: a table of the changed entries with name (a component's as
+   "Parent › Name"), type, summary field (read as its facet reads it), and
+   summary, a removed entry's read from the merge base; for each changed
+   creature, its AC, derived HP, and each action's attack bonus, DC, and
+   damage with its average; every warning the validator reports, which
+   includes every formula adjustment; and the new back-links, each link from a
+   changed entry to a target its merge-base version didn't link to, labeled
+   as the target's page labels it, without the links among a page's own parts.
+   The built site is uploaded as an artifact for 7 days.
 3. **`dev-checks`** (dev lane, not docs-only, after `lane`, alongside
    `content-checks`): `npm run check` (types, `astro check`, Stylelint, the link
    check) and `npm test`. A text-only PR skips `npm run check`.
