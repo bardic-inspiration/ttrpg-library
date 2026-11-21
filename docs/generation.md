@@ -295,7 +295,7 @@ The full SRD import bypassed requests: each stage was a sub-issue of its
 milestone, without the `request` label, so routines never took it, worked in
 sessions the owner started. Every stage is done. SRD entry upkeep (link
 passes, corrections, review) works the same way, with its issue under the
-current milestone or a track issue ([Dev Queue](../AGENTS.md#dev-queue)),
+current queue (a milestone, a "Spot Fixes" issue, or a track issue) ([Dev Queue](../AGENTS.md#dev-queue)),
 through the `generate` and `revise` skills. A stage session ran the
 `generate` skill on a batch picked from
 `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress`
