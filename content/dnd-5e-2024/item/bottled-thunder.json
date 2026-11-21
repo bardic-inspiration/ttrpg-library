@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "bottled-thunder",
+  "name": "Bottled Thunder",
+  "summary": "A glass sphere that releases a thunderclap when thrown.",
+  "description": "The sphere rumbles faintly when shaken. Cave-divers carry them to warn off things that live in the dark.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can throw this sphere at a point within 30 feet. Each creature within 10 feet of that point makes a DC 14 Constitution saving throw, taking 3d6 Thunder damage and having the {ref:condition/deafened} condition until the end of its next turn on a failed save, or half as much damage and no condition on a success. The sphere is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

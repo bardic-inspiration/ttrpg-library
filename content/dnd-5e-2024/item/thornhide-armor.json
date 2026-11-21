@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "thornhide-armor",
+  "name": "Thornhide Armor",
+  "summary": "Hide armor that pricks creatures who grapple the wearer.",
+  "description": "The hide is tanned with sap and studded with natural barbs. Bears are said to leave it alone.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/hide-armor"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to AC while wearing this armor. A creature that starts its turn grappling you takes 1d4 Piercing damage."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "belt-of-sure-footing",
+  "name": "Belt of Sure Footing",
+  "summary": "A belt that keeps you upright on ice, slick stones, and rocking decks.",
+  "description": "The buckle is carved with a single stylized gull. Ferrymen wear it, and so do mountain guides.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "While you wear this belt, you can't be given the {ref:condition/prone} condition while on the ground by effects that would trip or slip you, and nonmagical difficult terrain from ice, mud, or loose stone doesn't cost you extra movement."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

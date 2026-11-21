@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "beacon-flare",
+  "name": "Beacon Flare",
+  "summary": "A flare that rises into the sky and glows as a signal for an hour.",
+  "description": "Used by caravans and shepherds to send for help. It smells of struck flint.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "common",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Bonus Action, you can launch this flare into the air. It rises 200 feet and sheds Bright Light in a 60-foot radius for 1 hour. The flare is visible for 10 miles under open sky and is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

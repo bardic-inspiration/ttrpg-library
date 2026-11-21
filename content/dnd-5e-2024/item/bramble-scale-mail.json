@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "bramble-scale-mail",
+  "name": "Bramble Scale Mail",
+  "summary": "Scale mail that grows dull leaves and lets you hide in foliage.",
+  "description": "The scales are overlapped in a pattern like a pine cone. Rangers have been known to wear it all winter.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/scale-mail"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to AC while wearing this armor. While you are in a forest or other area with heavy vegetation, you have Advantage on Dexterity (Stealth) checks."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

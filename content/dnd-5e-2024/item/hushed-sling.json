@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "hushed-sling",
+  "name": "Hushed Sling",
+  "summary": "A sling that makes no sound and slings stones with extra bite.",
+  "description": "Its leather is stitched with thread that smells of wet moss. Poachers prize it and gamekeepers hate it.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/sling"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. Attacks made with it make no sound, and a creature that fails to see you attack does not learn where you are from the sound of it."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

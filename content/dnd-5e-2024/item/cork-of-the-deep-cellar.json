@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "cork-of-the-deep-cellar",
+  "name": "Cork of the Deep Cellar",
+  "summary": "A cork that seals a container so nothing can get in or out.",
+  "description": "Found in the cellars of old inns, stuck in a bottle no one has opened. The cork never dries.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can press this cork into a container no larger than a barrel. For 1 hour, nothing can pass into or out of the container, and its contents are shielded from detection. The cork is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

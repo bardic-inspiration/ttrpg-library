@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "heartroot-biscuit",
+  "name": "Heartroot Biscuit",
+  "summary": "A biscuit that feeds a creature for a day and restores a few hit points.",
+  "description": "Baked in a village with a bad harvest and a good oven. One biscuit is enough for a day, but no one eats just one.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "common",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As an action, you can eat this biscuit. You are nourished for 24 hours and regain 1d4 hit points. The biscuit is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

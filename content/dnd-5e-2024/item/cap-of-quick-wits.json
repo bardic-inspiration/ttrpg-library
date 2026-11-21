@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "cap-of-quick-wits",
+  "name": "Cap of Quick Wits",
+  "summary": "A cap that sharpens recall and the speed of your thinking.",
+  "description": "A scholar's cap, the sort worn on the way to examinations. The brim is chewed.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/guidance"
+        }
+      }
+    ],
+    "effect": "While you wear this cap, you can cast *Guidance* from it at will, without needing to provide Components. Once per Long Rest, you can reroll one Intelligence check you just made, and you must use the new roll."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}
