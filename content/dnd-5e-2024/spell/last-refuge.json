@@ -1,0 +1,59 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "last-refuge",
+  "name": "Last Refuge",
+  "summary": "Creates a sanctuary where nothing hostile can enter.",
+  "stats": {
+    "level": 9,
+    "school": "abjuration",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/paladin"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a feather, a scale, and a handful of salt worth 1000+ GP, which the spell consumes",
+        "costGp": 1000,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "A 100-foot-radius Sphere around you becomes a sanctuary. Hostile creatures and projectiles cannot enter, and creatures in the area are immune to damage from outside it."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

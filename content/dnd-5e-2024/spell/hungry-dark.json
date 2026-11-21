@@ -1,0 +1,55 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "hungry-dark",
+  "name": "Hungry Dark",
+  "summary": "Creates a patch of darkness that drains the life of those within.",
+  "stats": {
+    "level": 3,
+    "school": "necromancy",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A 20-foot-radius Sphere of drifting shadow appears centered on a point within range. A creature that starts its turn there makes a Constitution saving throw, taking 3d8 Necrotic damage on a failed save or half as much on a success. You regain Hit Points equal to half the total damage dealt this way each turn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

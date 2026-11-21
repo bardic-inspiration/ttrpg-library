@@ -1,0 +1,53 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "rattle",
+  "name": "Rattle",
+  "summary": "Booms against a target, damaging it and pushing it away.",
+  "stats": {
+    "level": 0,
+    "school": "evocation",
+    "classes": [
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/warlock"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Make a ranged spell attack against a creature within range. On a hit, the target takes 1d8 Thunder damage and is pushed up to 5 feet straight away from you."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

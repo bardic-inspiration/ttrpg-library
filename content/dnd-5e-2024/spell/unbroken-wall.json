@@ -1,0 +1,58 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "unbroken-wall",
+  "name": "Unbroken Wall",
+  "summary": "Raises a wall that cannot be passed or harmed by ordinary means.",
+  "stats": {
+    "level": 8,
+    "school": "abjuration",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/paladin"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a stone block"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A wall of force 100 feet long, 20 feet high, and 2 feet thick appears at a point within range. It cannot be damaged by anything short of a *Disintegrate* spell or a power word of equivalent strength. Nothing can pass through it."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

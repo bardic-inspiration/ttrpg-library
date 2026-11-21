@@ -1,0 +1,57 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "stone-tongue",
+  "name": "Stone Tongue",
+  "summary": "Lets a creature speak to stone and learn what it witnessed.",
+  "stats": {
+    "level": 5,
+    "school": "transmutation",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a piece of rock"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "You touch a stone and ask it up to three questions about events within 100 feet of it in the last 24 hours. It answers in a rumbling voice, truthfully but only in short phrases."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

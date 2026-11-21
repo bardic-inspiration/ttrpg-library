@@ -1,0 +1,55 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "grudge",
+  "name": "Grudge",
+  "summary": "Forces a creature to hold a bitter grudge against one target.",
+  "stats": {
+    "level": 3,
+    "school": "enchantment",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/warlock"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "One creature you can see within range makes a Wisdom saving throw. On a failure, it cannot willingly end its turn farther than 30 feet from a creature you choose, and it has Disadvantage on attack rolls against other targets. It repeats the save at the end of each of its turns."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

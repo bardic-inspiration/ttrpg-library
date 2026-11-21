@@ -1,0 +1,52 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "sour-touch",
+  "name": "Sour Touch",
+  "summary": "Withers a creature with a touch, leaving it unable to heal briefly.",
+  "stats": {
+    "level": 0,
+    "school": "necromancy",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Make a melee spell attack against a creature. On a hit, the target takes 1d8 Necrotic damage and cannot regain Hit Points until the start of your next turn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}
