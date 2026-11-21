@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "shadow-courier",
+  "name": "Shadow Courier",
+  "summary": "A Rogue subclass: deliver what cannot be found.",
+  "stats": {
+    "class": {
+      "ref": "class/rogue"
+    },
+    "tagline": "Deliver What Cannot Be Found",
+    "text": "Shadow Couriers carry secrets, goods, and warnings through guarded places. They master speed, disguise, and the art of not being where the watchers look.",
+    "features": [
+      {
+        "ref": "class-feature/shadow-courier-swift-parcel"
+      },
+      {
+        "ref": "class-feature/shadow-courier-cover-of-errands"
+      },
+      {
+        "ref": "class-feature/shadow-courier-run-straight"
+      },
+      {
+        "ref": "class-feature/shadow-courier-false-trail"
+      },
+      {
+        "ref": "class-feature/shadow-courier-message-in-the-wind"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

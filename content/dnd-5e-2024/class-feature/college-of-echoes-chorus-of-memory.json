@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "college-of-echoes-chorus-of-memory",
+  "name": "Chorus of Memory",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "When you roll {ref:glossary/initiative}, you regain one expended use of Bardic Inspiration, and you can grant a use to each ally who can hear you."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "bulwark-interpose",
+  "name": "Interpose",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "When a creature you can see within 5 feet of you is hit by an attack, you can use a {ref:glossary/reaction} to take the hit instead, halving the damage you take."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

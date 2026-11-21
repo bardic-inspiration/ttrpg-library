@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "chronicler-foreseen-page",
+  "name": "Foreseen Page",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "When you finish a Long Rest, roll two d20s and record the numbers. You can replace any one attack roll, saving throw, or ability check made by you or a creature you can see with one of these recorded numbers, expending it. You lose unused numbers when you finish your next Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}
