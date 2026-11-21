@@ -32,7 +32,10 @@ with a schema file and a registry entry. Anything else fails as unknown.
 ### IDs and names
 
 - The ID is the slug of the name at creation: lowercase, ASCII-folded,
-  non-alphanumerics collapsed to `-`. It equals the file name.
+  apostrophes dropped, other non-alphanumerics collapsed to `-`: "Hunter's
+  Mark" is `hunters-mark`. It equals the file name. Five items made before
+  this was written down keep `-s-` ids, such as `cantor-s-chain-mail`, since
+  an ID never changes.
 - IDs and names are unique within a type, not across the library. Entries of
   different types are different things even when they share a name: the Giant
   Insect spell and a Giant Insect creature can both exist. Everything that

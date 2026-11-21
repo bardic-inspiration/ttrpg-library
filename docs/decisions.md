@@ -358,6 +358,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A subclass's features are checked for level order by each feature's first level, with the class's check and message, whether or not its class resolves. | P3: one rule for both lists; the order doesn't depend on the class | #319 |
 | `srd-coverage` reads the library through `validateLibrary()`, and the ruleset's rules and component types through its module, instead of re-reading the files; it fails while validation has errors, as `build:index` does. | P3: one reading of components' parents and the rules data; P2: an entry that fails validation would otherwise read as missing | #319 |
 | `ruleset.json` drops `label`, `srdVersion`, and `attribution`, and `config/types.json` drops `attribution`: nothing read them. A ruleset's display label is the registry's, and its attribution statement is written where it shows rather than looked up by key. | P3: one label, and no key that claims a lookup nothing makes; a key-driven statement would be machinery for a single ruleset, whose licensing review sets the wording and placement anyway | #319 |
+| An ID's slug drops apostrophes ("Hunter's Mark" is `hunters-mark`), as every SRD entry and the Open5e importer already did; the five items generated with `-s-` ids keep them. The validator doesn't compare an ID with its name, since a renamed entry keeps its ID. | The docs' wording allowed both spellings; IDs never change | #350 |
+| A test that loads the whole library only so its fixtures' links resolve checks warnings on its fixtures alone. | The library's warnings, such as an authored DC, are notes for each entry's reviewer, not failures | #350 |
 
 ### Wording
 
@@ -465,6 +467,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Translators read `{ref:…}` tokens with the validator's parser, so one the validator calls malformed stays as written in an export and isn't reported as a link, as the site's renderer leaves it. | P3: one parser; only invalid text reads differently | #319 |
 | Open5e's ability keys (`strength`) are the phrase book's ability names in lowercase, rather than a table of their own. | P3: the names are the phrase book's; the vendored Open5e schema check catches a mismatch | #319 |
 | The index reads `{ref:…}` tokens through `replaceRefTokens`, and search text drops a malformed one as it drops every other token. | P3: one parser. A malformed token fails validation, so no index is built from one; its key isn't words | #322 |
+| An Open5e record keyed `ttrpg-library_<id>` imports with that id; any other record's id is its name's slug. | An exported entry round-trips as itself, whatever its id's spelling; IDs never change | #350 |
 
 ### Art
 

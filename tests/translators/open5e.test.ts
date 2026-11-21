@@ -204,6 +204,15 @@ describe('Open5e pilot cases (spec/tracks/integrations.md "Cases")', () => {
 });
 
 describe('Open5e import (docs/export.md#open5e)', () => {
+  it('keeps the id a record from this library carries in its key, and slugs any other record\'s name', () => {
+    const { record } = exportOne('item/cantor-s-chain-mail');
+    expect(record.key).toBe('ttrpg-library_cantor-s-chain-mail');
+    const ids = (r: Record<string, any>) => open5e.import({ magicitems: [r] }, context).entries[0]!.id;
+    expect(ids(record)).toBe('cantor-s-chain-mail');
+    expect(ids({ ...record, key: 'srd-2024_cantors-chain-mail' })).toBe('cantors-chain-mail');
+    expect(ids({ ...record, key: 'ttrpg-library_Not An Id' })).toBe('cantors-chain-mail');
+  });
+
   it('reads the SRD lich as Open5e gives it into inputs', async () => {
     const { entries, skipped } = open5e.import(await fixture('creatures-lich.json'), context);
     const s = entries[0]!.stats as Record<string, any>;
