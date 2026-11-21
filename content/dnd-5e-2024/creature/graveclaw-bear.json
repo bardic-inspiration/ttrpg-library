@@ -1,0 +1,117 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "graveclaw-bear",
+  "name": "Graveclaw Bear",
+  "summary": "A bear raised from a snowed-in den, its flesh slipping from the bone.",
+  "description": "Hunters find graveclaw bears at the mouths of caves where something fed them to the ground. They are slow to tire and stranger to kill, and a pelt taken from one stays cold.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 12,
+      "note": "natural armor"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 40,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 10,
+      "con": 18,
+      "int": 2,
+      "wis": 12,
+      "cha": 5
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Undead Fortitude",
+        "kind": "other",
+        "text": "If damage reduces the bear to 0 Hit Points, it must make a Constitution saving throw with a {dc=5} plus the damage taken, unless the damage is Radiant or from a Critical Hit. On a success, the bear drops to 1 Hit Point instead."
+      },
+      {
+        "name": "Carrion Regeneration",
+        "kind": "other",
+        "text": "The bear regains 5 Hit Points at the start of its turn if it has at least 1 Hit Point and hasn't taken Radiant or Fire damage since then."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The bear makes one Rending Bite attack and one Claw attack."
+      },
+      {
+        "name": "Rending Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "and the target has the {ref:condition/grappled} condition (escape {dc:str}) if the bear isn't already grappling a creature."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "knucklebone-swarm",
+  "name": "Knucklebone Swarm",
+  "summary": "A drifting mass of finger and toe bones that skitters over anything warm and scrapes it raw.",
+  "description": "Where a charnel pit has been left unblessed, the small bones sometimes go on without the rest. Sextons sweep them into sacks and weigh the sacks down with salt, which does no good but makes the sexton feel better.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "swarm": "tiny",
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 14,
+      "con": 11,
+      "int": 2,
+      "wis": 10,
+      "cha": 3
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/poisoned"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        },
+        {
+          "ref": "condition/stunned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny creature. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Scouring Bones",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "The target also takes {dmg:1d6:slashing} if the swarm is Bloodied."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

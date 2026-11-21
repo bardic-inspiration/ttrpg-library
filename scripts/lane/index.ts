@@ -35,7 +35,7 @@ export function isDocsPath(path: string): boolean {
 /**
  * Markdown that tests read but no build, type, or style check does, so a PR
  * that changes only these and docs skips `content-checks` and runs only the
- * tests and the link check (docs/workflow.md#text-only-prs): the stage spec,
+ * tests and the link check (docs/workflow.md#text-only-prs): the track specs,
  * the skills, the guidelines, `docs/routines.md`, `ATTRIBUTION.md`, and the
  * content PR template.
  */

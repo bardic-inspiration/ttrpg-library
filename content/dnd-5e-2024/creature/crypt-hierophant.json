@@ -1,0 +1,154 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "crypt-hierophant",
+  "name": "Crypt Hierophant",
+  "summary": "A gaunt cult leader in a robe of burial linen who commands the dead by name and the living by fear.",
+  "description": "Hierophants rule a cult by out-lasting its other candidates, and a good many do it by raising them. They preach at midnight, in graveyards, to a congregation that is only partly breathing.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 16,
+      "note": "robes of grave-wax"
+    },
+    "hitDice": 22,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 12,
+      "con": 16,
+      "int": 14,
+      "wis": 18,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "insight": "proficient",
+      "religion": "proficient",
+      "persuasion": "proficient"
+    },
+    "resistances": [
+      "necrotic"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Undercommon"
+      ]
+    },
+    "traits": [
+      {
+        "name": "Dead Congregation",
+        "kind": "other",
+        "text": "Each Undead ally within 30 feet of the hierophant has Advantage on attack rolls."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hierophant makes two Staff of Rot attacks, and it can replace one with a use of Spellcasting."
+      },
+      {
+        "name": "Staff of Rot",
+        "kind": "melee-attack",
+        "ability": "wis",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "wis",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "2d8",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "The target can't regain hit points until the end of the hierophant's next turn."
+      },
+      {
+        "name": "Funeral Pall",
+        "kind": "save",
+        "ability": "wis",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 30-foot Emanation originating from the hierophant"
+        },
+        "damage": [
+          {
+            "dice": "6d8",
+            "type": "necrotic"
+          }
+        ],
+        "onSuccess": "Half damage only.",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Rise and Serve",
+        "kind": "other",
+        "text": "The hierophant targets one corpse within 30 feet. It becomes a Zombie under the hierophant's control until the next dawn.",
+        "uses": "2/day"
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/command"
+        }
+      ],
+      "perDay": {
+        "2": [
+          {
+            "ref": "spell/bestow-curse"
+          },
+          {
+            "ref": "spell/inflict-wounds"
+          }
+        ],
+        "1": [
+          {
+            "ref": "spell/animate-dead"
+          }
+        ]
+      }
+    },
+    "cr": 8
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "leaders",
+      "cult leader"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

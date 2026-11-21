@@ -1,0 +1,131 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bonewright-colossus",
+  "name": "Bonewright Colossus",
+  "summary": "A hulking construct of stacked femurs and skulls that rebuilds itself from the dead around it.",
+  "description": "No one admits to building the first. Bonewrights are found where a battle was lost badly, standing in the middle of the field with the dead arranged around them in tidy piles.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "construct",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15,
+      "note": "natural armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 8,
+      "con": 18,
+      "int": 3,
+      "wis": 10,
+      "cha": 1
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "resistances": [
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "poison",
+        "psychic"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Scavenge Bone",
+        "kind": "other",
+        "text": "As a Bonus Action, the colossus absorbs a pile of bones or a corpse within 5 feet of it, destroying that remains. The colossus regains 10 Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The colossus makes two Bone Fist attacks."
+      },
+      {
+        "name": "Bone Fist",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/prone} condition."
+      },
+      {
+        "name": "Splinter Burst",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "4d8",
+            "type": "piercing"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

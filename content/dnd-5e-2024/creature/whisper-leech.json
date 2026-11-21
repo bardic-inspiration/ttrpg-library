@@ -1,0 +1,83 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "whisper-leech",
+  "name": "Whisper Leech",
+  "summary": "A fat, grey slug the size of a cat that clings to a skull and murmurs borrowed thoughts into its host.",
+  "description": "Cultists keep whisper leeches as pets, confessors, and spies, and wear them under hoods where they feed on dreams. A host who loses its leech is said to wake screaming for a week.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "aberration",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 12,
+      "note": "natural armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 20,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 14,
+      "con": 12,
+      "int": 12,
+      "wis": 12,
+      "cha": 8
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "telepathy": 60
+    },
+    "traits": [
+      {
+        "name": "Thought Anchor",
+        "kind": "other",
+        "text": "A creature that starts its turn with the leech attached to it takes {dmg:1d6:psychic}, and the leech regains hit points equal to the damage dealt."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Cling",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "psychic"
+          }
+        ],
+        "onHit": "The leech attaches to the target. While attached, the leech can't make this attack again, and it moves with the target. The leech can detach itself at any time, and a creature within 5 feet of it can pull it off as an action."
+      }
+    ],
+    "cr": 0.5
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "parasites",
+      "support"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

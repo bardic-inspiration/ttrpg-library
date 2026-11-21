@@ -1,0 +1,120 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "mindsunder-adept",
+  "name": "Mindsunder Adept",
+  "summary": "A cold-eyed psychic who shatters resolve one thought at a time, then walks through the gap.",
+  "description": "Adepts train in sealed cells where they learn to hear their own thoughts as a stranger's. They do not shout, and they do not hurry, and they leave the room very quiet.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 15,
+      "note": "warding sigils"
+    },
+    "hitDice": 20,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 14,
+      "con": 14,
+      "int": 18,
+      "wis": 14,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "insight": "proficient"
+    },
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Undercommon"
+      ],
+      "telepathy": 120
+    },
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The adept makes two Mind Spike attacks."
+      },
+      {
+        "name": "Mind Spike",
+        "kind": "ranged-attack",
+        "ability": "int",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "int",
+            "type": "psychic"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "noComponents": "Somatic or Material",
+      "atWill": [
+        {
+          "ref": "spell/detect-thoughts"
+        }
+      ],
+      "perDay": {
+        "2": [
+          {
+            "ref": "spell/hold-person"
+          }
+        ],
+        "1": [
+          {
+            "ref": "spell/hold-monster"
+          }
+        ]
+      }
+    },
+    "cr": 6
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "psychics",
+      "controller"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

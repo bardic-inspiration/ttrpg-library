@@ -1,0 +1,108 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "sporemantle-badger",
+  "name": "Sporemantle Badger",
+  "summary": "A stocky tunnel badger whose fur is overgrown with fungus that bursts into choking spores whenever it's struck.",
+  "description": "Sporemantles den in mushroom groves, rolling in the caps until the mold takes root in their coats. The fungus protects them, and they spread it from cavern to cavern as they dig. Foragers who find a grove riddled with badger holes wrap their faces before they pick.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30,
+      "burrow": 15
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 10,
+      "con": 15,
+      "int": 2,
+      "wis": 12,
+      "cha": 5
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Spore Mantle",
+        "kind": "other",
+        "text": "When the badger takes damage, it releases a puff of spores. Each creature within 5 feet of it must succeed on a {dc:con} Constitution saving throw or have the {ref:condition/poisoned} condition until the end of that creature's next turn."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The badger makes one Bite attack and one Claw attack."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

@@ -20,8 +20,7 @@ The site is static: no accounts, no servers.
 
 ## Where it's going
 
-v1 is complete. v2 is finishing with a final review
-([`spec/v2/`](spec/v2/README.md)). It brought:
+v1 and v2 are complete. v2 brought:
 
 - **The full SRD 5.2 rules base**, as linked data that your own content can
   build on.
