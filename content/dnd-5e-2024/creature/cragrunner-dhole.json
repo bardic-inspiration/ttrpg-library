@@ -1,0 +1,83 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "cragrunner-dhole",
+  "name": "Cragrunner Dhole",
+  "summary": "A rust-red mountain dog that hunts in whistling packs and knocks prey off its feet on narrow ledges.",
+  "description": "Cragrunner packs chase goats along ledges no wider than a boot, calling to one another in high whistles that echo off the cliffs. Shepherds pile cairns along the trails they use, though no one has ever shown the cairns keep them away.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "small"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 40,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 15,
+      "con": 12,
+      "int": 4,
+      "wis": 12,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The dhole has {ref:glossary/advantage} on an attack roll against a creature if at least one of the dhole's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is Medium or smaller and another dhole is within 5 feet of it, the target has the {ref:condition/prone} condition."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}
