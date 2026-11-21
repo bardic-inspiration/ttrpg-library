@@ -44,6 +44,9 @@
     },
     "effect": "For the duration, the willing creature you touch has {ref:glossary/resistance} to one damage type of your choice: Acid, Cold, Fire, Lightning, or Thunder."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

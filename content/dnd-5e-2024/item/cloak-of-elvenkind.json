@@ -12,6 +12,9 @@
     },
     "effect": "While you wear this cloak, Wisdom (Perception) checks made to perceive you have {ref:glossary/disadvantage}, and you have {ref:glossary/advantage} on Dexterity (Stealth) checks."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

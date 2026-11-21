@@ -12,6 +12,9 @@
     },
     "effect": "You have {ref:glossary/advantage} on saving throws against spells while you wear this cloak."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

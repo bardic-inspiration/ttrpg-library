@@ -12,6 +12,9 @@
     },
     "effect": "While wearing these gloves, you have a {ref:glossary/climb-speed} and a {ref:glossary/swim-speed} equal to your {ref:glossary/speed}, and you gain a +5 bonus to Strength (Athletics) checks made to climb or swim."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

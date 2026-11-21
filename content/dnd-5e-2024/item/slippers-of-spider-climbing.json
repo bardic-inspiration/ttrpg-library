@@ -12,6 +12,9 @@
     },
     "effect": "While you wear these light shoes, you can move up, down, and across vertical surfaces and along ceilings, while leaving your hands free. You have a {ref:glossary/climb-speed} equal to your {ref:glossary/speed}. However, the slippers don't allow you to move this way on a slippery surface, such as one covered by ice or oil."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

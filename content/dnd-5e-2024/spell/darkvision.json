@@ -44,6 +44,9 @@
     },
     "effect": "For the duration, a willing creature you touch has Darkvision with a range of 150 feet."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

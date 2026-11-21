@@ -46,6 +46,7 @@ The library as built at the `v1.0.0` tag.
 |---|---|---|
 | A library of D&D 5e content on SRD 5.2, ruleset `dnd-5e-2024`, with types `creature`, `magic-item`, and `spell`. | P9: the SRD is CC-BY-4.0 | #1 |
 | The library holds SRD entries and custom entries. | The full SRD proofs the schemas and UI against everything they must hold | #77, #128 |
+| Every SRD entry whose type takes tags carries `tags.source: "SRD"`, beside `meta.source.srd`; components, which have no tags, carry none. | The `source` tag is a conventional key that gives the gallery an SRD filter with no configuration; adding tags to components would change their schema. | this PR |
 | Public repo and Pages site on the free plan, not promoted. | P9 | #1 |
 | No backend, database, accounts, user submissions, or in-browser editing. Every change is a PR. | P1, P7 | #1 |
 | v1 is a prototype; v2 a complete product for one user; v3 and later explore multiple users and a public site. | | #95 |

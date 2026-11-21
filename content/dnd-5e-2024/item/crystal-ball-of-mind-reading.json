@@ -26,6 +26,9 @@
     ],
     "effect": "While touching this crystal orb, you can cast *{ref:spell/scrying}* (save DC 17) with it. In addition, you can cast *{ref:spell/detect-thoughts}* (save DC 17) targeting creatures you can see within 30 feet of the spell's sensor. You don't need to concentrate on this *{ref:spell/detect-thoughts}* spell to maintain it during its duration, but it ends if the *{ref:spell/scrying}* spell ends."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "updatedAt": "2026-11-04",

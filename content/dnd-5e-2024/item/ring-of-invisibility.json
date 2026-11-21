@@ -12,6 +12,9 @@
     },
     "effect": "While wearing this ring, you can take a {ref:glossary/magic} action to give yourself the {ref:condition/invisible} condition. You remain {ref:condition/invisible} until the ring is removed or until you take a {ref:glossary/bonus-action} to become visible again."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

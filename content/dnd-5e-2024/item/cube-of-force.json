@@ -60,6 +60,9 @@
     ],
     "effect": "This cube is about an inch across. Each face has a distinct marking on it. You can press one of those faces, expend the number of charges required for it, and thereby cast the spell associated with it (save DC 17), as shown in the Cube of Force Faces table.\n\nThe cube starts with 10 charges, and it regains 1d6 expended charges daily at dawn.\n\n**Cube of Force Faces**\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/mage-armor}* | 1 |\n| *{ref:spell/shield}* | 1 |\n| *{ref:spell/tiny-hut}* | 3 |\n| *{ref:spell/private-sanctum}* | 4 |\n| *{ref:spell/resilient-sphere}* | 4 |\n| *{ref:spell/wall-of-force}* | 5 |"
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
