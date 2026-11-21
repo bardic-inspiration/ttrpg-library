@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "stalwart-breastplate",
+  "name": "Stalwart Breastplate",
+  "summary": "A breastplate that steadies you against being shoved.",
+  "description": "The plate is thick and plain, and a hundred dents have been pounded out of it. Shield bearers love it.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/breastplate"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to AC while wearing this armor. You have Advantage on saving throws against effects that would move you against your will or give you the {ref:condition/prone} condition."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

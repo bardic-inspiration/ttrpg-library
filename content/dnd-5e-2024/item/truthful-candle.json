@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "truthful-candle",
+  "name": "Truthful Candle",
+  "summary": "A candle that compels honest answers while it burns.",
+  "description": "White tallow stamped with a thumbprint. Magistrates in the old cities swear by them in hearings.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You can light this candle as a Magic action. For up to 10 minutes while it burns, any creature within 10 feet must succeed on a DC 15 Charisma saving throw each time it tries to knowingly speak a lie, or it cannot speak the lie. The candle is consumed as it burns."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

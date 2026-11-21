@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "quickstep-rapier",
+  "name": "Quickstep Rapier",
+  "summary": "A rapier that lets its wielder slip away after a strike.",
+  "description": "Duelists in the harbor cities swear by its balance, and curse it when it passes to a rival. The guard is shaped like a folded fan.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/rapier"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. When you hit a creature with it, you can move up to 10 feet without provoking Opportunity Attacks from that creature."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

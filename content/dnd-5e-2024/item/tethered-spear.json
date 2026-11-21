@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "tethered-spear",
+  "name": "Tethered Spear",
+  "summary": "A spear on an invisible leash that snaps back to your hand after a throw.",
+  "description": "The shaft carries a ring of braided silver wire that leads nowhere. Hunters say the spear dislikes being left in the dirt.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/spear"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. When you make a ranged attack with it by throwing it, it flies back to your hand immediately after the attack."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}
