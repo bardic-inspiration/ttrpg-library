@@ -1,0 +1,54 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "echo-step",
+  "name": "Echo Step",
+  "summary": "Leaves a faint echo of yourself behind where you stood.",
+  "stats": {
+    "level": 0,
+    "school": "illusion",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": false,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "round",
+      "concentration": false
+    },
+    "effect": "You move up to 10 feet without provoking Opportunity Attacks, and leave an illusory echo of yourself in the space you left. The echo lasts until the end of your turn, and a creature that makes an attack against it learns it is an illusion."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

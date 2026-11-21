@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "orb-of-the-reckoner",
+  "name": "Orb of the Reckoner",
+  "summary": "A crystal orb that lets you glimpse a short way into the future.",
+  "description": "Fortune-tellers keep it under a cloth. Whatever it shows is true, and the rest is left to the reader.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 3,
+      "recharge": "1d3 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/augury"
+        },
+        "chargeCost": 1
+      }
+    ],
+    "effect": "The orb has 3 charges. As a Magic action, you can expend 1 charge to cast *Augury* from it. The orb regains 1d3 expended charges daily at dawn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

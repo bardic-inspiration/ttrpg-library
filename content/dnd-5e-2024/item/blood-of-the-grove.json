@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "blood-of-the-grove",
+  "name": "Blood of the Grove",
+  "summary": "A potion that returns the lost to health and ends all ailments.",
+  "description": "Sap tapped from an ancient tree on a single night each year. A single drop is enough to wet the lips of a dying man.",
+  "stats": {
+    "category": "potion",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, you regain 10d4 + 10 hit points, and it ends the {ref:condition/blinded}, {ref:condition/deafened}, {ref:condition/poisoned}, and {ref:condition/paralyzed} conditions affecting you."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -157,8 +157,10 @@ Each page in a ruleset's `rules/pages.json` builds at
   [Action]"), or its `stats` as
   labeled lines (the group it sits in isn't repeated). A group's shows its name, its `note`,
   and its `text`. Each lists its forward refs and back-refs under
-  the ruleset's labels, like a detail page's Links. A union group lists its
-  members as links.
+  the ruleset's labels, like a detail page's Links, with its links to
+  homebrew (an extension or a custom entry) after them under a "Homebrew"
+  label, as an SRD page's [Homebrew links](#detail-page). A union group
+  lists its members as links.
 - **Cross-listed primitives**, from a primitives block's `crossList`: each
   sits among the block's primitives by name as a heading with its type in
   brackets, "Blinded [Condition]", linked to its section on its own page,
@@ -404,6 +406,14 @@ indexes.
 - Forward refs and back-refs as links
   ([content-model.md](content-model.md#references)); a page type's include
   its components' ([content-model.md](content-model.md#components)).
+- **Homebrew links.** On an SRD entry's page, links to homebrew entries
+  (those without `meta.source.srd`) are moved out of Links into a
+  **Homebrew** section after it, under the same labels: a custom spell that
+  names an SRD class is listed there under "Spells", not in the class's
+  spell list. A label with links on both sides shows in both sections, and
+  a page without homebrew links has no Homebrew section. A homebrew page's
+  links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`; filtering
+  homebrew by volume is #353).
 - The type, linked to the Library filtered to it ([Redirects](#redirects)).
 - Tags as chips; a chip opens the Library filtered to the entry's ruleset,
   type, and that tag.

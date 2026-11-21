@@ -82,7 +82,9 @@
     "spellcasting": {
       "ability": "int",
       "atWill": [
-        "Mage Hand"
+        {
+          "ref": "spell/mage-hand"
+        }
       ],
       "perDay": {
         "1": [
@@ -117,6 +119,7 @@
       "issues": [
         329
       ]
-    }
+    },
+    "updatedAt": "2026-11-21"
   }
 }

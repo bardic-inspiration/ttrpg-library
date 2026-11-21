@@ -2,7 +2,7 @@
 // ruleset module, and links its refs (docs/content-model.md#references, docs/site.md#index-build step 3). Validation
 // has already run in build:index, so entries here are known good.
 
-import type { RulesetModule } from '../../../rulesets/module.ts';
+import { isSrdEntry, type RulesetModule } from '../../../rulesets/module.ts';
 import type { RefTarget } from './refs.ts';
 import { entryKey, linkEntries, objectRefs, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
 import { anchorId, ruleKey, rulePaths, typedGroups, type RulesData } from '../../../lib/rules.ts';
@@ -155,12 +155,13 @@ export function refTargets(all: LoadedEntry[], rules: RulesData[] = []): Map<str
   const paths = refPaths(rules);
   const names = entryNames([], rules);
   return new Map([
-    ...[...paths].map(([key, path]) => [key, { type: key.slice(0, key.indexOf('/')), name: names.get(key) ?? key, path }] as [string, RefTarget]),
-    ...all.map(({ entry }) => [entryKey(entry), { type: entry.type, name: entry.name, path: entryPath(entry) }] as [string, RefTarget]),
+    // A primitive or group is the ruleset's own rules, so SRD; an extension is an entry, below.
+    ...[...paths].map(([key, path]) => [key, { type: key.slice(0, key.indexOf('/')), name: names.get(key) ?? key, path, srd: true }] as [string, RefTarget]),
+    ...all.map(({ entry }) => [entryKey(entry), { type: entry.type, name: entry.name, path: entryPath(entry), srd: isSrdEntry(entry) }] as [string, RefTarget]),
     // A link to a component names its parent too, "Barbarian › Rage", since many parents share component names.
     ...allComponents(all).map(
       (c) =>
-        [entryKey(c.entry), { type: c.entry.type, name: `${c.parent.name} › ${c.entry.name}`, path: componentPath(c) }] as [string, RefTarget],
+        [entryKey(c.entry), { type: c.entry.type, name: `${c.parent.name} › ${c.entry.name}`, path: componentPath(c), srd: isSrdEntry(c.entry) }] as [string, RefTarget],
     ),
   ]);
 }

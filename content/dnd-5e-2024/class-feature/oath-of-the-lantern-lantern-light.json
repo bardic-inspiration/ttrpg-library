@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "oath-of-the-lantern-lantern-light",
+  "name": "Lantern Light",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can spend a use of Channel Divinity to shed bright light in a 30-foot radius for 10 minutes. You and allies in it can't be surprised, and have {ref:glossary/resistance} to Necrotic damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

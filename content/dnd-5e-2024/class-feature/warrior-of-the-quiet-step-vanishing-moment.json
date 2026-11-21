@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "warrior-of-the-quiet-step-vanishing-moment",
+  "name": "Vanishing Moment",
+  "stats": {
+    "levels": [
+      17
+    ],
+    "text": "When you roll {ref:glossary/initiative}, you can spend 4 Focus Points to become {ref:condition/invisible} until the start of your next turn or until you attack."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

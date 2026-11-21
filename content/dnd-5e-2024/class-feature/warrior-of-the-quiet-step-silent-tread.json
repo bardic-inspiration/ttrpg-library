@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "warrior-of-the-quiet-step-silent-tread",
+  "name": "Silent Tread",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You have proficiency in the Stealth skill, and you can spend 1 Focus Point as a {ref:glossary/bonus-action} to take the {ref:glossary/hide} action and move up to half your Speed without provoking {ref:glossary/opportunity-attacks}."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

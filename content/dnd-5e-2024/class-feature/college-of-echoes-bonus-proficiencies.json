@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "college-of-echoes-bonus-proficiencies",
+  "name": "Bonus Proficiencies",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You gain proficiency in the Performance skill and one other skill of your choice."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}
