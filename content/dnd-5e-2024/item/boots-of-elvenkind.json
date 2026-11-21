@@ -12,6 +12,9 @@
     },
     "effect": "While you wear these boots, your steps make no sound, regardless of the surface you are moving across. You also have {ref:glossary/advantage} on Dexterity (Stealth) checks."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {

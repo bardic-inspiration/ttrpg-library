@@ -20,6 +20,9 @@
     "cursed": true,
     "effect": "While holding this {ref:equipment/shield}, you have {ref:glossary/resistance} to damage from attacks made with Ranged weapons.\n\n***Curse.*** This {ref:equipment/shield} is cursed. Attuning to it curses you until you are targeted by a *{ref:spell/remove-curse}* spell or similar magic. Removing the {ref:equipment/shield} fails to end the curse on you. Whenever an attack with a Ranged weapon targets a creature within 10 feet of you, the curse causes you to become the target instead."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

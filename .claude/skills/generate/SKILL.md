@@ -176,7 +176,7 @@ against it before pushing.
   punctuation or layout; [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) "Formatting" lists what isn't matched.
 - An inline heading in rules text is bold italic: `***Regaining Charges.***`
   ([Templates](../../../docs/site.md#templates)).
-- Set `meta.source.srd` to `true` (step 4).
+- Set `meta.source.srd` to `true`, and `tags.source` to `"SRD"` where the type takes tags (step 4).
 
 ### Import batches
 
@@ -226,6 +226,7 @@ Set on every entry in the batch, including dependencies:
 - `meta.source.gapFill`: the bucket label, for a gap-fill run. Omit it
   otherwise.
 - `meta.source.srd`: `true` on an SRD entry. Omit it on a custom entry.
+  An SRD entry also gets `tags.source: "SRD"` where its type takes tags.
 - `tags`: the resolved request tags (request tags merged over
   `defaults.tags`), on every entry. Omit `tags` if it would be empty.
 

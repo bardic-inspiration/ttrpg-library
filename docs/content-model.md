@@ -56,7 +56,10 @@ with a schema file and a registry entry. Anything else fails as unknown.
   rejected for being unknown.
 - Every tag key becomes a gallery filter, `tags.<key>`, with no configuration.
 - Conventional keys, not enforced: `world`, `campaign`, `theme`,
-  `environment`, `author`.
+  `environment`, `author`, `source`.
+- Every SRD entry that takes tags carries `tags.source: "SRD"`, beside
+  `meta.source.srd: true`, so the gallery can filter to or from SRD content.
+  Components have no tags ([Components](#components)), so they carry none.
 - Filtering compares strings case-insensitively; display keeps the stored
   case.
 
@@ -357,7 +360,8 @@ has a fixed shape.
 
 **How SRD entries enter and change.**
 
-- An SRD entry sets `meta.source.srd: true`. It is added only by a request that
+- An SRD entry sets `meta.source.srd: true` and, where its type takes tags,
+  `tags.source: "SRD"` ([Tags](#tags)). It is added only by a request that
   asks for SRD content or by an SRD import stage
   ([generation.md](generation.md#srd-import)); gap fill never adds one.
 - Each SRD entry enters once; the uniqueness rules enforce it. If an SRD name

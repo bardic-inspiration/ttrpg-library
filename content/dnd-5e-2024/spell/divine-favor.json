@@ -32,6 +32,9 @@
     },
     "effect": "Until the spell ends, your attacks with weapons deal an extra 1d4 Radiant damage on a hit."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

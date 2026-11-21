@@ -22,6 +22,9 @@
     ],
     "repeatable": "You can take this feat more than once, but you must choose a different spell list each time."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-10",
     "source": {
