@@ -468,6 +468,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Open5e's ability keys (`strength`) are the phrase book's ability names in lowercase, rather than a table of their own. | P3: the names are the phrase book's; the vendored Open5e schema check catches a mismatch | #319 |
 | The index reads `{ref:…}` tokens through `replaceRefTokens`, and search text drops a malformed one as it drops every other token. | P3: one parser. A malformed token fails validation, so no index is built from one; its key isn't words | #322 |
 | An Open5e record keyed `ttrpg-library_<id>` imports with that id; any other record's id is its name's slug. | An exported entry round-trips as itself, whatever its id's spelling; IDs never change | #350 |
+| The Open5e round-trip test compares a creature's `saveProficiencies` as a set. | The ruleset reads them as a set, and Open5e keys saves by ability, so their order isn't carried | #350 |
 
 ### Art
 
