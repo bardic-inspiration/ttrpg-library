@@ -1,0 +1,92 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bloatrot-carrier",
+  "name": "Bloatrot Carrier",
+  "summary": "A gas-swollen corpse that bursts into a cloud of rot when it falls.",
+  "description": "Left in a flooded cellar or a sealed barrow, a body can swell until its skin is a drum. Grave-robbers hold their breath and use long poles, and still lose a crew a season.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 9
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 5,
+      "con": 17,
+      "int": 2,
+      "wis": 6,
+      "cha": 4
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "the languages it knew in life"
+      ]
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Death Burst",
+        "kind": "other",
+        "text": "When the carrier dies, it explodes in a 10-foot Emanation. Each creature in that area makes a {dc:con} Constitution saving throw, taking {dmg:2d6:poison} on a failed save, or half as much damage on a successful one."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Belch-Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "The target has the {ref:condition/poisoned} condition until the end of its next turn."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}
