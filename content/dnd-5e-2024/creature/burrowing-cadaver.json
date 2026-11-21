@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "burrowing-cadaver",
+  "name": "Burrowing Cadaver",
+  "summary": "A grave-dirt-caked corpse that tunnels beneath the earth and drags the living down.",
+  "description": "Where graveyards sit above old drains and root-cellars, cadavers dig between them in the night. A shuffle of loose soil is the only warning before a hand closes around an ankle.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 20,
+      "burrow": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 10,
+      "con": 15,
+      "int": 3,
+      "wis": 9,
+      "cha": 4
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60,
+      "tremorsense": 30
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "the languages it knew in life"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Earth Glide",
+        "kind": "other",
+        "text": "The cadaver can burrow through nonmagical, unworked earth and loose soil without disturbing the material it moves through."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Grasping Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "The target has the {ref:condition/grappled} condition (escape {dc:str}). Until this grapple ends, the cadaver can't make Grasping Claw attacks against a different target."
+      },
+      {
+        "name": "Pull Under",
+        "kind": "other",
+        "text": "One creature Grappled by the cadaver takes {dmg:2d6+str:bludgeoning} as the cadaver burrows 10 feet, dragging the creature with it. The creature ends up in an unoccupied space the cadaver chooses within 5 feet of it, beneath the surface, and has the {ref:condition/restrained} condition there until the grapple ends."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}

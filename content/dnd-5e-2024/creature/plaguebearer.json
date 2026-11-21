@@ -1,0 +1,118 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "plaguebearer",
+  "name": "Plaguebearer",
+  "summary": "A pustule-ridden corpse that spreads sickness with every breath.",
+  "description": "Plaguebearers walk out of mass graves from outbreaks no one recorded. Doctors say the rot does not need the claws; standing near one for a day is enough to start the fever.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 10
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 25
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 8,
+      "con": 16,
+      "int": 4,
+      "wis": 8,
+      "cha": 3
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "the languages it knew in life"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Fever Aura",
+        "kind": "other",
+        "text": "A creature that starts its turn within 10 feet of the plaguebearer must succeed on a {dc:con} Constitution saving throw or have the {ref:condition/poisoned} condition until the start of its next turn. A creature that succeeds is immune to this aura for 24 hours."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The plaguebearer makes two Rotting Fist attacks."
+      },
+      {
+        "name": "Rotting Fist",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d6",
+            "type": "necrotic"
+          }
+        ]
+      },
+      {
+        "name": "Choking Miasma",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Emanation originating from the plaguebearer"
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "poison"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "onFailure": "and the target has the {ref:condition/poisoned} condition until the end of its next turn.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}
