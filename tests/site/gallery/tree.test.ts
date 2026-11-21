@@ -7,7 +7,7 @@ import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { galleryConfig, type FacetData, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { facetData } from '../../../site/src/lib/gallery/facet-data.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
-import { filterTree, type TreeNode, type ValueNode } from '../../../site/src/lib/gallery/tree.ts';
+import { filterTree, openAtStart, type TreeNode, type ValueNode } from '../../../site/src/lib/gallery/tree.ts';
 import { computeView, searchIndex } from '../../../site/src/lib/gallery/view.ts';
 import { entryNames, loadLibrary, type Entry } from '../../../site/src/lib/library.ts';
 import { loadRules } from '../../../site/src/lib/rules.ts';
@@ -124,6 +124,18 @@ describe('Equipment › Weapon › Martial › Melee', () => {
     const groups = values(find(tree(gear, equipment, '?f.stats.group=martial-melee-weapons'), 'Equipment', 'Group'));
     const martial = groups[0]!.children.find((g) => g.label === 'Martial')!;
     expect([groups[0]!.open, martial.open, martial.children[0]!.selected]).toEqual([true, true, true]);
+  });
+
+  it('lists the nodes that start open, down to the groups, by the ids the island gives them', () => {
+    const nodes = tree(gear, equipment, '?f.stats.group=martial-melee-weapons');
+    const group = find(nodes, 'Equipment', 'Group')!;
+    expect([...openAtStart(nodes)].filter((id) => id.startsWith('dnd-5e-2024/equipment'))).toEqual([
+      'dnd-5e-2024/equipment',
+      group.id,
+      `${group.id}-weapons`,
+      `${group.id}-weapons-martial-weapons`,
+    ]);
+    expect(openAtStart(tree(gear, equipment))).toEqual(new Set());
   });
 });
 
