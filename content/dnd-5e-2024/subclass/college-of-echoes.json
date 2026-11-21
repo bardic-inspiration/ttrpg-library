@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "college-of-echoes",
+  "name": "College of Echoes",
+  "summary": "A Bard subclass: let every sound return.",
+  "stats": {
+    "class": {
+      "ref": "class/bard"
+    },
+    "tagline": "Let Every Sound Return",
+    "text": "Bards of the College of Echoes study how sound lingers and repeats. They answer voices with their own, bending what they hear into weapons and wonders.",
+    "features": [
+      {
+        "ref": "class-feature/college-of-echoes-repeating-refrain"
+      },
+      {
+        "ref": "class-feature/college-of-echoes-bonus-proficiencies"
+      },
+      {
+        "ref": "class-feature/college-of-echoes-hollow-reply"
+      },
+      {
+        "ref": "class-feature/college-of-echoes-chorus-of-memory"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

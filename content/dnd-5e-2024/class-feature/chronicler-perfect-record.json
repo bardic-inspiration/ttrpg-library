@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "chronicler-perfect-record",
+  "name": "Perfect Record",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You have proficiency in the History skill, and you add double your proficiency bonus to it. You can read and understand any written language you spend a minute studying."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

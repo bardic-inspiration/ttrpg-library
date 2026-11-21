@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "tidal-sorcery-undertow",
+  "name": "Undertow",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can spend 2 Sorcery Points to turn a 20-foot-radius area you can see within 60 feet into {ref:glossary/difficult-terrain} until the end of your next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}
