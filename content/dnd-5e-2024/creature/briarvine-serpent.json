@@ -1,0 +1,94 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "briarvine-serpent",
+  "name": "Briarvine Serpent",
+  "summary": "A thick green snake that hangs among the creepers until a footstep tells it where to drop.",
+  "description": "Its scales sprout hooked thorns, and it is hard to tell from the vines it lives in. Druids of the deep woods raise young ones in thornbushes and release them near poachers' camps.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30,
+      "climb": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 14,
+      "con": 15,
+      "int": 2,
+      "wis": 12,
+      "cha": 4
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Thorned Coils",
+        "kind": "other",
+        "text": "A creature that starts its turn {ref:condition/grappled} by the serpent takes {dmg:1d6:piercing}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "poison"
+          }
+        ],
+        "onHit": " and the target has the {ref:condition/grappled} condition (escape {dc:str}) if it is Large or smaller."
+      },
+      {
+        "name": "Constrict",
+        "kind": "other",
+        "text": "One creature {ref:condition/grappled} by the serpent must succeed on a {dc:str} Strength saving throw or take {dmg:2d6+str:bludgeoning} and have the {ref:condition/restrained} condition until the grapple ends."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}
