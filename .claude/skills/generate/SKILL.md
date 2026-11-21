@@ -102,7 +102,8 @@ batch doesn't repeat a concept already in the library.
 ## Step 3: Write entries
 
 Write each entry to `content/<ruleset>/<type>/<id>.json`, where `<id>` is the
-slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
+slug of the name: lowercase, ASCII-folded, apostrophes dropped, other
+non-alphanumerics collapsed to `-` ("Hunter's Mark" is `hunters-mark`)
 ([IDs and names](../../../docs/content-model.md#ids-and-names)). Write the envelope keys in the [Entry envelope](../../../docs/content-model.md#entry-envelope) order: `ruleset`, `type`, `id`,
 `name`, `summary`, `description`, `stats`, `tags`, `meta`.
 

@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "path-of-the-stone-ward-anchored-stance",
+  "name": "Anchored Stance",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "While your Rage is active, you can't be pushed, pulled, or moved against your will unless you choose to be."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

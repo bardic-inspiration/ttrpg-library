@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "bannerstaff-of-the-last-line",
+  "name": "Bannerstaff of the Last Line",
+  "summary": "A quarterstaff that bolsters nearby allies with courage.",
+  "description": "A tattered banner is bound around the grip, and no one agrees on which army it first flew over. Soldiers touch it before they march.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/quarterstaff"
+        }
+      ]
+    },
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You have a +2 bonus to attack and damage rolls made with this magic weapon. As a Bonus Action, you can plant the staff's end in the ground. Allies within 30 feet of you have Advantage on saving throws against the {ref:condition/frightened} condition until the start of your next turn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

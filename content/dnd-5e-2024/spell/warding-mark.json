@@ -1,0 +1,55 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "warding-mark",
+  "name": "Warding Mark",
+  "summary": "Marks a creature so its next attack against you is weakened.",
+  "stats": {
+    "level": 0,
+    "school": "abjuration",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/paladin"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "round",
+      "concentration": false
+    },
+    "effect": "Choose a creature you can see within range. The first time it hits you with an attack roll before the start of your next turn, the attack roll takes a penalty of 1d4."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

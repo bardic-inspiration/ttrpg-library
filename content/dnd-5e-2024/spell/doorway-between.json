@@ -1,0 +1,58 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "doorway-between",
+  "name": "Doorway Between",
+  "summary": "Opens a temporary door between two places you have visited.",
+  "stats": {
+    "level": 7,
+    "school": "conjuration",
+    "classes": [
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/bard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 500
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a key"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "round",
+      "concentration": false
+    },
+    "effect": "You open a door in the space before you and another at a location within range. A creature entering one exits through the other. The doors last for 1 round."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

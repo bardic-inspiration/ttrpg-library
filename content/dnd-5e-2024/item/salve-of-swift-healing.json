@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "salve-of-swift-healing",
+  "name": "Salve of Swift Healing",
+  "summary": "A salve that closes wounds in the space of a heartbeat.",
+  "description": "Rubbed on cuts and burns, it smells of mint and iron. Midwives keep a jar under the bed.",
+  "stats": {
+    "category": "potion",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You can apply this salve as a Bonus Action to yourself or a creature within 5 feet. The target regains 4d4 + 4 hit points and ends the {ref:condition/poisoned} condition on itself."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

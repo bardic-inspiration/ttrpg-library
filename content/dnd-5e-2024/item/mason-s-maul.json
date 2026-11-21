@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "mason-s-maul",
+  "name": "Mason's Maul",
+  "summary": "A maul that cracks stone and wooden barriers with ease.",
+  "description": "The head is dusted white no matter how often it is cleaned. A mason's guild is said to have commissioned a hundred of them, and only a few remain.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/maul"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. Attacks made with it against an object deal double damage."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

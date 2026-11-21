@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "candlewick-dagger",
+  "name": "Candlewick Dagger",
+  "summary": "A dagger whose pommel burns with a small steady flame on command.",
+  "description": "Chandlers in the river towns forge these for night watchmen. The flame never drips, and it gutters when a liar speaks nearby.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/dagger"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. As a Bonus Action, you can light or douse a flame on the pommel. While lit, the flame sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

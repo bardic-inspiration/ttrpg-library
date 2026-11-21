@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "chronicler-rewrite",
+  "name": "Rewrite",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "When a creature within 60 feet of you rolls a 1 on a d20 Test, you can use a {ref:glossary/reaction} to have it reroll the die. Once you use this feature, you can't use it again until you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

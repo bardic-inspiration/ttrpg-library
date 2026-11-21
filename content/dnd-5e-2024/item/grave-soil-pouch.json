@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "grave-soil-pouch",
+  "name": "Grave Soil Pouch",
+  "summary": "A pouch of dark earth that raises the dead for a time.",
+  "description": "Dug from beneath a barrow that has been empty for a thousand years. The soil is always wet.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can scatter this soil on a corpse that has been dead no longer than 1 day. The creature returns to life with 1 hit point, but has the {ref:condition/charmed} condition and obeys your spoken commands for 24 hours, after which it dies again. The soil is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "vanishing-act",
+  "name": "Vanishing Act",
+  "summary": "Makes you and your allies unseen while you remain stationary.",
+  "stats": {
+    "level": 6,
+    "school": "illusion",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a feather"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "You and up to six creatures within 30 feet of you become Invisible while you do not move or make attacks. A creature that moves or attacks becomes visible until the start of its next turn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "greater-seal",
+  "name": "Greater Seal",
+  "summary": "Permanently locks a door, chest, or portal against all but chosen creatures.",
+  "stats": {
+    "level": 6,
+    "school": "abjuration",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/paladin"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a wax seal worth 500+ GP, which the spell consumes",
+        "costGp": 500,
+        "consumed": true
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "day",
+      "concentration": false
+    },
+    "effect": "You seal a door, chest, or similar closure so it cannot be opened except by creatures you name. The seal lasts until dispelled and can only be broken by a spell of level 7 or higher."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

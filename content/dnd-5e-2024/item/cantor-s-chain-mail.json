@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "cantor-s-chain-mail",
+  "name": "Cantor's Chain Mail",
+  "summary": "Chain mail that sings a protective note when you are hurt.",
+  "description": "Choir wardens wore it at the temple doors. Each ring has a letter of a forgotten hymn scratched into it.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/chain-mail"
+        }
+      ]
+    },
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You have a +2 bonus to AC while wearing this armor. When you take damage, you can use your Reaction to cause each ally within 30 feet to gain Temporary Hit Points equal to half the damage. Once you use this property, you can't use it again until you finish a Short or Long Rest."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

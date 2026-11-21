@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "shatterhail",
+  "name": "Shatterhail",
+  "summary": "Calls a violent burst of jagged hail upon an area.",
+  "stats": {
+    "level": 3,
+    "school": "evocation",
+    "classes": [
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/druid"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a shard of glass"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Each creature in a 20-foot-radius Sphere centered on a point within range makes a Dexterity saving throw, taking 5d6 Piercing damage plus 3d6 Cold damage on a failed save, or half as much damage on a successful one."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

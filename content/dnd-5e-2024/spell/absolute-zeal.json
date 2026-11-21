@@ -1,0 +1,55 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "absolute-zeal",
+  "name": "Absolute Zeal",
+  "summary": "Fills creatures with burning purpose, immune to fear and charm.",
+  "stats": {
+    "level": 8,
+    "school": "enchantment",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/paladin"
+      },
+      {
+        "ref": "class/cleric"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "Up to eight creatures within range gain Immunity to the Frightened and Charmed conditions and gain Advantage on attack rolls and saving throws for the duration."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}
