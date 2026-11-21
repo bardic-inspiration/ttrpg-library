@@ -67,7 +67,9 @@ describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
   it('passes the fixtures, with each feature and option on its parent', async () => {
     const result = await validate();
     expect(result.messages).toEqual([]);
-    expect(result.warns).toEqual([]);
+    // Only the fixtures' own warnings: the rest of the library is here so links resolve, and its
+    // warnings, such as an authored DC on a creature, are notes for its reviewer (#350).
+    expect(result.warnings.filter((w) => FIXTURE_TYPES.has(w.file.split('/')[2]!)).map((w) => `${w.file}: ${w.message}`)).toEqual([]);
     const on = (parent: string, type: string) => result.components.filter((c) => c.parent === parent && c.entry.type === type).map((c) => c.entry.id);
     expect(on('class/sorcerer', 'class-feature')).toHaveLength(10);
     expect(on('class/sorcerer', 'class-option')).toHaveLength(10);
