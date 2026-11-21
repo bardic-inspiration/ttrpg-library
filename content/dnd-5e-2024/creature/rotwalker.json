@@ -1,0 +1,96 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "rotwalker",
+  "name": "Rotwalker",
+  "summary": "A drifting, half-rotted corpse that walks until something stops it for good.",
+  "description": "Rotwalkers rise in the thaw from field graves dug too shallow, and they follow the sound of work toward farms. Villagers stack them in ditches and burn the pile, because a single one left whole will get up again.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 8
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 20
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 6,
+      "con": 16,
+      "int": 3,
+      "wis": 6,
+      "cha": 5
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "the languages it knew in life"
+      ]
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Stubborn Husk",
+        "kind": "other",
+        "text": "If damage reduces the rotwalker to 0 Hit Points, it must make a Constitution saving throw with a {dc=5} plus the damage taken, unless the damage is Radiant or from a Critical Hit. On a successful save, the rotwalker instead drops to 1 Hit Point."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The rotwalker makes one Slam attack."
+      },
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}

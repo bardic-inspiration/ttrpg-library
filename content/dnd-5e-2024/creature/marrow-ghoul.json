@@ -1,0 +1,114 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "marrow-ghoul",
+  "name": "Marrow Ghoul",
+  "summary": "A gaunt, long-armed scavenger that cracks bones to suck out the marrow.",
+  "description": "Marrow ghouls haunt battlefields and ossuaries, scrabbling up walls and ceilings to drop on the last survivors. Their paralytic scratch is the part that survivors remember, and the sound of splintering bone is the part they hear in dreams.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 16,
+      "con": 12,
+      "int": 7,
+      "wis": 11,
+      "cha": 6
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The ghoul makes one Bone-Crack Bite attack and one Paralytic Claw attack."
+      },
+      {
+        "name": "Bone-Crack Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "necrotic"
+          }
+        ]
+      },
+      {
+        "name": "Paralytic Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a creature that isn't an Undead, it must succeed on a {dc:dex} Constitution saving throw or have the {ref:condition/paralyzed} condition until the end of its next turn."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}
