@@ -7,6 +7,8 @@ import { buildIndex, type ExportBundle } from '../../scripts/build-index/index.t
 import { validateLibrary } from '../../scripts/validate/index.ts';
 import { PROJECT_ROOT } from '../../scripts/validate/schema.ts';
 import { ruleNames } from '../../lib/rules.ts';
+import { tables } from '../../rulesets/dnd-5e-2024/index.ts';
+import type { Ability } from '../../rulesets/dnd-5e-2024/types.ts';
 import { open5e, MAPPINGS } from '../../site/src/translators/open5e/index.ts';
 import { checkOpen5e, CORRECTIONS } from '../../site/src/translators/open5e/schema.ts';
 import type { ImportContext, Skip, TranslatorItem } from '../../site/src/translators/types.ts';
@@ -57,6 +59,12 @@ function diffPaths(a: unknown, b: unknown, path: string): string[] {
 const reported = (diff: string, skips: Skip[]): boolean =>
   skips.some(({ path: p }) => p === '' || p === diff || [`${p}.`, `${p}[`].some((s) => diff.startsWith(s)) || [`${diff}.`, `${diff}[`].some((s) => p.startsWith(s)));
 
+/** Stats with their set-valued fields in table order: a creature's save proficiencies are a set (`derive.ts`), and Open5e keys saves by ability. */
+const unordered = (stats: any) =>
+  Array.isArray(stats?.saveProficiencies)
+    ? { ...stats, saveProficiencies: [...stats.saveProficiencies].sort((a: Ability, b: Ability) => tables.abilities.indexOf(a) - tables.abilities.indexOf(b)) }
+    : stats;
+
 describe('Open5e round trip (docs/export.md#open5e)', () => {
   it('returns every covered entry, apart from what the export reports', () => {
     expect(covered().length).toBeGreaterThan(900);
@@ -70,8 +78,8 @@ describe('Open5e round trip (docs/export.md#open5e)', () => {
         continue;
       }
       const back = open5e.import(JSON.parse(out.data), context).entries[0];
-      const original = { name: b.entry.name, summary: b.entry.summary, description: b.entry.description, stats: b.entry.stats };
-      const after = back && { name: back.name, summary: undefined, description: back.description, stats: back.stats };
+      const original = { name: b.entry.name, summary: b.entry.summary, description: b.entry.description, stats: unordered(b.entry.stats) };
+      const after = back && { name: back.name, summary: undefined, description: back.description, stats: unordered(back.stats) };
       for (const diff of after ? diffPaths(original, after, '') : ['']) {
         if (!reported(diff, skips)) unreported.push(`${key} ${diff}`);
       }
@@ -204,6 +212,15 @@ describe('Open5e pilot cases (spec/tracks/integrations.md "Cases")', () => {
 });
 
 describe('Open5e import (docs/export.md#open5e)', () => {
+  it('keeps the id a record from this library carries in its key, and slugs any other record\'s name', () => {
+    const { record } = exportOne('item/cantor-s-chain-mail');
+    expect(record.key).toBe('ttrpg-library_cantor-s-chain-mail');
+    const ids = (r: Record<string, any>) => open5e.import({ magicitems: [r] }, context).entries[0]!.id;
+    expect(ids(record)).toBe('cantor-s-chain-mail');
+    expect(ids({ ...record, key: 'srd-2024_cantors-chain-mail' })).toBe('cantors-chain-mail');
+    expect(ids({ ...record, key: 'ttrpg-library_Not An Id' })).toBe('cantors-chain-mail');
+  });
+
   it('reads the SRD lich as Open5e gives it into inputs', async () => {
     const { entries, skipped } = open5e.import(await fixture('creatures-lich.json'), context);
     const s = entries[0]!.stats as Record<string, any>;
