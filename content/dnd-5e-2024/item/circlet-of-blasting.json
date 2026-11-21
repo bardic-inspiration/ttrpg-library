@@ -20,6 +20,9 @@
     ],
     "effect": "While wearing this circlet, you can cast *{ref:spell/scorching-ray}* with it (+5 to hit). The circlet can't cast this spell again until the next dawn."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

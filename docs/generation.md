@@ -125,7 +125,7 @@ bucket, or an SRD import stage. Its steps:
    instead.
 4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
    `meta.source.issues` (or `meta.source.gapFill`), plus `meta.source.srd: true`
-   on SRD entries. Apply request and default tags.
+   and `tags.source: "SRD"` on SRD entries that take tags. Apply request and default tags.
 5. Run `npm run validate`; fix and retry up to `validateRetries` times. If it
    still fails, comment the errors on the issue, remove `in-progress`, and stop
    without a PR. A gap-fill run or inline request reports the errors in the run

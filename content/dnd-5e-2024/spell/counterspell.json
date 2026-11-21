@@ -38,6 +38,9 @@
     },
     "effect": "You attempt to interrupt a creature in the process of casting a spell. The creature makes a Constitution saving throw. On a failed save, the spell dissipates with no effect, and the action, {ref:glossary/bonus-action}, or {ref:glossary/reaction} used to cast it is wasted. If that spell was cast with a spell slot, the slot isn't expended."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {

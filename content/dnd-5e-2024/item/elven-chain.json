@@ -22,6 +22,9 @@
     },
     "effect": "You gain a +1 bonus to {ref:glossary/armor-class} while you wear this armor. You are considered trained with this armor even if you lack training with Medium or Heavy armor."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

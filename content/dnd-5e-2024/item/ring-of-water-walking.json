@@ -19,6 +19,9 @@
     ],
     "effect": "While wearing this ring, you cast *{ref:spell/water-walk}* from it, targeting only yourself."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

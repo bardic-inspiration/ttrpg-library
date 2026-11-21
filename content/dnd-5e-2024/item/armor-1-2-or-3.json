@@ -39,6 +39,9 @@
     },
     "effect": "You have a bonus to {ref:glossary/armor-class} while wearing this armor. The bonus is determined by its rarity."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

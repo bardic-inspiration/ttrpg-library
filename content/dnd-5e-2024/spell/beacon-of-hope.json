@@ -33,6 +33,9 @@
     },
     "effect": "Choose any number of creatures within range. For the duration, each target has {ref:glossary/advantage} on Wisdom saving throws and Death Saving Throws and regains the maximum number of {ref:glossary/hit-points} possible from any healing."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

@@ -41,6 +41,9 @@
     "effect": "Hail falls in a 20-foot-radius, 40-foot-high {ref:glossary/cylinder} centered on a point within range. Each creature in the Cylinder makes a Dexterity saving throw. A creature takes 2d10 Bludgeoning damage and 4d6 Cold damage on a failed save or half as much damage on a successful one.\n\nHailstones turn ground in the Cylinder into {ref:glossary/difficult-terrain} until the end of your next turn.",
     "higherLevels": "The Bludgeoning damage increases by 1d10 for each spell slot level above 4."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
