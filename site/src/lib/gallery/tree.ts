@@ -116,6 +116,33 @@ function facetNode(ctx: Context, def: FilterDef, records: LibraryRecord[], idPre
 
 const isOpen = (nodes: TreeNode[]) => nodes.some((n) => n.open);
 
+/** A value's node id inside its facet's (or its parent group's) node. */
+export const valueId = (parent: string, key: string) => `${parent}-${key}`;
+
+/**
+ * The ids of the nodes that start open, values' groups included. The island reads them once, when
+ * the tree first shows; after that only a node's own disclosure opens or closes it.
+ */
+export function openAtStart(nodes: TreeNode[]): Set<string> {
+  const ids = new Set<string>();
+  const values = (parent: string, list: ValueNode[]) => {
+    for (const v of list) {
+      const id = valueId(parent, v.key);
+      if (v.open && v.children.length > 0) ids.add(id);
+      values(id, v.children);
+    }
+  };
+  const walk = (list: TreeNode[]) => {
+    for (const n of list) {
+      if (n.open) ids.add(n.id);
+      if (n.kind === 'type' || n.kind === 'field') walk(n.children);
+      if (n.kind === 'enum') values(n.id, n.values);
+    }
+  };
+  walk(nodes);
+  return ids;
+}
+
 /**
  * Nests facets by their paths below `stats` or `derived`: facets that share a field, such as
  * `stats.immunities.damage` and `stats.immunities.conditions`, sit in a node named for it
