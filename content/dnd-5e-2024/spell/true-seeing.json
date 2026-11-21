@@ -49,6 +49,9 @@
     },
     "effect": "For the duration, the willing creature you touch has {ref:glossary/truesight} with a range of 120 feet."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

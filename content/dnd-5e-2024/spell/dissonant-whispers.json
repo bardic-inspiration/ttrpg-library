@@ -32,6 +32,9 @@
     "effect": "One creature of your choice that you can see within range hears a discordant melody in its mind. The target makes a Wisdom saving throw. On a failed save, it takes 3d6 Psychic damage and must immediately use its {ref:glossary/reaction}, if available, to move as far away from you as it can, using the safest route. On a successful save, the target takes half as much damage only.",
     "higherLevels": "The damage increases by 1d6 for each spell slot level above 1."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

@@ -23,6 +23,9 @@
     ],
     "effect": "While wearing this ring, you can expend 1 of its 3 charges to cast *{ref:spell/wish}* from it. The ring becomes nonmagical when you use the last charge."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

@@ -38,6 +38,9 @@
     },
     "effect": "You take the {ref:glossary/dash} action, and until the spell ends, you can take that action again as a {ref:glossary/bonus-action}."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

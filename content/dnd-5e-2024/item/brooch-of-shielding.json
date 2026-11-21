@@ -12,6 +12,9 @@
     },
     "effect": "While wearing this brooch, you have {ref:glossary/resistance} to Force damage, and you have {ref:glossary/immunity} to damage from the *{ref:spell/magic-missile}* spell."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

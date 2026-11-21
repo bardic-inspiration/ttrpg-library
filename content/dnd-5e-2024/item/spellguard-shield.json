@@ -19,6 +19,9 @@
     },
     "effect": "While holding this {ref:equipment/shield}, you have {ref:glossary/advantage} on saving throws against spells and other magical effects, and spell attack rolls have {ref:glossary/disadvantage} against you."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

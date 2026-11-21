@@ -39,6 +39,9 @@
     },
     "effect": "You launch a dazzling array of flashing, colorful light. Each creature in a 15-foot {ref:glossary/cone} originating from you must succeed on a Constitution saving throw or have the {ref:condition/blinded} condition until the end of your next turn."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
