@@ -231,11 +231,14 @@ describe('derivation', () => {
   });
 
   it('derives the spell list from the spells whose classes name it, and a custom class’s own spells', async () => {
-    const entries = (await withSpells()).map((e) => ({ type: e.type, id: e.id, name: e.name, stats: e.stats }));
+    const all = await withSpells();
+    const entries = all.map((e) => ({ type: e.type, id: e.id, name: e.name, stats: e.stats }));
     const { spellList, subclasses } = deriveClassLinked('sorcerer', await sorcerer(), entries);
+    // Homebrew spells that name the Sorcerer are left out: an SRD class's list is the SRD's (#350).
+    const srdSpells = new Set(all.filter((e) => e.type === 'spell' && e.meta?.source?.srd).map((e) => `spell/${e.id}`));
     expect(subclasses).toEqual(['subclass/draconic-sorcery']);
     // The SRD's Sorcerer cantrips, in its order.
-    expect(spellList[0]!.spells.map((s) => s.ref.slice('spell/'.length))).toEqual([
+    expect(spellList[0]!.spells.filter((s) => srdSpells.has(s.ref)).map((s) => s.ref.slice('spell/'.length))).toEqual([
       'acid-splash', 'chill-touch', 'dancing-lights', 'elementalism', 'fire-bolt', 'light', 'mage-hand', 'mending', 'message',
       'minor-illusion', 'poison-spray', 'prestidigitation', 'ray-of-frost', 'shocking-grasp', 'sorcerous-burst', 'true-strike',
     ]);

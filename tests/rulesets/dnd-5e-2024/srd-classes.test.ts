@@ -26,6 +26,7 @@ const entries = (await Promise.all(['class', 'class-feature', 'class-option', 's
   meta: { source: { srd?: true } };
 }[];
 const names = new Map(entries.map((e) => [`${e.type}/${e.id}`, e.name]));
+const srdSpells = new Set(entries.filter((e) => e.type === 'spell' && e.meta.source.srd).map((e) => `spell/${e.id}`));
 const classes = entries.filter((e) => e.type === 'class' && e.meta.source.srd);
 const derivedOf = (e: (typeof entries)[number]) =>
   ({ ...ruleset.derive('class', e.stats), ...ruleset.deriveLinked!('class', `class/${e.id}`, e.stats, entries) }) as unknown as DerivedClass & LinkedClass;
@@ -46,7 +47,8 @@ describe('SRD classes (docs/rulesets.md#classes)', () => {
   });
 
   it.each(classes.filter((e) => srd.spellLists[e.name]).map((e) => [e.name, e] as const))('%s derives its spell list as printed', (name, e) => {
-    const derived = derivedOf(e).spellList.flatMap((level) => level.spells.map((s) => names.get(s.ref)!));
+    // Homebrew spells that name the class are left out: an SRD class's list is the SRD's (#350).
+    const derived = derivedOf(e).spellList.flatMap((level) => level.spells.filter((s) => srdSpells.has(s.ref)).map((s) => names.get(s.ref)!));
     // The SRD's own inconsistencies: a spell whose entry names the class, which its list omits.
     const extra = srd.inconsistencies[name] ?? [];
     expect(derived.filter((n) => !extra.includes(n)).sort()).toEqual(srd.spellLists[name]);

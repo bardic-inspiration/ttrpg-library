@@ -559,8 +559,8 @@ Its page (`class-page`) prints, in the SRD's order:
 An SRD class's spell list comes only from its spells' `classes`; a custom
 class adds existing spells through `spells`, which a spell's card doesn't
 print. `tests/rulesets/dnd-5e-2024/srd-classes.test.ts` checks that each SRD
-class in the library derives its Features table and spell list as the SRD
-prints them (`tests/fixtures/srd/class-tables.json`). The SRD's spell entries
+class in the library derives its Features table and the SRD spells of its
+spell list as the SRD prints them (`tests/fixtures/srd/class-tables.json`). The SRD's spell entries
 and class lists disagree in two places, and the spell entry wins, since its
 card is reproduced as printed: *Phantasmal Force* names the Bard, Sorcerer, and
 Wizard, and *Mind Spike* the Sorcerer, whose lists omit them.
