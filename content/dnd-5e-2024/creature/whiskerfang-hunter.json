@@ -1,0 +1,108 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "whiskerfang-hunter",
+  "name": "Whiskerfang Hunter",
+  "summary": "An eyeless cave cat with whiskers long as a forearm that feels its prey through the air and strikes before it's noticed.",
+  "description": "Whiskerfangs prowl the widest caverns, where their whiskers can read the breath of a sleeping traveler from across a chamber. They are utterly silent and patient, and they favor the dark where torchlight dies. Hunters who take one sell the whiskers to diviners, who claim they still twitch when something approaches.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 40,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 16,
+      "con": 14,
+      "int": 3,
+      "wis": 14,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "blindsight": 60,
+      "note": "blind beyond this radius"
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Ambusher",
+        "kind": "other",
+        "text": "The hunter has {ref:glossary/advantage} on attack rolls against any creature that hasn't taken a turn yet in the current combat."
+      },
+      {
+        "name": "Dark Stalker",
+        "kind": "other",
+        "text": "While in {ref:glossary/darkness}, the hunter has {ref:glossary/advantage} on Dexterity (Stealth) checks."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hunter makes one Bite attack and two Claw attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}
