@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "phial-of-hearthlight",
+  "name": "Phial of Hearthlight",
+  "summary": "A phial of everburning light that mends the wounds of those who gather near.",
+  "description": "Said to contain a hearth fire from a house where no stranger was ever turned away. The glass is always warm.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 7,
+      "recharge": "1d6 + 1 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/cure-wounds"
+        },
+        "chargeCost": 1,
+        "maxChargeCost": 3
+      },
+      {
+        "spell": {
+          "ref": "spell/light"
+        }
+      }
+    ],
+    "effect": "The phial has 7 charges. As a Magic action, you can expend 1 or more charges to cast *Cure Wounds* from it, expending 1 charge per spell level. While you hold it, you can also cast *Light* at will. The phial regains 1d6 + 1 expended charges daily at dawn. If you expend the last charge, roll 1d20; on a 1, the phial's light goes out forever."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

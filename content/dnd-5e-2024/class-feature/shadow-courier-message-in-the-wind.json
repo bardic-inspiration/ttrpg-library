@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "shadow-courier-message-in-the-wind",
+  "name": "Message in the Wind",
+  "stats": {
+    "levels": [
+      17
+    ],
+    "text": "You can cast Sending without a spell slot a number of times equal to your Dexterity modifier. You regain all expended uses when you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "rule-of-law",
+  "name": "Rule of Law",
+  "summary": "Imposes a binding code of conduct upon everyone in an area.",
+  "stats": {
+    "level": 9,
+    "school": "enchantment",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/paladin"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 90
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "You declare a law that applies to all creatures within a 60-foot-radius Sphere centered on a point within range. A creature in the area that breaks the law takes 8d8 Psychic damage and has the Stunned condition until the end of its next turn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

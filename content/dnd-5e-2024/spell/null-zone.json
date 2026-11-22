@@ -1,0 +1,58 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "null-zone",
+  "name": "Null Zone",
+  "summary": "Suppresses all magic in an area.",
+  "stats": {
+    "level": 7,
+    "school": "abjuration",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a bar of lead"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A 40-foot-radius Sphere centered on a point within range becomes a null zone. Spells of level 6 or lower cannot be cast there, and magic items there cease to function. The area otherwise works like an *Antimagic Field*."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

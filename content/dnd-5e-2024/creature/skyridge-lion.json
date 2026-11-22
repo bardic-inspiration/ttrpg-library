@@ -1,0 +1,124 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "skyridge-lion",
+  "name": "Skyridge Lion",
+  "summary": "A gray-maned mountain lion that leaps between cliffs and roars hard enough to knock climbers from the rock.",
+  "description": "Skyridge lions keep territories that run from one peak to the next, and they cross the gaps between in a single bound. Their roar carries for leagues in still air, and in the passes it is reason enough to camp a day early.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 50,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 16,
+      "con": 16,
+      "int": 3,
+      "wis": 14,
+      "cha": 10
+    },
+    "skills": {
+      "athletics": "proficient",
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 6,
+    "traits": [
+      {
+        "name": "Cliff Leaper",
+        "kind": "other",
+        "text": "The lion's jump distance is tripled, and it takes no damage from falling 40 feet or less."
+      },
+      {
+        "name": "Pounce",
+        "kind": "other",
+        "text": "If the lion moves at least 20 feet straight toward a creature and then hits it with a Claw attack on the same turn, the target must succeed on a {dc:str} Strength saving throw or have the {ref:condition/prone} condition. If the target has the Prone condition, the lion can make one Bite attack against it as a {ref:glossary/bonus-action}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The lion makes one Bite attack and two Claw attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Peak Roar",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 30-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "5d8",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": ", and the target is pushed up to 15 feet straight away from the lion and has the {ref:condition/frightened} condition until the end of its next turn.",
+        "onSuccess": "Half damage only.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

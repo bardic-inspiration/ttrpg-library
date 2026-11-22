@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "philter-of-shared-tongues",
+  "name": "Philter of Shared Tongues",
+  "summary": "A philter that lets you speak and understand any language for an hour.",
+  "description": "Diplomats call it \"the shortcut\" and refuse to say how it tastes. A pearly layer floats on its surface.",
+  "stats": {
+    "category": "potion",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, for 1 hour you can understand any spoken language you hear and be understood by creatures that know at least one language."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

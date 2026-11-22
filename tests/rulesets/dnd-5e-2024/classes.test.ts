@@ -13,7 +13,7 @@ import { groupPageRefs } from '../../../site/src/lib/refs.ts';
 import { rulesData } from '../../../site/src/lib/rules.ts';
 import { deriveClass, deriveClassLinked } from '../../../rulesets/dnd-5e-2024/classes.ts';
 import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
-import type { ClassStats, DerivedClass, LinkedClass } from '../../../rulesets/dnd-5e-2024/types.ts';
+import type { ClassStats, DerivedClass, LinkedClass, SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
 import { withoutContents } from '../../site/library-fixtures.ts';
@@ -67,7 +67,9 @@ describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
   it('passes the fixtures, with each feature and option on its parent', async () => {
     const result = await validate();
     expect(result.messages).toEqual([]);
-    expect(result.warns).toEqual([]);
+    // Only the fixtures' own warnings: the rest of the library is here so links resolve, and its
+    // warnings, such as an authored DC on a creature, are notes for its reviewer (#350).
+    expect(result.warnings.filter((w) => FIXTURE_TYPES.has(w.file.split('/')[2]!)).map((w) => `${w.file}: ${w.message}`)).toEqual([]);
     const on = (parent: string, type: string) => result.components.filter((c) => c.parent === parent && c.entry.type === type).map((c) => c.entry.id);
     expect(on('class/sorcerer', 'class-feature')).toHaveLength(10);
     expect(on('class/sorcerer', 'class-option')).toHaveLength(10);
@@ -229,7 +231,7 @@ describe('derivation', () => {
   });
 
   it('derives the spell list from the spells whose classes name it, and a custom class’s own spells', async () => {
-    const entries = (await withSpells()).map((e) => ({ type: e.type, id: e.id, name: e.name, stats: e.stats }));
+    const entries = (await withSpells()).map((e) => ({ type: e.type, id: e.id, name: e.name, stats: e.stats, meta: e.meta }));
     const { spellList, subclasses } = deriveClassLinked('sorcerer', await sorcerer(), entries);
     expect(subclasses).toEqual(['subclass/draconic-sorcery']);
     // The SRD's Sorcerer cantrips, in its order.
@@ -243,6 +245,25 @@ describe('derivation', () => {
     expect(level1.find((s) => s.ref === 'spell/chromatic-orb')).toMatchObject({ concentration: false, ritual: false, material: true });
     const custom = deriveClassLinked('wayfinder', { ...(await sorcerer()), spells: [{ ref: 'spell/cure-wounds' }] }, entries);
     expect(custom.spellList.flatMap((l) => l.spells.map((s) => s.ref))).toEqual(['spell/cure-wounds']);
+  });
+
+  it('lists only SRD spells and subclasses for an SRD class, and homebrew too for a custom one (docs/rulesets.md#classes)', async () => {
+    const entries = (await withSpells()).map((e) => ({ type: e.type, id: e.id, name: e.name, stats: e.stats, meta: e.meta }));
+    const rattle = entries.find((e) => e.type === 'spell' && e.id === 'rattle')!;
+    expect(rattle.meta.source.srd).toBeUndefined();
+    expect((rattle.stats as SpellStats).classes).toContainEqual({ ref: 'class/sorcerer' });
+    const draconic = entries.find((e) => e.type === 'subclass' && e.id === 'draconic-sorcery')!;
+    const homebrewSubclass = { ...draconic, id: 'ember-soul', name: 'Ember Soul', meta: { source: { kind: 'manual' } } };
+    const all = [...entries, homebrewSubclass];
+    const srd = deriveClassLinked('sorcerer', await sorcerer(), all);
+    expect(srd.spellList.flatMap((l) => l.spells.map((s) => s.ref))).not.toContain('spell/rattle');
+    expect(srd.subclasses).toEqual(['subclass/draconic-sorcery']);
+    // The same class as homebrew: its list takes every spell and subclass that names it.
+    const self = all.find((e) => e.type === 'class' && e.id === 'sorcerer')!;
+    const custom = all.map((e) => (e === self ? { ...e, meta: { source: { kind: 'manual' } } } : e));
+    const homebrew = deriveClassLinked('sorcerer', await sorcerer(), custom);
+    expect(homebrew.spellList.flatMap((l) => l.spells.map((s) => s.ref))).toContain('spell/rattle');
+    expect(homebrew.subclasses).toEqual(['subclass/draconic-sorcery', 'subclass/ember-soul']);
   });
 });
 
@@ -368,7 +389,7 @@ describe('the pages', async () => {
     expect(page).toContain('<h3>Level 14: Dragon Wings</h3>');
     expect(page).toContain('<caption>Draconic Spells</caption>');
     const { forward } = groupPageRefs(loaded, loaded.components!, refTargets(all, [data]), ruleset.refLabels);
-    expect(forward[0]).toEqual({ label: 'Subclass of', targets: [{ type: 'class', name: 'Sorcerer', path: 'dnd-5e-2024/class/sorcerer/' }] });
+    expect(forward[0]).toEqual({ label: 'Subclass of', targets: [{ type: 'class', name: 'Sorcerer', path: 'dnd-5e-2024/class/sorcerer/', srd: true }] });
     const back = groupPageRefs(sorcerer, sorcerer.components!, refTargets(all, [data]), ruleset.refLabels).back;
     expect(back.find((g) => g.label === 'Subclasses')?.targets.map((t) => t.name)).toEqual(['Draconic Sorcery']);
   });

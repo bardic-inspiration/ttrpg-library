@@ -19,6 +19,9 @@
     ],
     "effect": "While wearing this hat, you can cast the *{ref:spell/disguise-self}* spell. The spell ends if the hat is removed."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

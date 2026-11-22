@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "tangle-seed",
+  "name": "Tangle Seed",
+  "summary": "A seed that sprouts into a knot of vines when thrown.",
+  "description": "Found in the gardens of the wild courts. It wriggles in the palm.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can throw this seed at a point within 30 feet. Vines burst out in a 10-foot radius; each creature in the area makes a DC 13 Strength saving throw or has the {ref:condition/restrained} condition for 1 minute. A restrained creature can repeat the save at the end of each of its turns. The seed is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

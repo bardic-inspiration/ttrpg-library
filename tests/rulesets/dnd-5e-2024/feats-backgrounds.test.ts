@@ -196,6 +196,6 @@ describe('cards', async () => {
   it('list the feat a background grants as "Granted by"', () => {
     const magic = all.find(({ entry }) => entry.id === 'magic-initiate')!;
     const { back } = groupRefs('feat', magic.refs, magic.refBy, refTargets(all, [data]), ruleset.refLabels);
-    expect(back).toEqual([{ label: 'Granted by', targets: [{ type: 'background', name: 'Acolyte', path: 'dnd-5e-2024/background/acolyte/' }] }]);
+    expect(back).toEqual([{ label: 'Granted by', targets: [{ type: 'background', name: 'Acolyte', path: 'dnd-5e-2024/background/acolyte/', srd: true }] }]);
   });
 });

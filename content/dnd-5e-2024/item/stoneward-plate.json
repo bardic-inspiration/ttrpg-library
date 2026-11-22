@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "stoneward-plate",
+  "name": "Stoneward Plate",
+  "summary": "Plate armor that turns aside blows and makes the wearer hard to move.",
+  "description": "The plates are shaped from a single block of grey stone hollowed with fire, and the seams are almost invisible. Cathedrals have been built with less patience.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/plate-armor"
+        }
+      ]
+    },
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You have a +2 bonus to AC while wearing this armor. As a Bonus Action, you can plant your feet; until the start of your next turn, you can't be moved against your will and you have Resistance to Bludgeoning, Piercing, and Slashing damage."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

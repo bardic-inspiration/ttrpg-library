@@ -1,0 +1,88 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "mossback-bruin",
+  "name": "Mossback Bruin",
+  "summary": "A bear so old that moss, ferns, and a small birch have taken root along its spine.",
+  "description": "Woodcutters give a mossback a wide berth and a wide river besides. It sleeps through the cold months and wakes slowly, and the forest around its den stays green long after the first frost.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 40,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 10,
+      "con": 18,
+      "int": 2,
+      "wis": 13,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Living Moss",
+        "kind": "other",
+        "text": "At the start of each of its turns, the bruin regains hit points equal to its Constitution modifier if it is in dim light or in a forest, and it has {ref:glossary/advantage} on Dexterity (Stealth) checks made to hide in forest terrain. It does not regain hit points if it took Fire or Radiant damage since the end of its last turn."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The bruin makes two Claw attacks."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": " and the target has the {ref:condition/prone} condition if it is Large or smaller and the bruin has moved at least 10 feet straight toward it this turn."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "subclass",
+  "id": "hollow-star-patron",
+  "name": "Hollow Star Patron",
+  "summary": "A Warlock subclass: answer the light that never reached you.",
+  "stats": {
+    "class": {
+      "ref": "class/warlock"
+    },
+    "tagline": "Answer the Light That Never Reached You",
+    "text": "Your patron is a dead star, a cold light whose long fall left a hunger for warmth. Its gifts are frost, silence, and the weight of distance.",
+    "features": [
+      {
+        "ref": "class-feature/hollow-star-patron-star-cold-touch"
+      },
+      {
+        "ref": "class-feature/hollow-star-patron-hollow-light"
+      },
+      {
+        "ref": "class-feature/hollow-star-patron-falling-away"
+      },
+      {
+        "ref": "class-feature/hollow-star-patron-void-ward"
+      },
+      {
+        "ref": "class-feature/hollow-star-patron-dead-stars-pull"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

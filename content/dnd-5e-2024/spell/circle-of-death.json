@@ -42,6 +42,9 @@
     "effect": "Negative energy ripples out in a 60-foot-radius {ref:glossary/sphere} from a point you choose within range. Each creature in that area makes a Constitution saving throw, taking 8d8 Necrotic damage on a failed save or half as much damage on a successful one.",
     "higherLevels": "The damage increases by 2d8 for each spell slot level above 6."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

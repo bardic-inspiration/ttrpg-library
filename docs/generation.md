@@ -125,7 +125,7 @@ bucket, or an SRD import stage. Its steps:
    instead.
 4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
    `meta.source.issues` (or `meta.source.gapFill`), plus `meta.source.srd: true`
-   on SRD entries. Apply request and default tags.
+   and `tags.source: "SRD"` on SRD entries that take tags. Apply request and default tags.
 5. Run `npm run validate`; fix and retry up to `validateRetries` times. If it
    still fails, comment the errors on the issue, remove `in-progress`, and stop
    without a PR. A gap-fill run or inline request reports the errors in the run
@@ -295,7 +295,7 @@ The full SRD import bypassed requests: each stage was a sub-issue of its
 milestone, without the `request` label, so routines never took it, worked in
 sessions the owner started. Every stage is done. SRD entry upkeep (link
 passes, corrections, review) works the same way, with its issue under the
-current milestone or a track issue ([Dev Queue](../AGENTS.md#dev-queue)),
+current queue (a milestone, a "Spot Fixes" issue, or a track issue) ([Dev Queue](../AGENTS.md#dev-queue)),
 through the `generate` and `revise` skills. A stage session ran the
 `generate` skill on a batch picked from
 `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress`

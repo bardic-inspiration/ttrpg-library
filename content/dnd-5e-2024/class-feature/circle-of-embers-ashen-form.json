@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "circle-of-embers-ashen-form",
+  "name": "Ashen Form",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You can expend a use of Wild Shape to wrap yourself in ember-light instead of transforming. For 10 minutes, you shed bright light in a 10-foot radius, and creatures that hit you with a melee attack take Fire damage equal to your Wisdom modifier (minimum 1)."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

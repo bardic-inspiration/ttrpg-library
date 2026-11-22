@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "mantle-of-many-winds",
+  "name": "Mantle of Many Winds",
+  "summary": "A mantle that lets you fly and call forth gusts.",
+  "description": "Wind-priests wore it and called it a tool. The hem is always stirring, even indoors.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "While you wear this mantle, you have a Fly Speed of 60 feet. As a Magic action, you can unleash a gust in a 30-foot cone: each creature in the area makes a DC 17 Strength saving throw or is pushed 20 feet away and has the {ref:condition/prone} condition. Once you use this property, you can't use it again until the next dawn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

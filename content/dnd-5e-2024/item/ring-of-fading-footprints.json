@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "ring-of-fading-footprints",
+  "name": "Ring of Fading Footprints",
+  "summary": "A ring that makes you vanish from sight for a few breaths.",
+  "description": "A narrow gold ring that gleams only in shadow. The thieves who cherish it keep their other ring on a chain.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 3,
+      "recharge": "1d3 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/invisibility"
+        },
+        "chargeCost": 1
+      }
+    ],
+    "effect": "The ring has 3 charges. As a Magic action, you can expend 1 charge to cast *Invisibility* from it on yourself. The ring regains 1d3 expended charges daily at dawn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

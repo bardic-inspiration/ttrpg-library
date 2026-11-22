@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "final-rest",
+  "name": "Final Rest",
+  "summary": "Ends a creature that is already near death.",
+  "stats": {
+    "level": 5,
+    "school": "necromancy",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a handful of grave soil"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "A creature within range that has half its Hit Points or fewer makes a Constitution saving throw. On a failed save, it takes 8d8 Necrotic damage and, if it has 0 Hit Points afterward, it dies. On a successful save, it takes half as much damage."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

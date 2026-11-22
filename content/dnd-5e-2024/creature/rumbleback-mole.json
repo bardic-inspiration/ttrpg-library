@@ -1,0 +1,106 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "rumbleback-mole",
+  "name": "Rumbleback Mole",
+  "summary": "A blind mole the size of a house that tunnels through solid rock and brings the ceiling down on anything in its way.",
+  "description": "Rumblebacks carve the great round tunnels that other creatures later call roads. They are not hunters by nature, but they are territorial, and they answer any loud noise by digging toward it. Whole mining camps have moved after feeling the floor begin to shudder in a slow, steady rhythm.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "gargantuan"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15,
+      "note": "natural armor"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30,
+      "burrow": 40
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 8,
+      "con": 20,
+      "int": 2,
+      "wis": 10,
+      "cha": 4
+    },
+    "senses": {
+      "blindsight": 30,
+      "tremorsense": 120,
+      "note": "blind beyond this radius"
+    },
+    "cr": 7,
+    "traits": [
+      {
+        "name": "Tunneler",
+        "kind": "other",
+        "text": "The mole can burrow through solid rock at half its {ref:glossary/burrow-speed} and leaves a 15-foot-diameter tunnel in its wake."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The mole makes two Digging Claw attacks."
+      },
+      {
+        "name": "Digging Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Cave-In",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each other creature within 30 feet of the mole"
+        },
+        "damage": [
+          {
+            "dice": "4d10",
+            "type": "bludgeoning"
+          }
+        ],
+        "onFailure": "and the target has the {ref:condition/prone} condition.",
+        "onSuccess": "Half damage.",
+        "onFailureOrSuccess": "The ground within 30 feet of the mole becomes {ref:glossary/difficult-terrain} until cleared.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "pauldrons-of-the-peerless",
+  "name": "Pauldrons of the Peerless",
+  "summary": "Shoulder guards that let you lift and hurl what a dozen could not.",
+  "description": "Bound with leather straps in a dozen places, and the leather is better than the steel. The sign of a champion, once.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "While you wear these pauldrons, your Strength score is 21, unless it is already higher. Your carrying capacity and the weight you can push, drag, or lift are doubled."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

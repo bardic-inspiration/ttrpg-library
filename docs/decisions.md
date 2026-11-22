@@ -46,6 +46,7 @@ The library as built at the `v1.0.0` tag.
 |---|---|---|
 | A library of D&D 5e content on SRD 5.2, ruleset `dnd-5e-2024`, with types `creature`, `magic-item`, and `spell`. | P9: the SRD is CC-BY-4.0 | #1 |
 | The library holds SRD entries and custom entries. | The full SRD proofs the schemas and UI against everything they must hold | #77, #128 |
+| Every SRD entry whose type takes tags carries `tags.source: "SRD"`, beside `meta.source.srd`; components, which have no tags, carry none. | The `source` tag is a conventional key that gives the gallery an SRD filter with no configuration; adding tags to components would change their schema. | this PR |
 | Public repo and Pages site on the free plan, not promoted. | P9 | #1 |
 | No backend, database, accounts, user submissions, or in-browser editing. Every change is a PR. | P1, P7 | #1 |
 | v1 is a prototype; v2 a complete product for one user; v3 and later explore multiple users and a public site. | | #95 |
@@ -358,6 +359,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A subclass's features are checked for level order by each feature's first level, with the class's check and message, whether or not its class resolves. | P3: one rule for both lists; the order doesn't depend on the class | #319 |
 | `srd-coverage` reads the library through `validateLibrary()`, and the ruleset's rules and component types through its module, instead of re-reading the files; it fails while validation has errors, as `build:index` does. | P3: one reading of components' parents and the rules data; P2: an entry that fails validation would otherwise read as missing | #319 |
 | `ruleset.json` drops `label`, `srdVersion`, and `attribution`, and `config/types.json` drops `attribution`: nothing read them. A ruleset's display label is the registry's, and its attribution statement is written where it shows rather than looked up by key. | P3: one label, and no key that claims a lookup nothing makes; a key-driven statement would be machinery for a single ruleset, whose licensing review sets the wording and placement anyway | #319 |
+| An ID's slug drops apostrophes ("Hunter's Mark" is `hunters-mark`), as every SRD entry and the Open5e importer already did; the five items generated with `-s-` ids keep them. The validator doesn't compare an ID with its name, since a renamed entry keeps its ID. | The docs' wording allowed both spellings; IDs never change | #350 |
+| A test that loads the whole library only so its fixtures' links resolve checks warnings on its fixtures alone. | The library's warnings, such as an authored DC, are notes for each entry's reviewer, not failures | #350 |
+| On an SRD entry's page, links to homebrew move from Links to a Homebrew section after it, under the same labels; a rules page lists them under a "Homebrew" label after each primitive's links. An SRD class's derived spell list and subclasses take only SRD entries, so its custom spells and subclasses show as Homebrew links ("Spells", "Subclasses") rather than in its tables. One line, SRD or not, until homebrew is filtered by volume (#353). | P5: SRD pages read as the SRD; the owner wants homebrew linked from them but apart. Back-refs already hold every homebrew entry that names the page, so one generic section covers every type | #352 |
 
 ### Wording
 
@@ -410,6 +414,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Component behavior in the browser (typing, focus) is tested by rendering with Preact into happy-dom, set per test file with `// @vitest-environment happy-dom`; other suites stay in Node. | A maintained DOM over a hand-written one; the owner approved the dependency | #319 |
 | UI work gets its accessibility review at the end of its milestone. UI work outside a milestone, such as a track's, is flagged for the next one: the session that opens its `ui` PR files a `test` issue under the Accessibility review backlog, a tracking issue kept like the Testing backlog, and the next milestone review takes up every open one. | Tracks have no milestones, so their UI would get neither the a11y job nor a review; one repo-wide rule, not case by case | #319 |
 | The milestone review stays a Testing backlog check; the Accessibility review backlog holds only UI work waiting for a review. | The review is a human check like the rest of the Testing backlog; the backlog is what the next review covers | #319 |
+| A filter tree node's default open state applies once, when the tree first shows from the URL. After that only its own disclosure opens or closes it: checking a type or value, or clearing filters, never opens or closes a node. | Every control in the tree is a discrete interaction, with no ripple elsewhere in the tree; a link still opens the view it names | #342 |
+| Every page keeps the scrollbar's room (`scrollbar-gutter: stable` on `html`), not only the Library. | The filter menu stays put as filtering changes the page's height; the same rule keeps the shell from shifting between pages | #342 |
 
 ### Export
 
@@ -465,6 +471,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Translators read `{ref:…}` tokens with the validator's parser, so one the validator calls malformed stays as written in an export and isn't reported as a link, as the site's renderer leaves it. | P3: one parser; only invalid text reads differently | #319 |
 | Open5e's ability keys (`strength`) are the phrase book's ability names in lowercase, rather than a table of their own. | P3: the names are the phrase book's; the vendored Open5e schema check catches a mismatch | #319 |
 | The index reads `{ref:…}` tokens through `replaceRefTokens`, and search text drops a malformed one as it drops every other token. | P3: one parser. A malformed token fails validation, so no index is built from one; its key isn't words | #322 |
+| An Open5e record keyed `ttrpg-library_<id>` imports with that id; any other record's id is its name's slug. | An exported entry round-trips as itself, whatever its id's spelling; IDs never change | #350 |
+| The Open5e round-trip test compares a creature's `saveProficiencies` as a set. | The ruleset reads them as a set, and Open5e keys saves by ability, so their order isn't carried | #350 |
 
 ### Art
 
@@ -478,3 +486,4 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | For the v2 build, the tuned skill opens a content PR with the Good-rated images. Later, art comes with content or is added afterwards; when content passes but its art is denied, the two are split and the request issue gets a comment. | Art has its own review criteria; P7 | #117 |
 
 [^style]: v2 planned a style redesign (#114, Milestone 6 #218) built from the owner's style package. It was scrapped before it was built: the site keeps v1's style, and v2 has no style area.
+| The active dev queue is the one open tracking issue labeled `queue`: the current milestone, or, with no open milestone, a "<version> Spot Fixes" issue named for the latest release's tag (the latest spec's version if there is no release), created if missing. Tracks are side queues, picked after it, and never carry the label. | Without an open milestone, new dev issues had no parent and sat unplaced; a label makes the active queue findable | #357 |

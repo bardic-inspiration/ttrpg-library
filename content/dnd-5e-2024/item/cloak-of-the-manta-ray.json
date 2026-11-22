@@ -12,6 +12,9 @@
     },
     "effect": "While wearing this cloak, you can breathe underwater, and you have a {ref:glossary/swim-speed} of 60 feet."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

@@ -80,6 +80,9 @@
       }
     ]
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {

@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "chronicler-edit-the-moment",
+  "name": "Edit the Moment",
+  "stats": {
+    "levels": [
+      10
+    ],
+    "text": "As a {ref:glossary/reaction} when a creature within 60 feet makes a d20 Test, you can add or subtract your Intelligence modifier from the roll. Once you use this feature, you can't use it again until you finish a Short or Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

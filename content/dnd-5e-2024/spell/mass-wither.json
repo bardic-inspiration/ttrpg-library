@@ -1,0 +1,53 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "mass-wither",
+  "name": "Mass Wither",
+  "summary": "Drains life from a group, leaving them aged and frail.",
+  "stats": {
+    "level": 8,
+    "school": "necromancy",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Up to ten creatures within range make a Constitution saving throw, taking 12d8 Necrotic damage and reducing their maximum Hit Points by half the damage on a failed save, or taking half as much damage on a success."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

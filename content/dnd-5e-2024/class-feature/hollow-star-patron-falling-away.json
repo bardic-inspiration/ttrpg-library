@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "hollow-star-patron-falling-away",
+  "name": "Falling Away",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "When a creature you can see within 30 feet makes an attack roll, you can use a {ref:glossary/reaction} to impose {ref:glossary/disadvantage} on it. Once you use this feature, you can't use it again until you finish a Short or Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

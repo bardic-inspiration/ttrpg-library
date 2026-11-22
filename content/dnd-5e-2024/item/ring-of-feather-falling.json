@@ -12,6 +12,9 @@
     },
     "effect": "When you fall while wearing this ring, you descend 60 feet per round and take no damage from falling."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

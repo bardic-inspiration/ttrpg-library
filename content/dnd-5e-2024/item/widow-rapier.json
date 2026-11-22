@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "widow-rapier",
+  "name": "Widow Rapier",
+  "summary": "A slender rapier whose wounds spread numbing venom.",
+  "description": "A thin black line runs the length of the blade and wanders slowly like a vein. Its former owners seldom die of old age.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/rapier"
+        }
+      ]
+    },
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You have a +2 bonus to attack and damage rolls made with this magic weapon. When you hit a creature with it, the target takes an extra 1d6 Poison damage and must succeed on a DC 14 Constitution saving throw or have the {ref:condition/poisoned} condition until the end of your next turn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

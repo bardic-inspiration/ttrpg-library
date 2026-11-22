@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "flash-powder",
+  "name": "Flash Powder",
+  "summary": "A small packet that bursts with blinding light when thrown.",
+  "description": "Stage magicians use it, and pickpockets use it more. The packet is stamped with a sunburst.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "common",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Bonus Action, you can throw this packet at a point within 20 feet. Each creature within 10 feet of that point must succeed on a DC 13 Constitution saving throw or have the {ref:condition/blinded} condition until the end of its next turn. The packet is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

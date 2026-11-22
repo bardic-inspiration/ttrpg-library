@@ -12,6 +12,9 @@
     },
     "effect": "While this polished agate is on your person, you gain a +1 bonus to ability checks and saving throws."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

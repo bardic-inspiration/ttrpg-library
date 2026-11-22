@@ -25,6 +25,9 @@
     },
     "effect": "You have {ref:glossary/resistance} to one type of damage while you wear this armor. The GM chooses the type or determines it randomly by rolling on the following table.\n\n| 1d10 | Damage Type |\n|---|---|\n| 1 | Acid |\n| 2 | Cold |\n| 3 | Fire |\n| 4 | Force |\n| 5 | Lightning |\n| 6 | Necrotic |\n| 7 | Poison |\n| 8 | Psychic |\n| 9 | Radiant |\n| 10 | Thunder |"
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

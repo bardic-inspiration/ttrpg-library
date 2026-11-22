@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "lantern-of-safe-passage",
+  "name": "Lantern of Safe Passage",
+  "summary": "A lantern whose light reveals any trap in its glow.",
+  "description": "Tomb-robbers curse it and sell it for good money. The flame is steady even in a gale.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "While this lantern is lit, it sheds Bright Light in a 30-foot radius and Dim Light for an additional 30 feet. Magical and mundane traps within the bright light are outlined in a faint glow, visible to creatures that see the light."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -38,6 +38,9 @@
     },
     "effect": "A creature you touch has the {ref:condition/invisible} condition until the spell ends."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

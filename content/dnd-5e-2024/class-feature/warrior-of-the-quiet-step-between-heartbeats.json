@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "warrior-of-the-quiet-step-between-heartbeats",
+  "name": "Between Heartbeats",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "When you take the {ref:glossary/dodge} action, you can spend 1 Focus Point to also make one {ref:glossary/unarmed-strike} as part of that action."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -12,6 +12,9 @@
     },
     "effect": "While wearing this necklace, you can breathe normally in any environment, and you have {ref:glossary/advantage} on saving throws made to avoid or end the {ref:condition/poisoned} condition."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

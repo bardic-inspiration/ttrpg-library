@@ -12,6 +12,9 @@
     },
     "effect": "The next time you see a creature within 10 minutes after drinking this philter, you are charmed by that creature and have the {ref:condition/charmed} condition for 1 hour.\n\nThis rose-hued, effervescent liquid contains one easy-to-miss bubble shaped like a heart."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "path-of-the-stone-ward-granite-skin",
+  "name": "Granite Skin",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "While your Rage is active and you aren't wearing armor, your Armor Class equals 10 plus your Dexterity and Constitution modifiers."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

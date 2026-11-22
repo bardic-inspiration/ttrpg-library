@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "circle-of-embers-rekindled-vigor",
+  "name": "Rekindled Vigor",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "When you reduce a creature to 0 hit points with a spell or attack, you gain {ref:glossary/temporary-hit-points} equal to your Druid level."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "weigh-fate",
+  "name": "Weigh Fate",
+  "summary": "Lets you predict a creature's next several actions.",
+  "stats": {
+    "level": 5,
+    "school": "divination",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a pair of dice"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "Choose a creature you can see within 60 feet. For the duration, you gain Advantage on saving throws against its effects and attack rolls against you have Disadvantage when it is the attacker, but a creature that succeeds on a Charisma saving throw when you cast the spell is unaffected."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

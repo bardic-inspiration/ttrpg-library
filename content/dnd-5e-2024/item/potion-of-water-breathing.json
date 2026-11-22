@@ -12,6 +12,9 @@
     },
     "effect": "You can breathe underwater for 24 hours after drinking this potion.\n\nThis potion's cloudy green fluid smells of the sea and has a jellyfish-like bubble floating in it."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
