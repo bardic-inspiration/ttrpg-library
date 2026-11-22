@@ -21,12 +21,13 @@ const readJson = async (path: string): Promise<Record<string, any>> => JSON.pars
 let bundles: ExportBundle[] = [];
 let context: ImportContext;
 
-/** The whole library, plus a custom condition and equipment (the library has none), as export bundles. */
+/** The whole library, plus a custom condition and custom equipment, as export bundles. */
 beforeAll(async () => {
   const library = await buildIndex(join(PROJECT_ROOT, 'content'));
   const extras = await tempLibrary([
     await readJson(join(FIXTURES, 'condition/mired.json')),
     await readJson(join(FIXTURES, 'equipment/tidewater-net.json')),
+    await readJson(join(FIXTURES, 'equipment/tidecaller-kit.json')),
   ]);
   const custom = await buildIndex(extras.content, { assetsRoot: extras.repo });
   expect([...library.errors, ...custom.errors]).toEqual([]);
@@ -86,6 +87,13 @@ describe('Open5e round trip (docs/export.md#open5e)', () => {
       if (back) expect(back.id).toBe(b.entry.id);
     }
     expect(unreported).toEqual([]);
+  });
+
+  it('reports equipment that exports but can\'t import back, such as a tool', () => {
+    const out = open5e.export([item(bundle('equipment/tidecaller-kit'))]);
+    expect(out.exported).toEqual(['equipment/tidecaller-kit']);
+    expect(out.skipped.filter((s) => s.path === '').map((s) => s.reason)).toEqual(["Open5e's Tools category doesn't name one equipment group, so it exports but doesn't import back."]);
+    expect(open5e.import(JSON.parse(out.data), context).entries).toEqual([]);
   });
 });
 

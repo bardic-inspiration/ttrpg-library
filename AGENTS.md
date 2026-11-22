@@ -63,7 +63,9 @@ Every content session, routine or not, follows these:
   derived numbers in prose, and use `adjust` only for a deliberate deviation
   ([Inputs and derived values](docs/rulesets.md#inputs-and-derived-values),
   [Text tokens](docs/rulesets.md#text-tokens)).
-- Run `npm run validate` before every push; never push a failing batch.
+- Run `npm run validate` and the
+  [Self-review](docs/generation.md#self-review) before every push; never push
+  a failing batch.
 - SRD-only rules and the blocklist apply to every text field
   ([Blocklist](docs/licensing.md#blocklist)).
 - SRD entries are reproduced faithfully; custom entries never reuse an SRD
@@ -200,7 +202,9 @@ The npm scripts are listed in
 **Before every push**, run what CI runs for the lane
 ([CI checks](docs/workflow.md#ci-checks)):
 
-- **Content:** `npm run validate` and `npm run build`.
+- **Content:** `npm run validate`, `npm run build`, and `npm test`, as part
+  of the [Self-review](docs/generation.md#self-review). CI runs only the
+  first two.
 - **Dev:** those two, then `npm run check` and `npm test`. The PR that
   closes a milestone also runs `npm run a11y`, gets the `milestone` label
   ([Milestone PRs](docs/workflow.md#milestone-prs)), and files the

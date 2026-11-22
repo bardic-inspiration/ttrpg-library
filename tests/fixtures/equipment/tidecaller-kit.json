@@ -1,0 +1,26 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "equipment",
+  "id": "tidecaller-kit",
+  "name": "Tidecaller Kit",
+  "summary": "Tide tables, a weighted line, and a conch for reading the sea.",
+  "description": "Harbor pilots keep these kits in oilcloth wraps.",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 12,
+      "unit": "gp"
+    },
+    "weight": 2,
+    "tool": {
+      "ability": "wis",
+      "utilize": "Predict the next high tide (DC 10)"
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-22",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

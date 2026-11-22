@@ -16,6 +16,20 @@ import, ATTRIBUTION.md. Delete sections that don't apply, and this comment.
 <!-- Every validator warning, including each formula adjustment (`adjust`)
 with its reason. "None" if there are none. -->
 
+## Self-review
+
+<!-- docs/generation.md "Self-review". Tick each item once it holds; under an
+item that can't, name the dev issue filed for it. -->
+
+- [ ] Validate and build pass
+- [ ] The tests pass (`npm test`)
+- [ ] IDs are name slugs, apostrophes dropped, unique
+- [ ] Every mentioned library entry or rule is a ref
+- [ ] Inputs only; tokens for derived numbers; each `adjust` explained
+- [ ] Every warning is listed with its reason
+- [ ] No SRD name or proper noun reused, nothing blocklisted; SRD entries match the PDF
+- [ ] Only the batch's files changed; Entries table complete
+
 ## Gap fill
 
 <!-- Gap-fill runs only: the bucket that was filled. -->

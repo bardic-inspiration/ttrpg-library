@@ -250,6 +250,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The `srd-import` skill is archived to `.claude/archive/srd-import/`, kept for the record outside `.claude/skills/` so it no longer loads, and its test is retired. SRD entry upkeep goes through the `generate` and `revise` skills. | The SRD import is done | #319 |
 | At close-out, `spec/v2/` is removed. Its file template, section meanings, and checks move to `spec/tracks/README.md`; `tests/stage-spec.test.ts` keeps its name and checks only `spec/tracks/`; the link check no longer recognizes `spec/v2/` citations. | The stage is finished when only its README is left, and the tracks must not depend on a removed folder | #255 |
 | Gap fill is on again. | It was off only so no entry was made in the v1 shape before v2's schemas were built, and they are | #109, #255 |
+| A content session runs a self-review list before opening or pushing to a content PR, `npm test` included, and ticks it in the PR body. A test that fails on a rule-following entry becomes a dev issue the PR waits for. Content CI stays validate and build. | Content PRs broke library-wide tests twice (#351, #360) and the owner's review caught what a checklist would | this PR |
+| Open5e export reports equipment outside a weapon, armor, or Adventuring Gear (a tool, a mount, a vehicle) as a whole entry that doesn't import back, since import can't read its group from Open5e's category. Import is unchanged. | The round trip reports every difference, and the first custom tool (#360) came back as nothing | this PR |
 
 ### Linking
 
