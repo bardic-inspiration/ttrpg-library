@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "condition",
+  "id": "fey-touched",
+  "name": "Fey-Touched",
+  "summary": "Fey magic fills you with bliss and charm, sharpening your Charisma while your turns grow ever more likely to be hijacked by whims.",
+  "description": "Fey-Touched creatures are soaked in the glamour of the fey realm, often after a bargain, a bite of enchanted fruit, or a night in a fairy ring. Onlookers see a creature grow lovelier and more magnetic, smiling too widely and drifting from the matter at hand.",
+  "stats": {
+    "effects": [
+      {
+        "name": "Stages",
+        "text": "This condition is cumulative and has six stages. You gain it at stage 1, and each time you receive it again, your stage increases by 1, to a maximum of 6. Stages 1 and 2 are mild, stages 3 to 5 are severe, and stage 6 is extreme."
+      },
+      {
+        "name": "Glamour",
+        "text": "You gain a bonus to Charisma checks and Charisma saving throws equal to your stage."
+      },
+      {
+        "name": "Wayward Whims",
+        "text": "At the start of each of your turns, roll a d20. If the result is equal to or less than 2 times your stage, a whim seizes you: the DM chooses or randomly determines something you do instead of your normal turn, such as dancing, singing, or wandering off. At stage 6, you are lost to the fey's will, and the DM controls all your actions."
+      },
+      {
+        "name": "Removing the Condition",
+        "text": "At stage 1 or 2, the condition ends if you are targeted by *{ref:spell/lesser-restoration}* or a higher-level spell that removes conditions. At stage 3 to 5, only *{ref:spell/greater-restoration}* or a stronger spell ends it. At stage 6, only *{ref:spell/wish}* ends it."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-22",
+    "source": { "kind": "routine", "issues": [359] }
+  }
+}
