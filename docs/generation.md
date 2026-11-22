@@ -103,8 +103,7 @@ leaves out, and request tags merge over default tags. `count` and
 trust, and no batch has a size limit. `scripts/generate/defaults.ts` loads and
 checks the file and applies it to a request.
 
-**Gap fill is on** (`gapFill.enabled: true`). Run-order step 6 skips while
-it's off.
+`gapFill.enabled` turns run-order step 6 on or off.
 
 ### The generate skill
 
@@ -244,20 +243,17 @@ every registered type's guideline exists at that path with those sections, that
 every `{...}` in it is a token the ruleset defines, and that it passes the
 blocklist.
 
-### Schedule
+### Routine prompts
 
-`docs/routines.md` holds the canonical routine prompts and the schedule:
-
-- **Scheduled routine:** weekly, Monday morning local time, one run. A request
-  without a count gets the default.
-- **On-demand routine:** the same prompt, with issue numbers or an inline
-  request added.
+`docs/routines.md` holds the canonical routine prompts: one for a full run,
+and the same prompt with issue numbers or an inline request added for an
+on-demand run.
 
 The prompts tell the run to follow the run order written in `docs/routines.md`
 on `main`, so changing the run order is a reviewed dev PR, not an edit to the
 routine's settings. A test checks that every path, script, and defaults key the
 file names exists, that it lists the run-order steps in order, and that the
-on-demand prompts are the scheduled prompt with inputs added.
+on-demand prompts are the full-run prompt with inputs added.
 
 ### Gap buckets
 
@@ -354,7 +350,7 @@ plain-text mentions of library entries into links).
 - `rulesets/<ruleset>/guidelines/`: the guidelines.
 - `config/defaults.json` and `scripts/generate/` (defaults, the gap-fill
   picker); `scripts/import/` (the import script) and `config/licenses.json`; `lib/buckets.ts` counts entries per bucket and builds labels.
-- `docs/routines.md`: the prompts, schedule, and run order.
+- `docs/routines.md`: the prompts and run order.
 - `.github/ISSUE_TEMPLATE/content-request.yml`, `revise-request.yml`,
   `import-request.yml`, and `.github/PULL_REQUEST_TEMPLATE/content.md`.
 

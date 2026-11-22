@@ -54,6 +54,10 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
   [`docs/decisions.md`](docs/decisions.md). A doc names a version only where
   releases are its subject, as [Releases](docs/workflow.md#releases) does, or
   to cite a tag or an issue by its title.
+- **Docs cover the repo.** Docs, specs, and tests describe what is in the
+  repo: code, config, skills, scripts, and the prompts a routine runs.
+  Whether a routine is set up, scheduled, or turned on, and other practices
+  kept outside the repo, aren't documented or tested here.
 - **Never skip, disable, or weaken a test or check to get green.**
 - **Never rewrite pushed history** (no amend, rebase, or force-push). To catch
   up with `main`, merge it in.

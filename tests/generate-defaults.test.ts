@@ -21,10 +21,6 @@ describe('config/defaults.json', () => {
     expect(file).toEqual(base());
   });
 
-  it('has gap fill on', async () => {
-    expect((await loadDefaults()).gapFill.enabled).toBe(true);
-  });
-
   it('passes its own checks and loads', async () => {
     const registry = await loadRegistry();
     expect(checkDefaults(await loadDefaults(), registry)).toEqual([]);

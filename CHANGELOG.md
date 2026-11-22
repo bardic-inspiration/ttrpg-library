@@ -39,8 +39,6 @@ take [Semantic Versioning](https://semver.org/)'s form as
 - The separate galleries are replaced by the Library page, and their URLs
   redirect to it (#293).
 - Filters keep their URL form, so bookmarked views still work.
-- Gap fill, which adds entries where the library is thinnest, is on again
-  (#325).
 
 ### Fixed
 
