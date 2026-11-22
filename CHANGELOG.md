@@ -5,7 +5,7 @@ Notable changes to the library, newest first. The format follows
 take [Semantic Versioning](https://semver.org/)'s form as
 [Releases](docs/workflow.md#releases) reads it.
 
-## [1.1.0] - Unreleased
+## [1.1.0] - 2026-11-22
 
 ### Added
 
@@ -30,6 +30,8 @@ take [Semantic Versioning](https://semver.org/)'s form as
   them (#355).
 - An SRD filter: every SRD entry that takes tags is tagged `source: SRD`
   (#343).
+- Validation rejects a creature spell written as text when the library has
+  that spell as an entry (#363).
 
 ### Changed
 
@@ -47,6 +49,8 @@ take [Semantic Versioning](https://semver.org/)'s form as
 - Screen readers read filter values as a list (#304).
 - Filter tree nodes open and close only from their own disclosure controls
   (#347).
+- An Open5e export of a tool, mount, or vehicle says it won't import back
+  (#361).
 
 ## [1.0.0] - 2026-11-04
 
