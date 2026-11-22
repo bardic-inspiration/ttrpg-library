@@ -1,0 +1,54 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "quick-study",
+  "name": "Quick Study",
+  "summary": "Lets you gain proficiency in a skill for a short time.",
+  "stats": {
+    "level": 2,
+    "school": "transmutation",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "You gain proficiency in one skill of your choice for the duration. If you are already proficient, you add double your Proficiency Bonus to checks with it instead."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

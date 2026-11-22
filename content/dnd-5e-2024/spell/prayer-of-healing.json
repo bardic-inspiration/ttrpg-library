@@ -35,6 +35,9 @@
     "effect": "Up to five creatures of your choice who remain within range for the spell's entire casting gain the benefits of a {ref:glossary/short-rest} and also regain 2d8 {ref:glossary/hit-points}. A creature can't be affected by this spell again until that creature finishes a {ref:glossary/long-rest}.",
     "higherLevels": "The healing increases by 1d8 for each spell slot level above 2."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

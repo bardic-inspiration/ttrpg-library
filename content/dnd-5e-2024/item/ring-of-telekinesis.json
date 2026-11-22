@@ -19,6 +19,9 @@
     ],
     "effect": "While wearing this ring, you can cast *{ref:spell/telekinesis}* from it."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

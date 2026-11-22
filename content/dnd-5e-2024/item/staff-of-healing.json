@@ -39,6 +39,9 @@
     ],
     "effect": "This staff has 10 charges. While holding the staff, you can cast one of the spells on the following table from it, using your spellcasting ability modifier. The table indicates how many charges you must expend to cast the spell.\n\n| Spell | Charge Cost |\n|---|---|\n| *{ref:spell/cure-wounds}* | 1 charge per spell level (maximum 4 for a level 4 spell) |\n| *{ref:spell/lesser-restoration}* | 2 |\n| *{ref:spell/mass-cure-wounds}* | 5 |\n\n***Regaining Charges.*** The staff regains 1d6 + 4 expended charges daily at dawn. If you expend the last charge, roll 1d20. On a 1, the staff vanishes in a flash of light, lost forever."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-03",
     "updatedAt": "2026-11-04",

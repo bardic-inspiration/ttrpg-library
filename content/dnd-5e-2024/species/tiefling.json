@@ -30,6 +30,9 @@
     ],
     "intro": "As a Tiefling, you have the following special traits."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-10",
     "source": {

@@ -46,6 +46,7 @@ The library as built at the `v1.0.0` tag.
 |---|---|---|
 | A library of D&D 5e content on SRD 5.2, ruleset `dnd-5e-2024`, with types `creature`, `magic-item`, and `spell`. | P9: the SRD is CC-BY-4.0 | #1 |
 | The library holds SRD entries and custom entries. | The full SRD proofs the schemas and UI against everything they must hold | #77, #128 |
+| Every SRD entry whose type takes tags carries `tags.source: "SRD"`, beside `meta.source.srd`; components, which have no tags, carry none. | The `source` tag is a conventional key that gives the gallery an SRD filter with no configuration; adding tags to components would change their schema. | this PR |
 | Public repo and Pages site on the free plan, not promoted. | P9 | #1 |
 | No backend, database, accounts, user submissions, or in-browser editing. Every change is a PR. | P1, P7 | #1 |
 | v1 is a prototype; v2 a complete product for one user; v3 and later explore multiple users and a public site. | | #95 |
@@ -247,6 +248,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A new back-link is a link from a changed entry or component to a target its merge-base version didn't link to, read from the base file's refs without validating it, labeled as the target's page labels it, and leaving out the links among a page's own parts. | The base isn't validated with the PR's code, which a migration would fail; a page shows its own parts itself | #319 |
 | With the SRD import done, a format-fix issue and an SRD upkeep issue (a link pass, a correction, a review) go in the dev queue under the current milestone or a track issue, placed like any dev issue. An upkeep issue has no `request` label, so routines never take it. | The import's milestone is closed, and the Dev Queue already places every issue | #319 |
 | The `srd-import` skill is archived to `.claude/archive/srd-import/`, kept for the record outside `.claude/skills/` so it no longer loads, and its test is retired. SRD entry upkeep goes through the `generate` and `revise` skills. | The SRD import is done | #319 |
+| At close-out, `spec/v2/` is removed. Its file template, section meanings, and checks move to `spec/tracks/README.md`; `tests/stage-spec.test.ts` keeps its name and checks only `spec/tracks/`; the link check no longer recognizes `spec/v2/` citations. | The stage is finished when only its README is left, and the tracks must not depend on a removed folder | #255 |
+| Gap fill is on again. | It was off only so no entry was made in the v1 shape before v2's schemas were built, and they are | #109, #255 |
 
 ### Linking
 
@@ -356,6 +359,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A subclass's features are checked for level order by each feature's first level, with the class's check and message, whether or not its class resolves. | P3: one rule for both lists; the order doesn't depend on the class | #319 |
 | `srd-coverage` reads the library through `validateLibrary()`, and the ruleset's rules and component types through its module, instead of re-reading the files; it fails while validation has errors, as `build:index` does. | P3: one reading of components' parents and the rules data; P2: an entry that fails validation would otherwise read as missing | #319 |
 | `ruleset.json` drops `label`, `srdVersion`, and `attribution`, and `config/types.json` drops `attribution`: nothing read them. A ruleset's display label is the registry's, and its attribution statement is written where it shows rather than looked up by key. | P3: one label, and no key that claims a lookup nothing makes; a key-driven statement would be machinery for a single ruleset, whose licensing review sets the wording and placement anyway | #319 |
+| An ID's slug drops apostrophes ("Hunter's Mark" is `hunters-mark`), as every SRD entry and the Open5e importer already did; the five items generated with `-s-` ids keep them. The validator doesn't compare an ID with its name, since a renamed entry keeps its ID. | The docs' wording allowed both spellings; IDs never change | #350 |
+| A test that loads the whole library only so its fixtures' links resolve checks warnings on its fixtures alone. | The library's warnings, such as an authored DC, are notes for each entry's reviewer, not failures | #350 |
+| On an SRD entry's page, links to homebrew move from Links to a Homebrew section after it, under the same labels; a rules page lists them under a "Homebrew" label after each primitive's links. An SRD class's derived spell list and subclasses take only SRD entries, so its custom spells and subclasses show as Homebrew links ("Spells", "Subclasses") rather than in its tables. One line, SRD or not, until homebrew is filtered by volume (#353). | P5: SRD pages read as the SRD; the owner wants homebrew linked from them but apart. Back-refs already hold every homebrew entry that names the page, so one generic section covers every type | #352 |
 
 ### Wording
 
@@ -463,6 +469,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Translators read `{ref:…}` tokens with the validator's parser, so one the validator calls malformed stays as written in an export and isn't reported as a link, as the site's renderer leaves it. | P3: one parser; only invalid text reads differently | #319 |
 | Open5e's ability keys (`strength`) are the phrase book's ability names in lowercase, rather than a table of their own. | P3: the names are the phrase book's; the vendored Open5e schema check catches a mismatch | #319 |
 | The index reads `{ref:…}` tokens through `replaceRefTokens`, and search text drops a malformed one as it drops every other token. | P3: one parser. A malformed token fails validation, so no index is built from one; its key isn't words | #322 |
+| An Open5e record keyed `ttrpg-library_<id>` imports with that id; any other record's id is its name's slug. | An exported entry round-trips as itself, whatever its id's spelling; IDs never change | #350 |
+| The Open5e round-trip test compares a creature's `saveProficiencies` as a set. | The ruleset reads them as a set, and Open5e keys saves by ability, so their order isn't carried | #350 |
 
 ### Art
 

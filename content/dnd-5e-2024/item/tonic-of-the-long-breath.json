@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "tonic-of-the-long-breath",
+  "name": "Tonic of the Long Breath",
+  "summary": "A tonic that lets you hold your breath for an hour.",
+  "description": "Pearl divers pay a good price for the stuff, and complain of the taste.",
+  "stats": {
+    "category": "potion",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, for 1 hour you can hold your breath without limit and have Advantage on saving throws against inhaled poisons and gases."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

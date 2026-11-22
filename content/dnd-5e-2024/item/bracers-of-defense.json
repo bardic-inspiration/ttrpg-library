@@ -12,6 +12,9 @@
     },
     "effect": "While wearing these bracers, you gain a +2 bonus to {ref:glossary/armor-class} if you are wearing no armor and using no {ref:equipment/shield}."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

@@ -12,6 +12,9 @@
     },
     "effect": "Your Constitution is 19 while you wear this amulet. It has no effect on you if your Constitution is 19 or higher without it."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

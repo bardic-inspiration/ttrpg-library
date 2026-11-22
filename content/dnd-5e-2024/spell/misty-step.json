@@ -36,6 +36,9 @@
     },
     "effect": "Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space you can see."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {

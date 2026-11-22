@@ -1,0 +1,53 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "spark-chain",
+  "name": "Spark Chain",
+  "summary": "Lightning leaps from one target to another nearby creature.",
+  "stats": {
+    "level": 1,
+    "school": "evocation",
+    "classes": [
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/warlock"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Make a ranged spell attack against a creature within range. On a hit, the target takes 2d8 Lightning damage, and 1d8 Lightning damage jumps to one other creature of your choice within 10 feet of it."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

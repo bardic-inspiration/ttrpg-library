@@ -1,0 +1,82 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "thinair-kestrel",
+  "name": "Thinair Kestrel",
+  "summary": "A small falcon that hunts above the snowline and drops on prey from straight overhead.",
+  "description": "Thinair kestrels hover over the high passes like specks of ash, holding still against the wind for minutes at a time. Herders say one circling a camp means a storm by nightfall, and they are right more often than not.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "tiny"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 10,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 4,
+      "dex": 13,
+      "con": 12,
+      "int": 2,
+      "wis": 14,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "cr": 0.125,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The kestrel doesn't provoke {ref:glossary/opportunity-attacks} when it flies out of an enemy's reach."
+      },
+      {
+        "name": "Stoop",
+        "kind": "other",
+        "text": "If the kestrel flies at least 30 feet straight down toward a target and then hits it with a Talons attack on the same turn, the target takes an extra {dmg:1d4:piercing}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Talons",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

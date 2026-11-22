@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "shadow-courier-swift-parcel",
+  "name": "Swift Parcel",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You gain proficiency with Forgery Kit and Disguise Kit. As a {ref:glossary/bonus-action}, you can take the Utilize action to hand an object to a willing creature within 5 feet."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

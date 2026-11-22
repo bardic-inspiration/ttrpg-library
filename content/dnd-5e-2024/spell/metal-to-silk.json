@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "metal-to-silk",
+  "name": "Metal to Silk",
+  "summary": "Transforms metal objects into silk so they fail at their purpose.",
+  "stats": {
+    "level": 8,
+    "school": "transmutation",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a bolt of silk"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Up to five nonmagical metal objects within range, each of size Large or smaller, turn into silk. A creature holding or wearing one makes a Dexterity saving throw to avoid the effect."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

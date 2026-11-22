@@ -1,0 +1,95 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "crypt-zealot",
+  "name": "Crypt Zealot",
+  "summary": "A shaven fanatic in grave-wrappings who swings a bone-studded mace and grows bolder as blood is spilled.",
+  "description": "Zealots are the cult's answer to every locked door. They fast before a raid, scar their palms with the god's wheel, and are baffled when anyone hesitates to die for the cause.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 14,
+      "note": "studded leather"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 12,
+      "con": 14,
+      "int": 9,
+      "wis": 11,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "con"
+    ],
+    "skills": {
+      "intimidation": "proficient"
+    },
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/mace"
+      }
+    ],
+    "traits": [
+      {
+        "name": "Fervor of the Grave",
+        "kind": "other",
+        "text": "While the zealot is Bloodied, its weapon attacks deal an extra {dmg:1d6:necrotic}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bone Mace",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d6",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/prone} condition."
+      }
+    ],
+    "cr": 1
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "zealots",
+      "brute"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

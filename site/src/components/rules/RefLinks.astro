@@ -1,8 +1,9 @@
 ---
 // A primitive's or group's forward refs and back-refs on its rules page
-// (docs/site.md#rules-pages), labeled as the ruleset names them, like a detail page's Links.
+// (docs/site.md#rules-pages), labeled as the ruleset names them, like a detail page's Links. The
+// rules are SRD, so links to homebrew follow under a Homebrew label, apart from the rest.
 import type { Links } from '../../../../scripts/validate/refs';
-import { groupRefs } from '../../lib/refs';
+import { groupRefs, splitHomebrew } from '../../lib/refs';
 import type { RulesContext } from '../../lib/rules';
 import { url } from '../../lib/url';
 
@@ -15,18 +16,21 @@ const { ctx, key } = Astro.props;
 const links: Links = ctx.links.get(key) ?? { refs: [], refBy: [] };
 const type = key.slice(0, key.indexOf('/'));
 const grouped = groupRefs(type, links.refs, links.refBy, ctx.targets, ctx.labelFor);
-const groups = [...grouped.forward, ...grouped.back];
+const { srd, homebrew } = splitHomebrew([...grouped.forward, ...grouped.back]);
 ---
-{groups.length > 0 && (
-  <dl class="rule-links">
-    {groups.map((group) => (
-      <>
-        <dt>{group.label}</dt>
-        <dd>{group.targets.map((target, i) => <>{i > 0 && ', '}<a href={url(target.path)}>{target.name}</a></>)}</dd>
-      </>
-    ))}
-  </dl>
-)}
+{[srd, homebrew].map((groups, i) => groups.length > 0 && (
+  <>
+    {i === 1 && <p class="rule-links__homebrew">Homebrew</p>}
+    <dl class="rule-links">
+      {groups.map((group) => (
+        <>
+          <dt>{group.label}</dt>
+          <dd>{group.targets.map((target, j) => <>{j > 0 && ', '}<a href={url(target.path)}>{target.name}</a></>)}</dd>
+        </>
+      ))}
+    </dl>
+  </>
+))}
 
 <style>
   @layer components {
@@ -38,6 +42,11 @@ const groups = [...grouped.forward, ...grouped.back];
       & dt {
         font-weight: var(--font-weight-strong);
       }
+    }
+
+    .rule-links__homebrew {
+      font-weight: var(--font-weight-strong);
+      margin-block-start: var(--space-2xs);
     }
   }
 </style>

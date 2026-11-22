@@ -25,6 +25,9 @@
     ],
     "effect": "The medallion has 5 charges. While wearing it, you can expend 1 charge to cast *{ref:spell/detect-thoughts}* (save DC 13) from it. The medallion regains 1d4 expended charges daily at dawn."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

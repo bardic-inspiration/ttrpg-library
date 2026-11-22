@@ -1,0 +1,122 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "stormcrest-condor",
+  "name": "Stormcrest Condor",
+  "summary": "A vast mountain vulture whose feathers crackle with static and whose wingbeat hits like a thunderclap.",
+  "description": "Stormcrest condors ride the updrafts ahead of thunderheads and feed on whatever the lightning leaves on the peaks. Their shed feathers spark when stroked, and tinkers pay well for a whole one.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 10,
+      "fly": 80
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 15,
+      "con": 14,
+      "int": 3,
+      "wis": 14,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "resistances": [
+      "lightning",
+      "thunder"
+    ],
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The condor doesn't provoke {ref:glossary/opportunity-attacks} when it flies out of an enemy's reach."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The condor makes one Beak attack and one Talons attack."
+      },
+      {
+        "name": "Beak",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Talons",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "lightning"
+          }
+        ]
+      },
+      {
+        "name": "Thunder Wingbeat",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "str",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": ", and the target is pushed up to 15 feet straight away from the condor and has the {ref:condition/prone} condition.",
+        "onSuccess": "Half damage only.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

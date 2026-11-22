@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "tidal-sorcery-riptide-step",
+  "name": "Riptide Step",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can spend 2 Sorcery Points to teleport up to 30 feet to a space you can see, leaving a current that pushes adjacent creatures 5 feet away."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -32,7 +32,10 @@ with a schema file and a registry entry. Anything else fails as unknown.
 ### IDs and names
 
 - The ID is the slug of the name at creation: lowercase, ASCII-folded,
-  non-alphanumerics collapsed to `-`. It equals the file name.
+  apostrophes dropped, other non-alphanumerics collapsed to `-`: "Hunter's
+  Mark" is `hunters-mark`. It equals the file name. Five items made before
+  this was written down keep `-s-` ids, such as `cantor-s-chain-mail`, since
+  an ID never changes.
 - IDs and names are unique within a type, not across the library. Entries of
   different types are different things even when they share a name: the Giant
   Insect spell and a Giant Insect creature can both exist. Everything that
@@ -53,7 +56,10 @@ with a schema file and a registry entry. Anything else fails as unknown.
   rejected for being unknown.
 - Every tag key becomes a gallery filter, `tags.<key>`, with no configuration.
 - Conventional keys, not enforced: `world`, `campaign`, `theme`,
-  `environment`, `author`.
+  `environment`, `author`, `source`.
+- Every SRD entry that takes tags carries `tags.source: "SRD"`, beside
+  `meta.source.srd: true`, so the gallery can filter to or from SRD content.
+  Components have no tags ([Components](#components)), so they carry none.
 - Filtering compares strings case-insensitively; display keeps the stored
   case.
 
@@ -354,7 +360,8 @@ has a fixed shape.
 
 **How SRD entries enter and change.**
 
-- An SRD entry sets `meta.source.srd: true`. It is added only by a request that
+- An SRD entry sets `meta.source.srd: true` and, where its type takes tags,
+  `tags.source: "SRD"` ([Tags](#tags)). It is added only by a request that
   asks for SRD content or by an SRD import stage
   ([generation.md](generation.md#srd-import)); gap fill never adds one.
 - Each SRD entry enters once; the uniqueness rules enforce it. If an SRD name

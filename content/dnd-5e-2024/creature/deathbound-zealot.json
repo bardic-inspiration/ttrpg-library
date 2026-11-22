@@ -1,0 +1,96 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "deathbound-zealot",
+  "name": "Deathbound Zealot",
+  "summary": "A scarred, hollow-eyed fighter who has already died once for the cult and fights as though it was nothing.",
+  "description": "Deathbound zealots are bound by a rite that tethers a sliver of their life to the grave. Their commanders say the rite takes nothing the zealot would have kept, which is the sort of thing commanders say.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 15,
+      "note": "scale mail"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 12,
+      "con": 16,
+      "int": 8,
+      "wis": 11,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "con"
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/scale-mail"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The zealot makes two Rusted Cleaver attacks."
+      },
+      {
+        "name": "Rusted Cleaver",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "necrotic"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Last Rite",
+        "kind": "other",
+        "text": "Trigger: The zealot is reduced to 0 hit points. Response: The zealot makes one Rusted Cleaver attack against a creature within its reach, then falls."
+      }
+    ],
+    "cr": 3
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "zealots",
+      "brute"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

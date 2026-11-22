@@ -42,6 +42,9 @@
     },
     "effect": "You attempt to turn one creature that you can see within range into stone. The target makes a Constitution saving throw. On a failed save, it has the {ref:condition/restrained} condition for the duration. On a successful save, its {ref:glossary/speed} is 0 until the start of your next turn. Constructs automatically succeed on the save.\n\nA {ref:condition/restrained} target makes another Constitution saving throw at the end of each of its turns. If it successfully saves against this spell three times, the spell ends. If it fails its saves three times, it is turned to stone and has the {ref:condition/petrified} condition for the duration. The successes and failures needn't be consecutive; keep track of both until the target collects three of a kind.\n\nIf you maintain your {ref:glossary/concentration} on this spell for the entire possible duration, the target is {ref:condition/petrified} until the condition is ended by *{ref:spell/greater-restoration}* or similar magic."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
