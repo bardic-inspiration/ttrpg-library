@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "pipes-of-haunting",
   "name": "Pipes of Haunting",
@@ -16,17 +18,13 @@
     },
     "effect": "These pipes have 3 charges and regain 1d3 expended charges daily at dawn. You can take a {ref:glossary/magic} action to play them and expend 1 charge to create an eerie, spellbinding tune. Each creature of your choice within 30 feet of you must succeed on a DC 15 Wisdom saving throw or have the {ref:condition/frightened} condition for 1 minute. A creature that fails the save repeats it at the end of each of its turns, ending the effect on itself on a success. A creature that succeeds on its save is immune to the effect of these pipes for 24 hours."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

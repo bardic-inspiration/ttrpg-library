@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "bound-ground",
   "name": "Bound Ground",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "Draw a 60-foot Line of protective glyphs on the ground within range. Creatures cannot cross the line unless they succeed on a Charisma saving throw, made each time they try to move across. A creature that fails remains where it is and its movement ends."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

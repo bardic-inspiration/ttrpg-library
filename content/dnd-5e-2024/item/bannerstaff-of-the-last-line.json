@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "bannerstaff-of-the-last-line",
   "name": "Bannerstaff of the Last Line",
@@ -19,10 +21,6 @@
       "required": true
     },
     "effect": "You have a +2 bonus to attack and damage rolls made with this magic weapon. As a Bonus Action, you can plant the staff's end in the ground. Allies within 30 feet of you have Advantage on saving throws against the {ref:condition/frightened} condition until the start of your next turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "frost-brand",
   "name": "Frost Brand",
@@ -34,17 +36,13 @@
     },
     "effect": "When you hit with an attack roll using this magic weapon, the target takes an extra 1d6 Cold damage. In addition, while you hold the weapon, you have {ref:glossary/resistance} to Fire damage.\n\nIn freezing temperatures, the weapon sheds {ref:glossary/bright-light} in a 10-foot radius and {ref:glossary/dim-light} for an additional 10 feet.\n\nWhen you draw this weapon, you can extinguish all nonmagical flames within 30 feet of yourself. Once used, this property can't be used again for 1 hour."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

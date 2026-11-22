@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "ember-wake",
   "name": "Ember Wake",
@@ -40,10 +42,6 @@
       "concentration": true
     },
     "effect": "For the duration, each time you move at least 10 feet on your turn you leave a trail of fire in the spaces you passed. A creature that enters or ends its turn in the trail makes a Dexterity saving throw, taking 2d6 Fire damage on a failed save or no damage on a successful one. The trail lasts until the start of your next turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

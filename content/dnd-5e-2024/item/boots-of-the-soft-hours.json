@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "boots-of-the-soft-hours",
   "name": "Boots of the Soft Hours",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "While you wear these boots, you have Advantage on Dexterity (Stealth) checks that rely on moving silently, and your steps leave no tracks you don't wish to leave."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

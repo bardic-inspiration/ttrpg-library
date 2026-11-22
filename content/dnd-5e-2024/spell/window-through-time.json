@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "window-through-time",
   "name": "Window Through Time",
@@ -38,10 +40,6 @@
       "concentration": false
     },
     "effect": "You witness the last minute of events at your location as though you stood there as a silent observer, seeing and hearing everything that occurred. It does not reveal thoughts and cannot be cast on a location where Nondetection has been used."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

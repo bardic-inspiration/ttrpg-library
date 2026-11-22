@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "hushed-sling",
   "name": "Hushed Sling",
@@ -19,10 +21,6 @@
       "required": false
     },
     "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. Attacks made with it make no sound, and a creature that fails to see you attack does not learn where you are from the sound of it."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

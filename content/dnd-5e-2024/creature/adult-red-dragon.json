@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "creature",
   "id": "adult-red-dragon",
   "name": "Adult Red Dragon",
@@ -154,9 +156,6 @@
       ]
     }
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-03",
     "updatedAt": "2026-11-09",
@@ -164,8 +163,7 @@
       "kind": "routine",
       "issues": [
         132
-      ],
-      "srd": true
+      ]
     }
   }
 }

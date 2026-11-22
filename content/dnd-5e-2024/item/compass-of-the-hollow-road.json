@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "compass-of-the-hollow-road",
   "name": "Compass of the Hollow Road",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "As a Magic action, you can hold this compass and learn the direction and distance of the nearest secret door or hidden passage within 60 feet. Once you use this property, you can't use it again until the next dawn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

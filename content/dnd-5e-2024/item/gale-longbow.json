@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "gale-longbow",
   "name": "Gale Longbow",
@@ -19,10 +21,6 @@
       "required": true
     },
     "effect": "You have a +2 bonus to attack and damage rolls made with this magic weapon. Ranged attacks you make with it ignore Disadvantage from long range, and its normal and long range are doubled. As a Bonus Action, you can cause the next arrow you fire from it this turn to ignore half cover and three-quarters cover."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

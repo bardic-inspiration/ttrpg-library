@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "eyes-of-minute-seeing",
   "name": "Eyes of Minute Seeing",
@@ -12,17 +14,13 @@
     },
     "effect": "These crystal lenses fit over the eyes. While wearing them, your vision improves significantly out to a range of 1 foot, granting you {ref:glossary/darkvision} within that range and {ref:glossary/advantage} on Intelligence (Investigation) checks made to examine something within that range."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

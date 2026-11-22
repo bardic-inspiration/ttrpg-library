@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "weigh-fate",
   "name": "Weigh Fate",
@@ -40,10 +42,6 @@
       "concentration": true
     },
     "effect": "Choose a creature you can see within 60 feet. For the duration, you gain Advantage on saving throws against its effects and attack rolls against you have Disadvantage when it is the attacker, but a creature that succeeds on a Charisma saving throw when you cast the spell is unaffected."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

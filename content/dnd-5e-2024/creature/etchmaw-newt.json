@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "etchmaw-newt",
   "name": "Etchmaw Newt",
@@ -84,8 +86,6 @@
     ]
   },
   "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures",
     "environment": "underdark",
     "theme": [
       "subterranean",

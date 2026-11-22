@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "sword-of-life-stealing",
   "name": "Sword of Life Stealing",
@@ -34,17 +36,13 @@
     },
     "effect": "When you attack a creature with this magic weapon and roll a 20 on the d20 for the attack roll, that target takes an extra 15 Necrotic damage if it isn't a Construct or an Undead, and you gain {ref:glossary/temporary-hit-points} equal to the amount of Necrotic damage taken."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

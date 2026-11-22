@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "dirge-drummer",
   "name": "Dirge Drummer",
@@ -99,8 +101,6 @@
     ]
   },
   "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures",
     "theme": [
       "skeletons",
       "bone constructs",

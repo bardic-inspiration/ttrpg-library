@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "soft-word",
   "name": "Soft Word",
@@ -38,10 +40,6 @@
       "concentration": false
     },
     "effect": "One creature within range that can hear you makes a Wisdom saving throw. On a failed save, its Speed is reduced by 10 feet and it cannot willingly move closer to you until the end of its next turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

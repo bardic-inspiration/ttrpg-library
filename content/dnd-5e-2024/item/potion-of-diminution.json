@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "potion-of-diminution",
   "name": "Potion of Diminution",
@@ -12,17 +14,13 @@
     },
     "effect": "When you drink this potion, you gain the \"reduce\" effect of the *{ref:spell/enlarge-reduce}* spell for 1d4 hours (no {ref:glossary/concentration} required).\n\nThe red in the potion's liquid continuously contracts to a tiny bead and then expands to color the clear liquid around it. Shaking the bottle fails to interrupt this process."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

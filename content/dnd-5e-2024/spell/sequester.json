@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "sequester",
   "name": "Sequester",
@@ -35,17 +37,13 @@
     },
     "effect": "With a touch, you magically sequester an object or a willing creature. For the duration, the target has the {ref:condition/invisible} condition and can't be targeted by Divination spells, detected by magic, or viewed remotely with magic.\n\nIf the target is a creature, it enters a state of suspended animation; it has the {ref:condition/unconscious} condition, doesn't age, and doesn't need food, water, or air.\n\nYou can set a condition for the spell to end early. The condition can be anything you choose, but it must occur or be visible within 1 mile of the target. Examples include \"after 1,000 years\" or \"when the tarrasque awakens.\" This spell also ends if the target takes any damage."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

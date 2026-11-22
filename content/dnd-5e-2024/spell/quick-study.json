@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "quick-study",
   "name": "Quick Study",
@@ -37,10 +39,6 @@
       "concentration": false
     },
     "effect": "You gain proficiency in one skill of your choice for the duration. If you are already proficient, you add double your Proficiency Bonus to checks with it instead."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

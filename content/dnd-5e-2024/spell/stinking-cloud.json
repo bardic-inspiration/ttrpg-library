@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "stinking-cloud",
   "name": "Stinking Cloud",
@@ -42,9 +44,6 @@
     },
     "effect": "You create a 20-foot-radius {ref:glossary/sphere} of yellow, nauseating gas centered on a point within range. The cloud is {ref:glossary/heavily-obscured}. The cloud lingers in the air for the duration or until a strong wind (such as the one created by *{ref:spell/gust-of-wind}*) disperses it.\n\nEach creature that starts its turn in the Sphere must succeed on a Constitution saving throw or have the {ref:condition/poisoned} condition until the end of the current turn. While {ref:condition/poisoned} in this way, the creature can't take an action or a {ref:glossary/bonus-action}."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "updatedAt": "2026-11-09",
@@ -52,8 +51,7 @@
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     }
   }
 }

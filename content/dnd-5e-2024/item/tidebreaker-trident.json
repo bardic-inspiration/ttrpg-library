@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "tidebreaker-trident",
   "name": "Tidebreaker Trident",
@@ -19,10 +21,6 @@
       "required": true
     },
     "effect": "You have a +2 bonus to attack and damage rolls made with this magic weapon. When you hit a Large or smaller creature with it, you can force the target to make a DC 15 Strength saving throw. On a failure, the target is pushed up to 15 feet away from you and has the {ref:condition/prone} condition."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "protection-from-evil-and-good",
   "name": "Protection from Evil and Good",
@@ -49,17 +51,13 @@
     },
     "effect": "Until the spell ends, one willing creature you touch is protected against creatures that are Aberrations, Celestials, Elementals, Fey, Fiends, or Undead. The protection grants several benefits. Creatures of those types have {ref:glossary/disadvantage} on attack rolls against the target. The target also can't be possessed by or gain the {ref:condition/charmed} or {ref:condition/frightened} conditions from them. If the target is already possessed, {ref:condition/charmed}, or {ref:condition/frightened} by such a creature, the target has {ref:glossary/advantage} on any new saving throw against the relevant effect."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

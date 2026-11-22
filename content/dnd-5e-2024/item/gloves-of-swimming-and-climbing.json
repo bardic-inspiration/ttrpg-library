@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "gloves-of-swimming-and-climbing",
   "name": "Gloves of Swimming and Climbing",
@@ -12,17 +14,13 @@
     },
     "effect": "While wearing these gloves, you have a {ref:glossary/climb-speed} and a {ref:glossary/swim-speed} equal to your {ref:glossary/speed}, and you gain a +5 bonus to Strength (Athletics) checks made to climb or swim."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

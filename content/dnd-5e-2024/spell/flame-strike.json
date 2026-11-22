@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "flame-strike",
   "name": "Flame Strike",
@@ -35,17 +37,13 @@
     "effect": "A vertical column of brilliant fire roars down from above. Each creature in a 10-foot-radius, 40-foot-high {ref:glossary/cylinder} centered on a point within range makes a Dexterity saving throw, taking 5d6 Fire damage and 5d6 Radiant damage on a failed save or half as much damage on a successful one.",
     "higherLevels": "The Fire damage and the Radiant damage increase by 1d6 for each spell slot level above 5."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

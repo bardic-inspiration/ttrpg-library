@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "light",
   "name": "Light",
@@ -44,14 +46,10 @@
     },
     "effect": "You touch one Large or smaller object that isn't being worn or carried by someone else. Until the spell ends, the object sheds {ref:glossary/bright-light} in a 20-foot radius and {ref:glossary/dim-light} for an additional 20 feet. The light can be colored as you like.\n\nCovering the object with something opaque blocks the light. The spell ends if you cast it again."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     },
     "updatedAt": "2026-11-09"
   }

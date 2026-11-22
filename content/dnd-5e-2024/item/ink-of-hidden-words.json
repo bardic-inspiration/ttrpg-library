@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "ink-of-hidden-words",
   "name": "Ink of Hidden Words",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "This ink fills a small bottle and can write up to 1,000 words. Text written with it is invisible to all but creatures you name, for 1 year. The ink is consumed."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

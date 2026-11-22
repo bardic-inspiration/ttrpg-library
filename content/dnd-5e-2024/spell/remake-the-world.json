@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "remake-the-world",
   "name": "Remake the World",
@@ -42,10 +44,6 @@
       "concentration": false
     },
     "effect": "You reshape terrain in a 500-foot-radius area, raising hills, moving water, and creating walls up to 100 feet high. Structures in the area collapse or shift as you choose, and creatures inside make a Dexterity saving throw to avoid falling."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

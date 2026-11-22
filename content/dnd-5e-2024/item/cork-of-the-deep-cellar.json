@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "cork-of-the-deep-cellar",
   "name": "Cork of the Deep Cellar",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "As a Magic action, you can press this cork into a container no larger than a barrel. For 1 hour, nothing can pass into or out of the container, and its contents are shielded from detection. The cork is consumed."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

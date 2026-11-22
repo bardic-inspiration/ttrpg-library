@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "storm-fleet",
   "name": "Storm Fleet",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "You summon four spectral ships at points within range. Each of your turns, each ship fires a volley at a point you choose. Creatures within 20 feet of a target point make a Dexterity saving throw, taking 6d10 Force damage on a failure or half as much on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

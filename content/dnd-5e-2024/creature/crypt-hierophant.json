@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "crypt-hierophant",
   "name": "Crypt Hierophant",
@@ -132,8 +134,6 @@
     "cr": 8
   },
   "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures",
     "theme": [
       "cultists",
       "necromancy",

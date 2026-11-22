@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "stoneskin-tonic",
   "name": "Stoneskin Tonic",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "When you drink this potion, for 1 hour you have Resistance to Bludgeoning, Piercing, and Slashing damage from nonmagical attacks."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

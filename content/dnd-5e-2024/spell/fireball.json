@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "fireball",
   "name": "Fireball",
@@ -38,14 +40,10 @@
     "effect": "A bright streak flashes from you to a point you choose within range and then blossoms with a low roar into a fiery explosion. Each creature in a 20-foot-radius {ref:glossary/sphere} centered on that point makes a Dexterity saving throw, taking 8d6 Fire damage on a failed save or half as much damage on a successful one.\n\nFlammable objects in the area that aren't being worn or carried start burning.",
     "higherLevels": "The damage increases by 1d6 for each spell slot level above 3."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     },
     "updatedAt": "2026-11-09"
   }

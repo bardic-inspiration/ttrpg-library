@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "end-of-days",
   "name": "End of Days",
@@ -36,10 +38,6 @@
       "concentration": false
     },
     "effect": "Each creature of your choice in a 60-foot-radius Sphere centered on a point within range makes a Constitution saving throw, taking 15d8 Necrotic damage on a failed save or half on a success. A creature reduced to 0 Hit Points by this damage crumbles to dust."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

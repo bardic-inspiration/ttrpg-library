@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "animated-shield",
   "name": "Animated Shield",
@@ -19,17 +21,13 @@
     },
     "effect": "While holding this {ref:equipment/shield}, you can take a {ref:glossary/bonus-action} to cause it to animate. The {ref:equipment/shield} leaps into the air and hovers in your space to protect you as if you were wielding it, leaving your hands free. The {ref:equipment/shield} remains animate for 1 minute, until you take a Bonus Action to end this effect, or until you die or have the {ref:condition/incapacitated} condition, at which point the {ref:equipment/shield} falls to the ground or into your hand if you have one free."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

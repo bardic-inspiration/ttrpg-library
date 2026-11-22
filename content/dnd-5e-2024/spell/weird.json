@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "weird",
   "name": "Weird",
@@ -36,17 +38,13 @@
     },
     "effect": "You try to create illusory terrors in others' minds. Each creature of your choice in a 30-foot-radius {ref:glossary/sphere} centered on a point within range makes a Wisdom saving throw. On a failed save, a target takes 10d10 Psychic damage and has the {ref:condition/frightened} condition for the duration. On a successful save, a target takes half as much damage only.\n\nA {ref:condition/frightened} target makes a Wisdom saving throw at the end of each of its turns. On a failed save, it takes 5d10 Psychic damage. On a successful save, the spell ends on that target."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

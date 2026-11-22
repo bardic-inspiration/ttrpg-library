@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "protection-from-energy",
   "name": "Protection from Energy",
@@ -44,17 +46,13 @@
     },
     "effect": "For the duration, the willing creature you touch has {ref:glossary/resistance} to one damage type of your choice: Acid, Cold, Fire, Lightning, or Thunder."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

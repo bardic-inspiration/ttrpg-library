@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "flash-powder",
   "name": "Flash Powder",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "As a Bonus Action, you can throw this packet at a point within 20 feet. Each creature within 10 feet of that point must succeed on a DC 13 Constitution saving throw or have the {ref:condition/blinded} condition until the end of its next turn. The packet is consumed."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

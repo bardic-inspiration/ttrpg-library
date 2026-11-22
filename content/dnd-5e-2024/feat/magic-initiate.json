@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "feat",
   "id": "magic-initiate",
   "name": "Magic Initiate",
@@ -22,17 +24,13 @@
     ],
     "repeatable": "You can take this feat more than once, but you must choose a different spell list each time."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-10",
     "source": {
       "kind": "routine",
       "issues": [
         234
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-10"
   }

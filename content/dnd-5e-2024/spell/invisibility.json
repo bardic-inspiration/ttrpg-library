@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "invisibility",
   "name": "Invisibility",
@@ -45,17 +47,13 @@
     "effect": "A creature you touch has the {ref:condition/invisible} condition until the spell ends. The spell ends early immediately after the target makes an attack roll, deals damage, or casts a spell.",
     "higherLevels": "You can target one additional creature for each spell slot level above 2."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

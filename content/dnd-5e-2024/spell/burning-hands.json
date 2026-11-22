@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "burning-hands",
   "name": "Burning Hands",
@@ -34,17 +36,13 @@
     "effect": "A thin sheet of flames shoots forth from you. Each creature in a 15-foot {ref:glossary/cone} makes a Dexterity saving throw, taking 3d6 Fire damage on a failed save or half as much damage on a successful one.\n\nFlammable objects in the Cone that aren't being worn or carried start burning.",
     "higherLevels": "The damage increases by 1d6 for each spell slot level above 1."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

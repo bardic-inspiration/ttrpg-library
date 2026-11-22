@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "emberheart-breastplate",
   "name": "Emberheart Breastplate",
@@ -19,10 +21,6 @@
       "required": true
     },
     "effect": "You have a +2 bonus to AC while wearing this armor. You have Resistance to Cold damage. When a creature within 5 feet hits you with a melee attack, it takes 1d6 Fire damage."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

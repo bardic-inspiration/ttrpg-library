@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "ruinous-beam",
   "name": "Ruinous Beam",
@@ -36,10 +38,6 @@
       "concentration": false
     },
     "effect": "A 5-foot-wide, 120-foot Line of searing light erupts from you. Each creature in the line makes a Dexterity saving throw, taking 10d8 Radiant damage on a failed save or half as much on a success. A creature in the line has its armor class reduced by 2 until the end of your next turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

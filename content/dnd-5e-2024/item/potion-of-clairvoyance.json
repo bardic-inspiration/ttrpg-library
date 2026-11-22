@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "potion-of-clairvoyance",
   "name": "Potion of Clairvoyance",
@@ -12,9 +14,6 @@
     },
     "effect": "When you drink this potion, you gain the effect of the *{ref:spell/clairvoyance}* spell (no {ref:glossary/concentration} required).\n\nAn eyeball bobs in this potion's yellowish liquid but vanishes when the potion is opened."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "updatedAt": "2026-11-09",
@@ -22,8 +21,7 @@
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     }
   }
 }

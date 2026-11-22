@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "brittle-weapon",
   "name": "Brittle Weapon",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "One weapon carried by a creature within range becomes brittle. When the weapon hits a target, it deals 1d8 less damage, and if the attack roll is a 1 the weapon is destroyed. The wielder can make a Wisdom saving throw at the end of each turn to end the effect."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

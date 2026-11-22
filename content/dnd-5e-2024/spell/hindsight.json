@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "hindsight",
   "name": "Hindsight",
@@ -38,10 +40,6 @@
       "concentration": false
     },
     "effect": "You witness the last hour of events in your area as an invisible observer, including the identities of the creatures who took part. The spell fails if the area has been protected by a spell that blocks divination."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "shield",
   "name": "Shield",
@@ -36,15 +38,11 @@
     },
     "effect": "An imperceptible barrier of magical force protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from *{ref:spell/magic-missile}*."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-03",
     "updatedAt": "2026-11-04",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     }
   }
 }

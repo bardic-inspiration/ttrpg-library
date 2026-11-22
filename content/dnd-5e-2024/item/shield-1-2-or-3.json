@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "shield-1-2-or-3",
   "name": "Shield, +1, +2, or +3",
@@ -33,17 +35,13 @@
     },
     "effect": "While holding this {ref:equipment/shield}, you have a bonus to {ref:glossary/armor-class} determined by the Shield's rarity, in addition to the Shield's normal bonus to AC."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         178
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

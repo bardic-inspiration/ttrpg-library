@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "blindclaw-crayfish",
   "name": "Blindclaw Crayfish",
@@ -66,8 +68,6 @@
     ]
   },
   "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures",
     "environment": "underdark",
     "theme": [
       "subterranean",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "dominate-person",
   "name": "Dominate Person",
@@ -40,17 +42,13 @@
     "effect": "One Humanoid you can see within range must succeed on a Wisdom saving throw or have the {ref:condition/charmed} condition for the duration. The target has {ref:glossary/advantage} on the save if you or your allies are fighting it. Whenever the target takes damage, it repeats the save, ending the spell on itself on a success.\n\nYou have a telepathic link with the {ref:condition/charmed} target while the two of you are on the same plane of existence. On your turn, you can use this link to issue commands to the target (no action required), such as \"{ref:glossary/attack} that creature,\" \"Move over there,\" or \"Fetch that object.\" The target does its best to obey on its turn. If it completes an order and doesn't receive further direction from you, it acts and moves as it likes, focusing on protecting itself.\n\nYou can command the target to take a {ref:glossary/reaction} but must take your own Reaction to do so.",
     "higherLevels": "Your {ref:glossary/concentration} can last longer with a spell slot of level 6 (up to 10 minutes), 7 (up to 1 hour), or 8+ (up to 8 hours)."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

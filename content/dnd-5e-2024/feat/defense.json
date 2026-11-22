@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "feat",
   "id": "defense",
   "name": "Defense",
@@ -9,17 +11,13 @@
     "prerequisite": "Fighting Style Feature",
     "text": "While you're wearing Light, Medium, or Heavy armor, you gain a +1 bonus to {ref:glossary/armor-class}."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-10",
     "source": {
       "kind": "routine",
       "issues": [
         234
-      ],
-      "srd": true
+      ]
     }
   }
 }

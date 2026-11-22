@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "rattle",
   "name": "Rattle",
@@ -36,10 +38,6 @@
       "concentration": false
     },
     "effect": "Make a ranged spell attack against a creature within range. On a hit, the target takes 1d8 Thunder damage and is pushed up to 5 feet straight away from you."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

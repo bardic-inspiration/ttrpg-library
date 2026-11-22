@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "figurine-of-wondrous-power",
   "name": "Figurine of Wondrous Power",
@@ -33,17 +35,13 @@
       }
     ]
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         179
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "unbreakable-oath",
   "name": "Unbreakable Oath",
@@ -38,10 +40,6 @@
       "concentration": false
     },
     "effect": "You and one willing creature within range agree to a single promise it will keep for the duration. If it knowingly breaks the promise, it takes 5d10 Psychic damage and the spell ends. A creature cannot be forced to make the promise."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

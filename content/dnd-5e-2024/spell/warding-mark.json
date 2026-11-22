@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "warding-mark",
   "name": "Warding Mark",
@@ -38,10 +40,6 @@
       "concentration": false
     },
     "effect": "Choose a creature you can see within range. The first time it hits you with an attack roll before the start of your next turn, the attack roll takes a penalty of 1d4."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

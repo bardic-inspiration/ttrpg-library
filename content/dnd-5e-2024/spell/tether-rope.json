@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "tether-rope",
   "name": "Tether Rope",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "Choose a creature within range. It makes a Strength saving throw. On a failed save, a glowing cord anchors it to a point within 5 feet of it, and it cannot move farther than 15 feet from that point. It repeats the save at the end of each of its turns, ending the effect on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

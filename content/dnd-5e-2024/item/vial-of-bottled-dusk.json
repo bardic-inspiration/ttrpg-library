@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "vial-of-bottled-dusk",
   "name": "Vial of Bottled Dusk",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "When you drink this potion, for 10 minutes you shed no light, and Dim Light within 20 feet of you becomes darkness. You have Advantage on Dexterity (Stealth) checks while in Dim Light or darkness."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

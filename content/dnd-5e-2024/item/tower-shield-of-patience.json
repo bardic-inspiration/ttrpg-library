@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "tower-shield-of-patience",
   "name": "Tower Shield of Patience",
@@ -19,10 +21,6 @@
       "required": false
     },
     "effect": "You have a +1 bonus to AC while wielding this shield (in addition to the shield's normal bonus). If you take the Dodge action, the bonus becomes +2 until the start of your next turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

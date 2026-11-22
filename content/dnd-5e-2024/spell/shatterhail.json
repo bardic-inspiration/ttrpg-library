@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "shatterhail",
   "name": "Shatterhail",
@@ -39,10 +41,6 @@
       "concentration": false
     },
     "effect": "Each creature in a 20-foot-radius Sphere centered on a point within range makes a Dexterity saving throw, taking 5d6 Piercing damage plus 3d6 Cold damage on a failed save, or half as much damage on a successful one."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

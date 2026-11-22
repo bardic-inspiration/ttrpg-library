@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "rolling-thunder",
   "name": "Rolling Thunder",
@@ -36,10 +38,6 @@
       "concentration": false
     },
     "effect": "Creatures in a 60-foot Cone make a Constitution saving throw, taking 11d8 Thunder damage and the Deafened condition for 1 minute on a failure, or half damage and no Deafened condition on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

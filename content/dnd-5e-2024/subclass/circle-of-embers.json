@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "subclass",
   "id": "circle-of-embers",
   "name": "Circle of Embers",
@@ -27,10 +29,6 @@
         "ref": "class-feature/circle-of-embers-phoenix-bloom"
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

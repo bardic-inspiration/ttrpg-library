@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "turn-aside",
   "name": "Turn Aside",
@@ -37,10 +39,6 @@
       "concentration": false
     },
     "effect": "You take this action when a creature you can see hits an ally within range with an attack. The ally takes only half the damage, and the attacker takes the other half as Force damage."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

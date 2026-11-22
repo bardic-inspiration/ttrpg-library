@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "unbroken-wall",
   "name": "Unbroken Wall",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "A wall of force 100 feet long, 20 feet high, and 2 feet thick appears at a point within range. It cannot be damaged by anything short of a *Disintegrate* spell or a power word of equivalent strength. Nothing can pass through it."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

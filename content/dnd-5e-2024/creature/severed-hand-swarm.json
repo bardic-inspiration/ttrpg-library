@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "severed-hand-swarm",
   "name": "Severed Hand Swarm",
@@ -95,8 +97,6 @@
     ]
   },
   "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures",
     "theme": [
       "zombies",
       "ghouls",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "staff-of-the-python",
   "name": "Staff of the Python",
@@ -12,9 +14,6 @@
     },
     "effect": "As a {ref:glossary/magic} action, you can throw this staff so that it lands in an unoccupied space within 10 feet of you, causing the staff to become a **{ref:creature/giant-constrictor-snake}** in that space. The snake is under your control and shares your {ref:glossary/initiative} count, taking its turn immediately after yours.\n\nOn your turn, you can mentally command the snake (no action required) if it is within 60 feet of you and you don't have the {ref:condition/incapacitated} condition. You decide what action the snake takes and where it moves during its turn, or you can issue it a general command, such as to attack your enemies or guard a location. Absent commands from you, the snake defends itself.\n\nAs a {ref:glossary/bonus-action}, you can command the snake to revert to staff form in its current space, and you can't use the staff's property again for 1 hour. If the snake is reduced to 0 {ref:glossary/hit-points}, it dies and reverts to its staff form; the staff then shatters and is destroyed. If the snake reverts to staff form before losing all its Hit Points, it regains all of them."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "updatedAt": "2026-11-09",
@@ -22,8 +21,7 @@
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     }
   }
 }

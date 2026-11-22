@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "equipment",
   "id": "astronomers-tools",
   "name": "Astronomer's Tools",
@@ -7,19 +9,23 @@
   "description": "Stargazers carry these tools in a padded case, with the star charts rolled around the tube. Each chart is inked by hand and marked with the margins of its owner's own observations.",
   "stats": {
     "group": "other-tools",
-    "cost": { "amount": 30, "unit": "gp" },
+    "cost": {
+      "amount": 30,
+      "unit": "gp"
+    },
     "weight": 3,
     "tool": {
       "ability": "wis",
       "utilize": "Read the stars for a minor omen about the coming night, such as weather or luck (DC 15), or identify a constellation or celestial event (DC 10)"
     }
   },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
-  },
   "meta": {
     "createdAt": "2026-11-22",
-    "source": { "kind": "routine", "issues": [359] }
+    "source": {
+      "kind": "routine",
+      "issues": [
+        359
+      ]
+    }
   }
 }

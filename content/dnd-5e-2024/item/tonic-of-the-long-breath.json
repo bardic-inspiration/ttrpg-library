@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "tonic-of-the-long-breath",
   "name": "Tonic of the Long Breath",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "When you drink this potion, for 1 hour you can hold your breath without limit and have Advantage on saving throws against inhaled poisons and gases."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

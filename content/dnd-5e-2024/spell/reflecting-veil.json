@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "reflecting-veil",
   "name": "Reflecting Veil",
@@ -37,10 +39,6 @@
       "concentration": true
     },
     "effect": "For the duration, the first time each round a spell that targets only you forces you to make a saving throw, you can use your Reaction to cause the caster to make the same saving throw against the spell instead. The veil ends after reflecting three spells."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

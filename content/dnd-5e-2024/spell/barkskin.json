@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "barkskin",
   "name": "Barkskin",
@@ -38,17 +40,13 @@
     },
     "effect": "You touch a willing creature. Until the spell ends, the target's skin assumes a bark-like appearance, and the target has an {ref:glossary/armor-class} of 17 if its AC is lower than that."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

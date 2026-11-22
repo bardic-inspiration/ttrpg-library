@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "stone-tongue",
   "name": "Stone Tongue",
@@ -40,10 +42,6 @@
       "concentration": false
     },
     "effect": "You touch a stone and ask it up to three questions about events within 100 feet of it in the last 24 hours. It answers in a rumbling voice, truthfully but only in short phrases."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

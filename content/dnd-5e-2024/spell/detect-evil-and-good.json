@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "detect-evil-and-good",
   "name": "Detect Evil and Good",
@@ -35,9 +37,6 @@
     },
     "effect": "For the duration, you sense the location of any Aberration, Celestial, Elemental, Fey, Fiend, or Undead within 30 feet of yourself. You also sense whether the *{ref:spell/hallow}* spell is active there and, if so, where.\n\nThe spell is blocked by 1 foot of stone, dirt, or wood; 1 inch of metal; or a thin sheet of lead."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "updatedAt": "2026-11-04",
@@ -45,8 +44,7 @@
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     }
   }
 }

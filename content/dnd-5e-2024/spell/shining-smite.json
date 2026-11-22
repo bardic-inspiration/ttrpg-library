@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "shining-smite",
   "name": "Shining Smite",
@@ -34,17 +36,13 @@
     "effect": "The target hit by the strike takes an extra 2d6 Radiant damage from the attack. Until the spell ends, the target sheds {ref:glossary/bright-light} in a 5-foot radius, attack rolls against it have {ref:glossary/advantage}, and it can't benefit from the {ref:condition/invisible} condition.",
     "higherLevels": "The damage increases by 1d6 for each spell slot level above 2."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

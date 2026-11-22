@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "pinch-of-stillness",
   "name": "Pinch of Stillness",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "As a Magic action, you can blow this powder at a creature within 10 feet. The creature must succeed on a DC 15 Wisdom saving throw or have the {ref:condition/paralyzed} condition until the end of its next turn. The powder is consumed."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

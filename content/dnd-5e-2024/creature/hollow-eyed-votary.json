@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "hollow-eyed-votary",
   "name": "Hollow-Eyed Votary",
@@ -87,8 +89,6 @@
     "cr": 2
   },
   "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures",
     "theme": [
       "cultists",
       "necromancy",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "echo-step",
   "name": "Echo Step",
@@ -37,10 +39,6 @@
       "concentration": false
     },
     "effect": "You move up to 10 feet without provoking Opportunity Attacks, and leave an illusory echo of yourself in the space you left. The echo lasts until the end of your turn, and a creature that makes an attack against it learns it is an illusion."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

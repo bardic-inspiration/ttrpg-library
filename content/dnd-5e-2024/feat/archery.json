@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "feat",
   "id": "archery",
   "name": "Archery",
@@ -9,17 +11,13 @@
     "prerequisite": "Fighting Style Feature",
     "text": "You gain a +2 bonus to attack rolls you make with Ranged weapons."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-10",
     "source": {
       "kind": "routine",
       "issues": [
         234
-      ],
-      "srd": true
+      ]
     }
   }
 }

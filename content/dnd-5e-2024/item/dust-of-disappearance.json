@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "dust-of-disappearance",
   "name": "Dust of Disappearance",
@@ -12,17 +14,13 @@
     },
     "effect": "This powder resembles fine sand. There is enough of it for one use. When you take a {ref:glossary/utilize} action to throw the dust into the air, you and each creature and object within a 10-foot {ref:glossary/emanation} originating from you have the {ref:condition/invisible} condition for 2d4 minutes. The duration is the same for all subjects, and the dust is consumed when its magic takes effect. Immediately after an affected creature makes an attack roll, deals damage, or casts a spell, the {ref:condition/invisible} condition ends for that creature."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

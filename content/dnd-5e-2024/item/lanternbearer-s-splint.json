@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "lanternbearer-s-splint",
   "name": "Lanternbearer's Splint",
@@ -19,10 +21,6 @@
       "required": false
     },
     "effect": "You have a +1 bonus to AC while wearing this armor. As a Bonus Action, you can cause it to shed Bright Light in a 10-foot radius and Dim Light for an additional 10 feet, or end the light."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

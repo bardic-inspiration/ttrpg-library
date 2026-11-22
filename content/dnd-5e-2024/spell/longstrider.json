@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "longstrider",
   "name": "Longstrider",
@@ -45,17 +47,13 @@
     "effect": "You touch a creature. The target's {ref:glossary/speed} increases by 10 feet until the spell ends.",
     "higherLevels": "You can target one additional creature for each spell slot level above 1."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "grudge",
   "name": "Grudge",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "One creature you can see within range makes a Wisdom saving throw. On a failure, it cannot willingly end its turn farther than 30 feet from a creature you choose, and it has Disadvantage on attack rolls against other targets. It repeats the save at the end of each of its turns."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "black-harvest",
   "name": "Black Harvest",
@@ -39,10 +41,6 @@
       "concentration": false
     },
     "effect": "Each creature of your choice in a 40-foot-radius Sphere centered on a point within range makes a Constitution saving throw, taking 11d8 Necrotic damage on a failed save or half on a success. You regain Hit Points equal to the total damage dealt, up to your maximum."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

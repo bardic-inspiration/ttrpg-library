@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "beacon-flare",
   "name": "Beacon Flare",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "As a Bonus Action, you can launch this flare into the air. It rises 200 feet and sheds Bright Light in a 60-foot radius for 1 hour. The flare is visible for 10 miles under open sky and is consumed."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "potion-of-animal-friendship",
   "name": "Potion of Animal Friendship",
@@ -21,17 +23,13 @@
     ],
     "effect": "When you drink this potion, you can cast the level 3 version of the *{ref:spell/animal-friendship}* spell (save DC 13).\n\nAgitating this potion's muddy liquid brings little bits into view: a fish scale, a hummingbird feather, a cat claw, or a squirrel hair."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     }
   }
 }

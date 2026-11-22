@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "mass-surrender",
   "name": "Mass Surrender",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "Up to six creatures within range make a Wisdom saving throw. On a failure, a creature drops what it holds and has the Charmed condition for the duration. It repeats the save when it takes damage."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

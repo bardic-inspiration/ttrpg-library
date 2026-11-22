@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "ashen-greatsword",
   "name": "Ashen Greatsword",
@@ -19,10 +21,6 @@
       "required": true
     },
     "effect": "You have a +2 bonus to attack and damage rolls made with this magic weapon. When you score a Critical Hit with it, ash and embers burst from the target; the target and each creature of your choice within 10 feet of it must succeed on a DC 15 Constitution saving throw or have the {ref:condition/blinded} condition until the end of your next turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

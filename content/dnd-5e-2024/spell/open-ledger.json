@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "open-ledger",
   "name": "Open Ledger",
@@ -37,10 +39,6 @@
       "concentration": false
     },
     "effect": "Hold a nonmagical object. For the duration, you learn the number of creatures that have held it in the past 24 hours and the general appearance of the most recent one."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

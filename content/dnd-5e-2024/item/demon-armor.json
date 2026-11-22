@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "demon-armor",
   "name": "Demon Armor",
@@ -26,17 +28,13 @@
     "cursed": true,
     "effect": "While wearing this armor, you gain a +1 bonus to {ref:glossary/armor-class}, and you know Abyssal. In addition, the armor's clawed gauntlets allow your Unarmed Strikes to deal 1d8 Slashing damage instead of the usual Bludgeoning damage, and you gain a +1 bonus to the attack and damage rolls of your Unarmed Strikes.\n\n***Curse.*** Once you don this cursed armor, you can't doff it unless you are targeted by a *{ref:spell/remove-curse}* spell or similar magic. While wearing the armor, you have {ref:glossary/disadvantage} on attack rolls against demons and on saving throws against their spells and special abilities."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "mass-healing-word",
   "name": "Mass Healing Word",
@@ -35,17 +37,13 @@
     "effect": "Up to six creatures of your choice that you can see within range regain {ref:glossary/hit-points} equal to 2d4 plus your spellcasting ability modifier.",
     "higherLevels": "The healing increases by 1d4 for each spell slot level above 3."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

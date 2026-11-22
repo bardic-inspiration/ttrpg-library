@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "mace-of-terror",
   "name": "Mace of Terror",
@@ -23,9 +25,6 @@
     },
     "effect": "This magic weapon has 3 charges and regains 1d3 expended charges daily at dawn. While holding the weapon, you can take a {ref:glossary/magic} action and expend 1 charge to release a wave of terror from it. Each creature of your choice within 30 feet of you must succeed on a DC 15 Wisdom saving throw or have the {ref:condition/frightened} condition for 1 minute. While {ref:condition/frightened} in this way, a creature must spend its turns trying to move as far away from you as it can, and it can't make {ref:glossary/opportunity-attacks}. For its action, it can use only the {ref:glossary/dash} action or try to escape from an effect that prevents it from moving. If it has nowhere it can move, the creature can take the {ref:glossary/dodge} action. At the end of each of its turns, a creature repeats the save, ending the effect on itself on a success."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "updatedAt": "2026-11-09",
@@ -33,8 +32,7 @@
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     }
   }
 }

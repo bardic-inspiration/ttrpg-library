@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "lingering-dread",
   "name": "Lingering Dread",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "Choose a creature within range. It makes a Wisdom saving throw, taking 3d6 Psychic damage and gaining the Frightened condition on a failed save. At the start of each of its turns it takes 1d6 Psychic damage and repeats the save, ending the effect on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",
