@@ -48,7 +48,7 @@ describe('snapshot widths (docs/styling.md#refinement-workflow)', () => {
 
 describe('snapshot labels', () => {
   it('accepts a plain folder name', () => {
-    for (const label of ['before', 'after-2', 'v1.2_tweak']) expect(isValidLabel(label)).toBe(true);
+    for (const label of ['before', 'after-2', 'tweak.2_b']) expect(isValidLabel(label)).toBe(true);
   });
 
   it('refuses anything that could leave snapshots/', () => {

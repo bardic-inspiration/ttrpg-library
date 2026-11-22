@@ -47,6 +47,13 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
 - **One issue per PR.** Out-of-scope work becomes an issue, not a `TODO`
   or a drive-by change. An issue that lists several items gets one PR, not
   one per item (see "Tracking work").
+- **No version names outside the record.** Code (comments, test names,
+  messages) never names a version or a stage of building one. Docs describe
+  what exists now, not when it arrived ("now that X is built"). When and why
+  something changed goes in [`CHANGELOG.md`](CHANGELOG.md) and
+  [`docs/decisions.md`](docs/decisions.md). A doc names a version only where
+  releases are its subject, as [Releases](docs/workflow.md#releases) does, or
+  to cite a tag or an issue by its title.
 - **Never skip, disable, or weaken a test or check to get green.**
 - **Never rewrite pushed history** (no amend, rebase, or force-push). To catch
   up with `main`, merge it in.
@@ -93,7 +100,8 @@ Every content session, routine or not, follows these:
 6. **Open a PR** from the [`dev.md`](.github/PULL_REQUEST_TEMPLATE/dev.md)
    template, titled `<area>: <summary>`. Use the area label as `<area>`
    (`ui`, `ruleset`, `generation`, `ci`), or `docs`, `spec`, `scripts`, or
-   `config` where none fits. PRs are squash-merged with the title as the
+   `config` where none fits, and `release` for a release PR
+   ([Releases](docs/workflow.md#releases)). PRs are squash-merged with the title as the
    commit message, so `git log` on `main` reads one line per change. Link
    the issue with `Closes #N`. A `ui` PR adds screenshots at 390, 820, and
    1440px ([UI screenshots](docs/workflow.md#ui-screenshots)).
@@ -130,7 +138,7 @@ sub-issue and PR only when it's too large to review alongside the others.
 ### Tracks
 
 A development track is ongoing work outside a version's build, such as
-Integrations (#315) and Images (#316), which v1.1.0 deferred. Its unbuilt design
+Integrations (#315) and Images (#316). Its unbuilt design
 is one file in [`spec/tracks/`](spec/tracks/README.md). An approved design can
 be amended at any time by a small PR to it that the owner merges. A task
 deletes the part it builds, and an open question there stops that part.
@@ -160,8 +168,8 @@ review takes up every open issue in it.
 Milestone issues, in milestone order (or, when no milestone is open, the
 "Spot Fixes" issue below), then track issues, in the order
 [`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
-sub-issues (GitHub's order) are one queue. Work beyond v1.1.0 goes under the "Later (v3)" issue (#118),
-outside the queue.
+sub-issues (GitHub's order) are one queue. Work for the next version goes under the "Later" issue
+(#118), outside the queue.
 
 - **The active queue** is the one open tracking issue labeled `queue`: the
   current milestone, or the "Spot Fixes" issue. It is tied to a version;
@@ -170,7 +178,7 @@ outside the queue.
   next milestone when one starts, and take it off an issue when it closes.
 - **No open milestone:** new dev issues go under a "<version> Spot Fixes"
   tracking issue labeled `queue`, where `<version>` is the latest release's
-  tag (`v1.0.0`), or the latest spec's version if there is no release.
+  tag (`v1.1.0`), or the latest spec's version if there is no release.
   Create it if it doesn't exist.
 - **Place** every new dev issue with `sub_issue_write`. Put it before the
   first issue that depends on it, and say why in a comment. If unsure, leave

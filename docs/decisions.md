@@ -49,7 +49,7 @@ The library as built at the `v1.0.0` tag.
 | Every SRD entry whose type takes tags carries `tags.source: "SRD"`, beside `meta.source.srd`; components, which have no tags, carry none. | The `source` tag is a conventional key that gives the gallery an SRD filter with no configuration; adding tags to components would change their schema. | this PR |
 | Public repo and Pages site on the free plan, not promoted. | P9 | #1 |
 | No backend, database, accounts, user submissions, or in-browser editing. Every change is a PR. | P1, P7 | #1 |
-| v1.0.0 is a prototype; v1.1.0 a complete product for one user; v3 and later explore multiple users and a public site. | | #95 |
+| v1.0.0 is a prototype; v1.1.0 a complete product for one user; v1.2.0 and later explore multiple users and a public site. | | #95 |
 
 ### Entry model
 
@@ -250,7 +250,10 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The `srd-import` skill is archived to `.claude/archive/srd-import/`, kept for the record outside `.claude/skills/` so it no longer loads, and its test is retired. SRD entry upkeep goes through the `generate` and `revise` skills. | The SRD import is done | #319 |
 | At close-out, `spec/v2/` is removed. Its file template, section meanings, and checks move to `spec/tracks/README.md`; `tests/stage-spec.test.ts` keeps its name and checks only `spec/tracks/`; the link check no longer recognizes `spec/v2/` citations. | The stage is finished when only its README is left, and the tracks must not depend on a removed folder | #255 |
 | Gap fill is on again. | It was off only so no entry was made in the v1.0.0 shape before v1.1.0's schemas were built, and they are | #109, #255 |
-| The release versions are named by their tags: v1 is v1.0.0 and v2 is v1.1.0, in every doc. A path that held a version, `spec/v2/`, keeps its name, since that is the folder as it was. | The release is tagged v1.1.0, and a doc should name versions as the tags do | this PR |
+| Versions are named by their tags: v1 is v1.0.0, v2 is v1.1.0, and v3 is v1.2.0. A path that held a version, `spec/v2/`, keeps its name, since that is the folder as it was, and issue and PR titles keep theirs. | Releases are tagged, and the docs should name versions as the tags do | this PR |
+| Version numbers take SemVer's form: a minor release is a planned version, a patch releases spot fixes, and a major is kept for a change the owner names. | SemVer's API rules don't fit a one-user site with no outside API; its form and ordering still do | this PR |
+| `CHANGELOG.md` follows Keep a Changelog and is written in a `release: v<version>` PR from the PRs merged since the last tag, not by each dev PR. The owner tags the merge and publishes a GitHub release with the section as notes. | Parallel sessions would conflict on an Unreleased section, and squash commits already list every change | this PR |
+| Code never names a version, and docs describe the present; when and why things changed lives in the changelog and this file. | A version named in code or a present-tense doc goes stale at the next release | this PR |
 
 ### Linking
 
@@ -270,9 +273,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The ruleset splits into rules (glossary terms, conditions, equipment) and content (everything else). | Separates the ruleset's definitions from the authorable library | #112 |
 | Ruleset primitives are ruleset data shown as one combined page per rules type, with an anchor per primitive. Ruleset extensions are authored entries shown as cards, listed on an Extensions page beside the rules pages and at the bottom of each rules page. | The line falls between the basis and the custom additions, and applies to every rules type | #112 |
 | In v1.1.0, only conditions and equipment take extensions. Glossary terms aren't authorable, and abilities, damage types, skills, creature types, and sizes stay closed lists. | Covers the simple house rules; P2 for the rest | #112 |
-| v1.1.0 extension only adds. Modifying or replacing a rule, or adding a mechanic, waits for v3's house rules system. | Additive extensions are simple; rule changes need their own design | #112 |
+| v1.1.0 extension only adds. Modifying or replacing a rule, or adding a mechanic, waits for v1.2.0's house rules system. | Additive extensions are simple; rule changes need their own design | #112 |
 | Equipment is one rules type with categories and nested sub-classifications, each group a linkable section. | Matches the SRD's grouping, and lets a base item name a group | #112 |
-| Content types are cards (spells, items, creatures, feats, backgrounds) or pages (classes, subclasses, species). A page type is assembled from components: hidden, linked sub-entries viewed only through the parent's page. | A hierarchy by complexity; v3's encounters and dungeons extend it | #112 |
+| Content types are cards (spells, items, creatures, feats, backgrounds) or pages (classes, subclasses, species). A page type is assembled from components: hidden, linked sub-entries viewed only through the parent's page. | A hierarchy by complexity; v1.2.0's encounters and dungeons extend it | #112 |
 | `magic-item` is renamed `item`, through a migration that keeps every `id` and redirects the old URLs. | Magic items are items built on equipment; P9 | #112 |
 | A ruleset primitive is one file under `rulesets/<ruleset>/rules/<type>/` holding `type`, `id`, `name`, and `stats`, validated like an entry. An extension's `stats` use the same schema, and keys and names are unique across a type's primitives, groups, and extensions. | P1, P3: one schema per type; P2 | #222 |
 | Primitives and equipment groups are in the SRD manifest, so coverage proves the rules data complete. | P2 | #222 |

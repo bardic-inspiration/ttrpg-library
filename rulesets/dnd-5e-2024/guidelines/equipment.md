@@ -64,7 +64,7 @@ priced and statted against them.
 | Adventuring gear | An effect no bigger than the SRD's thrown flasks (2d6 at most, a save of DC 8 plus your Dexterity modifier and Proficiency Bonus), cost by usefulness |
 
 - A weapon uses SRD properties and an SRD mastery property; a new property
-  is a new mechanic, which waits for v3.
+  is a new mechanic, which extensions can't add.
 - Equipment is never stronger than SRD equipment of the same cost.
 
 ## Prose style

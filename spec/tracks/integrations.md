@@ -16,8 +16,8 @@ imported: the library transcribes it from the official SRD PDF
 ([export.md](../../docs/export.md)), P5 and P9 (licensing), and P7 (every import is a
 reviewed PR).
 
-The Integrations track (#315) carries this on from v1.1.0, which built the
-framework, the Open5e translator, and the import flow.
+The Integrations track (#315) carries this on from the translator framework,
+the Open5e translator, and the import flow, which are built.
 
 ## Current
 

@@ -10,8 +10,8 @@ skill, guideline, or routine prompt cites it.
 
 | Track | Issue | Design | From |
 |---|---|---|---|
-| Integrations | #315 | [`integrations.md`](integrations.md) | v1.1.0's translators area (#116) and the rest of v1.1.0 Milestone 8 (#220) |
-| Images | #316 | [`images.md`](images.md) | v1.1.0's art area (#117) and v1.1.0 Milestone 9's art tasks (#221) |
+| Integrations | #315 | [`integrations.md`](integrations.md) | The translators area (#116) and the rest of Milestone 8 (#220) |
+| Images | #316 | [`images.md`](images.md) | The art area (#117) and Milestone 9's art tasks (#221) |
 
 ## Track files
 
@@ -54,7 +54,7 @@ other section that doesn't apply.
 - **Open questions:** what isn't settled yet. No part with an open question is
   built.
 - **Out of scope:** what the track deliberately leaves out, pointing to the
-  "Later (v3)" issue (#118) for what's earmarked there.
+  "Later" issue (#118) for what's earmarked there.
 
 The reasons behind a design go in its PR and in `docs/decisions.md`, not here,
 so nothing is lost when a built part is deleted.

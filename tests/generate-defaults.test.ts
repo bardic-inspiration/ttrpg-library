@@ -21,7 +21,7 @@ describe('config/defaults.json', () => {
     expect(file).toEqual(base());
   });
 
-  it('has gap fill on now that v2 is built (#255)', async () => {
+  it('has gap fill on', async () => {
     expect((await loadDefaults()).gapFill.enabled).toBe(true);
   });
 
