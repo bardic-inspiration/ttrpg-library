@@ -27,7 +27,7 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>`: the sort the Library opens on from the type's old gallery URL and its detail page's type link ([Redirects](#redirects)) |
-| `defaultFilters` | Filter tree nodes that start open while the type is checked; every other facet and tag stays in the tree, closed |
+| `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet and tag stays in the tree, closed |
 | `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, species, class, subclass), which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
@@ -244,7 +244,7 @@ redirect to the Library with the matching filter set
 - `/<ruleset>/<type>/` to `/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<type>`,
   so the view opens as the type's gallery did: its registry `defaultSort`
   (left out when it is `name:asc`), and its `defaultFilters` open because the
-  type is checked. A detail page's type link goes to the same view.
+  page opens with the type checked. A detail page's type link goes to the same view.
 
 **Renamed types.** The registry lists a type's earlier keys under `formerly`,
 such as `item`'s `["magic-item"]`, and from them:
@@ -275,7 +275,10 @@ phones and tablets it stacks above the results in a container closed by
 default, so results show on the first screen; a Filters button
 (`aria-expanded`) opens it. The breakpoint and the columns are tokens in
 `tokens/components.css` ([styling.md](styling.md#tokens)). Sort, the result
-count, and the set actions head the results.
+count, and the set actions head the results. The page keeps the scrollbar's
+room (`scrollbar-gutter: stable` in `layout.css`) whether or not it scrolls, so
+the menu and results don't shift sideways as filtering makes the page shorter
+or longer than the window.
 
 **Cards.** Each card shows art (only when the entry has it), name, type badge,
 `cardFields`, and summary. A boolean card field (concentration, ritual,
@@ -314,15 +317,19 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   as a number or is empty, so `1/` and `1.` on the way to `1/8` and `1.5`
   change nothing. While an input has focus its text stays as typed; when focus
   leaves, it shows the filter's value (`0.125` reads `1/8` for CR).
-- **Open nodes.** A checked type's registry `defaultFilters` start open, in
-  its node and, for a tag, in Tags. Every node holding an active filter starts
-  open, down to the value. The reader opens and closes the rest.
+- **Open nodes.** When the tree first shows, from the page's URL, a checked
+  type's registry `defaultFilters` start open, in its node and, for a tag, in
+  Tags, and every node holding an active filter starts open, down to the value
+  (`openAtStart` in `tree.ts`). From then on, only a node's own disclosure opens
+  or closes it, and only that node: checking or unchecking a type or a value,
+  and Clear filters, never opens or closes any node. A node keeps its state while
+  a node around it is closed.
 - **A shared path** stays in its own type's part of the tree. An enum value
-  shows checked, and opens its node, only under the types whose entries have
-  it, so checking Feat › Category › Origin leaves Item › Category closed; a
+  shows checked, and starts open, only under the types whose entries have it,
+  so a link checking Feat › Category › Origin leaves Item › Category closed; a
   selected value no entry has shows under each type, so it can be cleared. A
-  shared range opens only under a checked type, or under each type when none
-  is checked.
+  shared range starts open only under a checked type, or under each type when
+  none is checked.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
   filter's value never matches it. A path two types share (`stats.level` on
   spells and feats) is one filter: each type lists its own entries' values, and
