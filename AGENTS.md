@@ -163,11 +163,15 @@ Milestone issues, in milestone order (or, when no milestone is open, the
 sub-issues (GitHub's order) are one queue. Work beyond v2 goes under the "Later (v3)" issue (#118),
 outside the queue.
 
+- **The active queue** is the one open tracking issue labeled `queue`: the
+  current milestone, or the "Spot Fixes" issue. It is tied to a version;
+  tracks are side queues and never carry the label. "Place" and "Pick" start
+  at the labeled issue, and the tracks come after it. Move the label to the
+  next milestone when one starts, and take it off an issue when it closes.
 - **No open milestone:** new dev issues go under a "<version> Spot Fixes"
-  tracking issue, where `<version>` is the latest release's tag (`v1.0.0`),
-  or the latest spec's version if there is no release. Create it if it
-  doesn't exist. It is the current dev queue: it takes the milestone's place
-  in "Place" and "Pick", ahead of the tracks.
+  tracking issue labeled `queue`, where `<version>` is the latest release's
+  tag (`v1.0.0`), or the latest spec's version if there is no release.
+  Create it if it doesn't exist.
 - **Place** every new dev issue with `sub_issue_write`. Put it before the
   first issue that depends on it, and say why in a comment. If unsure, leave
   it unattached and ask the user.
