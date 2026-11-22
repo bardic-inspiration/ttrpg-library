@@ -206,6 +206,44 @@ install, validate, and build steps, then `actions/upload-pages-artifact` and
 `id-token: write`, in the concurrency group `pages` without cancelling runs in
 progress. The Pages source is GitHub Actions.
 
+### Releases
+
+A release is a tagged point on `main`, not a deploy: the site deploys on every
+merge ([Deploy](#deploy)), and content PRs never make a release by themselves.
+
+- **Version numbers** take [Semantic Versioning](https://semver.org/)'s
+  `MAJOR.MINOR.PATCH` form, read for a site with one user and no outside API:
+  - **Minor** (`v1.2.0`): a planned version, built through its milestones.
+  - **Patch** (`v1.1.1`): fixes from the Spot Fixes queue, released between
+    planned versions.
+  - **Major**: kept for a change the owner names, such as opening the site to
+    more users or breaking the published entry files for outside readers.
+- **Tags** are `v<version>`, on the release PR's squash commit on `main`, each
+  with a GitHub release whose notes are its changelog section. `package.json`'s
+  `version` is the latest release's.
+- **The changelog**, [`CHANGELOG.md`](../CHANGELOG.md), follows
+  [Keep a Changelog](https://keepachangelog.com/en/1.1.0/): newest release
+  first, one section per release under `## [<version>] - <YYYY-MM-DD>`, with
+  only the groups that apply of `Added`, `Changed`, `Deprecated`, `Removed`,
+  `Fixed`, and `Security`. Lines are written for someone using the library,
+  not copied from commits, and cite their PRs. Each version links to its
+  compare view at the bottom of the file.
+- **A release PR** is a dev PR titled `release: v<version>`. It sets
+  `version` in `package.json` and the lockfile (`npm version <version>
+  --no-git-tag-version`), writes the release's changelog section from the PRs
+  merged since the last tag (`git log <tag>..main`, one squash commit per PR),
+  and dates it the day it merges. Dev PRs don't edit the changelog as they
+  go, so parallel sessions never conflict over it. After the merge, the owner
+  tags the commit and publishes the GitHub release, and a new "Spot Fixes"
+  issue for the version takes the `queue` label if no milestone is open
+  ([`AGENTS.md`](../AGENTS.md) "Dev Queue").
+- **Version names.** Versions are named by their tags. Until v1.1.0, the
+  project called its versions v1, v2, and v3. At the v1.1.0 release they were
+  renamed to the tag names: v1 is v1.0.0, v2 is v1.1.0, and v3 is v1.2.0.
+  Issue and PR titles from before the rename keep the old names (such as
+  "spec: v2 close-out"), and the `spec/v2/` folder that
+  [`decisions.md`](decisions.md) names is the folder as it was.
+
 ### Repository settings
 
 Set by hand by the owner:

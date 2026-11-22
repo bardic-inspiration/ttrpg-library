@@ -66,7 +66,7 @@ describe('creature/air-elemental through Creature › Immunities › Conditions'
     expect(values(find(tree(elemental, home), 'Creature', 'Immunities', 'Damage')).map((v) => v.label)).toEqual(['Poison', 'Thunder']);
   });
 
-  it('filters by a condition, in the v1 URL form, and checks the value', () => {
+  it('filters by a condition, in the gallery URL form, and checks the value', () => {
     const creature = galleryConfig(reg, data);
     const query = '?f.stats.immunities.conditions=condition%2Fpoisoned';
     const state = parseQuery(query, creature);

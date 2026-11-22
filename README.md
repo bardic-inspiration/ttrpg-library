@@ -20,14 +20,15 @@ The site is static: no accounts, no servers.
 
 ## Where it's going
 
-v1 and v2 are complete. v2 brought:
+What each release added is in [`CHANGELOG.md`](CHANGELOG.md). The highlights so
+far:
 
 - **The full SRD 5.2 rules base**, as linked data that your own content can
   build on.
 - **A redesigned interface** for fast lookup and one-button export.
 - **Import and export with Open5e.**
 
-Two development tracks carry on past v2 ([`spec/tracks/`](spec/tracks/README.md)):
+Two development tracks carry on ([`spec/tracks/`](spec/tracks/README.md)):
 
 - **Integrations:** import and export for more open TTRPG formats, for VTTs
   and other sites.

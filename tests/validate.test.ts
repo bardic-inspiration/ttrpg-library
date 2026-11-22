@@ -515,7 +515,7 @@ describe('references (docs/content-model.md#references)', () => {
     const { content } = await temp([spell, await wandOfFrostLances()]);
     const messages = (await validateLibrary(content)).errors.map((e) => e.message);
     expect(messages).toContainEqual(
-      'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: "frost-lance" is in other-ruleset; refs can\'t cross rulesets in v1',
+      'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: "frost-lance" is in other-ruleset; refs can\'t cross rulesets',
     );
   });
 });

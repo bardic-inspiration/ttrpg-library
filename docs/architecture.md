@@ -94,6 +94,7 @@ tests/                                   Vitest suites and fixtures
 docs/                                    these docs (README.md is the index)
 spec/tracks/                             development tracks' specs: ongoing design not yet built
 AGENTS.md, CLAUDE.md, README.md          working guide and repo intro
+CHANGELOG.md                             what each release changed (workflow.md "Releases")
 LICENSE, LICENSE-CONTENT, ATTRIBUTION.md licensing (licensing.md)
 ```
 

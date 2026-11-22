@@ -156,7 +156,7 @@ export function objectRefs(stats: unknown, path = 'stats'): FoundRef[] {
 /**
  * Resolves every ref against the library and computes back-references. A ref
  * fails when no entry of its type has its id (IDs are unique per type,
- * docs/content-model.md#ids-and-names), or when the target is in another ruleset (not allowed in v1). Ruleset
+ * docs/content-model.md#ids-and-names), or when the target is in another ruleset (not allowed). Ruleset
  * primitives and groups are targets like entries (docs/rulesets.md#rules-data). Links are keyed by
  * `<type>/<id>`; only resolved refs become links.
  */
@@ -195,7 +195,7 @@ export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; i
       let problem: string | undefined;
       if (!target && other) problem = `no ${type} has id "${id}"; "${id}" is a ${other.type}`;
       else if (!target) problem = `no ${type} has id "${id}"`;
-      else if (target.ruleset !== entry.ruleset) problem = `"${id}" is in ${target.ruleset}; refs can't cross rulesets in v1`;
+      else if (target.ruleset !== entry.ruleset) problem = `"${id}" is in ${target.ruleset}; refs can't cross rulesets`;
       if (problem || !target) {
         issues.push({ file: entry.file, message: `${path}: ref "${ref}" does not resolve: ${problem}` });
         continue;
