@@ -245,6 +245,11 @@ If it still fails:
 
 Once it passes, keep every warning it prints; they go in the PR body.
 
+Then go through the [Self-review](../../../docs/generation.md#self-review)
+list, fixing each item that doesn't hold, and tick it in the PR body. If
+`npm test` fails on an entry that already follows the content rules, file
+the dev issue the list describes and leave that item unticked.
+
 ## Step 6: Branch, commit, and open the PR
 
 1. Branch from `main`:
@@ -269,6 +274,8 @@ Once it passes, keep every warning it prints; they go in the PR body.
      `summaryField` (CR, rarity, or spell level), and the summary.
    - **Warnings:** every validator warning, and every `adjust` or damage
      `bonus` with its reason. "None" if there are none.
+   - **Self-review:** each item ticked, or the dev issue named under an
+     unticked one.
    - **Gap fill:** the bucket label, for a gap-fill run. Delete the section
      otherwise.
    - **Skipped on import:** for an import batch, each issue's skip-list

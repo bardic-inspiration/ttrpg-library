@@ -128,7 +128,7 @@ bucket, or an SRD import stage. Its steps:
 5. Run `npm run validate`; fix and retry up to `validateRetries` times. If it
    still fails, comment the errors on the issue, remove `in-progress`, and stop
    without a PR. A gap-fill run or inline request reports the errors in the run
-   output instead.
+   output instead. Once it passes, go through the [Self-review](#self-review).
 6. Branch `gen/<issue-numbers-or-gap>-<YYYYMMDD>` (issue numbers ascending:
    `gen/12-14-20261102`, `gen/gap-spell-20261102`; an inline request uses
    `gen/inline-<type>-<YYYYMMDD>`), commit `Add <n> <type> entries`, push, and
@@ -138,11 +138,48 @@ bucket, or an SRD import stage. Its steps:
 batches), labeled `content` automatically, with a body from
 `.github/PULL_REQUEST_TEMPLATE/content.md`: a table of each entry (name, type,
 the type's summary field, summary); any validator warnings, including every
-formula adjustment with its reason; one `Closes #n` per fulfilled issue; and the
-bucket filled, for gap fill.
+formula adjustment with its reason; the ticked Self-review list; one `Closes #n`
+per fulfilled issue; and the bucket filled, for gap fill.
 
 A test checks that every repo path, npm script, and `config/defaults.json` key
 the skill names exists, and that `content.md` has the body sections above.
+
+### Self-review
+
+Content CI runs only `npm run validate` and `npm run build`
+([CI checks](workflow.md#ci-checks)), and the owner reviews what's left. To
+keep that review short, the session that opens a content PR, or pushes to
+one, first checks its batch against this list, and ticks each item in the PR
+body's "Self-review" section. The `generate` and `revise` skills run it after
+validation passes.
+
+1. **Validate and build pass.** `npm run validate` and `npm run build`.
+2. **The tests pass.** `npm test`. Content CI doesn't run it, but the tests
+   load the whole library, so a new entry can break one (#351, #360). If a
+   test fails on an entry and fixing the entry would break the content rules,
+   the bug is in code: file a dev issue, place it in the dev queue, name it
+   in the Self-review section, and leave the item unticked. The PR waits for
+   the fix.
+3. **IDs.** Each new ID is its name's slug, apostrophes dropped, and unique
+   in its type ([IDs and names](content-model.md#ids-and-names)).
+4. **Links.** Every library entry or rule an entry mentions or uses is a ref,
+   including a creature's spells and a spell's classes. Text stays only where
+   the library has no such entry ([References](content-model.md#references)).
+5. **Inputs only.** No value the ruleset derives is written, derived numbers
+   in prose are tokens, and each `adjust` is deliberate and listed under
+   Warnings ([Inputs and derived values](rulesets.md#inputs-and-derived-values),
+   [Text tokens](rulesets.md#text-tokens)).
+6. **Warnings.** Every validator warning is under Warnings, with its reason.
+7. **Names and text.** A custom entry reuses no SRD entry's exact name and no
+   SRD proper noun, and no text field holds a blocklisted term
+   ([SRD and custom entries](content-model.md#srd-and-custom-entries),
+   [Blocklist](licensing.md#blocklist)). An SRD entry matches the SRD PDF.
+8. **Scope.** The PR changes only the batch's files under `content/` (and
+   `ATTRIBUTION.md` for an import), and the Entries table lists every new or
+   revised entry, dependencies included, matching the count in the title.
+
+A test checks that the content PR template has the Self-review section with
+one item per entry above, and that both skills cite this section.
 
 ### Revisions
 
@@ -162,7 +199,7 @@ on a routine PR and `revise` issues.
   is pending if no reply with that marker follows it in its thread (inline) or
   after it (general).
 - **Action.** Edit only the affected files, set `meta.updatedAt`, re-validate,
-  push one commit per round (`Revise <ids>: <short reason>`), reply to each
+  go through the [Self-review](#self-review), push one commit per round (`Revise <ids>: <short reason>`), reply to each
   handled comment with what changed, and resolve the inline threads it
   addressed.
 - **SRD entries.** A revision of an SRD entry only brings it closer to the SRD.

@@ -37,6 +37,16 @@ describe('.github/PULL_REQUEST_TEMPLATE/content.md', () => {
     expect(template).toMatch(/^Closes #/m);
   });
 
+  it('has one Self-review item per item of docs/generation.md#self-review, and both skills cite it', () => {
+    const doc = read('docs/generation.md');
+    const section = /^### Self-review\n([\s\S]*?)\n### /m.exec(doc)?.[1] ?? '';
+    const items = section.match(/^\d+\. \*\*/gm) ?? [];
+    expect(items.length).toBeGreaterThan(0);
+    const review = /^## Self-review\n([\s\S]*?)\n## /m.exec(template)?.[1] ?? '';
+    expect(review.match(/^- \[ \] /gm)?.length).toBe(items.length);
+    for (const skill of [SKILL, '.claude/skills/revise/SKILL.md']) expect(read(skill)).toContain('docs/generation.md#self-review');
+  });
+
   it('runs import batches through the import script (docs/generation.md#imports)', () => {
     const skill = read(SKILL);
     expect(skill).toContain('`npm run import -- --issue <n>');

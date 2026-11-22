@@ -254,6 +254,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Version numbers take SemVer's form: a minor release is a planned version, a patch releases spot fixes, and a major is kept for a change the owner names. | SemVer's API rules don't fit a one-user site with no outside API; its form and ordering still do | this PR |
 | `CHANGELOG.md` follows Keep a Changelog and is written in a `release: v<version>` PR from the PRs merged since the last tag, not by each dev PR. The owner tags the merge and publishes a GitHub release with the section as notes. | Parallel sessions would conflict on an Unreleased section, and squash commits already list every change | this PR |
 | Code never names a version, and docs describe the present; when and why things changed lives in the changelog and this file. | A version named in code or a present-tense doc goes stale at the next release | this PR |
+| A content session runs a self-review list before opening or pushing to a content PR, `npm test` included, and ticks it in the PR body. A test that fails on a rule-following entry becomes a dev issue the PR waits for. Content CI stays validate and build. | Content PRs broke library-wide tests twice (#351, #360) and the owner's review caught what a checklist would | this PR |
+| Open5e export reports equipment outside a weapon, armor, or Adventuring Gear (a tool, a mount, a vehicle) as a whole entry that doesn't import back, since import can't read its group from Open5e's category. Import is unchanged. | The round trip reports every difference, and the first custom tool (#360) came back as nothing | this PR |
 
 ### Linking
 
