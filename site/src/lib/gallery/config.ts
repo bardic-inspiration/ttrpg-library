@@ -7,7 +7,7 @@ import { typeAliases } from '../redirects.ts';
 
 export type { Facet, LibraryRecord, Registry };
 
-/** A filterable path: a registry facet, the `type` filter, or a `tags.<key>`. */
+/** A filterable path: a registry facet, the `ruleset`, `source`, `author`, or `type` filter, or a `tags.<key>`. */
 export interface FilterDef {
   path: string;
   label: string;
@@ -43,9 +43,11 @@ export interface FacetData {
   names: Record<string, string>;
   /** `<ruleset>/<type>` → its groups, in page order with unions last among their siblings. */
   groups: Record<string, GroupInfo[]>;
+  /** Ruleset id → its publisher, the name an author of `"publisher"` reads as (docs/content-model.md#source-and-author). */
+  publishers: Record<string, string>;
 }
 
-export const NO_FACET_DATA: FacetData = { names: {}, groups: {} };
+export const NO_FACET_DATA: FacetData = { names: {}, groups: {}, publishers: {} };
 
 export interface SortKey {
   path: string;
@@ -53,8 +55,10 @@ export interface SortKey {
 }
 
 export interface GalleryConfig {
-  /** The `ruleset` and `type` filters, then every facet of every type, in registry order. */
+  /** The `ruleset`, `source`, `author`, and `type` filters, then every facet of every type, in registry order. */
   filters: FilterDef[];
+  /** Ruleset id → its publisher (FacetData). */
+  publishers: Record<string, string>;
   defaultSort: SortKey;
   /** Per type, keyed `<ruleset>/<type>`: its label, card fields, and facets in registry order. */
   types: Map<string, TypeInfo>;
@@ -77,6 +81,8 @@ export const NAME = 'name';
 export const CREATED = 'createdAt';
 export const TYPE = 'type';
 export const RULESET = 'ruleset';
+export const SOURCE = 'source';
+export const AUTHOR = 'author';
 
 /** The Library sorts by name until the reader picks a sort (docs/site.md#gallery "Sort"). */
 export const LIBRARY_SORT: SortKey = { path: NAME, dir: 'asc' };
@@ -131,6 +137,8 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
 
   const aliases = typeAliases(registry);
   const rulesetFilter: FilterDef = { path: RULESET, label: 'Ruleset', kind: 'enum', order: Object.keys(rulesetLabels), labels: rulesetLabels };
+  const sourceFilter: FilterDef = { path: SOURCE, label: 'Source', kind: 'enum' };
+  const authorFilter: FilterDef = { path: AUTHOR, label: 'Author', kind: 'enum' };
   const typeFilter: FilterDef = {
     path: TYPE,
     label: 'Type',
@@ -139,7 +147,12 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
     labels: typeLabels,
     ...(Object.keys(aliases).length > 0 && { aliases }),
   };
-  return { filters: [rulesetFilter, typeFilter, ...filters.values()], defaultSort: LIBRARY_SORT, types };
+  return {
+    filters: [rulesetFilter, sourceFilter, authorFilter, typeFilter, ...filters.values()],
+    defaultSort: LIBRARY_SORT,
+    types,
+    publishers: data.publishers,
+  };
 }
 
 const TAG_KEY = /^[a-z][a-z0-9-]*$/;
@@ -150,7 +163,7 @@ export const tagKey = (path: string): string | undefined => {
   return key !== undefined && TAG_KEY.test(key) ? key : undefined;
 };
 
-/** The definition of a filter path: a known facet, `ruleset`, `type`, or any tag key. */
+/** The definition of a filter path: a known facet, `ruleset`, `source`, `author`, `type`, or any tag key. */
 export function filterDef(config: GalleryConfig, path: string): FilterDef | undefined {
   const known = config.filters.find((f) => f.path === path);
   if (known) return known;
@@ -163,6 +176,6 @@ export function sortChoices(config: GalleryConfig): { path: string; label: strin
   return [
     { path: NAME, label: 'Name' },
     { path: CREATED, label: 'Date added' },
-    ...config.filters.filter((f) => f.path !== TYPE && f.path !== RULESET).map((f) => ({ path: f.path, label: f.label })),
+    ...config.filters.filter((f) => ![TYPE, RULESET, SOURCE, AUTHOR].includes(f.path)).map((f) => ({ path: f.path, label: f.label })),
   ];
 }

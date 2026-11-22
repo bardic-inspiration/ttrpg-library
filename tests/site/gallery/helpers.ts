@@ -17,6 +17,8 @@ export const registry = (): Promise<Registry> => loadRegistry();
 export function record(overrides: Partial<LibraryRecord> & { id: string }): LibraryRecord {
   return {
     ruleset: 'dnd-5e-2024',
+    source: null,
+    author: 'bardic-inspiration',
     type: 'creature',
     name: overrides.id,
     summary: 'A filler summary for tests.',

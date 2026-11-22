@@ -1,6 +1,6 @@
 // Gallery URL state (docs/site.md#gallery "URL state").
 import { beforeAll, describe, expect, it } from 'vitest';
-import { galleryConfig, type GalleryConfig } from '../../../site/src/lib/gallery/config.ts';
+import { galleryConfig, sortChoices, type GalleryConfig } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery, toQuery } from '../../../site/src/lib/gallery/state.ts';
 import { registry } from './helpers.ts';
 
@@ -16,10 +16,13 @@ describe('defaults', () => {
     expect(creature.defaultFilters).toEqual(['stats.cr', 'stats.creatureType', 'tags.theme']);
   });
 
-  it('the Library sorts by name, with a ruleset and a type filter first', () => {
+  it('the Library sorts by name, with the ruleset, source, author, and type filters first', () => {
     expect(library.defaultSort).toEqual({ path: 'name', dir: 'asc' });
     expect(library.filters[0]).toMatchObject({ path: 'ruleset', labels: { 'dnd-5e-2024': 'D&D 5e (SRD 5.2)' } });
-    expect(library.filters[1]).toMatchObject({ path: 'type', labels: { creature: 'Creature', spell: 'Spell' } });
+    expect(library.filters[1]).toMatchObject({ path: 'source', label: 'Source', kind: 'enum' });
+    expect(library.filters[2]).toMatchObject({ path: 'author', label: 'Author', kind: 'enum' });
+    expect(library.filters[3]).toMatchObject({ path: 'type', labels: { creature: 'Creature', spell: 'Spell' } });
+    expect(sortChoices(library).map((c) => c.path)).not.toEqual(expect.arrayContaining(['ruleset', 'source', 'author', 'type']));
   });
 });
 

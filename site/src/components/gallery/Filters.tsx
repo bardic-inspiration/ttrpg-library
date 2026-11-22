@@ -109,7 +109,7 @@ function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
   const open = shared.isOpen(node.id);
   const panel = `${idFor(node.id)}-panel`;
   if (node.kind === 'type') {
-    const selected = shared.filters.get('type');
+    const selected = shared.filters.get(node.path);
     const values = selected?.kind === 'enum' ? selected.values : [];
     const key = node.value.key;
     return (
@@ -119,7 +119,7 @@ function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
             type="checkbox"
             id={idFor(node.id)}
             checked={node.value.selected}
-            onChange={() => shared.onEnum('type', values.includes(key) ? values.filter((v) => v !== key) : [...values, key])}
+            onChange={() => shared.onEnum(node.path, values.includes(key) ? values.filter((v) => v !== key) : [...values, key])}
           />
           <label for={idFor(node.id)}>
             {node.value.label} <Count n={node.value.count} />

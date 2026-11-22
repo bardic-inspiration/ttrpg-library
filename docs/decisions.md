@@ -509,3 +509,10 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A component takes its parent's `source` and `author`; an import's `source` is the work's title and its `author` the work's author, matching its license block. | A component is part of its parent; an imported work is its own source | #366 |
 | Custom entries default to `author: "bardic-inspiration"` and no `source` (`config/defaults.json`). | The library's own homebrew; a collection is named per request | #366 |
 | The Open5e export skips `source` and `author`, which have no Open5e field. | Never guess a mapping | #366 |
+
+### Library filters
+
+| Decision | Why | Source |
+|---|---|---|
+| The Ruleset node is always first in the filter tree. Each ruleset in it is a checkbox, like a type, holding its Source and Author filters over its own entries; neither shows under Tags. | Source and author belong to the ruleset; one ruleset still shows where entries come from | #367 |
+| An author of `"publisher"` reads as the ruleset's publisher in the tree, per ruleset. Source and author aren't sort choices, and `library.json` records carry both. | The stored sentinel means nothing to a reader; sorts stay facets | #367 |
