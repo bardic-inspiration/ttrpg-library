@@ -75,6 +75,16 @@ describe('validateLibrary', () => {
     // An entry's own file stays under the content root, where the build copies it from.
     expect(result.files).toEqual(['dnd-5e-2024/creature/cinder-hound.json']);
   });
+
+  it('rejects a creature spell written as text when the library has that spell, but not one it lacks', async () => {
+    const hound = await cinderHound();
+    hound.stats.spellcasting = { ability: 'cha', atWill: ['Frost Lance', 'Light'], perDay: { '1': ['Frost Lance'] } };
+    const { content } = await temp([hound, await frostLance()]);
+    expect((await validateLibrary(content)).errors.map((e) => `${e.file}: ${e.message}`)).toEqual([
+      'content/dnd-5e-2024/creature/cinder-hound.json: stats.spellcasting.atWill[0]: "Frost Lance" is spell/frost-lance in the library; write it as a ref',
+      'content/dnd-5e-2024/creature/cinder-hound.json: stats.spellcasting.perDay.1[0]: "Frost Lance" is spell/frost-lance in the library; write it as a ref',
+    ]);
+  });
 });
 
 /**

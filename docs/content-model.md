@@ -189,7 +189,9 @@ error, as is a malformed one such as `{ref:zombie}`.
 - A `RefOrText` field takes a ref or a plain string. A plain string names SRD
   content not in the library ("Fireball", or "Lightning Bolt (level 5
   version)"). Once the entry is in the library, new entries ref it. Text
-  follows the same rule.
+  follows the same rule. A ruleset may check it: `dnd-5e-2024` rejects a
+  creature spell written as text that names a library spell
+  ([Consistency checks](rulesets.md#consistency-checks)).
 - Every ref must resolve to an entry of its type, in the same ruleset, or to
   a ruleset primitive or group of its type ([Rules data](rulesets.md#rules-data)),
   which renders as its name linked to its anchor on its rules page. An entry

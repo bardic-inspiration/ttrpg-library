@@ -239,11 +239,13 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     const found = targets.get(key);
     return found && found.stats !== undefined ? { type: found.type, stats: found.stats } : undefined;
   };
+  const byName = new Map(heads.map((h) => [`${h.ruleset}/${h.type}/${h.name}`, `${h.type}/${h.id}`]));
   for (const { file, entry } of [...entries, ...components]) {
     const checkLinks = rulesets.get(entry.ruleset)?.module.checkLinks;
     if (!checkLinks) continue;
     const srd = (entry.meta as { source?: { srd?: true } } | undefined)?.source?.srd === true;
-    for (const issue of checkLinks(entry.type, entry.stats, target)) {
+    const named = (type: string, name: string) => byName.get(`${entry.ruleset}/${type}/${name}`);
+    for (const issue of checkLinks(entry.type, entry.stats, target, named)) {
       if (srd && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file: repoPath(file), message: `${issue.path}: ${issue.message}` });
     }

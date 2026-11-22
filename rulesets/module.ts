@@ -27,6 +27,9 @@ export interface RulesetDefinition {
 /** A resolved ref target's type and stats, or undefined for one whose stats failed their schema. */
 export type LinkTarget = (key: string) => { type: string; stats: unknown } | undefined;
 
+/** The key (`<type>/<id>`) of the entry or component of `type` with exactly this name in the same ruleset, if any. */
+export type NameLookup = (type: string, name: string) => string | undefined;
+
 /** An entry or component of the library, for values derived from other entries. */
 export interface LinkedEntry {
   type: string;
@@ -58,7 +61,7 @@ export interface RulesetModule {
    * background's feat being an origin feat. They run after every ref resolves; `target` gives a
    * resolved target's type and stats, or undefined for one whose stats failed their schema. Optional.
    */
-  checkLinks?(type: string, stats: unknown, target: LinkTarget): Issue[];
+  checkLinks?(type: string, stats: unknown, target: LinkTarget, named: NameLookup): Issue[];
   /**
    * Derived values that read other entries, such as a class's spell list from the spells that name
    * it. `key` is the entry's `<type>/<id>`, and `entries` every entry and component of its ruleset.
