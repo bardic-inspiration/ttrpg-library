@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "fogveil-studded-leather",
   "name": "Fogveil Studded Leather",
@@ -26,10 +28,6 @@
       }
     ],
     "effect": "You have a +2 bonus to AC while wearing this armor. As a Magic action, you can cast *Fog Cloud* from it, centered on yourself. Once you use this property, you can't use it again until the next dawn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

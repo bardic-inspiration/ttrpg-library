@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "revivify",
   "name": "Revivify",
@@ -44,15 +46,11 @@
     },
     "effect": "You touch a creature that has died within the last minute. That creature revives with 1 Hit Point. This spell can't revive a creature that has died of old age, nor does it restore any missing body parts."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-03",
     "updatedAt": "2026-11-04",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     }
   }
 }

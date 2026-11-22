@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "aegis-of-the-unbroken-gate",
   "name": "Aegis of the Unbroken Gate",
@@ -26,10 +28,6 @@
       }
     ],
     "effect": "You have a +3 bonus to AC while wielding this shield (in addition to the shield's normal bonus). You have Advantage on saving throws against spells. As a Reaction when you are the target of a spell of 5th level or lower, you can cast *Counterspell* at 3rd level from it. Once you use this property, you can't use it again until the next dawn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

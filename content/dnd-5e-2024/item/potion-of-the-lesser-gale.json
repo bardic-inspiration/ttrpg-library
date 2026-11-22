@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "potion-of-the-lesser-gale",
   "name": "Potion of the Lesser Gale",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "When you drink this potion, for 1 minute you have a Fly Speed of 30 feet and can hover."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

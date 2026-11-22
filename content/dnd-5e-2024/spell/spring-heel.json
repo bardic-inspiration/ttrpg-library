@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "spring-heel",
   "name": "Spring Heel",
@@ -37,10 +39,6 @@
       "concentration": false
     },
     "effect": "A willing creature you touch gains the ability to leap. Once on each of its turns, it can move up to 20 feet by leaping without using its movement, ignoring Difficult Terrain along the way."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "pauldrons-of-the-peerless",
   "name": "Pauldrons of the Peerless",
@@ -12,10 +14,6 @@
       "required": true
     },
     "effect": "While you wear these pauldrons, your Strength score is 21, unless it is already higher. Your carrying capacity and the weight you can push, drag, or lift are doubled."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

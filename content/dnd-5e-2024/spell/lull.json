@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "lull",
   "name": "Lull",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "Choose up to three creatures within range. Each makes a Wisdom saving throw. On a failed save, a target cannot take Reactions for the duration. A target repeats the save whenever it takes damage, ending the effect on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

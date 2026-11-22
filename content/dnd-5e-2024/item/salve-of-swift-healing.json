@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "salve-of-swift-healing",
   "name": "Salve of Swift Healing",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "You can apply this salve as a Bonus Action to yourself or a creature within 5 feet. The target regains 4d4 + 4 hit points and ends the {ref:condition/poisoned} condition on itself."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "sapping-mist",
   "name": "Sapping Mist",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "A 20-foot-radius Sphere of mist spreads from a point within range. A creature in it makes a Constitution saving throw at the start of its turn, taking 4d6 Necrotic damage and gaining a level of Exhaustion on a failure, or half damage and no Exhaustion on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

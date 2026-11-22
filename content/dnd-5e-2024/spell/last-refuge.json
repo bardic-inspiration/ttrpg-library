@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "last-refuge",
   "name": "Last Refuge",
@@ -42,10 +44,6 @@
       "concentration": true
     },
     "effect": "A 100-foot-radius Sphere around you becomes a sanctuary. Hostile creatures and projectiles cannot enter, and creatures in the area are immune to damage from outside it."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

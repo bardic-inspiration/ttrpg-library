@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "winged-boots",
   "name": "Winged Boots",
@@ -16,17 +18,13 @@
     },
     "effect": "These boots have 4 charges and regain 1d4 expended charges daily at dawn. While wearing the boots, you can take a {ref:glossary/magic} action to expend 1 charge, gaining a {ref:glossary/fly-speed} of 30 feet for 1 hour. If you are flying when the duration expires, you descend at a rate of 30 feet per round until you land."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

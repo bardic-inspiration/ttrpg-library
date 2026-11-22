@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "heal",
   "name": "Heal",
@@ -35,17 +37,13 @@
     "effect": "Choose a creature that you can see within range. Positive energy washes through the target, restoring 70 {ref:glossary/hit-points}. This spell also ends the {ref:condition/blinded}, {ref:condition/deafened}, and {ref:condition/poisoned} conditions on the target.",
     "higherLevels": "The healing increases by 10 for each spell slot level above 6."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

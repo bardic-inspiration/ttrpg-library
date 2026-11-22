@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "draught-of-bright-eyes",
   "name": "Draught of Bright Eyes",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "When you drink this potion, for 1 hour you have Darkvision with a range of 60 feet."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

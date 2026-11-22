@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "expeditious-retreat",
   "name": "Expeditious Retreat",
@@ -38,17 +40,13 @@
     },
     "effect": "You take the {ref:glossary/dash} action, and until the spell ends, you can take that action again as a {ref:glossary/bonus-action}."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "paper-kingdom",
   "name": "Paper Kingdom",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "You create a vast illusory landscape within a 1-mile-radius area. A creature inside makes an Intelligence saving throw to realize it is illusory. The illusion cannot deal damage."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

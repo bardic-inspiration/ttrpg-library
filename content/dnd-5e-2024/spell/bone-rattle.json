@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "bone-rattle",
   "name": "Bone Rattle",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "One creature you can see within range makes a Constitution saving throw. On a failed save, it takes 2d6 Necrotic damage and has Disadvantage on its next attack roll before the end of your next turn. On a success, it takes half as much damage and suffers no other effect."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

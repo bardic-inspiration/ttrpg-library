@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "hourglass-of-held-breath",
   "name": "Hourglass of Held Breath",
@@ -19,10 +21,6 @@
       }
     ],
     "effect": "As a Magic action, you can turn the hourglass over to cast *Time Stop* from it. Once you use this property, you can't use it again until the next dawn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

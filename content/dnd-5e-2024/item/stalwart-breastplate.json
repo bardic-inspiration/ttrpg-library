@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "stalwart-breastplate",
   "name": "Stalwart Breastplate",
@@ -19,10 +21,6 @@
       "required": false
     },
     "effect": "You have a +1 bonus to AC while wearing this armor. You have Advantage on saving throws against effects that would move you against your will or give you the {ref:condition/prone} condition."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

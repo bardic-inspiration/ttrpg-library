@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "pallbearer-giant",
   "name": "Pallbearer Giant",
@@ -102,8 +104,6 @@
     ]
   },
   "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures",
     "theme": [
       "zombies",
       "ghouls",

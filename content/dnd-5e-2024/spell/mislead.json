@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "mislead",
   "name": "Mislead",
@@ -38,17 +40,13 @@
     },
     "effect": "You gain the {ref:condition/invisible} condition at the same time that an illusory double of you appears where you are standing. The double lasts for the duration, but the invisibility ends immediately after you make an attack roll, deal damage, or cast a spell.\n\nAs a {ref:glossary/magic} action, you can move the illusory double up to twice your {ref:glossary/speed} and make it gesture, speak, and behave in whatever way you choose. It is intangible and invulnerable.\n\nYou can see through its eyes and hear through its ears as if you were located where it is."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

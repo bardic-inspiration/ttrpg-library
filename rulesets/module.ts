@@ -14,6 +14,8 @@ export interface Issue {
 
 export interface RulesetDefinition {
   id: string;
+  /** Who publishes the ruleset; an entry whose `author` is `"publisher"` is theirs (docs/rulesets.md#the-ruleset-module). */
+  publisher: string;
   types: string[];
   /** Rules types, whose primitives are kept in rules/ (docs/rulesets.md#rules-data). Omitted for none. */
   rules?: { type: string; extensions: boolean }[];
@@ -36,12 +38,18 @@ export interface LinkedEntry {
   id: string;
   name: string;
   stats: unknown;
-  /** Its provenance; `source.srd` marks an SRD entry (docs/content-model.md#srd-and-custom-entries). */
-  meta?: { source?: unknown };
+  /** Who wrote it; `"publisher"` marks official content (docs/content-model.md#source-and-author). */
+  author?: string;
 }
 
-/** Whether a linked entry is an SRD entry. */
-export const isSrdEntry = (entry: Pick<LinkedEntry, 'meta'>): boolean => (entry.meta?.source as { srd?: boolean } | undefined)?.srd === true;
+/** The `author` that names the ruleset's publisher (docs/content-model.md#source-and-author). */
+export const PUBLISHER = 'publisher';
+
+/**
+ * Whether an entry is official content: written by its ruleset's publisher, as opposed to homebrew
+ * (docs/content-model.md#source-and-author). The one place official and homebrew are told apart.
+ */
+export const isOfficial = (entry: object): boolean => (entry as { author?: unknown }).author === PUBLISHER;
 
 /** How a detail page labels a reference, from each end: "Casts: Frost Lance", "Cast by: Wand of Frost Lances". */
 export interface RefLabels {
@@ -58,9 +66,9 @@ export interface RulesetModule {
   derive(type: string, stats: unknown, rules?: RulesData): Record<string, unknown>;
   /**
    * Consistency checks for one entry's or primitive's schema-valid `stats` (docs/rulesets.md#consistency-checks),
-   * with the ruleset's rules data and whether the entry is an SRD entry.
+   * with the ruleset's rules data and whether the entry is official content.
    */
-  check(type: string, stats: unknown, rules?: RulesData, context?: { srd: boolean }): Issue[];
+  check(type: string, stats: unknown, rules?: RulesData, context?: { official: boolean }): Issue[];
   /**
    * Checks that read what an entry's refs point to (docs/rulesets.md#consistency-checks), such as a
    * background's feat being an origin feat. They run after every ref resolves; `target` gives a

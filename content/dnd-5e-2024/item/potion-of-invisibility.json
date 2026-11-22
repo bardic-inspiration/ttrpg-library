@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "potion-of-invisibility",
   "name": "Potion of Invisibility",
@@ -12,17 +14,13 @@
     },
     "effect": "This potion's container looks empty but feels as though it holds liquid. When you drink the potion, you have the {ref:condition/invisible} condition for 1 hour. The effect ends early if you make an attack roll, deal damage, or cast a spell."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "absolute-zeal",
   "name": "Absolute Zeal",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "Up to eight creatures within range gain Immunity to the Frightened and Charmed conditions and gain Advantage on attack rolls and saving throws for the duration."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

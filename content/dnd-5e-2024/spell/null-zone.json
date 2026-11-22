@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "null-zone",
   "name": "Null Zone",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "A 40-foot-radius Sphere centered on a point within range becomes a null zone. Spells of level 6 or lower cannot be cast there, and magic items there cease to function. The area otherwise works like an *Antimagic Field*."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

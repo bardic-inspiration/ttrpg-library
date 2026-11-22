@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "throne-of-elements",
   "name": "Throne of Elements",
@@ -42,10 +44,6 @@
       "concentration": true
     },
     "effect": "A throne of fire, ice, stone, and storm rises within range, and you sit on it. Each turn you choose one elemental effect: a 60-foot-radius Sphere of fire (15d8 Fire damage), frost, earth, or storm, centered within 120 feet. Creatures in the area make a Dexterity saving throw, taking half as much damage on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

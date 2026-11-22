@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "cure-wounds",
   "name": "Cure Wounds",
@@ -43,14 +45,10 @@
     "effect": "A creature you touch regains a number of {ref:glossary/hit-points} equal to 2d8 plus your spellcasting ability modifier.",
     "higherLevels": "The healing increases by 2d8 for each spell slot level above 1."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     },
     "updatedAt": "2026-11-09"
   }

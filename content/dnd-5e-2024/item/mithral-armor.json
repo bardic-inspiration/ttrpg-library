@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "mithral-armor",
   "name": "Mithral Armor",
@@ -27,17 +29,13 @@
     },
     "effect": "Mithral is a light, flexible metal. Armor made of this substance can be worn under normal clothes. If the armor normally imposes {ref:glossary/disadvantage} on Dexterity (Stealth) checks or has a Strength requirement, the mithral version of the armor doesn't."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

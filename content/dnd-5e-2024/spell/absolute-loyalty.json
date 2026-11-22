@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "absolute-loyalty",
   "name": "Absolute Loyalty",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "One creature within range makes a Wisdom saving throw, with Advantage if you or your allies are fighting it. On a failure, it regards you as a trusted friend and obeys your commands. It repeats the save when damaged or when commanded to act against its nature."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

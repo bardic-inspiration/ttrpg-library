@@ -1,13 +1,13 @@
 ---
 // The body of a detail page (docs/site.md#detail-page): art when the entry has it, name,
 // type, and summary; the type template; the description as lore; forward refs and
-// back-refs, an SRD page's links to homebrew in a Homebrew section after them; tag chips into
+// back-refs, an official page's links to homebrew in a Homebrew section after them; tag chips into
 // the Library, filtered; and provenance. The
 // page passes its export controls (an island) in the `export` slot.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
 import { groupPageRefs, groupRefs, splitHomebrew, type RefTarget } from '../../lib/refs';
-import { isSrdEntry } from '../../../../rulesets/module';
+import { isOfficial } from '../../../../rulesets/module';
 import { provenance, tagChips } from '../../lib/detail';
 import { renderMarkdown } from '../../lib/markdown';
 import { present } from '../../lib/display';
@@ -40,7 +40,7 @@ const links = loaded.components
   : groupRefs(entry.type, loaded.refs, loaded.refBy, targets, labelFor);
 // An SRD page lists its links to homebrew in a Homebrew section of their own, after its SRD links.
 const allGroups = [...links.forward, ...links.back];
-const { srd: linkGroups, homebrew: homebrewGroups } = isSrdEntry(entry) ? splitHomebrew(allGroups) : { srd: allGroups, homebrew: [] };
+const { official: linkGroups, homebrew: homebrewGroups } = isOfficial(entry) ? splitHomebrew(allGroups) : { official: allGroups, homebrew: [] };
 const chips = tagChips(entry);
 const source = provenance(entry);
 // A slash isn't a break point, so "Antipathy/Sympathy" could set a phone page's width.

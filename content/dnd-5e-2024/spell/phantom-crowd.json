@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "phantom-crowd",
   "name": "Phantom Crowd",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "You create illusory people filling a 20-foot Cube within range. The area is Lightly Obscured, and creatures in it have Advantage on Dexterity (Stealth) checks. A creature that uses its action to examine the crowd and succeeds on an Intelligence (Investigation) check discerns the illusion."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

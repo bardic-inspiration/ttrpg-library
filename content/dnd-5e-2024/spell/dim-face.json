@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "dim-face",
   "name": "Dim Face",
@@ -37,10 +39,6 @@
       "concentration": false
     },
     "effect": "For the duration, creatures that see you must succeed on a Wisdom saving throw the first time they look at you or forget your features once they cease to see you. The spell ends early if you make an attack roll or force a saving throw."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

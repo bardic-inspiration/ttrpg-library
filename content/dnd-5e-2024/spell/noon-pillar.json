@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "noon-pillar",
   "name": "Noon Pillar",
@@ -39,10 +41,6 @@
       "concentration": false
     },
     "effect": "A 60-foot-radius, 200-foot-high Cylinder of sunlight descends on a point within range. Creatures in it make a Dexterity saving throw, taking 12d10 Radiant damage on a failed save or half as much on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

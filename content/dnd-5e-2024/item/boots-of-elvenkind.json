@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "boots-of-elvenkind",
   "name": "Boots of Elvenkind",
@@ -12,14 +14,10 @@
     },
     "effect": "While you wear these boots, your steps make no sound, regardless of the surface you are moving across. You also have {ref:glossary/advantage} on Dexterity (Stealth) checks."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     },
     "updatedAt": "2026-11-09"
   }

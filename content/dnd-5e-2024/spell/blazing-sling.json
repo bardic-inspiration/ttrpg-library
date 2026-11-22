@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "blazing-sling",
   "name": "Blazing Sling",
@@ -39,10 +41,6 @@
       "concentration": false
     },
     "effect": "Make a ranged spell attack against a creature within range. On a hit, the target takes 6d6 Fire damage, and each creature within 10 feet of it makes a Dexterity saving throw, taking 3d6 Fire damage on a failed save or half as much on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

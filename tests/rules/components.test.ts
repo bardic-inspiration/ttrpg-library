@@ -43,6 +43,14 @@ describe('validation', () => {
     ]);
   });
 
+  it('takes its parent\'s source and author (docs/content-model.md#source-and-author)', async () => {
+    const basics = await fixtureJson(BASICS);
+    expect(await errorsWith({ [BASICS]: { ...basics, source: 'Field Guide', author: 'someone-else' } })).toEqual([
+      'content/fixture-rules/chapter/handbook-basics.json: source: "Field Guide" must be its parent\'s, none (manual/handbook)',
+      'content/fixture-rules/chapter/handbook-basics.json: author: "someone-else" must be its parent\'s, "bardic-inspiration" (manual/handbook)',
+    ]);
+  });
+
   it('lets components of different parents share a name', async () => {
     const result = await validateFixture();
     expect(result.components.filter((c) => c.entry.name === 'Basics')).toHaveLength(2);
@@ -145,7 +153,7 @@ describe('the site', async () => {
       type: 'chapter',
       name: 'Pocket Guide › Basics',
       path: 'fixture-rules/manual/pocket-guide/#chapter-pocket-guide-basics',
-      srd: false,
+      official: false,
     });
     const html = renderMarkdown('See {ref:chapter/handbook-advanced}.', { names: entryNames(all, [data]), ruleset: 'fixture-rules', paths: refPaths([data], all) });
     expect(html).toContain('<a class="ref-link" href="/fixture-rules/manual/handbook/#chapter-handbook-advanced">Advanced</a>');
@@ -163,8 +171,8 @@ describe('the site', async () => {
 
   it('gives a page its links and its components’, but not the links among them', () => {
     const { forward, back } = groupPageRefs(handbook, handbook.components!, refTargets(all, [data]), labelFor);
-    expect(forward).toEqual([{ label: 'References', targets: [{ type: 'gear', name: 'Hammer', path: 'fixture-rules/rules/tools/#gear-hammer', srd: true }] }]);
-    expect(back).toEqual([{ label: 'Referenced by', targets: [{ type: 'note', name: 'Reading List', path: 'fixture-rules/note/reading-list/', srd: false }] }]);
+    expect(forward).toEqual([{ label: 'References', targets: [{ type: 'gear', name: 'Hammer', path: 'fixture-rules/rules/tools/#gear-hammer', official: true }] }]);
+    expect(back).toEqual([{ label: 'Referenced by', targets: [{ type: 'note', name: 'Reading List', path: 'fixture-rules/note/reading-list/', official: false }] }]);
   });
 
   it('names a component "Parent › Component" in links to it and back-links from it', async () => {

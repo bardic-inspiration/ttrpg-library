@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "boundless-eye",
   "name": "Boundless Eye",
@@ -40,10 +42,6 @@
       "concentration": true
     },
     "effect": "You choose a location you have visited. For the duration, you see and hear it as though standing there, and you can switch your viewpoint within it by taking a Bonus Action."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

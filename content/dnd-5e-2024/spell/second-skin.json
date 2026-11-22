@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "second-skin",
   "name": "Second Skin",
@@ -40,10 +42,6 @@
       "concentration": false
     },
     "effect": "You touch a willing creature and make it look, sound, and smell like another creature of the same size you have seen. Physical inspection reveals the illusion if the creature is touched."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "scroll-of-third-hour-rain",
   "name": "Scroll of Third-Hour Rain",
@@ -19,10 +21,6 @@
       }
     ],
     "effect": "This scroll bears the *Call Lightning* spell. Using an action to read it casts the spell once at 3rd level, using DC 15 for its saving throw, and the scroll is consumed."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

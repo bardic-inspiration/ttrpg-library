@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "stolen-shadow",
   "name": "Stolen Shadow",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "A creature within range makes a Charisma saving throw. On a failed save, its shadow detaches and acts as your ally, making one melee spell attack each turn on your behalf against creatures of your choice for 2d8 Necrotic damage."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

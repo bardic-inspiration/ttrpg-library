@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "subclass",
   "id": "college-of-echoes",
   "name": "College of Echoes",
@@ -24,10 +26,6 @@
         "ref": "class-feature/college-of-echoes-chorus-of-memory"
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

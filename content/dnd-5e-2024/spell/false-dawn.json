@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "false-dawn",
   "name": "False Dawn",
@@ -40,10 +42,6 @@
       "concentration": true
     },
     "effect": "A 60-foot-radius Sphere of daylight appears around you. Creatures sensitive to sunlight make a Constitution saving throw at the start of their turn, taking 3d8 Radiant damage on a failure or half as much on a success. The light is Bright Light."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

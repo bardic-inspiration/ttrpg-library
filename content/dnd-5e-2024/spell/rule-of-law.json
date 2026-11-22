@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "rule-of-law",
   "name": "Rule of Law",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "You declare a law that applies to all creatures within a 60-foot-radius Sphere centered on a point within range. A creature in the area that breaks the law takes 8d8 Psychic damage and has the Stunned condition until the end of its next turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

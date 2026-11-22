@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "condition",
   "id": "mired",
   "name": "Mired",

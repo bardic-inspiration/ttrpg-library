@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "mass-heal",
   "name": "Mass Heal",
@@ -31,17 +33,13 @@
     },
     "effect": "A flood of healing energy flows from you into creatures around you. You restore up to 700 {ref:glossary/hit-points}, divided as you choose among any number of creatures that you can see within range. Creatures healed by this spell also have the {ref:condition/blinded}, {ref:condition/deafened}, and {ref:condition/poisoned} conditions removed from them."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

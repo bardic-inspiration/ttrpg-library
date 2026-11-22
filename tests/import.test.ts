@@ -63,13 +63,14 @@ describe('import script (docs/generation.md#imports)', () => {
     expect(errors).toEqual([]);
   }, 120_000);
 
-  it('writes the import source, license block, and author tag, and no SRD marker', () => {
+  it('writes the work as source, its author, and the license block, with tags left as given (docs/content-model.md#source-and-author)', () => {
     const [spell] = done(runImport(request({ issue: 9, tags: { theme: 'forest' } }), library)).entries;
     expect(spell!.meta).toEqual({
       createdAt: '2026-11-17',
       source: { kind: 'import', issues: [9], license: { id: 'CC-BY-4.0', author: 'A. Author', url: 'https://example.com/hollow-grove' } },
     });
-    expect(spell!.tags).toEqual({ theme: 'forest', author: 'A. Author' });
+    expect(spell).toMatchObject({ source: 'The Hollow Grove', author: 'A. Author' });
+    expect(spell!.tags).toEqual({ theme: 'forest' });
     expect(spell!.summary.length).toBeGreaterThanOrEqual(10);
   });
 

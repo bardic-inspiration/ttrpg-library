@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "cloak-of-the-slow-tide",
   "name": "Cloak of the Slow Tide",
@@ -12,10 +14,6 @@
       "required": true
     },
     "effect": "While you wear this cloak, you have a Swim Speed equal to your Speed and can breathe underwater. As a Magic action, you can walk across the surface of liquids as if solid ground until the end of your next turn. Once you use this property, you can't use it again until the next dawn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

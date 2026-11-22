@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "grave-soil-pouch",
   "name": "Grave Soil Pouch",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "As a Magic action, you can scatter this soil on a corpse that has been dead no longer than 1 day. The creature returns to life with 1 hit point, but has the {ref:condition/charmed} condition and obeys your spoken commands for 24 hours, after which it dies again. The soil is consumed."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

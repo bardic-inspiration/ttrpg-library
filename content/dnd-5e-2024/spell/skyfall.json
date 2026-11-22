@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "skyfall",
   "name": "Skyfall",
@@ -39,10 +41,6 @@
       "concentration": false
     },
     "effect": "A massive rock falls on a 60-foot-radius Sphere centered on a point you can see within range. Each creature in the area makes a Dexterity saving throw, taking 15d10 Bludgeoning damage on a failed save or half as much on a success. The area becomes Difficult Terrain."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

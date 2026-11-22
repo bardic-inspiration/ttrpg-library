@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "roaring-tide",
   "name": "Roaring Tide",
@@ -39,10 +41,6 @@
       "concentration": false
     },
     "effect": "A wave surges across a 60-foot Line that is 15 feet wide. Creatures in it make a Strength saving throw, taking 6d8 Bludgeoning damage, being pushed 20 feet, and gaining the Prone condition on a failure, or half damage and no other effect on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

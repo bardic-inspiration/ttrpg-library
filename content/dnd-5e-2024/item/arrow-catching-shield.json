@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "arrow-catching-shield",
   "name": "Arrow-Catching Shield",
@@ -19,17 +21,13 @@
     },
     "effect": "You gain a +2 bonus to {ref:glossary/armor-class} against ranged attack rolls while you wield this {ref:equipment/shield}. This bonus is in addition to the Shield's normal bonus to AC.\n\nWhenever an attacker makes a ranged attack roll against a target within 5 feet of you, you can take a {ref:glossary/reaction} to become the target of the attack instead."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

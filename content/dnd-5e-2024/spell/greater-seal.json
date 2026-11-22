@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "greater-seal",
   "name": "Greater Seal",
@@ -42,10 +44,6 @@
       "concentration": false
     },
     "effect": "You seal a door, chest, or similar closure so it cannot be opened except by creatures you name. The seal lasts until dispelled and can only be broken by a spell of level 7 or higher."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "crown-of-borrowed-thought",
   "name": "Crown of Borrowed Thought",
@@ -31,10 +33,6 @@
       }
     ],
     "effect": "The crown has 6 charges. While you wear it, you can expend 1 charge as a Magic action to cast *Detect Thoughts* from it, or 3 charges to cast *Dominate Person* from it. The crown regains 1d6 expended charges daily at dawn. If you expend the last charge, roll 1d20; on a 1, the crown turns to silver dust."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

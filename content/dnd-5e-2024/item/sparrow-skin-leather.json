@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "sparrow-skin-leather",
   "name": "Sparrow-Skin Leather",
@@ -19,10 +21,6 @@
       "required": false
     },
     "effect": "You have a +1 bonus to AC while wearing this armor. You take no damage from falling 20 feet or less."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

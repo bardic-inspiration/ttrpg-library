@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "stiffen",
   "name": "Stiffen",
@@ -41,10 +43,6 @@
       "concentration": false
     },
     "effect": "Choose a creature within range. It makes a Constitution saving throw. On a failed save, its Speed is halved and it has Disadvantage on Dexterity checks until the end of your next turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

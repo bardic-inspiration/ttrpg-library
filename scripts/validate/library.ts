@@ -11,8 +11,8 @@ export interface EntryHead {
   id: string;
   name: string;
   image?: string;
-  /** `meta.source.srd` is true (docs/content-model.md#srd-and-custom-entries). */
-  srd?: boolean;
+  /** Official content, by its `author` (docs/content-model.md#source-and-author). */
+  official?: boolean;
   /** A component, whose name is unique within its parent rather than its type (docs/content-model.md#components). */
   component?: boolean;
 }
@@ -77,7 +77,7 @@ export function checkUniqueness(entries: EntryHead[]): FileIssue[] {
   for (let i = 0; i < entries.length; i++) {
     for (let j = i + 1; j < entries.length; j++) {
       const [a, b] = [entries[i], entries[j]];
-      if (!a || !b || a.type !== b.type || a.component || a.name.toLowerCase() === b.name.toLowerCase() || (a.srd && b.srd)) continue;
+      if (!a || !b || a.type !== b.type || a.component || a.name.toLowerCase() === b.name.toLowerCase() || (a.official && b.official)) continue;
       if (editDistance(normalizeName(a.name), normalizeName(b.name)) <= 2) {
         issues.push({ level: 'warning', file: b.file, message: `name "${b.name}" is close to "${a.name}" (${a.file})` });
       }
@@ -113,14 +113,17 @@ export interface ComponentListing {
   name: string;
   /** The types that may list it, from ruleset.json `components`. */
   parents: string[];
-  listedBy: { file: string; type: string; id: string }[];
+  listedBy: { file: string; type: string; id: string; source?: string; author: string }[];
+  source?: string;
+  author: string;
 }
 
 /**
  * Each component is listed by exactly one entry, of a type that may list it,
  * and its id starts with its parent's id and a hyphen. Within one parent, a
  * name repeats only where the later id adds a number (a level) to the earlier
- * one: "Improved Brutal Strike" at 13 and 17. Errors.
+ * one: "Improved Brutal Strike" at 13 and 17. Its `source` and `author` are its
+ * parent's (docs/content-model.md#source-and-author). Errors.
  */
 export function checkComponents(components: ComponentListing[]): FileIssue[] {
   const issues: FileIssue[] = [];
@@ -145,6 +148,12 @@ export function checkComponents(components: ComponentListing[]): FileIssue[] {
       continue;
     }
     if (!c.id.startsWith(`${parent.id}-`)) error(c.file, `id "${c.id}" must start with its parent's id, "${parent.id}-"`);
+    for (const field of ['source', 'author'] as const) {
+      if (c[field] !== parent[field]) {
+        const shown = (value: string | undefined) => (value === undefined ? 'none' : `"${value}"`);
+        error(c.file, `${field}: ${shown(c[field])} must be its parent's, ${shown(parent[field])} (${parentKey})`);
+      }
+    }
     const siblings = byParent.get(parentKey) ?? [];
     byParent.set(parentKey, [...siblings, c]);
   }

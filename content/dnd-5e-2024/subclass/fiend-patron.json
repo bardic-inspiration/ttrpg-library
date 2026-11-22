@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "subclass",
   "id": "fiend-patron",
   "name": "Fiend Patron",
@@ -28,17 +30,13 @@
       }
     ]
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-10",
     "source": {
       "kind": "routine",
       "issues": [
         234
-      ],
-      "srd": true
+      ]
     }
   }
 }

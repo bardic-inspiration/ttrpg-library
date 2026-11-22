@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "hungry-dark",
   "name": "Hungry Dark",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "A 20-foot-radius Sphere of drifting shadow appears centered on a point within range. A creature that starts its turn there makes a Constitution saving throw, taking 3d8 Necrotic damage on a failed save or half as much on a success. You regain Hit Points equal to half the total damage dealt this way each turn."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

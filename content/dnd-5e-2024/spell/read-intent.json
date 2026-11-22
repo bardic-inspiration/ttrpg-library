@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "read-intent",
   "name": "Read Intent",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "Choose a creature within range. For the duration, you know whether it intends to attack, flee, cast a spell, or take no hostile action on its next turn. A creature that succeeds on a Wisdom saving throw when you cast the spell is unaffected."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

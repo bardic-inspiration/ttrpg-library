@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "mirror-water",
   "name": "Mirror-Water",
@@ -19,10 +21,6 @@
       }
     ],
     "effect": "When you drink this potion, for 1 minute you are under the effect of a *Mirror Image* spell with no concentration required."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

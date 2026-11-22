@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "hollow-shield",
   "name": "Hollow Shield",
@@ -40,10 +42,6 @@
       "concentration": false
     },
     "effect": "A creature you touch gains 10 Temporary Hit Points. If it takes damage and has none left, it regains 5 Temporary Hit Points at the start of its next turn, once."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

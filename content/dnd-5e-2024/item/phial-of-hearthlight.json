@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "phial-of-hearthlight",
   "name": "Phial of Hearthlight",
@@ -30,10 +32,6 @@
       }
     ],
     "effect": "The phial has 7 charges. As a Magic action, you can expend 1 or more charges to cast *Cure Wounds* from it, expending 1 charge per spell level. While you hold it, you can also cast *Light* at will. The phial regains 1d6 + 1 expended charges daily at dawn. If you expend the last charge, roll 1d20; on a 1, the phial's light goes out forever."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

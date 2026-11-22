@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "steel-skin",
   "name": "Steel Skin",
@@ -40,10 +42,6 @@
       "concentration": true
     },
     "effect": "A willing creature you touch gains Resistance to Bludgeoning, Piercing, and Slashing damage from nonmagical attacks, and its AC cannot be lower than 19."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

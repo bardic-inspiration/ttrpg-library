@@ -96,9 +96,13 @@ reports the question instead.
 
 ### Defaults
 
-`config/defaults.json` holds the ruleset, count, tags, gap-fill settings, and
-the validation retry budget a run uses. Defaults apply only to fields a request
-leaves out, and request tags merge over default tags. `count` and
+`config/defaults.json` holds the ruleset, count, the `author` and optional
+`source` of custom entries, tags, gap-fill settings, and the validation retry
+budget a run uses. Defaults apply only to fields a request leaves out, and
+request tags merge over default tags. A `source:` or `author:` line in a
+request's tags is the entry's field, not a tag, and takes the place of the
+default. The default `author` can't be `"publisher"`, and neither `source` nor
+`author` is a default tag key ([Source and author](content-model.md#source-and-author)). `count` and
 `gapFill.count` are whole numbers of at least 1. A request's count is taken on
 trust, and no batch has a size limit. `scripts/generate/defaults.ts` loads and
 checks the file and applies it to a request.
@@ -121,9 +125,10 @@ bucket, or an SRD import stage. Its steps:
    values in prose, and use `adjust` only for a deliberate deviation, explained
    in the PR body. For an SRD request, transcribe the SRD entries faithfully
    instead.
-4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
-   `meta.source.issues` (or `meta.source.gapFill`), plus `meta.source.srd: true`
-   and `tags.source: "SRD"` on SRD entries that take tags. Apply request and default tags.
+4. Set `source` and `author` ([Source and author](content-model.md#source-and-author)):
+   `"SRD 5.2"` and `"publisher"` on SRD entries, and the request's on custom
+   ones. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
+   `meta.source.issues` (or `meta.source.gapFill`). Apply request and default tags.
 5. Run `npm run validate`; fix and retry up to `validateRetries` times. If it
    still fails, comment the errors on the issue, remove `in-progress`, and stop
    without a PR. A gap-fill run or inline request reports the errors in the run
@@ -296,9 +301,11 @@ every content rule applies to them.
   side ([Translators](export.md#translators)) on the file. Names in
   structured fields resolve against the library and its rules and become
   refs; names in text stay plain. It writes each entry to `content/` with
+  the work's title as `source` and its author as `author`
+  ([Source and author](content-model.md#source-and-author)),
   `meta.source.kind: import`, the issue, and `meta.source.license` (the
-  license id, author, and source URL), `tags` of `defaults.tags` plus
-  `author`, and a drafted `summary` the run rewrites. It appends the work's
+  license id, author, and source URL), `tags` of `defaults.tags`, and a
+  drafted `summary` the run rewrites. It appends the work's
   line to `ATTRIBUTION.md` ([Imported works](licensing.md#imported-works)),
   and prints the issue's skip-list section. It exits 2 with the reason when
   the issue is rejected: an `--issue` that isn't a positive integer, a

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "whistle-of-calling-home",
   "name": "Whistle of Calling Home",
@@ -12,10 +14,6 @@
       "required": false
     },
     "effect": "You can use an action to blow this whistle while standing at a spot you have been to for at least 1 hour. The spot is marked. Later, as a Magic action, you can blow the whistle again to teleport to the marked spot if it is on the same plane and within 5 miles. After the second blow, the whistle crumbles to dust."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

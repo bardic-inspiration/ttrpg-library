@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "item",
   "id": "shadowsilk-studded-coat",
   "name": "Shadowsilk Studded Coat",
@@ -26,10 +28,6 @@
       }
     ],
     "effect": "You have a +3 bonus to AC while wearing this armor. As a Bonus Action, you can step from a dim or dark space you can see to another such space within 60 feet, as if by the *Misty Step* spell. Once you use this property, you can't use it again until you finish a Short or Long Rest."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

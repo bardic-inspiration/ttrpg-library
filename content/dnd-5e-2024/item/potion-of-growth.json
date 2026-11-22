@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "potion-of-growth",
   "name": "Potion of Growth",
@@ -12,17 +14,13 @@
     },
     "effect": "When you drink this potion, you gain the \"enlarge\" effect of the *{ref:spell/enlarge-reduce}* spell for 10 minutes (no {ref:glossary/concentration} required).\n\nThe red in the potion's liquid continuously expands from a tiny bead to color the clear liquid around it and then contracts. Shaking the bottle fails to interrupt this process."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

@@ -168,6 +168,7 @@ describe('generic template (docs/site.md#templates)', () => {
   it('renders fixed keys, stats as a definition list, and tags, by presence alone', async () => {
     const entry: Entry = {
       ruleset: 'dnd-5e-2024',
+      author: 'bardic-inspiration',
       type: 'location',
       id: 'ember-gate',
       name: 'Ember Gate',

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "silence",
   "name": "Silence",
@@ -39,17 +41,13 @@
     },
     "effect": "For the duration, no sound can be created within or pass through a 20-foot-radius {ref:glossary/sphere} centered on a point you choose within range. Any creature or object entirely inside the Sphere has {ref:glossary/immunity} to Thunder damage, and creatures have the {ref:condition/deafened} condition while entirely inside it. Casting a spell that includes a Verbal component is impossible there."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

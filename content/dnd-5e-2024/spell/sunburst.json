@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "sunburst",
   "name": "Sunburst",
@@ -43,17 +45,13 @@
     },
     "effect": "Brilliant sunlight flashes in a 60-foot-radius {ref:glossary/sphere} centered on a point you choose within range. Each creature in the Sphere makes a Constitution saving throw. On a failed save, a creature takes 12d6 Radiant damage and has the {ref:condition/blinded} condition for 1 minute. On a successful save, it takes half as much damage only.\n\nA creature {ref:condition/blinded} by this spell makes another Constitution saving throw at the end of each of its turns, ending the effect on itself on a success.\n\nThis spell dispels {ref:glossary/darkness} in its area that was created by any spell."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

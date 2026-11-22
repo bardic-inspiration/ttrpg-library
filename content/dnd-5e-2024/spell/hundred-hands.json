@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "hundred-hands",
   "name": "Hundred Hands",
@@ -38,10 +40,6 @@
       "concentration": true
     },
     "effect": "Spectral hands fill a 20-foot-radius Sphere centered on a point within range. Creatures in the area make a Strength saving throw when it appears and at the start of each of their turns, taking 3d8 Force damage and being dragged up to 10 feet toward the center on a failure, or half as much damage and no movement on a success."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

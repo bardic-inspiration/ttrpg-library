@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "spare-the-dying",
   "name": "Spare the Dying",
@@ -35,17 +37,13 @@
     "effect": "Choose a creature within range that has 0 {ref:glossary/hit-points} and isn't dead. The creature becomes {ref:glossary/stable}.",
     "cantripUpgrade": "The range doubles when you reach levels 5 (30 feet), 11 (60 feet), and 17 (120 feet)."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "vampiric-touch",
   "name": "Vampiric Touch",
@@ -39,17 +41,13 @@
     "effect": "The touch of your shadow-wreathed hand can siphon life force from others to heal your wounds. Make a melee spell attack against one creature within reach. On a hit, the target takes 3d6 Necrotic damage, and you regain {ref:glossary/hit-points} equal to half the amount of Necrotic damage dealt.\n\nUntil the spell ends, you can make the attack again on each of your turns as a {ref:glossary/magic} action, targeting the same creature or a different one.",
     "higherLevels": "The damage increases by 1d6 for each spell slot level above 3."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

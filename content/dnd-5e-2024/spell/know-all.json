@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "know-all",
   "name": "Know All",
@@ -41,10 +43,6 @@
       "concentration": true
     },
     "effect": "For the duration, you can ask one question at the start of each of your turns. A source with knowledge of the entire world answers truthfully, though often cryptically."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "power-word-heal",
   "name": "Power Word Heal",
@@ -34,17 +36,13 @@
     },
     "effect": "A wave of healing energy washes over one creature you can see within range. The target regains all its {ref:glossary/hit-points}. If the creature has the {ref:condition/charmed}, {ref:condition/frightened}, {ref:condition/paralyzed}, {ref:condition/poisoned}, or {ref:condition/stunned} condition, the condition ends. If the creature has the {ref:condition/prone} condition, it can use its {ref:glossary/reaction} to stand up."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

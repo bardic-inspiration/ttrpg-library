@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "mantle-of-spell-resistance",
   "name": "Mantle of Spell Resistance",
@@ -12,17 +14,13 @@
     },
     "effect": "You have {ref:glossary/advantage} on saving throws against spells while you wear this cloak."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

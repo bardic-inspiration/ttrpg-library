@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "hold-person",
   "name": "Hold Person",
@@ -52,17 +54,13 @@
     "effect": "Choose a Humanoid that you can see within range. The target must succeed on a Wisdom saving throw or have the {ref:condition/paralyzed} condition for the duration. At the end of each of its turns, the target repeats the save, ending the spell on itself on a success.",
     "higherLevels": "You can target one additional Humanoid for each spell slot level above 2."
   },
-  "tags": {
-    "source": "SRD"
-  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {
       "kind": "routine",
       "issues": [
         133
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

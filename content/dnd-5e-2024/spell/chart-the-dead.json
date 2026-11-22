@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
   "type": "spell",
   "id": "chart-the-dead",
   "name": "Chart the Dead",
@@ -40,10 +42,6 @@
       "concentration": false
     },
     "effect": "For the duration, you sense every dead creature within 300 feet of you, including their direction and how long they have been dead."
-  },
-  "tags": {
-    "author": "bardic-inspiration",
-    "source": "Bardic's Compendium of Test Fixtures"
   },
   "meta": {
     "createdAt": "2026-11-21",
