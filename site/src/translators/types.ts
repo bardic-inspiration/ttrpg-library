@@ -7,6 +7,8 @@
 /** A library entry as a translator reads it: the envelope keys it maps. */
 export interface TranslatorEntry {
   ruleset: string;
+  source?: string;
+  author?: string;
   type: string;
   id: string;
   name: string;

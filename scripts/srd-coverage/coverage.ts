@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import { typedGroups } from '../../lib/rules.ts';
 import { validateLibrary, type ValidationError } from '../validate/index.ts';
 import { loadRuleset, PROJECT_ROOT } from '../validate/schema.ts';
+import { isOfficial } from '../../rulesets/module.ts';
 
 export const TIERS = ['complex', 'simple'] as const;
 export type Tier = (typeof TIERS)[number];
@@ -217,7 +218,7 @@ export function rulesCoverage(manifest: Manifest, rules: RuleHead[], filter: Fil
 }
 
 /**
- * Matches SRD entries (`meta.source.srd: true`) to manifest records by type and
+ * Matches SRD entries (official content, docs/content-model.md#source-and-author) to manifest records by type and
  * exact name, and groups the unmatched records by type and tier.
  */
 export function coverage(manifest: Manifest, entries: EntryHead[], filter: Filter = {}): Coverage {
@@ -309,16 +310,14 @@ export interface LibraryHeads {
   errors: ValidationError[];
 }
 
-const isSrd = (meta: unknown) => (meta as { source?: { srd?: unknown } } | undefined)?.source?.srd === true;
-
 /** Validates the library under `content` and reads what coverage matches from the result. */
 export async function loadLibraryHeads(ruleset: string, content = join(PROJECT_ROOT, 'content')): Promise<LibraryHeads> {
   const { errors, entries, components, rules } = await validateLibrary(content);
   const data = rules.find((r) => r.ruleset === ruleset);
   return {
-    entries: entries.filter(({ entry }) => entry.ruleset === ruleset).map(({ entry }) => ({ type: entry.type, name: entry.name, srd: isSrd(entry.meta) })),
+    entries: entries.filter(({ entry }) => entry.ruleset === ruleset).map(({ entry }) => ({ type: entry.type, name: entry.name, srd: isOfficial(entry) })),
     components: components
-      .filter(({ entry }) => entry.ruleset === ruleset && isSrd(entry.meta))
+      .filter(({ entry }) => entry.ruleset === ruleset && isOfficial(entry))
       .map(({ entry, parent }) => ({ type: entry.type, name: entry.name, parent })),
     rules: data
       ? [...data.primitives.map(({ type, name }) => ({ type, name })), ...typedGroups(data).map(({ type, name }) => ({ type, name, group: true as const }))]

@@ -2,13 +2,17 @@
 // ruleset module, and links its refs (docs/content-model.md#references, docs/site.md#index-build step 3). Validation
 // has already run in build:index, so entries here are known good.
 
-import { isSrdEntry, type RulesetModule } from '../../../rulesets/module.ts';
+import { isOfficial, type RulesetModule } from '../../../rulesets/module.ts';
 import type { RefTarget } from './refs.ts';
 import { entryKey, linkEntries, objectRefs, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
 import { anchorId, ruleKey, rulePaths, typedGroups, type RulesData } from '../../../lib/rules.ts';
 
 export interface Entry {
   ruleset: string;
+  /** The work it belongs to within its ruleset, if any (docs/content-model.md#source-and-author). */
+  source?: string;
+  /** Who wrote it; `"publisher"` for official content. */
+  author: string;
   type: string;
   id: string;
   name: string;
@@ -21,7 +25,7 @@ export interface Entry {
   meta: {
     createdAt: string;
     updatedAt?: string;
-    source: { kind: string; issues?: number[]; gapFill?: string; srd?: true; license?: { id: string; author: string; url: string } };
+    source: { kind: string; issues?: number[]; gapFill?: string; license?: { id: string; author: string; url: string } };
   };
 }
 
@@ -155,13 +159,13 @@ export function refTargets(all: LoadedEntry[], rules: RulesData[] = []): Map<str
   const paths = refPaths(rules);
   const names = entryNames([], rules);
   return new Map([
-    // A primitive or group is the ruleset's own rules, so SRD; an extension is an entry, below.
-    ...[...paths].map(([key, path]) => [key, { type: key.slice(0, key.indexOf('/')), name: names.get(key) ?? key, path, srd: true }] as [string, RefTarget]),
-    ...all.map(({ entry }) => [entryKey(entry), { type: entry.type, name: entry.name, path: entryPath(entry), srd: isSrdEntry(entry) }] as [string, RefTarget]),
+    // A primitive or group is the ruleset's own rules, so official; an extension is an entry, below.
+    ...[...paths].map(([key, path]) => [key, { type: key.slice(0, key.indexOf('/')), name: names.get(key) ?? key, path, official: true }] as [string, RefTarget]),
+    ...all.map(({ entry }) => [entryKey(entry), { type: entry.type, name: entry.name, path: entryPath(entry), official: isOfficial(entry) }] as [string, RefTarget]),
     // A link to a component names its parent too, "Barbarian › Rage", since many parents share component names.
     ...allComponents(all).map(
       (c) =>
-        [entryKey(c.entry), { type: c.entry.type, name: `${c.parent.name} › ${c.entry.name}`, path: componentPath(c), srd: isSrdEntry(c.entry) }] as [string, RefTarget],
+        [entryKey(c.entry), { type: c.entry.type, name: `${c.parent.name} › ${c.entry.name}`, path: componentPath(c), official: isOfficial(c.entry) }] as [string, RefTarget],
     ),
   ]);
 }

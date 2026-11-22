@@ -495,3 +495,17 @@ the SRD import to hold printed forms, following the nearest-field rule.
 
 [^style]: v1.1.0 planned a style redesign (#114, Milestone 6 #218) built from the owner's style package. It was scrapped before it was built: the site keeps v1.0.0's style, and v1.1.0 has no style area.
 | The active dev queue is the one open tracking issue labeled `queue`: the current milestone, or, with no open milestone, a "<version> Spot Fixes" issue named for the latest release's tag (the latest spec's version if there is no release), created if missing. Tracks are side queues, picked after it, and never carry the label. | Without an open milestone, new dev issues had no parent and sat unplaced; a label makes the active queue findable | #357 |
+
+## v1.1.0 Spot Fixes
+
+### Source and author
+
+| Decision | Why | Source |
+|---|---|---|
+| Each ruleset names its `publisher` in `ruleset.json` (`dnd-5e-2024`: Wizards of the Coast). Every entry has a required `author` and an optional `source`, top-level envelope fields beside `ruleset`, which stays a plain string. | Each ruleset is a published foundation with extensions; the path, refs, and URLs key on the `ruleset` string | #366 |
+| `author: "publisher"` marks official content, and every other author is homebrew. `isOfficial` in `rulesets/module.ts` is the one place they are told apart; the publisher is never written by name. | One derivation, no drift between a name and a marker | #366 |
+| `meta.source.srd` is retired in favor of `isOfficial`: the site publishes official content only where it is licensed, so official and licensed are one line. For `dnd-5e-2024` that is the SRD, with `source: "SRD 5.2"`. | The marker was specific to one ruleset | #366 |
+| `source` and `author` are no longer tags; the schema rejects them in `tags`, in content and in default tags. A request's `source:` or `author:` tag line sets the field instead. | They belong to the ruleset, not to open organization | #366 |
+| A component takes its parent's `source` and `author`; an import's `source` is the work's title and its `author` the work's author, matching its license block. | A component is part of its parent; an imported work is its own source | #366 |
+| Custom entries default to `author: "bardic-inspiration"` and no `source` (`config/defaults.json`). | The library's own homebrew; a collection is named per request | #366 |
+| The Open5e export skips `source` and `author`, which have no Open5e field. | Never guess a mapping | #366 |

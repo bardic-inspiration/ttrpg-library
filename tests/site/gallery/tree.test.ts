@@ -142,6 +142,7 @@ describe('Equipment › Weapon › Martial › Melee', () => {
 describe('a custom weapon through Equipment › Weapon › Property and Mastery', () => {
   const reefKnife: Entry = {
     ruleset: 'dnd-5e-2024',
+    author: 'bardic-inspiration',
     type: 'equipment',
     id: 'reef-knife',
     name: 'Reef Knife',

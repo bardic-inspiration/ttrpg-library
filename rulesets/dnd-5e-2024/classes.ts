@@ -2,7 +2,7 @@
 // what a class derives from its own stats and from the library, and the checks on both types and
 // their class-feature components.
 
-import { isSrdEntry, type Issue, type LinkedEntry, type LinkTarget } from '../module.ts';
+import { isOfficial, type Issue, type LinkedEntry, type LinkTarget } from '../module.ts';
 import type { ClassFeatureStats, ClassSpell, ClassStats, DerivedClass, FeatureLevel, LinkedClass, SpellStats, SubclassStats, Tables } from './types.ts';
 
 const LEVELS = Array.from({ length: 20 }, (_, i) => i + 1);
@@ -28,13 +28,13 @@ export function deriveClass(stats: ClassStats, tables: Tables): DerivedClass {
 /**
  * What a class derives from the library: its Features table's Class Features column, from its
  * features' levels and its later subclass levels; its spell list, every spell whose `classes`
- * names it plus its own `spells`; and its subclasses. An SRD class's spell list and subclasses
- * are SRD entries only; homebrew that names it shows in its page's Homebrew links (docs/site.md#detail-page).
+ * names it plus its own `spells`; and its subclasses. An official class's spell list and subclasses
+ * are official entries only; homebrew that names it shows in its page's Homebrew links (docs/site.md#detail-page).
  */
 export function deriveClassLinked(id: string, stats: ClassStats, entries: readonly LinkedEntry[]): LinkedClass {
   const byKey = new Map(entries.map((e) => [`${e.type}/${e.id}`, e]));
   const self = byKey.get(`class/${id}`);
-  const listed = self && isSrdEntry(self) ? (e: LinkedEntry) => isSrdEntry(e) : () => true;
+  const listed = self && isOfficial(self) ? (e: LinkedEntry) => isOfficial(e) : () => true;
   const featureRows = LEVELS.map((level) => ({
     features: stats.features.flatMap(({ ref }) => {
       const feature = byKey.get(ref)?.stats as ClassFeatureStats | undefined;
@@ -66,15 +66,15 @@ export function deriveClassLinked(id: string, stats: ClassStats, entries: readon
   return { featureRows, spellList, subclasses };
 }
 
-/** A class's subclass levels ascend, and only a custom class lists `spells`. */
-export function checkClass(stats: ClassStats, srd: boolean): Issue[] {
+/** A class's subclass levels ascend, and only a homebrew class lists `spells`. */
+export function checkClass(stats: ClassStats, official: boolean): Issue[] {
   const issues: Issue[] = [];
   const levels = stats.subclassLevels;
   if (levels.some((level, i) => i > 0 && level <= levels[i - 1]!)) {
     issues.push({ level: 'error', path: 'stats.subclassLevels', message: `subclass levels ${levels.join(', ')} must ascend` });
   }
-  if (srd && stats.spells) {
-    issues.push({ level: 'error', path: 'stats.spells', message: "an SRD class's spell list is derived from its spells' classes; only a custom class lists spells" });
+  if (official && stats.spells) {
+    issues.push({ level: 'error', path: 'stats.spells', message: "an official class's spell list is derived from its spells' classes; only a homebrew class lists spells" });
   }
   return issues;
 }

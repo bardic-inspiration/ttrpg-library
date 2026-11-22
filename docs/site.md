@@ -406,8 +406,8 @@ indexes.
 - Forward refs and back-refs as links
   ([content-model.md](content-model.md#references)); a page type's include
   its components' ([content-model.md](content-model.md#components)).
-- **Homebrew links.** On an SRD entry's page, links to homebrew entries
-  (those without `meta.source.srd`) are moved out of Links into a
+- **Homebrew links.** On an official entry's page, links to homebrew entries
+  ([Source and author](content-model.md#source-and-author)) are moved out of Links into a
   **Homebrew** section after it, under the same labels: a custom spell that
   names an SRD class is listed there under "Spells", not in the class's
   spell list. A label with links on both sides shows in both sections, and

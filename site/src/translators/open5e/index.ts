@@ -36,6 +36,8 @@ const RULESET = OPEN5E.ruleset;
 
 /** The envelope fields Open5e has no place for. */
 const ENVELOPE: [keyof TranslatorItem['entry'], string][] = [
+  ['source', 'Open5e\'s document field names Open5e\'s own sources, not the library\'s.'],
+  ['author', 'Open5e has no field for an author.'],
   ['summary', 'Open5e has no field for a summary.'],
   ['description', 'Open5e has no field for a description.'],
   ['tags', 'Open5e has no field for tags.'],

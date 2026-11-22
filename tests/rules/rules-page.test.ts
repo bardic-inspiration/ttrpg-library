@@ -50,7 +50,7 @@ describe('links to rules', () => {
     expect(names.get('gear/hand-tools')).toBe('Hand Tools');
     expect(names.get('term/advantage')).toBe('Advantage');
     expect(refPaths([data]).get('term/advantage')).toBe('fixture-rules/rules/glossary/#term-advantage');
-    expect(refTargets(all, [data]).get('gear/mallet')).toEqual({ type: 'gear', name: 'Mallet', path: 'fixture-rules/gear/mallet/', srd: false });
+    expect(refTargets(all, [data]).get('gear/mallet')).toEqual({ type: 'gear', name: 'Mallet', path: 'fixture-rules/gear/mallet/', official: false });
   });
 
   it('render a {ref:…} token as the name linked to the anchor, and an extension to its card', () => {

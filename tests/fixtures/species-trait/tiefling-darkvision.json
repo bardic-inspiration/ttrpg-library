@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "species-trait",
   "id": "tiefling-darkvision",
   "name": "Darkvision",
@@ -9,8 +11,7 @@
   "meta": {
     "createdAt": "2026-11-09",
     "source": {
-      "kind": "manual",
-      "srd": true
+      "kind": "manual"
     }
   }
 }

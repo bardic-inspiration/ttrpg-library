@@ -38,7 +38,7 @@ export const ruleset: RulesetModule = {
     if (type === 'feat') return checkFeat(stats as FeatStats);
     if (type === 'background') return checkBackground(stats as BackgroundStats);
     if (type === 'species') return checkSpecies(stats as SpeciesStats);
-    if (type === 'class') return checkClass(stats as ClassStats, context?.srd ?? false);
+    if (type === 'class') return checkClass(stats as ClassStats, context?.official ?? false);
     if (type === 'class-feature') return checkClassFeature(stats as ClassFeatureStats);
     return [];
   },

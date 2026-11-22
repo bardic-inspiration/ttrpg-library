@@ -82,7 +82,7 @@ export async function loadRules(
       if (tree) {
         groups.set(type, tree);
         for (const g of tree.groups) {
-          heads.push({ file: groupsFile, ruleset: id, type, id: g.id, name: g.name, srd: true });
+          heads.push({ file: groupsFile, ruleset: id, type, id: g.id, name: g.name, official: true });
           linkable.push({ file: groupsFile, ruleset: id, type, id: g.id, ...(g.text ? { stats: g.text, statsPath: `${g.id}.text` } : { stats: {} }) });
         }
       }
@@ -104,7 +104,7 @@ export async function loadRules(
         error(file, `file path must be ${rel}/rules/${primitive.type}/${primitive.id}.json to match type and id`);
         continue;
       }
-      heads.push({ file, ruleset: id, type, id: primitive.id, name: primitive.name, srd: true });
+      heads.push({ file, ruleset: id, type, id: primitive.id, name: primitive.name, official: true });
       const entryLike = { name: primitive.name, summary: '', stats: primitive.stats };
       for (const message of checkBlocklist(entryLike, blocklist)) error(file, message);
       for (const message of checkPlaceholders(entryLike)) error(file, message);

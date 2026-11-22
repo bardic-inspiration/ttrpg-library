@@ -201,8 +201,9 @@ describe('Open5e pilot cases (spec/tracks/integrations.md "Cases")', () => {
     const srdItem = await fixture('magicitems-boots-of-levitation.json');
     for (const field of ['name', 'category', 'rarity', 'requires_attunement', 'size', 'weight']) expect(boots.record[field], field).toEqual(srdItem[field]);
     expect(boots.out.skipped.map((s) => `${s.path}: ${s.reason}`)).toEqual([
+      "source: Open5e's document field names Open5e's own sources, not the library's.",
+      'author: Open5e has no field for an author.',
       'summary: Open5e has no field for a summary.',
-      'tags: Open5e has no field for tags.',
       'stats.spells: Open5e has no field for the spells an item casts.',
       'stats.effect: The link to Levitate became plain text.',
     ]);
