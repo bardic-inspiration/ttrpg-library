@@ -1,14 +1,14 @@
 # Design decisions
 
-A record of what each version decided and why. The v1 section is distilled
+A record of what each version decided and why. The v1.0.0 section is distilled
 from `SPEC.md` at the `v1.0.0` tag, the milestone issues and their comments,
 the decision comments those issues link to, and the dev PR descriptions. From
-v2 on, the PR that makes a decision adds its row (`AGENTS.md` "Rules").
+v1.1.0 on, the PR that makes a decision adds its row (`AGENTS.md` "Rules").
 
 **This is history, not a set of rules.** The decision rows describe what a
 version did. Later versions may change any of them (the themes, the look, the
 gallery, the type formats) without arguing against this file. The principles
-are what carries forward: they are the reasons v1 chose as it did, and they
+are what carries forward: they are the reasons v1.0.0 chose as it did, and they
 remain the guide for weighing new designs. What the library does now is in the
 current docs and code.
 
@@ -36,7 +36,7 @@ reversal is noted only when it explains the reason.
 | P11 | Weight follows the selection | Pages load a lean index; full data is fetched only for what the reader picks. |
 | P12 | A durable record | Sessions have no memory, so decisions live in the repo, issues, and PRs, and every merge leaves `main` consistent. |
 
-## v1
+## v1.0.0
 
 The library as built at the `v1.0.0` tag.
 
@@ -49,7 +49,7 @@ The library as built at the `v1.0.0` tag.
 | Every SRD entry whose type takes tags carries `tags.source: "SRD"`, beside `meta.source.srd`; components, which have no tags, carry none. | The `source` tag is a conventional key that gives the gallery an SRD filter with no configuration; adding tags to components would change their schema. | this PR |
 | Public repo and Pages site on the free plan, not promoted. | P9 | #1 |
 | No backend, database, accounts, user submissions, or in-browser editing. Every change is a PR. | P1, P7 | #1 |
-| v1 is a prototype; v2 a complete product for one user; v3 and later explore multiple users and a public site. | | #95 |
+| v1.0.0 is a prototype; v1.1.0 a complete product for one user; v3 and later explore multiple users and a public site. | | #95 |
 
 ### Entry model
 
@@ -210,9 +210,9 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Checks that need a human or a live service aren't milestone criteria; they go in the Testing backlog. | A pending manual check never blocks work | #38 |
 | No triage routine: the session that files an issue places it. | | #95 |
 | `SPEC.md` becomes reference docs for what's built plus a stage spec for what isn't; citations use file and heading; docs defer to code for exact rules. In progress under #108. | P3, P12: a routine must not act on unbuilt design | #95, #108 |
-| v2 starts with a design-only phase, one owner-led session per area. | Unknowns are worked out before they meet the dev rules | #95, #110 |
+| v1.1.0 starts with a design-only phase, one owner-led session per area. | Unknowns are worked out before they meet the dev rules | #95, #110 |
 
-## v2
+## v1.1.0
 
 ### Working process
 
@@ -223,22 +223,22 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The stage spec is a folder, `spec/v2/`, with one file per design area, kept outside `docs/` so routines never read it. | Built parts are easy to delete, and the stage ends when the folder is empty | #197 |
 | No status table: design, build, and built status come from the design issues, the build milestone issues, and the file tree. Front matter holds only an area's issue and dependencies. | P3: a table would copy state GitHub already holds | #197 |
 | Every area file follows one template (Goal, Current, Design, Cases, Migration, Done when, Open questions, Out of scope), with only Goal and Design required. A test checks the front matter, the sections, and that the entries cited under Cases are real. | Seven sessions write seven files of the same shape; designs are checked against the real library; P8 | #197 |
-| A gap found while building is decided by the session and recorded in the PR if a different choice wouldn't change behavior other work depends on. Otherwise it stops and goes to the owner, as an open question for v2 design. | v1 handled gaps inconsistently, sometimes stopping and sometimes guessing | #197 |
-| A PR that makes a decision lists it under "Decisions" and adds its row here. | v1's decisions were spread across comments, interviews, PRs, and spec edits; P12 | #197 |
-| Each build milestone starts with a pilot on its hardest cases, and an approved design can be amended by a small spec PR at any time. | v1's pilot, fix, bulk sequence turned discoveries into planned work | #197 |
-| `SPEC.md` is retired into the topic docs, schema descriptions, `AGENTS.md`, and `spec/v2/`. Its v1-only parts (non-goals, changes from the preliminary design, the delivery plan, the example entries as prose) aren't carried over; the `v1.0.0` tag keeps them, and the example entries live on as test fixtures. | P3: one home per fact; the stage spec holds only unbuilt design | #95, #108 |
+| A gap found while building is decided by the session and recorded in the PR if a different choice wouldn't change behavior other work depends on. Otherwise it stops and goes to the owner, as an open question for v1.1.0 design. | v1.0.0 handled gaps inconsistently, sometimes stopping and sometimes guessing | #197 |
+| A PR that makes a decision lists it under "Decisions" and adds its row here. | v1.0.0's decisions were spread across comments, interviews, PRs, and spec edits; P12 | #197 |
+| Each build milestone starts with a pilot on its hardest cases, and an approved design can be amended by a small spec PR at any time. | v1.0.0's pilot, fix, bulk sequence turned discoveries into planned work | #197 |
+| `SPEC.md` is retired into the topic docs, schema descriptions, `AGENTS.md`, and `spec/v2/`. Its v1.0.0-only parts (non-goals, changes from the preliminary design, the delivery plan, the example entries as prose) aren't carried over; the `v1.0.0` tag keeps them, and the example entries live on as test fixtures. | P3: one home per fact; the stage spec holds only unbuilt design | #95, #108 |
 | A link check runs in the `lane` job, so docs-only PRs get it, and in `npm run check`. It fails on a cited file or heading that doesn't exist, a broken relative Markdown link, and any section-number citation. | A renamed heading is most likely in a docs-only PR; P8 | #108 |
 | Markdown files cite docs with relative links titled by the heading; code cites `docs/<file>.md#<heading>` as plain text. | Readable in both places, and both forms are checked | #108 |
-| v1's allowance for a format-fix PR to add the SRD entries that motivated it isn't carried over: it was scoped to the SRD import, which is done. The entries a fix unblocks come in the next batch. | | #108, #319 |
-| Gap fill is off until v2 is built. | Entries made in the v1 shape would only add to v2's schema migrations | #95, #109 |
+| v1.0.0's allowance for a format-fix PR to add the SRD entries that motivated it isn't carried over: it was scoped to the SRD import, which is done. The entries a fix unblocks come in the next batch. | | #108, #319 |
+| Gap fill is off until v1.1.0 is built. | Entries made in the v1.0.0 shape would only add to v1.1.0's schema migrations | #95, #109 |
 | Text-only PRs (docs plus Markdown only tests read: the stage spec, skills, and guidelines) skip validate, build, and the type and style checks, and run the tests. `dev-checks` runs alongside `content-checks`. | Fast feedback where the build can't change | #212 |
 | A session takes one issue, or one batch of an import stage, and a new session takes the next. | Every turn re-reads the session's context, so a long session costs more per turn; the docs and PRs carry what the next one needs | #234 |
 | Agents watch only PRs that may need their work: dev PRs, until merged or until the owner turns on auto-merge. An owner-started session's content PRs aren't watched. | Each event is a turn; most events on a PR the owner merges need nothing | #234 |
 | An import batch that refs a type still in an open PR waits for it to merge, rather than stacking on its branch. | Stacked branches cost merges of `main`, re-validation, and PR-number mix-ups | #234 |
 | A test that validates library entries loads the whole library except the types its fixtures stand in for. | A link added in content broke tests that loaded a few types by hand, twice in one stage (#284) | #234 |
 | The SRD import's PDF extraction is a committed Python module, `scripts/srd-extract/`, which stage converters import; the converters stay in scratch. CI only compiles it. | Four stages rebuilt the same extraction and rediscovered its edge cases; pdfplumber has no TypeScript equivalent, and CI never reads the PDF | #234 |
-| v2 concludes in its current state: Milestone 8 ends at the translator framework, Open5e, and the import flow, and Milestone 9 becomes a final code and docs review (#317) before close-out (#255). The rest of `translators.md` and all of `art.md` move to ongoing development tracks, Integrations (#315) and Images (#316). | v2 is usable without them, and neither needs a version boundary to continue | #220, #221 |
-| A development track is a tracking issue with no end, and its unbuilt design is one file in `spec/tracks/`, in the area-file shape and checked by the same test and link check. Tracks join the dev queue after the last milestone, Integrations then Images. | The stage spec is removed at close-out, so deferred design needs a home that outlives v2; the order keeps v2 first and the old milestone order | #315, #316 |
+| v1.1.0 concludes in its current state: Milestone 8 ends at the translator framework, Open5e, and the import flow, and Milestone 9 becomes a final code and docs review (#317) before close-out (#255). The rest of `translators.md` and all of `art.md` move to ongoing development tracks, Integrations (#315) and Images (#316). | v1.1.0 is usable without them, and neither needs a version boundary to continue | #220, #221 |
+| A development track is a tracking issue with no end, and its unbuilt design is one file in `spec/tracks/`, in the area-file shape and checked by the same test and link check. Tracks join the dev queue after the last milestone, Integrations then Images. | The stage spec is removed at close-out, so deferred design needs a home that outlives v1.1.0; the order keeps v1.1.0 first and the old milestone order | #315, #316 |
 | Milestone 8's WCAG 2.2 AA review is folded into Milestone 9's, since #220 closed without a milestone PR. | One review covers what the last two milestones added | #220, #221 |
 | Validation issues name each file by its path from the repo root, taken as the content root's parent as the image check already takes it: `content/…` for an entry, `rulesets/…` for rules data. An entry's own `file` stays under the content root, where the build copies it from. | Entry and rules issues used different roots, so `validate` printed `content/rulesets/…` and `build:index` dropped `content/`; one root lets both print the path as carried | #319 |
 | Every npm script is pre-approved in `.claude/settings.json`, `dev` included, and a test checks the rules against `package.json`. A script that takes arguments gets a `:*` prefix rule. | An unattended routine must never stop at a permission prompt, and CLAUDE.md says every script is pre-approved; P8 | #319 |
@@ -249,13 +249,14 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | With the SRD import done, a format-fix issue and an SRD upkeep issue (a link pass, a correction, a review) go in the dev queue under the current milestone or a track issue, placed like any dev issue. An upkeep issue has no `request` label, so routines never take it. | The import's milestone is closed, and the Dev Queue already places every issue | #319 |
 | The `srd-import` skill is archived to `.claude/archive/srd-import/`, kept for the record outside `.claude/skills/` so it no longer loads, and its test is retired. SRD entry upkeep goes through the `generate` and `revise` skills. | The SRD import is done | #319 |
 | At close-out, `spec/v2/` is removed. Its file template, section meanings, and checks move to `spec/tracks/README.md`; `tests/stage-spec.test.ts` keeps its name and checks only `spec/tracks/`; the link check no longer recognizes `spec/v2/` citations. | The stage is finished when only its README is left, and the tracks must not depend on a removed folder | #255 |
-| Gap fill is on again. | It was off only so no entry was made in the v1 shape before v2's schemas were built, and they are | #109, #255 |
+| Gap fill is on again. | It was off only so no entry was made in the v1.0.0 shape before v1.1.0's schemas were built, and they are | #109, #255 |
+| The release versions are named by their tags: v1 is v1.0.0 and v2 is v1.1.0, in every doc. A path that held a version, `spec/v2/`, keeps its name, since that is the folder as it was. | The release is tagged v1.1.0, and a doc should name versions as the tags do | this PR |
 
 ### Linking
 
 | Decision | Why | Source |
 |---|---|---|
-| v1's ref standard carries into v2 unchanged: ref objects at `RefOrText` fields and `{ref:…}` tokens in text, keyed by `<type>/<id>`, with relations typed by field, labels in the ruleset's `refs.ts`, and back-references computed. Existing entries need no migration. | It works in practice and already covers what new types need; P3 | #111 |
+| v1.0.0's ref standard carries into v1.1.0 unchanged: ref objects at `RefOrText` fields and `{ref:…}` tokens in text, keyed by `<type>/<id>`, with relations typed by field, labels in the ruleset's `refs.ts`, and back-references computed. Existing entries need no migration. | It works in practice and already covers what new types need; P3 | #111 |
 | A new type links through `RefOrText` fields it declares, with a label pair in `refs.ts` for a relation that needs its own wording, rather than a new link mechanism. Each type's fields and labels are set in the type extension design. | P4: a new link is a schema and label addition | #111, #112 |
 | Linking is part of authoring: an entry links every library entry it mentions or uses, and a link pass links mentions written before their target existed. | Already the `generate` and `srd-import` rules; the owner confirmed them as the standard | #111 |
 | An area with no build of its own (`linking.md`) is deleted part by part, each by the first build PR that exercises it. | Keeps the stage spec's "emptied by building it" rule | #111, #214 |
@@ -265,11 +266,11 @@ the SRD import to hold printed forms, following the nearest-field rule.
 
 | Decision | Why | Source |
 |---|---|---|
-| v2 covers every SRD 5.2 component: glossary terms, conditions, equipment, feats, backgrounds, species, classes, and subclasses, alongside spells, items, and creatures. | Ruleset completeness: user content builds on the full SRD | #112 |
+| v1.1.0 covers every SRD 5.2 component: glossary terms, conditions, equipment, feats, backgrounds, species, classes, and subclasses, alongside spells, items, and creatures. | Ruleset completeness: user content builds on the full SRD | #112 |
 | The ruleset splits into rules (glossary terms, conditions, equipment) and content (everything else). | Separates the ruleset's definitions from the authorable library | #112 |
 | Ruleset primitives are ruleset data shown as one combined page per rules type, with an anchor per primitive. Ruleset extensions are authored entries shown as cards, listed on an Extensions page beside the rules pages and at the bottom of each rules page. | The line falls between the basis and the custom additions, and applies to every rules type | #112 |
-| In v2, only conditions and equipment take extensions. Glossary terms aren't authorable, and abilities, damage types, skills, creature types, and sizes stay closed lists. | Covers the simple house rules; P2 for the rest | #112 |
-| v2 extension only adds. Modifying or replacing a rule, or adding a mechanic, waits for v3's house rules system. | Additive extensions are simple; rule changes need their own design | #112 |
+| In v1.1.0, only conditions and equipment take extensions. Glossary terms aren't authorable, and abilities, damage types, skills, creature types, and sizes stay closed lists. | Covers the simple house rules; P2 for the rest | #112 |
+| v1.1.0 extension only adds. Modifying or replacing a rule, or adding a mechanic, waits for v3's house rules system. | Additive extensions are simple; rule changes need their own design | #112 |
 | Equipment is one rules type with categories and nested sub-classifications, each group a linkable section. | Matches the SRD's grouping, and lets a base item name a group | #112 |
 | Content types are cards (spells, items, creatures, feats, backgrounds) or pages (classes, subclasses, species). A page type is assembled from components: hidden, linked sub-entries viewed only through the parent's page. | A hierarchy by complexity; v3's encounters and dungeons extend it | #112 |
 | `magic-item` is renamed `item`, through a migration that keeps every `id` and redirects the old URLs. | Magic items are items built on equipment; P9 | #112 |
@@ -336,12 +337,12 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A page type's search text includes its components' names and text, in its order. | A search for a feature should find its class, since components have no records of their own | #230 |
 | Components render after the parent's template through `EntryTemplate`, so the detail page, print, and PNG capture show them alike: a heading, then rules text or the generic lines. | P3, P6: one rendering for every mode | #230 |
 | A page's Links merge its own and its components' links, without the links among its parts. Rules pages' back-links include components. | A component has no page, so its links show on its parent's | #230 |
-| Components get no raw data file or export bundle; a page type's own bundle is unchanged. | Page types get Print and no Download in v2 (`export.md`, #115) | #230 |
+| Components get no raw data file or export bundle; a page type's own bundle is unchanged. | Page types get Print and no Download in v1.1.0 (`export.md`, #115) | #230 |
 | A ruleset module may have `checkLinks`, run once every ref resolves with each target's type and stats, for checks across entries: a background's feat must be an origin feat. | `check` sees one entry's stats; this rule reads another's | #231 |
 | A background's coin option other than 50 GP is a warning, and a last option with items an error. | Every SRD background offers 50 GP; the coins-only option is part of the format | #231 |
 | A starting-equipment item whose SRD primitive name reads differently in a list ("Clothes, Traveler's") is a token with display text, `{ref:equipment/clothes-travelers Traveler's Clothes}`. | P5: it reads as the SRD names it, and still links | #231, #273 |
 | A registry facet may use the `ability` format, which reads an ability key by its full name from `tables.json`. | Backgrounds filter by ability score, stored as keys | #231 |
-| `linking.md` is deleted: v1's link standard carries into v2 unchanged, and the first v2 types declare their link fields in `refs.ts` and their schemas. | Nothing in it remained to build | #231 |
+| `linking.md` is deleted: v1.0.0's link standard carries into v1.1.0 unchanged, and the first v1.1.0 types declare their link fields in `refs.ts` and their schemas. | Nothing in it remained to build | #231 |
 | A template may place a page type's components itself (`PLACES_COMPONENTS`); the species page prints its traits as anchored, bold-italic titled paragraphs rather than generic sections. | P5, P6: the SRD prints traits as run-in paragraphs | #232 |
 | The species page words "As a/an <Name>, …" with "an" before a vowel, and `intro` overrides it. | P6: eight of nine SRD species share the sentence | #232 |
 | A ruleset module may have `deriveLinked`, values that read other entries, which the site merges into an entry's derived values: a class's Class Features column, spell list, and subclasses. | `derive` sees one entry's stats; these read its components, the spells, and the subclasses | #233 |
@@ -382,7 +383,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The design criteria: one place for all content, fast lookup, easy export, and equal support for phones, tablets, and laptops. | The site is a DM's resource for lookup and session prep | #113 |
 | The top bar is Library, Rulesets, About, Contribute. The Library is one gallery whose filters do the navigating; Rulesets holds the rules pages and the Extensions page. | Filters already navigate; rules and content are the big split | #113 |
 | The old per-ruleset and per-type gallery URLs redirect to the Library with their filter. | P9: stable URLs | #113 |
-| Filters are a nested accordion checkbox tree following the schema, in a sidebar on desktop and a collapsible container on phones and tablets, with search on top. | v1's filter pills took too much space on everything but desktop | #113 |
+| Filters are a nested accordion checkbox tree following the schema, in a sidebar on desktop and a collapsible container on phones and tablets, with search on top. | v1.0.0's filter pills took too much space on everything but desktop | #113 |
 | Export is one Download and one Print button, each opening the device's own dialog. | Easy export; fewer controls | #113 |
 | Card entries keep their own detail pages with back-navigation. Long pages use accordion sections with a jump-to table of contents, and a link opens its section. | Compartmentalized pages; fast lookup within long pages | #113 |
 | Print stacks entries by default; the one-entry-per-page mode is removed. | Fewer pages for session prep | #113 |
@@ -395,11 +396,11 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The filter menu is a sidebar from a `64rem` viewport up; below that, phones and tablets (820px included) get the closed container. | Tablets read as phones per the spec; a 16rem sidebar leaves too little room for cards below 64rem | #236 |
 | The axe run moves out of per-PR CI to a job on the PR that closes a milestone, marked by a hand-added `milestone` label. | A per-PR run isn't needed; a label is explicit and re-runs `validate` | #212 |
 | The filter tree nests a type's facets by their registry paths: facets that share a field below `stats` or `derived` sit in a node labeled from the field's key; a field holding one facet adds no node. | "Following the schema" with no new registry key; `stats.ac.value` shouldn't read as "Ac › AC" | #235 |
-| The tree keeps v1's filter semantics and URL form: one filter per path, OR within it and AND across paths, so a path two types share is one filter shown under each type. A type is a checkbox for `f.type`. | The pilot's "done when" keeps URL state as in v1; per-type filters would change every link | #235 |
+| The tree keeps v1.0.0's filter semantics and URL form: one filter per path, OR within it and AND across paths, so a path two types share is one filter shown under each type. A type is a checkbox for `f.type`. | The pilot's "done when" keeps URL state as in v1.0.0; per-type filters would change every link | #235 |
 | A ref facet is marked `"ref": true`; the index lifts its values as keys, and the island gets the targets' names from the build. | Condition primitives aren't in `library.json`, so names can't come from the records alone | #235 |
 | Equipment's group is a `"groups": true` facet whose values nest as the groups file does, and a group matches every leaf in it; `derived.category` is no longer a facet, being the tree's top level. Categories read by `noun`, groups by `qualifier`, else by name. | Equipment › Weapon › Martial without a second, overlapping Category filter; the labels are the groups' own short forms | #235 |
 | Creatures gain damage and condition immunity facets, which share the Immunities node. Spells' Classes filter reads `stats.classes`, and the derived class ids are removed. Subclasses filter, show, and sort by their class, and backgrounds filter by and show their feat. | The spec's facets over refs; the derived list was a stopgap until ref labels | #235 |
-| A facet node shows only when some entry of its type has a value or it's active; a type shows only when the route has entries of it. Default filters start open on a type route only. | v1 showed default filters only with values; on routes spanning types, every open default would bury the type list | #235 |
+| A facet node shows only when some entry of its type has a value or it's active; a type shows only when the route has entries of it. Default filters start open on a type route only. | v1.0.0 showed default filters only with values; on routes spanning types, every open default would bury the type list | #235 |
 | A type's count is its entries among the results, so checking a type leaves every unchecked type at 0. | The owner's expectation in #296; the old count, what checking a type adds, read as stale | #296 |
 | On a path two types share, an enum value shows checked, and opens its node, only under the types whose entries have it; a value no entry has shows under each, so it can be cleared. A shared range opens only under a checked type, or under each when no type is checked. | Checking a value under one type changed another's part of the tree (#296); a range value can't say which type it was set under, and from a link with no type checked it filters every type | #296 |
 | An accordion section is a native `<details>` with its heading inside the `<summary>`; a small script opens the sections around a link's target and scrolls to it, and opens every section to print the page. Print and PNG capture render the sections as plain, open sections. | Works without JavaScript, and browsers search inside closed sections; print and capture must show everything | #237 |
@@ -421,11 +422,11 @@ the SRD import to hold printed forms, following the nearest-field rule.
 
 | Decision | Why | Source |
 |---|---|---|
-| Export serves three lanes: data for other software, digital files for chat, and paper for the table. Print and PNG carry over from v1. | Already cover the file and paper lanes | #115 |
-| No dynamic API in v2. The data lane is file downloads, with translators for VTT and site formats; the static entry files and `library.json` stay as an informal read-only feed. | Targets import files; P1 | #115 |
+| Export serves three lanes: data for other software, digital files for chat, and paper for the table. Print and PNG carry over from v1.0.0. | Already cover the file and paper lanes | #115 |
+| No dynamic API in v1.1.0. The data lane is file downloads, with translators for VTT and site formats; the static entry files and `library.json` stay as an informal read-only feed. | Targets import files; P1 | #115 |
 | One-click PDF is dropped; Print uses the device's print dialog. | Same number of steps in practice; fewer controls | #115 |
 | Print layout adapts to the paper chosen in the print dialog, replacing the page size choice. | The size dropdown is gone | #115 |
-| Print has two layouts split at one breakpoint, 6.5in of printed page width: wide (two columns, 9.5pt, 0.5in margin) and narrow (one column, 8pt, 0.3in margin). The narrow layout takes v1's 4 × 6 density, so Half-Letter prints slightly smaller than v1's. The breakpoint and margins live in `tokens/print.css`. | One breakpoint gives the spec's two layouts; 6.5in falls between narrow pages and wide pages' printable widths, however a browser measures; `@page` margins can sit in a width media query, so a card keeps a narrow margin | #243 |
+| Print has two layouts split at one breakpoint, 6.5in of printed page width: wide (two columns, 9.5pt, 0.5in margin) and narrow (one column, 8pt, 0.3in margin). The narrow layout takes v1.0.0's 4 × 6 density, so Half-Letter prints slightly smaller than v1.0.0's. The breakpoint and margins live in `tokens/print.css`. | One breakpoint gives the spec's two layouts; 6.5in falls between narrow pages and wide pages' printable widths, however a browser measures; `@page` margins can sit in a width media query, so a card keeps a narrow margin | #243 |
 | A stale `size` parameter in a print URL is ignored. | Old links still print | #243 |
 | Exporters are of two kinds, `print` (the Print button) and `download` (a format in Download's menu); Download's formats follow `config/export.json` order, now PNG then JSON. | The controls are data-driven, so a translator is one more `download` module (P4); the order matches the stage spec's "PNG, JSON, translators" | #244 |
 | Download's menu is a disclosure (a button with `aria-expanded` over a list of buttons), not an ARIA menu. | A short list of formats needs no roving focus; Escape and focus leaving close it | #244 |
@@ -483,7 +484,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Art is lightly processed: cropped, monochrome, and tinted by CSS at display time. | One file serves every accent, and files stay small | #117 |
 | Art is used if its source marks it public domain, CC0, or CC-BY, or if the skill judges it public domain from creator and date (US publication before 1931, or a creator dead over 70 years), with the reasoning recorded. A denylist of protected collections and estates is never retrieved from. | Most wanted art predates 1931; some collections are protected regardless of age | #117 |
 | An `art` skill retrieves, checks, processes, and posts candidates. It is tuned on a `spike/` branch through a private claude.ai review page where the owner rates each candidate Good, OK, or Rejected with a note, and the next session updates the skill from the ratings. | Iteration narrows in on the right images without downloading or typing lists | #117 |
-| For the v2 build, the tuned skill opens a content PR with the Good-rated images. Later, art comes with content or is added afterwards; when content passes but its art is denied, the two are split and the request issue gets a comment. | Art has its own review criteria; P7 | #117 |
+| For the v1.1.0 build, the tuned skill opens a content PR with the Good-rated images. Later, art comes with content or is added afterwards; when content passes but its art is denied, the two are split and the request issue gets a comment. | Art has its own review criteria; P7 | #117 |
 
-[^style]: v2 planned a style redesign (#114, Milestone 6 #218) built from the owner's style package. It was scrapped before it was built: the site keeps v1's style, and v2 has no style area.
+[^style]: v1.1.0 planned a style redesign (#114, Milestone 6 #218) built from the owner's style package. It was scrapped before it was built: the site keeps v1.0.0's style, and v1.1.0 has no style area.
 | The active dev queue is the one open tracking issue labeled `queue`: the current milestone, or, with no open milestone, a "<version> Spot Fixes" issue named for the latest release's tag (the latest spec's version if there is no release), created if missing. Tracks are side queues, picked after it, and never carry the label. | Without an open milestone, new dev issues had no parent and sat unplaced; a label makes the active queue findable | #357 |

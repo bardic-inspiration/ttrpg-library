@@ -3,7 +3,7 @@
 The index of `docs/` and the conventions every doc follows. The approach was
 decided in #196. These docs describe what is built; design not yet built is in
 the development tracks' specs, [`spec/tracks/`](../spec/tracks/README.md).
-The v1 spec is kept at the `v1.0.0` tag, and the v2 stage spec was removed
+The v1.0.0 spec is kept at the `v1.0.0` tag, and the v1.1.0 stage spec was removed
 at close-out (#255).
 
 ## Index

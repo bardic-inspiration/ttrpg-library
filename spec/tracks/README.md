@@ -10,8 +10,8 @@ skill, guideline, or routine prompt cites it.
 
 | Track | Issue | Design | From |
 |---|---|---|---|
-| Integrations | #315 | [`integrations.md`](integrations.md) | v2's translators area (#116) and the rest of v2 Milestone 8 (#220) |
-| Images | #316 | [`images.md`](images.md) | v2's art area (#117) and v2 Milestone 9's art tasks (#221) |
+| Integrations | #315 | [`integrations.md`](integrations.md) | v1.1.0's translators area (#116) and the rest of v1.1.0 Milestone 8 (#220) |
+| Images | #316 | [`images.md`](images.md) | v1.1.0's art area (#117) and v1.1.0 Milestone 9's art tasks (#221) |
 
 ## Track files
 

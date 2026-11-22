@@ -130,7 +130,7 @@ sub-issue and PR only when it's too large to review alongside the others.
 ### Tracks
 
 A development track is ongoing work outside a version's build, such as
-Integrations (#315) and Images (#316), which v2 deferred. Its unbuilt design
+Integrations (#315) and Images (#316), which v1.1.0 deferred. Its unbuilt design
 is one file in [`spec/tracks/`](spec/tracks/README.md). An approved design can
 be amended at any time by a small PR to it that the owner merges. A task
 deletes the part it builds, and an open question there stops that part.
@@ -160,7 +160,7 @@ review takes up every open issue in it.
 Milestone issues, in milestone order (or, when no milestone is open, the
 "Spot Fixes" issue below), then track issues, in the order
 [`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
-sub-issues (GitHub's order) are one queue. Work beyond v2 goes under the "Later (v3)" issue (#118),
+sub-issues (GitHub's order) are one queue. Work beyond v1.1.0 goes under the "Later (v3)" issue (#118),
 outside the queue.
 
 - **The active queue** is the one open tracking issue labeled `queue`: the

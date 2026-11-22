@@ -103,8 +103,8 @@ leaves out, and request tags merge over default tags. `count` and
 trust, and no batch has a size limit. `scripts/generate/defaults.ts` loads and
 checks the file and applies it to a request.
 
-**Gap fill is on** (`gapFill.enabled: true`). It was off while v2 was built,
-so no entry was generated in the v1 shape for v2's schema changes to migrate.
+**Gap fill is on** (`gapFill.enabled: true`). It was off while v1.1.0 was built,
+so no entry was generated in the v1.0.0 shape for v1.1.0's schema changes to migrate.
 Run-order step 6 skips while it's off.
 
 ### The generate skill
