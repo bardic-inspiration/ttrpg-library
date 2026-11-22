@@ -414,6 +414,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Component behavior in the browser (typing, focus) is tested by rendering with Preact into happy-dom, set per test file with `// @vitest-environment happy-dom`; other suites stay in Node. | A maintained DOM over a hand-written one; the owner approved the dependency | #319 |
 | UI work gets its accessibility review at the end of its milestone. UI work outside a milestone, such as a track's, is flagged for the next one: the session that opens its `ui` PR files a `test` issue under the Accessibility review backlog, a tracking issue kept like the Testing backlog, and the next milestone review takes up every open one. | Tracks have no milestones, so their UI would get neither the a11y job nor a review; one repo-wide rule, not case by case | #319 |
 | The milestone review stays a Testing backlog check; the Accessibility review backlog holds only UI work waiting for a review. | The review is a human check like the rest of the Testing backlog; the backlog is what the next review covers | #319 |
+| A filter tree node's default open state applies once, when the tree first shows from the URL. After that only its own disclosure opens or closes it: checking a type or value, or clearing filters, never opens or closes a node. | Every control in the tree is a discrete interaction, with no ripple elsewhere in the tree; a link still opens the view it names | #342 |
+| Every page keeps the scrollbar's room (`scrollbar-gutter: stable` on `html`), not only the Library. | The filter menu stays put as filtering changes the page's height; the same rule keeps the shell from shifting between pages | #342 |
 
 ### Export
 

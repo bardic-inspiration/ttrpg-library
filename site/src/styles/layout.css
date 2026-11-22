@@ -3,6 +3,15 @@
  * come from components.css.
  */
 @layer layout {
+  /*
+   * Keep the scrollbar's room whether or not the page scrolls, so the shell doesn't shift sideways
+   * when a page grows or shrinks past the viewport, as the Library does as its filters change
+   * (docs/site.md#gallery "Layout").
+   */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   body {
     display: flex;
     flex-direction: column;
