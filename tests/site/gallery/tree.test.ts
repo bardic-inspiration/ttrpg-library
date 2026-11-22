@@ -234,19 +234,51 @@ describe('every facet of every type', () => {
     expect(typeValue(nodes, 'item')).toMatchObject({ selected: false, count: 0 });
   });
 
-  it('shows the Ruleset node only with more than one ruleset, or when it filters', () => {
+  /** Each ruleset under the Ruleset node, as label and count. */
+  const rulesets = (nodes: TreeNode[]) =>
+    nodes[0]?.kind === 'field' ? nodes[0].children.flatMap((n) => (n.kind === 'type' ? [[n.value.label, n.value.count, n.value.selected]] : [])) : [];
+
+  it('shows the Ruleset node first, with one ruleset, closed until it filters', () => {
     const home = galleryConfig(reg, data);
-    expect(tree(full(), home).map((n) => n.id)).not.toContain('ruleset');
+    const nodes = tree(full(), home);
+    expect(nodes[0]).toMatchObject({ kind: 'field', id: 'ruleset', label: 'Ruleset', open: false });
+    expect(rulesets(nodes)).toEqual([['D&D 5e (SRD 5.2)', full().length, false]]);
     const filtered = tree(full(), home, '?f.ruleset=dnd-5e-2024');
-    expect(filtered[0]).toMatchObject({ kind: 'enum', id: 'ruleset', open: true });
-    expect(values(filtered[0])).toEqual([expect.objectContaining({ key: 'dnd-5e-2024', label: 'D&D 5e (SRD 5.2)', selected: true })]);
+    expect(filtered[0]).toMatchObject({ kind: 'field', id: 'ruleset', open: true });
+    expect(rulesets(filtered)).toEqual([['D&D 5e (SRD 5.2)', full().length, true]]);
     const other = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as Registry;
     const two = [...full(), record({ id: 'stranger', ruleset: 'other' })];
-    const nodes = tree(two, galleryConfig(other, data));
-    expect(values(nodes[0]).map((v) => [v.label, v.count])).toEqual([
-      ['D&D 5e (SRD 5.2)', full().length],
-      ['Other', 1],
+    expect(rulesets(tree(two, galleryConfig(other, data)))).toEqual([
+      ['D&D 5e (SRD 5.2)', full().length, false],
+      ['Other', 1, false],
     ]);
+  });
+
+  it('puts Source and Author under each ruleset, not under Tags, with "publisher" read as its publisher (docs/content-model.md#source-and-author)', () => {
+    const home = galleryConfig(reg, { ...data, publishers: { 'dnd-5e-2024': 'Wizards of the Coast' } });
+    const records = [
+      record({ id: 'fireball', type: 'spell', source: 'SRD 5.2', author: 'publisher' }),
+      record({ id: 'frost-lance', type: 'spell', source: 'Ember Codex', author: 'bardic-inspiration' }),
+      record({ id: 'cinder-hound', author: 'bardic-inspiration' }),
+    ];
+    const nodes = tree(records, home);
+    const label = 'D&D 5e (SRD 5.2)';
+    expect(values(find(nodes, 'Ruleset', label, 'Source')).map((v) => [v.label, v.count])).toEqual([
+      ['Ember Codex', 1],
+      ['SRD 5.2', 1],
+    ]);
+    expect(values(find(nodes, 'Ruleset', label, 'Author')).map((v) => [v.key, v.label, v.count])).toEqual([
+      ['bardic-inspiration', 'bardic-inspiration', 2],
+      ['publisher', 'Wizards of the Coast', 1],
+    ]);
+    expect(find(nodes, 'Tags')).toBeUndefined();
+    // An active author filter opens the Ruleset node down to its value, and filters the results.
+    const filtered = tree(records, home, '?f.author=publisher');
+    expect(filtered[0]?.open).toBe(true);
+    expect(find(filtered, 'Ruleset', label)?.open).toBe(true);
+    expect(find(filtered, 'Ruleset', label, 'Author')?.open).toBe(true);
+    const view = computeView(records, home, parseQuery('?f.source=srd%205.2', home), searchIndex(records));
+    expect(view.results.map((r) => r.id)).toEqual(['fireball']);
   });
 });
 

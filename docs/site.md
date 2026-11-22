@@ -80,8 +80,8 @@ Two flags change what a facet's values are:
 3. Astro builds static pages, reading the full entries and derived values at
    build time.
 
-Each `library.json` record holds the entry's `id`, `ruleset`, `type`, `name`,
-`summary`, `url` (the detail page under the site base), `image` (the stored
+Each `library.json` record holds the entry's `id`, `ruleset`, `source` (or
+`null`), `author`, `type`, `name`, `summary`, `url` (the detail page under the site base), `image` (the stored
 path, or `null`), `facets`, `tags` (or `{}`), `createdAt`, `refs`, `refBy`, and
 `search`:
 
@@ -291,9 +291,16 @@ to four on wide screens.
 (`site/src/lib/gallery/tree.ts`): type, then field, then any subfield, then
 value, such as Creature › Immunities › Conditions › Poisoned.
 
-- **Rulesets.** A Ruleset node, each ruleset a checkbox for the ruleset
-  filter (`f.ruleset`), comes first when the library holds more than one
-  ruleset, or the filter is active.
+- **Ruleset.** A Ruleset node always comes first, even when the library holds
+  one ruleset. Inside it, each ruleset the library has entries of, or that is
+  checked, is a checkbox for the ruleset filter (`f.ruleset`) with its count
+  among the results of every other filter, and a disclosure holding its
+  **Source** and **Author** filters (`f.source`, `f.author`) over its own
+  entries ([Source and author](content-model.md#source-and-author)). An
+  author of `"publisher"` reads as the ruleset's publisher, from
+  `ruleset.json` (`rulesetPublishers` in `site/src/lib/rules.ts`), such as
+  Wizards of the Coast. Source and author follow the facet rules below
+  (values, counts, a shared path), with a ruleset in place of a type.
 - **Types.** Then the types, each a checkbox for the type filter (`f.type`)
   with its count, the entries of it among the results (so checking one type
   leaves the others at 0), and a disclosure holding its facets. A type shows when the
@@ -306,7 +313,8 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   reads as AC. A facet shows when some entry of its type has a value for it,
   or it's active.
 - **Tags** follow the types as one Tags node, holding every tag key in the
-  library and any tag filtered on.
+  library and any tag filtered on. Source and author aren't tags, so they
+  never appear here.
 - **Values.** An enum facet or tag lists its values vertically as checkboxes,
   each with its count: the entries of its type it matches under the search and
   every other active filter. Values come in declared order (ordered enums),
@@ -360,8 +368,8 @@ URL-encoded, so a comma inside a value is `%2C` and a bare comma separates
 values. Enum values are case-folded. The type filter is `f.type`. Unknown
 parameters, filters on paths the Library doesn't have, unknown sort paths, and
 malformed values are ignored. The gallery rewrites the URL as the view changes,
-replacing the history entry, in one canonical form: filters in registry order,
-then tags by key, with the default sort and ignored parameters left out.
+replacing the history entry, in one canonical form: the ruleset, source,
+author, and type filters, then the facets in registry order, then tags by key, with the default sort and ignored parameters left out.
 
 **Selection and set actions.**
 

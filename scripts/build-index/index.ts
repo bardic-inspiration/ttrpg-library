@@ -43,6 +43,9 @@ export type Registry = Record<string, { label: string; types: Record<string, Typ
 export interface LibraryRecord {
   id: string;
   ruleset: string;
+  /** The work the entry belongs to, or null (docs/content-model.md#source-and-author). */
+  source: string | null;
+  author: string;
   type: string;
   name: string;
   summary: string;
@@ -206,6 +209,8 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
     records.push({
       id: entry.id,
       ruleset: entry.ruleset,
+      source: typeof entry.source === 'string' ? entry.source : null,
+      author: entry.author as string,
       type: entry.type,
       name: entry.name,
       summary: entry.summary,

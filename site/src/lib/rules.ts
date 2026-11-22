@@ -30,6 +30,10 @@ export function rulesData(definition: RulesetDefinition, files: Record<string, u
   return { ruleset: definition.id, types, primitives, groups, pages: (files['pages.json'] as RulesPage[] | undefined) ?? [] };
 }
 
+/** Each ruleset's publisher, by ruleset id (docs/rulesets.md#the-ruleset-module). */
+export const rulesetPublishers = (): Record<string, string> =>
+  Object.fromEntries(Object.values(definitions).map((definition) => [definition.id, definition.publisher]));
+
 /** Every ruleset's rules data under rulesets/, for rulesets that have rules types. */
 export function loadRules(): RulesData[] {
   return Object.entries(definitions)

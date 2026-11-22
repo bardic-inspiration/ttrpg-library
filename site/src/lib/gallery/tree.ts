@@ -1,9 +1,10 @@
-// The filter tree (docs/site.md#gallery "Filters"): type, then field, then any subfield, then
-// value, built from each type's registry facets. Pure, so the island only renders it.
+// The filter tree (docs/site.md#gallery "Filters"): the Ruleset node, with each ruleset's source
+// and author; then type, field, any subfield, and value, built from each type's registry facets.
+// Pure, so the island only renders it.
 
 import type MiniSearch from 'minisearch';
 import { label } from '../../../../lib/wording/grammar.ts';
-import { RULESET, TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo } from './config.ts';
+import { AUTHOR, RULESET, SOURCE, TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, valueAt } from './values.ts';
 import { bounds, chips, hasValues, withoutFilter } from './view.ts';
@@ -20,9 +21,13 @@ export interface ValueNode {
 }
 
 export type TreeNode =
-  /** A type: checking it is the type filter; inside it, its facets. */
-  | { kind: 'type'; id: string; value: ValueNode; open: boolean; children: TreeNode[] }
-  /** A field two or more facets sit in, such as Immunities, or the Tags. */
+  /**
+   * A checkable value with filters inside it: a type, checked as the type filter and holding its
+   * facets, or a ruleset, checked as the ruleset filter and holding its source and author. `path`
+   * is the filter its checkbox sets.
+   */
+  | { kind: 'type'; id: string; path: typeof TYPE | typeof RULESET; value: ValueNode; open: boolean; children: TreeNode[] }
+  /** A field two or more facets sit in, such as Immunities, or the Ruleset or Tags node. */
   | { kind: 'field'; id: string; label: string; open: boolean; children: TreeNode[] }
   | { kind: 'enum'; id: string; def: FilterDef; open: boolean; values: ValueNode[] }
   | { kind: 'range'; id: string; def: FilterDef; open: boolean; bounds: { min: number; max: number } | undefined };
@@ -203,21 +208,45 @@ function tagsNode(ctx: Context, defaults: Set<string>): TreeNode | undefined {
 }
 
 /**
- * The Ruleset node: each ruleset as a value of the ruleset filter. It shows only when the
- * Library holds more than one ruleset, or the filter is active, as after a redirect from a
- * ruleset's old gallery (docs/site.md#redirects).
+ * The Ruleset node, always first: each ruleset the Library has entries of (or that is checked),
+ * as a value of the ruleset filter counted among the results of every other filter, holding its
+ * Source and Author filters over its own entries (docs/content-model.md#source-and-author). An
+ * author of `"publisher"` reads as the ruleset's publisher.
  */
 function rulesetNode(ctx: Context): TreeNode | undefined {
   const def = filterDef(ctx.config, RULESET);
   if (!def) return undefined;
-  const rulesets = new Set(ctx.records.map((r) => r.ruleset));
-  if (rulesets.size < 2 && !isActive(ctx.state.filters.get(RULESET))) return undefined;
-  return facetNode(ctx, def, ctx.records, '', false);
+  const selected = selectedValues(ctx.state.filters.get(RULESET));
+  const present = new Set(ctx.records.map((r) => r.ruleset.toLowerCase()));
+  const counted = ctx.others(RULESET);
+  const children: TreeNode[] = chips(def, ctx.records, counted, ctx.state.filters.get(RULESET))
+    .filter((chip) => present.has(chip.key) || selected.includes(chip.key))
+    .map((chip) => {
+      const ruleset = String(chip.stored);
+      const own = ctx.records.filter((r) => r.ruleset.toLowerCase() === chip.key);
+      const claims = selected.length === 0 || selected.includes(chip.key);
+      const publisher = ctx.config.publishers[ruleset];
+      const inside = [filterDef(ctx.config, SOURCE), filterDef(ctx.config, AUTHOR)]
+        .filter((d): d is FilterDef => d !== undefined)
+        .map((d) => (d.path === AUTHOR && publisher ? { ...d, labels: { ...d.labels, publisher } } : d))
+        .map((d) => facetNode(ctx, d, own, `${RULESET}/${ruleset}:`, false, claims))
+        .filter((node): node is TreeNode => node !== undefined);
+      return {
+        kind: 'type' as const,
+        id: `${RULESET}/${ruleset}`,
+        path: RULESET,
+        value: { key: chip.key, label: displayValue(def, chip.stored), count: chip.count, selected: selected.includes(chip.key), open: false, children: [] },
+        open: isOpen(inside),
+        children: inside,
+      };
+    });
+  if (children.length === 0) return undefined;
+  return { kind: 'field', id: RULESET, label: def.label, open: selected.length > 0 || isOpen(children), children };
 }
 
 /**
- * The Library's filter tree: the rulesets when there is a choice, then the types, each a value
- * of the type filter holding its own facets, then the Tags. Each type lists only its own
+ * The Library's filter tree: the Ruleset node, then the types, each a value of the type filter
+ * holding its own facets, then the Tags. Each type lists only its own
  * records' values, with counts of its own records, though a path two types share is one filter
  * (docs/site.md#gallery "Filters"). A type counts its entries among the results. A checked
  * type's registry default filters start open, and so does every node with an active filter of
@@ -250,6 +279,7 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
     nodes.push({
       kind: 'type',
       id: `${info.ruleset}/${info.type}`,
+      path: TYPE,
       value: {
         key,
         label: info.label,
