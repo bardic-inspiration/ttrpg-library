@@ -63,8 +63,9 @@ folder or registry entry fails as unknown. A type with no formulas derives `{}`.
 checks that read it: equipment's category comes from its group, and an
 item's base item is checked against the equipment groups. An optional
 `checkLinks` runs once every ref resolves, with a lookup of each target's type
-and stats, for checks that read another entry: a background's feat must be an
-origin feat. `check` also receives whether the entry is an SRD entry, for a
+and stats, and a lookup of an entry's key by its type and exact name in the
+same ruleset, for checks that read another entry: a background's feat must be
+an origin feat. `check` also receives whether the entry is an SRD entry, for a
 rule that depends on it. An optional `deriveLinked` computes values that read
 other entries, given the entry's key and every entry and component of its
 ruleset, each with its `meta` so it can tell an SRD entry (`isSrdEntry`); the site merges
@@ -635,6 +636,7 @@ warnings below on an SRD entry.
 | Creature | No literal derived numbers in prose | error |
 | Creature | Speeds are multiples of 5 | error |
 | Creature | A damage `condition` only on a rider, not the first damage | error |
+| Creature | No `spellcasting` spell written as text that exactly names a spell in the library; it's a ref | error |
 | Creature | Any `adjust`, damage `bonus`, or token adjustment | warning |
 | Creature | Any authored DC token `{dc=<n>}` | warning |
 | Creature | Derived attack bonus above +17 or save DC above 30 | warning |
