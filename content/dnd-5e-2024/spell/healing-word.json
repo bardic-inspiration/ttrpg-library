@@ -38,6 +38,9 @@
     "effect": "A creature of your choice that you can see within range regains {ref:glossary/hit-points} equal to 2d4 plus your spellcasting ability modifier.",
     "higherLevels": "The healing increases by 2d4 for each spell slot level above 1."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

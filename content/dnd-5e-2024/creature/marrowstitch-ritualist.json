@@ -1,0 +1,125 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "marrowstitch-ritualist",
+  "name": "Marrowstitch Ritualist",
+  "summary": "A needle-fingered ritualist who stitches broken bones into lurching servants and the wounded back together.",
+  "description": "Ritualists carry a sewing roll of silver wire and fishhooks, and the only thing they ask of a battlefield is that it be left unsearched. Their work is quick, loud, and hard to look at afterward.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 14,
+      "note": "studded leather"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 16,
+      "con": 14,
+      "int": 16,
+      "wis": 11,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "int",
+      "con"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "medicine": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Undercommon"
+      ]
+    },
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The ritualist makes two Marrow Needle attacks."
+      },
+      {
+        "name": "Marrow Needle",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 30,
+          "long": 90
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "necrotic"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Stitch the Fallen",
+        "kind": "other",
+        "text": "The ritualist touches a creature within 5 feet that is Undead or has 0 hit points. The target regains {dmg:2d8:necrotic} hit points, and if it has 0 hit points, it can rise.",
+        "uses": "3/day"
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/mage-hand"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/animate-dead"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/false-life"
+          }
+        ]
+      }
+    },
+    "cr": 4
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "bone-weavers",
+      "support"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    },
+    "updatedAt": "2026-11-21"
+  }
+}

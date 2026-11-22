@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "draught-of-steady-hands",
+  "name": "Draught of Steady Hands",
+  "summary": "A draught that steadies shaking hands for an hour.",
+  "description": "A bitter brown tonic, sold by apothecaries to surgeons and archers alike.",
+  "stats": {
+    "category": "potion",
+    "rarity": "common",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, for 1 hour you have Advantage on Dexterity checks that use Tools."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -155,6 +155,9 @@
       }
     }
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "updatedAt": "2026-11-09",

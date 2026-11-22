@@ -27,6 +27,9 @@
     },
     "effect": "This suit of armor is reinforced with adamantine, one of the hardest substances in existence. While you're wearing it, any {ref:glossary/critical-hit} against you becomes a normal hit."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-03",
     "source": {

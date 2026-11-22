@@ -145,6 +145,7 @@ describe('the site', async () => {
       type: 'chapter',
       name: 'Pocket Guide › Basics',
       path: 'fixture-rules/manual/pocket-guide/#chapter-pocket-guide-basics',
+      srd: false,
     });
     const html = renderMarkdown('See {ref:chapter/handbook-advanced}.', { names: entryNames(all, [data]), ruleset: 'fixture-rules', paths: refPaths([data], all) });
     expect(html).toContain('<a class="ref-link" href="/fixture-rules/manual/handbook/#chapter-handbook-advanced">Advanced</a>');
@@ -162,8 +163,8 @@ describe('the site', async () => {
 
   it('gives a page its links and its components’, but not the links among them', () => {
     const { forward, back } = groupPageRefs(handbook, handbook.components!, refTargets(all, [data]), labelFor);
-    expect(forward).toEqual([{ label: 'References', targets: [{ type: 'gear', name: 'Hammer', path: 'fixture-rules/rules/tools/#gear-hammer' }] }]);
-    expect(back).toEqual([{ label: 'Referenced by', targets: [{ type: 'note', name: 'Reading List', path: 'fixture-rules/note/reading-list/' }] }]);
+    expect(forward).toEqual([{ label: 'References', targets: [{ type: 'gear', name: 'Hammer', path: 'fixture-rules/rules/tools/#gear-hammer', srd: true }] }]);
+    expect(back).toEqual([{ label: 'Referenced by', targets: [{ type: 'note', name: 'Reading List', path: 'fixture-rules/note/reading-list/', srd: false }] }]);
   });
 
   it('names a component "Parent › Component" in links to it and back-links from it', async () => {

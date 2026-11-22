@@ -1,0 +1,87 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "dapplehound",
+  "name": "Dapplehound",
+  "summary": "A lean, spotted hound that runs the forest in a pack and vanishes at the first patch of sun-flecked shade.",
+  "description": "Packs of dapplehounds herd travelers toward their dens, never closing for the kill until the prey tires. Their yips carry strangely, so a pack of six can sound like a dozen on every side.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 45
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 15,
+      "con": 13,
+      "int": 3,
+      "wis": 13,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The hound has {ref:glossary/advantage} on attack rolls against a creature if at least one of the hound's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
+      },
+      {
+        "name": "Dappled Hide",
+        "kind": "other",
+        "text": "While in dim light or among trees, the hound has {ref:glossary/advantage} on Dexterity (Stealth) checks."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": " and the target has the {ref:condition/prone} condition if it is Medium or smaller."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

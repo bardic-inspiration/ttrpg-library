@@ -42,6 +42,9 @@
     },
     "effect": "You touch a creature and end one condition on it: {ref:condition/blinded}, {ref:condition/deafened}, {ref:condition/paralyzed}, or {ref:condition/poisoned}."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

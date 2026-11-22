@@ -12,6 +12,9 @@
     },
     "effect": "While wearing this pendant, you can take a {ref:glossary/magic} action to regain 2d4 + 2 {ref:glossary/hit-points}. Once used, this property can't be used again until the next dawn.\n\nIn addition, you have {ref:glossary/advantage} on saving throws to avoid or end the {ref:condition/poisoned} condition while you wear this pendant."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

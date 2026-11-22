@@ -1,0 +1,58 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "absolute-loyalty",
+  "name": "Absolute Loyalty",
+  "summary": "Makes a creature intensely loyal to you for a time.",
+  "stats": {
+    "level": 6,
+    "school": "enchantment",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/warlock"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a silver thread"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "One creature within range makes a Wisdom saving throw, with Advantage if you or your allies are fighting it. On a failure, it regards you as a trusted friend and obeys your commands. It repeats the save when damaged or when commanded to act against its nature."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

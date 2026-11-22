@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "ring-of-the-quiet-mind",
+  "name": "Ring of the Quiet Mind",
+  "summary": "A ring that blunts attempts to read or frighten your thoughts.",
+  "description": "A plain steel band that sits cool against the skin. Monks of a silent order bought a stock of them.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": true
+    },
+    "effect": "While you wear this ring, you have Advantage on saving throws against the {ref:condition/charmed} condition, and your thoughts can't be read by telepathy unless you allow it."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

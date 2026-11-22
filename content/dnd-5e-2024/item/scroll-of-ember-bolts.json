@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "scroll-of-ember-bolts",
+  "name": "Scroll of Ember Bolts",
+  "summary": "A scroll that casts a volley of fire bolts.",
+  "description": "Written in red ink on charred paper. It stays warm in the pouch.",
+  "stats": {
+    "category": "scroll",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/scorching-ray"
+        }
+      }
+    ],
+    "effect": "This scroll bears the *Scorching Ray* spell. Using an action to read it casts the spell once, using your spellcasting ability if you can cast spells, or otherwise a +5 spell attack bonus, and the scroll is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

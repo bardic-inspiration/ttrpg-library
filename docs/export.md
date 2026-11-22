@@ -246,7 +246,9 @@ entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
   results (`{ "results": […] }`), telling a lone record's type by its fields.
 - **The document.** Every record names the library as its Open5e document,
   `ttrpg-library`, and is keyed `ttrpg-library_<id>`, as Open5e keys a
-  document's records.
+  document's records. On import, a record keyed that way keeps that id, so an
+  exported entry comes back as itself; any other record's id is its name's
+  slug ([IDs and names](content-model.md#ids-and-names)).
 - **Links, on export:** a `{ref:…}` token in text becomes its display text
   or its target's name, and each is reported. A structured ref becomes the
   name in Open5e's field for it: a spell's classes, a creature's condition
@@ -281,6 +283,11 @@ entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
   its legendary actions don't import); an item whose rarity varies (not
   exported), its base item, charges, spells, and curse; embedded stat blocks;
   and any `adjust`. Each is reported where it occurs.
+- **Equipment groups.** Open5e gives an item a category, not a group, so
+  import reads a group only from a weapon's or armor's summary or the
+  Adventuring Gear category. Other equipment (tools, mounts, vehicles)
+  exports under its category, reported as an entry that doesn't import back;
+  an Open5e record in any other category isn't imported.
 - **Defaults Open5e requires:** an item without a size exports Open5e's
   default, Tiny, and a magic item a weight of `0.000`, as Open5e gives its
   SRD items.

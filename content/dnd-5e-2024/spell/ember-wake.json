@@ -1,0 +1,57 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "ember-wake",
+  "name": "Ember Wake",
+  "summary": "Leaves a trail of flames behind you as you move.",
+  "stats": {
+    "level": 2,
+    "school": "evocation",
+    "classes": [
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/druid"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a charred twig"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "For the duration, each time you move at least 10 feet on your turn you leave a trail of fire in the spaces you passed. A creature that enters or ends its turn in the trail makes a Dexterity saving throw, taking 2d6 Fire damage on a failed save or no damage on a successful one. The trail lasts until the start of your next turn."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

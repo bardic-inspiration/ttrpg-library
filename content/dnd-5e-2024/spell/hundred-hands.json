@@ -1,0 +1,55 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "hundred-hands",
+  "name": "Hundred Hands",
+  "summary": "Conjures spectral hands that seize and drag creatures.",
+  "stats": {
+    "level": 3,
+    "school": "conjuration",
+    "classes": [
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/cleric"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 90
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "Spectral hands fill a 20-foot-radius Sphere centered on a point within range. Creatures in the area make a Strength saving throw when it appears and at the start of each of their turns, taking 3d8 Force damage and being dragged up to 10 feet toward the center on a failure, or half as much damage and no movement on a success."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

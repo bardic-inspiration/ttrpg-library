@@ -1,0 +1,111 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "skullbound-hound",
+  "name": "Skullbound Hound",
+  "summary": "A hunting dog reduced to bone, with a human skull wired over its own and a howl that pins prey in place.",
+  "description": "Gravekeepers' hounds are sometimes given the skull of a murdered master. The hound never forgets whose voice it is meant to answer.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 16,
+      "con": 13,
+      "int": 3,
+      "wis": 12,
+      "cha": 6
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The hound has Advantage on an attack roll against a creature if at least one of the hound's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/prone} condition."
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Hollow Howl",
+        "kind": "save",
+        "ability": "wis",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature within 30 feet that can hear the hound"
+        },
+        "onFailure": "The target has the {ref:condition/frightened} condition until the end of the hound's next turn.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

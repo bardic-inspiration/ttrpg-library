@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "hollow-star-patron-dead-stars-pull",
+  "name": "Dead Star's Pull",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "As an action, you pull every creature within 30 feet up to 15 feet toward you; each must succeed on a Strength saving throw against your spell save DC or take Cold damage equal to your Warlock level. Once you use this feature, you can't use it again until you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -51,6 +51,9 @@
     "effect": "You touch a creature and choose Strength, Dexterity, Intelligence, Wisdom, or Charisma. For the duration, the target has {ref:glossary/advantage} on ability checks using the chosen ability.",
     "higherLevels": "You can target one additional creature for each spell slot level above 2. You can choose a different ability for each target."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

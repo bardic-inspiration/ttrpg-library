@@ -102,7 +102,8 @@ batch doesn't repeat a concept already in the library.
 ## Step 3: Write entries
 
 Write each entry to `content/<ruleset>/<type>/<id>.json`, where `<id>` is the
-slug of the name: lowercase, ASCII-folded, non-alphanumerics collapsed to `-`
+slug of the name: lowercase, ASCII-folded, apostrophes dropped, other
+non-alphanumerics collapsed to `-` ("Hunter's Mark" is `hunters-mark`)
 ([IDs and names](../../../docs/content-model.md#ids-and-names)). Write the envelope keys in the [Entry envelope](../../../docs/content-model.md#entry-envelope) order: `ruleset`, `type`, `id`,
 `name`, `summary`, `description`, `stats`, `tags`, `meta`.
 
@@ -175,7 +176,7 @@ against it before pushing.
   punctuation or layout; [SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries) "Formatting" lists what isn't matched.
 - An inline heading in rules text is bold italic: `***Regaining Charges.***`
   ([Templates](../../../docs/site.md#templates)).
-- Set `meta.source.srd` to `true` (step 4).
+- Set `meta.source.srd` to `true`, and `tags.source` to `"SRD"` where the type takes tags (step 4).
 
 ### Import batches
 
@@ -225,6 +226,7 @@ Set on every entry in the batch, including dependencies:
 - `meta.source.gapFill`: the bucket label, for a gap-fill run. Omit it
   otherwise.
 - `meta.source.srd`: `true` on an SRD entry. Omit it on a custom entry.
+  An SRD entry also gets `tags.source: "SRD"` where its type takes tags.
 - `tags`: the resolved request tags (request tags merged over
   `defaults.tags`), on every entry. Omit `tags` if it would be empty.
 
@@ -242,6 +244,11 @@ If it still fails:
   errors in the run's output and stop.
 
 Once it passes, keep every warning it prints; they go in the PR body.
+
+Then go through the [Self-review](../../../docs/generation.md#self-review)
+list, fixing each item that doesn't hold, and tick it in the PR body. If
+`npm test` fails on an entry that already follows the content rules, file
+the dev issue the list describes and leave that item unticked.
 
 ## Step 6: Branch, commit, and open the PR
 
@@ -267,6 +274,8 @@ Once it passes, keep every warning it prints; they go in the PR body.
      `summaryField` (CR, rarity, or spell level), and the summary.
    - **Warnings:** every validator warning, and every `adjust` or damage
      `bonus` with its reason. "None" if there are none.
+   - **Self-review:** each item ticked, or the dev issue named under an
+     unticked one.
    - **Gap fill:** the bucket label, for a gap-fill run. Delete the section
      otherwise.
    - **Skipped on import:** for an import batch, each issue's skip-list

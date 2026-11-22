@@ -36,7 +36,12 @@ export interface LinkedEntry {
   id: string;
   name: string;
   stats: unknown;
+  /** Its provenance; `source.srd` marks an SRD entry (docs/content-model.md#srd-and-custom-entries). */
+  meta?: { source?: unknown };
 }
+
+/** Whether a linked entry is an SRD entry. */
+export const isSrdEntry = (entry: Pick<LinkedEntry, 'meta'>): boolean => (entry.meta?.source as { srd?: boolean } | undefined)?.srd === true;
 
 /** How a detail page labels a reference, from each end: "Casts: Frost Lance", "Cast by: Wand of Frost Lances". */
 export interface RefLabels {

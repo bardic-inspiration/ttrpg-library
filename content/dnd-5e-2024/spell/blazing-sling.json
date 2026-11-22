@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "blazing-sling",
+  "name": "Blazing Sling",
+  "summary": "Hurls a ball of fire that splits into smaller flames on impact.",
+  "stats": {
+    "level": 4,
+    "school": "evocation",
+    "classes": [
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/druid"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a smooth stone"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Make a ranged spell attack against a creature within range. On a hit, the target takes 6d6 Fire damage, and each creature within 10 feet of it makes a Dexterity saving throw, taking 3d6 Fire damage on a failed save or half as much on a success."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

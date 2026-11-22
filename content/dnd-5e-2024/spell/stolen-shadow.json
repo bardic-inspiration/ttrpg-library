@@ -1,0 +1,55 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "stolen-shadow",
+  "name": "Stolen Shadow",
+  "summary": "Steals a creature's shadow so that it fights beside you.",
+  "stats": {
+    "level": 4,
+    "school": "illusion",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/warlock"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A creature within range makes a Charisma saving throw. On a failed save, its shadow detaches and acts as your ally, making one melee spell attack each turn on your behalf against creatures of your choice for 2d8 Necrotic damage."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

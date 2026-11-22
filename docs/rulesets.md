@@ -68,8 +68,9 @@ same ruleset, for checks that read another entry: a background's feat must be
 an origin feat. `check` also receives whether the entry is an SRD entry, for a
 rule that depends on it. An optional `deriveLinked` computes values that read
 other entries, given the entry's key and every entry and component of its
-ruleset; the site merges them into the entry's derived values, as a class's
-spell list is the spells that name it ([Classes](#classes)).
+ruleset, each with its `meta` so it can tell an SRD entry (`isSrdEntry`); the site merges
+them into the entry's derived values, as a class's spell list is the spells
+that name it ([Classes](#classes)).
 
 `dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, an
 item's `spells[].spell`) are "Casts" / "Cast by"; a background's `feat` is
@@ -530,7 +531,11 @@ A class derives (`classes.ts`), per level 1–20:
   at the later `subclassLevels`; its spell list, every spell whose `classes`
   holds its id plus its own `spells`, by level and then name, each with its
   school and Special marks (C for Concentration, R for a ritual, M for a
-  material component with a cost); and its subclasses, by name.
+  material component with a cost); and its subclasses, by name. An SRD
+  class's spell list and subclasses take only SRD entries; a custom spell or
+  subclass that names it is listed in the page's Homebrew links
+  ([Detail page](site.md#detail-page)). A custom class takes every spell and
+  subclass that names it.
 
 Its page (`class-page`) prints, in the SRD's order:
 

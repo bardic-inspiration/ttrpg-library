@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "fieldwarden-s-satchel",
+  "name": "Fieldwarden's Satchel",
+  "summary": "A satchel that holds more than it should and keeps food fresh.",
+  "description": "Plain oiled leather with a wooden toggle. Farm wives hand them to their daughters and say nothing about how they work.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "This satchel can hold up to 100 pounds of items. The weight inside doesn't add to what you carry beyond 10 pounds. Food and drink stored in it stays fresh for 1 week. Living creatures can't be placed inside."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

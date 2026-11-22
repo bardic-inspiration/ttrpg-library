@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "pinch-of-stillness",
+  "name": "Pinch of Stillness",
+  "summary": "A pinch of powder that holds a creature in place for a breath.",
+  "description": "Gathered from the dust beneath a clock that stopped. It is very fine and settles in no wind.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can blow this powder at a creature within 10 feet. The creature must succeed on a DC 15 Wisdom saving throw or have the {ref:condition/paralyzed} condition until the end of its next turn. The powder is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "thoughtreaver",
+  "name": "Thoughtreaver",
+  "summary": "A robed psychic who rips secrets and sanity from a creature's mind with a whispered word.",
+  "description": "Thoughtreavers are the cult's interrogators, and they are rarely needed twice. A prisoner who has met one often confesses to crimes that never happened, simply to make the voice stop.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 13,
+      "note": "mage armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 14,
+      "con": 14,
+      "int": 16,
+      "wis": 12,
+      "cha": 13
+    },
+    "saveProficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "insight": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Undercommon"
+      ],
+      "telepathy": 60
+    },
+    "traits": [
+      {
+        "name": "Mental Ward",
+        "kind": "other",
+        "text": "The thoughtreaver has Advantage on saving throws against being {ref:condition/charmed} or {ref:condition/frightened}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The thoughtreaver makes two Psychic Lance attacks."
+      },
+      {
+        "name": "Psychic Lance",
+        "kind": "ranged-attack",
+        "ability": "int",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "int",
+            "type": "psychic"
+          }
+        ]
+      },
+      {
+        "name": "Thought Rip",
+        "kind": "save",
+        "ability": "int",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature the thoughtreaver can see within 60 feet"
+        },
+        "damage": [
+          {
+            "dice": "4d8",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "and the target has the {ref:condition/stunned} condition until the end of its next turn.",
+        "onSuccess": "Half damage only.",
+        "recharge": "5-6"
+      }
+    ],
+    "cr": 3
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "thought-thieves",
+      "controller"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

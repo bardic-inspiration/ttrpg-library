@@ -12,6 +12,9 @@
     },
     "effect": "These furred boots are snug and feel warm. While wearing them, you gain the following benefits.\n\n***Cold Resistance.*** You have {ref:glossary/resistance} to Cold damage and can tolerate temperatures of 0 degrees Fahrenheit or lower without any additional protection.\n\n***Winter Strider.*** You ignore {ref:glossary/difficult-terrain} created by ice or snow."
   },
+  "tags": {
+    "source": "SRD"
+  },
   "meta": {
     "createdAt": "2026-11-04",
     "source": {

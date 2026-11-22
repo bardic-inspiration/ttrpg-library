@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "item",
+  "id": "dust-of-misdirection",
+  "name": "Dust of Misdirection",
+  "summary": "A pinch of grey dust that makes pursuers lose your trail.",
+  "description": "Sold in twists of paper by traveling peddlers who can't say where they get it. It glitters when it falls.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Bonus Action, you can scatter this dust around you. For 1 hour, creatures tracking you by sight, scent, or magic have Disadvantage on checks to follow your trail, and the dust is consumed."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

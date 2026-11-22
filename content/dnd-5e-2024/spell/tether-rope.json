@@ -1,0 +1,58 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "spell",
+  "id": "tether-rope",
+  "name": "Tether Rope",
+  "summary": "Binds a creature's movement to a point with a glowing cord.",
+  "stats": {
+    "level": 1,
+    "school": "conjuration",
+    "classes": [
+      {
+        "ref": "class/ranger"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a length of cord"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "Choose a creature within range. It makes a Strength saving throw. On a failed save, a glowing cord anchors it to a point within 5 feet of it, and it cannot move farther than 15 feet from that point. It repeats the save at the end of each of its turns, ending the effect on a success."
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures"
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

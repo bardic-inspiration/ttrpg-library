@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "bulwark-steadfast-guard",
+  "name": "Steadfast Guard",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You can use the {ref:glossary/dodge} action as a {ref:glossary/bonus-action} a number of times equal to your Strength modifier (minimum once). You regain all expended uses when you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

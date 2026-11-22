@@ -22,6 +22,20 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(wand).toMatch(/<a href="[^"]*\/dnd-5e-2024\/spell\/frost-lance\/"[^>]*>Frost Lance<\/a>/);
   });
 
+  it('lists an SRD page\'s links to homebrew in a Homebrew section after its links, and a homebrew page\'s links unsplit', async () => {
+    const html = await render('sorcerer');
+    // Frost Lance is homebrew and names the Sorcerer: not on its spell list, and only under Homebrew.
+    const at = html.indexOf('<h2 id="homebrew-heading"');
+    expect(at).toBeGreaterThan(html.indexOf('<h2 id="links-heading"'));
+    const [before, homebrew] = [html.slice(0, at), html.slice(at)];
+    expect(before).not.toContain('Frost Lance');
+    expect(textOf(homebrew).trim()).toMatch(/^Homebrew Spells Frost Lance /);
+    expect(homebrew).toMatch(/<a href="[^"]*\/dnd-5e-2024\/spell\/frost-lance\/"[^>]*>Frost Lance<\/a>/);
+    const spell = await render('frost-lance');
+    expect(spell).not.toContain('homebrew-heading');
+    expect(textOf(spell)).toContain('Classes Sorcerer, Wizard');
+  });
+
   it('shows the name, type, summary, template, and lore, with no art frame when there is no art', async () => {
     const html = await render('cinder-hound');
     const text = textOf(html);

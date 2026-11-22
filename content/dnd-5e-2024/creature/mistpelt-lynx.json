@@ -1,0 +1,105 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "mistpelt-lynx",
+  "name": "Mistpelt Lynx",
+  "summary": "A pale lynx whose fur takes on the color of whatever it crouches against.",
+  "description": "Mistpelt lynxes hunt from low branches, dropping onto passing prey with barely a rustle. Their pelts are worthless once the cat is dead; the color drains out of them within the hour.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 40,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 17,
+      "con": 12,
+      "int": 3,
+      "wis": 13,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Chameleon Pelt",
+        "kind": "other",
+        "text": "While the lynx is motionless in a forest, it has {ref:glossary/advantage} on Dexterity (Stealth) checks and creatures have {ref:glossary/disadvantage} on Wisdom (Perception) checks to notice it."
+      },
+      {
+        "name": "Pounce",
+        "kind": "other",
+        "text": "If the lynx moves at least 20 feet straight toward a creature and then hits it with a Claw attack on the same turn, the target must succeed on a {dc:str} Strength saving throw or have the {ref:condition/prone} condition. If the target has the Prone condition, the lynx can make one Bite attack against it as a {ref:glossary/bonus-action}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The lynx makes one Claw attack and one Bite attack."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

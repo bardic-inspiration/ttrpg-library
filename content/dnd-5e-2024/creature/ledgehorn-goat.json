@@ -1,0 +1,85 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ledgehorn-goat",
+  "name": "Ledgehorn Goat",
+  "summary": "A shaggy mountain goat that stands on ledges no wider than a hoof and butts trespassers off them.",
+  "description": "Ledgehorn goats graze the faces of cliffs that nothing else can reach, and they treat every narrow path as their own. Travelers who meet a billy on a ledge trail learn to back up, because the goat never does.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 40,
+      "climb": 40
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 14,
+      "int": 3,
+      "wis": 12,
+      "cha": 6
+    },
+    "skills": {
+      "athletics": "proficient",
+      "perception": "proficient"
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Sure-Footed",
+        "kind": "other",
+        "text": "The goat has {ref:glossary/advantage} on Strength and Dexterity saving throws made against effects that would move it or give it the {ref:condition/prone} condition."
+      },
+      {
+        "name": "Ledge Charge",
+        "kind": "other",
+        "text": "If the goat moves at least 20 feet straight toward a target and then hits it with a Ram attack on the same turn, the target takes an extra {dmg:1d6:bludgeoning}. If the target is Medium or smaller, it must succeed on a {dc:str} Strength saving throw or be pushed up to 10 feet straight away from the goat."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Ram",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration",
+    "source": "Bardic's Compendium of Test Fixtures",
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

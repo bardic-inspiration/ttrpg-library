@@ -1,0 +1,21 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "class-feature",
+  "id": "warrior-of-the-quiet-step-hush",
+  "name": "Hush",
+  "stats": {
+    "levels": [
+      11
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can spend 2 Focus Points to create a 20-foot-radius zone of silence centered on you for 1 minute. Sound can't pass in or out of it."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}
