@@ -108,7 +108,8 @@ prefix, so a spike can't merge. Record what you learned, then close the PR.
 
 Each milestone is a tracking issue holding its "done when" and its tasks as
 ordered sub-issues. So is each development track ("Tracks" below), which has
-no end of its own. GitHub's milestone feature isn't used. Content issues
+no end of its own. So is the "Spot Fixes" issue when no milestone is open
+("Dev Queue" below). GitHub's milestone feature isn't used. Content issues
 follow [Requests](docs/generation.md#requests).
 
 A dev issue states what to do, the docs or track spec section it implements,
@@ -156,11 +157,21 @@ review takes up every open issue in it.
 
 ### Dev Queue
 
-Milestone issues, in milestone order, then track issues, in the order
+Milestone issues, in milestone order (or, when no milestone is open, the
+"Spot Fixes" issue below), then track issues, in the order
 [`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
 sub-issues (GitHub's order) are one queue. Work beyond v2 goes under the "Later (v3)" issue (#118),
 outside the queue.
 
+- **The active queue** is the one open tracking issue labeled `queue`: the
+  current milestone, or the "Spot Fixes" issue. It is tied to a version;
+  tracks are side queues and never carry the label. "Place" and "Pick" start
+  at the labeled issue, and the tracks come after it. Move the label to the
+  next milestone when one starts, and take it off an issue when it closes.
+- **No open milestone:** new dev issues go under a "<version> Spot Fixes"
+  tracking issue labeled `queue`, where `<version>` is the latest release's
+  tag (`v1.0.0`), or the latest spec's version if there is no release.
+  Create it if it doesn't exist.
 - **Place** every new dev issue with `sub_issue_write`. Put it before the
   first issue that depends on it, and say why in a comment. If unsure, leave
   it unattached and ask the user.
