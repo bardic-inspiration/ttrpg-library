@@ -1,0 +1,126 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "spellfencer",
+  "name": "Spellfencer",
+  "summary": "An elven duelist who weaves spells between sword strokes and strikes with lightning in the blade.",
+  "description": "The spellfencing schools teach a sword-and-spell style that no mortal can learn before the age of fifty. The practitioners are proud, quick, and always in a hurry to be somewhere else.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 15,
+      "note": "studded leather armor"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 17,
+      "con": 14,
+      "int": 15,
+      "wis": 12,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "dex",
+      "int"
+    ],
+    "skills": {
+      "acrobatics": "proficient",
+      "arcana": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/rapier"
+      },
+      {
+        "ref": "equipment/studded-leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The spellfencer has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      },
+      {
+        "name": "Spell Strike",
+        "kind": "other",
+        "text": "When the spellfencer casts a spell as an action, it can make one Rapier attack as a {ref:glossary/bonus-action}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The spellfencer makes two Rapier attacks."
+      },
+      {
+        "name": "Rapier",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "lightning"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/shocking-grasp"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/blur"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/shield"
+          },
+          {
+            "ref": "spell/misty-step"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "magister",
+  "name": "Magister",
+  "summary": "A master of the spire's schools, trading blast for counter-blast and answering every spell with a better one.",
+  "description": "Magisters wear robes of a sober color and a patient expression. They have studied the great spells long enough to know exactly where each one fails, and they are generous in sharing that knowledge on the field.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 15,
+      "note": "mage armor"
+    },
+    "hitDice": 24,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 14,
+      "con": 16,
+      "int": 20,
+      "wis": 14,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "expertise",
+      "history": "proficient",
+      "investigation": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/quarterstaff"
+      },
+      {
+        "ref": "equipment/arcane-focus"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Draconic",
+        "Sylvan",
+        "Celestial"
+      ]
+    },
+    "cr": 9,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The magister has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Quarterstaff",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The magister makes two Arcane Lance attacks."
+      },
+      {
+        "name": "Arcane Lance",
+        "kind": "ranged-attack",
+        "ability": "int",
+        "range": {
+          "normal": 120
+        },
+        "damage": [
+          {
+            "dice": "4d8",
+            "ability": "int",
+            "type": "force"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Spell Ward",
+        "kind": "other",
+        "text": "*Trigger:* The magister is targeted by a spell that requires a saving throw. *Response:* The magister has {ref:glossary/advantage} on the saving throw."
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/fire-bolt"
+        },
+        {
+          "ref": "spell/mage-hand"
+        },
+        {
+          "ref": "spell/prestidigitation"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/cone-of-cold"
+          },
+          {
+            "ref": "spell/teleport"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/fireball"
+          },
+          {
+            "ref": "spell/wall-of-force"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/counterspell"
+          },
+          {
+            "ref": "spell/dispel-magic"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

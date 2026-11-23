@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "orc-ravager",
+  "name": "Orc Ravager",
+  "summary": "A berserk orc who fights harder the closer it comes to death.",
+  "description": "Ravagers are what is left when the clan's anger is given a body and a weapon. They go into a fight as if they had already lost, and nobody who has watched one will argue.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Orc"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 15,
+      "note": "chain shirt"
+    },
+    "hitDice": 14,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 14,
+      "con": 18,
+      "int": 8,
+      "wis": 10,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "intimidation": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/greataxe"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Orc"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Reckless",
+        "kind": "other",
+        "text": "At the start of its turn, the ravager can gain {ref:glossary/advantage} on all melee attack rolls it makes during that turn, but attack rolls against it have Advantage until the start of its next turn."
+      },
+      {
+        "name": "Relentless Endurance",
+        "kind": "other",
+        "text": "If the ravager is reduced to 0 hit points but not killed outright, it drops to 1 hit point instead.",
+        "uses": "1/day"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The ravager makes two Greataxe attacks."
+      },
+      {
+        "name": "Greataxe",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d8",
+            "type": "slashing",
+            "condition": "if the ravager is Bloodied"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Aggressive",
+        "kind": "other",
+        "text": "The ravager moves up to its Speed toward a hostile creature it can see."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "goblin-trapsetter",
+  "name": "Goblin Trapsetter",
+  "summary": "A goblin who litters the approach to a warren with tripwires and spiked snares.",
+  "description": "Every goblin warren has a ring of traps, and every trapsetter has a secret about which ones they hid to protect themselves from their own chief.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 14,
+      "con": 12,
+      "int": 10,
+      "wis": 10,
+      "cha": 8
+    },
+    "skills": {
+      "stealth": "proficient",
+      "survival": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      },
+      {
+        "ref": "equipment/caltrops",
+        "count": 2
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Spiked Snare",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature within 30 feet of the trapsetter"
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "piercing"
+          }
+        ],
+        "onFailure": "The target also has the {ref:condition/prone} condition and its Speed is 0 until the end of its next turn.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Nimble Escape",
+        "kind": "other",
+        "text": "The trapsetter takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

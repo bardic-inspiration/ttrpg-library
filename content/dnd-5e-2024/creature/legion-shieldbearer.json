@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "legion-shieldbearer",
+  "name": "Legion Shieldbearer",
+  "summary": "A heavy infantryman in the front rank who covers a comrade with a tower shield.",
+  "description": "Shieldbearers hold the front of a legion's line, locked together so closely that a single shield covers two soldiers. When the line breaks, it breaks where a shieldbearer has fallen.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 16,
+      "note": "chain mail"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 10,
+      "con": 14,
+      "int": 9,
+      "wis": 11,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "con"
+    ],
+    "gear": [
+      {
+        "ref": "equipment/spear"
+      },
+      {
+        "ref": "equipment/chain-mail"
+      },
+      {
+        "ref": "equipment/shield"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 0.5,
+    "actions": [
+      {
+        "name": "Spear",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Shield Bash",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is Medium or smaller, it must succeed on a {dc:str} Strength saving throw or have the {ref:condition/prone} condition.",
+        "recharge": "5-6"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Cover an Ally",
+        "kind": "other",
+        "text": "*Trigger:* A creature within 5 feet of the shieldbearer is hit by an attack roll. *Response:* The shieldbearer adds 2 to that creature's AC against the attack, possibly causing it to miss."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

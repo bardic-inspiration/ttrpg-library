@@ -1,0 +1,127 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "cat-burglar",
+  "name": "Cat Burglar",
+  "summary": "A rooftop thief who opens locks, scales walls, and strikes from behind with a hidden blade.",
+  "description": "They take what is out of reach, and the guards learn about it the next morning. A cat burglar who is cornered is rarely there for long: the nearest window is usually already open.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 15,
+      "note": "leather armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 18,
+      "con": 12,
+      "int": 13,
+      "wis": 14,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "dex",
+      "int"
+    ],
+    "skills": {
+      "acrobatics": "expertise",
+      "stealth": "expertise",
+      "sleight-of-hand": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/rapier"
+      },
+      {
+        "ref": "equipment/thieves-tools"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Sneak Attack",
+        "kind": "other",
+        "text": "Once per turn, the burglar deals an extra {dmg:2d6:piercing} damage to a creature it hits with an attack roll if the roll had {ref:glossary/advantage}, or if another enemy of the target is within 5 feet of it and doesn't have the {ref:condition/incapacitated} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The burglar makes two Rapier attacks."
+      },
+      {
+        "name": "Rapier",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Shortbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Cunning Action",
+        "kind": "other",
+        "text": "The burglar takes the {ref:glossary/dash}, {ref:glossary/disengage}, or {ref:glossary/hide} action."
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Uncanny Dodge",
+        "kind": "other",
+        "text": "*Trigger:* An attacker the burglar can see hits it with an attack roll. *Response:* The burglar halves the attack's damage against it."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

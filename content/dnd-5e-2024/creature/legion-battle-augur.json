@@ -1,0 +1,124 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "legion-battle-augur",
+  "name": "Legion Battle-Augur",
+  "summary": "A legion war-mage who reads omens before battle and answers with fire, lightning, and well-timed counsel.",
+  "description": "The augurs read the entrails, the sky, and the enemy's dispositions with equal skill, and their advice is the reason the legion's generals are rarely surprised. They tend to be quiet, expensive, and hard to kill.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "shortName": "augur",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 15,
+      "note": "chain shirt"
+    },
+    "hitDice": 22,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 12,
+      "con": 14,
+      "int": 18,
+      "wis": 14,
+      "cha": 13
+    },
+    "saveProficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "history": "proficient",
+      "insight": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Celestial",
+        "Elvish"
+      ]
+    },
+    "cr": 7,
+    "traits": [
+      {
+        "name": "Read the Omens",
+        "kind": "other",
+        "text": "When the augur or a creature it can see within 30 feet makes an attack roll, an ability check, or a saving throw, the augur can roll 1d6 and add or subtract the result.",
+        "uses": "3/day"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/fire-bolt"
+        },
+        {
+          "ref": "spell/mage-hand"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/clairvoyance"
+          },
+          {
+            "ref": "spell/wall-of-force"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/lightning-bolt"
+          },
+          {
+            "ref": "spell/slow"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/shield"
+          },
+          {
+            "ref": "spell/detect-thoughts"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

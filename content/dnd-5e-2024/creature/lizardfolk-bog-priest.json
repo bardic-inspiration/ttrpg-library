@@ -1,0 +1,139 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "lizardfolk-bog-priest",
+  "name": "Lizardfolk Bog-Priest",
+  "summary": "A lizardfolk shaman who speaks for the swamp, heals the tribe, and wraps trespassers in choking vines.",
+  "description": "The bog-priest keeps a nest of eggs, a pot of herbs, and a long list of the ways a swamp can kill a stranger. They respect the dragon, but the swamp predates it, and they have noticed.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Lizardfolk"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 12,
+      "con": 14,
+      "int": 8,
+      "wis": 16,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "nature": "proficient",
+      "survival": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/quarterstaff"
+      },
+      {
+        "ref": "equipment/druidic-focus"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Hold Breath",
+        "kind": "other",
+        "text": "The bog-priest can hold its breath for 15 minutes."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The bog-priest makes two attacks, using Bite and Quarterstaff once each."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Quarterstaff",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/druidcraft"
+        },
+        {
+          "ref": "spell/poison-spray"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/hold-person"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/fog-cloud"
+          },
+          {
+            "ref": "spell/stinking-cloud"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/entangle"
+          },
+          {
+            "ref": "spell/cure-wounds"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

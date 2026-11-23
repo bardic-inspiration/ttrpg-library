@@ -1,0 +1,117 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "legion-medicus",
+  "name": "Legion Medicus",
+  "summary": "A legion field surgeon who stitches the wounded back into the line and keeps them fighting.",
+  "description": "A medicus works with a needle in one hand and a sword in the other, and has learned to shout for help in both. Their ranks swear to heal friend and foe alike, an oath the enemy rarely returns.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 14,
+      "note": "chain shirt"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 12,
+      "con": 12,
+      "int": 13,
+      "wis": 16,
+      "cha": 11
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "skills": {
+      "medicine": "expertise",
+      "insight": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/shortsword"
+      },
+      {
+        "ref": "equipment/healers-kit"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Celestial"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The medicus makes two Shortsword attacks."
+      },
+      {
+        "name": "Shortsword",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Field Dressing",
+        "kind": "other",
+        "text": "The medicus uses a Healer's Kit on one creature within 5 feet, which restores 8 hit points to it.",
+        "uses": "2/day"
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/sacred-flame"
+        },
+        {
+          "ref": "spell/spare-the-dying"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/lesser-restoration"
+          },
+          {
+            "ref": "spell/protection-from-poison"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/healing-word"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

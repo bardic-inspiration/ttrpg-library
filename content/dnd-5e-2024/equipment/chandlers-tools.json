@@ -1,0 +1,28 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "equipment",
+  "id": "chandlers-tools",
+  "name": "Chandler's Tools",
+  "summary": "Wax pots, wick cord, and dipping frames for making candles, lamp oil, and torches.",
+  "description": "A chandler's kit smells of tallow and beeswax, and its moulds and dipping frames fold flat for the road. Miners, temples, and besieged garrisons all pay well for people who can keep a flame burning.",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 10,
+      "unit": "gp"
+    },
+    "weight": 5,
+    "tool": {
+      "ability": "int",
+      "utilize": "Tell what fuel a flame is burning by its smoke and smell (DC 10), or rig a candle or torch to burn twice as long as normal (DC 15)",
+      "craft": "{ref:equipment/candle}, {ref:equipment/oil}, {ref:equipment/torch}, Soap"
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

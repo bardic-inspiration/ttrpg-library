@@ -1,0 +1,137 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "scaleblood-sorcerer",
+  "name": "Scaleblood Sorcerer",
+  "summary": "A dragon-blooded caster whose spells burn hotter than they should, and who sprouts wings when it matters.",
+  "description": "The Scaleblood have a dragon in the family tree, and in the blood. Their magic comes unbidden and in excess, and they have learned to control it through a lifetime of mistakes.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "dragon",
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 15,
+      "note": "natural armor"
+    },
+    "hitDice": 18,
+    "speed": {
+      "walk": 30,
+      "fly": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 14,
+      "con": 16,
+      "int": 12,
+      "wis": 12,
+      "cha": 19
+    },
+    "saveProficiencies": [
+      "con",
+      "cha"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "persuasion": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/arcane-focus"
+      }
+    ],
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 10
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 6,
+    "actions": [
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Wyrmfire Burst",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "10d6",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "atWill": [
+        {
+          "ref": "spell/fire-bolt"
+        },
+        {
+          "ref": "spell/mage-hand"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/dragons-breath"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/fireball"
+          },
+          {
+            "ref": "spell/fly"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/scorching-ray"
+          },
+          {
+            "ref": "spell/shield"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

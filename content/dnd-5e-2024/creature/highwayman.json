@@ -1,0 +1,104 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "highwayman",
+  "name": "Highwayman",
+  "summary": "A mounted road robber who demands \"your money or your life\" and has the pistol to make it stick.",
+  "description": "The highwayman works alone or with one partner and takes only what a traveler can hand over quickly. A good one leaves most victims alive, because the next coach will be easier if the story is \"they were polite\".",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 16,
+      "con": 13,
+      "int": 11,
+      "wis": 12,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "dex"
+    ],
+    "skills": {
+      "intimidation": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/rapier"
+      },
+      {
+        "ref": "equipment/pistol"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Rapier",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Pistol",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 30,
+          "long": 90
+        },
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Stand and Deliver",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature of the highwayman's choice within 30 feet that can hear it"
+        },
+        "onFailure": "The target has the {ref:condition/frightened} condition until the end of its next turn.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

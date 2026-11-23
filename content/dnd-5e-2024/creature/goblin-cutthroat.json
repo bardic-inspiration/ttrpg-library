@@ -1,0 +1,92 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "goblin-cutthroat",
+  "name": "Goblin Cutthroat",
+  "summary": "A goblin knifeman who prefers to strike a distracted foe from behind.",
+  "description": "Cutthroats are the warren's assassins, and they are paid in whatever they can carry away. A warband's chiefs sleep with their backs to a wall, and not out of habit.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 16,
+      "con": 11,
+      "int": 10,
+      "wis": 9,
+      "cha": 8
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "gear": [
+      {
+        "ref": "equipment/scimitar"
+      },
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 0.5,
+    "actions": [
+      {
+        "name": "Scimitar",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d4",
+            "type": "slashing",
+            "condition": "if the attack roll had Advantage"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Nimble Escape",
+        "kind": "other",
+        "text": "The cutthroat takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

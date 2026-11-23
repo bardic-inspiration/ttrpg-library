@@ -1,0 +1,133 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "lorekeeper",
+  "name": "Lorekeeper",
+  "summary": "An elven archivist who has read the answer already and answers back with darts of pure force.",
+  "description": "A lorekeeper knows the genealogy of every house and the precise date of every treaty, and will tell you at length. They fight reluctantly, with an exactness that leaves the room tidier than it was.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "neutral good",
+    "ac": {
+      "value": 13,
+      "note": "mage armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 12,
+      "con": 11,
+      "int": 17,
+      "wis": 16,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "expertise",
+      "history": "expertise",
+      "investigation": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/quarterstaff"
+      },
+      {
+        "ref": "equipment/arcane-focus"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Draconic",
+        "Sylvan"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The lorekeeper has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The lorekeeper makes two Lore-Bolt attacks."
+      },
+      {
+        "name": "Lore-Bolt",
+        "kind": "ranged-attack",
+        "ability": "int",
+        "range": {
+          "normal": 90
+        },
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "int",
+            "type": "force"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/message"
+        },
+        {
+          "ref": "spell/mage-hand"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/counterspell"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/misty-step"
+          },
+          {
+            "ref": "spell/hold-person"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/detect-magic"
+          },
+          {
+            "ref": "spell/identify"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

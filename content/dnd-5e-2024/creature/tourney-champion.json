@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "tourney-champion",
+  "name": "Tourney Champion",
+  "summary": "A crowd-pleasing jouster whose lance can unhorse a rider and whose bow to the stands is half the fight.",
+  "description": "The champion has won more bouts in the lists than most knights have fought on a battlefield. A real fight is rougher, but the footwork carries over, and so does the showmanship.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 16,
+      "note": "half plate"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 13,
+      "con": 14,
+      "int": 10,
+      "wis": 11,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "performance": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/lance"
+      },
+      {
+        "ref": "equipment/half-plate-armor"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The champion makes two Longsword attacks."
+      },
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Unhorsing Lance",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "attackNote": "with Disadvantage if the target is within 5 feet of the champion",
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is Large or smaller, it must succeed on a {dc:str} Strength saving throw or have the {ref:condition/prone} condition.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

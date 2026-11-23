@@ -1,0 +1,133 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "dawnwarden",
+  "name": "Dawnwarden",
+  "summary": "A paladin of the sun whose sword burns with light and whose blast of radiance blinds and scorches.",
+  "description": "Dawnwardens hold the last watch before sunrise and are first to the field when it comes. They believe that darkness is not evil, only unguarded, and they make a point of guarding it.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 17,
+      "note": "splint armor"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 10,
+      "con": 14,
+      "int": 10,
+      "wis": 13,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "insight": "proficient",
+      "religion": "proficient"
+    },
+    "resistances": [
+      "radiant"
+    ],
+    "gear": [
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/splint-armor"
+      },
+      {
+        "ref": "equipment/holy-symbol"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Celestial"
+      ]
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The dawnwarden makes two Longsword attacks."
+      },
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d8",
+            "type": "radiant"
+          }
+        ]
+      },
+      {
+        "name": "Dawn's Radiance",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Emanation originating from the dawnwarden"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "radiant"
+          }
+        ],
+        "onFailure": "The target also has the {ref:condition/blinded} condition until the end of the dawnwarden's next turn.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "noComponents": "Material",
+      "atWill": [
+        {
+          "ref": "spell/light"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/daylight"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/bless"
+          },
+          {
+            "ref": "spell/shield-of-faith"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

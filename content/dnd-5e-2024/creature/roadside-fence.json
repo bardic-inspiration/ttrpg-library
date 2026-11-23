@@ -1,0 +1,95 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "roadside-fence",
+  "name": "Roadside Fence",
+  "summary": "A smiling dealer in stolen goods who talks a mark into a very bad bargain.",
+  "description": "Every bandit camp has a fence, and every fence has a cart, a sign, and a story about where the goods came from. Their real skill is knowing who will pay and who will talk.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 13,
+      "con": 11,
+      "int": 14,
+      "wis": 14,
+      "cha": 16
+    },
+    "skills": {
+      "deception": "expertise",
+      "insight": "proficient",
+      "persuasion": "proficient",
+      "sleight-of-hand": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/clothes-fine"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 0.5,
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-or-ranged-attack",
+        "ability": "dex",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Honeyed Offer",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature within 30 feet of the fence that can hear and understand it"
+        },
+        "onFailure": "The target has the {ref:condition/charmed} condition until the end of its next turn.",
+        "recharge": "5-6"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Look the Other Way",
+        "kind": "other",
+        "text": "*Trigger:* A creature the fence can see within 30 feet is hit by an attack roll. *Response:* The fence offers a bribe to the attacker or a witness, and the attacker must succeed on a {dc:cha} Wisdom saving throw or have {ref:glossary/disadvantage} on its next attack roll before the end of its next turn."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

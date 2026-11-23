@@ -1,0 +1,117 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "radiant-crusader",
+  "name": "Radiant Crusader",
+  "summary": "A zealous paladin in full plate who smites foes for extra radiant damage and shrugs off fear.",
+  "description": "The crusader's armor is dented and bright in equal measure, and no one has ever seen them take it off. They talk little and pray often, and their sermons are delivered with a greatsword.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 18,
+      "note": "plate armor"
+    },
+    "hitDice": 14,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 10,
+      "con": 16,
+      "int": 10,
+      "wis": 12,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "intimidation": "proficient"
+    },
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/frightened"
+        }
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/greatsword"
+      },
+      {
+        "ref": "equipment/plate-armor"
+      },
+      {
+        "ref": "equipment/holy-symbol"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Celestial"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Aura of Courage",
+        "kind": "other",
+        "text": "The crusader and each ally within 10 feet of it can't have the {ref:condition/frightened} condition while the crusader has the hit points to stay conscious."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The crusader makes two Greatsword attacks."
+      },
+      {
+        "name": "Greatsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d8",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/searing-smite"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/divine-smite"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

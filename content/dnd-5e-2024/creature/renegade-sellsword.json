@@ -1,0 +1,106 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "renegade-sellsword",
+  "name": "Renegade Sellsword",
+  "summary": "A deserter who sells a good sword arm to whoever pays, and changes sides when the pay changes.",
+  "description": "Years of army discipline are all that keep a sellsword from being just another thug. They fight well, count their coin often, and leave a doomed cause the moment it stops paying.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 14,
+      "note": "ring mail"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 13,
+      "con": 15,
+      "int": 10,
+      "wis": 11,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "intimidation": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/light-crossbow"
+      },
+      {
+        "ref": "equipment/ring-mail"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Opportunist",
+        "kind": "other",
+        "text": "Once per turn, the sellsword deals an extra {dmg:1d6:slashing} damage to a creature it hits with an attack roll if that creature has already taken damage this round."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The sellsword makes two Longsword attacks."
+      },
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Light Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

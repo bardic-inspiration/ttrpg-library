@@ -1,0 +1,28 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "equipment",
+  "id": "farriers-tools",
+  "name": "Farrier's Tools",
+  "summary": "Hoof knives, rasps, and shoeing hammers for keeping mounts and draft animals sound on the road.",
+  "description": "Every cavalry stable and caravan master keeps a farrier, and a farrier is rarely far from their roll of well-worn tools. A set includes a hoof pick, rasp, nippers, a driving hammer, and a few pounds of nails.",
+  "stats": {
+    "group": "artisans-tools",
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weight": 10,
+    "tool": {
+      "ability": "wis",
+      "utilize": "Shoe a mount or other hooved animal (DC 10), or find the cause of a mount's lameness (DC 15)",
+      "craft": "Horseshoes, {ref:equipment/caltrops}"
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

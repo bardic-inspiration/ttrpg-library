@@ -1,0 +1,116 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "grifter",
+  "name": "Grifter",
+  "summary": "A smooth confidence trickster who charms a victim into handing over the deed and the key.",
+  "description": "The grifter is never the one who looks dangerous. A fine coat, a warm voice, and a little borrowed magic carry them from one town to the next, one step ahead of the last one.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13,
+      "note": "leather armor"
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 13,
+      "con": 12,
+      "int": 14,
+      "wis": 13,
+      "cha": 17
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "deception": "expertise",
+      "insight": "proficient",
+      "persuasion": "expertise"
+    },
+    "gear": [
+      {
+        "ref": "equipment/rapier"
+      },
+      {
+        "ref": "equipment/clothes-fine"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The grifter makes two Rapier attacks."
+      },
+      {
+        "name": "Rapier",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Switch the Blame",
+        "kind": "other",
+        "text": "*Trigger:* The grifter is hit by an attack roll while an ally is within 5 feet of it. *Response:* The grifter swaps places with that ally, and the ally becomes the target of the attack instead."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "atWill": [
+        {
+          "ref": "spell/minor-illusion"
+        },
+        {
+          "ref": "spell/vicious-mockery"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/suggestion"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/charm-person"
+          },
+          {
+            "ref": "spell/disguise-self"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

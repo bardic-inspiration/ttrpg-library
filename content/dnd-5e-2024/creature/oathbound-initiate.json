@@ -1,0 +1,93 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "oathbound-initiate",
+  "name": "Oathbound Initiate",
+  "summary": "A paladin in training whose mace burns undead and fiends and whose touch mends wounds.",
+  "description": "The initiate has sworn a first oath and keeps it with painful literalness. Elders say the vow will either harden into judgment or break, and they watch closely which one it is.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 14,
+      "note": "scale mail"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 10,
+      "con": 13,
+      "int": 10,
+      "wis": 14,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "religion": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/mace"
+      },
+      {
+        "ref": "equipment/scale-mail"
+      },
+      {
+        "ref": "equipment/holy-symbol"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The initiate makes two Mace attacks."
+      },
+      {
+        "name": "Mace",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d6",
+            "type": "radiant",
+            "condition": "if the target is a Fiend or an Undead"
+          }
+        ]
+      },
+      {
+        "name": "Lay on Hands",
+        "kind": "other",
+        "text": "The initiate touches a creature within 5 feet and restores 10 hit points to it. This action can't be used on a Construct or an Undead.",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

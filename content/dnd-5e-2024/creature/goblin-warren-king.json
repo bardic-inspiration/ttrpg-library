@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "goblin-warren-king",
+  "name": "Goblin Warren-King",
+  "summary": "A cunning goblin chieftain who rules by cruelty and sends the rabble in first.",
+  "description": "The warren-king has survived every coup, which is the only qualification that counts. They keep a few loyal bodyguards, many disloyal ones, and a very good sense of when to look the other way.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "fey",
+    "shortName": "king",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 16,
+      "note": "chain shirt, shield"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 16,
+      "con": 14,
+      "int": 12,
+      "wis": 10,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "dex",
+      "cha"
+    ],
+    "skills": {
+      "intimidation": "proficient",
+      "stealth": "expertise"
+    },
+    "gear": [
+      {
+        "ref": "equipment/scimitar"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/shield"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The king makes two Scimitar attacks."
+      },
+      {
+        "name": "Scimitar",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "3d4",
+            "type": "poison"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Rabble Rush",
+        "kind": "other",
+        "text": "Up to three Goblinoid allies the king can see within 30 feet can each use its {ref:glossary/reaction} to move up to half its Speed without provoking {ref:glossary/opportunity-attacks}."
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Shove an Underling",
+        "kind": "other",
+        "text": "*Trigger:* A creature the king can see makes an attack roll against it. *Response:* The king chooses a Small or Medium ally within 5 feet of it. The king and that ally swap places, and the ally becomes the target of the attack instead."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

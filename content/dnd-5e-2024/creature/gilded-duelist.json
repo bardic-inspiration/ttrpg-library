@@ -1,0 +1,115 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "gilded-duelist",
+  "name": "Gilded Duelist",
+  "summary": "A celebrated elven blademaster who fights as an art, stepping through the air between strokes.",
+  "description": "The duelist's gilded rapier is a gift from a royal house and a debt to a dead rival. A duel with one is an honor, and most of the people who have had it describe it as brief.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 17,
+      "note": "studded leather armor"
+    },
+    "hitDice": 21,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 20,
+      "con": 14,
+      "int": 13,
+      "wis": 12,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "dex",
+      "cha"
+    ],
+    "skills": {
+      "acrobatics": "expertise",
+      "performance": "proficient",
+      "insight": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/rapier"
+      },
+      {
+        "ref": "equipment/studded-leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish"
+      ]
+    },
+    "cr": 7,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The duelist has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The duelist makes three Rapier attacks."
+      },
+      {
+        "name": "Rapier",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d6",
+            "type": "psychic",
+            "condition": "if the target has no creature other than the duelist within 5 feet of it"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Fey Step",
+        "kind": "other",
+        "text": "The duelist teleports up to 30 feet to an unoccupied space it can see.",
+        "recharge": "5-6"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Parry",
+        "kind": "other",
+        "text": "*Trigger:* The duelist is hit by a melee attack roll while holding a weapon. *Response:* The duelist adds 3 to its AC against that attack, possibly causing it to miss."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

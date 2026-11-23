@@ -1,0 +1,107 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "lancer",
+  "name": "Lancer",
+  "summary": "A heavy cavalryman whose lance, driven home at a full run, throws enemies to the ground.",
+  "description": "Lancers train for years to hold a spear steady against a horse's gait, and they take it badly when a battle is fought in a forest. In a good field, a line of them is the hammer that breaks the other army.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 16,
+      "note": "chain mail"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 12,
+      "con": 14,
+      "int": 10,
+      "wis": 12,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "animal-handling": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/lance"
+      },
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/chain-mail"
+      },
+      {
+        "ref": "equipment/shield"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Charge",
+        "kind": "other",
+        "text": "If the lancer moves at least 20 feet straight toward a target and then hits it with a Lance attack on the same turn, the target takes an extra {dmg:2d6:piercing} damage and must succeed on a {dc:str} Strength saving throw or have the {ref:condition/prone} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The lancer makes two attacks, using Lance or Longsword in any combination."
+      },
+      {
+        "name": "Lance",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "attackNote": "with Disadvantage if the target is within 5 feet of the lancer",
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

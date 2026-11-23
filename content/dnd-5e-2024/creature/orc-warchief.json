@@ -1,0 +1,120 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "orc-warchief",
+  "name": "Orc Warchief",
+  "summary": "An orc war leader who rides at the head of the horde and has not yet been bested in single combat.",
+  "description": "To win the warchief's title an orc must kill the last one, and to keep it they must keep doing so. Those who have held it for a decade are not merely strong: they are also very good at making sure the right people are in the room.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Orc"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 17,
+      "note": "splint armor"
+    },
+    "hitDice": 19,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 12,
+      "con": 20,
+      "int": 12,
+      "wis": 14,
+      "cha": 18
+    },
+    "saveProficiencies": [
+      "str",
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "intimidation": "expertise"
+    },
+    "gear": [
+      {
+        "ref": "equipment/greataxe"
+      },
+      {
+        "ref": "equipment/splint-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Orc"
+      ]
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the warchief fails a saving throw, it can choose to succeed instead.",
+        "uses": "2/day"
+      },
+      {
+        "name": "Relentless Endurance",
+        "kind": "other",
+        "text": "If the warchief is reduced to 0 hit points but not killed outright, it drops to 1 hit point instead.",
+        "uses": "1/day"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The warchief makes three Greataxe attacks."
+      },
+      {
+        "name": "Greataxe",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d10",
+            "type": "slashing",
+            "condition": "if an ally of the warchief has damaged the target since the start of the warchief's last turn"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Bloodlust Roar",
+        "kind": "other",
+        "text": "Each ally of the warchief's choice within 30 feet that can hear it has {ref:glossary/advantage} on the next attack roll it makes before the end of its next turn and can move up to its Speed as a {ref:glossary/reaction}.",
+        "recharge": "5-6"
+      },
+      {
+        "name": "Aggressive",
+        "kind": "other",
+        "text": "The warchief moves up to its Speed toward a hostile creature it can see."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

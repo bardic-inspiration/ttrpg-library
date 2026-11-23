@@ -1,0 +1,120 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "hospitaller",
+  "name": "Hospitaller",
+  "summary": "A battlefield healer in knightly mail who mends allies between swings of a radiant mace.",
+  "description": "Hospitallers follow the army and the pilgrim road, and set up their field hospitals wherever the wounded fall. They fight when they must, and they are formidable when someone they are treating is threatened.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 15,
+      "note": "chain shirt, shield"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 10,
+      "con": 14,
+      "int": 10,
+      "wis": 16,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "medicine": "expertise",
+      "religion": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/mace"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/healers-kit"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Celestial"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hospitaller makes two Mace attacks."
+      },
+      {
+        "name": "Mace",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d6",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/sacred-flame"
+        },
+        {
+          "ref": "spell/spare-the-dying"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/lesser-restoration"
+          },
+          {
+            "ref": "spell/protection-from-poison"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/healing-word"
+          },
+          {
+            "ref": "spell/cure-wounds"
+          }
+        ]
+      }
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

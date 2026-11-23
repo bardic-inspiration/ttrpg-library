@@ -1,0 +1,115 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "back-alley-smuggler",
+  "name": "Back-Alley Smuggler",
+  "summary": "A contraband runner who covers a getaway with smoke bombs and false-bottomed bags.",
+  "description": "Smugglers know every culvert and cellar in a port city. A few of them are honest enough to refuse a job that involves people instead of cargo.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral",
+    "ac": {
+      "value": 13,
+      "note": "leather armor"
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 15,
+      "con": 13,
+      "int": 12,
+      "wis": 12,
+      "cha": 13
+    },
+    "skills": {
+      "stealth": "proficient",
+      "deception": "proficient",
+      "sleight-of-hand": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/shortsword"
+      },
+      {
+        "ref": "equipment/hand-crossbow"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The smuggler makes two attacks, using Shortsword or Hand Crossbow in any combination."
+      },
+      {
+        "name": "Shortsword",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Hand Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Smoke Bomb",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 10-foot-radius Sphere centered on a point the smuggler can see within 30 feet"
+        },
+        "onFailure": "The target has the {ref:condition/blinded} condition until the end of its next turn.",
+        "uses": "2/day"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Slip Away",
+        "kind": "other",
+        "text": "The smuggler takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

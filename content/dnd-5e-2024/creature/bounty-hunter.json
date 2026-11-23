@@ -1,0 +1,134 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "bounty-hunter",
+  "name": "Bounty Hunter",
+  "summary": "A patient tracker who marks a target, nets it, and brings it in alive for the coin.",
+  "description": "A bounty hunter reads the warrant, the face, and the road, in that order. Many outlaws would rather face the gallows than the hunter who has already hung their likeness over a bedroll.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 15,
+      "note": "chain shirt"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 14,
+      "con": 14,
+      "int": 10,
+      "wis": 14,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "perception": "proficient",
+      "survival": "expertise",
+      "stealth": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/maul"
+      },
+      {
+        "ref": "equipment/heavy-crossbow"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/net"
+      },
+      {
+        "ref": "equipment/manacles"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The hunter makes two attacks, using Maul or Heavy Crossbow in any combination."
+      },
+      {
+        "name": "Maul",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          },
+          {
+            "dice": "1d6",
+            "type": "bludgeoning",
+            "condition": "if the target is the hunter's quarry"
+          }
+        ]
+      },
+      {
+        "name": "Heavy Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 100,
+          "long": 400
+        },
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "piercing",
+            "condition": "if the target is the hunter's quarry"
+          }
+        ]
+      },
+      {
+        "name": "Weighted Net",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature within 15 feet of the hunter"
+        },
+        "onFailure": "The target has the {ref:condition/restrained} condition until it escapes (escape {dc:str}).",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Mark Quarry",
+        "kind": "other",
+        "text": "The hunter chooses one creature it can see within 60 feet. That creature is the hunter's quarry until the hunter uses this bonus action again or the quarry dies."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

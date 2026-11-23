@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "kobold-slinger",
+  "name": "Kobold Slinger",
+  "summary": "A kobold skirmisher who hurls stones from the shadow of a dragon's lair and ducks back below the lip.",
+  "description": "Slingers are the first line of a kobold warren's defense, and the first to go to ground when something large arrives. They are surprisingly accurate, and surprisingly quiet.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Kobold"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 13,
+      "note": "leather armor"
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 7,
+      "dex": 15,
+      "con": 9,
+      "int": 8,
+      "wis": 7,
+      "cha": 8
+    },
+    "gear": [
+      {
+        "ref": "equipment/sling"
+      },
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 0.125,
+    "traits": [
+      {
+        "name": "Dragon's Lackey",
+        "kind": "other",
+        "text": "The slinger has {ref:glossary/advantage} on saving throws against the {ref:condition/frightened} condition while a Dragon that is its ally is within 60 feet of it."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Sling",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Dagger",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}
