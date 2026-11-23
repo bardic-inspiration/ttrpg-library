@@ -237,6 +237,29 @@
     padding: var(--card-padding);
   }
 
+  /*
+   * The name and the official star's slot. The slot is a fixed column on every card, starred or
+   * not, so the name's width and wrapping never depend on the star (docs/site.md#gallery "Cards").
+   */
+  .card__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--card-star-size);
+    align-items: start;
+    gap: var(--space-2xs);
+  }
+
+  .card__official {
+    display: flex;
+    justify-content: end;
+    color: var(--card-star-color);
+
+    & .icon {
+      inline-size: var(--card-star-size);
+      block-size: var(--card-star-size);
+      fill: currentcolor;
+    }
+  }
+
   .card__name {
     font-size: var(--text-h4);
     overflow-wrap: anywhere;
@@ -263,6 +286,18 @@
     border: var(--badge-border);
     border-radius: var(--chip-radius);
     padding: 0 var(--space-2xs);
+  }
+
+  /*
+   * The source shows in full, whatever its length (docs/site.md#gallery "Cards"): a name longer
+   * than the card's line wraps inside its badge instead of overflowing the card.
+   */
+  .badge--source {
+    max-inline-size: 100%;
+    overflow-wrap: anywhere;
+    color: var(--badge-source-text);
+    border: var(--badge-source-border);
+    border-radius: var(--badge-source-radius);
   }
 
   .card__fields {
