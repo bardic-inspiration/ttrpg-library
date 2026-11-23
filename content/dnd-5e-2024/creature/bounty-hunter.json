@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "bounty-hunter",
   "name": "Bounty Hunter",
@@ -123,9 +124,6 @@
         "text": "The hunter chooses one creature it can see within 60 feet. That creature is the hunter's quarry until the hunter uses this bonus action again or the quarry dies."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

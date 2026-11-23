@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "gilded-duelist",
   "name": "Gilded Duelist",
@@ -104,9 +105,6 @@
         "text": "*Trigger:* The duelist is hit by a melee attack roll while holding a weapon. *Response:* The duelist adds 3 to its AC against that attack, possibly causing it to miss."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "goblin-warren-king",
   "name": "Goblin Warren-King",
@@ -98,9 +99,6 @@
         "text": "*Trigger:* A creature the king can see makes an attack roll against it. *Response:* The king chooses a Small or Medium ally within 5 feet of it. The king and that ally swap places, and the ally becomes the target of the attack instead."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

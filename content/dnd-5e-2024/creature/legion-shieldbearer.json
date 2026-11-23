@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "legion-shieldbearer",
   "name": "Legion Shieldbearer",
@@ -88,9 +89,6 @@
         "text": "*Trigger:* A creature within 5 feet of the shieldbearer is hit by an attack roll. *Response:* The shieldbearer adds 2 to that creature's AC against the attack, possibly causing it to miss."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "equipment",
   "id": "farriers-tools",
   "name": "Farrier's Tools",
@@ -17,9 +18,6 @@
       "utilize": "Shoe a mount or other hooved animal (DC 10), or find the cause of a mount's lameness (DC 15)",
       "craft": "Horseshoes, {ref:equipment/caltrops}"
     }
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

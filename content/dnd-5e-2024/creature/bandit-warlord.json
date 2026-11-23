@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "bandit-warlord",
   "name": "Bandit Warlord",
@@ -113,9 +114,6 @@
         "recharge": "5-6"
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

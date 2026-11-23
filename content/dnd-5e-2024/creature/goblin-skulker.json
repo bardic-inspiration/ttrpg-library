@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "goblin-skulker",
   "name": "Goblin Skulker",
@@ -99,9 +100,6 @@
         "text": "The skulker takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

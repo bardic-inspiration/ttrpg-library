@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "kobold-fire-tinkerer",
   "name": "Kobold Fire-Tinkerer",
@@ -108,9 +109,6 @@
         "recharge": "5-6"
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

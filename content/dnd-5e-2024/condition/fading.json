@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "condition",
   "id": "fading",
   "name": "Fading",
@@ -24,9 +25,6 @@
         "text": "If your Fading stage is 6, you have lost your physical form and are a living shadow. You have the {ref:condition/invisible} condition while you are in {ref:glossary/dim-light} or {ref:glossary/darkness}, and any equipment you are wearing or carrying becomes a shadow with you."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

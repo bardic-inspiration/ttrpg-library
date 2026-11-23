@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "roadside-fence",
   "name": "Roadside Fence",
@@ -84,9 +85,6 @@
         "text": "*Trigger:* A creature the fence can see within 30 feet is hit by an attack roll. *Response:* The fence offers a bribe to the attacker or a witness, and the attacker must succeed on a {dc:cha} Wisdom saving throw or have {ref:glossary/disadvantage} on its next attack roll before the end of its next turn."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

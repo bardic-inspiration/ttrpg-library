@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "legion-praetorian",
   "name": "Legion Praetorian",
@@ -95,9 +96,6 @@
         "text": "*Trigger:* A creature misses the praetorian with a melee attack roll. *Response:* The praetorian makes one Greatsword attack against that creature."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

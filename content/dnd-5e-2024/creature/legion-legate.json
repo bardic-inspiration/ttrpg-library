@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "legion-legate",
   "name": "Legion Legate",
@@ -120,9 +121,6 @@
         "text": "*Trigger:* The legate is hit by a melee attack roll while holding a weapon. *Response:* The legate adds 4 to its AC against that attack, possibly causing it to miss."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

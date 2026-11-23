@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "orc-warchief",
   "name": "Orc Warchief",
@@ -109,9 +110,6 @@
         "text": "The warchief moves up to its Speed toward a hostile creature it can see."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

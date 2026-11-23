@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "legion-optio",
   "name": "Legion Optio",
@@ -106,9 +107,6 @@
         "text": "One ally the optio can see within 30 feet can use its {ref:glossary/reaction} to make one weapon attack."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

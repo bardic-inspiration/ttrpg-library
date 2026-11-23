@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "cutpurse",
   "name": "Cutpurse",
@@ -73,9 +74,6 @@
         "text": "The cutpurse makes a Dexterity (Sleight of Hand) check contested by the Wisdom (Perception) of one creature within 5 feet. On a success, the cutpurse takes one object of 1 pound or less that the creature is carrying but not holding or wearing. The cutpurse then takes the {ref:glossary/disengage} action."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

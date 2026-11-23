@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "dragonkin-breathwarden",
   "name": "Dragonkin Breathwarden",
@@ -104,9 +105,6 @@
         "text": "*Trigger:* An ally within 5 feet of the breathwarden is hit by an attack roll. *Response:* The damage the ally takes from that attack is reduced by 10."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",

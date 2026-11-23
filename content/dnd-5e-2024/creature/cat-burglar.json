@@ -1,5 +1,6 @@
 {
   "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "cat-burglar",
   "name": "Cat Burglar",
@@ -116,9 +117,6 @@
         "text": "*Trigger:* An attacker the burglar can see hits it with an attack roll. *Response:* The burglar halves the attack's damage against it."
       }
     ]
-  },
-  "tags": {
-    "author": "bardic-inspiration"
   },
   "meta": {
     "createdAt": "2026-11-23",
