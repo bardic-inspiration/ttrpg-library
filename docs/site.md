@@ -282,8 +282,20 @@ room (`scrollbar-gutter: stable` in `layout.css`) whether or not it scrolls, so
 the menu and results don't shift sideways as filtering makes the page shorter
 or longer than the window.
 
-**Cards.** Each card shows art (only when the entry has it), name, type badge,
-`cardFields`, and summary. A boolean card field (concentration, ritual,
+**Cards.** Each card shows art (only when the entry has it), name, source and
+type badges, `cardFields`, and summary.
+
+- **Official star.** An official entry's card has a star in the top right
+  corner, beside its name ([Source and author](content-model.md#source-and-author)),
+  named "Official" for assistive technology and on hover. Every card keeps the
+  star's slot, a fixed column beside the name, so a name wraps the same with
+  or without the star.
+- **Source badge.** The entry's `source` heads the badge list, before the type,
+  in a neutral, square-cornered badge so it never reads as a type or rarity.
+  It shows in full however long it is; a name longer than the card's line
+  wraps inside its badge. An entry with no source has no source badge.
+
+A boolean card field (concentration, ritual,
 attunement) reads as a badge labeled with the facet when `true` and is left out
 when `false`. A `rarity`-formatted field reads as a badge carrying
 `data-rarity`. Other fields read as label and value. One column on phones, up

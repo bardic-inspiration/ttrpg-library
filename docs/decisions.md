@@ -526,3 +526,11 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The URL carries the ruleset set only when it differs from the default; a query naming any part of it sets the whole set, and `f.ruleset=` with no value is an empty set. Old gallery links (`/<ruleset>/`) keep `f.ruleset`, so they show the whole ruleset, homebrew included. | One view has one URL, and old links keep showing what they showed | #380 |
 | A ruleset, source, or author counts what checking it adds: its entries under the search and the other filters, ignoring the rest of the set. Clear filters returns the set to its default instead of emptying it. | An additive checkbox's count is what it adds; clearing shouldn't leave an empty Library | #380 |
 | The Ruleset node always starts open, so a fresh Library shows why only official content is listed. | The default narrows the results; the reader should see it | #380 |
+
+### Library cards
+
+| Decision | Why | Source |
+|---|---|---|
+| A card's source badge shows the full source name, wrapping inside a square-cornered badge when it's longer than the line. Tried at 320, 390, 820, and 1440px against truncation with an ellipsis and the full name on hover ("Bardic's Co…") and an initialism ("BCTF"). | The full name fits on one line at every width the library's sources need. Truncation and initialisms hide the name from sighted keyboard users, since a badge takes no focus, and no other part of the card or detail page shows the source | #379 |
+| The source badge comes first in the badge list and is neutral (muted text and border), not accented. | Where an entry comes from reads before what it is, without being mistaken for a type or rarity | #379 |
+| An official card's star sits in a fixed column beside the name that every card keeps, empty on homebrew cards. It is named "Official" (`role="img"`) and filled in the accent color. | A name wraps the same on every card, so nothing shifts sideways; the star is a shape with a name, never color alone | #379 |
