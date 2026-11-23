@@ -67,6 +67,15 @@
     --badge-font: var(--font-ui);
     --badge-border: var(--border-width) solid var(--accent);
     --badge-text: var(--accent);
+    /* The source badge is neutral, so it never reads as a type or a rarity. */
+    --badge-source-border: var(--border-width) solid var(--color-control-border);
+    --badge-source-text: var(--color-text-muted);
+    /* Square-cornered, so a long source that wraps stays inside its border. */
+    --badge-source-radius: var(--control-radius);
+
+    /* The official star in a card's top right corner, and the slot every card keeps for it. */
+    --card-star-size: var(--size-icon);
+    --card-star-color: var(--color-accent);
   }
 
   /*

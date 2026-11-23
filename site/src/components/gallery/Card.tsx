@@ -1,8 +1,11 @@
-// One gallery card (docs/site.md#gallery "Card grid"): art when the entry has it,
-// name, type badge, the type's card fields, and the summary, with a selection
-// checkbox. Accents come from data-type (and data-rarity), never per-type CSS.
+// One gallery card (docs/site.md#gallery "Cards"): art when the entry has it,
+// name with a star slot, source and type badges, the type's card fields, and the
+// summary, with a selection checkbox. Accents come from data-type (and data-rarity),
+// never per-type CSS.
+import { isOfficial } from '../../../../rulesets/module.ts';
 import type { FilterDef, LibraryRecord } from '../../lib/gallery/config.ts';
 import { displayValue, valueAt } from '../../lib/gallery/values.ts';
+import StarIcon from '../../icons/Star.tsx';
 
 export interface CardProps {
   record: LibraryRecord;
@@ -50,10 +53,21 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, selected
     <article class="card" data-type={record.type} aria-labelledby={`${id}-name`}>
       {imageSrc && <img class="card__art" src={imageSrc} alt={record.name} loading="lazy" />}
       <div class="card__body">
-        <h2 class="card__name" id={`${id}-name`}>
-          <a href={record.url}>{record.name}</a>
-        </h2>
+        {/* The star's slot is on every card, so the name wraps the same with or without it. */}
+        <div class="card__head">
+          <h2 class="card__name" id={`${id}-name`}>
+            <a href={record.url}>{record.name}</a>
+          </h2>
+          <span class="card__official">
+            {isOfficial(record) && (
+              <span role="img" aria-label="Official" title="Official">
+                <StarIcon />
+              </span>
+            )}
+          </span>
+        </div>
         <ul class="card__badges">
+          {record.source && <li class="badge badge--source">{record.source}</li>}
           <li class="badge">{typeLabel}</li>
           {badges.map((badge) => (
             <li class="badge" key={badge.text} data-rarity={badge.rarity}>

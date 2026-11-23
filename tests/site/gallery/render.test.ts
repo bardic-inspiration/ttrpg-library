@@ -101,4 +101,30 @@ describe('Gallery', () => {
   it('links each card to its detail page', () => {
     expect(render({})).toContain('href="/ttrpg-library/dnd-5e-2024/creature/cinder-hound/"');
   });
+
+  describe('where an entry comes from (#379)', () => {
+    const official = (r: LibraryRecord): LibraryRecord => ({ ...r, source: 'SRD 5.2', author: 'publisher' });
+    const card = (html: string, name: string) => html.split('<article').find((part) => part.includes(`>${name}</a>`)) ?? '';
+
+    it('shows the source first in the badge list, and no source badge for an entry with none', () => {
+      const withSource = records.map((r) => (r.id === 'frost-lance' ? { ...r, source: "Bardic's Compendium of Test Fixtures" } : r));
+      const html = render({ records: withSource, initialQuery: '?f.type=spell' });
+      expect(card(html, 'Frost Lance')).toMatch(
+        /<ul class="card__badges"><li class="badge badge--source">Bardic(&#39;|')s Compendium of Test Fixtures<\/li><li class="badge">Spell<\/li>/,
+      );
+      const bare = render({ records: records.map((r) => ({ ...r, source: null })), initialQuery: '?f.type=spell' });
+      expect(card(bare, 'Frost Lance')).toMatch(/<ul class="card__badges"><li class="badge">Spell<\/li>/);
+      expect(bare).not.toContain('badge--source');
+    });
+
+    it('stars official cards with an accessible name, and reserves the same slot on every other card', () => {
+      const html = render({ records: records.map((r) => (r.id === 'cinder-hound' ? official(r) : r)) });
+      const hound = card(html, 'Cinder Hound');
+      const lance = card(html, 'Frost Lance');
+      expect(hound).toMatch(/<span class="card__official"><span role="img" aria-label="Official" title="Official"><svg class="icon"/);
+      expect(lance).toContain('<span class="card__official"></span>');
+      // The name and the slot share one head on both cards, so the name's width never depends on the star.
+      for (const part of [hound, lance]) expect(part).toMatch(/<div class="card__head"><h2 class="card__name"[^>]*>.*<\/h2><span class="card__official">/);
+    });
+  });
 });

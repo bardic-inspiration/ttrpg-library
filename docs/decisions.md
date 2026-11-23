@@ -519,3 +519,11 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | An author of `"publisher"` reads as the ruleset's publisher in the tree, per ruleset. Source and author aren't sort choices, and `library.json` records carry both. | The stored sentinel means nothing to a reader; sorts stay facets | #367 |
 | The sort menu offers the facets of the types the ruleset and type filters allow, all of them when no type is checked; other facet filters don't narrow it. A path checked types share is one choice. | Sorts come from the registry, not from which entries happen to match (P4) | #368 |
 | When filters drop the chosen sort from the menu, the sort returns to `name:asc`, and a URL's sort the filters don't offer is ignored. | One view has one URL; a hidden sort would order results by a value the menu can't show | #368 |
+
+### Library cards
+
+| Decision | Why | Source |
+|---|---|---|
+| A card's source badge shows the full source name, wrapping inside a square-cornered badge when it's longer than the line. Tried at 320, 390, 820, and 1440px against truncation with an ellipsis and the full name on hover ("Bardic's Co…") and an initialism ("BCTF"). | The full name fits on one line at every width the library's sources need. Truncation and initialisms hide the name from sighted keyboard users, since a badge takes no focus, and no other part of the card or detail page shows the source | #379 |
+| The source badge comes first in the badge list and is neutral (muted text and border), not accented. | Where an entry comes from reads before what it is, without being mistaken for a type or rarity | #379 |
+| An official card's star sits in a fixed column beside the name that every card keeps, empty on homebrew cards. It is named "Official" (`role="img"`) and filled in the accent color. | A name wraps the same on every card, so nothing shifts sideways; the star is a shape with a name, never color alone | #379 |
