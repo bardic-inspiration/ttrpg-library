@@ -242,14 +242,14 @@ describe('every facet of every type', () => {
     const home = galleryConfig(reg, data);
     const nodes = tree(full(), home);
     expect(nodes[0]).toMatchObject({ kind: 'field', id: 'ruleset', label: 'Ruleset', open: false });
-    expect(rulesets(nodes)).toEqual([['D&D 5e (SRD 5.2)', full().length, false]]);
+    expect(rulesets(nodes)).toEqual([['D&D 5e', full().length, false]]);
     const filtered = tree(full(), home, '?f.ruleset=dnd-5e-2024');
     expect(filtered[0]).toMatchObject({ kind: 'field', id: 'ruleset', open: true });
-    expect(rulesets(filtered)).toEqual([['D&D 5e (SRD 5.2)', full().length, true]]);
+    expect(rulesets(filtered)).toEqual([['D&D 5e', full().length, true]]);
     const other = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as Registry;
     const two = [...full(), record({ id: 'stranger', ruleset: 'other' })];
     expect(rulesets(tree(two, galleryConfig(other, data)))).toEqual([
-      ['D&D 5e (SRD 5.2)', full().length, false],
+      ['D&D 5e', full().length, false],
       ['Other', 1, false],
     ]);
   });
@@ -262,10 +262,11 @@ describe('every facet of every type', () => {
       record({ id: 'cinder-hound', author: 'bardic-inspiration' }),
     ];
     const nodes = tree(records, home);
-    const label = 'D&D 5e (SRD 5.2)';
+    const label = 'D&D 5e';
+    // An official source is pinned first, though "Ember Codex" sorts before it.
     expect(values(find(nodes, 'Ruleset', label, 'Source')).map((v) => [v.label, v.count])).toEqual([
-      ['Ember Codex', 1],
       ['SRD 5.2', 1],
+      ['Ember Codex', 1],
     ]);
     expect(values(find(nodes, 'Ruleset', label, 'Author')).map((v) => [v.key, v.label, v.count])).toEqual([
       ['bardic-inspiration', 'bardic-inspiration', 2],
@@ -279,6 +280,20 @@ describe('every facet of every type', () => {
     expect(find(filtered, 'Ruleset', label, 'Author')?.open).toBe(true);
     const view = computeView(records, home, parseQuery('?f.source=srd%205.2', home), searchIndex(records));
     expect(view.results.map((r) => r.id)).toEqual(['fireball']);
+  });
+});
+
+describe('official sources first in the Source menu (#375)', () => {
+  it('pins every official source above the homebrew ones, each part keeping its order', async () => {
+    const home = galleryConfig(await registry(), data);
+    const records = [
+      record({ id: 'a', source: 'Ash Tome', author: 'bardic-inspiration' }),
+      record({ id: 'b', source: 'Zephyr Rules', author: 'publisher' }),
+      record({ id: 'c', source: 'Basic Rules', author: 'publisher' }),
+      record({ id: 'd', source: 'Moss Notes', author: 'someone' }),
+    ];
+    const source = values(find(tree(records, home), 'Ruleset', 'D&D 5e', 'Source')).map((v) => v.label);
+    expect(source).toEqual(['Basic Rules', 'Zephyr Rules', 'Ash Tome', 'Moss Notes']);
   });
 });
 

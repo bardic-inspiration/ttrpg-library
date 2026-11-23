@@ -519,6 +519,8 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | An author of `"publisher"` reads as the ruleset's publisher in the tree, per ruleset. Source and author aren't sort choices, and `library.json` records carry both. | The stored sentinel means nothing to a reader; sorts stay facets | #367 |
 | The sort menu offers the facets of the types the ruleset and type filters allow, all of them when no type is checked; other facet filters don't narrow it. A path checked types share is one choice. | Sorts come from the registry, not from which entries happen to match (P4) | #368 |
 | When filters drop the chosen sort from the menu, the sort returns to `name:asc`, and a URL's sort the filters don't offer is ignored. | One view has one URL; a hidden sort would order results by a value the menu can't show | #368 |
+| A ruleset's official sources are pinned above its other sources in the Source filter, each part keeping its order. A source is official when official content carries it. | Official material is the foundation the homebrew builds on; one official entry is enough to mark the work it belongs to | #375 |
+| The `dnd-5e-2024` ruleset is labeled "D&D 5e"; "SRD 5.2" names only the source. | The ruleset holds homebrew too, which isn't part of the SRD | #375 |
 
 ### Library cards
 

@@ -312,7 +312,10 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   author of `"publisher"` reads as the ruleset's publisher, from
   `ruleset.json` (`rulesetPublishers` in `site/src/lib/rules.ts`), such as
   Wizards of the Coast. Source and author follow the facet rules below
-  (values, counts, a shared path), with a ruleset in place of a type.
+  (values, counts, a shared path), with a ruleset in place of a type, except
+  that a ruleset's official sources, those official content carries, are
+  pinned above its other sources, each part keeping its order: SRD 5.2 comes
+  before a homebrew collection whatever its name.
 - **Types.** Then the types, each a checkbox for the type filter (`f.type`)
   with its count, the entries of it among the results (so checking one type
   leaves the others at 0), and a disclosure holding its facets. A type shows when the
