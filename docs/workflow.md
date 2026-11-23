@@ -169,11 +169,18 @@ task ([Testing backlog](../AGENTS.md#testing-backlog)).
 UI work that isn't part of a milestone, such as a track's, gets no milestone
 PR, so it waits for the next milestone's review
 ([Accessibility review backlog](../AGENTS.md#accessibility-review-backlog)).
-The session that opens its `ui` PR files a `test` issue under the
-Accessibility review backlog, titled `Accessibility review: <what it added>`,
-with the PR and the same Pages and Checks. The next milestone review takes up
-every open backlog issue: it lists their pages and checks with its own, and
-they close with it.
+The session that opens its `ui` PR adds an item to the list in the
+Accessibility review backlog issue's body, rather than filing a sub-issue:
+
+```markdown
+- **<what it added>** (#<PR>)
+  - Pages: <the entries and pages that show it>
+  - [ ] <a check axe can't prove>
+```
+
+Its Pages and Checks are the same kind as a milestone review's. The session
+that files the next milestone review moves every item into it, listed with its
+own pages and checks, and removes them from the backlog's list.
 
 ### UI screenshots
 
