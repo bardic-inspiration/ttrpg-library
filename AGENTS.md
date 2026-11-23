@@ -164,10 +164,10 @@ a pending manual check never blocks a milestone or the next task.
 UI work gets its accessibility review at the end of its milestone, in the
 milestone review ([Milestone review](docs/workflow.md#milestone-review)). UI
 work that isn't part of a milestone, such as a track's, is flagged for the
-next one: the session that opens its `ui` PR files an issue for it under an
-"Accessibility review backlog" issue. Like the Testing backlog, it sits
-outside the dev queue's pick order and blocks nothing. The next milestone
-review takes up every open issue in it.
+next one: the session that opens its `ui` PR adds an item for it to the list
+in the "Accessibility review backlog" issue's body, not a sub-issue. Like the
+Testing backlog, the issue sits outside the dev queue's pick order and blocks
+nothing. The next milestone review takes up every item in it.
 
 ### Dev Queue
 
