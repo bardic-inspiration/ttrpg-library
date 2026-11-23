@@ -1,0 +1,53 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "phantom-crowd",
+  "name": "Phantom Crowd",
+  "summary": "Fills an area with an illusory crowd that obscures your allies.",
+  "stats": {
+    "level": 2,
+    "school": "illusion",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 90
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 10,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "You create illusory people filling a 20-foot Cube within range. The area is Lightly Obscured, and creatures in it have Advantage on Dexterity (Stealth) checks. A creature that uses its action to examine the crowd and succeeds on an Intelligence (Investigation) check discerns the illusion."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

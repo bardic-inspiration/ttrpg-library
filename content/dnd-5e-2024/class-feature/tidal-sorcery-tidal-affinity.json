@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "tidal-sorcery-tidal-affinity",
+  "name": "Tidal Affinity",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "When you cast a spell that deals Cold or Thunder damage, you can change that damage to Bludgeoning or Cold damage. You can also breathe underwater and have a Swim Speed equal to your Speed."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

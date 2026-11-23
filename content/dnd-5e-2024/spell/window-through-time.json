@@ -1,0 +1,53 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "window-through-time",
+  "name": "Window Through Time",
+  "summary": "Shows you the last minute of events in your location.",
+  "stats": {
+    "level": 3,
+    "school": "divination",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/cleric"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "an hourglass"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "You witness the last minute of events at your location as though you stood there as a silent observer, seeing and hearing everything that occurred. It does not reveal thoughts and cannot be cast on a location where Nondetection has been used."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

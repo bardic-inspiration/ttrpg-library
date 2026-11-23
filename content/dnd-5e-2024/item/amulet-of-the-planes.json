@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "amulet-of-the-planes",
   "name": "Amulet of the Planes",
@@ -26,8 +28,7 @@
       "kind": "routine",
       "issues": [
         134
-      ],
-      "srd": true
+      ]
     }
   }
 }

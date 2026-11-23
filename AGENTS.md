@@ -2,13 +2,12 @@
 
 How work is done in this repo, by agents or humans. [`docs/`](docs/README.md)
 describes *what is built*, including CI, lanes, labels, and repository
-settings. The v2 stage spec, [`spec/v2/`](spec/v2/README.md), and the
-development tracks' specs, [`spec/tracks/`](spec/tracks/README.md), hold the
-design that isn't built yet. This file covers *how to work*, and defers to them wherever they
+settings. The development tracks' specs, [`spec/tracks/`](spec/tracks/README.md),
+hold the design that isn't built yet. This file covers *how to work*, and defers to them wherever they
 overlap.
 
 Sessions start with no memory of earlier ones. Decisions, follow-ups, and
-open questions go into the docs, the stage spec, issues, and PR descriptions,
+open questions go into the docs, the track specs, issues, and PR descriptions,
 never only into a chat. Because they do, a session can stay small: one issue,
 or one batch of an import stage, per session, and a new session for the next.
 A long session costs more on every turn as its context grows.
@@ -21,34 +20,44 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
   Routines open these PRs on `gen/` and `revise/` branches, using the
   `generate` and `revise` skills ([`docs/generation.md`](docs/generation.md)). Hand-made
   entries go on `manual/` branches.
-- **Development:** everything else, including the docs and the stage spec, on
+- **Development:** everything else, including the docs and the track specs, on
   `dev/<short-description>` branches. A dev PR touches content only as a
   deliberate migration; the labeler adds the `migration` label to it.
 
 ## Rules
 
 - **Never push to `main`.** Every change is a PR.
-- **Don't invent behavior.** When the docs or the stage spec are silent,
+- **Don't invent behavior.** When the docs or a track spec are silent,
   ambiguous, or wrong,
   ask whether a different reasonable choice would change behavior that
   something else depends on.
   - If it wouldn't, decide by the principles in
     [`docs/decisions.md`](docs/decisions.md) and record the choice in the
     PR's "Decisions" section. The owner's merge confirms it.
-  - If it would, stop that item and ask (the user, or on the issue). Fix the
-    stage spec before writing code that depends on it. For v2 or track
-    design, the question goes into the area's or track's "Open questions"
-    in [`spec/v2/`](spec/v2/README.md) or [`spec/tracks/`](spec/tracks/README.md)
-    through a small PR. Carry on with the items that are clear.
+  - If it would, stop that item and ask (the user, or on the issue). For track
+    design, the question goes into the track's "Open questions" in
+    [`spec/tracks/`](spec/tracks/README.md) through a small PR, before any
+    code that depends on it. Carry on with the items that are clear.
 - **Record decisions where they're made.** A PR that makes a decision lists
   it under "Decisions" and adds its row to
   [`docs/decisions.md`](docs/decisions.md) in the same PR.
 - **A dev PR that changes behavior updates the docs in the same PR.** It
   describes what now exists in `docs/`, and deletes the part it built from
-  the stage spec, so `main` is complete after every merge.
+  its track spec, so `main` is complete after every merge.
 - **One issue per PR.** Out-of-scope work becomes an issue, not a `TODO`
   or a drive-by change. An issue that lists several items gets one PR, not
   one per item (see "Tracking work").
+- **No version names outside the record.** Code (comments, test names,
+  messages) never names a version or a stage of building one. Docs describe
+  what exists now, not when it arrived ("now that X is built"). When and why
+  something changed goes in [`CHANGELOG.md`](CHANGELOG.md) and
+  [`docs/decisions.md`](docs/decisions.md). A doc names a version only where
+  releases are its subject, as [Releases](docs/workflow.md#releases) does, or
+  to cite a tag or an issue by its title.
+- **Docs cover the repo.** Docs, specs, and tests describe what is in the
+  repo: code, config, skills, scripts, and the prompts a routine runs.
+  Whether a routine is set up, scheduled, or turned on, and other practices
+  kept outside the repo, aren't documented or tested here.
 - **Never skip, disable, or weaken a test or check to get green.**
 - **Never rewrite pushed history** (no amend, rebase, or force-push). To catch
   up with `main`, merge it in.
@@ -65,7 +74,9 @@ Every content session, routine or not, follows these:
   derived numbers in prose, and use `adjust` only for a deliberate deviation
   ([Inputs and derived values](docs/rulesets.md#inputs-and-derived-values),
   [Text tokens](docs/rulesets.md#text-tokens)).
-- Run `npm run validate` before every push; never push a failing batch.
+- Run `npm run validate` and the
+  [Self-review](docs/generation.md#self-review) before every push; never push
+  a failing batch.
 - SRD-only rules and the blocklist apply to every text field
   ([Blocklist](docs/licensing.md#blocklist)).
 - SRD entries are reproduced faithfully; custom entries never reuse an SRD
@@ -75,7 +86,7 @@ Every content session, routine or not, follows these:
 
 ## Dev workflow
 
-1. **Read** the task and the docs and stage spec sections it touches.
+1. **Read** the task and the docs and track spec sections it touches.
 2. **Branch** from `main` as `dev/<short-description>`.
 3. **Write tests first** for new behavior, using Vitest suites and fixtures
    in `tests/`. Bug fixes come with a test that fails before the fix.
@@ -85,7 +96,7 @@ Every content session, routine or not, follows these:
    whole library, minus only the types its own fixtures stand in for, so a
    new link in content can't leave its library unresolved.
 4. **Update the docs as you go.** In the same PR, update the `docs/` files
-   that describe what changed, delete the part you built from the stage spec,
+   that describe what changed, delete the part you built from the track spec,
    and add a row to `docs/decisions.md` for each decision the PR makes (see
    "Rules"). A renamed heading means updating its citations; the link check
    catches any you miss.
@@ -95,7 +106,8 @@ Every content session, routine or not, follows these:
 6. **Open a PR** from the [`dev.md`](.github/PULL_REQUEST_TEMPLATE/dev.md)
    template, titled `<area>: <summary>`. Use the area label as `<area>`
    (`ui`, `ruleset`, `generation`, `ci`), or `docs`, `spec`, `scripts`, or
-   `config` where none fits. PRs are squash-merged with the title as the
+   `config` where none fits, and `release` for a release PR
+   ([Releases](docs/workflow.md#releases)). PRs are squash-merged with the title as the
    commit message, so `git log` on `main` reads one line per change. Link
    the issue with `Closes #N`. A `ui` PR adds screenshots at 390, 820, and
    1440px ([UI screenshots](docs/workflow.md#ui-screenshots)).
@@ -110,10 +122,11 @@ prefix, so a spike can't merge. Record what you learned, then close the PR.
 
 Each milestone is a tracking issue holding its "done when" and its tasks as
 ordered sub-issues. So is each development track ("Tracks" below), which has
-no end of its own. GitHub's milestone feature isn't used. Content issues
+no end of its own. So is the "Spot Fixes" issue when no milestone is open
+("Dev Queue" below). GitHub's milestone feature isn't used. Content issues
 follow [Requests](docs/generation.md#requests).
 
-A dev issue states what to do, the docs or stage spec section it implements,
+A dev issue states what to do, the docs or track spec section it implements,
 and how to tell it's done.
 
 Bundle small related dev issues (a few lines each, same area) into one issue
@@ -128,20 +141,13 @@ items that are ready, and add the others as commits once they're decided, or
 in a follow-up PR if the first has merged. Split an item into its own
 sub-issue and PR only when it's too large to review alongside the others.
 
-### Stage spec
-
-The v2 design lives in [`spec/v2/`](spec/v2/README.md), one file per design
-area. An approved design can be amended at any time by a small PR to it that
-the owner merges. Each build milestone starts with a pilot task on its area's
-hardest cases, which is expected to turn up amendments.
-
 ### Tracks
 
 A development track is ongoing work outside a version's build, such as
-Integrations (#315) and Images (#316), which v2 deferred. Its unbuilt design
-is one file in [`spec/tracks/`](spec/tracks/README.md). Everything this file
-says about the stage spec applies to a track's file too: a task deletes the
-part it builds, and an open question there stops that part.
+Integrations (#315) and Images (#316). Its unbuilt design
+is one file in [`spec/tracks/`](spec/tracks/README.md). An approved design can
+be amended at any time by a small PR to it that the owner merges. A task
+deletes the part it builds, and an open question there stops that part.
 
 ### Testing backlog
 
@@ -158,18 +164,28 @@ a pending manual check never blocks a milestone or the next task.
 UI work gets its accessibility review at the end of its milestone, in the
 milestone review ([Milestone review](docs/workflow.md#milestone-review)). UI
 work that isn't part of a milestone, such as a track's, is flagged for the
-next one: the session that opens its `ui` PR files an issue for it under an
-"Accessibility review backlog" issue. Like the Testing backlog, it sits
-outside the dev queue's pick order and blocks nothing. The next milestone
-review takes up every open issue in it.
+next one: the session that opens its `ui` PR adds an item for it to the list
+in the "Accessibility review backlog" issue's body, not a sub-issue. Like the
+Testing backlog, the issue sits outside the dev queue's pick order and blocks
+nothing. The next milestone review takes up every item in it.
 
 ### Dev Queue
 
-Milestone issues, in milestone order, then track issues, in the order
+Milestone issues, in milestone order (or, when no milestone is open, the
+"Spot Fixes" issue below), then track issues, in the order
 [`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
-sub-issues (GitHub's order) are one queue. Work beyond v2 goes under the "Later (v3)" issue (#118),
-outside the queue.
+sub-issues (GitHub's order) are one queue. Work for the next version goes under the "Later" issue
+(#118), outside the queue.
 
+- **The active queue** is the one open tracking issue labeled `queue`: the
+  current milestone, or the "Spot Fixes" issue. It is tied to a version;
+  tracks are side queues and never carry the label. "Place" and "Pick" start
+  at the labeled issue, and the tracks come after it. Move the label to the
+  next milestone when one starts, and take it off an issue when it closes.
+- **No open milestone:** new dev issues go under a "<version> Spot Fixes"
+  tracking issue labeled `queue`, where `<version>` is the latest release's
+  tag (`v1.1.0`), or the latest spec's version if there is no release.
+  Create it if it doesn't exist.
 - **Place** every new dev issue with `sub_issue_write`. Put it before the
   first issue that depends on it, and say why in a comment. If unsure, leave
   it unattached and ask the user.
@@ -198,7 +214,9 @@ The npm scripts are listed in
 **Before every push**, run what CI runs for the lane
 ([CI checks](docs/workflow.md#ci-checks)):
 
-- **Content:** `npm run validate` and `npm run build`.
+- **Content:** `npm run validate`, `npm run build`, and `npm test`, as part
+  of the [Self-review](docs/generation.md#self-review). CI runs only the
+  first two.
 - **Dev:** those two, then `npm run check` and `npm test`. The PR that
   closes a milestone also runs `npm run a11y`, gets the `milestone` label
   ([Milestone PRs](docs/workflow.md#milestone-prs)), and files the

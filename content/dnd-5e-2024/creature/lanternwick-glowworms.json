@@ -1,0 +1,141 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "lanternwick-glowworms",
+  "name": "Lanternwick Glowworms",
+  "summary": "A carpet of glowing cave larvae on the ceiling that drops sticky threads to haul prey up into the light.",
+  "description": "From below, a lanternwick colony looks like a field of cold stars, and more than one lost traveler has walked toward it thinking it was the sky. Each larva lets down a beaded thread of glue; together they make a curtain that catches moths, bats, and now and then a person. Miners prize the dried threads as lamp wicks that never quite go out.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "swarm": "tiny",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 5,
+      "climb": 10
+    },
+    "abilities": {
+      "str": 3,
+      "dex": 14,
+      "con": 10,
+      "int": 1,
+      "wis": 10,
+      "cha": 3
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        },
+        {
+          "ref": "condition/stunned"
+        }
+      ]
+    },
+    "senses": {
+      "blindsight": 30,
+      "note": "blind beyond this radius"
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Ceiling Dwellers",
+        "kind": "other",
+        "text": "The swarm can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      },
+      {
+        "name": "Glow",
+        "kind": "other",
+        "text": "The swarm sheds {ref:glossary/dim-light} in a 20-foot radius."
+      },
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny larva. The swarm can't regain {ref:glossary/hit-points} or gain {ref:glossary/temporary-hit-points}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The swarm uses Snaring Threads and makes one Bites attack."
+      },
+      {
+        "name": "Bites",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "The attack deals half damage if the swarm is {ref:glossary/bloodied}."
+      },
+      {
+        "name": "Snaring Threads",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature within 15 feet of the swarm"
+        },
+        "onFailure": "The target is pulled up to 10 feet straight toward the swarm and has the {ref:condition/restrained} condition until the end of the swarm's next turn."
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "roaring-tide",
+  "name": "Roaring Tide",
+  "summary": "Summons a wave that crushes and sweeps creatures away.",
+  "stats": {
+    "level": 5,
+    "school": "conjuration",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a conch shell"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "A wave surges across a 60-foot Line that is 15 feet wide. Creatures in it make a Strength saving throw, taking 6d8 Bludgeoning damage, being pushed 20 feet, and gaining the Prone condition on a failure, or half damage and no other effect on a success."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

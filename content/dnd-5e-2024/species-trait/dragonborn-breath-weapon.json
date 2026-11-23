@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "species-trait",
   "id": "dragonborn-breath-weapon",
   "name": "Breath Weapon",
@@ -12,8 +14,7 @@
       "kind": "routine",
       "issues": [
         234
-      ],
-      "srd": true
+      ]
     }
   }
 }

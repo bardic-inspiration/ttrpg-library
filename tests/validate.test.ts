@@ -8,6 +8,8 @@ import { listEntryFiles } from '../scripts/validate/walk.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
 import type { SpellStats } from '../rulesets/dnd-5e-2024/types.ts';
 import { castingTimeLine } from '../site/src/lib/spell.ts';
+import { isOfficial } from '../rulesets/module.ts';
+import dndDefinition from '../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
 
 const library = join(FIXTURES, 'library');
 const temps: string[] = [];
@@ -75,6 +77,16 @@ describe('validateLibrary', () => {
     // An entry's own file stays under the content root, where the build copies it from.
     expect(result.files).toEqual(['dnd-5e-2024/creature/cinder-hound.json']);
   });
+
+  it('rejects a creature spell written as text when the library has that spell, but not one it lacks', async () => {
+    const hound = await cinderHound();
+    hound.stats.spellcasting = { ability: 'cha', atWill: ['Frost Lance', 'Light'], perDay: { '1': ['Frost Lance'] } };
+    const { content } = await temp([hound, await frostLance()]);
+    expect((await validateLibrary(content)).errors.map((e) => `${e.file}: ${e.message}`)).toEqual([
+      'content/dnd-5e-2024/creature/cinder-hound.json: stats.spellcasting.atWill[0]: "Frost Lance" is spell/frost-lance in the library; write it as a ref',
+      'content/dnd-5e-2024/creature/cinder-hound.json: stats.spellcasting.perDay.1[0]: "Frost Lance" is spell/frost-lance in the library; write it as a ref',
+    ]);
+  });
 });
 
 /**
@@ -91,10 +103,10 @@ const INVALID: Record<string, RegExp> = {
   'equipment-variants-with-cost': /^stats\.cost: equipment with variants has no cost of its own/,
   'equipment-group-not-leaf': /^stats\.group: "weapons" has groups in it; name a group with none$/,
   'equipment-weapon-range-without-property': /^stats\.weapon\.range: a range is only for a weapon with the Ammunition or Thrown property$/,
-  'equipment-srd-marker': /^meta\.source\.srd: an extension is custom/,
+  'equipment-official': /^author: an extension is homebrew/,
   'condition-no-effects': /^stats\.effects: must NOT have fewer than 1 items/,
   'condition-effect-name-period': /^stats\.effects\[0\]\.name: must match pattern/,
-  'condition-srd-marker': /^meta\.source\.srd: an extension is custom/,
+  'condition-official': /^author: an extension is homebrew/,
   'condition-unknown-key': /^stats\.duration: unknown key$/,
   'condition-name-of-primitive': /^id "prone" is already used by rulesets\/dnd-5e-2024\/rules\/condition\/prone\.json$/,
   'unknown-top-level-key': /^hp: unknown key$/,
@@ -298,20 +310,47 @@ describe('situational fields (docs/content-model.md#situational-fields)', () => 
     expect((await validateLibrary(content)).errors).toEqual([]);
   });
 
-  it('accepts the SRD marker meta.source.srd as true and rejects false (docs/content-model.md#meta)', async () => {
-    const srd = await cinderHound();
-    srd.meta.source.srd = true;
-    expect((await validateLibrary((await temp([srd])).content)).errors).toEqual([]);
-    const none = await cinderHound();
-    none.meta.source.srd = false;
-    const { errors } = await validateLibrary((await temp([none])).content);
-    expect(errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/^meta\.source\.srd: must be equal to constant/));
+  describe('source and author (docs/content-model.md#source-and-author)', () => {
+    const messages = async (entry: Record<string, any>) =>
+      (await validateLibrary((await temp([entry])).content)).errors.map((e) => e.message);
+
+    it('tells official content from homebrew by author alone, against the ruleset\'s publisher', () => {
+      expect(dndDefinition.publisher).toBe('Wizards of the Coast');
+      expect(isOfficial({ author: 'publisher' })).toBe(true);
+      for (const author of ['bardic-inspiration', 'Wizards of the Coast', undefined]) expect(isOfficial({ author })).toBe(false);
+    });
+
+    it('requires author, and takes source optionally', async () => {
+      const official = Object.assign(await cinderHound(), { source: 'SRD 5.2', author: 'publisher' });
+      expect(await messages(official)).toEqual([]);
+      const sourceless = await cinderHound();
+      delete sourceless.source;
+      expect(await messages(sourceless)).toEqual([]);
+      const anonymous = await cinderHound();
+      delete anonymous.author;
+      expect(await messages(anonymous)).toContainEqual('(entry): missing required key "author"');
+    });
+
+    it('rejects the publisher\'s name as author, which is written "publisher"', async () => {
+      const named = Object.assign(await cinderHound(), { author: 'Wizards of the Coast' });
+      expect(await messages(named)).toContainEqual('author: "Wizards of the Coast" is the ruleset\'s publisher; write "publisher" for official content');
+    });
+
+    it('rejects source and author as tags, and the retired SRD marker', async () => {
+      const tagged = await cinderHound();
+      tagged.tags = { ...tagged.tags, source: 'SRD', author: 'someone' };
+      expect(await messages(tagged)).toContainEqual(expect.stringMatching(/^tags: property name must be valid/));
+      const marked = await cinderHound();
+      marked.meta.source.srd = true;
+      expect(await messages(marked)).toContainEqual(expect.stringMatching(/^meta\.source\.srd: unknown key/));
+    });
   });
 
   describe('imported entries (docs/content-model.md#meta, docs/licensing.md#source-allowlist)', () => {
     const imported = async (license?: Record<string, unknown>) => {
       const entry = await cinderHound();
       entry.meta.source = { kind: 'import', issues: [7], ...(license ? { license } : {}) };
+      if (license) entry.author = license.author;
       return entry;
     };
     const messages = async (entry: Record<string, any>) =>
@@ -333,13 +372,16 @@ describe('situational fields (docs/content-model.md#situational-fields)', () => 
       }
     });
 
-    it('rejects the license block on any other kind, and the SRD marker on an import', async () => {
+    it('rejects the license block on any other kind', async () => {
       const routine = await cinderHound();
       routine.meta.source.license = LICENSE;
       expect(await messages(routine)).not.toEqual([]);
-      const srd = await imported(LICENSE);
-      srd.meta.source.srd = true;
-      expect(await messages(srd)).not.toEqual([]);
+    });
+
+    it('requires an import\'s author to be its license\'s (docs/content-model.md#source-and-author)', async () => {
+      const entry = await imported(LICENSE);
+      entry.author = 'Someone Else';
+      expect(await messages(entry)).toContainEqual('author: an imported entry\'s author is its license\'s, "A. Author"');
     });
   });
 
@@ -396,12 +438,10 @@ describe('library checks (docs/content-model.md#validation, all types)', () => {
     expect(near.warnings.map((w) => w.file)).toEqual(['content/dnd-5e-2024/creature/frost-lances.json']);
   });
 
-  it('skips the near-duplicate warning when both entries are SRD entries (docs/content-model.md#ids-and-names)', async () => {
-    const srd = await cinderHound();
-    srd.meta.source.srd = true;
+  it('skips the near-duplicate warning when both entries are official (docs/content-model.md#ids-and-names)', async () => {
+    const srd = Object.assign(await cinderHound(), { author: 'publisher' });
     const near = await cinderHound();
-    Object.assign(near, { name: 'Cinder Hounds', id: 'cinder-hounds' });
-    near.meta.source.srd = true;
+    Object.assign(near, { name: 'Cinder Hounds', id: 'cinder-hounds', author: 'publisher' });
     expect((await validateLibrary((await temp([srd, near])).content)).warnings).toEqual([]);
     const custom = await cinderHound();
     Object.assign(custom, { name: 'Cinder Hounds', id: 'cinder-hounds' });
@@ -515,7 +555,7 @@ describe('references (docs/content-model.md#references)', () => {
     const { content } = await temp([spell, await wandOfFrostLances()]);
     const messages = (await validateLibrary(content)).errors.map((e) => e.message);
     expect(messages).toContainEqual(
-      'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: "frost-lance" is in other-ruleset; refs can\'t cross rulesets in v1',
+      'stats.spells[0].spell: ref "spell/frost-lance" does not resolve: "frost-lance" is in other-ruleset; refs can\'t cross rulesets',
     );
   });
 });
@@ -561,9 +601,9 @@ describe('authored DCs (docs/rulesets.md#text-tokens, #88)', () => {
     expect(literal.errors.map((e) => e.message)).toContainEqual(expect.stringMatching(/"DC 12" writes a derived number/));
   });
 
-  it('skips ruleset warnings on an SRD entry, which is literal, but keeps its errors (docs/content-model.md#srd-and-custom-entries)', async () => {
+  it('skips ruleset warnings on official content, which is literal, but keeps its errors (docs/content-model.md#srd-and-custom-entries)', async () => {
     const entry = await cinderHound();
-    entry.meta.source.srd = true;
+    entry.author = 'publisher';
     entry.stats.actions[0].adjust = 1;
     entry.stats.actions[0].damage[0].bonus = 1;
     entry.stats.traits[0].text = 'It escapes with a {dc=12} Strength (Athletics) check, or a {dc:con:+1} save.';

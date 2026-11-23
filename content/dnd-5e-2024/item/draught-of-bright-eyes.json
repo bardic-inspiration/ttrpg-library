@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "draught-of-bright-eyes",
+  "name": "Draught of Bright Eyes",
+  "summary": "A draught that lets you see clearly in dim light for an hour.",
+  "description": "Smells of carrots and a little of lamp oil. Nightwatchmen carry a flask in each boot.",
+  "stats": {
+    "category": "potion",
+    "rarity": "common",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, for 1 hour you have Darkvision with a range of 60 feet."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

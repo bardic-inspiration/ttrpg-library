@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "feather-fall",
   "name": "Feather Fall",
@@ -49,8 +51,7 @@
       "kind": "routine",
       "issues": [
         132
-      ],
-      "srd": true
+      ]
     }
   }
 }

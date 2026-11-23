@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "wand-of-wonder",
   "name": "Wand of Wonder",
@@ -96,8 +98,7 @@
       "kind": "routine",
       "issues": [
         174
-      ],
-      "srd": true
+      ]
     }
   }
 }

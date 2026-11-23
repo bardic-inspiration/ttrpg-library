@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "scroll-of-small-wonders",
+  "name": "Scroll of Small Wonders",
+  "summary": "A scroll that casts a minor cantrip once.",
+  "description": "Scribbled by hedge wizards on the backs of recipes. The ink smells of wine.",
+  "stats": {
+    "category": "scroll",
+    "rarity": "common",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/prestidigitation"
+        }
+      }
+    ],
+    "effect": "This scroll bears the *Prestidigitation* cantrip. Using an action to read it casts the cantrip once, and the scroll is consumed."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

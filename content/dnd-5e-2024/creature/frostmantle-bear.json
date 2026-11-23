@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "frostmantle-bear",
+  "name": "Frostmantle Bear",
+  "summary": "A white bear of the glaciers whose bite leaves a crust of ice that slows its prey.",
+  "description": "Frostmantle bears den in ice caves under the glaciers and come down to the treeline only in the leanest weeks of winter. Their tracks are said to freeze solid behind them, and trappers who find fresh ones turn around.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15,
+      "note": "natural armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 40,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 10,
+      "con": 18,
+      "int": 2,
+      "wis": 13,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "resistances": [
+      "cold"
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Snow Camouflage",
+        "kind": "other",
+        "text": "The bear has {ref:glossary/advantage} on Dexterity (Stealth) checks made to hide in snowy terrain."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The bear makes one Bite attack and two Claw attacks."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "cold"
+          }
+        ],
+        "onHit": "and the target's {ref:glossary/speed} decreases by 10 feet until the start of the bear's next turn."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

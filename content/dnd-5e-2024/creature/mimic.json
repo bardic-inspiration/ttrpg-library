@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "creature",
   "id": "mimic",
   "name": "Mimic",
@@ -105,8 +107,7 @@
       "kind": "routine",
       "issues": [
         180
-      ],
-      "srd": true
+      ]
     }
   }
 }

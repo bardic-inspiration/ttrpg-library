@@ -6,7 +6,7 @@ import { selectEntries } from '../../site/src/lib/print-run.ts';
 import { parsePrintQuery } from '../../site/src/lib/print.ts';
 import { libraryQuery } from '../../site/src/lib/gallery/library-url.ts';
 import { currentKey, formerTypes, redirectScript, typeAliases } from '../../site/src/lib/redirects.ts';
-import { fixtureRecords, registry } from './gallery/helpers.ts';
+import { fixtureRecords, registry, whole } from './gallery/helpers.ts';
 
 const reg = await registry();
 const records = await fixtureRecords();
@@ -34,7 +34,7 @@ describe('former type keys', () => {
   it('let an old type filter select the renamed type', () => {
     const home = galleryConfig(reg);
     expect(parseQuery('?f.type=magic-item', home).filters.get('type')).toEqual({ kind: 'enum', values: ['item'] });
-    expect(selectEntries(parsePrintQuery('?f.type=magic-item'), records, reg, NO_FACET_DATA).records.map((r) => r.id)).toEqual([
+    expect(selectEntries(parsePrintQuery(whole('?f.type=magic-item')), records, reg, NO_FACET_DATA).records.map((r) => r.id)).toEqual([
       'wand-of-frost-lances',
     ]);
   });

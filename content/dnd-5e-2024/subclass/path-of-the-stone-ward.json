@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "path-of-the-stone-ward",
+  "name": "Path of the Stone Ward",
+  "summary": "A Barbarian subclass: becoming an unyielding bulwark.",
+  "stats": {
+    "class": {
+      "ref": "class/barbarian"
+    },
+    "tagline": "Become an Unyielding Bulwark",
+    "text": "You root your rage in the mountain beneath your feet. When you rage, your body hardens like rock, and you become the immovable anchor of any battle.",
+    "features": [
+      {
+        "ref": "class-feature/path-of-the-stone-ward-granite-skin"
+      },
+      {
+        "ref": "class-feature/path-of-the-stone-ward-anchored-stance"
+      },
+      {
+        "ref": "class-feature/path-of-the-stone-ward-shattering-blow"
+      },
+      {
+        "ref": "class-feature/path-of-the-stone-ward-mountains-patience"
+      },
+      {
+        "ref": "class-feature/path-of-the-stone-ward-living-bulwark"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

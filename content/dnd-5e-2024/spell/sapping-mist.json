@@ -1,0 +1,53 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "sapping-mist",
+  "name": "Sapping Mist",
+  "summary": "A mist that drains strength from creatures breathing it.",
+  "stats": {
+    "level": 4,
+    "school": "necromancy",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 90
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A 20-foot-radius Sphere of mist spreads from a point within range. A creature in it makes a Constitution saving throw at the start of its turn, taking 4d6 Necrotic damage and gaining a level of Exhaustion on a failure, or half damage and no Exhaustion on a success."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "wand-of-the-war-mage-1-2-or-3",
   "name": "Wand of the War Mage, +1, +2, or +3",
@@ -33,8 +35,7 @@
       "kind": "routine",
       "issues": [
         178
-      ],
-      "srd": true
+      ]
     }
   }
 }

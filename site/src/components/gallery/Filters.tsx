@@ -2,9 +2,9 @@
 // accordion of disclosure buttons, with values as checkboxes that keep their counts and range
 // facets as min and max inputs inside their node. The tree's shape comes from lib/gallery/tree.ts.
 import { useEffect, useRef, useState } from 'preact/hooks';
-import type { FilterDef } from '../../lib/gallery/config.ts';
+import { RULESET, type FilterDef } from '../../lib/gallery/config.ts';
 import type { FilterValue } from '../../lib/gallery/state.ts';
-import type { TreeNode, ValueNode } from '../../lib/gallery/tree.ts';
+import { openAtStart, valueId, type TreeNode, type ValueNode } from '../../lib/gallery/tree.ts';
 import { parseNumber } from '../../lib/gallery/values.ts';
 import { formatValue } from '../../lib/format.ts';
 
@@ -21,24 +21,46 @@ export interface TreeProps {
 type Toggle = (id: string, open: boolean) => void;
 
 interface Shared extends TreeProps {
-  isOpen: (id: string, byDefault: boolean) => boolean;
+  isOpen: (id: string) => boolean;
   toggle: Toggle;
 }
 
-/** The whole tree. Which nodes are open is the reader's, starting from each node's default. */
+/**
+ * The whole tree. Which nodes are open is the reader's: the nodes open by default when the tree first
+ * shows (the view a link opens), and from then on only what each disclosure opens or closes. Checking
+ * or clearing a filter never opens or closes a node.
+ */
 export function FilterTree(props: TreeProps) {
-  const [opened, setOpened] = useState<Map<string, boolean>>(new Map());
+  const [opened, setOpened] = useState<Set<string>>(() => openAtStart(props.nodes));
   const shared: Shared = {
     ...props,
-    isOpen: (id, byDefault) => opened.get(id) ?? byDefault,
-    toggle: (id, open) => setOpened(new Map(opened).set(id, open)),
+    isOpen: (id) => opened.has(id),
+    toggle: (id, open) =>
+      setOpened((current) => {
+        const next = new Set(current);
+        if (open) next.add(id);
+        else next.delete(id);
+        return next;
+      }),
   };
+  // The ruleset set is its own list at the top, divided from the narrowing filters by a break line.
+  const rulesets = props.nodes.filter((node) => node.id === RULESET);
+  const rest = props.nodes.filter((node) => node.id !== RULESET);
   return (
-    <ul class="tree">
-      {props.nodes.map((node) => (
-        <Node key={node.id} node={node} shared={shared} />
-      ))}
-    </ul>
+    <>
+      {rulesets.length > 0 && (
+        <ul class="tree tree--rulesets">
+          {rulesets.map((node) => (
+            <Node key={node.id} node={node} shared={shared} />
+          ))}
+        </ul>
+      )}
+      <ul class="tree">
+        {rest.map((node) => (
+          <Node key={node.id} node={node} shared={shared} />
+        ))}
+      </ul>
+    </>
   );
 }
 
@@ -71,8 +93,8 @@ function Count({ n }: { n: number }) {
 
 /** A checkable value, with its nested values (a group's) behind its own disclosure. */
 function Value({ id, value, onToggle, shared }: { id: string; value: ValueNode; onToggle: (key: string) => void; shared: Shared }) {
-  const own = `${id}-${value.key}`;
-  const open = value.children.length > 0 && shared.isOpen(own, value.open);
+  const own = valueId(id, value.key);
+  const open = value.children.length > 0 && shared.isOpen(own);
   return (
     <li class="tree__value">
       <div class="tree__row">
@@ -96,10 +118,10 @@ function Value({ id, value, onToggle, shared }: { id: string; value: ValueNode; 
 }
 
 function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
-  const open = shared.isOpen(node.id, node.open);
+  const open = shared.isOpen(node.id);
   const panel = `${idFor(node.id)}-panel`;
   if (node.kind === 'type') {
-    const selected = shared.filters.get('type');
+    const selected = shared.filters.get(node.path);
     const values = selected?.kind === 'enum' ? selected.values : [];
     const key = node.value.key;
     return (
@@ -109,7 +131,7 @@ function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
             type="checkbox"
             id={idFor(node.id)}
             checked={node.value.selected}
-            onChange={() => shared.onEnum('type', values.includes(key) ? values.filter((v) => v !== key) : [...values, key])}
+            onChange={() => shared.onEnum(node.path, values.includes(key) ? values.filter((v) => v !== key) : [...values, key])}
           />
           <label for={idFor(node.id)}>
             {node.value.label} <Count n={node.value.count} />

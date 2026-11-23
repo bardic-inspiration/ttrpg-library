@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "dripstone-mantis",
+  "name": "Dripstone Mantis",
+  "summary": "A stony, long-limbed mantis that hangs among stalactites and drops onto anyone walking beneath.",
+  "description": "Dripstone mantises spend their lives upside down, growing a crust of mineral scale until they're indistinguishable from the rock around them. They wait weeks between meals. Cave guides tap the ceilings ahead with long poles, and count it a good day when nothing taps back.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 16,
+      "con": 14,
+      "int": 2,
+      "wis": 12,
+      "cha": 4
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Drop Ambush",
+        "kind": "other",
+        "text": "If the mantis drops at least 10 feet from a ceiling into a space within 5 feet of a creature, that creature must succeed on a {dc:dex} Dexterity saving throw or take {dmg:2d6:bludgeoning} and have the {ref:condition/prone} condition. The mantis takes no damage from the fall."
+      },
+      {
+        "name": "False Appearance",
+        "kind": "other",
+        "text": "While the mantis remains motionless on a ceiling, it is indistinguishable from a cluster of stalactites."
+      },
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The mantis can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The mantis makes two Raptorial Claw attacks."
+      },
+      {
+        "name": "Raptorial Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc:dex}) from one of two claws."
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

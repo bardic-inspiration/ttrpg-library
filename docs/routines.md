@@ -2,8 +2,8 @@
 
 Routines are scheduled or on-demand Claude Code sessions that work the
 content lane: they turn `request`, `import`, and `revise` issues into content
-PRs and answer review comments on them. This file holds the canonical prompts, the
-schedule, and the run order every run follows. [Generation](generation.md) is the source of
+PRs and answer review comments on them. This file holds the canonical prompts and the
+run order every run follows. [Generation](generation.md) is the source of
 truth; where this file and `generation.md` disagree, `generation.md` wins and
 this file is fixed.
 
@@ -12,31 +12,7 @@ The prompts below are short on purpose. They tell the run to follow
 change to the run order lands through a reviewed PR here instead of by
 editing the routine's settings.
 
-## Schedule
-
-| Routine | When | Batch |
-|---|---|---|
-| Scheduled | Weekly, Monday morning local time, one run | `defaults.count` (5) per request without a count, and every request picked; no size limit |
-| On-demand | Whenever you start it | Same, for the issues or inline request you name |
-
-Both routines use the same prompt ([Schedule](generation.md#schedule)). The on-demand routine adds its
-inputs after it.
-
-## Setup
-
-Create each routine as a scheduled task in Claude Code on the web (see the
-[Claude Code on the web docs](https://code.claude.com/docs/en/claude-code-on-the-web)):
-
-- **Repository:** this repository, with GitHub access that can push branches,
-  open PRs, label and comment on issues, and reply to review comments.
-- **Environment:** network access to the npm registry, so the session-start
-  hook (`.claude/hooks/session-start.sh`) can install dependencies.
-- **Trigger:** for the scheduled routine, a weekly schedule on Monday
-  morning in your time zone. The on-demand routine has no schedule; run it by
-  hand.
-- **Prompt:** the [scheduled prompt](#scheduled-prompt) as written, or for an
-  on-demand run, the [on-demand prompt](#on-demand-prompt) with its inputs
-  filled in.
+## Scope
 
 Routines work only the content lane ([Work lanes](workflow.md#work-lanes)). They take only `request`,
 `import`, and `revise` issues, never dev-lane issues (bugs, features, UI refinement). They

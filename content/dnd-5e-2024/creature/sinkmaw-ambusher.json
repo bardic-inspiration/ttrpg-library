@@ -1,0 +1,104 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "sinkmaw-ambusher",
+  "name": "Sinkmaw Ambusher",
+  "summary": "A huge burrowing beast that lies buried with its mouth open like a pit in the cavern floor and swallows whatever steps in.",
+  "description": "Sinkmaws bury themselves in the soft grit of cavern floors and wait for years, their open gullets looking like nothing more than an old sinkhole. Caravans that use the deep roads mark these pits with cairns, and replace the cairns that go missing. A sinkmaw that has fed lies still and full for a season.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "huge"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15,
+      "note": "natural armor"
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 20,
+      "burrow": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 8,
+      "con": 18,
+      "int": 1,
+      "wis": 12,
+      "cha": 3
+    },
+    "senses": {
+      "blindsight": 30,
+      "tremorsense": 90,
+      "note": "blind beyond this radius"
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "False Appearance",
+        "kind": "other",
+        "text": "While the ambusher is buried with its mouth open and motionless, it is indistinguishable from a sinkhole in the ground."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The ambusher makes one Bite attack, and then it can use Swallow."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "3d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc:str}), and it has the {ref:condition/restrained} condition until the grapple ends."
+      },
+      {
+        "name": "Swallow",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "one Medium or smaller creature Grappled by the ambusher"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "acid"
+          }
+        ],
+        "onFailure": "The ambusher swallows the target, which is no longer {ref:condition/grappled}. While swallowed, a creature has the {ref:condition/blinded} and {ref:condition/restrained} conditions, has Total Cover against attacks and other effects outside the ambusher, and takes {dmg:3d6:acid} at the start of each of the ambusher's turns. If the ambusher takes 20 damage or more on a single turn from a creature inside it, the ambusher must succeed on a {dc=15} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall into spaces within 5 feet of it and have the {ref:condition/prone} condition. If the ambusher dies, a swallowed creature can escape the corpse by using 10 feet of movement, exiting with the {ref:condition/prone} condition."
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

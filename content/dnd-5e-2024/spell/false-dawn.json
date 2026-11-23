@@ -1,0 +1,55 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "false-dawn",
+  "name": "False Dawn",
+  "summary": "Fills an area with false daylight that confuses undead and creatures of darkness.",
+  "stats": {
+    "level": 5,
+    "school": "illusion",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a lantern"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "A 60-foot-radius Sphere of daylight appears around you. Creatures sensitive to sunlight make a Constitution saving throw at the start of their turn, taking 3d8 Radiant damage on a failure or half as much on a success. The light is Bright Light."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

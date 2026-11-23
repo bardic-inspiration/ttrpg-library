@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "sky-chalk",
+  "name": "Sky-Chalk",
+  "summary": "A piece of chalk that draws a bridge through the air.",
+  "description": "Taught to a generation of mountain climbers, who never mention it to their landlords.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can use this chalk to draw a line up to 30 feet long between two points in the air. For 1 hour, the line acts as a solid bridge 3 feet wide that can support up to 500 pounds. The chalk is consumed."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

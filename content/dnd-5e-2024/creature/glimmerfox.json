@@ -1,0 +1,89 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "glimmerfox",
+  "name": "Glimmerfox",
+  "summary": "A fox no bigger than a housecat whose coat throws copies of itself across the leaves.",
+  "description": "Glimmerfoxes are said to steal the shine from dewdrops and wear it. Foresters leave out bowls of milk so the foxes will play tricks on someone else, and mostly it works.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "tiny"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 4,
+      "dex": 16,
+      "con": 12,
+      "int": 6,
+      "wis": 12,
+      "cha": 10
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 0.125,
+    "traits": [
+      {
+        "name": "Keen Smell",
+        "kind": "other",
+        "text": "The fox has {ref:glossary/advantage} on Wisdom (Perception) checks that rely on smell."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Mirror Flicker",
+        "kind": "other",
+        "text": "The fox casts no spell, but it leaves a shimmering double of itself in its space and moves up to half its Speed without provoking {ref:glossary/opportunity-attacks}. Until the start of the fox's next turn, the first attack roll made against it has {ref:glossary/disadvantage}.",
+        "uses": "3/day"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

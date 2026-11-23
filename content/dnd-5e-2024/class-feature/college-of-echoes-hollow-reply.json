@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "college-of-echoes-hollow-reply",
+  "name": "Hollow Reply",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "When you cast a spell with a verbal component, you can echo it. Choose a creature within 30 feet of the target; that creature takes Thunder damage equal to your Charisma modifier (minimum 1). You can do this a number of times equal to your Charisma modifier (minimum once), and regain all uses when you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

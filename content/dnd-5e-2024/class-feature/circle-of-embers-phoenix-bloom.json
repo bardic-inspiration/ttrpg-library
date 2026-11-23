@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "circle-of-embers-phoenix-bloom",
+  "name": "Phoenix Bloom",
+  "stats": {
+    "levels": [
+      14
+    ],
+    "text": "When you would be reduced to 0 hit points, you can instead drop to 1 hit point and erupt in flame; each creature within 10 feet takes Fire damage equal to your Druid level. Once you use this feature, you can't use it again until you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

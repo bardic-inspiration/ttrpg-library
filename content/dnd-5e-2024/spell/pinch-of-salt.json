@@ -1,0 +1,51 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "pinch-of-salt",
+  "name": "Pinch of Salt",
+  "summary": "Hurls a spray of grit that blinds and stings one creature.",
+  "stats": {
+    "level": 0,
+    "school": "conjuration",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 10
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Make a ranged spell attack against a creature within range. On a hit, the target takes 1d6 Piercing damage and has the Blinded condition until the end of its next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

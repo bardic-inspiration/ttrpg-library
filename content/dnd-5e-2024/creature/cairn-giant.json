@@ -1,0 +1,129 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "cairn-giant",
+  "name": "Cairn Giant",
+  "summary": "A towering giant held together by lashed bones and mortared stones, its chest a burial mound with something still breathing inside.",
+  "description": "The cairn builders were the first to bury their heroes under rock. The rock got up some centuries later and took a skeleton along for the walk.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "giant",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 16,
+      "note": "natural armor"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 23,
+      "dex": 8,
+      "con": 21,
+      "int": 5,
+      "wis": 10,
+      "cha": 5
+    },
+    "saveProficiencies": [
+      "con"
+    ],
+    "resistances": [
+      "necrotic",
+      "piercing"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Giant"
+      ]
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Barrow Aura",
+        "kind": "other",
+        "text": "The first time on a turn that a creature starts its turn within 10 feet of the giant, it takes {dmg:1d8:necrotic}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The giant makes two Cairn Maul attacks, or one Cairn Maul attack and uses Grave Toss."
+      },
+      {
+        "name": "Cairn Maul",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Grave Toss",
+        "kind": "ranged-attack",
+        "ability": "str",
+        "range": {
+          "normal": 60,
+          "long": 240
+        },
+        "damage": [
+          {
+            "dice": "4d10",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Settle",
+        "kind": "other",
+        "text": "Trigger: The giant takes damage that would reduce it to 0 Hit Points. Response: The giant makes a {dc:con} Constitution saving throw. On a success, it drops to 1 Hit Point instead. It can't use this reaction again until it finishes a Long Rest."
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

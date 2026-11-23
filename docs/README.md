@@ -2,8 +2,9 @@
 
 The index of `docs/` and the conventions every doc follows. The approach was
 decided in #196. These docs describe what is built; design not yet built is in
-the v2 stage spec, [`spec/v2/`](../spec/v2/README.md), and the development
-tracks' specs, [`spec/tracks/`](../spec/tracks/README.md). The v1 spec is kept at the
+the development tracks' specs, [`spec/tracks/`](../spec/tracks/README.md).
+What each release changed is in [`CHANGELOG.md`](../CHANGELOG.md), and why in
+[`decisions.md`](decisions.md). The first spec, `SPEC.md`, is kept at the
 `v1.0.0` tag.
 
 ## Index
@@ -13,14 +14,14 @@ tracks' specs, [`spec/tracks/`](../spec/tracks/README.md). The v1 spec is kept a
 | [`architecture.md`](architecture.md) | What the library is, the pipeline, technology, repo layout, npm scripts, and the shared terms | Starting out, or looking for where something lives |
 | [`content-model.md`](content-model.md) | Entries in every ruleset: envelope, IDs, tags, meta, text, tables, images, refs, situational fields, SRD vs custom entries, validation | Writing or validating any entry, or changing what an entry is |
 | [`rulesets.md`](rulesets.md) | The ruleset module, derived values, tokens, and how each type in [`ruleset.json`](../rulesets/dnd-5e-2024/ruleset.json) prints | Working on `rulesets/`, a type's schema, or a stat block's wording |
-| [`generation.md`](generation.md) | Requests, labels, the run order, defaults, the `generate` and `revise` skills, guidelines, schedule, gap buckets, SRD import | Changing how routines or skills work |
+| [`generation.md`](generation.md) | Requests, labels, the run order, defaults, the `generate` and `revise` skills, guidelines, routine prompts, gap buckets, SRD import | Changing how routines or skills work |
 | [`site.md`](site.md) | The type registry, index build, pages, gallery, detail page, templates | Working on `site/`, `config/types.json`, or the index builder |
 | [`styling.md`](styling.md) | The styling system, tokens, palette, visual direction, accessibility, refinement workflow | Changing how anything looks, or checking accessibility |
 | [`export.md`](export.md) | Exporters, JSON, PNG, print, `config/export.json` | Working on exports or adding a translator |
 | [`workflow.md`](workflow.md) | Lanes, labeling, CI, docs-only PRs, the link check, deploy, repo settings, review | Changing CI or lanes, or asking why a check failed |
 | [`licensing.md`](licensing.md) | Licenses, SRD attribution, the blocklist, new rulesets | Adding content sources, art, or a ruleset |
 | [`decisions.md`](decisions.md) | What each version decided and why, and the principles that carry forward | Weighing a design, or asking why something is the way it is |
-| [`routines.md`](routines.md) | Routine prompts, schedule, and run order | Setting up or changing a routine; a routine reads it on every run |
+| [`routines.md`](routines.md) | Routine prompts and run order | Setting up or changing a routine; a routine reads it on every run |
 | [`SRD_CC_v5.2.pdf`](SRD_CC_v5.2.pdf) | The SRD 5.2 reference copy | Transcribing or checking an SRD entry |
 
 ## Conventions
@@ -32,10 +33,9 @@ Each rule is stated once, in the place its reader already looks:
 - **`docs/`**: reference for what is built and live, written for developers
   and dev sessions.
 - **Skills and guidelines**: rules that routines follow. A routine reads only
-  these and `docs/`, never the stage spec or the track specs.
-- **The stage spec** ([`spec/v2/`](../spec/v2/README.md)) **and the track
-  specs** ([`spec/tracks/`](../spec/tracks/README.md)): design that isn't
-  built yet.
+  these and `docs/`, never the track specs.
+- **The track specs** ([`spec/tracks/`](../spec/tracks/README.md)): design
+  that isn't built yet.
 - **Code, schemas, and data files**: the exact rules. A doc explains them and
   links to them; it doesn't restate them. A field's meaning goes in its
   schema's `description` keyword, not in a table in a doc.

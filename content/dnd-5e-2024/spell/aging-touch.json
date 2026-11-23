@@ -1,0 +1,50 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "aging-touch",
+  "name": "Aging Touch",
+  "summary": "Rapidly ages a creature, damaging it and weakening its body.",
+  "stats": {
+    "level": 6,
+    "school": "transmutation",
+    "classes": [
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/cleric"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Make a melee spell attack. On a hit, the target takes 10d6 Necrotic damage and its maximum Hit Points are reduced by the damage taken for 24 hours."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

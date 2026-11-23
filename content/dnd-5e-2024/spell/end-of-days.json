@@ -1,0 +1,51 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "end-of-days",
+  "name": "End of Days",
+  "summary": "Pronounces a verdict of oblivion on every creature in a wide area.",
+  "stats": {
+    "level": 9,
+    "school": "necromancy",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/warlock"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Each creature of your choice in a 60-foot-radius Sphere centered on a point within range makes a Constitution saving throw, taking 15d8 Necrotic damage on a failed save or half on a success. A creature reduced to 0 Hit Points by this damage crumbles to dust."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

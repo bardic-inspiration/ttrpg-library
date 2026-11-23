@@ -1,0 +1,111 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "dreamrot-weaver",
+  "name": "Dreamrot Weaver",
+  "summary": "A gaunt cultist who spins sleepers' dreams into nightmares and feeds on the fear that wakes them.",
+  "description": "Weavers sit at bedsides in villages that have angered the cult and hum until the sleeper's breathing changes. Those who survive speak of a long hallway with a door they could not open.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 14,
+      "con": 14,
+      "int": 13,
+      "wis": 12,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "insight": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Undercommon"
+      ]
+    },
+    "traits": [
+      {
+        "name": "Dream Walker",
+        "kind": "other",
+        "text": "The weaver knows whether any creature it can see is asleep."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Thorn Needle",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d6",
+            "type": "psychic"
+          }
+        ]
+      },
+      {
+        "name": "Nightmare Lull",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature the weaver can see within 60 feet"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "and the target has the {ref:condition/frightened} condition until the end of its next turn.",
+        "onSuccess": "Half damage only.",
+        "recharge": "5-6"
+      }
+    ],
+    "cr": 2
+  },
+  "tags": {
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "dream-corrupters",
+      "controller"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "glowbloom-moth",
+  "name": "Glowbloom Moth",
+  "summary": "A moth as big as a cart wheel whose wings hold a slow, pulsing glow.",
+  "description": "Glowbloom moths drift above the forest at dusk, drinking the nectar of night-flowering trees. Their wing powder shines for hours, and woodland children dare each other to walk out of a glade still wearing it.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 7,
+    "speed": {
+      "walk": 10,
+      "fly": 50,
+      "hover": true
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 14,
+      "con": 13,
+      "int": 2,
+      "wis": 12,
+      "cha": 9
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Luminous Wings",
+        "kind": "other",
+        "text": "The moth sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. Creatures that can see the moth have {ref:glossary/disadvantage} on Wisdom (Perception) checks to notice anything outside the light."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Proboscis",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Dazzling Powder",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "radiant"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "onFailure": ", and the target has the {ref:condition/blinded} condition until the end of the moth's next turn.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

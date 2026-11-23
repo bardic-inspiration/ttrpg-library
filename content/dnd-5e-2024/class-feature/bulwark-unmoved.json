@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "bulwark-unmoved",
+  "name": "Unmoved",
+  "stats": {
+    "levels": [
+      10
+    ],
+    "text": "You have proficiency in Constitution saving throws if you don't already, and you can add your Strength modifier to Constitution saving throws made to maintain {ref:glossary/concentration}."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

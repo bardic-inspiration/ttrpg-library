@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "feat",
   "id": "boon-of-combat-prowess",
   "name": "Boon of Combat Prowess",
@@ -24,8 +26,7 @@
       "kind": "routine",
       "issues": [
         234
-      ],
-      "srd": true
+      ]
     }
   }
 }

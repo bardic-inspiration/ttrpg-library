@@ -7,7 +7,7 @@ import type { ItemStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import type { ImportContext, ImportedEntry, Skip, Translator, TranslatorItem } from '../types.ts';
 import { exportCondition, importCondition } from './condition.ts';
 import { exportCreature, importCreature } from './creature.ts';
-import type { Record5e } from './document.ts';
+import { DOCUMENT_KEY, type Record5e } from './document.ts';
 import { exportEquipment, importEquipment } from './equipment.ts';
 import { exportItem, importItem, unexportableItem } from './item.ts';
 import type { Open5eKind } from './schema.ts';
@@ -36,6 +36,8 @@ const RULESET = OPEN5E.ruleset;
 
 /** The envelope fields Open5e has no place for. */
 const ENVELOPE: [keyof TranslatorItem['entry'], string][] = [
+  ['source', 'Open5e\'s document field names Open5e\'s own sources, not the library\'s.'],
+  ['author', 'Open5e has no field for an author.'],
   ['summary', 'Open5e has no field for a summary.'],
   ['description', 'Open5e has no field for a description.'],
   ['tags', 'Open5e has no field for tags.'],
@@ -113,7 +115,11 @@ export const open5e: Translator = {
         continue;
       }
       const entry = mapping.import(record, context, skips);
-      if (entry) entries.push(entry);
+      if (!entry) continue;
+      // A record this library exported keeps its entry's id, which its key carries; any other takes its name's slug.
+      const own = typeof record.key === 'string' && record.key.startsWith(`${DOCUMENT_KEY}_`) ? record.key.slice(DOCUMENT_KEY.length + 1) : '';
+      if (/^[a-z0-9]+(-[a-z0-9]+)*$/.test(own)) entry.id = own;
+      entries.push(entry);
     }
     return { entries, skipped };
   },

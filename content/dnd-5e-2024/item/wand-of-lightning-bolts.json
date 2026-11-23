@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "wand-of-lightning-bolts",
   "name": "Wand of Lightning Bolts",
@@ -34,8 +36,7 @@
       "kind": "routine",
       "issues": [
         134
-      ],
-      "srd": true
+      ]
     }
   }
 }

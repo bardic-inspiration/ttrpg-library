@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "belt-of-giant-strength",
   "name": "Belt of Giant Strength",
@@ -18,8 +20,7 @@
       "kind": "routine",
       "issues": [
         140
-      ],
-      "srd": true
+      ]
     }
   }
 }

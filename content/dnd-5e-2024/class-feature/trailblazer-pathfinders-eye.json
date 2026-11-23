@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "trailblazer-pathfinders-eye",
+  "name": "Pathfinder's Eye",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "You have proficiency in the Survival skill, and you double your proficiency bonus for it. You always know the direction of north and can't become lost by nonmagical means."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

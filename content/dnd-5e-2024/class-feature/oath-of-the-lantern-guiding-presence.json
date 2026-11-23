@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "oath-of-the-lantern-guiding-presence",
+  "name": "Guiding Presence",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "As a Magic action, you can expend a use of Channel Divinity to let a creature you touch know the direction of safety, giving it a bonus to its next saving throw equal to your Charisma modifier (minimum +1)."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

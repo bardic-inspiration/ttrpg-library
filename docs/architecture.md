@@ -6,7 +6,7 @@ An overview of the whole system: what the library is, how an entry gets from a
 request to the live site, the technology it's built on, where things are in the
 repo, and the terms every doc uses.
 
-The library is a static GitHub Pages gallery of D&D 5e (SRD 5.2) content. Claude
+The library is a static GitHub Pages gallery of D&D 5e content, built on SRD 5.2. Claude
 routines generate entries as JSON files in response to GitHub issues, open one
 PR per batch, and revise the batch from review comments. CI validates every
 entry against strict schemas and rule-derived checks. Merging a PR to `main` is
@@ -92,9 +92,9 @@ tests/                                   Vitest suites and fixtures
 .claude/                                 session settings, hooks, skills, and archived skills
 .github/                                 workflows, labeler, issue and PR templates, Dependabot
 docs/                                    these docs (README.md is the index)
-spec/v2/                                 the v2 stage spec: design not yet built
 spec/tracks/                             development tracks' specs: ongoing design not yet built
 AGENTS.md, CLAUDE.md, README.md          working guide and repo intro
+CHANGELOG.md                             what each release changed (workflow.md "Releases")
 LICENSE, LICENSE-CONTENT, ATTRIBUTION.md licensing (licensing.md)
 ```
 
@@ -137,7 +137,6 @@ npm scripts:
   type.
 - **Routine:** a scheduled or on-demand Claude run that works content issues.
 - **Lane:** the kind of a PR, content or dev, set by its branch prefix.
-- **Stage spec:** `spec/v2/`, the design not yet built.
 - **Track:** ongoing development outside a version's build, with a tracking
   issue and its unbuilt design in `spec/tracks/`.
 

@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "quilted-ward",
+  "name": "Quilted Ward",
+  "summary": "Padded armor that dulls the weight of a fall and a blow.",
+  "description": "Grandmothers in the hill country quilt these with charms in the lining. The charms are mostly dried herbs.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/padded-armor"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to AC while wearing this armor. When you take Bludgeoning damage, you can use your Reaction to reduce that damage by 3."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

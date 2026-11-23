@@ -133,12 +133,22 @@ describe('the key space (docs/rulesets.md#rules-data)', () => {
   });
 });
 
+describe('the ruleset definition', () => {
+  it('names its publisher (docs/rulesets.md#the-ruleset-module)', async () => {
+    const ruleset = await fixtureJson('rulesets/fixture-rules/ruleset.json');
+    expect(ruleset.publisher).toBe('Fixture Press');
+    expect(await errorsWith({ 'rulesets/fixture-rules/ruleset.json': { ...ruleset, publisher: undefined } })).toContain(
+      'rulesets/fixture-rules/ruleset.json: publisher: missing; name who publishes the ruleset',
+    );
+  });
+});
+
 describe('extensions', () => {
-  it('are custom: an SRD marker is an error', async () => {
+  it('are homebrew: official authorship is an error', async () => {
     const mallet = await fixtureJson(MALLET);
-    mallet.meta.source.srd = true;
+    mallet.author = 'publisher';
     expect(await errorsWith({ [MALLET]: mallet })).toContain(
-      'content/fixture-rules/gear/mallet.json: meta.source.srd: an extension is custom; the SRD rules are kept in the ruleset as primitives',
+      "content/fixture-rules/gear/mallet.json: author: an extension is homebrew; the ruleset's official rules are kept in rulesets/fixture-rules/rules/ as primitives",
     );
   });
 

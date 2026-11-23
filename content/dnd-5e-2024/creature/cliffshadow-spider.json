@@ -1,0 +1,108 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "cliffshadow-spider",
+  "name": "Cliffshadow Spider",
+  "summary": "A slate-gray spider that strings its webs across cave mouths and waits in the dark just behind them.",
+  "description": "Cliffshadow spiders favor the first few yards of a cave, where wind carries moths and bats into their webs. Miners clear the mouths of old shafts with torches before going in, and still find the silk grown back by spring.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 15,
+      "con": 12,
+      "int": 2,
+      "wis": 12,
+      "cha": 4
+    },
+    "skills": {
+      "stealth": "expertise"
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The spider can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      },
+      {
+        "name": "Web Sense",
+        "kind": "other",
+        "text": "While in contact with a web, the spider knows the location of any other creature in contact with the same web."
+      },
+      {
+        "name": "Web Walker",
+        "kind": "other",
+        "text": "The spider ignores movement restrictions caused by webs."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d4",
+            "type": "poison"
+          }
+        ]
+      },
+      {
+        "name": "Curtain Web",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature the spider can see within 30 feet"
+        },
+        "onFailure": "The target has the {ref:condition/restrained} condition until the web is destroyed. As an action, the restrained target or a creature within 5 feet of it can make a {dc=12} Strength (Athletics) check, freeing the target on a success. The web has AC 10, 5 {ref:glossary/hit-points}, and Immunity to Poison and Psychic damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

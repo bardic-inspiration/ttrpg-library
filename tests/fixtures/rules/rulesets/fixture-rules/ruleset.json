@@ -1,5 +1,6 @@
 {
   "id": "fixture-rules",
+  "publisher": "Fixture Press",
   "types": ["note", "manual"],
   "rules": [
     { "type": "term", "extensions": false },

@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "warrior-of-the-quiet-step-still-strike",
+  "name": "Still Strike",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "The first time you hit a creature on your turn that hasn't noticed you, you deal extra damage equal to one roll of your Martial Arts die."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

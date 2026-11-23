@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "tower-shield-of-patience",
+  "name": "Tower Shield of Patience",
+  "summary": "A shield that grants extra cover to a defender who stands their ground.",
+  "description": "The face is painted with an eye that has been repainted so many times it looks stern. Gatekeepers treasure it.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/shield"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to AC while wielding this shield (in addition to the shield's normal bonus). If you take the Dodge action, the bonus becomes +2 until the start of your next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

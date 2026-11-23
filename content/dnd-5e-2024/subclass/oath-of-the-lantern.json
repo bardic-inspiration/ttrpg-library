@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "oath-of-the-lantern",
+  "name": "Oath of the Lantern",
+  "summary": "A Paladin subclass: carry light into dark places.",
+  "stats": {
+    "class": {
+      "ref": "class/paladin"
+    },
+    "tagline": "Carry Light Into Dark Places",
+    "text": "Paladins of the Lantern swear to guide the lost, shelter travelers, and drive back the dark. Their light is a promise that no one walks alone.",
+    "features": [
+      {
+        "ref": "class-feature/oath-of-the-lantern-lantern-light"
+      },
+      {
+        "ref": "class-feature/oath-of-the-lantern-guiding-presence"
+      },
+      {
+        "ref": "class-feature/oath-of-the-lantern-aura-of-the-lamp"
+      },
+      {
+        "ref": "class-feature/oath-of-the-lantern-unwavering-flame"
+      },
+      {
+        "ref": "class-feature/oath-of-the-lantern-beacon-ascendant"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

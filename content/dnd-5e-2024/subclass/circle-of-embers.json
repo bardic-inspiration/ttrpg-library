@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "circle-of-embers",
+  "name": "Circle of Embers",
+  "summary": "A Druid subclass: tend the fire that renews.",
+  "stats": {
+    "class": {
+      "ref": "class/druid"
+    },
+    "tagline": "Tend the Fire That Renews",
+    "text": "Druids of the Circle of Embers know that fire clears the way for growth. They guard burned lands as they recover and carry a measure of that renewing flame.",
+    "features": [
+      {
+        "ref": "class-feature/circle-of-embers-ashen-form"
+      },
+      {
+        "ref": "class-feature/circle-of-embers-smoldering-sense"
+      },
+      {
+        "ref": "class-feature/circle-of-embers-rekindled-vigor"
+      },
+      {
+        "ref": "class-feature/circle-of-embers-cinder-ward"
+      },
+      {
+        "ref": "class-feature/circle-of-embers-phoenix-bloom"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

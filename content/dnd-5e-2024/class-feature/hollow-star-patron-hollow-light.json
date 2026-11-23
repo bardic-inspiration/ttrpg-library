@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "hollow-star-patron-hollow-light",
+  "name": "Hollow Light",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can shroud yourself in dim starlight for 1 minute. While it lasts, creatures within 10 feet of you that begin their turn there take Cold damage equal to your Charisma modifier (minimum 1). You can do this once per Short or Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

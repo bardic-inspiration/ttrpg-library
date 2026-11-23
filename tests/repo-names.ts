@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-// docs/generation.md#the-generate-skill and docs/generation.md#schedule: the generate skill and docs/routines.md may name only
+// docs/generation.md#the-generate-skill and docs/generation.md#routine-prompts: the generate skill and docs/routines.md may name only
 // repo paths, npm scripts, and config/defaults.json keys that exist.
 export const ROOT = join(import.meta.dirname, '..');
 export const read = (path: string) => readFileSync(join(ROOT, path), 'utf8');

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { read, repo, unresolved } from './repo-names.ts';
 
-// docs/generation.md#schedule (Schedule), docs/generation.md#run-order (Routine run order); issue #65.
+// docs/generation.md#routine-prompts (Routine prompts), docs/generation.md#run-order (Routine run order); issue #65.
 const DOC = 'docs/routines.md';
 const doc = read(DOC);
 
@@ -21,20 +21,12 @@ describe(DOC, () => {
     expect(unresolved(doc, repo)).toEqual([]);
   });
 
-  it('records the docs/generation.md#schedule schedule', () => {
-    const schedule = section('Schedule');
-    expect(schedule).toMatch(/weekly/i);
-    expect(schedule).toMatch(/Monday morning/);
-    expect(schedule).toContain('`defaults.count`');
-    expect(schedule).not.toContain('maxBatch');
-  });
-
   it('has one canonical prompt each for the scheduled and on-demand routines', () => {
     const scheduled = fences(section('Scheduled prompt'));
     const onDemand = fences(section('On-demand prompt'));
     expect(scheduled).toHaveLength(1);
     expect(onDemand.length).toBeGreaterThanOrEqual(1);
-    // The on-demand routine is the same prompt (docs/generation.md#schedule), with its inputs added.
+    // The on-demand routine is the same prompt (docs/generation.md#routine-prompts), with its inputs added.
     for (const prompt of onDemand) expect(prompt.startsWith(scheduled[0]!.trimEnd())).toBe(true);
   });
 

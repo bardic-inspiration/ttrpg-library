@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "staff-of-power",
   "name": "Staff of Power",
@@ -82,8 +84,7 @@
       "kind": "routine",
       "issues": [
         134
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

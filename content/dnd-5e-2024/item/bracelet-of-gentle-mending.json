@@ -1,0 +1,31 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "bracelet-of-gentle-mending",
+  "name": "Bracelet of Gentle Mending",
+  "summary": "A bracelet that closes small wounds as a creature rests.",
+  "description": "Hospitallers wear these on the left wrist, where the pulse is. The bracelet warms when an ally nearby is hurt.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "charges": {
+      "max": 3,
+      "recharge": "1d3 daily at dawn"
+    },
+    "effect": "The bracelet has 3 charges. As a Magic action, you can expend 1 charge to touch a creature and restore 2d4 + 2 hit points to it. The bracelet regains 1d3 expended charges daily at dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

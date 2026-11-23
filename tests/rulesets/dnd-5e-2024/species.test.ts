@@ -135,7 +135,7 @@ describe('the page', async () => {
 
   it('lists a trait’s links on its species’ page, and names the trait from the other end', () => {
     const { forward } = groupPageRefs(dragonborn, dragonborn.components!, refTargets(all, [data]), ruleset.refLabels);
-    expect(forward).toEqual([{ label: 'References', targets: [{ type: 'condition', name: 'Incapacitated', path: 'dnd-5e-2024/rules/conditions/#condition-incapacitated' }] }]);
+    expect(forward).toEqual([{ label: 'References', targets: [{ type: 'condition', name: 'Incapacitated', path: 'dnd-5e-2024/rules/conditions/#condition-incapacitated', official: true }] }]);
     expect(refTargets(all, [data]).get('species-trait/dragonborn-draconic-flight')?.name).toBe('Dragonborn › Draconic Flight');
   });
 });

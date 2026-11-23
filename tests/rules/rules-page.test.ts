@@ -50,7 +50,7 @@ describe('links to rules', () => {
     expect(names.get('gear/hand-tools')).toBe('Hand Tools');
     expect(names.get('term/advantage')).toBe('Advantage');
     expect(refPaths([data]).get('term/advantage')).toBe('fixture-rules/rules/glossary/#term-advantage');
-    expect(refTargets(all, [data]).get('gear/mallet')).toEqual({ type: 'gear', name: 'Mallet', path: 'fixture-rules/gear/mallet/' });
+    expect(refTargets(all, [data]).get('gear/mallet')).toEqual({ type: 'gear', name: 'Mallet', path: 'fixture-rules/gear/mallet/', official: false });
   });
 
   it('render a {ref:…} token as the name linked to the anchor, and an extension to its card', () => {
@@ -80,7 +80,8 @@ describe('a rules page', () => {
     expect(html).toContain('id="term-advantage"');
     expect(html).toContain('id="term-disadvantage"');
     // Advantage links Disadvantage in its text, and the note links Advantage.
-    expect(html).toMatch(/id="term-advantage"[\s\S]*References[\s\S]*Disadvantage[\s\S]*Referenced by[\s\S]*Field Notes/);
+    // Field Notes is homebrew, so it's listed under Homebrew, apart from the SRD links (docs/site.md#rules-pages).
+    expect(html).toMatch(/id="term-advantage"[\s\S]*References[\s\S]*Disadvantage[\s\S]*<\/dl>\s*<p class="rule-links__homebrew">Homebrew<\/p>\s*<dl class="rule-links">\s*<dt>Referenced by<\/dt>[\s\S]*Field Notes/);
     expect(html).toMatch(/id="term-disadvantage"[\s\S]*Referenced by[\s\S]*href="\/fixture-rules\/rules\/glossary\/#term-advantage">Advantage/);
     expect(text).not.toContain('Extensions');
   });

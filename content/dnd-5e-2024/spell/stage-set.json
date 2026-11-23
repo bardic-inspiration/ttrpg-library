@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "stage-set",
+  "name": "Stage Set",
+  "summary": "Transforms an area into a convincing illusory setting.",
+  "stats": {
+    "level": 7,
+    "school": "illusion",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a cardboard model"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 8,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "You alter the appearance of a 100-foot-radius area, adding objects, creatures, and terrain. A creature that touches or investigates the illusion with a successful Intelligence (Investigation) check against your spell save DC sees through it."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

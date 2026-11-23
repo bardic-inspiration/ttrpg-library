@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "mirrorlink-chain-shirt",
+  "name": "Mirrorlink Chain Shirt",
+  "summary": "A chain shirt of polished rings that throws light back at foes.",
+  "description": "Each ring has been mirror-bright for centuries. Assassins complain they can see their own faces in it.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/chain-shirt"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to AC while wearing this armor. As a Reaction when a creature within 30 feet makes a ranged attack against you with a ray of light or Radiant damage, you can cause the attack to have Disadvantage."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

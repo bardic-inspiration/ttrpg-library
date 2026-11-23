@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "identify",
   "name": "Identify",
@@ -40,8 +42,7 @@
   "meta": {
     "createdAt": "2026-11-03",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     },
     "updatedAt": "2026-11-09"
   }

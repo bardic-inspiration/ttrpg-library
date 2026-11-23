@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "chronicler-marginal-note",
+  "name": "Marginal Note",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "When you cast a spell using a spell slot, you can add a short note to the record: one creature within 60 feet of you of your choice is affected as though it had the benefit of the Guidance cantrip."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

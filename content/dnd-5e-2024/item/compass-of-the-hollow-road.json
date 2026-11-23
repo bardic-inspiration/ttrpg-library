@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "compass-of-the-hollow-road",
+  "name": "Compass of the Hollow Road",
+  "summary": "A compass that points toward the nearest hidden door or passage.",
+  "description": "Dwarven surveyors made them for mapping deep halls. The needle quivers when a wall is thinner than it ought to be.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can hold this compass and learn the direction and distance of the nearest secret door or hidden passage within 60 feet. Once you use this property, you can't use it again until the next dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

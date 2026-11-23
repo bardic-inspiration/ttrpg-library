@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "trailblazer-unseen-passage",
+  "name": "Unseen Passage",
+  "stats": {
+    "levels": [
+      15
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can leave no trace and ignore {ref:glossary/difficult-terrain} until the end of your turn. During that time, creatures can't track you by nonmagical means."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "chronicler",
+  "name": "Chronicler",
+  "summary": "A Wizard subclass: record, recall, and rewrite.",
+  "stats": {
+    "class": {
+      "ref": "class/wizard"
+    },
+    "tagline": "Record, Recall, and Rewrite",
+    "text": "Chroniclers study how events are written into the world. They keep perfect records of what has happened and use that knowledge to nudge what happens next.",
+    "features": [
+      {
+        "ref": "class-feature/chronicler-perfect-record"
+      },
+      {
+        "ref": "class-feature/chronicler-foreseen-page"
+      },
+      {
+        "ref": "class-feature/chronicler-marginal-note"
+      },
+      {
+        "ref": "class-feature/chronicler-edit-the-moment"
+      },
+      {
+        "ref": "class-feature/chronicler-rewrite"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "class-feature",
   "id": "sorcerer-metamagic",
   "name": "Metamagic",
@@ -14,8 +16,7 @@
   "meta": {
     "createdAt": "2026-11-10",
     "source": {
-      "kind": "manual",
-      "srd": true
+      "kind": "manual"
     }
   }
 }

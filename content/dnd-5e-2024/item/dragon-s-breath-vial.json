@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "dragon-s-breath-vial",
+  "name": "Dragon's Breath Vial",
+  "summary": "A vial that lets you exhale a gout of flame once.",
+  "description": "The vial is warm and the cork has been burned black. Do not drink it near the hay.",
+  "stats": {
+    "category": "potion",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, you can use a Magic action once within the next hour to exhale fire in a 15-foot cone. Each creature in the cone makes a DC 14 Dexterity saving throw, taking 4d6 Fire damage on a failed save, or half as much on a success."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

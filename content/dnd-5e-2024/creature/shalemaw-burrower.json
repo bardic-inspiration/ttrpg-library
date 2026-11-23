@@ -1,0 +1,94 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "shalemaw-burrower",
+  "name": "Shalemaw Burrower",
+  "summary": "A blind, flat-snouted digger that chews through solid shale and bursts up under whatever it hears walking.",
+  "description": "Shalemaws eat the soft seams in mountain rock and the grubs that live there, leaving tunnels that miners are glad to borrow and sorry to meet the owner of. A floor that hums faintly underfoot is the only warning anyone gets.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 20,
+      "burrow": 20
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 10,
+      "con": 16,
+      "int": 2,
+      "wis": 12,
+      "cha": 5
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "blindsight": 30,
+      "tremorsense": 60,
+      "note": "blind beyond this radius"
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Rock Tunneler",
+        "kind": "other",
+        "text": "The burrower can burrow through solid rock at half its Burrow Speed and leaves a 5-foot-diameter tunnel in its wake."
+      },
+      {
+        "name": "Erupt",
+        "kind": "other",
+        "text": "If the burrower moves out of the ground into a space within 5 feet of a creature, that creature must succeed on a {dc:str} Dexterity saving throw or have the {ref:condition/prone} condition. The burrower has {ref:glossary/advantage} on the next attack roll it makes against that creature this turn."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The burrower makes two Claw attacks."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

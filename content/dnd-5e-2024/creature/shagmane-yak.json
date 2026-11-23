@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "shagmane-yak",
+  "name": "Shagmane Yak",
+  "summary": "A huge long-haired yak that travels in herds and tramples anything it knocks down.",
+  "description": "Shagmane herds winter on wind-scoured plateaus where the snow is too thin to bury the grass. Highland folk follow them for milk, wool, and dung for fires, and give a wide berth to any herd with calves in it.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12,
+      "note": "thick coat"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 9,
+      "con": 16,
+      "int": 2,
+      "wis": 11,
+      "cha": 5
+    },
+    "resistances": [
+      "cold"
+    ],
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Charge",
+        "kind": "other",
+        "text": "If the yak moves at least 20 feet straight toward a target and then hits it with a Gore attack on the same turn, the target must succeed on a {dc:str} Strength saving throw or have the {ref:condition/prone} condition."
+      },
+      {
+        "name": "Herd Wall",
+        "kind": "other",
+        "text": "While the yak is within 5 feet of at least one ally, it has {ref:glossary/advantage} on saving throws against effects that would move it or give it the {ref:condition/prone} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Trample",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "attackNote": "only against a target that has the Prone condition"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

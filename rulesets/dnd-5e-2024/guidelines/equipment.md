@@ -9,8 +9,8 @@ warranted, names, prices and stats, prose, and links.
 These rules are for custom equipment only. The SRD's weapons, armor, tools,
 adventuring gear, and mounts and vehicles are ruleset primitives in
 `rulesets/dnd-5e-2024/rules/equipment/`, reproduced faithfully and never
-authored as entries. Custom equipment is always a custom entry: it never sets
-`meta.source.srd`.
+authored as entries. Custom equipment is always a custom entry: its `author`
+is never `"publisher"`.
 
 ## Tone and voice
 
@@ -64,7 +64,7 @@ priced and statted against them.
 | Adventuring gear | An effect no bigger than the SRD's thrown flasks (2d6 at most, a save of DC 8 plus your Dexterity modifier and Proficiency Bonus), cost by usefulness |
 
 - A weapon uses SRD properties and an SRD mastery property; a new property
-  is a new mechanic, which waits for v3.
+  is a new mechanic, which extensions can't add.
 - Equipment is never stronger than SRD equipment of the same cost.
 
 ## Prose style

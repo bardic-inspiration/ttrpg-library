@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "heavy-step",
+  "name": "Heavy Step",
+  "summary": "Increases the weight on a creature, slowing and weakening it.",
+  "stats": {
+    "level": 3,
+    "school": "transmutation",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/ranger"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a lead weight"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A creature within range makes a Strength saving throw. On a failure, its Speed is halved, it cannot jump, and it has Disadvantage on Strength checks and saving throws. It repeats the save at the end of each of its turns."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "crown-of-borrowed-thought",
+  "name": "Crown of Borrowed Thought",
+  "summary": "A crown that lets you read minds and overwhelm a mind in turn.",
+  "description": "No one agrees who first wore it, only that none could wear it long. The metal is cold and slightly damp.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 6,
+      "recharge": "1d6 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/detect-thoughts"
+        },
+        "chargeCost": 1
+      },
+      {
+        "spell": {
+          "ref": "spell/dominate-person"
+        },
+        "chargeCost": 3,
+        "saveDc": 17
+      }
+    ],
+    "effect": "The crown has 6 charges. While you wear it, you can expend 1 charge as a Magic action to cast *Detect Thoughts* from it, or 3 charges to cast *Dominate Person* from it. The crown regains 1d6 expended charges daily at dawn. If you expend the last charge, roll 1d20; on a 1, the crown turns to silver dust."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

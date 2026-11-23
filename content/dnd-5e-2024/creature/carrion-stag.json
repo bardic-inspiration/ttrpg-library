@@ -1,0 +1,108 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "carrion-stag",
+  "name": "Carrion Stag",
+  "summary": "A risen forest stag with rotting antlers and a lowered head.",
+  "description": "A carrion stag still rides the old rut, charging at anything that enters its glade. Foresters know the antlers are good for knife handles and bad luck to keep.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 12,
+      "note": "natural armor"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 12,
+      "con": 16,
+      "int": 2,
+      "wis": 10,
+      "cha": 4
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Charge",
+        "kind": "other",
+        "text": "If the stag moves at least 20 feet straight toward a target and then hits it with an Antler Gore attack on the same turn, the target takes an extra {dmg:1d8:piercing} and, if it is Large or smaller, has the {ref:condition/prone} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The stag makes one Antler Gore attack and one Hoof Stomp attack."
+      },
+      {
+        "name": "Antler Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Hoof Stomp",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "attackNote": "with Advantage if the target has the Prone condition"
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}

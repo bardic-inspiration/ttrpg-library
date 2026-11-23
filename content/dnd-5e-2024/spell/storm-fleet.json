@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "storm-fleet",
+  "name": "Storm Fleet",
+  "summary": "Summons a fleet of spectral ships that bombard enemies.",
+  "stats": {
+    "level": 8,
+    "school": "conjuration",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 300
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a model ship"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "You summon four spectral ships at points within range. Each of your turns, each ship fires a volley at a point you choose. Creatures within 20 feet of a target point make a Dexterity saving throw, taking 6d10 Force damage on a failure or half as much on a success."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

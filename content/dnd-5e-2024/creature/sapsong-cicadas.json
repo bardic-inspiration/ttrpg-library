@@ -1,0 +1,124 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "sapsong-cicadas",
+  "name": "Sapsong Cicadas",
+  "summary": "A cloud of fat, amber-winged cicadas whose droning song pulls the mind toward sleep.",
+  "description": "In the hottest part of a forest summer, sapsong cicadas rise from the root-mud in a single night and drone until the first rain. Bark-gatherers stuff their ears with wax and work in pairs, one to cut and one to watch the other.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "swarm": "tiny",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 5,
+      "fly": 30
+    },
+    "abilities": {
+      "str": 3,
+      "dex": 14,
+      "con": 12,
+      "int": 1,
+      "wis": 10,
+      "cha": 2
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        },
+        {
+          "ref": "condition/stunned"
+        }
+      ]
+    },
+    "senses": {
+      "blindsight": 10
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny insect. The swarm can't regain {ref:glossary/hit-points} or gain {ref:glossary/temporary-hit-points}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bites",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": " The attack deals half damage if the swarm is Bloodied."
+      },
+      {
+        "name": "Drowsing Drone",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature within 20 feet of the swarm that can hear it"
+        },
+        "onFailure": "The target's Speed is halved, and it has {ref:glossary/disadvantage} on Dexterity saving throws until the end of the swarm's next turn. If the target fails by 5 or more, it has the {ref:condition/incapacitated} condition until the end of the swarm's next turn instead.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

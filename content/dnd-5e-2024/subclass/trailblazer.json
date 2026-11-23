@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "trailblazer",
+  "name": "Trailblazer",
+  "summary": "A Ranger subclass: open the way ahead.",
+  "stats": {
+    "class": {
+      "ref": "class/ranger"
+    },
+    "tagline": "Open the Way Ahead",
+    "text": "Trailblazers scout paths where none exist. They read terrain, move faster than any pursuer, and bring companions safely through hostile country.",
+    "features": [
+      {
+        "ref": "class-feature/trailblazer-pathfinders-eye"
+      },
+      {
+        "ref": "class-feature/trailblazer-swift-foot"
+      },
+      {
+        "ref": "class-feature/trailblazer-lead-the-way"
+      },
+      {
+        "ref": "class-feature/trailblazer-ambush-reader"
+      },
+      {
+        "ref": "class-feature/trailblazer-unseen-passage"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

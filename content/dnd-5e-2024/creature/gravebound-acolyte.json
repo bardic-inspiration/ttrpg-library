@@ -1,0 +1,89 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "gravebound-acolyte",
+  "name": "Gravebound Acolyte",
+  "summary": "A pale novice of a death cult who fights with a grave-dirt dagger and whispers to the dead for strength.",
+  "description": "Acolytes sleep in open graves for their first year, and the ones who still sleep soundly afterward are given a dagger. They are eager, underfed, and certain the dead are speaking only to them.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 12,
+      "note": "leather armor"
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 12,
+      "con": 12,
+      "int": 10,
+      "wis": 13,
+      "cha": 11
+    },
+    "skills": {
+      "religion": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "traits": [
+      {
+        "name": "Grave Chill",
+        "kind": "other",
+        "text": "Once per turn, when the acolyte hits a creature with an attack and the target has no allies within 5 feet of it that aren't Incapacitated, the target takes an extra {dmg:1d4:necrotic}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Grave-Dirt Dagger",
+        "kind": "melee-or-ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "cr": 0.25
+  },
+  "tags": {
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "acolytes",
+      "skirmisher"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

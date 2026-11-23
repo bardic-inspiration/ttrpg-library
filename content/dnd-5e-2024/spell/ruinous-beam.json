@@ -1,0 +1,51 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "ruinous-beam",
+  "name": "Ruinous Beam",
+  "summary": "A beam of destructive energy that burns through armor and flesh.",
+  "stats": {
+    "level": 6,
+    "school": "evocation",
+    "classes": [
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/warlock"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "A 5-foot-wide, 120-foot Line of searing light erupts from you. Each creature in the line makes a Dexterity saving throw, taking 10d8 Radiant damage on a failed save or half as much on a success. A creature in the line has its armor class reduced by 2 until the end of your next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

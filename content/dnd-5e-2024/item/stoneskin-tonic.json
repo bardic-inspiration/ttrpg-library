@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "stoneskin-tonic",
+  "name": "Stoneskin Tonic",
+  "summary": "A tonic that hardens your skin to rock for an hour.",
+  "description": "Gritty and grey, and it tastes of chalk. Miners take it before blasting.",
+  "stats": {
+    "category": "potion",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, for 1 hour you have Resistance to Bludgeoning, Piercing, and Slashing damage from nonmagical attacks."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

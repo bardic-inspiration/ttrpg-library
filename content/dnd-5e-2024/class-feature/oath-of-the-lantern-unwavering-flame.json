@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "oath-of-the-lantern-unwavering-flame",
+  "name": "Unwavering Flame",
+  "stats": {
+    "levels": [
+      15
+    ],
+    "text": "When you reduce a creature to 0 hit points, your light surges: allies within 30 feet regain hit points equal to your Charisma modifier (minimum 1)."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

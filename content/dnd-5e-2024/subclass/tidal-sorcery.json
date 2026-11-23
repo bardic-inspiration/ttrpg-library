@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "tidal-sorcery",
+  "name": "Tidal Sorcery",
+  "summary": "A Sorcerer subclass: command the rise and fall.",
+  "stats": {
+    "class": {
+      "ref": "class/sorcerer"
+    },
+    "tagline": "Command the Rise and Fall",
+    "text": "Tidal Sorcerers carry the pull of the sea in their blood. Their magic ebbs and surges, and they bend water and the forces that move it to their will.",
+    "features": [
+      {
+        "ref": "class-feature/tidal-sorcery-tidal-affinity"
+      },
+      {
+        "ref": "class-feature/tidal-sorcery-rising-surge"
+      },
+      {
+        "ref": "class-feature/tidal-sorcery-undertow"
+      },
+      {
+        "ref": "class-feature/tidal-sorcery-riptide-step"
+      },
+      {
+        "ref": "class-feature/tidal-sorcery-heart-of-the-sea"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

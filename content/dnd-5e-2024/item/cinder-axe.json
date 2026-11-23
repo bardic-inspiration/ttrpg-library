@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "cinder-axe",
+  "name": "Cinder Axe",
+  "summary": "A greataxe whose blade runs molten on command.",
+  "description": "Smiths at the old volcano forges built it and then walked away from the work. It is always warm to the touch, even at midwinter.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/greataxe"
+        }
+      ]
+    },
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You have a +3 bonus to attack and damage rolls made with this magic weapon. As a Bonus Action, you can ignite the blade for 1 minute. While ignited, it deals an extra 2d6 Fire damage on a hit and sheds Bright Light in a 20-foot radius."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "scroll-of-the-tall-wall",
+  "name": "Scroll of the Tall Wall",
+  "summary": "A scroll that raises a great barrier of fire.",
+  "description": "Burned into the paper by someone who stood too close. The words are inked in ash.",
+  "stats": {
+    "category": "scroll",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/wall-of-fire"
+        }
+      }
+    ],
+    "effect": "This scroll bears the *Wall of Fire* spell. Using an action to read it casts the spell once at 7th level, using DC 17 for its saving throw, and the scroll is consumed."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

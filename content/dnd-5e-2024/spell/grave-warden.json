@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "grave-warden",
+  "name": "Grave Warden",
+  "summary": "Raises a skeletal guard that attacks anything that moves.",
+  "stats": {
+    "level": 6,
+    "school": "necromancy",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/warlock"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 60
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a bone fragment"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "You conjure a skeletal warden in an unoccupied space within range. It acts on your initiative, taking the Attack action on each of its turns. It has AC 17 and 60 Hit Points, with melee attacks that deal 2d10 Necrotic damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

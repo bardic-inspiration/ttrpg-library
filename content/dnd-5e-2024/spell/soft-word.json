@@ -1,0 +1,53 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "soft-word",
+  "name": "Soft Word",
+  "summary": "Makes a creature reluctant to move toward you.",
+  "stats": {
+    "level": 0,
+    "school": "enchantment",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/druid"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 30
+    },
+    "components": {
+      "v": true,
+      "s": false
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "round",
+      "concentration": false
+    },
+    "effect": "One creature within range that can hear you makes a Wisdom saving throw. On a failed save, its Speed is reduced by 10 feet and it cannot willingly move closer to you until the end of its next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

@@ -4,8 +4,8 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import registryJson from '../../../../config/types.json' with { type: 'json' };
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
-import { galleryConfig, sortChoices, type FacetData, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
-import { isActive, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
+import { defaultScope, galleryConfig, isScopePath, sortChoices, validSort, type FacetData, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
+import { isActive, isDefaultScope, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
 import { filterTree } from '../../lib/gallery/tree.ts';
 import { computeView, searchIndex } from '../../lib/gallery/view.ts';
 import FilterIcon from '../../icons/Filter.tsx';
@@ -70,6 +70,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     setState((current) => {
       const next = { ...current, filters: new Map(current.filters) };
       change(next);
+      next.sort = validSort(config, next.sort, next.filters);
       return next;
     });
   const setFilter = (path: string, value: FilterValue) =>
@@ -79,8 +80,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     });
 
   const tree = filterTree(config, state, records, index);
-  const choices = sortChoices(config);
-  const sortValue = choices.some((c) => c.path === state.sort.path) ? state.sort.path : config.defaultSort.path;
+  const choices = sortChoices(config, state.filters);
 
   return (
     <div class="gallery">
@@ -119,13 +119,13 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
               onEnum={(path, values) => setFilter(path, { kind: 'enum', values })}
               onRange={(path, min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
             />
-            {state.filters.size > 0 && (
+            {(!isDefaultScope(state.filters) || [...state.filters.keys()].some((path) => !isScopePath(path))) && (
               <button
                 type="button"
                 class="gallery__clear"
                 onClick={() =>
                   update((next) => {
-                    next.filters.clear();
+                    next.filters = new Map(defaultScope());
                   })
                 }
               >
@@ -142,7 +142,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
             </label>
             <select
               id="gallery-sort"
-              value={sortValue}
+              value={state.sort.path}
               onChange={(e) => {
                 const path = (e.currentTarget as HTMLSelectElement).value;
                 update((next) => {

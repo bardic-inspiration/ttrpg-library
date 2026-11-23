@@ -1,0 +1,116 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "severed-hand-swarm",
+  "name": "Severed Hand Swarm",
+  "summary": "A crawling mass of detached hands, each one still trying to choke something.",
+  "description": "Hand swarms spill out of a battlefield dump or a surgeon's pit and spread across the floor like spilled crabs. They are a plague in the old hospices, where nobody wants to count what's missing.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 20,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 2,
+      "wis": 8,
+      "cha": 3
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        },
+        {
+          "ref": "condition/stunned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.5,
+    "swarm": "tiny",
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny creature. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Throttling Fingers",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc:dex}). While Grappled, the target takes {dmg:1d4:bludgeoning} at the start of each of its turns."
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}

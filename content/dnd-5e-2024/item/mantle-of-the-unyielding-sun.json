@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "mantle-of-the-unyielding-sun",
+  "name": "Mantle of the Unyielding Sun",
+  "summary": "Plate armor that never fails and sends a burst of radiance in your defense.",
+  "description": "Ancient priest-knights wore these, and no one wears them now. The sun-disc on the chest is warm no matter the weather.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/plate-armor"
+        }
+      ]
+    },
+    "rarity": "legendary",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You have a +3 bonus to AC while wearing this armor. You have Resistance to Necrotic and Radiant damage, and you are immune to the {ref:condition/frightened} condition. When you drop to 0 hit points but aren't killed outright, you can use your Reaction to drop to 1 hit point instead and cause each creature of your choice within 30 feet to take 6d6 Radiant damage. Once you use this property, you can't use it again until the next dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

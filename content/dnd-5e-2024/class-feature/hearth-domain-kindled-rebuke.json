@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "hearth-domain-kindled-rebuke",
+  "name": "Kindled Rebuke",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "When a creature within 30 feet of you hits an ally with an attack, you can use a {ref:glossary/reaction} and expend a use of Channel Divinity to deal Radiant damage to the attacker equal to two rolls of your Wisdom modifier die d6."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

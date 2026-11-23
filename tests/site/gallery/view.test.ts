@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { galleryConfig, sortChoices, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
 import { chips, computeView, searchIndex, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
-import { fixtureRecords, record, registry } from './helpers.ts';
+import { fixtureRecords, record, registry, whole } from './helpers.ts';
 
 let reg: Registry;
 let fixtures: LibraryRecord[];
@@ -15,7 +15,7 @@ beforeAll(async () => {
 });
 
 const view = (records: LibraryRecord[], config: GalleryConfig, query: string) =>
-  computeView(records, config, parseQuery(query, config), searchIndex(records)).results.map((r) => r.name);
+  computeView(records, config, parseQuery(whole(query), config), searchIndex(records)).results.map((r) => r.name);
 
 describe('finding the example entries', () => {
   it('by name, with prefix and light fuzzy matching', () => {
@@ -151,7 +151,7 @@ describe('filter values', () => {
   ];
 
   it('counts each value against the search and every other filter, showing stored case', () => {
-    const state = parseQuery('?f.stats.cr=..2&f.stats.creatureType=beast', library);
+    const state = parseQuery(whole('?f.stats.cr=..2&f.stats.creatureType=beast'), library);
     const index = searchIndex(records);
     const def = library.filters.find((f) => f.path === 'stats.creatureType')!;
     const result = chips(def, records, withoutFilter(library, records, state, index, def.path), state.filters.get(def.path));
@@ -169,7 +169,7 @@ describe('filter values', () => {
   });
 
   it('sorts ref values, and records by a ref, by the target’s name', () => {
-    const config = galleryConfig(reg, { names: { 'class/bard': 'Bard', 'class/wizard': 'Wizard', 'class/cleric': 'Cleric' }, groups: {} });
+    const config = galleryConfig(reg, { names: { 'class/bard': 'Bard', 'class/wizard': 'Wizard', 'class/cleric': 'Cleric' }, groups: {}, publishers: {} });
     const defaultSort = config.types.get('dnd-5e-2024/subclass')!.defaultSort;
     const subs = [
       record({ id: 'lore', type: 'subclass', facets: { 'stats.class': 'class/bard' } }),

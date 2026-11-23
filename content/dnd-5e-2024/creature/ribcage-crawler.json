@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "ribcage-crawler",
+  "name": "Ribcage Crawler",
+  "summary": "A cage of ribs scuttling on finger-bones, snapping shut around whatever it can reach.",
+  "description": "Tomb robbers call them traps, and cultists call them pets. They hide under silt and rubble and wait for a sleeper to stretch out a hand.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 14,
+      "con": 12,
+      "int": 3,
+      "wis": 10,
+      "cha": 4
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 0.25,
+    "skills": {
+      "stealth": "expertise"
+    },
+    "traits": [
+      {
+        "name": "False Appearance",
+        "kind": "other",
+        "text": "While motionless, the crawler is indistinguishable from a heap of loose bones."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Snap Shut",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "If the target is a Medium or smaller creature, it has the {ref:condition/grappled} condition (escape {dc:str}). Until the grapple ends, the target has the {ref:condition/restrained} condition, and the crawler can't use Snap Shut on another target."
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

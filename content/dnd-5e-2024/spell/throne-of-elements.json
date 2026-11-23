@@ -1,0 +1,57 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "throne-of-elements",
+  "name": "Throne of Elements",
+  "summary": "Raises a throne of elemental power that grants command of the surrounding land.",
+  "stats": {
+    "level": 9,
+    "school": "conjuration",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "four gemstones worth 1,000+ GP each",
+        "costGp": 1000
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A throne of fire, ice, stone, and storm rises within range, and you sit on it. Each turn you choose one elemental effect: a 60-foot-radius Sphere of fire (15d8 Fire damage), frost, earth, or storm, centered within 120 feet. Creatures in the area make a Dexterity saving throw, taking half as much damage on a success."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

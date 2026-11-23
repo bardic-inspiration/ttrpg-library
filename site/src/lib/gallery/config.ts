@@ -2,12 +2,13 @@
 // defaults, all read from the registry (docs/site.md#type-registry).
 
 import type { Facet, LibraryRecord, Registry } from '../../../../scripts/build-index/index.ts';
+import { PUBLISHER } from '../../../../rulesets/module.ts';
 import { phraseBook } from '../phrases.ts';
 import { typeAliases } from '../redirects.ts';
 
 export type { Facet, LibraryRecord, Registry };
 
-/** A filterable path: a registry facet, the `type` filter, or a `tags.<key>`. */
+/** A filterable path: a registry facet, the `ruleset`, `source`, `author`, or `type` filter, or a `tags.<key>`. */
 export interface FilterDef {
   path: string;
   label: string;
@@ -43,9 +44,11 @@ export interface FacetData {
   names: Record<string, string>;
   /** `<ruleset>/<type>` → its groups, in page order with unions last among their siblings. */
   groups: Record<string, GroupInfo[]>;
+  /** Ruleset id → its publisher, the name an author of `"publisher"` reads as (docs/content-model.md#source-and-author). */
+  publishers: Record<string, string>;
 }
 
-export const NO_FACET_DATA: FacetData = { names: {}, groups: {} };
+export const NO_FACET_DATA: FacetData = { names: {}, groups: {}, publishers: {} };
 
 export interface SortKey {
   path: string;
@@ -53,8 +56,10 @@ export interface SortKey {
 }
 
 export interface GalleryConfig {
-  /** The `ruleset` and `type` filters, then every facet of every type, in registry order. */
+  /** The `ruleset`, `source`, `author`, and `type` filters, then every facet of every type, in registry order. */
   filters: FilterDef[];
+  /** Ruleset id → its publisher (FacetData). */
+  publishers: Record<string, string>;
   defaultSort: SortKey;
   /** Per type, keyed `<ruleset>/<type>`: its label, card fields, and facets in registry order. */
   types: Map<string, TypeInfo>;
@@ -77,6 +82,19 @@ export const NAME = 'name';
 export const CREATED = 'createdAt';
 export const TYPE = 'type';
 export const RULESET = 'ruleset';
+export const SOURCE = 'source';
+export const AUTHOR = 'author';
+
+/**
+ * The ruleset set's filters (docs/site.md#gallery "Filters"): additive, so an entry is in the
+ * results' scope when it matches any of them, and the other filters narrow that scope.
+ */
+export const SCOPE_PATHS: readonly string[] = [RULESET, SOURCE, AUTHOR];
+
+export const isScopePath = (path: string): boolean => SCOPE_PATHS.includes(path);
+
+/** The ruleset set a fresh Library starts with: the publisher's entries, the official content. */
+export const defaultScope = (): Map<string, { kind: 'enum'; values: string[] }> => new Map([[AUTHOR, { kind: 'enum', values: [PUBLISHER] }]]);
 
 /** The Library sorts by name until the reader picks a sort (docs/site.md#gallery "Sort"). */
 export const LIBRARY_SORT: SortKey = { path: NAME, dir: 'asc' };
@@ -131,6 +149,8 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
 
   const aliases = typeAliases(registry);
   const rulesetFilter: FilterDef = { path: RULESET, label: 'Ruleset', kind: 'enum', order: Object.keys(rulesetLabels), labels: rulesetLabels };
+  const sourceFilter: FilterDef = { path: SOURCE, label: 'Source', kind: 'enum' };
+  const authorFilter: FilterDef = { path: AUTHOR, label: 'Author', kind: 'enum' };
   const typeFilter: FilterDef = {
     path: TYPE,
     label: 'Type',
@@ -139,7 +159,12 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
     labels: typeLabels,
     ...(Object.keys(aliases).length > 0 && { aliases }),
   };
-  return { filters: [rulesetFilter, typeFilter, ...filters.values()], defaultSort: LIBRARY_SORT, types };
+  return {
+    filters: [rulesetFilter, sourceFilter, authorFilter, typeFilter, ...filters.values()],
+    defaultSort: LIBRARY_SORT,
+    types,
+    publishers: data.publishers,
+  };
 }
 
 const TAG_KEY = /^[a-z][a-z0-9-]*$/;
@@ -150,7 +175,7 @@ export const tagKey = (path: string): string | undefined => {
   return key !== undefined && TAG_KEY.test(key) ? key : undefined;
 };
 
-/** The definition of a filter path: a known facet, `ruleset`, `type`, or any tag key. */
+/** The definition of a filter path: a known facet, `ruleset`, `source`, `author`, `type`, or any tag key. */
 export function filterDef(config: GalleryConfig, path: string): FilterDef | undefined {
   const known = config.filters.find((f) => f.path === path);
   if (known) return known;
@@ -158,11 +183,40 @@ export function filterDef(config: GalleryConfig, path: string): FilterDef | unde
   return key === undefined ? undefined : { path, label: key.replace(/-/g, ' '), kind: 'enum' };
 }
 
-/** Sort choices: name, date added, then every facet (docs/site.md#gallery). */
-export function sortChoices(config: GalleryConfig): { path: string; label: string }[] {
+/**
+ * The types the ruleset set and the type filter allow, in registry order (docs/site.md#gallery
+ * "Sort"). The ruleset filter limits the types to its rulesets only while no source or author is
+ * checked, since those add entries from any ruleset. Every type when neither limits them.
+ */
+export function typesInScope(config: GalleryConfig, filters: ReadonlyMap<string, ActiveFilter> = new Map()): TypeInfo[] {
+  const values = (path: string) => {
+    const filter = filters.get(path);
+    return filter?.kind === 'enum' ? filter.values : [];
+  };
+  const allowed = (path: string, value: string) => values(path).length === 0 || values(path).includes(value);
+  const byRuleset = values(SOURCE).length === 0 && values(AUTHOR).length === 0;
+  return [...config.types.values()].filter((t) => (!byRuleset || allowed(RULESET, t.ruleset)) && allowed(TYPE, t.type));
+}
+
+/** The part of an active filter `typesInScope` reads; the gallery state's filter values fit it. */
+export type ActiveFilter = { kind: 'enum'; values: string[] } | { kind: 'range' };
+
+/**
+ * Sort choices: name, date added, then each facet of the types the ruleset and type filters
+ * allow, in registry order (docs/site.md#gallery "Sort"). A path two types share is one choice,
+ * labeled as the first of them labels it.
+ */
+export function sortChoices(config: GalleryConfig, filters?: ReadonlyMap<string, ActiveFilter>): { path: string; label: string }[] {
+  const facets = new Map<string, string>();
+  for (const type of typesInScope(config, filters)) for (const f of type.facets) if (!facets.has(f.path)) facets.set(f.path, f.label);
   return [
     { path: NAME, label: 'Name' },
     { path: CREATED, label: 'Date added' },
-    ...config.filters.filter((f) => f.path !== TYPE && f.path !== RULESET).map((f) => ({ path: f.path, label: f.label })),
+    ...[...facets].map(([path, label]) => ({ path, label })),
   ];
+}
+
+/** The sort to apply: the chosen one while the filters offer it, else the Library's default. */
+export function validSort(config: GalleryConfig, sort: SortKey, filters?: ReadonlyMap<string, ActiveFilter>): SortKey {
+  return sortChoices(config, filters).some((c) => c.path === sort.path) ? sort : config.defaultSort;
 }

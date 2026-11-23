@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "bulwark-holdfast",
+  "name": "Holdfast",
+  "stats": {
+    "levels": [
+      15
+    ],
+    "text": "Creatures within 5 feet of you have their Speed reduced to 0 for the rest of the turn when they hit you with an attack."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

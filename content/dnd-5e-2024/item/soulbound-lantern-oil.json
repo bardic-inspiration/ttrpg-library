@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "soulbound-lantern-oil",
+  "name": "Soulbound Lantern Oil",
+  "summary": "A flask of oil that burns with a light only the dead can resist.",
+  "description": "Priests keep it in locked cabinets. It stays lit in the rain.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "effect": "As a Magic action, you can pour this oil on a weapon or on the ground within 5 feet. For 1 hour, the weapon deals an extra 2d6 Radiant damage to Undead on a hit, or the ground sheds Bright Light in a 20-foot radius and Undead there take 2d6 Radiant damage at the start of their turns. The oil is consumed."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -51,14 +51,14 @@ describe('checkLinks', () => {
     ]);
   });
 
-  it('checks citations of the stage spec and the track specs in code', () => {
+  it('checks citations of the track specs in code', () => {
     const files = repo({
       'spec/tracks/images.md': '# Images\n\n## Design\n',
-      'tests/a.ts': '// spec/tracks/images.md#design\n// spec/tracks/images.md#gone\n// spec/v2/art.md#design\n',
+      'tests/a.ts': '// spec/tracks/images.md#design\n// spec/tracks/images.md#gone\n// spec/tracks/art.md#design\n',
     });
     expect(checkLinks(files, (path) => files.has(path))).toEqual([
       'tests/a.ts:2: spec/tracks/images.md#gone: no such heading',
-      'tests/a.ts:3: spec/v2/art.md#design: no such file',
+      'tests/a.ts:3: spec/tracks/art.md#design: no such file',
     ]);
   });
 
@@ -82,8 +82,8 @@ describe('checkLinks', () => {
   });
 
   it('accepts links to existing files that are not Markdown, and to folders', () => {
-    const files = repo({ 'AGENTS.md': '[s](.claude/settings.json) [v](spec/v2/)\n', '.claude/settings.json': '{}' });
-    const exists = (path: string) => files.has(path) || path === 'spec/v2';
+    const files = repo({ 'AGENTS.md': '[s](.claude/settings.json) [v](spec/tracks/)\n', '.claude/settings.json': '{}' });
+    const exists = (path: string) => files.has(path) || path === 'spec/tracks';
     expect(checkLinks(files, exists)).toEqual([]);
   });
 

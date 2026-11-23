@@ -38,7 +38,7 @@ async function validate(change: (entries: Record<string, any>[]) => void = () =>
   return { ...result, messages: result.errors.map((e) => `${e.file}: ${e.message}`), warns: result.warnings.map((e) => `${e.file}: ${e.message}`) };
 }
 const byId = (entries: Record<string, any>[], id: string) => entries.find((e) => e.id === id)!;
-const custom = (entry: Record<string, any>) => delete entry.meta.source.srd;
+const custom = (entry: Record<string, any>) => Object.assign(entry, { author: 'bardic-inspiration' });
 
 describe('validation', () => {
   it('passes the fixtures, deriving whether a feat is repeatable', async () => {
@@ -196,6 +196,6 @@ describe('cards', async () => {
   it('list the feat a background grants as "Granted by"', () => {
     const magic = all.find(({ entry }) => entry.id === 'magic-initiate')!;
     const { back } = groupRefs('feat', magic.refs, magic.refBy, refTargets(all, [data]), ruleset.refLabels);
-    expect(back).toEqual([{ label: 'Granted by', targets: [{ type: 'background', name: 'Acolyte', path: 'dnd-5e-2024/background/acolyte/' }] }]);
+    expect(back).toEqual([{ label: 'Granted by', targets: [{ type: 'background', name: 'Acolyte', path: 'dnd-5e-2024/background/acolyte/', official: true }] }]);
   });
 });

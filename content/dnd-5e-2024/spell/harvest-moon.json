@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "harvest-moon",
+  "name": "Harvest Moon",
+  "summary": "Summons a moonlit field of scythes that cut through enemies.",
+  "stats": {
+    "level": 6,
+    "school": "conjuration",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/cleric"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 120
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a sickle"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "A 40-foot-radius Sphere of pale light fills with spectral blades. Creatures in the area when it appears and at the start of their turns make a Dexterity saving throw, taking 6d8 Slashing damage on a failed save or half on a success."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}
