@@ -240,7 +240,9 @@ so a parameter they brought wins, and the fragment kept
 redirect to the Library with the matching filter set
 (`site/src/lib/gallery/library-url.ts`):
 
-- `/<ruleset>/` to `/?f.ruleset=<ruleset>`.
+- `/<ruleset>/` to `/?f.ruleset=<ruleset>`, which puts the whole ruleset,
+  homebrew included, in the ruleset set (see "Filters" under
+  [Gallery](#gallery)).
 - `/<ruleset>/<type>/` to `/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<type>`,
   so the view opens as the type's gallery did: its registry `defaultSort`
   (left out when it is `name:asc`), and its `defaultFilters` open because the
@@ -288,19 +290,35 @@ when `false`. A `rarity`-formatted field reads as a badge carrying
 to four on wide screens.
 
 **Filters** are a nested accordion checkbox tree built from the registry
-(`site/src/lib/gallery/tree.ts`): type, then field, then any subfield, then
-value, such as Creature › Immunities › Conditions › Poisoned.
+(`site/src/lib/gallery/tree.ts`) in two sets. The **ruleset set** comes first,
+in its own list, divided from the rest by a break line. It is additive: it
+chooses which entries are in the results at all. The other filters, type, then
+field, then any subfield, then value, such as Creature › Immunities ›
+Conditions › Poisoned, narrow those entries.
 
-- **Ruleset.** A Ruleset node always comes first, even when the library holds
-  one ruleset. Inside it, each ruleset the library has entries of, or that is
-  checked, is a checkbox for the ruleset filter (`f.ruleset`) with its count
-  among the results of every other filter, and a disclosure holding its
-  **Source** and **Author** filters (`f.source`, `f.author`) over its own
-  entries ([Source and author](content-model.md#source-and-author)). An
-  author of `"publisher"` reads as the ruleset's publisher, from
-  `ruleset.json` (`rulesetPublishers` in `site/src/lib/rules.ts`), such as
-  Wizards of the Coast. Source and author follow the facet rules below
-  (values, counts, a shared path), with a ruleset in place of a type.
+- **Ruleset set.** A Ruleset node, always first and open at the start, even
+  when the library holds one ruleset. Inside it, each ruleset the library has
+  entries of, or that is checked, is a checkbox for the ruleset filter
+  (`f.ruleset`), and a disclosure holding its **Source** and **Author**
+  filters (`f.source`, `f.author`) over its own entries
+  ([Source and author](content-model.md#source-and-author)). An author of
+  `"publisher"` reads as the ruleset's publisher, from `ruleset.json`
+  (`rulesetPublishers` in `site/src/lib/rules.ts`), such as Wizards of the
+  Coast. Source and author list their values like a facet (below), with a
+  ruleset in place of a type.
+  - **Additive.** An entry is in the results when it matches any checked
+    ruleset, source, or author (`SCOPE_PATHS` in
+    `site/src/lib/gallery/config.ts`, `applyFilters` in `view.ts`): checking
+    Bardic's Compendium of Test Fixtures beside Wizards of the Coast adds the
+    collection's entries to the official ones. With nothing in the set
+    checked, no entry is.
+  - **Default.** A fresh Library has the author `"publisher"` checked, so it
+    shows only official content: each ruleset's own material, such as the SRD
+    for `dnd-5e-2024`. Clear filters clears the other filters and returns the
+    set to this default; it shows while either differs from a fresh Library.
+  - **Counts.** A ruleset, source, or author counts what checking it adds:
+    its entries under the search and the other filters, whatever else in the
+    set is checked.
 - **Types.** Then the types, each a checkbox for the type filter (`f.type`)
   with its count, the entries of it among the results (so checking one type
   leaves the others at 0), and a disclosure holding its facets. A type shows when the
@@ -349,11 +367,12 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   Weapon › Martial › Martial Melee Weapons.
 
 **Sort.** By name, created date, or a facet, ascending or descending. The
-menu offers the facets of the types the ruleset and type filters allow, in
+menu offers the facets of the types the ruleset set and type filter allow, in
 registry order (`sortChoices` in `site/src/lib/gallery/config.ts`): with Spell
 checked, it lists name, date added, level, school, and the spell's other
-facets, but not CR. With no type checked, every type's facets are offered. A
-path two checked types share (`stats.level` on spells and feats) is one
+facets, but not CR. With no type checked, every type's facets are offered.
+The ruleset filter limits the types to its rulesets only while no source or
+author is checked, since those add entries from any ruleset. A path two checked types share (`stats.level` on spells and feats) is one
 choice, labeled as the first of them in registry order labels it. When a
 filter change leaves the chosen sort off the menu, the sort returns to
 `name:asc`. Ordered enums sort by declared order, an array
@@ -369,7 +388,11 @@ the active sort.
 **URL state.** Query, sort, and filters live in the query string, so any view
 can be bookmarked or linked:
 `?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8&f.tags.theme=fire`.
-Ranges use `min..max` (either side may be empty). Keys and values are
+Ranges use `min..max` (either side may be empty). The ruleset set is
+written only when it differs from the default: a query naming any of
+`f.ruleset`, `f.source`, or `f.author` sets the whole set, so `?f.type=spell`
+shows official spells and `?f.ruleset=dnd-5e-2024&f.type=spell` every spell,
+and `f.ruleset=` with no value is an empty set. Keys and values are
 URL-encoded, so a comma inside a value is `%2C` and a bare comma separates
 values. Enum values are case-folded. The type filter is `f.type`. Unknown
 parameters, filters on paths the Library doesn't have, a sort the filters

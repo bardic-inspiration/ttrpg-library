@@ -241,7 +241,8 @@ function rulesetNode(ctx: Context): TreeNode | undefined {
       };
     });
   if (children.length === 0) return undefined;
-  return { kind: 'field', id: RULESET, label: def.label, open: selected.length > 0 || isOpen(children), children };
+  // The ruleset set's own section, at the top of the menu, always starts open.
+  return { kind: 'field', id: RULESET, label: def.label, open: true, children };
 }
 
 /**

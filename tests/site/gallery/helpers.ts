@@ -33,3 +33,13 @@ export function record(overrides: Partial<LibraryRecord> & { id: string }): Libr
     ...overrides,
   };
 }
+
+/**
+ * A query with the whole `dnd-5e-2024` ruleset in the ruleset set, unless it sets the set itself
+ * (docs/site.md#gallery "Filters"), so a test of the other filters sees homebrew fixtures too.
+ */
+export function whole(query = ''): string {
+  const bare = query.replace(/^\?/, '');
+  if (/(^|&)f\.(ruleset|source|author)=/.test(bare)) return `?${bare}`;
+  return `?f.ruleset=dnd-5e-2024${bare === '' ? '' : `&${bare}`}`;
+}

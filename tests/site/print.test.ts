@@ -16,7 +16,7 @@ import {
   parsePrintQuery,
   printUrl,
 } from '../../site/src/lib/print.ts';
-import { fixtureRecords, record, registry } from './gallery/helpers.ts';
+import { fixtureRecords, record, registry, whole } from './gallery/helpers.ts';
 import { fixtureLibrary } from './library-fixtures.ts';
 
 const BASE = '/ttrpg-library/';
@@ -85,18 +85,18 @@ describe('selectEntries', () => {
   });
 
   it('reads a gallery query as the Library’s, with f.type narrowing by type', () => {
-    expect(selectEntries(parsePrintQuery('?f.type=spell'), records, reg, data).records.map((r) => r.id)).toEqual(['frost-lance']);
-    expect(selectEntries(parsePrintQuery('?f.stats.cr=1..5'), records, reg, data).records.map((r) => r.id)).toEqual(['cinder-hound']);
+    expect(selectEntries(parsePrintQuery(whole('?f.type=spell')), records, reg, data).records.map((r) => r.id)).toEqual(['frost-lance']);
+    expect(selectEntries(parsePrintQuery(whole('?f.stats.cr=1..5')), records, reg, data).records.map((r) => r.id)).toEqual(['cinder-hound']);
   });
 
   it('ignores a stale size parameter from an older print link', () => {
-    const ids = (q: string) => selectEntries(parsePrintQuery(q), records, reg, data).records.map((r) => r.id);
+    const ids = (q: string) => selectEntries(parsePrintQuery(whole(q)), records, reg, data).records.map((r) => r.id);
     expect(ids('?ids=spell/frost-lance&size=a4')).toEqual(['frost-lance']);
     expect(ids('?f.type=spell&size=card-4x6')).toEqual(ids('?f.type=spell'));
   });
 
   it('prints a gallery query’s results in its order', () => {
-    const names = (q: string) => selectEntries(parsePrintQuery(q), records, reg, data).records.map((r) => r.name);
+    const names = (q: string) => selectEntries(parsePrintQuery(whole(q)), records, reg, data).records.map((r) => r.name);
     expect(names('?sort=name:asc')).toEqual(['Cinder Hound', 'Frost Lance', 'Sorcerer', 'Wand of Frost Lances', 'Wizard']);
     expect(names('?sort=name:desc')).toEqual(['Wizard', 'Wand of Frost Lances', 'Sorcerer', 'Frost Lance', 'Cinder Hound']);
   });
@@ -106,7 +106,7 @@ describe('selectEntries', () => {
       record({ id: 'longsword-plus', type: 'equipment', facets: { 'stats.group': 'martial-melee-weapons' } }),
       record({ id: 'sling-plus', type: 'equipment', facets: { 'stats.group': 'simple-ranged-weapons' } }),
     ];
-    const ids = (q: string) => selectEntries(parsePrintQuery(q), gear, reg, data).records.map((r) => r.id);
+    const ids = (q: string) => selectEntries(parsePrintQuery(whole(q)), gear, reg, data).records.map((r) => r.id);
     expect(ids('?f.stats.group=martial-weapons')).toEqual(['longsword-plus']);
     expect(ids('?f.stats.group=weapons')).toEqual(['longsword-plus', 'sling-plus']);
   });
@@ -117,7 +117,7 @@ describe('selectEntries', () => {
       record({ id: 'path-of-z', type: 'subclass', name: 'Path of Z', facets: { 'stats.class': 'class/zebra' } }),
     ];
     const names = { names: { 'class/aardvark': 'Zealot', 'class/zebra': 'Abjurer' }, groups: {}, publishers: {} };
-    const ids = selectEntries(parsePrintQuery('?sort=stats.class:asc'), subclasses, reg, names).records.map((r) => r.id);
+    const ids = selectEntries(parsePrintQuery(whole('?sort=stats.class:asc')), subclasses, reg, names).records.map((r) => r.id);
     expect(ids).toEqual(['path-of-z', 'path-of-a']);
   });
 });
@@ -188,7 +188,7 @@ describe('loadPrintRun', () => {
       record({ id: 'longsword-plus', type: 'equipment', facets: { 'stats.group': 'martial-melee-weapons' } }),
       record({ id: 'rope-plus', type: 'equipment', facets: { 'stats.group': 'adventuring-gear' } }),
     ];
-    const run = await loadPrintRun('?f.stats.group=martial-weapons', BASE, reg, data, site({}, gear).fetch);
+    const run = await loadPrintRun(whole('?f.stats.group=martial-weapons'), BASE, reg, data, site({}, gear).fetch);
     expect(run.ok && run.fragments.map((f) => f.record.id)).toEqual(['longsword-plus']);
   });
 

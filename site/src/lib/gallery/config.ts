@@ -2,6 +2,7 @@
 // defaults, all read from the registry (docs/site.md#type-registry).
 
 import type { Facet, LibraryRecord, Registry } from '../../../../scripts/build-index/index.ts';
+import { PUBLISHER } from '../../../../rulesets/module.ts';
 import { phraseBook } from '../phrases.ts';
 import { typeAliases } from '../redirects.ts';
 
@@ -83,6 +84,17 @@ export const TYPE = 'type';
 export const RULESET = 'ruleset';
 export const SOURCE = 'source';
 export const AUTHOR = 'author';
+
+/**
+ * The ruleset set's filters (docs/site.md#gallery "Filters"): additive, so an entry is in the
+ * results' scope when it matches any of them, and the other filters narrow that scope.
+ */
+export const SCOPE_PATHS: readonly string[] = [RULESET, SOURCE, AUTHOR];
+
+export const isScopePath = (path: string): boolean => SCOPE_PATHS.includes(path);
+
+/** The ruleset set a fresh Library starts with: the publisher's entries, the official content. */
+export const defaultScope = (): Map<string, { kind: 'enum'; values: string[] }> => new Map([[AUTHOR, { kind: 'enum', values: [PUBLISHER] }]]);
 
 /** The Library sorts by name until the reader picks a sort (docs/site.md#gallery "Sort"). */
 export const LIBRARY_SORT: SortKey = { path: NAME, dir: 'asc' };
@@ -172,15 +184,18 @@ export function filterDef(config: GalleryConfig, path: string): FilterDef | unde
 }
 
 /**
- * The types the ruleset and type filters allow, in registry order: every type when neither is
- * active (docs/site.md#gallery "Sort").
+ * The types the ruleset set and the type filter allow, in registry order (docs/site.md#gallery
+ * "Sort"). The ruleset filter limits the types to its rulesets only while no source or author is
+ * checked, since those add entries from any ruleset. Every type when neither limits them.
  */
 export function typesInScope(config: GalleryConfig, filters: ReadonlyMap<string, ActiveFilter> = new Map()): TypeInfo[] {
-  const allowed = (path: string, value: string) => {
+  const values = (path: string) => {
     const filter = filters.get(path);
-    return filter?.kind !== 'enum' || filter.values.length === 0 || filter.values.includes(value);
+    return filter?.kind === 'enum' ? filter.values : [];
   };
-  return [...config.types.values()].filter((t) => allowed(RULESET, t.ruleset) && allowed(TYPE, t.type));
+  const allowed = (path: string, value: string) => values(path).length === 0 || values(path).includes(value);
+  const byRuleset = values(SOURCE).length === 0 && values(AUTHOR).length === 0;
+  return [...config.types.values()].filter((t) => (!byRuleset || allowed(RULESET, t.ruleset)) && allowed(TYPE, t.type));
 }
 
 /** The part of an active filter `typesInScope` reads; the gallery state's filter values fit it. */

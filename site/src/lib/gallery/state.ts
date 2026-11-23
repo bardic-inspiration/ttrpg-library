@@ -1,7 +1,7 @@
 // Gallery view state and its query string (docs/site.md#gallery "URL state"):
 // `?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8`.
 
-import { filterDef, parseSortKey, sortChoices, type GalleryConfig, type SortKey } from './config.ts';
+import { RULESET, defaultScope, filterDef, isScopePath, parseSortKey, sortChoices, type GalleryConfig, type SortKey } from './config.ts';
 import { parseNumber } from './values.ts';
 
 export type FilterValue = { kind: 'enum'; values: string[] } | { kind: 'range'; min?: number; max?: number };
@@ -9,11 +9,25 @@ export type FilterValue = { kind: 'enum'; values: string[] } | { kind: 'range'; 
 export interface GalleryState {
   q: string;
   sort: SortKey;
-  /** Active filters by path, in the order they were added. Enum values are case-folded keys. */
+  /**
+   * Active filters by path, in the order they were added. Enum values are case-folded keys. The
+   * ruleset set's filters (`SCOPE_PATHS`) are among them; with none of them, the scope is empty.
+   */
   filters: Map<string, FilterValue>;
 }
 
-export const initialState = (config: GalleryConfig): GalleryState => ({ q: '', sort: config.defaultSort, filters: new Map() });
+/** A fresh Library: no query, the default sort, and the default ruleset set. */
+export const initialState = (config: GalleryConfig): GalleryState => ({ q: '', sort: config.defaultSort, filters: new Map(defaultScope()) });
+
+const sameValues = (a: FilterValue | undefined, b: FilterValue | undefined): boolean =>
+  a?.kind === 'enum' && b?.kind === 'enum' ? a.values.length === b.values.length && a.values.every((v) => b.values.includes(v)) : a === b;
+
+/** Whether the ruleset set is the default one (docs/site.md#gallery "Filters"). */
+export function isDefaultScope(filters: ReadonlyMap<string, FilterValue>): boolean {
+  const fallback = defaultScope();
+  const active = [...filters].filter(([path, value]) => isScopePath(path) && isActive(value));
+  return active.length === fallback.size && active.every(([path, value]) => sameValues(value, fallback.get(path)));
+}
 
 /** Whether a filter value narrows anything; empty ones are dropped. */
 export const isActive = (value: FilterValue | undefined): value is FilterValue =>
@@ -41,11 +55,13 @@ function parseRange(raw: string): FilterValue | undefined {
  * Reads a query string into gallery state. Unknown parameters, sorts the
  * filters don't offer (docs/site.md#gallery "Sort"), filters on paths the
  * Library doesn't have, and malformed values are ignored. The last sort offered
- * wins.
+ * wins. A query naming any of the ruleset set's filters sets the whole set, so
+ * `f.ruleset=` with no value empties it; otherwise the set is the default.
  */
 export function parseQuery(search: string, config: GalleryConfig): GalleryState {
   const state = initialState(config);
   const sorts: SortKey[] = [];
+  let scoped = false;
   for (const pair of search.replace(/^\?/, '').split('&')) {
     if (pair === '') continue;
     const eq = pair.indexOf('=');
@@ -58,6 +74,10 @@ export function parseQuery(search: string, config: GalleryConfig): GalleryState 
     } else if (key?.startsWith('f.')) {
       const def = filterDef(config, key.slice(2));
       if (!def) continue;
+      if (isScopePath(def.path) && !scoped) {
+        scoped = true;
+        for (const path of defaultScope().keys()) state.filters.delete(path);
+      }
       const value: FilterValue | undefined =
         def.kind === 'range'
           ? parseRange(raw)
@@ -89,7 +109,8 @@ const encode = (text: string): string =>
 /**
  * Writes gallery state as a query string (with a leading `?`, or `''` for the
  * default view). Filters follow the Library's filter order, then tags by key, so
- * one view always has one URL. The default sort is left out.
+ * one view always has one URL. The default sort and the default ruleset set are
+ * left out; an empty ruleset set is `f.ruleset=`.
  */
 export function toQuery(state: GalleryState, config: GalleryConfig): string {
   const parts: string[] = [];
@@ -99,9 +120,11 @@ export function toQuery(state: GalleryState, config: GalleryConfig): string {
   const order = config.filters.map((f) => f.path);
   const rank = (path: string) => (order.includes(path) ? order.indexOf(path) : order.length);
   const paths = [...state.filters.keys()].sort((a, b) => rank(a) - rank(b) || (a < b ? -1 : a > b ? 1 : 0));
+  const scopeDefault = isDefaultScope(state.filters);
+  if (![...state.filters].some(([path, value]) => isScopePath(path) && isActive(value))) parts.push(`f.${RULESET}=`);
   for (const path of paths) {
     const value = state.filters.get(path);
-    if (!isActive(value)) continue;
+    if (!isActive(value) || (scopeDefault && isScopePath(path))) continue;
     const text =
       value.kind === 'enum'
         ? value.values.map(encode).join(',')
