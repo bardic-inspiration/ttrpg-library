@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "potion-of-the-lesser-gale",
+  "name": "Potion of the Lesser Gale",
+  "summary": "A potion that fills you with wind and gives you swift flight for a minute.",
+  "description": "Bottled in the high passes and sold at a premium. It keeps up its own faint whistling.",
+  "stats": {
+    "category": "potion",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, for 1 minute you have a Fly Speed of 30 feet and can hover."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -41,7 +41,7 @@ adding a ruleset is adding a folder:
 
 | File | Purpose |
 |---|---|
-| `ruleset.json` | ID, list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
+| `ruleset.json` | ID, `publisher` ([Source and author](content-model.md#source-and-author)), list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
 | `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
 | `phrases.json` | The phrase book: the fixed sentences templates fill, the display name of each enum value, and irregular plurals and articles ([Wording](site.md#wording)) |
 | `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`, classes' in `classes.ts`) |
@@ -55,6 +55,9 @@ adding a ruleset is adding a folder:
 | `srd-manifest.json` | Every SRD entry of the ruleset ([content-model.md](content-model.md#srd-manifest-and-coverage)) |
 | `rules/` | The ruleset's primitives, groups, and rules pages ([Rules data](#rules-data)) |
 
+`publisher` names who publishes the ruleset: `dnd-5e-2024` is published by
+Wizards of the Coast. The validator fails a ruleset without one.
+
 The validator, the index builder, the site templates, and the exporters all
 import this module, so each derived value is computed in exactly one place. The
 validator loads a ruleset by folder name, so an entry whose `ruleset` has no
@@ -63,12 +66,14 @@ folder or registry entry fails as unknown. A type with no formulas derives `{}`.
 checks that read it: equipment's category comes from its group, and an
 item's base item is checked against the equipment groups. An optional
 `checkLinks` runs once every ref resolves, with a lookup of each target's type
-and stats, for checks that read another entry: a background's feat must be an
-origin feat. `check` also receives whether the entry is an SRD entry, for a
-rule that depends on it. An optional `deriveLinked` computes values that read
+and stats, and a lookup of an entry's key by its type and exact name in the
+same ruleset, for checks that read another entry: a background's feat must be
+an origin feat. `check` also receives whether the entry is official content,
+for a rule that depends on it. An optional `deriveLinked` computes values that read
 other entries, given the entry's key and every entry and component of its
-ruleset; the site merges them into the entry's derived values, as a class's
-spell list is the spells that name it ([Classes](#classes)).
+ruleset, each with its `author` so it can tell official content (`isOfficial`); the site merges
+them into the entry's derived values, as a class's spell list is the spells
+that name it ([Classes](#classes)).
 
 `dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, an
 item's `spells[].spell`) are "Casts" / "Cast by"; a background's `feat` is
@@ -99,7 +104,7 @@ from `types`, with whether it takes extensions:
   `content/<ruleset>/<type>/`, whose `stats` validate against the same type
   schema as a primitive's. Only a type that takes extensions may have them,
   it needs a registry entry for their cards, and an extension is always
-  custom, so `meta.source.srd` on one is an error.
+  homebrew, so an extension whose `author` is `"publisher"` is an error.
 - **One key space per type.** A key (`<type>/<id>`) is unique across a
   type's primitives, groups, and extensions, and so is a name, ignoring case.
 - **Validated like entries:** the type schema, the markdown subset, refs and
@@ -529,7 +534,11 @@ A class derives (`classes.ts`), per level 1–20:
   at the later `subclassLevels`; its spell list, every spell whose `classes`
   holds its id plus its own `spells`, by level and then name, each with its
   school and Special marks (C for Concentration, R for a ritual, M for a
-  material component with a cost); and its subclasses, by name.
+  material component with a cost); and its subclasses, by name. An SRD
+  class's spell list and subclasses take only SRD entries; a custom spell or
+  subclass that names it is listed in the page's Homebrew links
+  ([Detail page](site.md#detail-page)). A custom class takes every spell and
+  subclass that names it.
 
 Its page (`class-page`) prints, in the SRD's order:
 
@@ -630,6 +639,7 @@ warnings below on an SRD entry.
 | Creature | No literal derived numbers in prose | error |
 | Creature | Speeds are multiples of 5 | error |
 | Creature | A damage `condition` only on a rider, not the first damage | error |
+| Creature | No `spellcasting` spell written as text that exactly names a spell in the library; it's a ref | error |
 | Creature | Any `adjust`, damage `bonus`, or token adjustment | warning |
 | Creature | Any authored DC token `{dc=<n>}` | warning |
 | Creature | Derived attack bonus above +17 or save DC above 30 | warning |

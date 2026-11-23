@@ -1,0 +1,97 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "shriekwing-bat",
+  "name": "Shriekwing Bat",
+  "summary": "A leather-winged cave bat whose scream is loud enough to knock a torchbearer's ears ringing.",
+  "description": "Shriekwings roost by the thousand in vaulted caverns, and the guano beneath them is the first sign a traveler is close. A colony disturbed at once is a wall of noise; caravans crossing their halls go in silence, with rags over the lamps. The bats themselves are nearly deaf to everything but their own voices.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "small"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 5,
+      "fly": 40
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 14,
+      "con": 12,
+      "int": 2,
+      "wis": 12,
+      "cha": 5
+    },
+    "senses": {
+      "blindsight": 60
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Echolocation",
+        "kind": "other",
+        "text": "The bat can't use its Blindsight while it has the {ref:condition/deafened} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Shriek",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "2d4",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": "and the target has the {ref:condition/deafened} condition until the end of the bat's next turn.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

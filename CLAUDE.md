@@ -41,7 +41,7 @@ failing lines.
 
 ## Sub-issues
 
-Attach a task issue to its milestone or track issue with `sub_issue_write` (`add`),
+Attach a task issue to its milestone, "Spot Fixes", or track issue (the open `queue`-labeled issue is the active queue) with `sub_issue_write` (`add`),
 then move it into place with `reprioritize` ([`AGENTS.md`](AGENTS.md) "Dev
 Queue"). Read progress and order with `issue_read` (`get_sub_issues`), and
 find a task's parent with `get_parent`.

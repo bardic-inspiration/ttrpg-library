@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "feat",
   "id": "magic-initiate",
   "name": "Magic Initiate",
@@ -28,8 +30,7 @@
       "kind": "routine",
       "issues": [
         234
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-10"
   }

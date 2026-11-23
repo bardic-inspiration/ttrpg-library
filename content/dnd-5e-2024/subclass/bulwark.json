@@ -1,0 +1,45 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "bulwark",
+  "name": "Bulwark",
+  "summary": "A Fighter subclass: stand where others fall.",
+  "stats": {
+    "class": {
+      "ref": "class/fighter"
+    },
+    "tagline": "Stand Where Others Fall",
+    "text": "A Bulwark trains to hold a line against overwhelming odds. They protect companions, absorb punishment, and turn their endurance into a weapon.",
+    "features": [
+      {
+        "ref": "class-feature/bulwark-interpose"
+      },
+      {
+        "ref": "class-feature/bulwark-steadfast-guard"
+      },
+      {
+        "ref": "class-feature/bulwark-rally-the-line"
+      },
+      {
+        "ref": "class-feature/bulwark-unmoved"
+      },
+      {
+        "ref": "class-feature/bulwark-holdfast"
+      },
+      {
+        "ref": "class-feature/bulwark-last-wall"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

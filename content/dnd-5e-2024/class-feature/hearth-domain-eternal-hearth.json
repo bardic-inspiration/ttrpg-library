@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "hearth-domain-eternal-hearth",
+  "name": "Eternal Hearth",
+  "stats": {
+    "levels": [
+      17
+    ],
+    "text": "When you finish a Long Rest, you can name a place you slept in. As an action, you can teleport yourself and willing creatures within 30 feet to that place, once per Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

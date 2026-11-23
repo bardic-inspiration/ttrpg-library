@@ -12,8 +12,7 @@ fits the site, through a repeatable workflow that can be tuned until it finds th
 (files are the database), P5 and P9 (licensing and an original look), and P7
 (art is reviewed before it publishes).
 
-The Images track (#316) carries this on from v2, which deferred it before any
-of it was built.
+The Images track (#316) carries this on. None of it is built yet.
 
 ## Current
 

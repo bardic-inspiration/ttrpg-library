@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "tidal-sorcery-rising-surge",
+  "name": "Rising Surge",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "When you cast a spell with a spell slot, you can spend 1 Sorcery Point to push each creature you hit with it up to 10 feet away from you."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

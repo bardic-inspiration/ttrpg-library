@@ -1,0 +1,87 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "blindclaw-crayfish",
+  "name": "Blindclaw Crayfish",
+  "summary": "A pale, eyeless crayfish the size of a cart that waits in black underground rivers and seizes anything that splashes.",
+  "description": "Blindclaws grow without end in the cold rivers that run beneath the world, molting their shells into the shallows like abandoned boats. They find prey by the ripples it makes. River-folk ferry across in silence, and they never trail a hand in the water.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 10,
+      "con": 15,
+      "int": 1,
+      "wis": 10,
+      "cha": 3
+    },
+    "senses": {
+      "blindsight": 60,
+      "note": "blind beyond this radius"
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The crayfish can breathe air and water."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The crayfish makes two Pincer attacks."
+      },
+      {
+        "name": "Pincer",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc:str}) from one of two pincers."
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

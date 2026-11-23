@@ -1,0 +1,89 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "scree-pika",
+  "name": "Scree Pika",
+  "summary": "A round-eared rock rabbit that whistles an alarm and vanishes into the scree before anyone sees it.",
+  "description": "Scree pikas stack hay in the gaps between boulders all summer and guard their piles with shrill whistles. Climbers learn to stop when the whistling starts, since a colony only goes quiet for a hawk or a rockfall.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "tiny"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 30,
+      "burrow": 10,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 2,
+      "dex": 15,
+      "con": 10,
+      "int": 2,
+      "wis": 12,
+      "cha": 5
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 30
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Scree Runner",
+        "kind": "other",
+        "text": "The pika ignores {ref:glossary/difficult-terrain} made of loose rock or snow."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Bolt Hole",
+        "kind": "other",
+        "text": "The pika takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
+      }
+    ]
+  },
+  "tags": {
+    "environment": "mountain",
+    "theme": [
+      "mountains",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        331
+      ]
+    }
+  }
+}

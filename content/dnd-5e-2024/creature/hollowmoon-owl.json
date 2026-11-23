@@ -1,0 +1,99 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "hollowmoon-owl",
+  "name": "Hollowmoon Owl",
+  "summary": "A broad-winged owl whose hooting makes listeners forget which way they were walking.",
+  "description": "Hollowmoon owls nest in dead trees with hollow centers that ring like drums. Travelers who follow the hooting off the path are usually found in the morning, sleeping at the foot of the tree.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 10,
+      "fly": 60
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 15,
+      "con": 12,
+      "int": 5,
+      "wis": 14,
+      "cha": 8
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Flyby",
+        "kind": "other",
+        "text": "The owl doesn't provoke {ref:glossary/opportunity-attacks} when it flies out of an enemy's reach."
+      },
+      {
+        "name": "Silent Flight",
+        "kind": "other",
+        "text": "The owl has {ref:glossary/advantage} on Dexterity (Stealth) checks while flying."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Talons",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Lulling Hoot",
+        "kind": "save",
+        "ability": "wis",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature within 30 feet of the owl that can hear it"
+        },
+        "onFailure": "The target has the {ref:condition/charmed} condition until the end of the owl's next turn. While charmed this way, the target must use its movement to move toward the owl by the safest route.",
+        "onFailureOrSuccess": "A target that succeeds is immune to the owl's Lulling Hoot for 24 hours.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

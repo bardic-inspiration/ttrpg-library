@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "brine-handaxe",
+  "name": "Brine Handaxe",
+  "summary": "A salt-crusted handaxe that chills the creatures it cuts.",
+  "description": "Sailors hang these over the bunks of the ships they sail on. A thin crust of salt reforms on the blade every morning.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/handaxe"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. When you hit a creature with it, the creature's Speed is reduced by 10 feet until the start of your next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

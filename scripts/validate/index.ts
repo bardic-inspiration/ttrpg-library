@@ -17,6 +17,7 @@ import {
 import type { RulesData } from '../../lib/rules.ts';
 import { groupProblem, loadRules } from './rules.ts';
 import { termMatcher } from '../../lib/text.ts';
+import { isOfficial, PUBLISHER } from '../../rulesets/module.ts';
 import { accepts, checkLicenses, type Licenses } from '../../lib/licenses.ts';
 import { checkBlocklist, checkMarkdown, checkPlaceholders, loadBlocklist, stringsIn } from './text.ts';
 import { listEntryFiles } from './walk.ts';
@@ -53,6 +54,12 @@ export interface ValidComponent extends Omit<ValidEntry, 'entry'> {
   /** The parent's key, `<type>/<id>`. */
   parent: string;
 }
+
+/** An entry's `source` and `author` (docs/content-model.md#source-and-author); the schema requires `author`. */
+const origin = (entry: { [key: string]: unknown }): { source?: string; author: string } => ({
+  ...(typeof entry.source === 'string' ? { source: entry.source } : {}),
+  author: entry.author as string,
+});
 
 export interface ValidationResult {
   /** Every entry file, under the content root. */
@@ -107,6 +114,9 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   for (const id of Object.keys(registry)) {
     const ruleset = await loadRuleset(id, rulesetsRoot);
     rulesets.set(id, ruleset);
+    // Every ruleset names its publisher, whose entries are official (docs/rulesets.md#the-ruleset-module).
+    const publisher: unknown = ruleset?.module.definition.publisher;
+    if (ruleset && (typeof publisher !== 'string' || publisher.trim() === '')) error(`rulesets/${id}/ruleset.json`, 'publisher: missing; name who publishes the ruleset');
     if (!ruleset?.module.definition.rules?.length) continue;
     const loaded = await loadRules(join(rulesetsRoot, id), `rulesets/${id}`, ruleset, rulesValidators, blocklist);
     issues.push(...loaded.issues);
@@ -148,7 +158,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     if (license && !accepts(licenses, 'import', license.id)) {
       error(file, `meta.source.license.id: "${license.id}" isn't a license config/licenses.json accepts for imports (${licenses.kinds.import?.join(', ')})`);
     }
-    const srd = (entry.meta as { source?: { srd?: true } }).source?.srd === true;
+    const official = isOfficial(entry);
     heads.push({
       file,
       ruleset: entry.ruleset,
@@ -156,7 +166,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       id: entry.id,
       name: entry.name,
       ...(entry.image ? { image: entry.image } : {}),
-      ...(srd ? { srd } : {}),
+      ...(official ? { official } : {}),
       ...(componentType ? { component: true } : {}),
     });
     const linked: RefEntry = { file, ruleset: entry.ruleset, type: entry.type, id: entry.id };
@@ -190,7 +200,14 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       error(file, `type: unknown type "${entry.type}" for ${entry.ruleset}; it must be listed in ruleset.json, have a schema, and have a config/types.json entry`);
       continue;
     }
-    if (rulesType && srd) error(file, 'meta.source.srd: an extension is custom; the SRD rules are kept in the ruleset as primitives');
+    if (rulesType && official) error(file, `author: an extension is homebrew; the ruleset's official rules are kept in rulesets/${entry.ruleset}/rules/ as primitives`);
+    // The publisher is named by "publisher", so official content is told apart in one way (docs/content-model.md#source-and-author).
+    if (entry.author === ruleset.module.definition.publisher) {
+      error(file, `author: "${entry.author}" is the ruleset's publisher; write "${PUBLISHER}" for official content`);
+    }
+    if (license && entry.author !== (entry.meta as { source: { license: { author: string } } }).source.license.author) {
+      error(file, `author: an imported entry's author is its license's, "${(entry.meta as { source: { license: { author: string } } }).source.license.author}"`);
+    }
     const statsResult = validateWithText(validateStats, entry.stats, 'stats');
     if (!statsResult.valid) {
       for (const message of formatErrors(validateStats.errors, 'stats')) error(file, message);
@@ -207,11 +224,11 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     for (const { path } of plain.filter(({ text }) => new RegExp(REF_TOKEN.source).test(text))) {
       error(file, `${path}: a {ref:…} token works only in text fields (rules text and description)`);
     }
-    // An SRD entry is literal (docs/content-model.md#srd-and-custom-entries): its deviations and authored
-    // numbers match the SRD, so the ruleset's review warnings are skipped.
+    // Official content is literal (docs/content-model.md#srd-and-custom-entries): its deviations and authored
+    // numbers match the published text, so the ruleset's review warnings are skipped.
     const rulesData = rules.find((r) => r.ruleset === entry.ruleset);
-    for (const issue of ruleset.module.check(entry.type, entry.stats, rulesData, { srd })) {
-      if (srd && issue.level === 'warning') continue;
+    for (const issue of ruleset.module.check(entry.type, entry.stats, rulesData, { official })) {
+      if (official && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
     }
     if (rulesType) {
@@ -239,20 +256,22 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     const found = targets.get(key);
     return found && found.stats !== undefined ? { type: found.type, stats: found.stats } : undefined;
   };
+  const byName = new Map(heads.map((h) => [`${h.ruleset}/${h.type}/${h.name}`, `${h.type}/${h.id}`]));
   for (const { file, entry } of [...entries, ...components]) {
     const checkLinks = rulesets.get(entry.ruleset)?.module.checkLinks;
     if (!checkLinks) continue;
-    const srd = (entry.meta as { source?: { srd?: true } } | undefined)?.source?.srd === true;
-    for (const issue of checkLinks(entry.type, entry.stats, target)) {
-      if (srd && issue.level === 'warning') continue;
+    const official = isOfficial(entry);
+    const named = (type: string, name: string) => byName.get(`${entry.ruleset}/${type}/${name}`);
+    for (const issue of checkLinks(entry.type, entry.stats, target, named)) {
+      if (official && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file: repoPath(file), message: `${issue.path}: ${issue.message}` });
     }
   }
 
   // Each component's parent is the one entry whose stats list it by ref (docs/content-model.md#components).
-  const listedBy = new Map<string, { file: string; type: string; id: string }[]>();
+  const listedBy = new Map<string, ComponentListing['listedBy']>();
   for (const { file, entry } of entries) {
-    for (const { ref } of objectRefs(entry.stats)) listedBy.set(ref, [...(listedBy.get(ref) ?? []), { file: repoPath(file), type: entry.type, id: entry.id }]);
+    for (const { ref } of objectRefs(entry.stats)) listedBy.set(ref, [...(listedBy.get(ref) ?? []), { file: repoPath(file), type: entry.type, id: entry.id, ...origin(entry) }]);
   }
   const listings: ComponentListing[] = components.map(({ file, entry, parents }) => ({
     file: repoPath(file),
@@ -261,6 +280,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     name: entry.name,
     parents,
     listedBy: listedBy.get(entryKey(entry)) ?? [],
+    ...origin(entry),
   }));
   const componentIssues = checkComponents(listings);
   issues.push(...componentIssues);

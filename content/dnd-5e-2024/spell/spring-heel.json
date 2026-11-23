@@ -1,0 +1,52 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "spring-heel",
+  "name": "Spring Heel",
+  "summary": "Grants a powerful bounding leap once per turn.",
+  "stats": {
+    "level": 1,
+    "school": "transmutation",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/ranger"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "bonus-action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "touch"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": false
+    },
+    "effect": "A willing creature you touch gains the ability to leap. Once on each of its turns, it can move up to 20 feet by leaping without using its movement, ignoring Difficult Terrain along the way."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

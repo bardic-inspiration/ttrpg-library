@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "college-of-echoes-repeating-refrain",
+  "name": "Repeating Refrain",
+  "stats": {
+    "levels": [
+      3
+    ],
+    "text": "When a creature you can see within 60 feet of you misses with an attack roll or fails a saving throw, you can use a {ref:glossary/reaction} and expend a use of Bardic Inspiration to let one ally within 60 feet of you repeat the result with a Bardic Inspiration die added to the next d20 Test they make before the end of their next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

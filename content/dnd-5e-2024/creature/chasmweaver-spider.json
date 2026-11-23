@@ -1,0 +1,115 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "chasmweaver-spider",
+  "name": "Chasmweaver Spider",
+  "summary": "A huge chasm spider that strings lines across bottomless drops and reels prey in by a single sticky thread.",
+  "description": "Chasmweavers live where caverns split open into depths no rope can reach. Their lines stretch from wall to wall like the rigging of a ship, and anything that falls into them hangs there over nothing. Travelers who must cross a chasm look first for the glint of old silk, and cross somewhere else.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30,
+      "climb": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 16,
+      "con": 14,
+      "int": 2,
+      "wis": 12,
+      "cha": 4
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "senses": {
+      "blindsight": 10,
+      "darkvision": 60
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Spider Climb",
+        "kind": "other",
+        "text": "The spider can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+      },
+      {
+        "name": "Web Walker",
+        "kind": "other",
+        "text": "The spider ignores movement restrictions caused by webs."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The spider makes one Bite attack and one Dragline attack."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d10",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "2d8",
+            "type": "poison"
+          }
+        ],
+        "onHit": "and the target has the {ref:condition/poisoned} condition until the end of its next turn."
+      },
+      {
+        "name": "Dragline",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 30,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "The target is pulled up to 25 feet straight toward the spider. If the target is a Large or smaller creature, it has the {ref:condition/grappled} condition (escape {dc:dex})."
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

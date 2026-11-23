@@ -1,0 +1,119 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "dirge-drummer",
+  "name": "Dirge Drummer",
+  "summary": "A skeleton in a ragged tabard beating a drum of stretched skin, whose rhythm keeps nearby undead standing.",
+  "description": "Armies marched to its beat, and then marched on without their flesh. The drummer never learned the war was over.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 14,
+      "con": 14,
+      "int": 8,
+      "wis": 12,
+      "cha": 14
+    },
+    "skills": {
+      "performance": "proficient"
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Drumstick",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Death March",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature of the drummer's choice in a 30-foot Emanation"
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": "and the target has the {ref:condition/frightened} condition until the start of the drummer's next turn.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Rally the Dead",
+        "kind": "other",
+        "text": "One undead ally within 30 feet of the drummer that can hear it regains {dmg:1d8+cha:necrotic} Hit Points.",
+        "uses": "3/day"
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

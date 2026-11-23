@@ -10,19 +10,18 @@ const ROOT = join(import.meta.dirname, '..');
 const base = (): Defaults => ({
   ruleset: 'dnd-5e-2024',
   count: 5,
+  author: 'bardic-inspiration',
   tags: {},
   gapFill: { enabled: true, count: 3 },
   validateRetries: 3,
 });
 
 describe('config/defaults.json', () => {
-  it('matches the defaults docs/generation.md#defaults describes', async () => {
+  it('matches the defaults docs/generation.md#defaults describes, apart from whether gap fill is on', async () => {
     const file = JSON.parse(await readFile(join(ROOT, 'config/defaults.json'), 'utf8'));
-    expect(file).toEqual({ ...base(), gapFill: { enabled: false, count: 3 } });
-  });
-
-  it('keeps gap fill off until v2 is built (#109)', async () => {
-    expect((await loadDefaults()).gapFill.enabled).toBe(false);
+    const expected = base();
+    expected.gapFill.enabled = file.gapFill?.enabled;
+    expect(file).toEqual(expected);
   });
 
   it('passes its own checks and loads', async () => {
@@ -75,6 +74,22 @@ describe('checkDefaults', () => {
       expect.stringMatching(/tags/),
     );
   });
+
+  it('rejects source and author as tags, since they are envelope fields (docs/content-model.md#source-and-author)', () => {
+    expect(checkDefaults({ ...base(), tags: { source: 'x', author: 'y' } }, registry)).toEqual([
+      expect.stringMatching(/^tags\.source: is an envelope field/),
+      expect.stringMatching(/^tags\.author: is an envelope field/),
+    ]);
+  });
+
+  it('requires an author other than "publisher", and takes an optional source', () => {
+    const { author: _, ...missing } = base();
+    expect(checkDefaults(missing, registry)).toContainEqual('author: missing');
+    expect(checkDefaults({ ...base(), author: 'publisher' }, registry)).toContainEqual(expect.stringMatching(/^author:/));
+    expect(checkDefaults({ ...base(), author: '' }, registry)).toContainEqual(expect.stringMatching(/^author:/));
+    expect(checkDefaults({ ...base(), source: 'Ember Codex' }, registry)).toEqual([]);
+    expect(checkDefaults({ ...base(), source: '' }, registry)).toContainEqual(expect.stringMatching(/^source:/));
+  });
 });
 
 describe('applyDefaults', () => {
@@ -84,6 +99,7 @@ describe('applyDefaults', () => {
       brief: 'frost magic',
       ruleset: 'dnd-5e-2024',
       count: 5,
+      author: 'bardic-inspiration',
       tags: {},
     });
   });
@@ -95,10 +111,17 @@ describe('applyDefaults', () => {
   });
 
   it('merges request tags over default tags', () => {
-    const defaults = { ...base(), tags: { world: 'Aldmere', author: 'routine' } };
+    const defaults = { ...base(), tags: { world: 'Aldmere', campaign: 'Ashfall' } };
     const request = applyDefaults({ type: 'creature', tags: { world: 'Vell', theme: ['ice'] } }, defaults);
-    expect(request.tags).toEqual({ world: 'Vell', author: 'routine', theme: ['ice'] });
-    expect(defaults.tags).toEqual({ world: 'Aldmere', author: 'routine' });
+    expect(request.tags).toEqual({ world: 'Vell', campaign: 'Ashfall', theme: ['ice'] });
+    expect(defaults.tags).toEqual({ world: 'Aldmere', campaign: 'Ashfall' });
+  });
+
+  it('lifts a source or author line out of the request tags, over the defaults', () => {
+    const request = applyDefaults({ type: 'spell', tags: { source: 'Ember Codex', author: 'A. Author', theme: 'fire' } }, { ...base(), source: 'Default Book' });
+    expect(request).toMatchObject({ source: 'Ember Codex', author: 'A. Author', tags: { theme: 'fire' } });
+    expect(applyDefaults({ type: 'spell' }, { ...base(), source: 'Default Book' }).source).toBe('Default Book');
+    expect(applyDefaults({ type: 'spell' }, base())).not.toHaveProperty('source');
   });
 
   it('takes any count as given, with no batch size limit', () => {

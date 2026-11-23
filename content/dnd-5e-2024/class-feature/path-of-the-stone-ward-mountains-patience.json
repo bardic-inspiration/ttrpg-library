@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "path-of-the-stone-ward-mountains-patience",
+  "name": "Mountain's Patience",
+  "stats": {
+    "levels": [
+      10
+    ],
+    "text": "When you roll {ref:glossary/initiative}, you can regain one expended use of Rage. Once you use this feature, you can't use it again until you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

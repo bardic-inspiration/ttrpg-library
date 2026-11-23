@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "hourglass-of-held-breath",
+  "name": "Hourglass of Held Breath",
+  "summary": "An hourglass that freezes the world for a moment while you act.",
+  "description": "The sand never runs out and never settles. Those who carry it dislike being near clocks.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "very-rare",
+    "attunement": {
+      "required": true
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/time-stop"
+        }
+      }
+    ],
+    "effect": "As a Magic action, you can turn the hourglass over to cast *Time Stop* from it. Once you use this property, you can't use it again until the next dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

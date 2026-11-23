@@ -1,0 +1,108 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "boneclad-elk",
+  "name": "Boneclad Elk",
+  "summary": "A great antlered elk, long dead, that charges through the trees with its skull wreathed in iron-hard antler.",
+  "description": "Hunters leave the first kill of a season to the forest. In some places the forest sends it back.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13,
+      "note": "natural armor"
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 12,
+      "con": 16,
+      "int": 2,
+      "wis": 12,
+      "cha": 5
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Charge",
+        "kind": "other",
+        "text": "If the elk moves at least 20 feet in a straight line toward a target and then hits it with a Gore attack on the same turn, the target takes an extra {dmg:2d6:piercing} and, if it is a Large or smaller creature, has the {ref:condition/prone} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Trample",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "attackNote": "only against a Prone creature"
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

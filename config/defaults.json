@@ -1,7 +1,8 @@
 {
   "ruleset": "dnd-5e-2024",
   "count": 5,
+  "author": "bardic-inspiration",
   "tags": {},
-  "gapFill": { "enabled": false, "count": 3 },
+  "gapFill": { "enabled": true, "count": 3 },
   "validateRetries": 3
 }

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "spell",
   "id": "prismatic-wall",
   "name": "Prismatic Wall",
@@ -42,8 +44,7 @@
       "kind": "routine",
       "issues": [
         174
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

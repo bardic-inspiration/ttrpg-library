@@ -24,7 +24,6 @@ export function exportEquipment(item: TranslatorItem, skips: Skips): Record5e {
   const s = item.entry.stats as EquipmentStats;
   const d = item.derived as DerivedEquipment;
   const name = (ref: string) => item.names[ref] ?? ref.slice(ref.indexOf('/') + 1);
-  if (!groupReadsBack(s)) skips.add('stats.group', 'Open5e\'s item categories are coarser than equipment groups, so the group doesn\'t read back.');
   for (const key of ['weightNote', 'variants', 'tool', 'mount', 'vehicle'] as const) {
     if (s[key] !== undefined) skips.add(`stats.${key}`, `Open5e has no field for equipment's ${key}.`);
   }
@@ -38,6 +37,9 @@ export function exportEquipment(item: TranslatorItem, skips: Skips): Record5e {
     return null;
   };
   const category = CATEGORY[d.category ?? ''] ?? CATEGORY['adventuring-gear']!;
+  // Import reads a group only from a weapon, armor, or the adventuring-gear category, so other equipment doesn't come back.
+  if (!s.weapon && !s.armor && category.key !== 'adventuring-gear') skips.add('', `Open5e's ${category.name} category doesn't name one equipment group, so it exports but doesn't import back.`);
+  else if (!groupReadsBack(s)) skips.add('stats.group', 'Open5e\'s item categories are coarser than equipment groups, so the group doesn\'t read back.');
   return {
     key: keyOf(`equipment/${item.entry.id}`),
     name: item.entry.name,

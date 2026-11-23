@@ -1,0 +1,122 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "ghoul-matriarch",
+  "name": "Ghoul Matriarch",
+  "summary": "A bloated, crowned ghoul that commands a pack by hunger and scent.",
+  "description": "The matriarch is the oldest of her kind in a warren, and the pack takes its orders from her nose. She sends the weak ahead, saves the freshest meals for herself, and eats the dead leaders she once served.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 15,
+      "note": "natural armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 17,
+      "con": 14,
+      "int": 10,
+      "wis": 14,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "wis",
+      "con"
+    ],
+    "skills": {
+      "perception": "proficient",
+      "intimidation": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 6,
+    "traits": [
+      {
+        "name": "Aura of Hunger",
+        "kind": "other",
+        "text": "Allies within 10 feet of the matriarch have {ref:glossary/advantage} on attack rolls against creatures that don't have all their Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The matriarch makes two Corpse-Tongue attacks and uses Command the Pack if it is available."
+      },
+      {
+        "name": "Corpse-Tongue",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d6",
+            "type": "necrotic"
+          }
+        ],
+        "onHit": "If the target is a creature that isn't an Undead, it must succeed on a {dc:dex} Constitution saving throw or have the {ref:condition/paralyzed} condition until the end of its next turn."
+      },
+      {
+        "name": "Command the Pack",
+        "kind": "other",
+        "text": "Each Undead of the matriarch's choice within 60 feet of her that can hear her moves up to its Speed without provoking Opportunity Attacks and makes one melee attack.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}

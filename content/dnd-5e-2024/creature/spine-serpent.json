@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "spine-serpent",
+  "name": "Spine Serpent",
+  "summary": "A long skeletal snake built from a single spinal column that coils around prey until it stops struggling.",
+  "description": "Seen from a distance, it resembles a rope of knotted bone laid across a corridor. Up close, the knots all move.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30,
+      "climb": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 14,
+      "con": 15,
+      "int": 3,
+      "wis": 12,
+      "cha": 5
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "blindsight": 30,
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The serpent makes one Bite attack and one Constrict attack."
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Constrict",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "The target has the {ref:condition/grappled} condition (escape {dc:str}). Until the grapple ends, the target has the {ref:condition/restrained} condition, and the serpent can't Constrict another target."
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

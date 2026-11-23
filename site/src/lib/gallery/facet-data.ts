@@ -1,10 +1,11 @@
 // What the filter tree reads from the build besides library.json (docs/site.md#gallery "Filters"):
-// the names a ref facet's values read by, and the groups a groups facet nests its values in.
+// the names a ref facet's values read by, the groups a groups facet nests its values in, and each
+// ruleset's publisher, whom an author of "publisher" reads as.
 
 import registryJson from '../../../../config/types.json' with { type: 'json' };
 import type { GroupTree, RulesData, RulesGroup } from '../../../../lib/rules.ts';
 import { entryNames, loadEntries, type LoadedEntry } from '../library.ts';
-import { loadRules } from '../rules.ts';
+import { loadRules, rulesetPublishers } from '../rules.ts';
 import type { FacetData, GroupInfo, Registry } from './config.ts';
 
 interface Source {
@@ -52,11 +53,17 @@ export function groupInfo(tree: GroupTree): GroupInfo[] {
 }
 
 /**
- * The facet data for the gallery: the name of every ref a ref facet holds in `entries`, and the
- * groups of every type with a groups facet.
+ * The facet data for the gallery: the name of every ref a ref facet holds in `entries`, the
+ * groups of every type with a groups facet, and each ruleset's publisher.
  */
-export function facetData(registry: Registry, entries: Source[], names: Map<string, string>, rules: RulesData[]): FacetData {
-  const out: FacetData = { names: {}, groups: {} };
+export function facetData(
+  registry: Registry,
+  entries: Source[],
+  names: Map<string, string>,
+  rules: RulesData[],
+  publishers: Record<string, string> = rulesetPublishers(),
+): FacetData {
+  const out: FacetData = { names: {}, groups: {}, publishers };
   for (const source of entries) {
     const facets = registry[source.entry.ruleset]?.types[source.entry.type]?.facets ?? [];
     for (const facet of facets.filter((f) => f.ref)) {

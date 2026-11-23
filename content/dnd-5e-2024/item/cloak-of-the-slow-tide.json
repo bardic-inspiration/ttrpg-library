@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "cloak-of-the-slow-tide",
+  "name": "Cloak of the Slow Tide",
+  "summary": "A cloak that lets you walk on water and resist its drag.",
+  "description": "Sea-cults weave these from dyed kelp and silver thread. Rain beads on it and rolls away.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "While you wear this cloak, you have a Swim Speed equal to your Speed and can breathe underwater. As a Magic action, you can walk across the surface of liquids as if solid ground until the end of your next turn. Once you use this property, you can't use it again until the next dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

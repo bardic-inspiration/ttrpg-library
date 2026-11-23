@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "hearth-domain-sheltering-flame",
+  "name": "Sheltering Flame",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you create a ring of soft fire in a 10-foot radius around you for 1 minute. Allies inside have Half {ref:glossary/cover}, and enemies that start their turn inside take Fire damage equal to your Wisdom modifier. Once you use this feature, you can't use it again until you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -13,12 +13,15 @@ as the `stats` of a creature, are in [rulesets.md](rulesets.md).
 
 Every entry is one JSON file at `content/<ruleset>/<type>/<id>.json`, and the
 path must match the entry's `ruleset`, `type`, and `id`. Every entry, in every
-ruleset, has the same envelope: `ruleset`, `type`, `id`, `name`, `summary`,
-`stats`, and `meta`, plus optional `description`, `tags`, and `image`. Unknown
-top-level keys are rejected.
+ruleset, has the same envelope, written in this order: `ruleset`, `source`
+(optional), `author`, `type`, `id`, `name`, `summary`, `description`
+(optional), `stats`, `tags` (optional), and `meta`, plus an optional `image`.
+Unknown top-level keys are rejected.
 
-The envelope has three zones:
+The envelope has four zones:
 
+- **`source` and `author`** place the entry within its ruleset
+  ([Source and author](#source-and-author)).
 - **`stats`** holds the rules data, validated strictly by the ruleset's schema
   for the type. Unknown keys fail. It holds inputs only, never a value the
   ruleset derives ([rulesets.md](rulesets.md#inputs-and-derived-values)).
@@ -32,7 +35,10 @@ with a schema file and a registry entry. Anything else fails as unknown.
 ### IDs and names
 
 - The ID is the slug of the name at creation: lowercase, ASCII-folded,
-  non-alphanumerics collapsed to `-`. It equals the file name.
+  apostrophes dropped, other non-alphanumerics collapsed to `-`: "Hunter's
+  Mark" is `hunters-mark`. It equals the file name. Five items made before
+  this was written down keep `-s-` ids, such as `cantor-s-chain-mail`, since
+  an ID never changes.
 - IDs and names are unique within a type, not across the library. Entries of
   different types are different things even when they share a name: the Giant
   Insect spell and a Giant Insect creature can both exist. Everything that
@@ -53,16 +59,46 @@ with a schema file and a registry entry. Anything else fails as unknown.
   rejected for being unknown.
 - Every tag key becomes a gallery filter, `tags.<key>`, with no configuration.
 - Conventional keys, not enforced: `world`, `campaign`, `theme`,
-  `environment`, `author`.
+  `environment`.
+- `source` and `author` are envelope fields ([Source and author](#source-and-author)),
+  so neither is a tag key; the schema rejects both in `tags`.
 - Filtering compares strings case-insensitively; display keeps the stored
   case.
+
+### Source and author
+
+Each ruleset is a published foundation with extensions. Its `ruleset.json`
+names its `publisher` ([rulesets.md](rulesets.md#the-ruleset-module)), and
+every entry says where it sits within the ruleset:
+
+- **`source`**: the sourcebook, collection, or other work the entry belongs
+  to, such as `"SRD 5.2"`. Optional: an entry that belongs to no work omits it.
+- **`author`**: who wrote the entry. Required. `"publisher"` means the
+  ruleset's publisher; anyone else is named as credited
+  (`"bardic-inspiration"`). The publisher is never written by name, so the
+  validator fails an `author` equal to the ruleset's `publisher`.
+
+**Official content** is an entry whose `author` is `"publisher"`; every other
+entry is **homebrew**. `isOfficial` in `rulesets/module.ts` is the one place
+the two are told apart, and the validator, the ruleset modules, SRD
+coverage, and the site all call it. Official content is published on the site
+only where it is licensed to be, so official and licensed are the same line:
+for `dnd-5e-2024`, the only official content is the SRD, each entry with
+`source: "SRD 5.2"` ([SRD and custom entries](#srd-and-custom-entries)).
+Other rulesets settle their licensing case by case.
+
+- A component takes its parent's `source` and `author`
+  ([Components](#components)); the validator fails one that differs.
+- An imported entry's `source` is the work's title and its `author` the work's
+  author, the same as its license block's ([Meta](#meta)).
+- An extension of a rules type is always homebrew
+  ([rulesets.md](rulesets.md#rules-data)).
 
 ### Meta
 
 `meta` records when an entry was created and revised, and where it came from:
 the source kind (`routine`, `revise`, `manual`, or `import`), the issues it
-fulfilled, the gap bucket that produced it ([generation.md](generation.md#gap-buckets)), and
-whether it's an SRD entry. It shows on the detail page as a provenance line and
+fulfilled, and the gap bucket that produced it ([generation.md](generation.md#gap-buckets)). It shows on the detail page as a provenance line and
 `meta.createdAt` is sortable, but meta isn't a tag.
 
 An imported entry ([Imports](generation.md#imports)) has
@@ -70,8 +106,8 @@ An imported entry ([Imports](generation.md#imports)) has
 license's id in `config/licenses.json`; `author`; and `url`, where the work is
 published. The block is required on an import and allowed nowhere else, and
 the validator fails an `id` the [source allowlist](licensing.md#source-allowlist)
-doesn't accept for imports. An imported entry is custom, so it never sets
-`meta.source.srd`. Its provenance line credits the author, linked to the
+doesn't accept for imports. An imported entry is homebrew: its `author` is
+the license block's `author`, never `"publisher"`. Its provenance line credits the author, linked to the
 source, and the license by name, linked to its legal code.
 
 ### Text fields
@@ -189,7 +225,9 @@ error, as is a malformed one such as `{ref:zombie}`.
 - A `RefOrText` field takes a ref or a plain string. A plain string names SRD
   content not in the library ("Fireball", or "Lightning Bolt (level 5
   version)"). Once the entry is in the library, new entries ref it. Text
-  follows the same rule.
+  follows the same rule. A ruleset may check it: `dnd-5e-2024` rejects a
+  creature spell written as text that names a library spell
+  ([Consistency checks](rulesets.md#consistency-checks)).
 - Every ref must resolve to an entry of its type, in the same ruleset, or to
   a ruleset primitive or group of its type ([Rules data](rulesets.md#rules-data)),
   which renders as its name linked to its anchor on its rules page. An entry
@@ -220,9 +258,9 @@ features and a species' traits are components.
   entry, so it has no card, gallery, facets, guideline, or gap buckets
   ([rulesets.md](rulesets.md#the-ruleset-module)).
 - **Stored like an entry**, at `content/<ruleset>/<type>/<id>.json`, with the
-  component envelope (`schemas/component.schema.json`): `ruleset`, `type`,
-  `id`, `name`, `stats`, and `meta`, and no `summary`, `description`, `tags`,
-  or `image`. The validator picks the envelope by whether the ruleset lists
+  component envelope (`schemas/component.schema.json`): `ruleset`,
+  `author`, `type`, `id`, `name`, `stats`, and `meta`, with `source` when its
+  parent has one, and no `summary`, `description`, `tags`, or `image`. The validator picks the envelope by whether the ruleset lists
   the type under `components`.
 - **The parent lists its components**, in order, by `{ "ref": … }` objects
   in its `stats`, and a component doesn't name its parent: its parent is the
@@ -336,7 +374,7 @@ allowed without a note.
   printed number that contradicts the entry's own stats is a misprint: the
   entry keeps the derived value, and the misprint is recorded in the PR.
 - SRD content is literal, so the ruleset's consistency warnings are skipped on
-  an SRD entry. Its errors still apply ([Validation](#validation)).
+  official content. Its errors still apply ([Validation](#validation)).
 - Only what the SRD doesn't provide is authored: a required one-line factual
   `summary`. `description` is omitted, since SRD stat blocks carry no lore. The
   guidelines' tone, naming, and balance targets don't apply.
@@ -354,7 +392,8 @@ has a fixed shape.
 
 **How SRD entries enter and change.**
 
-- An SRD entry sets `meta.source.srd: true`. It is added only by a request that
+- An SRD entry is official content: `source: "SRD 5.2"` and
+  `author: "publisher"` ([Source and author](#source-and-author)). It is added only by a request that
   asks for SRD content or by an SRD import stage
   ([generation.md](generation.md#srd-import)); gap fill never adds one.
 - Each SRD entry enters once; the uniqueness rules enforce it. If an SRD name
@@ -369,7 +408,7 @@ in the library: no SRD entry's exact name, of any type; no SRD proper noun (a
 specific person, place, or thing named in the SRD); and no concept that
 duplicates an SRD entry. A custom name may build on the common words in SRD
 names: "Fire Zombie" and "Ice Troll" are fine beside the SRD's Zombie and Troll.
-A custom entry omits `meta.source.srd`. The blocklist keeps non-SRD proper
+A custom entry is homebrew: its `author` is never `"publisher"`. The blocklist keeps non-SRD proper
 nouns out of every entry ([licensing.md](licensing.md#blocklist)).
 
 ### SRD manifest and coverage
@@ -438,8 +477,9 @@ Checks for every type and ruleset:
 |---|---|
 | File path matches `ruleset`, `type`, `id` | error |
 | ID unique within its type; name unique within its type, ignoring case (a component's within its parent) | error |
-| A component is listed by exactly one parent of an allowed type, and its id starts with the parent's | error |
-| Near-duplicate names, unless both entries are SRD entries | warning |
+| A component is listed by exactly one parent of an allowed type, its id starts with the parent's, and its `source` and `author` are the parent's | error |
+| `author` isn't the ruleset's `publisher` by name; an import's `author` is its license's | error |
+| Near-duplicate names, unless both entries are official | warning |
 | Every ref resolves and its type matches | error |
 | Text fields use only the markdown subset | error |
 | Blocklist match in any text-bearing field ([licensing.md](licensing.md#blocklist)) | error |
@@ -447,7 +487,7 @@ Checks for every type and ruleset:
 | `image` path valid and file exists; size limits | error / warning |
 
 Each ruleset adds its own checks ([rulesets.md](rulesets.md#consistency-checks)).
-The validator skips a ruleset's warnings on an SRD entry, whose numbers and
+The validator skips a ruleset's warnings on official content, whose numbers and
 text are literal; errors still apply. The build fails if validation fails, so
 nothing invalid reaches the site.
 

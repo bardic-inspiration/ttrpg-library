@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "shield-1-2-or-3",
   "name": "Shield, +1, +2, or +3",
@@ -39,8 +41,7 @@
       "kind": "routine",
       "issues": [
         178
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

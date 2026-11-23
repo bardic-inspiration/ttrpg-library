@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "weapon-1-2-or-3",
   "name": "Weapon, +1, +2, or +3",
@@ -42,8 +44,7 @@
       "kind": "routine",
       "issues": [
         178
-      ],
-      "srd": true
+      ]
     }
   }
 }

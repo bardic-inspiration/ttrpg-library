@@ -1,0 +1,54 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "noon-pillar",
+  "name": "Noon Pillar",
+  "summary": "Calls a column of searing sunlight down from the sky.",
+  "stats": {
+    "level": 8,
+    "school": "evocation",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/wizard"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 500
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a sliver of sunstone"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "A 60-foot-radius, 200-foot-high Cylinder of sunlight descends on a point within range. Creatures in it make a Dexterity saving throw, taking 12d10 Radiant damage on a failed save or half as much on a success."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

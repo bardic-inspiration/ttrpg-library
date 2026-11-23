@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "mysterious-deck",
   "name": "Mysterious Deck",
@@ -57,8 +59,7 @@
       "kind": "routine",
       "issues": [
         179
-      ],
-      "srd": true
+      ]
     }
   }
 }

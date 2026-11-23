@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "scroll-of-third-hour-rain",
+  "name": "Scroll of Third-Hour Rain",
+  "summary": "A scroll that casts a storm over a small area.",
+  "description": "The paper is damp and the ink runs, but the words stay legible. It rains on the owner at inconvenient times.",
+  "stats": {
+    "category": "scroll",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/call-lightning"
+        }
+      }
+    ],
+    "effect": "This scroll bears the *Call Lightning* spell. Using an action to read it casts the spell once at 3rd level, using DC 15 for its saving throw, and the scroll is consumed."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

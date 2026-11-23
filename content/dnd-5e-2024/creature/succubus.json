@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "creature",
   "id": "succubus",
   "name": "Succubus",
@@ -115,8 +117,7 @@
       "kind": "routine",
       "issues": [
         134
-      ],
-      "srd": true
+      ]
     }
   }
 }

@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "sunward-scimitar",
+  "name": "Sunward Scimitar",
+  "summary": "A curved blade that glows faintly in sunlight and harries the undead.",
+  "description": "Its edge is polished until it throws a small spot of light on whatever it points at. Desert caravans carry them as much for comfort as for defense.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/scimitar"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. When you hit an Undead with it, the target takes an extra 1d4 Radiant damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "lanternbearer-s-splint",
+  "name": "Lanternbearer's Splint",
+  "summary": "Splint armor that glows when you will it, like a lantern.",
+  "description": "Patrols on the long road wear it so their comrades can find them in the dark. The plates are the dull gold of old brass.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/splint-armor"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to AC while wearing this armor. As a Bonus Action, you can cause it to shed Bright Light in a 10-foot radius and Dim Light for an additional 10 feet, or end the light."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

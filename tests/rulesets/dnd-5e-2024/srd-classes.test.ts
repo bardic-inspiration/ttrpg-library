@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { featuresTable } from '../../../site/src/lib/class.ts';
 import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { ClassStats, DerivedClass, LinkedClass } from '../../../rulesets/dnd-5e-2024/types.ts';
+import { isOfficial } from '../../../rulesets/module.ts';
 import { FIXTURES } from '../../helpers.ts';
 
 const CONTENT = join(import.meta.dirname, '../../../content/dnd-5e-2024');
@@ -23,10 +24,10 @@ const entries = (await Promise.all(['class', 'class-feature', 'class-option', 's
   id: string;
   name: string;
   stats: unknown;
-  meta: { source: { srd?: true } };
+  author: string;
 }[];
 const names = new Map(entries.map((e) => [`${e.type}/${e.id}`, e.name]));
-const classes = entries.filter((e) => e.type === 'class' && e.meta.source.srd);
+const classes = entries.filter((e) => e.type === 'class' && isOfficial(e));
 const derivedOf = (e: (typeof entries)[number]) =>
   ({ ...ruleset.derive('class', e.stats), ...ruleset.deriveLinked!('class', `class/${e.id}`, e.stats, entries) }) as unknown as DerivedClass & LinkedClass;
 /** A rendered cell as plain text: each link token as its target's name, escapes dropped. */

@@ -96,16 +96,18 @@ reports the question instead.
 
 ### Defaults
 
-`config/defaults.json` holds the ruleset, count, tags, gap-fill settings, and
-the validation retry budget a run uses. Defaults apply only to fields a request
-leaves out, and request tags merge over default tags. `count` and
+`config/defaults.json` holds the ruleset, count, the `author` and optional
+`source` of custom entries, tags, gap-fill settings, and the validation retry
+budget a run uses. Defaults apply only to fields a request leaves out, and
+request tags merge over default tags. A `source:` or `author:` line in a
+request's tags is the entry's field, not a tag, and takes the place of the
+default. The default `author` can't be `"publisher"`, and neither `source` nor
+`author` is a default tag key ([Source and author](content-model.md#source-and-author)). `count` and
 `gapFill.count` are whole numbers of at least 1. A request's count is taken on
 trust, and no batch has a size limit. `scripts/generate/defaults.ts` loads and
 checks the file and applies it to a request.
 
-**Gap fill is off** (`gapFill.enabled: false`) until v2 is built. Every entry
-generated in the v1 shape is one more for v2's schema changes to migrate.
-Run-order step 6 skips while it's off.
+`gapFill.enabled` turns run-order step 6 on or off.
 
 ### The generate skill
 
@@ -123,13 +125,14 @@ bucket, or an SRD import stage. Its steps:
    values in prose, and use `adjust` only for a deliberate deviation, explained
    in the PR body. For an SRD request, transcribe the SRD entries faithfully
    instead.
-4. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
-   `meta.source.issues` (or `meta.source.gapFill`), plus `meta.source.srd: true`
-   on SRD entries. Apply request and default tags.
+4. Set `source` and `author` ([Source and author](content-model.md#source-and-author)):
+   `"SRD 5.2"` and `"publisher"` on SRD entries, and the request's on custom
+   ones. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
+   `meta.source.issues` (or `meta.source.gapFill`). Apply request and default tags.
 5. Run `npm run validate`; fix and retry up to `validateRetries` times. If it
    still fails, comment the errors on the issue, remove `in-progress`, and stop
    without a PR. A gap-fill run or inline request reports the errors in the run
-   output instead.
+   output instead. Once it passes, go through the [Self-review](#self-review).
 6. Branch `gen/<issue-numbers-or-gap>-<YYYYMMDD>` (issue numbers ascending:
    `gen/12-14-20261102`, `gen/gap-spell-20261102`; an inline request uses
    `gen/inline-<type>-<YYYYMMDD>`), commit `Add <n> <type> entries`, push, and
@@ -139,11 +142,48 @@ bucket, or an SRD import stage. Its steps:
 batches), labeled `content` automatically, with a body from
 `.github/PULL_REQUEST_TEMPLATE/content.md`: a table of each entry (name, type,
 the type's summary field, summary); any validator warnings, including every
-formula adjustment with its reason; one `Closes #n` per fulfilled issue; and the
-bucket filled, for gap fill.
+formula adjustment with its reason; the ticked Self-review list; one `Closes #n`
+per fulfilled issue; and the bucket filled, for gap fill.
 
 A test checks that every repo path, npm script, and `config/defaults.json` key
 the skill names exists, and that `content.md` has the body sections above.
+
+### Self-review
+
+Content CI runs only `npm run validate` and `npm run build`
+([CI checks](workflow.md#ci-checks)), and the owner reviews what's left. To
+keep that review short, the session that opens a content PR, or pushes to
+one, first checks its batch against this list, and ticks each item in the PR
+body's "Self-review" section. The `generate` and `revise` skills run it after
+validation passes.
+
+1. **Validate and build pass.** `npm run validate` and `npm run build`.
+2. **The tests pass.** `npm test`. Content CI doesn't run it, but the tests
+   load the whole library, so a new entry can break one (#351, #360). If a
+   test fails on an entry and fixing the entry would break the content rules,
+   the bug is in code: file a dev issue, place it in the dev queue, name it
+   in the Self-review section, and leave the item unticked. The PR waits for
+   the fix.
+3. **IDs.** Each new ID is its name's slug, apostrophes dropped, and unique
+   in its type ([IDs and names](content-model.md#ids-and-names)).
+4. **Links.** Every library entry or rule an entry mentions or uses is a ref,
+   including a creature's spells and a spell's classes. Text stays only where
+   the library has no such entry ([References](content-model.md#references)).
+5. **Inputs only.** No value the ruleset derives is written, derived numbers
+   in prose are tokens, and each `adjust` is deliberate and listed under
+   Warnings ([Inputs and derived values](rulesets.md#inputs-and-derived-values),
+   [Text tokens](rulesets.md#text-tokens)).
+6. **Warnings.** Every validator warning is under Warnings, with its reason.
+7. **Names and text.** A custom entry reuses no SRD entry's exact name and no
+   SRD proper noun, and no text field holds a blocklisted term
+   ([SRD and custom entries](content-model.md#srd-and-custom-entries),
+   [Blocklist](licensing.md#blocklist)). An SRD entry matches the SRD PDF.
+8. **Scope.** The PR changes only the batch's files under `content/` (and
+   `ATTRIBUTION.md` for an import), and the Entries table lists every new or
+   revised entry, dependencies included, matching the count in the title.
+
+A test checks that the content PR template has the Self-review section with
+one item per entry above, and that both skills cite this section.
 
 ### Revisions
 
@@ -163,7 +203,7 @@ on a routine PR and `revise` issues.
   is pending if no reply with that marker follows it in its thread (inline) or
   after it (general).
 - **Action.** Edit only the affected files, set `meta.updatedAt`, re-validate,
-  push one commit per round (`Revise <ids>: <short reason>`), reply to each
+  go through the [Self-review](#self-review), push one commit per round (`Revise <ids>: <short reason>`), reply to each
   handled comment with what changed, and resolve the inline threads it
   addressed.
 - **SRD entries.** A revision of an SRD entry only brings it closer to the SRD.
@@ -208,20 +248,17 @@ every registered type's guideline exists at that path with those sections, that
 every `{...}` in it is a token the ruleset defines, and that it passes the
 blocklist.
 
-### Schedule
+### Routine prompts
 
-`docs/routines.md` holds the canonical routine prompts and the schedule:
-
-- **Scheduled routine:** weekly, Monday morning local time, one run. A request
-  without a count gets the default.
-- **On-demand routine:** the same prompt, with issue numbers or an inline
-  request added.
+`docs/routines.md` holds the canonical routine prompts: one for a full run,
+and the same prompt with issue numbers or an inline request added for an
+on-demand run.
 
 The prompts tell the run to follow the run order written in `docs/routines.md`
 on `main`, so changing the run order is a reviewed dev PR, not an edit to the
 routine's settings. A test checks that every path, script, and defaults key the
 file names exists, that it lists the run-order steps in order, and that the
-on-demand prompts are the scheduled prompt with inputs added.
+on-demand prompts are the full-run prompt with inputs added.
 
 ### Gap buckets
 
@@ -264,9 +301,11 @@ every content rule applies to them.
   side ([Translators](export.md#translators)) on the file. Names in
   structured fields resolve against the library and its rules and become
   refs; names in text stay plain. It writes each entry to `content/` with
+  the work's title as `source` and its author as `author`
+  ([Source and author](content-model.md#source-and-author)),
   `meta.source.kind: import`, the issue, and `meta.source.license` (the
-  license id, author, and source URL), `tags` of `defaults.tags` plus
-  `author`, and a drafted `summary` the run rewrites. It appends the work's
+  license id, author, and source URL), `tags` of `defaults.tags`, and a
+  drafted `summary` the run rewrites. It appends the work's
   line to `ATTRIBUTION.md` ([Imported works](licensing.md#imported-works)),
   and prints the issue's skip-list section. It exits 2 with the reason when
   the issue is rejected: an `--issue` that isn't a positive integer, a
@@ -295,7 +334,7 @@ The full SRD import bypassed requests: each stage was a sub-issue of its
 milestone, without the `request` label, so routines never took it, worked in
 sessions the owner started. Every stage is done. SRD entry upkeep (link
 passes, corrections, review) works the same way, with its issue under the
-current milestone or a track issue ([Dev Queue](../AGENTS.md#dev-queue)),
+current queue (a milestone, a "Spot Fixes" issue, or a track issue) ([Dev Queue](../AGENTS.md#dev-queue)),
 through the `generate` and `revise` skills. A stage session ran the
 `generate` skill on a batch picked from
 `npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress`
@@ -318,7 +357,7 @@ plain-text mentions of library entries into links).
 - `rulesets/<ruleset>/guidelines/`: the guidelines.
 - `config/defaults.json` and `scripts/generate/` (defaults, the gap-fill
   picker); `scripts/import/` (the import script) and `config/licenses.json`; `lib/buckets.ts` counts entries per bucket and builds labels.
-- `docs/routines.md`: the prompts, schedule, and run order.
+- `docs/routines.md`: the prompts and run order.
 - `.github/ISSUE_TEMPLATE/content-request.yml`, `revise-request.yml`,
   `import-request.yml`, and `.github/PULL_REQUEST_TEMPLATE/content.md`.
 

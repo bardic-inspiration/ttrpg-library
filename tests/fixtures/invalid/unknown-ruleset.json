@@ -1,5 +1,6 @@
 {
   "ruleset": "pathfinder-2e",
+  "author": "bardic-inspiration",
   "type": "creature",
   "id": "cinder-hound",
   "name": "Cinder Hound",

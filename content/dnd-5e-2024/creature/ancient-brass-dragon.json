@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "creature",
   "id": "ancient-brass-dragon",
   "name": "Ancient Brass Dragon",
@@ -194,8 +196,7 @@
       "kind": "routine",
       "issues": [
         134
-      ],
-      "srd": true
+      ]
     }
   }
 }

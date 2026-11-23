@@ -5,7 +5,7 @@ import { attackBonus, deriveCreature, saveDc } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
 import type { Action, BackgroundStats, CreatureStats, DerivedAction, DerivedCreature, FeatStats, ItemStats, SpeciesStats, SpellStats, Tables } from './types.ts';
 import { ACTION_LISTS } from './types.ts';
-import type { Issue } from '../module.ts';
+import type { Issue, NameLookup } from '../module.ts';
 
 const MAX_ATTACK_BONUS = 17;
 const MAX_SAVE_DC = 30;
@@ -250,6 +250,25 @@ export function checkBackgroundLinks(stats: BackgroundStats, target: (key: strin
   if (feat?.type !== 'feat') return [];
   const category = (feat.stats as FeatStats).category;
   return category === 'origin' ? [] : [{ level: 'error', path: 'stats.feat', message: `${stats.feat.ref} is a ${category} feat; a background grants an origin feat` }];
+}
+
+/**
+ * A creature spell written as text is SRD content the library lacks, so text that names a spell the
+ * library has is a ref instead (docs/rulesets.md#consistency-checks).
+ */
+export function checkCreatureLinks(stats: CreatureStats, named: NameLookup): Issue[] {
+  const spellcasting = stats.spellcasting;
+  if (!spellcasting) return [];
+  const lists = [
+    { path: 'stats.spellcasting.atWill', spells: spellcasting.atWill ?? [] },
+    ...Object.entries(spellcasting.perDay ?? {}).map(([uses, spells]) => ({ path: `stats.spellcasting.perDay.${uses}`, spells: spells ?? [] })),
+  ];
+  return lists.flatMap(({ path, spells }) =>
+    spells.flatMap((spell, i) => {
+      const key = typeof spell === 'string' ? named('spell', spell) : undefined;
+      return key ? [{ level: 'error' as const, path: `${path}[${i}]`, message: `"${spell}" is ${key} in the library; write it as a ref` }] : [];
+    }),
+  );
 }
 
 /** A species' speed is a multiple of 5, as a creature's is (docs/rulesets.md#species). */

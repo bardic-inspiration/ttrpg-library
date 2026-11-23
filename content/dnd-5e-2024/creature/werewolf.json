@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "creature",
   "id": "werewolf",
   "name": "Werewolf",
@@ -124,8 +126,7 @@
       "kind": "routine",
       "issues": [
         132
-      ],
-      "srd": true
+      ]
     }
   }
 }

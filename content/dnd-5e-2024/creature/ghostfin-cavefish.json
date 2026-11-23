@@ -1,0 +1,87 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "ghostfin-cavefish",
+  "name": "Ghostfin Cavefish",
+  "summary": "A finger-length, eyeless fish so clear you can see its heart beating, which nips at anything that wades into its pool.",
+  "description": "Ghostfins school in the still black pools of deep caves, where nothing has ever needed eyes. Travelers notice them only as a cold flicker against the shins, and then as a row of tiny bites. Cave-dwelling folk keep a few in a jar as a warning: when the fish go still, something large is moving in the water.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "tiny"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 11
+    },
+    "hitDice": 1,
+    "speed": {
+      "walk": 5,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 2,
+      "dex": 13,
+      "con": 10,
+      "int": 1,
+      "wis": 10,
+      "cha": 3
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "senses": {
+      "blindsight": 30,
+      "note": "blind beyond this radius"
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Glass Body",
+        "kind": "other",
+        "text": "While underwater, the cavefish has {ref:glossary/advantage} on Dexterity (Stealth) checks."
+      },
+      {
+        "name": "Water Breathing",
+        "kind": "other",
+        "text": "The cavefish can breathe only underwater."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

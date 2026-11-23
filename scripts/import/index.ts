@@ -1,8 +1,8 @@
 // The import script (docs/generation.md#imports): runs a translator's import side on an import
 // issue's file and turns what it returns into library entries. It checks the license against the
 // source allowlist, resolves names against the library, skips what a custom entry can't be (an SRD
-// name, a blocklisted term, a name or id the library already has), writes `summary`, `tags`, and
-// `meta`, and returns the skip list and the work's ATTRIBUTION.md line. The `generate` skill runs it.
+// name, a blocklisted term, a name or id the library already has), writes `source`, `author`, `summary`,
+// `tags`, and `meta`, and returns the skip list and the work's ATTRIBUTION.md line. The `generate` skill runs it.
 
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -42,6 +42,9 @@ export interface ImportRequest {
 
 /** A written entry: the envelope, ready to save at `content/<ruleset>/<type>/<id>.json`. */
 export interface WrittenEntry extends ImportedEntry {
+  /** The work's title and author (docs/content-model.md#source-and-author); the author as its license block credits it. */
+  source: string;
+  author: string;
   summary: string;
   tags: Tags;
   meta: {
@@ -133,13 +136,15 @@ export function runImport(request: ImportRequest, library: ImportLibrary): Impor
     const label = library.registry[request.ruleset]?.types[entry.type]?.label ?? entry.type;
     const written: WrittenEntry = {
       ruleset: entry.ruleset,
+      source: request.work,
+      author: request.author,
       type: entry.type,
       id: entry.id,
       name: entry.name,
       summary: draftSummary(label, request.author),
       ...(entry.description === undefined ? {} : { description: entry.description }),
       stats: entry.stats,
-      tags: { ...request.tags, author: request.author },
+      tags: { ...request.tags },
       meta: {
         createdAt: request.date,
         source: { kind: 'import', issues: [request.issue], license: { id: request.license, author: request.author, url: request.url } },

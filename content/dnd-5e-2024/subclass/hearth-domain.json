@@ -1,0 +1,39 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "hearth-domain",
+  "name": "Hearth Domain",
+  "summary": "A Cleric subclass: kindle warmth and welcome.",
+  "stats": {
+    "class": {
+      "ref": "class/cleric"
+    },
+    "tagline": "Kindle Warmth and Welcome",
+    "text": "Clerics of the Hearth Domain tend the fires that gather people together. Their magic shelters, feeds, and warms, and it burns hot against those who would break a household.",
+    "features": [
+      {
+        "ref": "class-feature/hearth-domain-hearth-blessing"
+      },
+      {
+        "ref": "class-feature/hearth-domain-kindled-rebuke"
+      },
+      {
+        "ref": "class-feature/hearth-domain-sheltering-flame"
+      },
+      {
+        "ref": "class-feature/hearth-domain-eternal-hearth"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

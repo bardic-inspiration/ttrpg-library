@@ -1,0 +1,57 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "remake-the-world",
+  "name": "Remake the World",
+  "summary": "Reshapes the surrounding terrain to your will.",
+  "stats": {
+    "level": 9,
+    "school": "transmutation",
+    "classes": [
+      {
+        "ref": "class/druid"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 500
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a handful of clay worth 1000+ GP",
+        "costGp": 1000
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "hour",
+      "concentration": false
+    },
+    "effect": "You reshape terrain in a 500-foot-radius area, raising hills, moving water, and creating walls up to 100 feet high. Structures in the area collapse or shift as you choose, and creatures inside make a Dexterity saving throw to avoid falling."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

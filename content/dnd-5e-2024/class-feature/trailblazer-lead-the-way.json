@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "trailblazer-lead-the-way",
+  "name": "Lead the Way",
+  "stats": {
+    "levels": [
+      7
+    ],
+    "text": "Allies who travel with you ignore {ref:glossary/difficult-terrain} while you lead, and you and they can move at a fast pace without penalty to noticing threats."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

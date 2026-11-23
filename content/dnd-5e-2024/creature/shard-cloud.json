@@ -1,0 +1,125 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "shard-cloud",
+  "name": "Shard Cloud",
+  "summary": "A whirling cloud of splintered rib and skull fragments that shreds everything within a short, bright circle.",
+  "description": "Crypts that have been collapsed or burned sometimes leave a hum in the air. It is the sound of broken bone that hasn't been told it's done.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "swarm": "small",
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 0,
+      "fly": 30,
+      "hover": true
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 16,
+      "con": 12,
+      "int": 2,
+      "wis": 10,
+      "cha": 3
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/poisoned"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        },
+        {
+          "ref": "condition/stunned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": []
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Small creature. The swarm can't regain Hit Points or gain Temporary Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Whirling Shards",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in the swarm's space"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "slashing"
+          }
+        ],
+        "onSuccess": "Half damage."
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

@@ -9,7 +9,7 @@ warranted, names, power, prose, and links to the SRD conditions.
 These rules are for custom conditions only. The SRD conditions are ruleset
 primitives in `rulesets/dnd-5e-2024/rules/condition/`, reproduced faithfully
 and never authored as entries. A custom condition is always a custom entry:
-it never sets `meta.source.srd`.
+its `author` is never `"publisher"`.
 
 ## Tone and voice
 

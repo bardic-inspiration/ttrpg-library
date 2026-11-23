@@ -27,7 +27,7 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>`: the sort the Library opens on from the type's old gallery URL and its detail page's type link ([Redirects](#redirects)) |
-| `defaultFilters` | Filter tree nodes that start open while the type is checked; every other facet and tag stays in the tree, closed |
+| `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet and tag stays in the tree, closed |
 | `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, species, class, subclass), which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
@@ -80,8 +80,8 @@ Two flags change what a facet's values are:
 3. Astro builds static pages, reading the full entries and derived values at
    build time.
 
-Each `library.json` record holds the entry's `id`, `ruleset`, `type`, `name`,
-`summary`, `url` (the detail page under the site base), `image` (the stored
+Each `library.json` record holds the entry's `id`, `ruleset`, `source` (or
+`null`), `author`, `type`, `name`, `summary`, `url` (the detail page under the site base), `image` (the stored
 path, or `null`), `facets`, `tags` (or `{}`), `createdAt`, `refs`, `refBy`, and
 `search`:
 
@@ -157,8 +157,10 @@ Each page in a ruleset's `rules/pages.json` builds at
   [Action]"), or its `stats` as
   labeled lines (the group it sits in isn't repeated). A group's shows its name, its `note`,
   and its `text`. Each lists its forward refs and back-refs under
-  the ruleset's labels, like a detail page's Links. A union group lists its
-  members as links.
+  the ruleset's labels, like a detail page's Links, with its links to
+  homebrew (an extension or a custom entry) after them under a "Homebrew"
+  label, as an SRD page's [Homebrew links](#detail-page). A union group
+  lists its members as links.
 - **Cross-listed primitives**, from a primitives block's `crossList`: each
   sits among the block's primitives by name as a heading with its type in
   brackets, "Blinded [Condition]", linked to its section on its own page,
@@ -242,7 +244,7 @@ redirect to the Library with the matching filter set
 - `/<ruleset>/<type>/` to `/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<type>`,
   so the view opens as the type's gallery did: its registry `defaultSort`
   (left out when it is `name:asc`), and its `defaultFilters` open because the
-  type is checked. A detail page's type link goes to the same view.
+  page opens with the type checked. A detail page's type link goes to the same view.
 
 **Renamed types.** The registry lists a type's earlier keys under `formerly`,
 such as `item`'s `["magic-item"]`, and from them:
@@ -273,7 +275,10 @@ phones and tablets it stacks above the results in a container closed by
 default, so results show on the first screen; a Filters button
 (`aria-expanded`) opens it. The breakpoint and the columns are tokens in
 `tokens/components.css` ([styling.md](styling.md#tokens)). Sort, the result
-count, and the set actions head the results.
+count, and the set actions head the results. The page keeps the scrollbar's
+room (`scrollbar-gutter: stable` in `layout.css`) whether or not it scrolls, so
+the menu and results don't shift sideways as filtering makes the page shorter
+or longer than the window.
 
 **Cards.** Each card shows art (only when the entry has it), name, type badge,
 `cardFields`, and summary. A boolean card field (concentration, ritual,
@@ -286,9 +291,19 @@ to four on wide screens.
 (`site/src/lib/gallery/tree.ts`): type, then field, then any subfield, then
 value, such as Creature › Immunities › Conditions › Poisoned.
 
-- **Rulesets.** A Ruleset node, each ruleset a checkbox for the ruleset
-  filter (`f.ruleset`), comes first when the library holds more than one
-  ruleset, or the filter is active.
+- **Ruleset.** A Ruleset node always comes first, even when the library holds
+  one ruleset. Inside it, each ruleset the library has entries of, or that is
+  checked, is a checkbox for the ruleset filter (`f.ruleset`) with its count
+  among the results of every other filter, and a disclosure holding its
+  **Source** and **Author** filters (`f.source`, `f.author`) over its own
+  entries ([Source and author](content-model.md#source-and-author)). An
+  author of `"publisher"` reads as the ruleset's publisher, from
+  `ruleset.json` (`rulesetPublishers` in `site/src/lib/rules.ts`), such as
+  Wizards of the Coast. Source and author follow the facet rules below
+  (values, counts, a shared path), with a ruleset in place of a type, except
+  that a ruleset's official sources, those official content carries, are
+  pinned above its other sources, each part keeping its order: SRD 5.2 comes
+  before a homebrew collection whatever its name.
 - **Types.** Then the types, each a checkbox for the type filter (`f.type`)
   with its count, the entries of it among the results (so checking one type
   leaves the others at 0), and a disclosure holding its facets. A type shows when the
@@ -301,7 +316,8 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   reads as AC. A facet shows when some entry of its type has a value for it,
   or it's active.
 - **Tags** follow the types as one Tags node, holding every tag key in the
-  library and any tag filtered on.
+  library and any tag filtered on. Source and author aren't tags, so they
+  never appear here.
 - **Values.** An enum facet or tag lists its values vertically as checkboxes,
   each with its count: the entries of its type it matches under the search and
   every other active filter. Values come in declared order (ordered enums),
@@ -312,15 +328,19 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   as a number or is empty, so `1/` and `1.` on the way to `1/8` and `1.5`
   change nothing. While an input has focus its text stays as typed; when focus
   leaves, it shows the filter's value (`0.125` reads `1/8` for CR).
-- **Open nodes.** A checked type's registry `defaultFilters` start open, in
-  its node and, for a tag, in Tags. Every node holding an active filter starts
-  open, down to the value. The reader opens and closes the rest.
+- **Open nodes.** When the tree first shows, from the page's URL, a checked
+  type's registry `defaultFilters` start open, in its node and, for a tag, in
+  Tags, and every node holding an active filter starts open, down to the value
+  (`openAtStart` in `tree.ts`). From then on, only a node's own disclosure opens
+  or closes it, and only that node: checking or unchecking a type or a value,
+  and Clear filters, never opens or closes any node. A node keeps its state while
+  a node around it is closed.
 - **A shared path** stays in its own type's part of the tree. An enum value
-  shows checked, and opens its node, only under the types whose entries have
-  it, so checking Feat › Category › Origin leaves Item › Category closed; a
+  shows checked, and starts open, only under the types whose entries have it,
+  so a link checking Feat › Category › Origin leaves Item › Category closed; a
   selected value no entry has shows under each type, so it can be cleared. A
-  shared range opens only under a checked type, or under each type when none
-  is checked.
+  shared range starts open only under a checked type, or under each type when
+  none is checked.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
   filter's value never matches it. A path two types share (`stats.level` on
   spells and feats) is one filter: each type lists its own entries' values, and
@@ -331,9 +351,15 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   `noun` and a group by its `qualifier`, else by name: Equipment › Group ›
   Weapon › Martial › Martial Melee Weapons.
 
-**Sort.** By name, created date, or any facet, ascending or descending. Every
-facet of every type is a sort choice, so CR is offered alongside name.
-Ordered enums sort by declared order, an array
+**Sort.** By name, created date, or a facet, ascending or descending. The
+menu offers the facets of the types the ruleset and type filters allow, in
+registry order (`sortChoices` in `site/src/lib/gallery/config.ts`): with Spell
+checked, it lists name, date added, level, school, and the spell's other
+facets, but not CR. With no type checked, every type's facets are offered. A
+path two checked types share (`stats.level` on spells and feats) is one
+choice, labeled as the first of them in registry order labels it. When a
+filter change leaves the chosen sort off the menu, the sort returns to
+`name:asc`. Ordered enums sort by declared order, an array
 facet (size) by its first item. Ties break by name, then ruleset, type, and id,
 so the order never depends on `library.json` order. Entries missing the sort
 value go last in either direction. The Library starts on `name:asc`.
@@ -349,10 +375,11 @@ can be bookmarked or linked:
 Ranges use `min..max` (either side may be empty). Keys and values are
 URL-encoded, so a comma inside a value is `%2C` and a bare comma separates
 values. Enum values are case-folded. The type filter is `f.type`. Unknown
-parameters, filters on paths the Library doesn't have, unknown sort paths, and
-malformed values are ignored. The gallery rewrites the URL as the view changes,
-replacing the history entry, in one canonical form: filters in registry order,
-then tags by key, with the default sort and ignored parameters left out.
+parameters, filters on paths the Library doesn't have, a sort the filters
+don't offer (wherever the filters come in the query), and malformed values are
+ignored; of several sorts, the last one offered applies. The gallery rewrites the URL as the view changes,
+replacing the history entry, in one canonical form: the ruleset, source,
+author, and type filters, then the facets in registry order, then tags by key, with the default sort and ignored parameters left out.
 
 **Selection and set actions.**
 
@@ -397,6 +424,14 @@ indexes.
 - Forward refs and back-refs as links
   ([content-model.md](content-model.md#references)); a page type's include
   its components' ([content-model.md](content-model.md#components)).
+- **Homebrew links.** On an official entry's page, links to homebrew entries
+  ([Source and author](content-model.md#source-and-author)) are moved out of Links into a
+  **Homebrew** section after it, under the same labels: a custom spell that
+  names an SRD class is listed there under "Spells", not in the class's
+  spell list. A label with links on both sides shows in both sections, and
+  a page without homebrew links has no Homebrew section. A homebrew page's
+  links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`; filtering
+  homebrew by volume is #353).
 - The type, linked to the Library filtered to it ([Redirects](#redirects)).
 - Tags as chips; a chip opens the Library filtered to the entry's ruleset,
   type, and that tag.

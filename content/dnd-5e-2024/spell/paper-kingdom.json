@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "paper-kingdom",
+  "name": "Paper Kingdom",
+  "summary": "Creates an illusory kingdom whose inhabitants appear real.",
+  "stats": {
+    "level": 8,
+    "school": "illusion",
+    "classes": [
+      {
+        "ref": "class/bard"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/druid"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 300
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a folded paper crown"
+      }
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 8,
+      "unit": "hour",
+      "concentration": true
+    },
+    "effect": "You create a vast illusory landscape within a 1-mile-radius area. A creature inside makes an Intelligence saving throw to realize it is illusory. The illusion cannot deal damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

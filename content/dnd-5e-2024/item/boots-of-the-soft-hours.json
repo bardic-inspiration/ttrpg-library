@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "boots-of-the-soft-hours",
+  "name": "Boots of the Soft Hours",
+  "summary": "Boots that let you walk without a sound.",
+  "description": "Burglars say they were left by someone who never wanted to be heard. They have been resoled many times.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "While you wear these boots, you have Advantage on Dexterity (Stealth) checks that rely on moving silently, and your steps leave no tracks you don't wish to leave."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

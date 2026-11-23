@@ -5,9 +5,11 @@
   "description": "Fixed keys, tags, meta, and image for every entry in every ruleset. `stats` is validated by the ruleset's type schema.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["ruleset", "type", "id", "name", "summary", "stats", "meta"],
+  "required": ["ruleset", "author", "type", "id", "name", "summary", "stats", "meta"],
   "properties": {
     "ruleset": { "description": "The ruleset: a folder in rulesets/ and a key in config/types.json, such as \"dnd-5e-2024\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "source": { "description": "The sourcebook, collection, or other work the entry belongs to within its ruleset, such as \"SRD 5.2\" (docs/content-model.md#source-and-author). Omitted when it belongs to none.", "type": "string", "minLength": 1, "maxLength": 120 },
+    "author": { "description": "Who wrote the entry: \"publisher\" for the ruleset's publisher, whose entries are official content, or anyone else's name for homebrew (docs/content-model.md#source-and-author).", "type": "string", "minLength": 1, "maxLength": 120 },
     "type": { "description": "The entry's type, listed in the ruleset's ruleset.json, such as \"creature\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
     "id": { "description": "The slug of the name at creation. Unique within the type, equal to the file name, and never changed after merge.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "minLength": 3, "maxLength": 64 },
     "name": { "description": "Display name, unique within the type ignoring case. For an SRD entry, the SRD name exactly.", "type": "string", "minLength": 1, "maxLength": 80 },
@@ -15,9 +17,9 @@
     "description": { "description": "Lore and flavor in the markdown subset; not rules text. Omitted on SRD entries.", "type": "string", "minLength": 1, "markdownSubset": true },
     "stats": { "description": "Rules data, validated by the ruleset's schema for the type. Inputs only, never a derived value.", "type": "object" },
     "tags": {
-      "description": "Open, flat organization; every key is a gallery filter. Conventional keys: world, campaign, theme, environment, author.",
+      "description": "Open, flat organization; every key is a gallery filter. Conventional keys: world, campaign, theme, environment. `source` and `author` are envelope fields, not tags.",
       "type": "object",
-      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$", "not": { "enum": ["source", "author"] } },
       "additionalProperties": {
         "anyOf": [
           { "type": "string" },
@@ -45,7 +47,6 @@
             "kind": { "description": "\"routine\" for a generated entry, \"revise\" for a revision, \"manual\" for a hand-made entry, \"import\" for an imported one.", "enum": ["routine", "revise", "manual", "import"] },
             "issues": { "description": "The issues the entry fulfilled.", "type": "array", "items": { "type": "integer", "minimum": 1 } },
             "gapFill": { "description": "The gap bucket's label, when gap fill created the entry.", "type": "string", "minLength": 1 },
-            "srd": { "description": "Set on an SRD entry, reproduced unmodified from SRD 5.2; omitted on a custom entry.", "const": true },
             "license": {
               "description": "An imported entry's source and license (docs/content-model.md#meta): required on an import, and only there.",
               "type": "object",
@@ -59,7 +60,7 @@
             }
           },
           "if": { "properties": { "kind": { "const": "import" } } },
-          "then": { "required": ["license"], "not": { "required": ["srd"] } },
+          "then": { "required": ["license"] },
           "else": { "not": { "required": ["license"] } }
         }
       }

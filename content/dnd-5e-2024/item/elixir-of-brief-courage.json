@@ -1,0 +1,27 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "elixir-of-brief-courage",
+  "name": "Elixir of Brief Courage",
+  "summary": "An elixir that burns away fear for a minute.",
+  "description": "The bottle is stamped with a rampant lion that nobody can identify. It tastes of pepper.",
+  "stats": {
+    "category": "potion",
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "When you drink this potion, for 1 minute you are immune to the {ref:condition/frightened} condition, and any such condition on you ends."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

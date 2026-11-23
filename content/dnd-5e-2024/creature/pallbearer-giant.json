@@ -1,0 +1,123 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "pallbearer-giant",
+  "name": "Pallbearer Giant",
+  "summary": "A risen giant that still carries its own coffin-sized burden.",
+  "description": "Pallbearer giants walk the ridgelines in funeral procession, hauling a corpse in their arms for a burial that never arrives. The thing they carry is the only gentle part of them.",
+  "stats": {
+    "size": [
+      "huge"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 23,
+      "dex": 8,
+      "con": 20,
+      "int": 5,
+      "wis": 10,
+      "cha": 7
+    },
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Giant"
+      ]
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Undead Fortitude",
+        "kind": "other",
+        "text": "If damage reduces the giant to 0 Hit Points, it must make a Constitution saving throw with a {dc=5} plus the damage taken, unless the damage is Radiant or from a Critical Hit. On a success, the giant drops to 1 Hit Point instead."
+      },
+      {
+        "name": "Funeral Tread",
+        "kind": "other",
+        "text": "Creatures within 10 feet of the giant that are Large or smaller have their Speed halved."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The giant makes two Slam attacks, or one Slam attack and one Hurl Corpse."
+      },
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 15,
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Hurl Corpse",
+        "kind": "save",
+        "ability": "str",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 30-foot-long, 10-foot-wide Line"
+        },
+        "damage": [
+          {
+            "dice": "4d8",
+            "type": "bludgeoning"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "onFailure": "and the target has the {ref:condition/prone} condition.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}

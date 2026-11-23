@@ -1,0 +1,105 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "etchmaw-newt",
+  "name": "Etchmaw Newt",
+  "summary": "A slick gray cave newt that spits acid and leaves a hissing smear on anything that strikes it.",
+  "description": "Etchmaws hunt the warm runoff streams near deep springs, where the stone is pocked with the little craters of their spittle. Their skin weeps a corrosive slime that keeps most predators away. Prospectors follow the craters, since the newts favor water that runs past ore.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "small"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 20,
+      "climb": 20,
+      "swim": 20
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 14,
+      "con": 14,
+      "int": 2,
+      "wis": 10,
+      "cha": 4
+    },
+    "immunities": {
+      "damage": [
+        "acid"
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Amphibious",
+        "kind": "other",
+        "text": "The newt can breathe air and water."
+      },
+      {
+        "name": "Corrosive Skin",
+        "kind": "other",
+        "text": "When a creature hits the newt with a melee attack while within 5 feet of it, the attacker takes {dmg:1d4:acid}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Acid Spit",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "acid"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "creature",
   "id": "troll",
   "name": "Troll",
@@ -82,8 +84,7 @@
     "createdAt": "2026-11-02",
     "updatedAt": "2026-11-09",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     }
   }
 }

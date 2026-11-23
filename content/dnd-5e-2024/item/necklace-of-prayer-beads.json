@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "necklace-of-prayer-beads",
   "name": "Necklace of Prayer Beads",
@@ -52,8 +54,7 @@
       "kind": "routine",
       "issues": [
         134
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }

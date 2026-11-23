@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "shadow-courier-false-trail",
+  "name": "False Trail",
+  "stats": {
+    "levels": [
+      13
+    ],
+    "text": "As a {ref:glossary/reaction} when a creature attacks you, you can teleport up to 15 feet to an unoccupied space you can see, leaving behind an illusory double that the attacker hits instead. Once you use this feature, you can't use it again until you finish a Short or Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "skyveil-glider",
+  "name": "Skyveil Glider",
+  "summary": "A palm-sized glider with membranes of translucent blue that sail between treetops.",
+  "description": "Skyveil gliders live in colonies high in the canopy, where they trade gossip in chirps pitched too high for most ears. They hoard bright beads and buttons, and a village that is missing its buttons knows where to look.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "tiny"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 20,
+      "climb": 20,
+      "fly": 40
+    },
+    "abilities": {
+      "str": 3,
+      "dex": 17,
+      "con": 10,
+      "int": 5,
+      "wis": 12,
+      "cha": 8
+    },
+    "skills": {
+      "acrobatics": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 0,
+    "traits": [
+      {
+        "name": "Glide",
+        "kind": "other",
+        "text": "The glider can fly only when it begins its turn at least 10 feet above the ground, and it descends at least 5 feet during the move."
+      },
+      {
+        "name": "Falling Grace",
+        "kind": "other",
+        "text": "The glider takes no damage from falling."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Nip",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "amount": 1,
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

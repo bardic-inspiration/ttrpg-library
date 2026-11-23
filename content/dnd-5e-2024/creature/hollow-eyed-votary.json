@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "hollow-eyed-votary",
+  "name": "Hollow-Eyed Votary",
+  "summary": "The restless remains of a cultist who gave up both eyes and the rest of a mind, and still stares at whoever enters.",
+  "description": "Votaries stand in cult shrines in rows, facing the door, and are mistaken for statues until someone steps inside. The empty sockets weep a thin grey light, and whoever meets it hears their own name said slowly.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 12,
+      "con": 14,
+      "int": 6,
+      "wis": 13,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common"
+      ]
+    },
+    "actions": [
+      {
+        "name": "Grasping Hand",
+        "kind": "melee-attack",
+        "ability": "cha",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "cha",
+            "type": "necrotic"
+          }
+        ]
+      },
+      {
+        "name": "Empty Stare",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "one creature that can see the votary within 30 feet"
+        },
+        "damage": [
+          {
+            "dice": "2d8",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "and the target has the {ref:condition/frightened} condition until the end of its next turn.",
+        "onSuccess": "Half damage only.",
+        "recharge": "5-6"
+      }
+    ],
+    "cr": 2
+  },
+  "tags": {
+    "theme": [
+      "cultists",
+      "necromancy",
+      "psychic",
+      "undead",
+      "controller"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        329
+      ]
+    }
+  }
+}

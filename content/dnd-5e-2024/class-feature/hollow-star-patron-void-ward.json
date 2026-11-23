@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "hollow-star-patron-void-ward",
+  "name": "Void Ward",
+  "stats": {
+    "levels": [
+      10
+    ],
+    "text": "You have {ref:glossary/resistance} to Cold damage and {ref:glossary/immunity} to being moved by {ref:glossary/teleportation} magic against your will."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

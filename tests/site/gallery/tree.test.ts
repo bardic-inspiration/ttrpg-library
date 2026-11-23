@@ -7,7 +7,7 @@ import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { galleryConfig, type FacetData, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { facetData } from '../../../site/src/lib/gallery/facet-data.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
-import { filterTree, type TreeNode, type ValueNode } from '../../../site/src/lib/gallery/tree.ts';
+import { filterTree, openAtStart, type TreeNode, type ValueNode } from '../../../site/src/lib/gallery/tree.ts';
 import { computeView, searchIndex } from '../../../site/src/lib/gallery/view.ts';
 import { entryNames, loadLibrary, type Entry } from '../../../site/src/lib/library.ts';
 import { loadRules } from '../../../site/src/lib/rules.ts';
@@ -66,7 +66,7 @@ describe('creature/air-elemental through Creature › Immunities › Conditions'
     expect(values(find(tree(elemental, home), 'Creature', 'Immunities', 'Damage')).map((v) => v.label)).toEqual(['Poison', 'Thunder']);
   });
 
-  it('filters by a condition, in the v1 URL form, and checks the value', () => {
+  it('filters by a condition, in the gallery URL form, and checks the value', () => {
     const creature = galleryConfig(reg, data);
     const query = '?f.stats.immunities.conditions=condition%2Fpoisoned';
     const state = parseQuery(query, creature);
@@ -125,11 +125,24 @@ describe('Equipment › Weapon › Martial › Melee', () => {
     const martial = groups[0]!.children.find((g) => g.label === 'Martial')!;
     expect([groups[0]!.open, martial.open, martial.children[0]!.selected]).toEqual([true, true, true]);
   });
+
+  it('lists the nodes that start open, down to the groups, by the ids the island gives them', () => {
+    const nodes = tree(gear, equipment, '?f.stats.group=martial-melee-weapons');
+    const group = find(nodes, 'Equipment', 'Group')!;
+    expect([...openAtStart(nodes)].filter((id) => id.startsWith('dnd-5e-2024/equipment'))).toEqual([
+      'dnd-5e-2024/equipment',
+      group.id,
+      `${group.id}-weapons`,
+      `${group.id}-weapons-martial-weapons`,
+    ]);
+    expect(openAtStart(tree(gear, equipment))).toEqual(new Set());
+  });
 });
 
 describe('a custom weapon through Equipment › Weapon › Property and Mastery', () => {
   const reefKnife: Entry = {
     ruleset: 'dnd-5e-2024',
+    author: 'bardic-inspiration',
     type: 'equipment',
     id: 'reef-knife',
     name: 'Reef Knife',
@@ -221,19 +234,66 @@ describe('every facet of every type', () => {
     expect(typeValue(nodes, 'item')).toMatchObject({ selected: false, count: 0 });
   });
 
-  it('shows the Ruleset node only with more than one ruleset, or when it filters', () => {
+  /** Each ruleset under the Ruleset node, as label and count. */
+  const rulesets = (nodes: TreeNode[]) =>
+    nodes[0]?.kind === 'field' ? nodes[0].children.flatMap((n) => (n.kind === 'type' ? [[n.value.label, n.value.count, n.value.selected]] : [])) : [];
+
+  it('shows the Ruleset node first, with one ruleset, closed until it filters', () => {
     const home = galleryConfig(reg, data);
-    expect(tree(full(), home).map((n) => n.id)).not.toContain('ruleset');
+    const nodes = tree(full(), home);
+    expect(nodes[0]).toMatchObject({ kind: 'field', id: 'ruleset', label: 'Ruleset', open: false });
+    expect(rulesets(nodes)).toEqual([['D&D 5e', full().length, false]]);
     const filtered = tree(full(), home, '?f.ruleset=dnd-5e-2024');
-    expect(filtered[0]).toMatchObject({ kind: 'enum', id: 'ruleset', open: true });
-    expect(values(filtered[0])).toEqual([expect.objectContaining({ key: 'dnd-5e-2024', label: 'D&D 5e (SRD 5.2)', selected: true })]);
+    expect(filtered[0]).toMatchObject({ kind: 'field', id: 'ruleset', open: true });
+    expect(rulesets(filtered)).toEqual([['D&D 5e', full().length, true]]);
     const other = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as Registry;
     const two = [...full(), record({ id: 'stranger', ruleset: 'other' })];
-    const nodes = tree(two, galleryConfig(other, data));
-    expect(values(nodes[0]).map((v) => [v.label, v.count])).toEqual([
-      ['D&D 5e (SRD 5.2)', full().length],
-      ['Other', 1],
+    expect(rulesets(tree(two, galleryConfig(other, data)))).toEqual([
+      ['D&D 5e', full().length, false],
+      ['Other', 1, false],
     ]);
+  });
+
+  it('puts Source and Author under each ruleset, not under Tags, with "publisher" read as its publisher (docs/content-model.md#source-and-author)', () => {
+    const home = galleryConfig(reg, { ...data, publishers: { 'dnd-5e-2024': 'Wizards of the Coast' } });
+    const records = [
+      record({ id: 'fireball', type: 'spell', source: 'SRD 5.2', author: 'publisher' }),
+      record({ id: 'frost-lance', type: 'spell', source: 'Ember Codex', author: 'bardic-inspiration' }),
+      record({ id: 'cinder-hound', author: 'bardic-inspiration' }),
+    ];
+    const nodes = tree(records, home);
+    const label = 'D&D 5e';
+    // An official source is pinned first, though "Ember Codex" sorts before it.
+    expect(values(find(nodes, 'Ruleset', label, 'Source')).map((v) => [v.label, v.count])).toEqual([
+      ['SRD 5.2', 1],
+      ['Ember Codex', 1],
+    ]);
+    expect(values(find(nodes, 'Ruleset', label, 'Author')).map((v) => [v.key, v.label, v.count])).toEqual([
+      ['bardic-inspiration', 'bardic-inspiration', 2],
+      ['publisher', 'Wizards of the Coast', 1],
+    ]);
+    expect(find(nodes, 'Tags')).toBeUndefined();
+    // An active author filter opens the Ruleset node down to its value, and filters the results.
+    const filtered = tree(records, home, '?f.author=publisher');
+    expect(filtered[0]?.open).toBe(true);
+    expect(find(filtered, 'Ruleset', label)?.open).toBe(true);
+    expect(find(filtered, 'Ruleset', label, 'Author')?.open).toBe(true);
+    const view = computeView(records, home, parseQuery('?f.source=srd%205.2', home), searchIndex(records));
+    expect(view.results.map((r) => r.id)).toEqual(['fireball']);
+  });
+});
+
+describe('official sources first in the Source menu (#375)', () => {
+  it('pins every official source above the homebrew ones, each part keeping its order', async () => {
+    const home = galleryConfig(await registry(), data);
+    const records = [
+      record({ id: 'a', source: 'Ash Tome', author: 'bardic-inspiration' }),
+      record({ id: 'b', source: 'Zephyr Rules', author: 'publisher' }),
+      record({ id: 'c', source: 'Basic Rules', author: 'publisher' }),
+      record({ id: 'd', source: 'Moss Notes', author: 'someone' }),
+    ];
+    const source = values(find(tree(records, home), 'Ruleset', 'D&D 5e', 'Source')).map((v) => v.label);
+    expect(source).toEqual(['Basic Rules', 'Zephyr Rules', 'Ash Tome', 'Moss Notes']);
   });
 });
 

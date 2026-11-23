@@ -19,6 +19,8 @@ export interface RefTarget {
   name: string;
   /** Path under the site base, such as `dnd-5e-2024/spell/frost-lance/`. */
   path: string;
+  /** Whether it's official: official content (docs/content-model.md#source-and-author), or a primitive or group of the rules. */
+  official: boolean;
 }
 
 export interface RefGroup {
@@ -97,4 +99,15 @@ function groupLinks(
     forward: group(refs, (link) => labelFor(link.from, link.path).forward),
     back: group(refBy, (link) => labelFor(link.key.slice(0, link.key.indexOf('/')), link.path).back),
   };
+}
+
+/**
+ * An official page's link groups split at the official line (docs/site.md#detail-page): each group's
+ * official targets stay, and its homebrew targets move to a group of the same label for the page's Homebrew
+ * section. A group left empty is dropped. A homebrew page's links aren't split.
+ */
+export function splitHomebrew(groups: RefGroup[]): { official: RefGroup[]; homebrew: RefGroup[] } {
+  const part = (official: boolean) =>
+    groups.map((g) => ({ label: g.label, targets: g.targets.filter((t) => t.official === official) })).filter((g) => g.targets.length > 0);
+  return { official: part(true), homebrew: part(false) };
 }

@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "marrow-warhammer",
+  "name": "Marrow Warhammer",
+  "summary": "A pale hammer that rattles bones loose and staggers its target.",
+  "description": "The head is carved from something that is not quite stone and not quite bone. Gravediggers sometimes take it in trade for a hard burial.",
+  "stats": {
+    "category": "weapon",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/warhammer"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to attack and damage rolls made with this magic weapon. When you hit a creature with it, the creature has Disadvantage on the next attack roll it makes before the end of its next turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

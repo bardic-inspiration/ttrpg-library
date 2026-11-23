@@ -1,0 +1,45 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "heart-of-the-wandering-star",
+  "name": "Heart of the Wandering Star",
+  "summary": "A gem that grants wishes of a limited kind and lets you travel between worlds.",
+  "description": "Fell from the sky into a fallow field, and burned there until a farmer built a shrine around it. It is cold as a mountain lake.",
+  "stats": {
+    "category": "wondrous-item",
+    "rarity": "legendary",
+    "attunement": {
+      "required": true
+    },
+    "charges": {
+      "max": 3,
+      "recharge": "1d3 daily at dawn"
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/wish"
+        },
+        "chargeCost": 1
+      },
+      {
+        "spell": {
+          "ref": "spell/plane-shift"
+        },
+        "chargeCost": 1
+      }
+    ],
+    "effect": "The gem has 3 charges. As a Magic action, you can expend 1 charge to cast *Wish* from it, though only to duplicate another spell of 8th level or lower. Alternatively, you can expend 1 charge to cast *Plane Shift* from it. The gem regains 1d3 expended charges daily at dawn. If you expend the last charge, roll 1d20; on a 1, the gem fades and is lost."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 import type { RulesetModule } from '../module.ts';
 import type { PhraseBook } from '../../lib/wording/book.ts';
-import { checkBackground, checkBackgroundLinks, checkCreature, checkFeat, checkItem, checkSpecies, checkSpell } from './checks.ts';
+import { checkBackground, checkBackgroundLinks, checkCreature, checkCreatureLinks, checkFeat, checkItem, checkSpecies, checkSpell } from './checks.ts';
 import { checkClass, checkClassFeature, checkClassLinks, checkSubclassLinks, deriveClass, deriveClassLinked } from './classes.ts';
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
@@ -38,11 +38,12 @@ export const ruleset: RulesetModule = {
     if (type === 'feat') return checkFeat(stats as FeatStats);
     if (type === 'background') return checkBackground(stats as BackgroundStats);
     if (type === 'species') return checkSpecies(stats as SpeciesStats);
-    if (type === 'class') return checkClass(stats as ClassStats, context?.srd ?? false);
+    if (type === 'class') return checkClass(stats as ClassStats, context?.official ?? false);
     if (type === 'class-feature') return checkClassFeature(stats as ClassFeatureStats);
     return [];
   },
-  checkLinks(type, stats, target) {
+  checkLinks(type, stats, target, named) {
+    if (type === 'creature') return checkCreatureLinks(stats as CreatureStats, named);
     if (type === 'background') return checkBackgroundLinks(stats as BackgroundStats, target);
     if (type === 'class') return checkClassLinks(stats as ClassStats, target);
     if (type === 'subclass') return checkSubclassLinks(stats as SubclassStats, target);

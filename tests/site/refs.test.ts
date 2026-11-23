@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { ruleset } from '../../rulesets/dnd-5e-2024/index.ts';
-import { groupRefs, type RefTarget } from '../../site/src/lib/refs.ts';
+import { groupRefs, splitHomebrew, type RefTarget } from '../../site/src/lib/refs.ts';
 
 const targets = new Map<string, RefTarget>([
-  ['spell/frost-lance', { type: 'spell', name: 'Frost Lance', path: 'dnd-5e-2024/spell/frost-lance/' }],
-  ['item/wand-of-frost-lances', { type: 'item', name: 'Wand of Frost Lances', path: 'dnd-5e-2024/item/wand-of-frost-lances/' }],
-  ['creature/cinder-witch', { type: 'creature', name: 'Cinder Witch', path: 'dnd-5e-2024/creature/cinder-witch/' }],
+  ['spell/frost-lance', { type: 'spell', name: 'Frost Lance', path: 'dnd-5e-2024/spell/frost-lance/', official: false }],
+  ['item/wand-of-frost-lances', { type: 'item', name: 'Wand of Frost Lances', path: 'dnd-5e-2024/item/wand-of-frost-lances/', official: false }],
+  ['creature/cinder-witch', { type: 'creature', name: 'Cinder Witch', path: 'dnd-5e-2024/creature/cinder-witch/', official: true }],
 ]);
 const labels = ruleset.refLabels.bind(ruleset);
 
@@ -42,5 +42,18 @@ describe('groupRefs (docs/site.md#detail-page)', () => {
 
   it('skips a link whose target is unknown', () => {
     expect(groupRefs('item', [{ path: 'stats.spells[0].spell', key: 'spell/gone' }], [], targets, labels).forward).toEqual([]);
+  });
+});
+
+describe('splitHomebrew (docs/site.md#detail-page)', () => {
+  it('keeps each group\'s official targets, moves its homebrew ones to a group of the same label, and drops an empty group', () => {
+    const [lance, wand, witch] = ['spell/frost-lance', 'item/wand-of-frost-lances', 'creature/cinder-witch'].map((k) => targets.get(k)!);
+    expect(splitHomebrew([
+      { label: 'Cast by', targets: [witch!, wand!] },
+      { label: 'Spells', targets: [lance!] },
+    ])).toEqual({
+      official: [{ label: 'Cast by', targets: [witch] }],
+      homebrew: [{ label: 'Cast by', targets: [wand] }, { label: 'Spells', targets: [lance] }],
+    });
   });
 });

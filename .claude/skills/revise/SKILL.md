@@ -75,7 +75,7 @@ Then read every entry file the revision may touch, under `content/`.
   brief. The brief is the one the PR was generated from: the issues in the
   entry's `meta.source.issues`, or the bucket in `meta.source.gapFill`.
 
-An entry with `meta.source.srd` is an SRD entry, reproduced faithfully from
+An entry whose `author` is `"publisher"` is an SRD entry, reproduced faithfully from
 SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries)). Change it only to bring it closer to the SRD, such as a
 transcription fix. Don't apply any other change: reply (or, for a revise
 issue, ask on the issue with `needs-info`) that SRD entries stay as the SRD
@@ -131,6 +131,12 @@ If it still fails, don't push. Undo this round's edits, then:
 Once it passes, keep every warning it prints; they go in the reply or the PR
 body.
 
+Then go through the [Self-review](../../../docs/generation.md#self-review)
+list for the round's entries. On a revise issue's PR, tick it in the PR body;
+on review comments, update the Self-review section of the PR body. If
+`npm test` fails on an entry that already follows the content rules, file
+the dev issue the list describes and say so in the reply.
+
 ## Step 5: Commit and push
 
 Stage only the changed files under `content/`. A content PR that changes
@@ -148,6 +154,8 @@ the round changed, dropped, or regenerated, comma-separated.
     type's `summaryField`, and the summary.
   - **Warnings:** every validator warning, and every `adjust` or damage
     `bonus` the revision added, with its reason. "None" if there are none.
+  - **Self-review:** each item ticked, or the dev issue named under an
+    unticked one.
   - Delete the **Gap fill** and **Skipped on import** sections.
   - `Closes #<issue>`.
 

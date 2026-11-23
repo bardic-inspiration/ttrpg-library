@@ -1,0 +1,109 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "ossuary-warden",
+  "name": "Ossuary Warden",
+  "summary": "A tall skeleton clad in plates of fused bone that turns a blade aside and answers it with a hooked halberd.",
+  "description": "Crypt-keepers raise wardens to stand in doorways, and the wardens do so for centuries without complaint. Their plate is grown, not forged, and the cracks in it are said to close at night.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 17,
+      "note": "bone plate"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 17,
+      "dex": 10,
+      "con": 16,
+      "int": 6,
+      "wis": 10,
+      "cha": 5
+    },
+    "saveProficiencies": [
+      "con"
+    ],
+    "resistances": [
+      "piercing"
+    ],
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The warden makes two Hooked Halberd attacks."
+      },
+      {
+        "name": "Hooked Halberd",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/prone} condition."
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Interlocking Guard",
+        "kind": "other",
+        "text": "Trigger: A creature the warden can see hits an ally within 5 feet of it with an attack. Response: The warden grants that ally a +2 bonus to AC against that attack, potentially causing it to miss."
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

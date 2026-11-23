@@ -1,0 +1,41 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "fogveil-studded-leather",
+  "name": "Fogveil Studded Leather",
+  "summary": "Studded leather that lets you wrap yourself in a bank of fog.",
+  "description": "Smugglers on the foggy coast pay a king's ransom for it. The studs are tiny silver pearls.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/studded-leather-armor"
+        }
+      ]
+    },
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/fog-cloud"
+        }
+      }
+    ],
+    "effect": "You have a +2 bonus to AC while wearing this armor. As a Magic action, you can cast *Fog Cloud* from it, centered on yourself. Once you use this property, you can't use it again until the next dawn."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

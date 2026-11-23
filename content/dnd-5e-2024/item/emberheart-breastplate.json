@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "emberheart-breastplate",
+  "name": "Emberheart Breastplate",
+  "summary": "A breastplate that warms you and scorches those who strike you.",
+  "description": "Dwarves of the deep furnaces gift it to their best smiths. A glow shows through the seams when its wearer is angry.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/breastplate"
+        }
+      ]
+    },
+    "rarity": "rare",
+    "attunement": {
+      "required": true
+    },
+    "effect": "You have a +2 bonus to AC while wearing this armor. You have Resistance to Cold damage. When a creature within 5 feet hits you with a melee attack, it takes 1d6 Fire damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

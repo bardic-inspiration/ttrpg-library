@@ -20,13 +20,13 @@ within the one repo, not by convention.
 
 | | Content lane | Dev lane |
 |---|---|---|
-| Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, stage spec |
+| Purpose | Add, revise, or remove entries and art | Change the ruleset module, config, site, scripts, workflows, skills, docs, track specs |
 | Paths it may change | `content/**`, `assets/images/**`, `ATTRIBUTION.md` | Everything else; content paths with the `migration` label, which the labeler adds |
 | Branch prefixes | `gen/`, `revise/` (routines), `manual/` (hand-made entries) | `dev/`, `dependabot/`, or any branch without a content prefix (such as a web-editor `<user>-patch-1`) |
 | Opened by | Routines, or the owner for `manual/`, or a session the owner starts for SRD work | The owner, or a Claude session the owner starts |
 | Lane label (auto) | `content` | `dev` |
 | Area labels (auto, from paths) | none | `ui` (`site/**`), `ruleset` (`rulesets/**` except guidelines), `generation` (`rulesets/*/guidelines/**`, `.claude/skills/**`, `config/defaults.json`, `docs/routines.md`), `ci` (`.github/**`), `migration` (`content/**`, `assets/images/**`) |
-| Issue templates and labels | Content request (`request`), import request (`import`), revise request (`revise`) ([generation.md](generation.md#requests)) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`) |
+| Issue templates and labels | Content request (`request`), import request (`import`), revise request (`revise`) ([generation.md](generation.md#requests)) | Bug report (`bug`), feature request (`feature`), UI refinement (`ui`). The `queue` label marks the one tracking issue that is the active dev queue ([Dev Queue](../AGENTS.md#dev-queue)) |
 | PR template | `content.md`, filled by the routine | `dev.md`: what and why, decisions, testing, screenshots for `ui` ([UI screenshots](#ui-screenshots)), migration notes |
 | PR title | `Add <n> <type> entries`, `Revise <ids>: <reason>` | `<area>: <summary>`, such as `ui: tighten stat-block spacing` |
 | CI | Content checks | Full checks |
@@ -169,11 +169,18 @@ task ([Testing backlog](../AGENTS.md#testing-backlog)).
 UI work that isn't part of a milestone, such as a track's, gets no milestone
 PR, so it waits for the next milestone's review
 ([Accessibility review backlog](../AGENTS.md#accessibility-review-backlog)).
-The session that opens its `ui` PR files a `test` issue under the
-Accessibility review backlog, titled `Accessibility review: <what it added>`,
-with the PR and the same Pages and Checks. The next milestone review takes up
-every open backlog issue: it lists their pages and checks with its own, and
-they close with it.
+The session that opens its `ui` PR adds an item to the list in the
+Accessibility review backlog issue's body, rather than filing a sub-issue:
+
+```markdown
+- **<what it added>** (#<PR>)
+  - Pages: <the entries and pages that show it>
+  - [ ] <a check axe can't prove>
+```
+
+Its Pages and Checks are the same kind as a milestone review's. The session
+that files the next milestone review moves every item into it, listed with its
+own pages and checks, and removes them from the backlog's list.
 
 ### UI screenshots
 
@@ -189,8 +196,8 @@ changes that it doesn't cover. Screenshots aren't a CI check.
 Docs are cited by file and heading ([docs/README.md](README.md#headings-and-citations)).
 `npm run links` (`scripts/links/`) scans every tracked text file and fails on:
 
-- a citation `docs/<file>.md#<heading>`, `spec/v2/<file>.md#<heading>`, or
-  `spec/tracks/<file>.md#<heading>` whose file or heading doesn't exist;
+- a citation `docs/<file>.md#<heading>` or `spec/tracks/<file>.md#<heading>`
+  whose file or heading doesn't exist;
 - a relative Markdown link, in a Markdown file, whose target or heading doesn't
   exist;
 - a section-number citation (`§` and a number).
@@ -205,6 +212,44 @@ install, validate, and build steps, then `actions/upload-pages-artifact` and
 `actions/deploy-pages`. Permissions are `contents: read`, `pages: write`, and
 `id-token: write`, in the concurrency group `pages` without cancelling runs in
 progress. The Pages source is GitHub Actions.
+
+### Releases
+
+A release is a tagged point on `main`, not a deploy: the site deploys on every
+merge ([Deploy](#deploy)), and content PRs never make a release by themselves.
+
+- **Version numbers** take [Semantic Versioning](https://semver.org/)'s
+  `MAJOR.MINOR.PATCH` form, read for a site with one user and no outside API:
+  - **Minor** (`v1.2.0`): a planned version, built through its milestones.
+  - **Patch** (`v1.1.1`): fixes from the Spot Fixes queue, released between
+    planned versions.
+  - **Major**: kept for a change the owner names, such as opening the site to
+    more users or breaking the published entry files for outside readers.
+- **Tags** are `v<version>`, on the release PR's squash commit on `main`, each
+  with a GitHub release whose notes are its changelog section. `package.json`'s
+  `version` is the latest release's.
+- **The changelog**, [`CHANGELOG.md`](../CHANGELOG.md), follows
+  [Keep a Changelog](https://keepachangelog.com/en/1.1.0/): newest release
+  first, one section per release under `## [<version>] - <YYYY-MM-DD>`, with
+  only the groups that apply of `Added`, `Changed`, `Deprecated`, `Removed`,
+  `Fixed`, and `Security`. Lines are written for someone using the library,
+  not copied from commits, and cite their PRs. Each version links to its
+  compare view at the bottom of the file.
+- **A release PR** is a dev PR titled `release: v<version>`. It sets
+  `version` in `package.json` and the lockfile (`npm version <version>
+  --no-git-tag-version`), writes the release's changelog section from the PRs
+  merged since the last tag (`git log <tag>..main`, one squash commit per PR),
+  and dates it the day it merges. Dev PRs don't edit the changelog as they
+  go, so parallel sessions never conflict over it. After the merge, the owner
+  tags the commit and publishes the GitHub release, and a new "Spot Fixes"
+  issue for the version takes the `queue` label if no milestone is open
+  ([`AGENTS.md`](../AGENTS.md) "Dev Queue").
+- **Version names.** Versions are named by their tags. Until v1.1.0, the
+  project called its versions v1, v2, and v3. At the v1.1.0 release they were
+  renamed to the tag names: v1 is v1.0.0, v2 is v1.1.0, and v3 is v1.2.0.
+  Issue and PR titles from before the rename keep the old names (such as
+  "spec: v2 close-out"), and the `spec/v2/` folder that
+  [`decisions.md`](decisions.md) names is the folder as it was.
 
 ### Repository settings
 

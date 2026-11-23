@@ -14,6 +14,8 @@ export interface Issue {
 
 export interface RulesetDefinition {
   id: string;
+  /** Who publishes the ruleset; an entry whose `author` is `"publisher"` is theirs (docs/rulesets.md#the-ruleset-module). */
+  publisher: string;
   types: string[];
   /** Rules types, whose primitives are kept in rules/ (docs/rulesets.md#rules-data). Omitted for none. */
   rules?: { type: string; extensions: boolean }[];
@@ -27,13 +29,27 @@ export interface RulesetDefinition {
 /** A resolved ref target's type and stats, or undefined for one whose stats failed their schema. */
 export type LinkTarget = (key: string) => { type: string; stats: unknown } | undefined;
 
+/** The key (`<type>/<id>`) of the entry or component of `type` with exactly this name in the same ruleset, if any. */
+export type NameLookup = (type: string, name: string) => string | undefined;
+
 /** An entry or component of the library, for values derived from other entries. */
 export interface LinkedEntry {
   type: string;
   id: string;
   name: string;
   stats: unknown;
+  /** Who wrote it; `"publisher"` marks official content (docs/content-model.md#source-and-author). */
+  author?: string;
 }
+
+/** The `author` that names the ruleset's publisher (docs/content-model.md#source-and-author). */
+export const PUBLISHER = 'publisher';
+
+/**
+ * Whether an entry is official content: written by its ruleset's publisher, as opposed to homebrew
+ * (docs/content-model.md#source-and-author). The one place official and homebrew are told apart.
+ */
+export const isOfficial = (entry: object): boolean => (entry as { author?: unknown }).author === PUBLISHER;
 
 /** How a detail page labels a reference, from each end: "Casts: Frost Lance", "Cast by: Wand of Frost Lances". */
 export interface RefLabels {
@@ -50,15 +66,15 @@ export interface RulesetModule {
   derive(type: string, stats: unknown, rules?: RulesData): Record<string, unknown>;
   /**
    * Consistency checks for one entry's or primitive's schema-valid `stats` (docs/rulesets.md#consistency-checks),
-   * with the ruleset's rules data and whether the entry is an SRD entry.
+   * with the ruleset's rules data and whether the entry is official content.
    */
-  check(type: string, stats: unknown, rules?: RulesData, context?: { srd: boolean }): Issue[];
+  check(type: string, stats: unknown, rules?: RulesData, context?: { official: boolean }): Issue[];
   /**
    * Checks that read what an entry's refs point to (docs/rulesets.md#consistency-checks), such as a
    * background's feat being an origin feat. They run after every ref resolves; `target` gives a
    * resolved target's type and stats, or undefined for one whose stats failed their schema. Optional.
    */
-  checkLinks?(type: string, stats: unknown, target: LinkTarget): Issue[];
+  checkLinks?(type: string, stats: unknown, target: LinkTarget, named: NameLookup): Issue[];
   /**
    * Derived values that read other entries, such as a class's spell list from the spells that name
    * it. `key` is the entry's `<type>/<id>`, and `entries` every entry and component of its ruleset.

@@ -1,0 +1,122 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "rockmite-swarm",
+  "name": "Rockmite Swarm",
+  "summary": "A seething mass of pebble-sized beetles that chews the cave floor to rubble around whatever it's eating.",
+  "description": "Rockmites eat stone, slowly, and flesh, quickly. Where a swarm has fed, the floor is pitted and loose for yards around, and old tunnels sag where generations of them have hollowed the walls. The clicking of their jaws carries a long way, and wise travelers turn around when they hear it.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "medium"
+    ],
+    "swarm": "tiny",
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 20,
+      "burrow": 10,
+      "climb": 20
+    },
+    "abilities": {
+      "str": 4,
+      "dex": 14,
+      "con": 12,
+      "int": 1,
+      "wis": 8,
+      "cha": 2
+    },
+    "resistances": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/frightened"
+        },
+        {
+          "ref": "condition/grappled"
+        },
+        {
+          "ref": "condition/paralyzed"
+        },
+        {
+          "ref": "condition/petrified"
+        },
+        {
+          "ref": "condition/prone"
+        },
+        {
+          "ref": "condition/restrained"
+        },
+        {
+          "ref": "condition/stunned"
+        }
+      ]
+    },
+    "senses": {
+      "blindsight": 10,
+      "tremorsense": 30
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Crumbling Ground",
+        "kind": "other",
+        "text": "The ground in the swarm's space and within 5 feet of it is {ref:glossary/difficult-terrain} for creatures other than the swarm."
+      },
+      {
+        "name": "Swarm",
+        "kind": "other",
+        "text": "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny beetle. The swarm can't regain {ref:glossary/hit-points} or gain {ref:glossary/temporary-hit-points}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Bites",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "3d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "The attack deals half damage if the swarm is {ref:glossary/bloodied}."
+      }
+    ]
+  },
+  "tags": {
+    "environment": "underdark",
+    "theme": [
+      "subterranean",
+      "caves",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        332
+      ]
+    }
+  }
+}

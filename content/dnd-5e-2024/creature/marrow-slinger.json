@@ -1,0 +1,116 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "marrow-slinger",
+  "name": "Marrow Slinger",
+  "summary": "A gaunt skeleton with an open jaw that spits shards of its own splintered bone.",
+  "description": "Whatever animates the slinger has taught it to keep its distance. Its ribs are always a little shorter than they should be, and its victims are always a little more full of splinters.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "undead",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13
+    },
+    "hitDice": 6,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 16,
+      "con": 14,
+      "int": 6,
+      "wis": 10,
+      "cha": 5
+    },
+    "vulnerabilities": [
+      "bludgeoning"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "Common plus one other language"
+      ]
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The slinger makes two Bone Shard attacks."
+      },
+      {
+        "name": "Bone Shard",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 60,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Marrow Spit",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "one creature the slinger can see within 30 feet"
+        },
+        "damage": [
+          {
+            "dice": "2d4",
+            "type": "poison"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "skeletons",
+      "bone constructs",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        327
+      ]
+    }
+  }
+}

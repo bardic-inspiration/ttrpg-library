@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "bag-of-holding",
   "name": "Bag of Holding",
@@ -16,8 +18,7 @@
     "createdAt": "2026-11-03",
     "updatedAt": "2026-11-09",
     "source": {
-      "kind": "routine",
-      "srd": true
+      "kind": "routine"
     }
   }
 }

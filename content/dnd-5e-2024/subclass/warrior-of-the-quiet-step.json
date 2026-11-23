@@ -1,0 +1,42 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "subclass",
+  "id": "warrior-of-the-quiet-step",
+  "name": "Warrior of the Quiet Step",
+  "summary": "A Monk subclass: move unheard, strike unseen.",
+  "stats": {
+    "class": {
+      "ref": "class/monk"
+    },
+    "tagline": "Move Unheard, Strike Unseen",
+    "text": "Warriors of the Quiet Step silence their movement and breath until they are part of the stillness around them. They strike in the pauses between heartbeats.",
+    "features": [
+      {
+        "ref": "class-feature/warrior-of-the-quiet-step-silent-tread"
+      },
+      {
+        "ref": "class-feature/warrior-of-the-quiet-step-still-strike"
+      },
+      {
+        "ref": "class-feature/warrior-of-the-quiet-step-between-heartbeats"
+      },
+      {
+        "ref": "class-feature/warrior-of-the-quiet-step-hush"
+      },
+      {
+        "ref": "class-feature/warrior-of-the-quiet-step-vanishing-moment"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

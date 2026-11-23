@@ -1,0 +1,129 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "stitchflesh-abomination",
+  "name": "Stitchflesh Abomination",
+  "summary": "A hulking patchwork of corpses sewn together, hungry for more material.",
+  "description": "No two abominations are alike, though each shows a different butcher's stitching. They collect bodies for repairs and treat everything that falls as new parts.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "undead",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 12,
+      "note": "natural armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 8,
+      "con": 19,
+      "int": 5,
+      "wis": 8,
+      "cha": 5
+    },
+    "vulnerabilities": [
+      "fire"
+    ],
+    "immunities": {
+      "damage": [
+        "poison"
+      ],
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/exhaustion"
+        },
+        {
+          "ref": "condition/poisoned"
+        }
+      ]
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [],
+      "understood": [
+        "the languages of its parts"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Regeneration",
+        "kind": "other",
+        "text": "The abomination regains 10 Hit Points at the start of its turn. If it takes Acid or Fire damage, this trait doesn't function at the start of its next turn. It dies only if it starts its turn with 0 Hit Points and doesn't regenerate."
+      },
+      {
+        "name": "Stolen Parts",
+        "kind": "other",
+        "text": "When a creature within 5 feet of the abomination dies, the abomination regains 10 Hit Points."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The abomination makes two Slam attacks."
+      },
+      {
+        "name": "Slam",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ],
+        "onHit": "If the target is a Large or smaller creature, it has the {ref:condition/prone} condition."
+      },
+      {
+        "name": "Rotting Spew",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 20-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "5d8",
+            "type": "poison"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "theme": [
+      "zombies",
+      "ghouls",
+      "flesh",
+      "undead"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        328
+      ]
+    }
+  }
+}

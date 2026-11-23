@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "mirror-water",
+  "name": "Mirror-Water",
+  "summary": "A shimmering liquid that creates a double of you for a minute.",
+  "description": "The flask is silvered on the outside, and the liquid inside moves against any tilt. Illusionists use it in the theater and in the courtroom.",
+  "stats": {
+    "category": "potion",
+    "rarity": "rare",
+    "attunement": {
+      "required": false
+    },
+    "spells": [
+      {
+        "spell": {
+          "ref": "spell/mirror-image"
+        }
+      }
+    ],
+    "effect": "When you drink this potion, for 1 minute you are under the effect of a *Mirror Image* spell with no concentration required."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

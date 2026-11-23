@@ -1,0 +1,88 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "dewpetal-fawn",
+  "name": "Dewpetal Fawn",
+  "summary": "A speckled fawn whose hooves leave small flowers that open at dawn and close by noon.",
+  "description": "Forest folk say a dewpetal fawn means a glade is safe to sleep in. The fawn is shy and quick to bolt, but it will nose at a wounded traveler if nothing else is around, and the flowers it leaves are good for poultices.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "small"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 3,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 14,
+      "con": 11,
+      "int": 4,
+      "wis": 15,
+      "cha": 12
+    },
+    "skills": {
+      "perception": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Bloom Trail",
+        "kind": "other",
+        "text": "Each space the fawn moves through becomes a patch of blooming flowers until the next dawn. A creature that starts its turn in a patch of blooms has {ref:glossary/advantage} on saving throws against being {ref:condition/frightened}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Butt",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "bludgeoning"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Healing Dew",
+        "kind": "other",
+        "text": "The fawn touches one creature within 5 feet of it. The target regains 1d8 {ref:glossary/hit-points} and ends the {ref:condition/poisoned} condition on itself.",
+        "uses": "1/day"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

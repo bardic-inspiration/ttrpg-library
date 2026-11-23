@@ -1,0 +1,52 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "reflecting-veil",
+  "name": "Reflecting Veil",
+  "summary": "Throws a spell back toward its caster.",
+  "stats": {
+    "level": 4,
+    "school": "abjuration",
+    "classes": [
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/sorcerer"
+      },
+      {
+        "ref": "class/cleric"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "self"
+    },
+    "components": {
+      "v": true,
+      "s": true
+    },
+    "duration": {
+      "kind": "timed",
+      "amount": 1,
+      "unit": "minute",
+      "concentration": true
+    },
+    "effect": "For the duration, the first time each round a spell that targets only you forces you to make a saving throw, you can use your Reaction to cause the caster to make the same saving throw against the spell instead. The veil ends after reflecting three spells."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

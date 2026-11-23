@@ -1,0 +1,123 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "thornveil-stag",
+  "name": "Thornveil Stag",
+  "summary": "An ancient stag in a crown of antlers so overgrown with briar that it looks like a walking hedge.",
+  "description": "The woods keep a stag like this the way a house keeps a hearth: out of sight, doing something important. Hunters who have loosed an arrow at one tend to find the briars waiting for them on the walk home.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 50
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 14,
+      "con": 16,
+      "int": 6,
+      "wis": 16,
+      "cha": 12
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "proficient"
+    },
+    "senses": {
+      "darkvision": 60
+    },
+    "cr": 6,
+    "traits": [
+      {
+        "name": "Charge",
+        "kind": "other",
+        "text": "If the stag moves at least 20 feet straight toward a target and then hits it with a Gore attack on the same turn, the target takes an extra {dmg:2d6:piercing} and, if it is Huge or smaller, has the {ref:condition/prone} condition."
+      },
+      {
+        "name": "Briar Crown",
+        "kind": "other",
+        "text": "A creature that starts its turn grappling the stag, or that touches it, takes {dmg:1d6:piercing}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The stag makes one Gore attack and one Hooves attack."
+      },
+      {
+        "name": "Gore",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Hooves",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Entangling Thorns",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 20-foot-radius Sphere centered on a point the stag can see within 60 feet"
+        },
+        "damage": [
+          {
+            "dice": "4d6",
+            "type": "piercing"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "onFailure": ", and the target has the {ref:condition/restrained} condition until the end of the stag's next turn as briars coil around it.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

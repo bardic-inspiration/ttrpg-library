@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "rivet-proof-half-plate",
+  "name": "Rivet-Proof Half Plate",
+  "summary": "Half plate that shrugs off the crushing of heavy weapons.",
+  "description": "Dwarven armorers rivet every plate twice and call the second row a courtesy. It is noisy and proud of it.",
+  "stats": {
+    "category": "armor",
+    "baseItem": {
+      "oneOf": [
+        {
+          "ref": "equipment/half-plate-armor"
+        }
+      ]
+    },
+    "rarity": "uncommon",
+    "attunement": {
+      "required": false
+    },
+    "effect": "You have a +1 bonus to AC while wearing this armor. You have Resistance to Bludgeoning damage from nonmagical attacks."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        338
+      ]
+    }
+  }
+}

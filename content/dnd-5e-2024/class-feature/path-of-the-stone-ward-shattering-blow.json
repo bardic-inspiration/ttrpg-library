@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "path-of-the-stone-ward-shattering-blow",
+  "name": "Shattering Blow",
+  "stats": {
+    "levels": [
+      6
+    ],
+    "text": "Once on each of your turns while your Rage is active, when you hit a creature with a melee attack, you can deal extra Force damage equal to your Rage Damage bonus."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

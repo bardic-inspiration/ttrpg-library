@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "oath-of-the-lantern-beacon-ascendant",
+  "name": "Beacon Ascendant",
+  "stats": {
+    "levels": [
+      20
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you become a beacon for 1 minute. You emit bright light in a 60-foot radius, enemies within it have {ref:glossary/disadvantage} on attack rolls against creatures other than you, and you regain 10 hit points at the start of each of your turns. Once you use this feature, you can't use it again until you finish a Long Rest."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

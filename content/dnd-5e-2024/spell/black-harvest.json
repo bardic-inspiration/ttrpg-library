@@ -1,0 +1,54 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "spell",
+  "id": "black-harvest",
+  "name": "Black Harvest",
+  "summary": "Siphons life from every creature in a wide area.",
+  "stats": {
+    "level": 7,
+    "school": "necromancy",
+    "classes": [
+      {
+        "ref": "class/cleric"
+      },
+      {
+        "ref": "class/wizard"
+      },
+      {
+        "ref": "class/warlock"
+      }
+    ],
+    "castingTime": {
+      "amount": 1,
+      "unit": "action"
+    },
+    "ritual": false,
+    "range": {
+      "kind": "distance",
+      "feet": 90
+    },
+    "components": {
+      "v": true,
+      "s": true,
+      "m": {
+        "text": "a handful of ash"
+      }
+    },
+    "duration": {
+      "kind": "instantaneous",
+      "concentration": false
+    },
+    "effect": "Each creature of your choice in a 40-foot-radius Sphere centered on a point within range makes a Constitution saving throw, taking 11d8 Necrotic damage on a failed save or half on a success. You regain Hit Points equal to the total damage dealt, up to your maximum."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        336
+      ]
+    }
+  }
+}

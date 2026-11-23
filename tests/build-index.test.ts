@@ -43,7 +43,7 @@ describe('library.json records', () => {
     expect(records).toHaveLength(5);
     for (const record of records) {
       expect(Object.keys(record)).toEqual([
-        'id', 'ruleset', 'type', 'name', 'summary', 'url', 'image', 'facets', 'tags', 'createdAt', 'refs', 'refBy', 'search',
+        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'facets', 'tags', 'createdAt', 'refs', 'refBy', 'search',
       ]);
     }
   });
@@ -53,6 +53,8 @@ describe('library.json records', () => {
     const hound = records.find((r) => r.id === 'cinder-hound');
     expect(hound).toMatchObject({
       ruleset: 'dnd-5e-2024',
+      source: null,
+      author: 'bardic-inspiration',
       type: 'creature',
       name: 'Cinder Hound',
       url: '/ttrpg-library/dnd-5e-2024/creature/cinder-hound/',

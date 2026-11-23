@@ -1,0 +1,23 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "class-feature",
+  "id": "tidal-sorcery-heart-of-the-sea",
+  "name": "Heart of the Sea",
+  "stats": {
+    "levels": [
+      18
+    ],
+    "text": "As a {ref:glossary/bonus-action}, you can spend 5 Sorcery Points to become a surge of water for 1 minute. You have {ref:glossary/resistance} to Bludgeoning, Piercing, and Slashing damage, and your spells ignore Resistance to Cold damage."
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        339
+      ]
+    }
+  }
+}

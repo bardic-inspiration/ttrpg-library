@@ -1,0 +1,107 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "gloamcat",
+  "name": "Gloamcat",
+  "summary": "A dusk-gray panther whose shadow moves a half step ahead of the rest of it.",
+  "description": "Gloamcats prowl where the forest is darkest, and they are said to step through the dusk the way others step through a door. The oldest woodsmen refuse to carry a lantern at twilight, which the cats seem to resent.",
+  "stats": {
+    "creatureType": "beast",
+    "languages": {
+      "spoken": []
+    },
+    "size": [
+      "large"
+    ],
+    "alignment": "unaligned",
+    "ac": {
+      "value": 15,
+      "note": "natural armor"
+    },
+    "hitDice": 11,
+    "speed": {
+      "walk": 50,
+      "climb": 40
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 18,
+      "con": 16,
+      "int": 5,
+      "wis": 15,
+      "cha": 10
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "expertise"
+    },
+    "senses": {
+      "darkvision": 120
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Shadow Step",
+        "kind": "other",
+        "text": "While in Dim Light or Darkness, the cat can use a {ref:glossary/bonus-action} to teleport up to 30 feet to an unoccupied space it can see that is also in Dim Light or Darkness."
+      },
+      {
+        "name": "Light Sensitivity",
+        "kind": "other",
+        "text": "While in {ref:glossary/bright-light}, the cat has {ref:glossary/disadvantage} on attack rolls."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The cat makes two Claw attacks. It can replace one attack with a Bite attack."
+      },
+      {
+        "name": "Claw",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "dex",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": " and the target has the {ref:condition/grappled} condition (escape {dc:str})."
+      }
+    ]
+  },
+  "tags": {
+    "environment": "forest",
+    "theme": [
+      "enchanted forest",
+      "beasts"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-21",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        330
+      ]
+    }
+  }
+}

@@ -1,5 +1,7 @@
 {
   "ruleset": "dnd-5e-2024",
+  "source": "SRD 5.2",
+  "author": "publisher",
   "type": "item",
   "id": "horn-of-valhalla",
   "name": "Horn of Valhalla",
@@ -32,8 +34,7 @@
       "kind": "routine",
       "issues": [
         178
-      ],
-      "srd": true
+      ]
     },
     "updatedAt": "2026-11-09"
   }
