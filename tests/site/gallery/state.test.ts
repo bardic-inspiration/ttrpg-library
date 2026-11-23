@@ -18,7 +18,7 @@ describe('defaults', () => {
 
   it('the Library sorts by name, with the ruleset, source, author, and type filters first', () => {
     expect(library.defaultSort).toEqual({ path: 'name', dir: 'asc' });
-    expect(library.filters[0]).toMatchObject({ path: 'ruleset', labels: { 'dnd-5e-2024': 'D&D 5e (SRD 5.2)' } });
+    expect(library.filters[0]).toMatchObject({ path: 'ruleset', labels: { 'dnd-5e-2024': 'D&D 5e' } });
     expect(library.filters[1]).toMatchObject({ path: 'source', label: 'Source', kind: 'enum' });
     expect(library.filters[2]).toMatchObject({ path: 'author', label: 'Author', kind: 'enum' });
     expect(library.filters[3]).toMatchObject({ path: 'type', labels: { creature: 'Creature', spell: 'Spell' } });

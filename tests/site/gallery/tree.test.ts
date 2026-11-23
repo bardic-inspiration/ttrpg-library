@@ -262,10 +262,11 @@ describe('every facet of every type', () => {
       record({ id: 'cinder-hound', author: 'bardic-inspiration' }),
     ];
     const nodes = tree(records, home);
-    const label = 'D&D 5e (SRD 5.2)';
+    const label = 'D&D 5e';
+    // An official source is pinned first, though "Ember Codex" sorts before it.
     expect(values(find(nodes, 'Ruleset', label, 'Source')).map((v) => [v.label, v.count])).toEqual([
-      ['Ember Codex', 1],
       ['SRD 5.2', 1],
+      ['Ember Codex', 1],
     ]);
     expect(values(find(nodes, 'Ruleset', label, 'Author')).map((v) => [v.key, v.label, v.count])).toEqual([
       ['bardic-inspiration', 'bardic-inspiration', 2],
@@ -324,12 +325,26 @@ describe('the ruleset set adds entries (#380)', () => {
     const home = galleryConfig(reg, data);
     const nodes = filterTree(home, parseQuery('?f.type=spell', home), records(), searchIndex(records()));
     expect(values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Source')).map((v) => [v.label, v.count])).toEqual([
+      ['SRD 5.2', 1],
       ['Ember Codex', 1],
       ['Moss Notes', 0],
-      ['SRD 5.2', 1],
     ]);
     // A type counts the entries of it in the results: only the official spell by default.
     expect(find(nodes, 'Spell')?.kind === 'type' && (find(nodes, 'Spell') as { value: ValueNode }).value.count).toBe(1);
+  });
+});
+
+describe('official sources first in the Source menu (#375)', () => {
+  it('pins every official source above the homebrew ones, each part keeping its order', async () => {
+    const home = galleryConfig(await registry(), data);
+    const records = [
+      record({ id: 'a', source: 'Ash Tome', author: 'bardic-inspiration' }),
+      record({ id: 'b', source: 'Zephyr Rules', author: 'publisher' }),
+      record({ id: 'c', source: 'Basic Rules', author: 'publisher' }),
+      record({ id: 'd', source: 'Moss Notes', author: 'someone' }),
+    ];
+    const source = values(find(tree(records, home), 'Ruleset', 'D&D 5e', 'Source')).map((v) => v.label);
+    expect(source).toEqual(['Basic Rules', 'Zephyr Rules', 'Ash Tome', 'Moss Notes']);
   });
 });
 

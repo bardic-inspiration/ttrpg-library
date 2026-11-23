@@ -305,7 +305,10 @@ Conditions › Poisoned, narrow those entries.
   `"publisher"` reads as the ruleset's publisher, from `ruleset.json`
   (`rulesetPublishers` in `site/src/lib/rules.ts`), such as Wizards of the
   Coast. Source and author list their values like a facet (below), with a
-  ruleset in place of a type.
+  ruleset in place of a type, except that a ruleset's official sources, those
+  official content carries, are pinned above its other sources, each part
+  keeping its order: SRD 5.2 comes before a homebrew collection whatever its
+  name.
   - **Additive.** An entry is in the results when it matches any checked
     ruleset, source, or author (`SCOPE_PATHS` in
     `site/src/lib/gallery/config.ts`, `applyFilters` in `view.ts`): checking
