@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/elementals/ward.schema.json",
+  "title": "A ward card: a lasting effect, which may cost chips each turn to keep.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cost", "text"],
+  "properties": {
+    "cost": { "$ref": "common.schema.json#/$defs/Cost" },
+    "upkeep": { "description": "Chips paid at the start of each turn, or the ward ends.", "type": "integer", "minimum": 1, "maximum": 4 },
+    "text": { "$ref": "common.schema.json#/$defs/Text" }
+  }
+}

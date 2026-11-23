@@ -1,0 +1,26 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "creature",
+  "id": "veteran-pilot",
+  "name": "Veteran Pilot",
+  "summary": "A steady hand at the helm who has flown every lane in the sector.",
+  "stats": {
+    "species": "Human",
+    "skills": {
+      "helm": 8,
+      "engineering": 3,
+      "gunnery": 4,
+      "science": 2,
+      "comms": 3
+    },
+    "upkeep": 40
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

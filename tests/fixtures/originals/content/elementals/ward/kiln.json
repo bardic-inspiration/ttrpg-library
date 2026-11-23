@@ -1,0 +1,22 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "ward",
+  "id": "kiln",
+  "name": "Kiln",
+  "summary": "A furnace that hardens whatever passes through it.",
+  "stats": {
+    "cost": {
+      "earth": 1,
+      "fire": 2
+    },
+    "text": "At the start of your turn, a creature you control gets +4/+4."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

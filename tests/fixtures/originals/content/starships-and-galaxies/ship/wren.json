@@ -1,0 +1,28 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "ship",
+  "id": "wren",
+  "name": "Wren",
+  "summary": "A two-seat scout built for speed and long-range sensing.",
+  "stats": {
+    "size": "scout",
+    "systems": {
+      "engines": 7,
+      "shields": 2,
+      "weapons": 1,
+      "sensors": 6,
+      "comms": 4
+    },
+    "cargo": 1,
+    "fuel": 6,
+    "price": 1200
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

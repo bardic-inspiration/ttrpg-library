@@ -1,0 +1,25 @@
+[
+  {
+    "id": "play",
+    "title": "Play",
+    "blocks": [
+      {
+        "kind": "prose",
+        "title": "The game",
+        "text": "Each player starts at 64 life with a 64-card deck and draws a hand of 4. Key numbers are powers of 4.",
+        "sections": [
+          { "title": "Chips", "text": "Cards cost chips, not cards. Each turn a player draws chips from a shared pool of 16 per color and spends them to play cards." },
+          { "title": "Budget", "text": "A creature's power plus toughness is at most 8 per chip it costs." }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "elements",
+    "title": "Elements",
+    "blocks": [
+      { "kind": "prose", "title": "Advantage", "text": "Water beats fire, fire beats wind, wind beats earth, and earth beats water. A blend beats what either of its parts beats." },
+      { "kind": "primitives", "type": "element" }
+    ]
+  }
+]

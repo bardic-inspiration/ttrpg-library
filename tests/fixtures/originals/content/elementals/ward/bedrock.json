@@ -1,0 +1,21 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "ward",
+  "id": "bedrock",
+  "name": "Bedrock",
+  "summary": "Solid ground under every creature you control.",
+  "stats": {
+    "cost": {
+      "earth": 2
+    },
+    "text": "Your creatures have +0/+4."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

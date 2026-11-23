@@ -679,6 +679,67 @@ warnings below on an SRD entry.
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).
 
+### Fixture rulesets
+
+Two original rulesets in `tests/fixtures/originals/` test the ruleset-generic
+code against rulesets that share nothing with `dnd-5e-2024`. Each is a full
+ruleset module, with rules primitives and a rules page, and a small library
+of official and homebrew content. They aren't in `config/types.json`, so
+they're never on the site. Their registry is their own `types.json`, and
+every type uses the generic template.
+
+```
+tests/fixtures/originals/
+  types.json                 the fixtures' registry
+  rulesets/<ruleset>/        ruleset.json, tables.json, phrases.json, types.ts, index.ts, schemas/, rules/
+  content/<ruleset>/<type>/  entries
+```
+
+- **Starships & Galaxies** (`starships-and-galaxies`): a crew runs a ship's
+  stations, and travel is a run of d100 checks. A check's target is the crew
+  member's skill plus the ship system's rating (each 0 to 10), times 5, plus
+  the hazard's difficulty (0 to -30); a roll at or under it succeeds, and a
+  failure costs the hazard's damage in d10s of hull. Its primitives are the
+  five `station`s, each running one ship system.
+  - `creature`: a crew member's skill at each station and upkeep. Derived: the
+    stations it's best at.
+  - `ship`: a size and a rating per system. Derived from the size: crew and
+    hull. Checks: the ratings fit the size's system points.
+  - `item`: an upgrade that raises a system, or a trade good. Derived: resale
+    value, half the value rounded down to 10 credits.
+  - `celestial-body`: a star, planet, moon, or asteroid field, with what it
+    orbits, its services (trade, refuel, discovery), and its hazards, each
+    environmental (testing a station) or a hostile ship. Derived: whether a
+    ship can dock, and the worst hazard. Checks: a star has no services or
+    orbit, anything else orbits, and a moon orbits a planet, anything else a
+    star (a link check).
+- **Elementals** (`elementals`): a card game whose colors are fire, water,
+  earth, and wind. A card costs chips of one or two colors, drawn from a
+  shared pool, and its colors set its element: one of the four, or the blend
+  of two. Water beats fire, fire beats wind, wind beats earth, and earth beats
+  water; a blend beats what either part beats. Key numbers are powers of 4:
+  64 life, a 64-card deck, a hand of 4, 16 chips per color. Its primitives
+  are the ten `element`s, the blends naming their two parts.
+  - `creature`, `invocation` (a one-time effect), and `ward` (a lasting one,
+    with optional upkeep). Derived for each: its element, read from the rules
+    data, its total cost, and the base elements it beats and is beaten by.
+    Checks: some element blends its colors. A creature's power and toughness
+    go in steps of 4, and their sum over 8 per chip is a warning.
+
+Tests run in two places:
+
+- `tests/originals.test.ts`, part of `npm test`, runs the generic behavior
+  against both: validation, rules placement, the index build, the gallery's
+  filters and sorts, and loading and rendering every entry and rules page.
+- `tests/originals/`, the rulesets' own derived values, checks, and ref
+  labels, runs only in `npm run test:originals`, so work on `dnd-5e-2024`
+  never runs it. CI runs it in the `originals` job on a dev PR that changes
+  the fixtures or these tests, or closes a milestone
+  ([CI checks](workflow.md#ci-checks)).
+
+`tests/originals/fixture.ts` validates, indexes, and loads the fixtures, or a
+temporary copy with a file changed to break one thing.
+
 ## Where the rules live
 
 - `rulesets/module.ts`: the contract every ruleset module meets.
@@ -688,6 +749,8 @@ Balance isn't checked by CI; it's judged in review
 - `tests/fixtures/library/valid/dnd-5e-2024/`: example entries, including the
   Cinder Hound, Frost Lance, and Wand of Frost Lances, with their rendered
   numbers checked in `tests/rulesets/dnd-5e-2024/`.
+- `tests/fixtures/originals/`: the fixture rulesets
+  ([Fixture rulesets](#fixture-rulesets)).
 
 ## Extending
 

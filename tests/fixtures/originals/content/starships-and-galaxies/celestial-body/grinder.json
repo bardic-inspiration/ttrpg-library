@@ -1,0 +1,43 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "author": "bardic-inspiration",
+  "type": "celestial-body",
+  "id": "grinder",
+  "name": "The Grinder",
+  "summary": "An asteroid field where raiders wait for slow ships.",
+  "stats": {
+    "kind": "asteroid-field",
+    "orbits": {
+      "ref": "celestial-body/pale-sun"
+    },
+    "hazards": [
+      {
+        "name": "Tumbling Rock",
+        "kind": "environmental",
+        "station": {
+          "ref": "station/helm"
+        },
+        "difficulty": "hard",
+        "damage": 1,
+        "text": "Weave between the rocks."
+      },
+      {
+        "name": "Raider Ambush",
+        "kind": "hostile",
+        "ship": {
+          "ref": "ship/reaver"
+        },
+        "difficulty": "extreme",
+        "damage": 4,
+        "text": "A Reaver drops out of the rocks."
+      }
+    ],
+    "text": "The fastest route to Veil, and the most dangerous."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

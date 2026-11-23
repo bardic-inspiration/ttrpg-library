@@ -1,0 +1,37 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "celestial-body",
+  "id": "veil",
+  "name": "Veil",
+  "summary": "A cloud-wrapped world whose surface no survey has finished.",
+  "stats": {
+    "kind": "planet",
+    "orbits": {
+      "ref": "celestial-body/pale-sun"
+    },
+    "services": [
+      "discovery"
+    ],
+    "hazards": [
+      {
+        "name": "Ion Storm",
+        "kind": "environmental",
+        "station": {
+          "ref": "station/helm"
+        },
+        "difficulty": "severe",
+        "damage": 3,
+        "text": "The pilot must fly through the storm bands."
+      }
+    ],
+    "text": "Landing parties come back with samples, or not at all. Its moon is {ref:celestial-body/shard}."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

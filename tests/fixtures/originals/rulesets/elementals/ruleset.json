@@ -1,0 +1,6 @@
+{
+  "id": "elementals",
+  "publisher": "Fixture Games",
+  "types": ["creature", "invocation", "ward"],
+  "rules": [{ "type": "element", "extensions": false }]
+}

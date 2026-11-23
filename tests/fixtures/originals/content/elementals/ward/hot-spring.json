@@ -1,0 +1,22 @@
+{
+  "ruleset": "elementals",
+  "author": "bardic-inspiration",
+  "type": "ward",
+  "id": "hot-spring",
+  "name": "Hot Spring",
+  "summary": "A homebrew healing pool.",
+  "stats": {
+    "cost": {
+      "fire": 1,
+      "water": 2
+    },
+    "upkeep": 2,
+    "text": "At the start of your turn, gain 4 life."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

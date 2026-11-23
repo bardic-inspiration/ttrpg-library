@@ -1,0 +1,34 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "ship",
+  "id": "reaver",
+  "name": "Reaver",
+  "summary": "A raider cruiser that hunts merchant frigates at the edges of the lanes.",
+  "stats": {
+    "size": "cruiser",
+    "systems": {
+      "engines": 8,
+      "shields": 8,
+      "weapons": 10,
+      "sensors": 6,
+      "comms": 4
+    },
+    "cargo": 3,
+    "fuel": 5,
+    "price": 6500,
+    "traits": [
+      {
+        "name": "Boarding Clamps",
+        "text": "A Reaver that beats a ship in a Gunnery check can seize one trade good."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

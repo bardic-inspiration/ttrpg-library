@@ -1,0 +1,18 @@
+[
+  {
+    "id": "checks",
+    "title": "Checks",
+    "blocks": [
+      {
+        "kind": "prose",
+        "title": "Rolling a check",
+        "text": "Every check rolls a d100. The target is the crew member's skill plus the ship system's rating, times 5, plus the hazard's difficulty. A roll at or under the target succeeds.",
+        "sections": [
+          { "title": "Difficulty", "text": "A routine hazard adds 0, a hard one -10, a severe one -20, and an extreme one -30." },
+          { "title": "Damage", "text": "A failed check against a hazard that deals damage costs the ship that many d10s of hull." }
+        ]
+      },
+      { "kind": "primitives", "type": "station" }
+    ]
+  }
+]

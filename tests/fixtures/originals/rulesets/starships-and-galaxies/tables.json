@@ -1,0 +1,14 @@
+{
+  "skill": { "min": 0, "max": 10 },
+  "checkMultiplier": 5,
+  "difficulty": { "routine": 0, "hard": -10, "severe": -20, "extreme": -30 },
+  "difficultyOrder": ["routine", "hard", "severe", "extreme"],
+  "shipSize": {
+    "scout": { "crew": 2, "hull": 30, "systemPoints": 20 },
+    "frigate": { "crew": 4, "hull": 50, "systemPoints": 30 },
+    "cruiser": { "crew": 6, "hull": 70, "systemPoints": 40 },
+    "carrier": { "crew": 10, "hull": 100, "systemPoints": 50 }
+  },
+  "resaleRate": 0.5,
+  "creditStep": 10
+}

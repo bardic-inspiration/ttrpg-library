@@ -1,0 +1,1 @@
+{ "type": "station", "id": "engineering", "name": "Engineering", "stats": { "system": "shields", "text": "The engineer keeps the reactor steady, patches the hull, and feeds power to the shields." } }

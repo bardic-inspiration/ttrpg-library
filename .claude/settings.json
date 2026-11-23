@@ -14,6 +14,7 @@
       "Bash(npm run snapshots:*)",
       "Bash(npm run dev)",
       "Bash(npm test:*)",
+      "Bash(npm run test:originals:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",

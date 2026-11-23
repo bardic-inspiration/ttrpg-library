@@ -83,8 +83,9 @@ metadata and changed paths; it never checks out or runs PR code.
 1. **`lane`** gets the lane from the branch prefix, lists changed paths against
    the base, applies the lane rules with `scripts/lane/`, and runs the link
    check ([Link check](#link-check)). It outputs the lane, whether content
-   changed, whether the PR is docs-only or text-only, and whether it has the
-   `milestone` label. Its scripts use only Node built-ins and run on Node's
+   changed, whether the PR is docs-only or text-only, whether it has the
+   `milestone` label, and whether it changes the fixture rulesets
+   (`tests/fixtures/originals/` or `tests/originals/`) or has that label. Its scripts use only Node built-ins and run on Node's
    type stripping, so it skips `npm ci`.
 2. **`content-checks`** (every PR except docs-only and text-only, after
    `lane`): set up the latest Node 22 release (`check-latest`, so a runner's
@@ -103,12 +104,15 @@ metadata and changed paths; it never checks out or runs PR code.
 3. **`dev-checks`** (dev lane, not docs-only, after `lane`, alongside
    `content-checks`): `npm run check` (types, `astro check`, Stylelint, the link
    check) and `npm test`. A text-only PR skips `npm run check`.
-4. **`a11y`** (milestone PRs only, after `content-checks`): installs
+4. **`originals`** (dev lane, when the fixture rulesets changed or on a
+   milestone PR, after `lane`): `npm run test:originals`, the fixture
+   rulesets' own tests ([Fixture rulesets](rulesets.md#fixture-rulesets)).
+5. **`a11y`** (milestone PRs only, after `content-checks`): installs
    Playwright's Chromium and runs `npm run a11y` against the built site
    artifact ([Milestone PRs](#milestone-prs)).
-5. **`validate`** always runs and needs all of the above. It passes only if each
-   succeeded or was skipped by lane, by docs-only or text-only, or for want of
-   the `milestone` label. It's the single required status check, so branch
+6. **`validate`** always runs and needs all of the above. It passes only if each
+   succeeded or was skipped by lane, by docs-only or text-only, for want of a
+   change to the fixture rulesets, or for want of the `milestone` label. It's the single required status check, so branch
    protection never depends on which jobs a lane runs.
 
 Content PRs get fast feedback, since they can't change code; dev PRs get the

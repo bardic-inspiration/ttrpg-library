@@ -1,0 +1,21 @@
+{
+  "ruleset": "elementals",
+  "author": "bardic-inspiration",
+  "type": "invocation",
+  "id": "smoke-signal",
+  "name": "Smoke Signal",
+  "summary": "A homebrew draw card: a column of smoke that calls for help.",
+  "stats": {
+    "cost": {
+      "fire": 1,
+      "wind": 1
+    },
+    "text": "Draw 4 chips from the pool."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

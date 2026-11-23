@@ -18,6 +18,7 @@
     "check": "tsc --noEmit && astro check --root site && stylelint \"site/src/**/*.{css,astro}\" && npm run links",
     "links": "node scripts/links/cli.ts",
     "test": "vitest run",
+    "test:originals": "vitest run --config vitest.originals.config.ts",
     "a11y": "tsx scripts/a11y/cli.ts",
     "snapshots": "tsx scripts/snapshots/cli.ts"
   },

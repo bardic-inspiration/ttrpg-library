@@ -1,0 +1,32 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "creature",
+  "id": "reactor-tender",
+  "name": "Reactor Tender",
+  "summary": "A quiet engineer who can coax power out of a dying core.",
+  "stats": {
+    "species": "Vessari",
+    "skills": {
+      "helm": 2,
+      "engineering": 9,
+      "gunnery": 1,
+      "science": 5,
+      "comms": 2
+    },
+    "upkeep": 50,
+    "traits": [
+      {
+        "name": "Cold Hands",
+        "text": "Once per voyage, re-roll a failed Engineering check."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

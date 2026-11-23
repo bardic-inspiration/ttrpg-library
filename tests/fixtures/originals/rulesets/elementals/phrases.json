@@ -1,0 +1,9 @@
+{
+  "sentences": {},
+  "vocabulary": {
+    "element": { "fire": "Fire", "water": "Water", "earth": "Earth", "wind": "Wind", "steam": "Steam", "mud": "Mud", "magma": "Magma", "mist": "Mist", "dust": "Dust", "smoke": "Smoke" },
+    "keyword": { "swift": "Swift", "guard": "Guard", "drain": "Drain" }
+  },
+  "plurals": {},
+  "articles": {}
+}

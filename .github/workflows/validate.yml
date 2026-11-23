@@ -30,6 +30,7 @@ jobs:
       docs-only: ${{ steps.lane.outputs.docs-only }}
       text-only: ${{ steps.lane.outputs.text-only }}
       milestone: ${{ steps.lane.outputs.milestone }}
+      originals-changed: ${{ steps.lane.outputs.originals-changed }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -97,6 +98,22 @@ jobs:
         run: npm run check
       - run: npm test
 
+  # docs/rulesets.md#fixture-rulesets: the original-ruleset fixtures' own tests, which `npm test`
+  # leaves out, on a dev PR that changes them or closes a milestone.
+  originals:
+    needs: lane
+    if: needs.lane.outputs.lane == 'dev' && needs.lane.outputs.originals-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          check-latest: true
+          cache: npm
+      - run: npm ci
+      - run: npm run test:originals
+
   # docs/workflow.md#milestone-prs: accessibility checks against the site
   # content-checks built (docs/styling.md#accessibility), on milestone PRs only.
   a11y:
@@ -120,7 +137,7 @@ jobs:
 
   validate:
     if: always()
-    needs: [lane, content-checks, dev-checks, a11y]
+    needs: [lane, content-checks, dev-checks, originals, a11y]
     runs-on: ubuntu-latest
     steps:
       - name: Every job the lane needs passed
@@ -129,15 +146,17 @@ jobs:
           DOCS_ONLY: ${{ needs.lane.outputs.docs-only }}
           TEXT_ONLY: ${{ needs.lane.outputs.text-only }}
           MILESTONE: ${{ needs.lane.outputs.milestone }}
+          ORIGINALS: ${{ needs.lane.outputs.originals-changed }}
           LANE_RESULT: ${{ needs.lane.result }}
           CONTENT_RESULT: ${{ needs.content-checks.result }}
           DEV_RESULT: ${{ needs.dev-checks.result }}
           A11Y_RESULT: ${{ needs.a11y.result }}
+          ORIGINALS_RESULT: ${{ needs.originals.result }}
         run: |
-          echo "lane: $LANE_RESULT (${LANE:-none}, docs only: ${DOCS_ONLY:-false}, text only: ${TEXT_ONLY:-false}, milestone: ${MILESTONE:-false}), content-checks: $CONTENT_RESULT, dev-checks: $DEV_RESULT, a11y: $A11Y_RESULT"
+          echo "lane: $LANE_RESULT (${LANE:-none}, docs only: ${DOCS_ONLY:-false}, text only: ${TEXT_ONLY:-false}, milestone: ${MILESTONE:-false}, originals changed: ${ORIGINALS:-false}), content-checks: $CONTENT_RESULT, dev-checks: $DEV_RESULT, originals: $ORIGINALS_RESULT, a11y: $A11Y_RESULT"
           [ "$LANE_RESULT" = success ] || { echo "::error::lane did not pass"; exit 1; }
           if [ "$DOCS_ONLY" = true ]; then
-            [ "$CONTENT_RESULT" = skipped ] && [ "$DEV_RESULT" = skipped ] && [ "$A11Y_RESULT" = skipped ] || { echo "::error::checks ran on a docs-only PR"; exit 1; }
+            [ "$CONTENT_RESULT" = skipped ] && [ "$DEV_RESULT" = skipped ] && [ "$ORIGINALS_RESULT" = skipped ] && [ "$A11Y_RESULT" = skipped ] || { echo "::error::checks ran on a docs-only PR"; exit 1; }
             exit 0
           fi
           if [ "$TEXT_ONLY" = true ]; then
@@ -149,6 +168,11 @@ jobs:
             [ "$DEV_RESULT" = success ] || { echo "::error::dev-checks did not pass"; exit 1; }
           else
             [ "$DEV_RESULT" = skipped ] || { echo "::error::dev-checks ran outside the dev lane"; exit 1; }
+          fi
+          if [ "$LANE" = dev ] && [ "$ORIGINALS" = true ]; then
+            [ "$ORIGINALS_RESULT" = success ] || { echo "::error::originals did not pass"; exit 1; }
+          else
+            [ "$ORIGINALS_RESULT" = skipped ] || { echo "::error::originals ran without a change to the original-ruleset fixtures"; exit 1; }
           fi
           if [ "$MILESTONE" = true ]; then
             [ "$A11Y_RESULT" = success ] || { echo "::error::a11y did not pass on a milestone PR"; exit 1; }

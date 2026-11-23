@@ -1,0 +1,22 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "invocation",
+  "id": "mist-veil",
+  "name": "Mist Veil",
+  "summary": "A curtain of fog that hides your creatures for a turn.",
+  "stats": {
+    "cost": {
+      "water": 1,
+      "wind": 1
+    },
+    "text": "Your creatures can’t be targeted this turn."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

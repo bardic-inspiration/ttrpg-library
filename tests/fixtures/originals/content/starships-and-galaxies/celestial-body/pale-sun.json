@@ -1,0 +1,31 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "celestial-body",
+  "id": "pale-sun",
+  "name": "Pale Sun",
+  "summary": "A white star at the heart of the home sector.",
+  "stats": {
+    "kind": "star",
+    "hazards": [
+      {
+        "name": "Solar Flare",
+        "kind": "environmental",
+        "station": {
+          "ref": "station/engineering"
+        },
+        "difficulty": "hard",
+        "damage": 2,
+        "text": "Shields must hold against the flare."
+      }
+    ],
+    "text": "Every lane in the sector starts here."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

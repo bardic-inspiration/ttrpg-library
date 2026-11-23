@@ -1,0 +1,25 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "creature",
+  "id": "stone-warden",
+  "name": "Stone Warden",
+  "summary": "A slow, heavy guardian of the hills.",
+  "stats": {
+    "cost": {
+      "earth": 3
+    },
+    "power": 8,
+    "toughness": 16,
+    "keywords": [
+      "guard"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

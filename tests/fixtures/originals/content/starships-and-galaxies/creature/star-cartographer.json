@@ -1,0 +1,26 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "creature",
+  "id": "star-cartographer",
+  "name": "Star Cartographer",
+  "summary": "A scholar who reads the sensors like a book and the sky like a map.",
+  "stats": {
+    "species": "Lumen",
+    "skills": {
+      "helm": 4,
+      "engineering": 2,
+      "gunnery": 0,
+      "science": 9,
+      "comms": 4
+    },
+    "upkeep": 60
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{ "type": "element", "id": "magma", "name": "Magma", "stats": { "blend": [{ "ref": "element/earth" }, { "ref": "element/fire" }], "text": "Earth and fire together." } }

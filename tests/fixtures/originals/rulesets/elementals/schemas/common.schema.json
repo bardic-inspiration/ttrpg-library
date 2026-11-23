@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/elementals/common.schema.json",
+  "$defs": {
+    "Ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "type": "string", "pattern": "^(creature|invocation|ward|element)/[a-z0-9-]+$" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "ElementRef": {
+      "description": "A typed ref: only an element.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": { "ref": { "type": "string", "pattern": "^element/[a-z0-9-]+$" } }
+    },
+    "Text": { "type": "string", "minLength": 1, "markdownSubset": true },
+    "Cost": {
+      "description": "Chips of each color a card costs, drawn from the shared pool. One or two colors.",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "maxProperties": 2,
+      "properties": {
+        "fire": { "$ref": "#/$defs/Chips" },
+        "water": { "$ref": "#/$defs/Chips" },
+        "earth": { "$ref": "#/$defs/Chips" },
+        "wind": { "$ref": "#/$defs/Chips" }
+      }
+    },
+    "Chips": { "type": "integer", "minimum": 1, "maximum": 4 },
+    "Stat": { "description": "Power or toughness, in steps of 4.", "type": "integer", "minimum": 0, "maximum": 64, "multipleOf": 4 }
+  }
+}

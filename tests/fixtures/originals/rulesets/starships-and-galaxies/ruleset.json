@@ -1,0 +1,6 @@
+{
+  "id": "starships-and-galaxies",
+  "publisher": "Fixture Press",
+  "types": ["creature", "ship", "item", "celestial-body"],
+  "rules": [{ "type": "station", "extensions": false }]
+}

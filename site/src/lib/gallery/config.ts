@@ -3,6 +3,7 @@
 
 import type { Facet, LibraryRecord, Registry } from '../../../../scripts/build-index/index.ts';
 import { PUBLISHER } from '../../../../rulesets/module.ts';
+import type { PhraseBook } from '../../../../lib/wording/book.ts';
 import { phraseBook } from '../phrases.ts';
 import { typeAliases } from '../redirects.ts';
 
@@ -108,19 +109,25 @@ export function parseSortKey(value: string | undefined): SortKey | undefined {
  * A facet as a filter. A vocabulary's names become its labels (docs/site.md#wording), and so do
  * a ref facet's target names and a groups facet's group labels.
  */
-const facetDef = (facet: Facet, ruleset: string, type: string, data: FacetData): FilterDef => {
+const facetDef = (facet: Facet, ruleset: string, type: string, data: FacetData, books: PhraseBooks): FilterDef => {
   const { groups: grouped, ...rest } = facet;
   if (grouped) {
     const groups = data.groups[`${ruleset}/${type}`] ?? [];
     return { ...rest, groups, labels: Object.fromEntries(groups.map((g) => [g.id, g.label])) };
   }
   if (facet.ref) return { ...rest, labels: data.names };
-  const labels = facet.vocabulary === undefined ? undefined : phraseBook(ruleset)?.vocabulary[facet.vocabulary];
+  const labels = facet.vocabulary === undefined ? undefined : books(ruleset)?.vocabulary[facet.vocabulary];
   return { ...rest, ...(labels ? { labels } : {}) };
 };
 
-/** The Library's configuration (docs/site.md#gallery): every ruleset and type in the registry. */
-export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DATA): GalleryConfig {
+/** A ruleset's phrase book by its id, or undefined for a ruleset with none. */
+export type PhraseBooks = (ruleset: string) => PhraseBook | undefined;
+
+/**
+ * The Library's configuration (docs/site.md#gallery): every ruleset and type in the registry. `books`
+ * gives each ruleset's phrase book, the repo's own by default.
+ */
+export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DATA, books: PhraseBooks = phraseBook): GalleryConfig {
   const types = new Map<string, TypeInfo>();
   const filters = new Map<string, FilterDef>();
   const typeLabels: Record<string, string> = {};
@@ -130,7 +137,7 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
     rulesetLabels[rulesetId] = ruleset.label;
     for (const [typeId, type] of Object.entries(ruleset.types)) {
       typeLabels[typeId] = type.label;
-      const facets = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data));
+      const facets = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data, books));
       const cardFields = ((type.cardFields as string[] | undefined) ?? [])
         .map((path) => facets.find((facet) => facet.path === path))
         .filter((facet): facet is FilterDef => facet !== undefined);

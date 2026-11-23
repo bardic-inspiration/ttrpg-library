@@ -1,0 +1,27 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "creature",
+  "id": "steam-wraith",
+  "name": "Steam Wraith",
+  "summary": "A scalding cloud that drifts across the field.",
+  "stats": {
+    "cost": {
+      "fire": 1,
+      "water": 1
+    },
+    "power": 8,
+    "toughness": 8,
+    "keywords": [
+      "drain"
+    ],
+    "text": "When the Steam Wraith deals damage, its owner gains 4 life."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}
