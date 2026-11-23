@@ -4,15 +4,18 @@ import { renderToString } from 'preact-render-to-string';
 import { beforeAll, describe, expect, it } from 'vitest';
 import Gallery from '../../../site/src/components/gallery/Gallery.tsx';
 import type { LibraryRecord } from '../../../site/src/lib/gallery/config.ts';
-import { fixtureRecords } from './helpers.ts';
+import { fixtureRecords, whole } from './helpers.ts';
 
 let records: LibraryRecord[];
 beforeAll(async () => {
   records = await fixtureRecords();
 });
 
+/** The gallery, with the whole ruleset in the ruleset set unless the query sets it, since the fixtures are homebrew. */
 const render = (props: Record<string, unknown>) =>
-  renderToString(h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records, initialQuery: '', ...props }));
+  renderToString(
+    h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records, ...props, initialQuery: whole((props.initialQuery as string | undefined) ?? '') }),
+  );
 
 describe('Gallery', () => {
   it('shows a loading message until the index arrives', () => {
@@ -100,5 +103,17 @@ describe('Gallery', () => {
 
   it('links each card to its detail page', () => {
     expect(render({})).toContain('href="/ttrpg-library/dnd-5e-2024/creature/cinder-hound/"');
+  });
+
+  it('puts the ruleset set in its own list above the other filters (#380)', () => {
+    const html = render({});
+    expect(html).toMatch(/<ul class="tree tree--rulesets">.*Ruleset.*<\/ul><ul class="tree">.*Creature/);
+  });
+
+  it('starts a fresh Library on the official content alone: the two SRD classes, not the homebrew fixtures', () => {
+    const html = renderToString(h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records, initialQuery: '' }));
+    expect(html.match(/<article class="card"/g)).toHaveLength(2);
+    expect(html).not.toContain('Cinder Hound');
+    expect(html).not.toContain('gallery__clear');
   });
 });
