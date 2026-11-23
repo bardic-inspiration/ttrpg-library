@@ -44,12 +44,13 @@ describe('parseQuery and toQuery', () => {
     expect(parseQuery('?f.stats.cr=..4', library).filters.get('stats.cr')).toEqual({ kind: 'range', max: 4 });
     expect(parseQuery('?f.stats.cr=0.125..', library).filters.get('stats.cr')).toEqual({ kind: 'range', min: 0.125 });
     expect(parseQuery('?f.stats.cr=1/8..1/2', library).filters.get('stats.cr')).toEqual({ kind: 'range', min: 0.125, max: 0.5 });
-    expect(parseQuery('?f.stats.cr=..', library).filters.size).toBe(0);
+    expect([...parseQuery('?f.stats.cr=..', library).filters.keys()]).toEqual(['author']);
   });
 
   it('ignores unknown parameters, unknown paths, unknown sorts, and malformed values', () => {
     const state = parseQuery('?utm_source=x&f.stats.nope=1&f.stats.cr=a..b&sort=stats.nope:asc&f.tags.Bad=1&f.stats.cr=3..4..5', library);
-    expect(state.filters.size).toBe(0);
+    // Only the default ruleset set remains.
+    expect([...state.filters.keys()]).toEqual(['author']);
     expect(state.sort).toEqual(library.defaultSort);
     expect(toQuery(state, library)).toBe('');
   });
@@ -74,6 +75,30 @@ describe('parseQuery and toQuery', () => {
   it('reads the ruleset and type filters', () => {
     expect(parseQuery('?f.type=spell', library).filters.get('type')).toEqual({ kind: 'enum', values: ['spell'] });
     expect(parseQuery('?f.ruleset=DND-5e-2024', library).filters.get('ruleset')).toEqual({ kind: 'enum', values: ['dnd-5e-2024'] });
+  });
+});
+
+describe('the ruleset set in the URL (#380)', () => {
+  it('starts on the publisher’s entries, written as no parameter', () => {
+    const state = parseQuery('', library);
+    expect(state.filters.get('author')).toEqual({ kind: 'enum', values: ['publisher'] });
+    expect(toQuery(state, library)).toBe('');
+    expect(toQuery(parseQuery('?f.type=spell', library), library)).toBe('?f.type=spell');
+    expect(toQuery(parseQuery('?f.author=publisher&f.type=spell', library), library)).toBe('?f.type=spell');
+  });
+
+  it('takes the whole set from a query that names any of it, and writes a set other than the default', () => {
+    const state = parseQuery('?f.source=srd%205.2', library);
+    expect([...state.filters.keys()]).toEqual(['source']);
+    expect(toQuery(state, library)).toBe('?f.source=srd%205.2');
+    expect(toQuery(parseQuery('?f.author=publisher,bardic-inspiration', library), library)).toBe('?f.author=publisher,bardic-inspiration');
+    expect(toQuery(parseQuery('?f.ruleset=dnd-5e-2024', library), library)).toBe('?f.ruleset=dnd-5e-2024');
+  });
+
+  it('reads and writes an empty set as f.ruleset with no value', () => {
+    const state = parseQuery('?f.ruleset=&f.type=spell', library);
+    expect([...state.filters.keys()]).toEqual(['type']);
+    expect(toQuery(state, library)).toBe('?f.ruleset=&f.type=spell');
   });
 });
 

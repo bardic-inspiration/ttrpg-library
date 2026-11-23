@@ -12,7 +12,7 @@ import { computeView, searchIndex } from '../../../site/src/lib/gallery/view.ts'
 import { entryNames, loadLibrary, type Entry } from '../../../site/src/lib/library.ts';
 import { loadRules } from '../../../site/src/lib/rules.ts';
 import { tempLibrary } from '../../helpers.ts';
-import { record, registry } from './helpers.ts';
+import { record, registry, whole } from './helpers.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const rules = loadRules();
@@ -34,7 +34,7 @@ beforeAll(async () => {
 });
 afterAll(() => rm(repo, { recursive: true, force: true }));
 
-const tree = (records: LibraryRecord[], config: GalleryConfig, query = '') => filterTree(config, parseQuery(query, config), records, searchIndex(records));
+const tree = (records: LibraryRecord[], config: GalleryConfig, query = '') => filterTree(config, parseQuery(whole(query), config), records, searchIndex(records));
 
 /** A node's label: a type's, a field's, or a facet's. */
 const labelOf = (n: TreeNode) => (n.kind === 'type' ? n.value.label : n.kind === 'field' ? n.label : n.def.label);
@@ -112,7 +112,7 @@ describe('Equipment › Weapon › Martial › Melee', () => {
   });
 
   it('matches a group by every leaf group in it, a union by its parts', () => {
-    const ids = (query: string) => computeView(gear, equipment, parseQuery(query, equipment), searchIndex(gear)).results.map((r) => r.id).sort();
+    const ids = (query: string) => computeView(gear, equipment, parseQuery(whole(query), equipment), searchIndex(gear)).results.map((r) => r.id).sort();
     expect(ids('?f.stats.group=weapons')).toEqual(['longsword-plus', 'sling-plus']);
     expect(ids('?f.stats.group=martial-weapons')).toEqual(['longsword-plus']);
     expect(ids('?f.stats.group=melee-weapons')).toEqual(['longsword-plus']);
@@ -135,7 +135,8 @@ describe('Equipment › Weapon › Martial › Melee', () => {
       `${group.id}-weapons`,
       `${group.id}-weapons-martial-weapons`,
     ]);
-    expect(openAtStart(tree(gear, equipment))).toEqual(new Set());
+    // The ruleset set's section starts open; nothing else does without a filter in it.
+    expect(openAtStart(tree(gear, equipment))).toEqual(new Set(['ruleset']));
   });
 });
 
@@ -184,7 +185,7 @@ describe('a custom weapon through Equipment › Weapon › Property and Mastery'
   });
 
   it('filters by a property and by a mastery', () => {
-    const ids = (query: string) => computeView(records, config, parseQuery(query, config), searchIndex(records)).results.map((r) => r.id);
+    const ids = (query: string) => computeView(records, config, parseQuery(whole(query), config), searchIndex(records)).results.map((r) => r.id);
     expect(ids('?f.stats.weapon.properties=weapon-property%2Ffinesse')).toEqual(['reef-knife']);
     expect(ids('?f.stats.weapon.properties=weapon-property%2Fheavy')).toEqual([]);
     expect(ids('?f.stats.weapon.mastery=mastery-property%2Fnick')).toEqual(['reef-knife']);
@@ -238,18 +239,17 @@ describe('every facet of every type', () => {
   const rulesets = (nodes: TreeNode[]) =>
     nodes[0]?.kind === 'field' ? nodes[0].children.flatMap((n) => (n.kind === 'type' ? [[n.value.label, n.value.count, n.value.selected]] : [])) : [];
 
-  it('shows the Ruleset node first, with one ruleset, closed until it filters', () => {
+  it('shows the Ruleset node first and open, with each ruleset counted among the other filters’ results', () => {
     const home = galleryConfig(reg, data);
     const nodes = tree(full(), home);
-    expect(nodes[0]).toMatchObject({ kind: 'field', id: 'ruleset', label: 'Ruleset', open: false });
-    expect(rulesets(nodes)).toEqual([['D&D 5e', full().length, false]]);
-    const filtered = tree(full(), home, '?f.ruleset=dnd-5e-2024');
-    expect(filtered[0]).toMatchObject({ kind: 'field', id: 'ruleset', open: true });
-    expect(rulesets(filtered)).toEqual([['D&D 5e', full().length, true]]);
+    expect(nodes[0]).toMatchObject({ kind: 'field', id: 'ruleset', label: 'Ruleset', open: true });
+    expect(rulesets(nodes)).toEqual([[reg['dnd-5e-2024']!.label, full().length, true]]);
+    // Its count is what checking it adds, so a narrower ruleset set leaves it unchanged.
+    expect(rulesets(tree(full(), home, '?f.author=publisher'))).toEqual([[reg['dnd-5e-2024']!.label, full().length, false]]);
     const other = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as Registry;
     const two = [...full(), record({ id: 'stranger', ruleset: 'other' })];
     expect(rulesets(tree(two, galleryConfig(other, data)))).toEqual([
-      ['D&D 5e', full().length, false],
+      [reg['dnd-5e-2024']!.label, full().length, true],
       ['Other', 1, false],
     ]);
   });
@@ -280,6 +280,57 @@ describe('every facet of every type', () => {
     expect(find(filtered, 'Ruleset', label, 'Author')?.open).toBe(true);
     const view = computeView(records, home, parseQuery('?f.source=srd%205.2', home), searchIndex(records));
     expect(view.results.map((r) => r.id)).toEqual(['fireball']);
+  });
+});
+
+describe('the ruleset set adds entries (#380)', () => {
+  const records = (): LibraryRecord[] => [
+    record({ id: 'fireball', type: 'spell', source: 'SRD 5.2', author: 'publisher' }),
+    record({ id: 'goblin', source: 'SRD 5.2', author: 'publisher' }),
+    record({ id: 'frost-lance', type: 'spell', source: 'Ember Codex', author: 'bardic-inspiration' }),
+    record({ id: 'cinder-hound', author: 'bardic-inspiration' }),
+    record({ id: 'moss-imp', source: 'Moss Notes', author: 'someone' }),
+  ];
+  const ids = (config: GalleryConfig, query: string) =>
+    computeView(records(), config, parseQuery(query, config), searchIndex(records())).results.map((r) => r.id).sort();
+
+  it('starts on the official content alone, with the publisher checked', () => {
+    const home = galleryConfig(reg, { ...data, publishers: { 'dnd-5e-2024': 'Wizards of the Coast' } });
+    expect(ids(home, '')).toEqual(['fireball', 'goblin']);
+    const nodes = filterTree(home, parseQuery('', home), records(), searchIndex(records()));
+    const author = values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Author'));
+    expect(author.map((v) => [v.label, v.selected])).toEqual([
+      ['bardic-inspiration', false],
+      ['Wizards of the Coast', true],
+      ['someone', false],
+    ]);
+    expect(openAtStart(nodes)).toEqual(new Set(['ruleset', 'ruleset/dnd-5e-2024', 'ruleset/dnd-5e-2024:author']));
+  });
+
+  it('adds each checked ruleset, source, or author to the results, and the other filters narrow them', () => {
+    const home = galleryConfig(reg, data);
+    expect(ids(home, '?f.author=publisher&f.source=ember%20codex')).toEqual(['fireball', 'frost-lance', 'goblin']);
+    expect(ids(home, '?f.source=moss%20notes&f.author=bardic-inspiration')).toEqual(['cinder-hound', 'frost-lance', 'moss-imp']);
+    expect(ids(home, '?f.ruleset=dnd-5e-2024')).toEqual(['cinder-hound', 'fireball', 'frost-lance', 'goblin', 'moss-imp']);
+    expect(ids(home, '?f.author=publisher&f.source=ember%20codex&f.type=spell')).toEqual(['fireball', 'frost-lance']);
+  });
+
+  it('shows nothing when nothing in the set is checked', () => {
+    const home = galleryConfig(reg, data);
+    expect(ids(home, '?f.ruleset=')).toEqual([]);
+    expect(ids(home, '?f.ruleset=&f.type=spell')).toEqual([]);
+  });
+
+  it('counts a source or author by what checking it adds, under the other filters', () => {
+    const home = galleryConfig(reg, data);
+    const nodes = filterTree(home, parseQuery('?f.type=spell', home), records(), searchIndex(records()));
+    expect(values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Source')).map((v) => [v.label, v.count])).toEqual([
+      ['SRD 5.2', 1],
+      ['Ember Codex', 1],
+      ['Moss Notes', 0],
+    ]);
+    // A type counts the entries of it in the results: only the official spell by default.
+    expect(find(nodes, 'Spell')?.kind === 'type' && (find(nodes, 'Spell') as { value: ValueNode }).value.count).toBe(1);
   });
 });
 

@@ -4,8 +4,8 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import registryJson from '../../../../config/types.json' with { type: 'json' };
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
-import { galleryConfig, sortChoices, validSort, type FacetData, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
-import { isActive, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
+import { defaultScope, galleryConfig, isScopePath, sortChoices, validSort, type FacetData, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
+import { isActive, isDefaultScope, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
 import { filterTree } from '../../lib/gallery/tree.ts';
 import { computeView, searchIndex } from '../../lib/gallery/view.ts';
 import FilterIcon from '../../icons/Filter.tsx';
@@ -119,13 +119,13 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
               onEnum={(path, values) => setFilter(path, { kind: 'enum', values })}
               onRange={(path, min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
             />
-            {state.filters.size > 0 && (
+            {(!isDefaultScope(state.filters) || [...state.filters.keys()].some((path) => !isScopePath(path))) && (
               <button
                 type="button"
                 class="gallery__clear"
                 onClick={() =>
                   update((next) => {
-                    next.filters.clear();
+                    next.filters = new Map(defaultScope());
                   })
                 }
               >

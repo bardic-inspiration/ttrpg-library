@@ -2,7 +2,7 @@
 // over library.json records, so the island stays a thin view.
 
 import MiniSearch from 'minisearch';
-import { NAME, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
+import { NAME, filterDef, isScopePath, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
 
@@ -34,9 +34,20 @@ export function matchedFilters(config: GalleryConfig, filters: Map<string, Filte
   return out;
 }
 
-/** Records passing every active filter (AND across filters, OR within one), optionally skipping one path. */
-export const applyFilters = (records: LibraryRecord[], filters: Map<string, FilterValue>, except?: string): LibraryRecord[] =>
-  records.filter((record) => [...filters].every(([path, value]) => path === except || !isActive(value) || matches(record, path, value)));
+/**
+ * Records passing the filters (docs/site.md#gallery "Filters"): in the ruleset set's scope, matching
+ * any of its filters, then every other active filter (AND across filters, OR within one). Skipping
+ * one path skips that filter; skipping one of the ruleset set's skips the whole set, so a ruleset,
+ * source, or author counts what checking it adds.
+ */
+export function applyFilters(records: LibraryRecord[], filters: Map<string, FilterValue>, except?: string): LibraryRecord[] {
+  const active = [...filters].filter(([path, value]) => path !== except && isActive(value));
+  const scope = active.filter(([path]) => isScopePath(path));
+  const narrowing = active.filter(([path]) => !isScopePath(path));
+  const inScope = (record: LibraryRecord) =>
+    (except !== undefined && isScopePath(except)) || scope.some(([path, value]) => matches(record, path, value));
+  return records.filter((record) => inScope(record) && narrowing.every(([path, value]) => matches(record, path, value)));
+}
 
 /** The search index (docs/site.md#gallery): name ×3, summary ×2, tag values ×1.5, search text ×1, with prefix and light fuzzy matching. */
 export function searchIndex(records: LibraryRecord[]): MiniSearch<LibraryRecord> {

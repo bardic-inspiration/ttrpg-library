@@ -2,7 +2,7 @@
 // accordion of disclosure buttons, with values as checkboxes that keep their counts and range
 // facets as min and max inputs inside their node. The tree's shape comes from lib/gallery/tree.ts.
 import { useEffect, useRef, useState } from 'preact/hooks';
-import type { FilterDef } from '../../lib/gallery/config.ts';
+import { RULESET, type FilterDef } from '../../lib/gallery/config.ts';
 import type { FilterValue } from '../../lib/gallery/state.ts';
 import { openAtStart, valueId, type TreeNode, type ValueNode } from '../../lib/gallery/tree.ts';
 import { parseNumber } from '../../lib/gallery/values.ts';
@@ -43,12 +43,24 @@ export function FilterTree(props: TreeProps) {
         return next;
       }),
   };
+  // The ruleset set is its own list at the top, divided from the narrowing filters by a break line.
+  const rulesets = props.nodes.filter((node) => node.id === RULESET);
+  const rest = props.nodes.filter((node) => node.id !== RULESET);
   return (
-    <ul class="tree">
-      {props.nodes.map((node) => (
-        <Node key={node.id} node={node} shared={shared} />
-      ))}
-    </ul>
+    <>
+      {rulesets.length > 0 && (
+        <ul class="tree tree--rulesets">
+          {rulesets.map((node) => (
+            <Node key={node.id} node={node} shared={shared} />
+          ))}
+        </ul>
+      )}
+      <ul class="tree">
+        {rest.map((node) => (
+          <Node key={node.id} node={node} shared={shared} />
+        ))}
+      </ul>
+    </>
   );
 }
 
