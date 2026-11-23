@@ -3,6 +3,7 @@
 // Pure, so the island only renders it.
 
 import type MiniSearch from 'minisearch';
+import { isOfficial } from '../../../../rulesets/module.ts';
 import { label } from '../../../../lib/wording/grammar.ts';
 import { AUTHOR, RULESET, SOURCE, TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
@@ -208,10 +209,19 @@ function tagsNode(ctx: Context, defaults: Set<string>): TreeNode | undefined {
 }
 
 /**
+ * A ruleset's sources with its official ones pinned first: a source is official when official
+ * content carries it (docs/content-model.md#source-and-author). Each part keeps its order.
+ */
+function officialFirst(values: ValueNode[], records: LibraryRecord[]): ValueNode[] {
+  const official = new Set(records.filter(isOfficial).flatMap((r) => enumValues(valueAt(r, SOURCE)).map((v) => v.key)));
+  return [...values.filter((v) => official.has(v.key)), ...values.filter((v) => !official.has(v.key))];
+}
+
+/**
  * The Ruleset node, always first: each ruleset the Library has entries of (or that is checked),
  * as a value of the ruleset filter counted among the results of every other filter, holding its
- * Source and Author filters over its own entries (docs/content-model.md#source-and-author). An
- * author of `"publisher"` reads as the ruleset's publisher.
+ * Source and Author filters over its own entries (docs/content-model.md#source-and-author), its
+ * official sources first. An author of `"publisher"` reads as the ruleset's publisher.
  */
 function rulesetNode(ctx: Context): TreeNode | undefined {
   const def = filterDef(ctx.config, RULESET);
@@ -230,7 +240,8 @@ function rulesetNode(ctx: Context): TreeNode | undefined {
         .filter((d): d is FilterDef => d !== undefined)
         .map((d) => (d.path === AUTHOR && publisher ? { ...d, labels: { ...d.labels, publisher } } : d))
         .map((d) => facetNode(ctx, d, own, `${RULESET}/${ruleset}:`, false, claims))
-        .filter((node): node is TreeNode => node !== undefined);
+        .filter((node): node is TreeNode => node !== undefined)
+        .map((node) => (node.kind === 'enum' && node.def.path === SOURCE ? { ...node, values: officialFirst(node.values, own) } : node));
       return {
         kind: 'type' as const,
         id: `${RULESET}/${ruleset}`,
