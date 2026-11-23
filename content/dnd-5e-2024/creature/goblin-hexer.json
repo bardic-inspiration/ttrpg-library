@@ -1,0 +1,134 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "goblin-hexer",
+  "name": "Goblin Hexer",
+  "summary": "A goblin curse-caster who afflicts enemies with bad luck, bad dreams, and a very bad day.",
+  "description": "The hexer is half shaman, half con artist. Their curses are mostly misdirection, but the ones that work tend to be the sort that get remembered.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 13,
+      "note": "leather armor"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 14,
+      "con": 12,
+      "int": 12,
+      "wis": 14,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "wis"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "stealth": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/arcane-focus"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 1,
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Hex Bolt",
+        "kind": "ranged-attack",
+        "ability": "wis",
+        "range": {
+          "normal": 60
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "wis",
+            "type": "necrotic"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Nimble Escape",
+        "kind": "other",
+        "text": "The hexer takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/chill-touch"
+        },
+        {
+          "ref": "spell/minor-illusion"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/hold-person"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/bane"
+          },
+          {
+            "ref": "spell/hex"
+          }
+        ]
+      }
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

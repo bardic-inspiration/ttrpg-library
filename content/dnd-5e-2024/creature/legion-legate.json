@@ -1,0 +1,133 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "legion-legate",
+  "name": "Legion Legate",
+  "summary": "A general of the legion who commands thousands, issues orders in the middle of a melee, and never loses the field.",
+  "description": "The legate is the legion's mind and its voice, appointed by the highest authority and answerable to no one else on the field. They have won more battles than most generals have fought, and they plan their retreats before their advances.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 19,
+      "note": "splint armor, shield"
+    },
+    "hitDice": 24,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 14,
+      "con": 18,
+      "int": 16,
+      "wis": 16,
+      "cha": 20
+    },
+    "saveProficiencies": [
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "history": "proficient",
+      "insight": "proficient",
+      "persuasion": "expertise"
+    },
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/frightened"
+        }
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/splint-armor"
+      },
+      {
+        "ref": "equipment/shield"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Orc",
+        "Celestial"
+      ]
+    },
+    "cr": 11,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the legate fails a saving throw, it can choose to succeed instead.",
+        "uses": "3/day"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The legate makes three Longsword attacks."
+      },
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "3d8",
+            "type": "force"
+          }
+        ]
+      },
+      {
+        "name": "Sound the Charge",
+        "kind": "other",
+        "text": "Each ally of the legate's choice within 60 feet that can hear it can take the {ref:glossary/dash} action as a {ref:glossary/reaction}, and has {ref:glossary/advantage} on the next attack roll it makes before the end of its next turn.",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Strategic Orders",
+        "kind": "other",
+        "text": "Up to three allies the legate can see within 60 feet can each use its {ref:glossary/reaction} to make one weapon attack.",
+        "uses": "3/day"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Parry",
+        "kind": "other",
+        "text": "*Trigger:* The legate is hit by a melee attack roll while holding a weapon. *Response:* The legate adds 4 to its AC against that attack, possibly causing it to miss."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "eldersage",
+  "name": "Eldersage",
+  "summary": "An ancient elven scholar-mage whose power and patience have outlasted dynasties.",
+  "description": "The eldersage has watched empires rise, and fall, and rise again. They no longer argue with anyone, and mostly decline to interfere; when one does, the result usually becomes a footnote in the next history.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "neutral good",
+    "ac": {
+      "value": 17,
+      "note": "arcane ward"
+    },
+    "hitDice": 28,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 14,
+      "con": 18,
+      "int": 22,
+      "wis": 18,
+      "cha": 20
+    },
+    "saveProficiencies": [
+      "int",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "arcana": "expertise",
+      "history": "expertise",
+      "insight": "proficient"
+    },
+    "resistances": [
+      "force"
+    ],
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        }
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/quarterstaff"
+      },
+      {
+        "ref": "equipment/arcane-focus"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Draconic",
+        "Sylvan",
+        "Celestial",
+        "Primordial"
+      ]
+    },
+    "cr": 12,
+    "traits": [
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the eldersage fails a saving throw, it can choose to succeed instead.",
+        "uses": "3/day"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Quarterstaff",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Arcane Torrent",
+        "kind": "save",
+        "ability": "int",
+        "save": {
+          "ability": "con",
+          "targets": "each creature in a 60-foot Line that is 5 feet wide"
+        },
+        "damage": [
+          {
+            "dice": "16d6",
+            "type": "force"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Spell Ward",
+        "kind": "other",
+        "text": "*Trigger:* The eldersage is targeted by a spell that requires a saving throw. *Response:* The eldersage has {ref:glossary/advantage} on the saving throw."
+      }
+    ],
+    "spellcasting": {
+      "ability": "int",
+      "atWill": [
+        {
+          "ref": "spell/fire-bolt"
+        },
+        {
+          "ref": "spell/mage-hand"
+        },
+        {
+          "ref": "spell/message"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/disintegrate"
+          },
+          {
+            "ref": "spell/chain-lightning"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/cone-of-cold"
+          },
+          {
+            "ref": "spell/wall-of-force"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/counterspell"
+          },
+          {
+            "ref": "spell/dispel-magic"
+          },
+          {
+            "ref": "spell/fireball"
+          }
+        ]
+      }
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "brigand-archer",
+  "name": "Brigand Archer",
+  "summary": "A roadside sniper who pins travelers in place with arrows from the tree line.",
+  "description": "Brigand archers choose a bend in the road and wait there for days. Their volleys are meant to stop a wagon, not kill its driver, because a living driver can be ransomed.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 11,
+      "dex": 16,
+      "con": 12,
+      "int": 10,
+      "wis": 13,
+      "cha": 10
+    },
+    "skills": {
+      "stealth": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/longbow"
+      },
+      {
+        "ref": "equipment/shortsword"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 0.5,
+    "actions": [
+      {
+        "name": "Shortsword",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Longbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Pinning Shot",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ],
+        "onHit": "The target's Speed is 0 until the end of its next turn.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "ley-warden",
+  "name": "Ley-Warden",
+  "summary": "An elven guardian of a ley-line junction who steps between trees in a blink and shoots on arrival.",
+  "description": "Wardens guard the places where the old magic comes close to the surface. They know every tree and standing stone for forty miles, and they treat the roads between them as theirs.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "neutral good",
+    "ac": {
+      "value": 16,
+      "note": "studded leather armor"
+    },
+    "hitDice": 17,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 18,
+      "con": 14,
+      "int": 12,
+      "wis": 16,
+      "cha": 10
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis"
+    ],
+    "skills": {
+      "nature": "proficient",
+      "perception": "proficient",
+      "stealth": "expertise",
+      "survival": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/longbow"
+      },
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/studded-leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The warden has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The warden makes three attacks, using Longsword or Longbow in any combination."
+      },
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "force",
+            "condition": "if the warden teleported this turn"
+          }
+        ]
+      },
+      {
+        "name": "Longbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "force",
+            "condition": "if the warden teleported this turn"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Ley Step",
+        "kind": "other",
+        "text": "The warden teleports up to 30 feet to an unoccupied space it can see.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

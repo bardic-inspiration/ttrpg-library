@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "equipment",
+  "id": "excavators-tools",
+  "name": "Excavator's Tools",
+  "summary": "A folding spade, pry bar, plumb line, and shoring pegs for digging, tunnelling, and propping up what you dig.",
+  "description": "Diggers, sappers, and tomb-robbers prize these sturdy kits. Each one has a pick head, a collapsing spade, and a coil of knotted line, and the best are cared for like family heirlooms.",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 20,
+      "unit": "gp"
+    },
+    "weight": 12,
+    "tool": {
+      "ability": "str",
+      "utilize": "Shore up a tunnel or trench against collapse (DC 15), or judge whether a dig is safe by its sound and dust (DC 15)"
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

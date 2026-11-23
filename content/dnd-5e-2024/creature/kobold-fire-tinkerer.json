@@ -1,0 +1,121 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "kobold-fire-tinkerer",
+  "name": "Kobold Fire-Tinkerer",
+  "summary": "A kobold inventor whose jars of burning oil have made it the warren's favorite, and its most hazardous, resident.",
+  "description": "Fire-tinkerers brew and test their wares in a back chamber of the lair, which has been rebuilt twice. They regard each explosion as a data point, and the warren keeps a running tally.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "dragon",
+    "shortName": "tinkerer",
+    "descriptors": [
+      "Kobold"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 16,
+      "con": 12,
+      "int": 16,
+      "wis": 10,
+      "cha": 8
+    },
+    "saveProficiencies": [
+      "dex",
+      "int"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "sleight-of-hand": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/hand-crossbow"
+      },
+      {
+        "ref": "equipment/alchemists-fire",
+        "count": 3
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Pack Tactics",
+        "kind": "other",
+        "text": "The tinkerer has {ref:glossary/advantage} on an attack roll against a creature if at least one of the tinkerer's allies is within 5 feet of the creature and the ally doesn't have the {ref:condition/incapacitated} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The tinkerer makes two Hand Crossbow attacks."
+      },
+      {
+        "name": "Hand Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Flame Jar",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 10-foot-radius Sphere centered on a point the tinkerer can see within 30 feet"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

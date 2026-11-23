@@ -1,0 +1,124 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "dragonkin-champion",
+  "name": "Dragonkin Champion",
+  "summary": "A towering dragonkin war-champion who cuts with a flaming greatsword and breathes a cone of fire.",
+  "description": "A champion is the wyrm's chosen, hatched for a single purpose and well pleased with it. They fight in the open and in plain sight, and they do not understand why anyone would try to sneak.",
+  "stats": {
+    "size": [
+      "large"
+    ],
+    "creatureType": "dragon",
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 17,
+      "note": "natural armor"
+    },
+    "hitDice": 16,
+    "speed": {
+      "walk": 40
+    },
+    "abilities": {
+      "str": 22,
+      "dex": 12,
+      "con": 20,
+      "int": 10,
+      "wis": 12,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "intimidation": "proficient",
+      "perception": "proficient"
+    },
+    "immunities": {
+      "damage": [
+        "fire"
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/greatsword"
+      }
+    ],
+    "senses": {
+      "darkvision": 60,
+      "blindsight": 10
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 8,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The champion makes three attacks, using Greatsword twice and Bite once."
+      },
+      {
+        "name": "Greatsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d6",
+            "type": "fire"
+          }
+        ]
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Fire Breath",
+        "kind": "save",
+        "ability": "con",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 30-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "12d6",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "kobold-wyrmpriest",
+  "name": "Kobold Wyrmpriest",
+  "summary": "A kobold priest who preaches the dragon's divinity and spits embers to prove it.",
+  "description": "The wyrmpriest holds a dragon's rule to be sacred scripture, and may even believe it. The warren listens, partly from faith and partly because the priest is the one who decides who eats.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Kobold"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 13,
+      "note": "leather armor"
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 7,
+      "dex": 14,
+      "con": 12,
+      "int": 10,
+      "wis": 16,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "religion": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/mace"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      },
+      {
+        "ref": "equipment/holy-symbol"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Dragon's Lackey",
+        "kind": "other",
+        "text": "The wyrmpriest has {ref:glossary/advantage} on saving throws against the {ref:condition/frightened} condition while a Dragon that is its ally is within 60 feet of it."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Mace",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Dragon's Ember",
+        "kind": "ranged-attack",
+        "ability": "wis",
+        "range": {
+          "normal": 30,
+          "long": 90
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "wis",
+            "type": "fire"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/sacred-flame"
+        },
+        {
+          "ref": "spell/thaumaturgy"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/hold-person"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/bane"
+          },
+          {
+            "ref": "spell/cure-wounds"
+          }
+        ]
+      }
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

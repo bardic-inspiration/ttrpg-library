@@ -1,0 +1,115 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "goblin-bombardier",
+  "name": "Goblin Bombardier",
+  "summary": "A goblin who lobs pots of burning pitch and has not yet lost an eyebrow to it.",
+  "description": "The bombardier's kit is a sling, a satchel of fire pots, and a bucket of water they do not mention. The warren is generous with them, as long as they stay at the back.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 12,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 15,
+      "con": 12,
+      "int": 10,
+      "wis": 10,
+      "cha": 8
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/sling"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      },
+      {
+        "ref": "equipment/alchemists-fire",
+        "count": 3
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 2,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The bombardier makes two Sling attacks."
+      },
+      {
+        "name": "Sling",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Pitch Bomb",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 5-foot-radius Sphere centered on a point the bombardier can see within 60 feet"
+        },
+        "damage": [
+          {
+            "dice": "4d6",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "uses": "3/day"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Nimble Escape",
+        "kind": "other",
+        "text": "The bombardier takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

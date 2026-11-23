@@ -1,0 +1,125 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "orc-war-chanter",
+  "name": "Orc War-Chanter",
+  "summary": "An orc drum-priest whose chanting hardens the warband and cows its enemies.",
+  "description": "A war-chanter's voice carries over the roar of battle. The chant is older than the clan, and when it stops the warband usually does too.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Orc"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 14,
+      "note": "chain shirt"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 12,
+      "con": 16,
+      "int": 10,
+      "wis": 14,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "intimidation": "expertise",
+      "performance": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/spear"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Orc"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Battle Chant",
+        "kind": "other",
+        "text": "Each ally within 30 feet of the war-chanter has {ref:glossary/advantage} on saving throws against the {ref:condition/frightened} condition while the war-chanter is conscious."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The war-chanter makes two Spear attacks."
+      },
+      {
+        "name": "Spear",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "thunder"
+          }
+        ]
+      },
+      {
+        "name": "Roar of the Horde",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "thunder"
+          }
+        ],
+        "onFailure": "The target also has the {ref:condition/frightened} condition until the end of the war-chanter's next turn.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Aggressive",
+        "kind": "other",
+        "text": "The war-chanter moves up to its Speed toward a hostile creature it can see."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

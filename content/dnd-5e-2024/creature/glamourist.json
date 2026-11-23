@@ -1,0 +1,153 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "glamourist",
+  "name": "Glamourist",
+  "summary": "An elven illusionist who bends light, sound, and expectation until nothing in the room can be trusted.",
+  "description": "The glamourist lives as much in other people's heads as in their own. Their finest work is a lie so well made that the victim insists on its truth even after they have seen it fall apart.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 13,
+      "note": "mage armor"
+    },
+    "hitDice": 15,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 14,
+      "con": 12,
+      "int": 14,
+      "wis": 12,
+      "cha": 18
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "deception": "expertise",
+      "performance": "proficient",
+      "persuasion": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/arcane-focus"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Sylvan"
+      ]
+    },
+    "cr": 4,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The glamourist has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Dazzling Glamour",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature in a 15-foot Cone"
+        },
+        "damage": [
+          {
+            "dice": "3d8",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "The target also has the {ref:condition/charmed} condition until the end of the glamourist's next turn.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Phantom Double",
+        "kind": "other",
+        "text": "*Trigger:* A creature the glamourist can see makes an attack roll against it. *Response:* An illusory double of the glamourist appears in its place, and the attack roll has {ref:glossary/disadvantage}.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "atWill": [
+        {
+          "ref": "spell/minor-illusion"
+        },
+        {
+          "ref": "spell/dancing-lights"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/major-image"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/hypnotic-pattern"
+          },
+          {
+            "ref": "spell/invisibility"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/disguise-self"
+          },
+          {
+            "ref": "spell/silent-image"
+          }
+        ]
+      }
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "starcaller",
+  "name": "Starcaller",
+  "summary": "An elven star-reader who reads the heavens for answers and calls down a fall of silver light.",
+  "description": "Starcallers keep their vigils on the highest balconies of the spires, where the air is thin and the night is long. Their predictions are right often enough that the nobility pay for the rest.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "neutral good",
+    "ac": {
+      "value": 14,
+      "note": "mage armor"
+    },
+    "hitDice": 20,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 14,
+      "con": 14,
+      "int": 16,
+      "wis": 18,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "int",
+      "wis"
+    ],
+    "skills": {
+      "arcana": "proficient",
+      "insight": "proficient",
+      "religion": "proficient"
+    },
+    "resistances": [
+      "radiant"
+    ],
+    "gear": [
+      {
+        "ref": "equipment/quarterstaff"
+      },
+      {
+        "ref": "equipment/arcane-focus"
+      }
+    ],
+    "senses": {
+      "darkvision": 120
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Celestial"
+      ]
+    },
+    "cr": 6,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The starcaller has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Quarterstaff",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Starfall",
+        "kind": "save",
+        "ability": "wis",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 20-foot-radius Sphere centered on a point the starcaller can see within 90 feet"
+        },
+        "damage": [
+          {
+            "dice": "8d6",
+            "type": "radiant"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/starry-wisp"
+        },
+        {
+          "ref": "spell/light"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/sunbeam"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/moonbeam"
+          },
+          {
+            "ref": "spell/spirit-guardians"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/guiding-bolt"
+          },
+          {
+            "ref": "spell/faerie-fire"
+          }
+        ]
+      }
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

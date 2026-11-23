@@ -1,0 +1,126 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "bandit-warlord",
+  "name": "Bandit Warlord",
+  "summary": "A scarred road-king who rallies a bandit army with a shout and hews through guard lines.",
+  "description": "A warlord rules a stretch of road and forest the way a baron rules a barony, with tolls, taxes, and justice delivered at the end of an axe. Their followers are loyal because the warlord has never yet lost a fight that mattered.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 16,
+      "note": "chain mail"
+    },
+    "hitDice": 20,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 18,
+      "dex": 14,
+      "con": 17,
+      "int": 12,
+      "wis": 13,
+      "cha": 17
+    },
+    "saveProficiencies": [
+      "str",
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "intimidation": "expertise",
+      "athletics": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/greataxe"
+      },
+      {
+        "ref": "equipment/javelin",
+        "count": 4
+      },
+      {
+        "ref": "equipment/chain-mail"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 7,
+    "traits": [
+      {
+        "name": "Brutal Cleave",
+        "kind": "other",
+        "text": "When the warlord reduces a creature to 0 hit points with a melee attack, it can make one Greataxe attack against another creature within 5 feet of the first as a {ref:glossary/bonus-action}."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The warlord makes three Greataxe attacks."
+      },
+      {
+        "name": "Greataxe",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d10",
+            "type": "slashing",
+            "condition": "if the target is Bloodied"
+          }
+        ]
+      },
+      {
+        "name": "Javelin",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Rally the Pack",
+        "kind": "other",
+        "text": "Each ally of the warlord's choice within 30 feet that can see or hear it gains 10 {ref:glossary/temporary-hit-points} and can make one weapon attack as a {ref:glossary/reaction}.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

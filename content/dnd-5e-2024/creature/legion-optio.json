@@ -1,0 +1,119 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "legion-optio",
+  "name": "Legion Optio",
+  "summary": "A hard-bitten sergeant who drives the rank and file forward and trades blows beside them.",
+  "description": "An optio keeps the legion's order from the back, and gets in front of it when order fails. They carry a staff of office, a sword, and a long list of the names of the dead.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 16,
+      "note": "ring mail, shield"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 13,
+      "con": 15,
+      "int": 11,
+      "wis": 12,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "intimidation": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/javelin",
+        "count": 3
+      },
+      {
+        "ref": "equipment/ring-mail"
+      },
+      {
+        "ref": "equipment/shield"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Orc"
+      ]
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The optio makes three Longsword attacks."
+      },
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "slashing",
+            "condition": "if the target has been attacked by an ally of the optio since the start of the optio's last turn"
+          }
+        ]
+      },
+      {
+        "name": "Javelin",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Order to Strike",
+        "kind": "other",
+        "text": "One ally the optio can see within 30 feet can use its {ref:glossary/reaction} to make one weapon attack."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

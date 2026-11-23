@@ -1,0 +1,108 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "legion-praetorian",
+  "name": "Legion Praetorian",
+  "summary": "An elite legion guard whose blows grow heavier when comrades stand close.",
+  "description": "Praetorians are drawn from the best of every cohort and sworn to the general's person. They fight shoulder to shoulder, and they are most dangerous when one of them is not alone.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 18,
+      "note": "plate armor"
+    },
+    "hitDice": 22,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 19,
+      "dex": 14,
+      "con": 17,
+      "int": 10,
+      "wis": 12,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "str",
+      "con"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "perception": "proficient"
+    },
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/frightened"
+        }
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/greatsword"
+      },
+      {
+        "ref": "equipment/plate-armor"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 8,
+    "traits": [
+      {
+        "name": "Unbroken Line",
+        "kind": "other",
+        "text": "The praetorian has {ref:glossary/advantage} on saving throws against the {ref:condition/frightened} and {ref:condition/prone} conditions."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The praetorian makes three Greatsword attacks."
+      },
+      {
+        "name": "Greatsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "2d6",
+            "type": "slashing",
+            "condition": "if an ally of the praetorian is within 5 feet of the target"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Riposte",
+        "kind": "other",
+        "text": "*Trigger:* A creature misses the praetorian with a melee attack roll. *Response:* The praetorian makes one Greatsword attack against that creature."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

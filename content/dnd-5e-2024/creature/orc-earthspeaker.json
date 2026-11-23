@@ -1,0 +1,139 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "orc-earthspeaker",
+  "name": "Orc Earthspeaker",
+  "summary": "An orc shaman who calls the ground up in waves and shakes enemies off their feet.",
+  "description": "The earthspeaker listens to the ground for rumors of weather and war, and the ground answers. They are the clan's memory and its oldest grudge-keepers.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Orc"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 14,
+      "note": "hide armor and stone ward"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 10,
+      "con": 16,
+      "int": 10,
+      "wis": 16,
+      "cha": 12
+    },
+    "saveProficiencies": [
+      "con",
+      "wis"
+    ],
+    "skills": {
+      "nature": "proficient",
+      "survival": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/maul"
+      },
+      {
+        "ref": "equipment/hide-armor"
+      },
+      {
+        "ref": "equipment/druidic-focus"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Orc"
+      ]
+    },
+    "cr": 4,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The earthspeaker makes two Maul attacks."
+      },
+      {
+        "name": "Maul",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "bludgeoning"
+          }
+        ]
+      },
+      {
+        "name": "Rolling Tremor",
+        "kind": "save",
+        "ability": "wis",
+        "save": {
+          "ability": "str",
+          "targets": "each creature on the ground in a 15-foot Emanation originating from the earthspeaker"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "bludgeoning"
+          }
+        ],
+        "onFailure": "The target also has the {ref:condition/prone} condition.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "wis",
+      "atWill": [
+        {
+          "ref": "spell/druidcraft"
+        },
+        {
+          "ref": "spell/produce-flame"
+        }
+      ],
+      "perDay": {
+        "2": [
+          {
+            "ref": "spell/spike-growth"
+          },
+          {
+            "ref": "spell/barkskin"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/entangle"
+          },
+          {
+            "ref": "spell/thunderwave"
+          }
+        ]
+      }
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

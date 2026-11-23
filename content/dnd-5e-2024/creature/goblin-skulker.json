@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "goblin-skulker",
+  "name": "Goblin Skulker",
+  "summary": "A small goblin scout who creeps ahead of the warband and prefers the dark.",
+  "description": "Skulkers are the runts of a warren, sent out first because the chief expects them to die. The smart ones come back with the whole map in their heads and a plan for the next night.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "fey",
+    "descriptors": [
+      "Goblinoid"
+    ],
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 13,
+      "note": "leather armor"
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 8,
+      "dex": 15,
+      "con": 10,
+      "int": 10,
+      "wis": 8,
+      "cha": 8
+    },
+    "skills": {
+      "stealth": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/shortbow"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Goblin"
+      ]
+    },
+    "cr": 0.125,
+    "traits": [
+      {
+        "name": "Shadow Lurker",
+        "kind": "other",
+        "text": "While in {ref:glossary/dim-light} or {ref:glossary/darkness}, the skulker has {ref:glossary/advantage} on Dexterity (Stealth) checks."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Shortbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Nimble Escape",
+        "kind": "other",
+        "text": "The skulker takes the {ref:glossary/disengage} or {ref:glossary/hide} action."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

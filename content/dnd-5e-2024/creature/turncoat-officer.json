@@ -1,0 +1,141 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "turncoat-officer",
+  "name": "Turncoat Officer",
+  "summary": "A traitor in a stolen uniform who knows how the enemy fights and sells that knowledge.",
+  "description": "The turncoat took coin, a grudge, or a better offer, and now leads bandits with all the drill their old commanders taught. Their former comrades remember the face, and some of them will not wait for the trial.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 16,
+      "note": "breastplate"
+    },
+    "hitDice": 17,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 14,
+      "dex": 15,
+      "con": 14,
+      "int": 13,
+      "wis": 12,
+      "cha": 17
+    },
+    "saveProficiencies": [
+      "dex",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "insight": "proficient",
+      "persuasion": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/rapier"
+      },
+      {
+        "ref": "equipment/light-crossbow"
+      },
+      {
+        "ref": "equipment/breastplate"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Orc",
+        "Goblin"
+      ]
+    },
+    "cr": 5,
+    "traits": [
+      {
+        "name": "Know the Plan",
+        "kind": "other",
+        "text": "The officer has {ref:glossary/advantage} on attack rolls against a creature that has already attacked one of the officer's allies since the end of the officer's last turn."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The officer makes three Rapier attacks."
+      },
+      {
+        "name": "Rapier",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d6",
+            "type": "psychic"
+          }
+        ]
+      },
+      {
+        "name": "Light Crossbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 80,
+          "long": 320
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Sow Doubt",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "wis",
+          "targets": "each creature of the officer's choice within 30 feet that can hear it"
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "psychic"
+          }
+        ],
+        "onFailure": "The target also has {ref:glossary/disadvantage} on the next attack roll it makes before the end of its next turn.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Parry",
+        "kind": "other",
+        "text": "*Trigger:* The officer is hit by a melee attack roll while holding a weapon. *Response:* The officer adds 3 to its AC against that attack, possibly causing it to miss."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

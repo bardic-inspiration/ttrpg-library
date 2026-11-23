@@ -1,0 +1,106 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "tower-sentinel",
+  "name": "Tower Sentinel",
+  "summary": "An elven watcher on a spire balcony whose arrows fall long before the enemy is in sight.",
+  "description": "A sentinel can stand watch for a week without sleeping and can name every bird on the horizon. When one shoots, there is usually already a second arrow on the string.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "neutral good",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 16,
+      "con": 12,
+      "int": 12,
+      "wis": 14,
+      "cha": 10
+    },
+    "skills": {
+      "perception": "expertise",
+      "stealth": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/longbow"
+      },
+      {
+        "ref": "equipment/shortsword"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish"
+      ]
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The sentinel has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Shortsword",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Longbow",
+        "kind": "ranged-attack",
+        "ability": "dex",
+        "range": {
+          "normal": 150,
+          "long": 600
+        },
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

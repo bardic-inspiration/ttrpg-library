@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "lizardfolk-hunter",
+  "name": "Lizardfolk Hunter",
+  "summary": "A swamp hunter who lies motionless in the reeds and strikes with a thrown spear.",
+  "description": "A lizardfolk hunter is patient in the way of any predator that has never been in a hurry. They stalk the margins of a lair, and take whatever walks too close to the waterline.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Lizardfolk"
+    ],
+    "alignment": "neutral",
+    "ac": {
+      "value": 14,
+      "note": "natural armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30,
+      "swim": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 13,
+      "con": 13,
+      "int": 7,
+      "wis": 12,
+      "cha": 7
+    },
+    "skills": {
+      "perception": "proficient",
+      "stealth": "expertise",
+      "survival": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/javelin",
+        "count": 4
+      },
+      {
+        "ref": "equipment/spear"
+      },
+      {
+        "ref": "equipment/shield"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 0.5,
+    "traits": [
+      {
+        "name": "Hold Breath",
+        "kind": "other",
+        "text": "The hunter can hold its breath for 15 minutes."
+      },
+      {
+        "name": "Ambusher",
+        "kind": "other",
+        "text": "The hunter has {ref:glossary/advantage} on attack rolls against a creature that hasn't yet taken a turn in the combat."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Spear",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Bite",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "equipment",
+  "id": "trappers-tools",
+  "name": "Trapper's Tools",
+  "summary": "Snare wire, trap springs, and a skinning knife for setting and finding traps in the wild.",
+  "description": "Hunters and wardens carry these tools in a roll of oiled leather. The wire is thin and strong, and the springs come from salvaged clock mechanisms and crossbow limbs.",
+  "stats": {
+    "group": "other-tools",
+    "cost": {
+      "amount": 15,
+      "unit": "gp"
+    },
+    "weight": 6,
+    "tool": {
+      "ability": "wis",
+      "utilize": "Set a snare or deadfall that catches a Small or smaller creature (DC 15), or spot and disarm a snare, pit, or deadfall set in the wild (DC 15)",
+      "craft": "{ref:equipment/hunting-trap}"
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

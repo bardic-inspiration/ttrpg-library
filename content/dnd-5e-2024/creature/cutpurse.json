@@ -1,0 +1,86 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "cutpurse",
+  "name": "Cutpurse",
+  "summary": "A crowd-working thief who lifts purses and slips away before the victim notices.",
+  "description": "Cutpurses work festivals, docks, and market days, where a jostle and an apology cover a lot of sins. Most are bold for a week and dead or jailed within the year.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "chaotic neutral",
+    "ac": {
+      "value": 12,
+      "note": "leather armor"
+    },
+    "hitDice": 2,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 15,
+      "con": 10,
+      "int": 11,
+      "wis": 12,
+      "cha": 12
+    },
+    "skills": {
+      "sleight-of-hand": "expertise",
+      "stealth": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger",
+        "count": 2
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 0.125,
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-or-ranged-attack",
+        "ability": "dex",
+        "reach": 5,
+        "range": {
+          "normal": 20,
+          "long": 60
+        },
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Quick Fingers",
+        "kind": "other",
+        "text": "The cutpurse makes a Dexterity (Sleight of Hand) check contested by the Wisdom (Perception) of one creature within 5 feet. On a success, the cutpurse takes one object of 1 pound or less that the creature is carrying but not holding or wearing. The cutpurse then takes the {ref:glossary/disengage} action."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

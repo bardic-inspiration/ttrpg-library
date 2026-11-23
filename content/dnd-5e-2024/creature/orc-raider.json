@@ -1,0 +1,107 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "orc-raider",
+  "name": "Orc Raider",
+  "summary": "A warband fighter who charges at the nearest enemy swinging a greataxe.",
+  "description": "Orc raiders move fast and fight faster. They strike at dawn or dusk, take what they came for, and are gone before the neighbors have found their boots.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Orc"
+    ],
+    "alignment": "chaotic evil",
+    "ac": {
+      "value": 13,
+      "note": "hide armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 12,
+      "con": 16,
+      "int": 7,
+      "wis": 11,
+      "cha": 10
+    },
+    "skills": {
+      "intimidation": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/greataxe"
+      },
+      {
+        "ref": "equipment/javelin",
+        "count": 3
+      },
+      {
+        "ref": "equipment/hide-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Orc"
+      ]
+    },
+    "cr": 0.5,
+    "actions": [
+      {
+        "name": "Greataxe",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d12",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      },
+      {
+        "name": "Javelin",
+        "kind": "melee-or-ranged-attack",
+        "ability": "str",
+        "reach": 5,
+        "range": {
+          "normal": 30,
+          "long": 120
+        },
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Aggressive",
+        "kind": "other",
+        "text": "The raider moves up to its Speed toward a hostile creature it can see."
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

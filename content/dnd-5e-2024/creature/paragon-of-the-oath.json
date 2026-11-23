@@ -1,0 +1,162 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "paragon-of-the-oath",
+  "name": "Paragon of the Oath",
+  "summary": "A legendary paladin whose presence steels allies, whose strikes shine with the oath, and who does not fall easily.",
+  "description": "A paragon is rare, and a living one rarer. They keep their oath perfectly and without pride, and kings have been known to change their plans on learning that one has arrived.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "shortName": "paragon",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 19,
+      "note": "plate armor, shield"
+    },
+    "hitDice": 25,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 20,
+      "dex": 12,
+      "con": 18,
+      "int": 12,
+      "wis": 16,
+      "cha": 20
+    },
+    "saveProficiencies": [
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "insight": "proficient",
+      "persuasion": "expertise"
+    },
+    "resistances": [
+      "necrotic",
+      "radiant"
+    ],
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/charmed"
+        },
+        {
+          "ref": "condition/frightened"
+        }
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/greatsword"
+      },
+      {
+        "ref": "equipment/plate-armor"
+      },
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/holy-symbol"
+      }
+    ],
+    "senses": {
+      "truesight": 30
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Celestial"
+      ]
+    },
+    "cr": 12,
+    "traits": [
+      {
+        "name": "Aura of Protection",
+        "kind": "other",
+        "text": "Each ally within 10 feet of the paragon, and the paragon itself, adds the paragon's Charisma modifier to saving throws while the paragon is conscious."
+      },
+      {
+        "name": "Legendary Resistance",
+        "kind": "other",
+        "text": "If the paragon fails a saving throw, it can choose to succeed instead.",
+        "uses": "3/day"
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The paragon makes three Greatsword attacks."
+      },
+      {
+        "name": "Greatsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "2d6",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "3d8",
+            "type": "radiant"
+          }
+        ]
+      },
+      {
+        "name": "Oathlight Nova",
+        "kind": "save",
+        "ability": "cha",
+        "save": {
+          "ability": "con",
+          "targets": "each creature of the paragon's choice in a 30-foot Emanation originating from the paragon"
+        },
+        "damage": [
+          {
+            "dice": "6d8",
+            "type": "radiant"
+          }
+        ],
+        "onFailure": "The target also has the {ref:condition/blinded} condition until the end of the paragon's next turn.",
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/banishment"
+          },
+          {
+            "ref": "spell/holy-aura"
+          }
+        ],
+        "3": [
+          {
+            "ref": "spell/revivify"
+          }
+        ]
+      }
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

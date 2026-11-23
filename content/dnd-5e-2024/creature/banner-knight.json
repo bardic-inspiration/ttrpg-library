@@ -1,0 +1,102 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "banner-knight",
+  "name": "Banner Knight",
+  "summary": "A standard-bearing knight whose raised banner lifts allies' spirits and gives them second wind.",
+  "description": "A banner knight carries the colors of a house, an order, or a city. As long as the banner stands, the troops fight; as soon as it falls, so do they, and everyone on the field knows it.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 18,
+      "note": "plate armor"
+    },
+    "hitDice": 18,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 16,
+      "dex": 12,
+      "con": 15,
+      "int": 12,
+      "wis": 13,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "con",
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "athletics": "proficient",
+      "persuasion": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/plate-armor"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 6,
+    "traits": [
+      {
+        "name": "Standard of Valor",
+        "kind": "other",
+        "text": "While the knight is conscious, each ally within 30 feet of it that can see the banner has {ref:glossary/advantage} on saving throws against the {ref:condition/frightened} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The knight makes three Longsword attacks."
+      },
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "radiant"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Raise the Banner",
+        "kind": "other",
+        "text": "Each ally of the knight's choice within 30 feet that can see the banner gains 10 {ref:glossary/temporary-hit-points} and can use its {ref:glossary/reaction} to make one weapon attack.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "court-envoy",
+  "name": "Court Envoy",
+  "summary": "A courtier-diplomat whose charm is real and whose smile deflects blows and attention alike.",
+  "description": "An envoy can be gracious for three centuries without repeating a compliment. Their sharpest weapon is a pleasant offer that is very hard to refuse.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "descriptors": [
+      "Elf"
+    ],
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 12
+    },
+    "hitDice": 8,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 9,
+      "dex": 13,
+      "con": 11,
+      "int": 14,
+      "wis": 15,
+      "cha": 18
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "insight": "proficient",
+      "persuasion": "expertise"
+    },
+    "gear": [
+      {
+        "ref": "equipment/rapier"
+      },
+      {
+        "ref": "equipment/clothes-fine"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Elvish",
+        "Sylvan",
+        "Dwarvish"
+      ]
+    },
+    "cr": 1,
+    "traits": [
+      {
+        "name": "Fey Ancestry",
+        "kind": "other",
+        "text": "The envoy has {ref:glossary/advantage} on saving throws it makes to avoid or end the {ref:condition/charmed} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Rapier",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      }
+    ],
+    "reactions": [
+      {
+        "name": "Honeyed Rebuke",
+        "kind": "other",
+        "text": "*Trigger:* A creature the envoy can see within 30 feet makes an attack roll against the envoy. *Response:* The attacker must succeed on a {dc:cha} Wisdom saving throw or have {ref:glossary/disadvantage} on the attack roll."
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "atWill": [
+        {
+          "ref": "spell/vicious-mockery"
+        },
+        {
+          "ref": "spell/minor-illusion"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/suggestion"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/charm-person"
+          }
+        ]
+      }
+    }
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

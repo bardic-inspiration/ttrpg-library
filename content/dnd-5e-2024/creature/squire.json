@@ -1,0 +1,79 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "squire",
+  "name": "Squire",
+  "summary": "A knight's apprentice who carries the shield, tends the horse, and fights hardest when a friend is close.",
+  "description": "Most knights began as squires, and most squires carry more of the work than the glory. The ones who survive their first battle learn what the drills were for.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful good",
+    "ac": {
+      "value": 14,
+      "note": "chain shirt"
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 13,
+      "dex": 12,
+      "con": 12,
+      "int": 10,
+      "wis": 11,
+      "cha": 12
+    },
+    "skills": {
+      "athletics": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/longsword"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Hold the Line",
+        "kind": "other",
+        "text": "While at least one ally is within 5 feet of the squire, the squire has {ref:glossary/advantage} on saving throws against the {ref:condition/frightened} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Longsword",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "slashing"
+          }
+        ]
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

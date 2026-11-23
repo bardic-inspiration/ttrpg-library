@@ -1,0 +1,93 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "footpad",
+  "name": "Footpad",
+  "summary": "A back-alley robber who blinds a victim with a flung handful of grit before striking.",
+  "description": "Footpads wait in doorways and under bridges for a lone traveler or a drunk. They prefer a quick blow, a quick search, and no witnesses.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 13,
+      "note": "leather armor"
+    },
+    "hitDice": 4,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 12,
+      "dex": 15,
+      "con": 12,
+      "int": 10,
+      "wis": 12,
+      "cha": 10
+    },
+    "skills": {
+      "stealth": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/shortsword"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      },
+      {
+        "ref": "equipment/sling"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Thieves' Cant"
+      ]
+    },
+    "cr": 0.25,
+    "actions": [
+      {
+        "name": "Shortsword",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d6",
+            "ability": "dex",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d4",
+            "type": "piercing",
+            "condition": "if the attack roll had Advantage"
+          }
+        ]
+      },
+      {
+        "name": "Grit Toss",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "one creature within 10 feet of the footpad"
+        },
+        "onFailure": "The target has the {ref:condition/blinded} condition until the end of its next turn.",
+        "recharge": "6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

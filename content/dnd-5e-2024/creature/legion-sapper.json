@@ -1,0 +1,114 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "legion-sapper",
+  "name": "Legion Sapper",
+  "summary": "A legion engineer who breaches walls with a pick and hurls pitch pots to set a gate ablaze.",
+  "description": "Sappers dig the ditches, build the siege works, and undermine the walls. They fight with picks and pitch, and never complain about the smell.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 15,
+      "note": "chain shirt, shield"
+    },
+    "hitDice": 9,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 14,
+      "con": 14,
+      "int": 13,
+      "wis": 11,
+      "cha": 9
+    },
+    "saveProficiencies": [
+      "con"
+    ],
+    "skills": {
+      "athletics": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/war-pick"
+      },
+      {
+        "ref": "equipment/shovel"
+      },
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/flask",
+        "count": 3
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 2,
+    "traits": [
+      {
+        "name": "Siege Specialist",
+        "kind": "other",
+        "text": "The sapper deals double damage to objects and structures."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The sapper makes two War Pick attacks."
+      },
+      {
+        "name": "War Pick",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "str",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Pitch Pot",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 5-foot-radius Sphere centered on a point the sapper can see within 30 feet"
+        },
+        "damage": [
+          {
+            "dice": "3d6",
+            "type": "fire"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

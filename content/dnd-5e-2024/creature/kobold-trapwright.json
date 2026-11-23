@@ -1,0 +1,104 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "kobold-trapwright",
+  "name": "Kobold Trapwright",
+  "summary": "A kobold engineer who rigs tunnels with rockfalls, snares, and spring-loaded darts.",
+  "description": "A trapwright's greatest pride is a trap that nobody has found and nobody has survived. They are not as proud of the ones the warren's own children have stumbled into, and they do not speak of it.",
+  "stats": {
+    "size": [
+      "small"
+    ],
+    "creatureType": "dragon",
+    "descriptors": [
+      "Kobold"
+    ],
+    "alignment": "lawful evil",
+    "ac": {
+      "value": 14,
+      "note": "leather armor"
+    },
+    "hitDice": 5,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 6,
+      "dex": 14,
+      "con": 10,
+      "int": 10,
+      "wis": 12,
+      "cha": 8
+    },
+    "skills": {
+      "stealth": "proficient",
+      "perception": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/leather-armor"
+      }
+    ],
+    "senses": {
+      "darkvision": 60
+    },
+    "languages": {
+      "spoken": [
+        "Common",
+        "Draconic"
+      ]
+    },
+    "cr": 0.25,
+    "traits": [
+      {
+        "name": "Dragon's Lackey",
+        "kind": "other",
+        "text": "The trapwright has {ref:glossary/advantage} on saving throws against the {ref:condition/frightened} condition while a Dragon that is its ally is within 60 feet of it."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Dagger",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d4",
+            "ability": "dex",
+            "type": "piercing"
+          }
+        ]
+      },
+      {
+        "name": "Rockfall",
+        "kind": "save",
+        "ability": "dex",
+        "save": {
+          "ability": "dex",
+          "targets": "each creature in a 10-foot-radius Sphere centered on a point within 30 feet of the trapwright, beneath a loose ceiling"
+        },
+        "damage": [
+          {
+            "dice": "2d6",
+            "type": "bludgeoning"
+          }
+        ],
+        "onSuccess": "Half damage.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}

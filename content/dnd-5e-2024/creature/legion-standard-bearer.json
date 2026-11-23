@@ -1,0 +1,108 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "type": "creature",
+  "id": "legion-standard-bearer",
+  "name": "Legion Standard-Bearer",
+  "summary": "The soldier who carries the legion's eagle, whose raised standard makes the whole cohort advance.",
+  "description": "To lose the standard is the legion's greatest shame, so the standard-bearer is chosen from the toughest and the most stubborn. When the standard moves, the cohort moves with it.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "lawful neutral",
+    "ac": {
+      "value": 16,
+      "note": "chain mail"
+    },
+    "hitDice": 10,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 15,
+      "dex": 12,
+      "con": 15,
+      "int": 10,
+      "wis": 12,
+      "cha": 14
+    },
+    "saveProficiencies": [
+      "con",
+      "cha"
+    ],
+    "skills": {
+      "athletics": "proficient"
+    },
+    "immunities": {
+      "conditions": [
+        {
+          "ref": "condition/frightened"
+        }
+      ]
+    },
+    "gear": [
+      {
+        "ref": "equipment/pike"
+      },
+      {
+        "ref": "equipment/chain-mail"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common"
+      ]
+    },
+    "cr": 3,
+    "traits": [
+      {
+        "name": "Eagle Standard",
+        "kind": "other",
+        "text": "Each ally within 30 feet of the standard-bearer that can see the standard has {ref:glossary/advantage} on saving throws against the {ref:condition/frightened} condition."
+      }
+    ],
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "The standard-bearer makes two Pike attacks."
+      },
+      {
+        "name": "Pike",
+        "kind": "melee-attack",
+        "ability": "str",
+        "reach": 10,
+        "damage": [
+          {
+            "dice": "1d10",
+            "ability": "str",
+            "type": "piercing"
+          },
+          {
+            "dice": "1d8",
+            "type": "piercing",
+            "condition": "if an ally of the standard-bearer is within 5 feet of the target"
+          }
+        ]
+      }
+    ],
+    "bonusActions": [
+      {
+        "name": "Sound the Advance",
+        "kind": "other",
+        "text": "Each ally within 30 feet of the standard-bearer that can see the standard can move up to half its Speed without provoking {ref:glossary/opportunity-attacks}.",
+        "recharge": "5-6"
+      }
+    ]
+  },
+  "tags": {
+    "author": "bardic-inspiration"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "routine"
+    }
+  }
+}
