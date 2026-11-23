@@ -171,11 +171,37 @@ export function filterDef(config: GalleryConfig, path: string): FilterDef | unde
   return key === undefined ? undefined : { path, label: key.replace(/-/g, ' '), kind: 'enum' };
 }
 
-/** Sort choices: name, date added, then every facet (docs/site.md#gallery). */
-export function sortChoices(config: GalleryConfig): { path: string; label: string }[] {
+/**
+ * The types the ruleset and type filters allow, in registry order: every type when neither is
+ * active (docs/site.md#gallery "Sort").
+ */
+export function typesInScope(config: GalleryConfig, filters: ReadonlyMap<string, ActiveFilter> = new Map()): TypeInfo[] {
+  const allowed = (path: string, value: string) => {
+    const filter = filters.get(path);
+    return filter?.kind !== 'enum' || filter.values.length === 0 || filter.values.includes(value);
+  };
+  return [...config.types.values()].filter((t) => allowed(RULESET, t.ruleset) && allowed(TYPE, t.type));
+}
+
+/** The part of an active filter `typesInScope` reads; the gallery state's filter values fit it. */
+export type ActiveFilter = { kind: 'enum'; values: string[] } | { kind: 'range' };
+
+/**
+ * Sort choices: name, date added, then each facet of the types the ruleset and type filters
+ * allow, in registry order (docs/site.md#gallery "Sort"). A path two types share is one choice,
+ * labeled as the first of them labels it.
+ */
+export function sortChoices(config: GalleryConfig, filters?: ReadonlyMap<string, ActiveFilter>): { path: string; label: string }[] {
+  const facets = new Map<string, string>();
+  for (const type of typesInScope(config, filters)) for (const f of type.facets) if (!facets.has(f.path)) facets.set(f.path, f.label);
   return [
     { path: NAME, label: 'Name' },
     { path: CREATED, label: 'Date added' },
-    ...config.filters.filter((f) => ![TYPE, RULESET, SOURCE, AUTHOR].includes(f.path)).map((f) => ({ path: f.path, label: f.label })),
+    ...[...facets].map(([path, label]) => ({ path, label })),
   ];
+}
+
+/** The sort to apply: the chosen one while the filters offer it, else the Library's default. */
+export function validSort(config: GalleryConfig, sort: SortKey, filters?: ReadonlyMap<string, ActiveFilter>): SortKey {
+  return sortChoices(config, filters).some((c) => c.path === sort.path) ? sort : config.defaultSort;
 }

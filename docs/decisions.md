@@ -516,3 +516,5 @@ the SRD import to hold printed forms, following the nearest-field rule.
 |---|---|---|
 | The Ruleset node is always first in the filter tree. Each ruleset in it is a checkbox, like a type, holding its Source and Author filters over its own entries; neither shows under Tags. | Source and author belong to the ruleset; one ruleset still shows where entries come from | #367 |
 | An author of `"publisher"` reads as the ruleset's publisher in the tree, per ruleset. Source and author aren't sort choices, and `library.json` records carry both. | The stored sentinel means nothing to a reader; sorts stay facets | #367 |
+| The sort menu offers the facets of the types the ruleset and type filters allow, all of them when no type is checked; other facet filters don't narrow it. A path checked types share is one choice. | Sorts come from the registry, not from which entries happen to match (P4) | #368 |
+| When filters drop the chosen sort from the menu, the sort returns to `name:asc`, and a URL's sort the filters don't offer is ignored. | One view has one URL; a hidden sort would order results by a value the menu can't show | #368 |

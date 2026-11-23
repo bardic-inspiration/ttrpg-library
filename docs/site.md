@@ -348,9 +348,15 @@ value, such as Creature › Immunities › Conditions › Poisoned.
   `noun` and a group by its `qualifier`, else by name: Equipment › Group ›
   Weapon › Martial › Martial Melee Weapons.
 
-**Sort.** By name, created date, or any facet, ascending or descending. Every
-facet of every type is a sort choice, so CR is offered alongside name.
-Ordered enums sort by declared order, an array
+**Sort.** By name, created date, or a facet, ascending or descending. The
+menu offers the facets of the types the ruleset and type filters allow, in
+registry order (`sortChoices` in `site/src/lib/gallery/config.ts`): with Spell
+checked, it lists name, date added, level, school, and the spell's other
+facets, but not CR. With no type checked, every type's facets are offered. A
+path two checked types share (`stats.level` on spells and feats) is one
+choice, labeled as the first of them in registry order labels it. When a
+filter change leaves the chosen sort off the menu, the sort returns to
+`name:asc`. Ordered enums sort by declared order, an array
 facet (size) by its first item. Ties break by name, then ruleset, type, and id,
 so the order never depends on `library.json` order. Entries missing the sort
 value go last in either direction. The Library starts on `name:asc`.
@@ -366,8 +372,9 @@ can be bookmarked or linked:
 Ranges use `min..max` (either side may be empty). Keys and values are
 URL-encoded, so a comma inside a value is `%2C` and a bare comma separates
 values. Enum values are case-folded. The type filter is `f.type`. Unknown
-parameters, filters on paths the Library doesn't have, unknown sort paths, and
-malformed values are ignored. The gallery rewrites the URL as the view changes,
+parameters, filters on paths the Library doesn't have, a sort the filters
+don't offer (wherever the filters come in the query), and malformed values are
+ignored; of several sorts, the last one offered applies. The gallery rewrites the URL as the view changes,
 replacing the history entry, in one canonical form: the ruleset, source,
 author, and type filters, then the facets in registry order, then tags by key, with the default sort and ignored parameters left out.
 
