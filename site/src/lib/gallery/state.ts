@@ -38,13 +38,14 @@ function parseRange(raw: string): FilterValue | undefined {
 }
 
 /**
- * Reads a query string into gallery state. Unknown parameters, unknown sort
- * paths, filters on paths the Library doesn't have, and malformed values are
- * ignored.
+ * Reads a query string into gallery state. Unknown parameters, sorts the
+ * filters don't offer (docs/site.md#gallery "Sort"), filters on paths the
+ * Library doesn't have, and malformed values are ignored. The last sort offered
+ * wins.
  */
 export function parseQuery(search: string, config: GalleryConfig): GalleryState {
   const state = initialState(config);
-  const sortable = new Set(sortChoices(config).map((c) => c.path));
+  const sorts: SortKey[] = [];
   for (const pair of search.replace(/^\?/, '').split('&')) {
     if (pair === '') continue;
     const eq = pair.indexOf('=');
@@ -53,7 +54,7 @@ export function parseQuery(search: string, config: GalleryConfig): GalleryState 
     if (key === 'q') state.q = decode(raw) ?? '';
     else if (key === 'sort') {
       const sort = parseSortKey(decode(raw));
-      if (sort && sortable.has(sort.path)) state.sort = sort;
+      if (sort) sorts.push(sort);
     } else if (key?.startsWith('f.')) {
       const def = filterDef(config, key.slice(2));
       if (!def) continue;
@@ -76,6 +77,8 @@ export function parseQuery(search: string, config: GalleryConfig): GalleryState 
       if (isActive(value)) state.filters.set(def.path, value);
     }
   }
+  const sortable = new Set(sortChoices(config, state.filters).map((c) => c.path));
+  state.sort = sorts.findLast((sort) => sortable.has(sort.path)) ?? state.sort;
   return state;
 }
 

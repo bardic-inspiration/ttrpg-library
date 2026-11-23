@@ -1,6 +1,6 @@
 // Gallery URL state (docs/site.md#gallery "URL state").
 import { beforeAll, describe, expect, it } from 'vitest';
-import { galleryConfig, sortChoices, type GalleryConfig } from '../../../site/src/lib/gallery/config.ts';
+import { galleryConfig, sortChoices, validSort, type GalleryConfig } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery, toQuery } from '../../../site/src/lib/gallery/state.ts';
 import { registry } from './helpers.ts';
 
@@ -74,5 +74,43 @@ describe('parseQuery and toQuery', () => {
   it('reads the ruleset and type filters', () => {
     expect(parseQuery('?f.type=spell', library).filters.get('type')).toEqual({ kind: 'enum', values: ['spell'] });
     expect(parseQuery('?f.ruleset=DND-5e-2024', library).filters.get('ruleset')).toEqual({ kind: 'enum', values: ['dnd-5e-2024'] });
+  });
+});
+
+describe('sort choices follow the filters', () => {
+  const enumFilter = (values: string[]) => ({ kind: 'enum' as const, values });
+  const paths = (filters: Map<string, { kind: 'enum'; values: string[] }>) => sortChoices(library, filters).map((c) => c.path);
+  const facetsOf = (type: string) => library.types.get(`dnd-5e-2024/${type}`)!.facets.map((f) => f.path);
+
+  it('offers name, date added, and only the checked type’s facets, in registry order', () => {
+    expect(paths(new Map([['type', enumFilter(['spell'])]]))).toEqual(['name', 'createdAt', ...facetsOf('spell')]);
+    expect(paths(new Map([['type', enumFilter(['spell'])]]))).not.toContain('stats.cr');
+  });
+
+  it('offers each checked type’s facets once, in registry order, a shared path as one choice', () => {
+    const both = paths(new Map([['type', enumFilter(['spell', 'feat'])]]));
+    expect(both).toEqual(['name', 'createdAt', ...new Set([...facetsOf('feat'), ...facetsOf('spell')])]);
+    expect(both.filter((p) => p === 'stats.level')).toHaveLength(1);
+  });
+
+  it('offers every type’s facets when no type is checked', () => {
+    expect(paths(new Map())).toEqual(expect.arrayContaining(['stats.cr', 'stats.school']));
+    expect(paths(new Map([['ruleset', enumFilter(['dnd-5e-2024'])]]))).toEqual(paths(new Map()));
+  });
+
+  it('offers no facet for a ruleset with no types', () => {
+    expect(paths(new Map([['ruleset', enumFilter(['nope'])]]))).toEqual(['name', 'createdAt']);
+  });
+
+  it('falls back to the default sort when the filters no longer offer the chosen one', () => {
+    const spells = new Map([['type', enumFilter(['spell'])]]);
+    expect(validSort(library, { path: 'stats.cr', dir: 'desc' }, spells)).toEqual(library.defaultSort);
+    expect(validSort(library, { path: 'stats.level', dir: 'desc' }, spells)).toEqual({ path: 'stats.level', dir: 'desc' });
+  });
+
+  it('ignores a sort in the URL the filters don’t offer, wherever the filters come in it', () => {
+    expect(parseQuery('?sort=stats.cr:desc&f.type=spell', library).sort).toEqual(library.defaultSort);
+    expect(parseQuery('?sort=stats.level:desc&sort=stats.cr:asc&f.type=spell', library).sort).toEqual({ path: 'stats.level', dir: 'desc' });
+    expect(toQuery(parseQuery('?sort=stats.cr:desc&f.type=spell', library), library)).toBe('?f.type=spell');
   });
 });
