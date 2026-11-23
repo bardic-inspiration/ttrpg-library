@@ -60,6 +60,7 @@ describe('.claude/settings.json allow rules', () => {
 
   it.each([
     'npm test -- tests/import.test.ts',
+    'npm run test:originals -- tests/originals/elementals.test.ts',
     'npm run srd-coverage -- --type spell --tier 1',
     'npm run import -- --issue 7 --format open5e --file hollow-grove.json --work W --author A --url https://example.com --license CC-BY-4.0',
     'npm run snapshots before',

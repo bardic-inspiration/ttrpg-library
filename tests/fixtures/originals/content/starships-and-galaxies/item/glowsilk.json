@@ -1,0 +1,19 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "author": "bardic-inspiration",
+  "type": "item",
+  "id": "glowsilk",
+  "name": "Glowsilk",
+  "summary": "A shimmering fabric spun on a single world and sold everywhere.",
+  "stats": {
+    "kind": "trade-good",
+    "value": 310,
+    "text": "One hold of glowsilk."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

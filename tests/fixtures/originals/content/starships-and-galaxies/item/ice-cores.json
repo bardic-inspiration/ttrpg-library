@@ -1,0 +1,20 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "item",
+  "id": "ice-cores",
+  "name": "Ice Cores",
+  "summary": "Frozen water drilled from moons, prized on dry worlds.",
+  "stats": {
+    "kind": "trade-good",
+    "value": 120,
+    "text": "One hold of ice cores."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

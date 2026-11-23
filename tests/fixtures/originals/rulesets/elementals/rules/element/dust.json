@@ -1,0 +1,1 @@
+{ "type": "element", "id": "dust", "name": "Dust", "stats": { "blend": [{ "ref": "element/earth" }, { "ref": "element/wind" }], "text": "Earth and wind together." } }

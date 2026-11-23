@@ -1,0 +1,27 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "author": "bardic-inspiration",
+  "type": "ship",
+  "id": "bastion",
+  "name": "Bastion",
+  "summary": "A homebuilt carrier whose shields are worth more than the rest of it.",
+  "stats": {
+    "size": "carrier",
+    "systems": {
+      "engines": 5,
+      "shields": 10,
+      "weapons": 9,
+      "sensors": 8,
+      "comms": 9
+    },
+    "cargo": 10,
+    "fuel": 3,
+    "price": 9900
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

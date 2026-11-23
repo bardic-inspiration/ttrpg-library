@@ -1,0 +1,25 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "creature",
+  "id": "ember-sprite",
+  "name": "Ember Sprite",
+  "summary": "A spark of living flame that darts in and out of reach.",
+  "stats": {
+    "cost": {
+      "fire": 1
+    },
+    "power": 4,
+    "toughness": 4,
+    "keywords": [
+      "swift"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

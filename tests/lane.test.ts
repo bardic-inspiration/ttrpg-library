@@ -34,7 +34,7 @@ describe('checkLane', () => {
 
   it('passes an unprefixed branch that touches no content', () => {
     const result = checkLane({ branch: 'user-patch-1', paths: ['README.md'], labels: [] });
-    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, textOnly: false, milestone: false, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, textOnly: false, milestone: false, originalsChanged: false, errors: [] });
   });
 
   it('fails an unprefixed branch that touches content without the migration label', () => {
@@ -53,7 +53,7 @@ describe('checkLane', () => {
       paths: ['content/dnd-5e-2024/creature/cinder-hound.json', 'assets/images/x.png'],
       labels: [],
     });
-    expect(result).toEqual({ lane: 'content', contentChanged: true, docsOnly: false, textOnly: false, milestone: false, errors: [] });
+    expect(result).toEqual({ lane: 'content', contentChanged: true, docsOnly: false, textOnly: false, milestone: false, originalsChanged: false, errors: [] });
   });
 
   it('passes a content PR that adds an import\'s line to ATTRIBUTION.md (docs/generation.md#imports)', () => {
@@ -90,7 +90,7 @@ describe('checkLane', () => {
 
   it('passes a dev PR that touches no content', () => {
     const result = checkLane({ branch: 'dev/lane-ci', paths: ['SPEC.md'], labels: [] });
-    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, textOnly: false, milestone: false, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: false, docsOnly: true, textOnly: false, milestone: false, originalsChanged: false, errors: [] });
   });
 
   it('fails a dev PR that touches content without the migration label', () => {
@@ -111,7 +111,7 @@ describe('checkLane', () => {
       paths: ['content/dnd-5e-2024/creature/a.json'],
       labels: ['dev', 'migration'],
     });
-    expect(result).toEqual({ lane: 'dev', contentChanged: true, docsOnly: false, textOnly: false, milestone: false, errors: [] });
+    expect(result).toEqual({ lane: 'dev', contentChanged: true, docsOnly: false, textOnly: false, milestone: false, originalsChanged: false, errors: [] });
   });
 });
 
@@ -231,6 +231,23 @@ describe('checkLane milestone (docs/workflow.md#milestone-prs)', () => {
 
   it('is false without the label', () => {
     expect(checkLane({ branch: 'dev/x', paths: ['site/a.astro'], labels: ['dev'] }).milestone).toBe(false);
+  });
+});
+
+describe('checkLane originalsChanged (docs/rulesets.md#fixture-rulesets)', () => {
+  it('is true when the original-ruleset fixtures or their own tests change', () => {
+    for (const path of ['tests/fixtures/originals/types.json', 'tests/originals/elementals.test.ts']) {
+      expect(checkLane({ branch: 'dev/x', paths: ['site/a.astro', path], labels: [] }).originalsChanged).toBe(true);
+    }
+  });
+
+  it('is false for any other change, the generic tests that read the fixtures included', () => {
+    const result = checkLane({ branch: 'dev/x', paths: ['tests/originals.test.ts', 'rulesets/dnd-5e-2024/derive.ts'], labels: [] });
+    expect(result.originalsChanged).toBe(false);
+  });
+
+  it('is true on a milestone PR, whatever its paths', () => {
+    expect(checkLane({ branch: 'dev/x', paths: ['site/a.astro'], labels: ['milestone'] }).originalsChanged).toBe(true);
   });
 });
 

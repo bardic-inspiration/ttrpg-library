@@ -1,0 +1,1 @@
+{ "type": "station", "id": "science", "name": "Science", "stats": { "system": "sensors", "text": "The science officer reads the sensors, charts unknown worlds, and makes discoveries." } }

@@ -1,0 +1,25 @@
+{
+  "ruleset": "elementals",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "dust-devil",
+  "name": "Dust Devil",
+  "summary": "A whirling column of sand from a homebrew desert set.",
+  "stats": {
+    "cost": {
+      "earth": 1,
+      "wind": 1
+    },
+    "power": 8,
+    "toughness": 8
+  },
+  "tags": {
+    "theme": "desert"
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

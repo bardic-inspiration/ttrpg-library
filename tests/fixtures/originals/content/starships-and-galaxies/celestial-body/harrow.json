@@ -1,0 +1,38 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "celestial-body",
+  "id": "harrow",
+  "name": "Harrow",
+  "summary": "A dusty trade world, the busiest port in the sector.",
+  "stats": {
+    "kind": "planet",
+    "orbits": {
+      "ref": "celestial-body/pale-sun"
+    },
+    "services": [
+      "trade",
+      "refuel"
+    ],
+    "hazards": [
+      {
+        "name": "Customs Cutter",
+        "kind": "hostile",
+        "ship": {
+          "ref": "ship/longhaul",
+          "note": "flying patrol"
+        },
+        "difficulty": "routine",
+        "text": "A patrol hails every ship coming in."
+      }
+    ],
+    "text": "Harrow buys water at any price."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/starships-and-galaxies/common.schema.json",
+  "$defs": {
+    "Ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "type": "string", "pattern": "^(creature|ship|item|celestial-body|station)/[a-z0-9-]+$" },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "StationRef": {
+      "description": "A typed ref: only a station.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": { "ref": { "type": "string", "pattern": "^station/[a-z0-9-]+$" } }
+    },
+    "ShipRef": {
+      "description": "A typed ref: only a ship.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": { "ref": { "type": "string", "pattern": "^ship/[a-z0-9-]+$" }, "note": { "type": "string", "minLength": 1 } }
+    },
+    "CelestialRef": {
+      "description": "A typed ref: only a celestial body.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": { "ref": { "type": "string", "pattern": "^celestial-body/[a-z0-9-]+$" } }
+    },
+    "Text": { "type": "string", "minLength": 1, "markdownSubset": true },
+    "Rating": { "description": "A skill or system rating, 0 to 10.", "type": "integer", "minimum": 0, "maximum": 10 },
+    "Credits": { "description": "Credits, in steps of 10.", "type": "integer", "minimum": 0, "multipleOf": 10 },
+    "System": { "enum": ["engines", "shields", "weapons", "sensors", "comms"] },
+    "Difficulty": { "enum": ["routine", "hard", "severe", "extreme"] },
+    "Systems": {
+      "description": "A rating for each ship system.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engines", "shields", "weapons", "sensors", "comms"],
+      "properties": {
+        "engines": { "$ref": "#/$defs/Rating" },
+        "shields": { "$ref": "#/$defs/Rating" },
+        "weapons": { "$ref": "#/$defs/Rating" },
+        "sensors": { "$ref": "#/$defs/Rating" },
+        "comms": { "$ref": "#/$defs/Rating" }
+      }
+    },
+    "Trait": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "text"],
+      "properties": { "name": { "type": "string", "minLength": 1 }, "text": { "$ref": "#/$defs/Text" } }
+    }
+  }
+}

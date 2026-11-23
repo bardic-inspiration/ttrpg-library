@@ -1,0 +1,9 @@
+{
+  "life": 64,
+  "deckSize": 64,
+  "handSize": 4,
+  "chipsPerColor": 16,
+  "statStep": 4,
+  "budgetPerChip": 8,
+  "beats": { "water": "fire", "fire": "wind", "wind": "earth", "earth": "water" }
+}

@@ -1,0 +1,31 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "dockside-broker",
+  "name": "Dockside Broker",
+  "summary": "A fast talker equally at home on the comms and at the trading floor.",
+  "stats": {
+    "species": "Vessari",
+    "skills": {
+      "helm": 5,
+      "engineering": 1,
+      "gunnery": 2,
+      "science": 3,
+      "comms": 5
+    },
+    "upkeep": 40,
+    "traits": [
+      {
+        "name": "Haggler",
+        "text": "Trade goods sell for 10 more credits at any port with trade."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

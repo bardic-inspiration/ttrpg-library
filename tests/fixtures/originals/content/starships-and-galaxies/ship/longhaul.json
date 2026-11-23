@@ -1,0 +1,28 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "ship",
+  "id": "longhaul",
+  "name": "Longhaul",
+  "summary": "A slow frigate with deep holds, the workhorse of the trade lanes.",
+  "stats": {
+    "size": "frigate",
+    "systems": {
+      "engines": 4,
+      "shields": 6,
+      "weapons": 4,
+      "sensors": 5,
+      "comms": 6
+    },
+    "cargo": 6,
+    "fuel": 4,
+    "price": 2800
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

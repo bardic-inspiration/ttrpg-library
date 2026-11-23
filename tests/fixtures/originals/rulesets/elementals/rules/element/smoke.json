@@ -1,0 +1,1 @@
+{ "type": "element", "id": "smoke", "name": "Smoke", "stats": { "blend": [{ "ref": "element/fire" }, { "ref": "element/wind" }], "text": "Fire and wind together." } }

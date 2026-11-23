@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/starships-and-galaxies/item.schema.json",
+  "title": "An item: an upgrade that raises a ship system, or a trade good bought and sold at port.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kind", "value", "text"],
+  "properties": {
+    "kind": { "enum": ["upgrade", "trade-good"] },
+    "value": { "$ref": "common.schema.json#/$defs/Credits" },
+    "upgrade": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system", "bonus"],
+      "properties": { "system": { "$ref": "common.schema.json#/$defs/System" }, "bonus": { "type": "integer", "minimum": 1, "maximum": 3 } }
+    },
+    "text": { "$ref": "common.schema.json#/$defs/Text" }
+  },
+  "if": { "properties": { "kind": { "const": "upgrade" } } },
+  "then": { "required": ["upgrade"] },
+  "else": { "not": { "required": ["upgrade"] } }
+}

@@ -1,0 +1,25 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "creature",
+  "id": "gale-hawk",
+  "name": "Gale Hawk",
+  "summary": "A bird made of a single gust of wind.",
+  "stats": {
+    "cost": {
+      "wind": 2
+    },
+    "power": 8,
+    "toughness": 4,
+    "keywords": [
+      "swift"
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

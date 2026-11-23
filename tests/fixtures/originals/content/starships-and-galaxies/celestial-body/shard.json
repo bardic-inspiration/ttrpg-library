@@ -1,0 +1,25 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "author": "bardic-inspiration",
+  "type": "celestial-body",
+  "id": "shard",
+  "name": "Shard",
+  "summary": "A cracked moon of Veil, mined for ice.",
+  "stats": {
+    "kind": "moon",
+    "orbits": {
+      "ref": "celestial-body/veil"
+    },
+    "services": [
+      "trade",
+      "refuel"
+    ],
+    "text": "Shard sells {ref:item/ice-cores} cheaply."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

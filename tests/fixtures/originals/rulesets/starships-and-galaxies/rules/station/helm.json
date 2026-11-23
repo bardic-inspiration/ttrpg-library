@@ -1,0 +1,1 @@
+{ "type": "station", "id": "helm", "name": "Helm", "stats": { "system": "engines", "text": "The pilot flies the ship, plots jumps, and steers through debris and gravity wells." } }

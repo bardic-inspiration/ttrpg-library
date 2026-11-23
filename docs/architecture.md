@@ -109,6 +109,7 @@ npm scripts:
 | `check` | Types, `astro check`, Stylelint, and the link check |
 | `links` | The link check alone |
 | `test` | Vitest |
+| `test:originals` | The fixture rulesets' own tests ([Fixture rulesets](rulesets.md#fixture-rulesets)) |
 | `a11y` | Axe checks against the built site |
 | `snapshots` | On-demand screenshots at 390, 820, and 1440px |
 | `gap-fill` | Print the type and bucket gap fill would take |

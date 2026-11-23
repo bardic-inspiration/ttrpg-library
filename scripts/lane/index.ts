@@ -48,6 +48,14 @@ export function isTestTextPath(path: string): boolean {
   return /^rulesets\/[^/]+\/guidelines\/[^/]+\.md$/.test(path);
 }
 
+/**
+ * The original-ruleset fixtures and their own tests (docs/rulesets.md#fixture-rulesets). Their tests run
+ * in the `originals` job, only on a PR that changes these paths or closes a milestone.
+ */
+const ORIGINALS_PATHS = ['tests/fixtures/originals/', 'tests/originals/'];
+
+export const isOriginalsPath = (path: string): boolean => ORIGINALS_PATHS.some((prefix) => path.startsWith(prefix));
+
 /** The label on the PR that closes a milestone, which runs every check (docs/workflow.md#milestone-prs). */
 export const MILESTONE_LABEL = 'milestone';
 
@@ -67,6 +75,8 @@ export interface LaneResult {
   textOnly: boolean;
   /** The PR has the milestone label, so it gets every check, accessibility included. */
   milestone: boolean;
+  /** The PR changes the original-ruleset fixtures or their tests, or closes a milestone, so their own tests run. */
+  originalsChanged: boolean;
   errors: string[];
 }
 
@@ -99,6 +109,7 @@ export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
   const docsOnly = !milestone && paths.length > 0 && paths.every(isDocsPath);
   const textOnly =
     !milestone && !docsOnly && paths.length > 0 && paths.every((path) => isDocsPath(path) || isTestTextPath(path));
+  const originalsChanged = milestone || paths.some(isOriginalsPath);
   const errors: string[] = [];
   const list = (items: string[]) => items.map((item) => `  ${item}`).join('\n');
 
@@ -118,7 +129,7 @@ export function checkLane({ branch, paths, labels }: LaneInput): LaneResult {
       `A dev-lane PR may change content only with the migration label, which the labeler adds. Content paths:\n${list(paths.filter(isContentPath))}`,
     );
   }
-  return { lane, contentChanged, docsOnly, textOnly, milestone, errors };
+  return { lane, contentChanged, docsOnly, textOnly, milestone, originalsChanged, errors };
 }
 
 /** Whether a PR is a dev PR that changes content without the `migration` label the labeler adds. */

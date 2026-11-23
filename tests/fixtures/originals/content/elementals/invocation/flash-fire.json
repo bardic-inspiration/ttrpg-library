@@ -1,0 +1,21 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "invocation",
+  "id": "flash-fire",
+  "name": "Flash Fire",
+  "summary": "A burst of flame that strikes one creature.",
+  "stats": {
+    "cost": {
+      "fire": 1
+    },
+    "text": "Deal 8 damage to a creature. A {ref:element/wind} creature takes 16 instead."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

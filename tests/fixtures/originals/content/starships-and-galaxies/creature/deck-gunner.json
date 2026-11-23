@@ -1,0 +1,26 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "creature",
+  "id": "deck-gunner",
+  "name": "Deck Gunner",
+  "summary": "A loud, cheerful gunner who never misses twice.",
+  "stats": {
+    "species": "Human",
+    "skills": {
+      "helm": 3,
+      "engineering": 2,
+      "gunnery": 8,
+      "science": 1,
+      "comms": 2
+    },
+    "upkeep": 30
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

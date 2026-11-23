@@ -1,0 +1,22 @@
+{
+  "ruleset": "elementals",
+  "source": "First Set",
+  "author": "publisher",
+  "type": "creature",
+  "id": "tide-caller",
+  "name": "Tide Caller",
+  "summary": "A water spirit that pulls the sea up behind it.",
+  "stats": {
+    "cost": {
+      "water": 2
+    },
+    "power": 4,
+    "toughness": 12
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

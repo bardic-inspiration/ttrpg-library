@@ -16,5 +16,5 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
   },
-  "include": ["lib/**/*", "scripts/**/*", "rulesets/**/*", "tests/**/*", "vitest.config.ts"]
+  "include": ["lib/**/*", "scripts/**/*", "rulesets/**/*", "tests/**/*", "vitest.config.ts", "vitest.originals.config.ts"]
 }

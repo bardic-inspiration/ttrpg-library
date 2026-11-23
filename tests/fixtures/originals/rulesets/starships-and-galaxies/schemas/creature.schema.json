@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/starships-and-galaxies/creature.schema.json",
+  "title": "A crew member: a skill at each station, and the upkeep they cost per voyage.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["species", "skills", "upkeep"],
+  "properties": {
+    "species": { "type": "string", "minLength": 1 },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["helm", "engineering", "gunnery", "science", "comms"],
+      "properties": {
+        "helm": { "$ref": "common.schema.json#/$defs/Rating" },
+        "engineering": { "$ref": "common.schema.json#/$defs/Rating" },
+        "gunnery": { "$ref": "common.schema.json#/$defs/Rating" },
+        "science": { "$ref": "common.schema.json#/$defs/Rating" },
+        "comms": { "$ref": "common.schema.json#/$defs/Rating" }
+      }
+    },
+    "upkeep": { "$ref": "common.schema.json#/$defs/Credits" },
+    "traits": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/Trait" } }
+  }
+}

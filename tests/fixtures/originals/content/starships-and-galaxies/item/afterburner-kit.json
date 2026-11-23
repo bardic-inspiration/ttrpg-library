@@ -1,0 +1,24 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "item",
+  "id": "afterburner-kit",
+  "name": "Afterburner Kit",
+  "summary": "A bolt-on kit that pushes the engines past their rating.",
+  "stats": {
+    "kind": "upgrade",
+    "value": 400,
+    "upgrade": {
+      "system": "engines",
+      "bonus": 2
+    },
+    "text": "Raises Engines by 2."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

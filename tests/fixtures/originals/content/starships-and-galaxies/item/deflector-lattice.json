@@ -1,0 +1,24 @@
+{
+  "ruleset": "starships-and-galaxies",
+  "source": "Core Rules",
+  "author": "publisher",
+  "type": "item",
+  "id": "deflector-lattice",
+  "name": "Deflector Lattice",
+  "summary": "A mesh of field emitters that spreads incoming fire.",
+  "stats": {
+    "kind": "upgrade",
+    "value": 650,
+    "upgrade": {
+      "system": "shields",
+      "bonus": 3
+    },
+    "text": "Raises Shields by 3."
+  },
+  "meta": {
+    "createdAt": "2026-11-23",
+    "source": {
+      "kind": "manual"
+    }
+  }
+}

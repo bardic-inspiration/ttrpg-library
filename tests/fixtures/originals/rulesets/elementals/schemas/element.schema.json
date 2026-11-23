@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/elementals/element.schema.json",
+  "title": "An element: one of the four colors, or a blend of two.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["text"],
+  "properties": {
+    "blend": { "description": "The two base elements a blend is made of.", "type": "array", "minItems": 2, "maxItems": 2, "items": { "$ref": "common.schema.json#/$defs/ElementRef" } },
+    "text": { "$ref": "common.schema.json#/$defs/Text" }
+  }
+}

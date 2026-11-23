@@ -1,0 +1,109 @@
+{
+  "starships-and-galaxies": {
+    "label": "Starships & Galaxies",
+    "types": {
+      "creature": {
+        "label": "Crew member",
+        "plural": "Crew",
+        "template": "generic",
+        "facets": [
+          { "path": "stats.species", "label": "Species", "kind": "enum" },
+          { "path": "derived.bestStations", "label": "Best station", "kind": "enum", "vocabulary": "station" },
+          { "path": "stats.skills.helm", "label": "Helm", "kind": "range" },
+          { "path": "stats.upkeep", "label": "Upkeep", "kind": "range" }
+        ],
+        "cardFields": ["derived.bestStations", "stats.upkeep"],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["derived.bestStations"]
+      },
+      "ship": {
+        "label": "Ship",
+        "plural": "Ships",
+        "template": "generic",
+        "facets": [
+          { "path": "stats.size", "label": "Size", "kind": "enum", "vocabulary": "shipSize", "order": ["scout", "frigate", "cruiser", "carrier"] },
+          { "path": "derived.crew", "label": "Crew", "kind": "range" },
+          { "path": "derived.hull", "label": "Hull", "kind": "range" },
+          { "path": "stats.price", "label": "Price", "kind": "range" }
+        ],
+        "cardFields": ["stats.size", "derived.crew"],
+        "defaultSort": "stats.price:asc",
+        "defaultFilters": ["stats.size"]
+      },
+      "item": {
+        "label": "Item",
+        "plural": "Items",
+        "template": "generic",
+        "facets": [
+          { "path": "stats.kind", "label": "Kind", "kind": "enum", "vocabulary": "itemKind" },
+          { "path": "stats.upgrade.system", "label": "System", "kind": "enum", "vocabulary": "system" },
+          { "path": "stats.value", "label": "Value", "kind": "range" },
+          { "path": "derived.resale", "label": "Resale", "kind": "range" }
+        ],
+        "cardFields": ["stats.kind", "stats.value"],
+        "defaultSort": "stats.value:desc",
+        "defaultFilters": ["stats.kind"]
+      },
+      "celestial-body": {
+        "label": "Celestial body",
+        "plural": "Celestial bodies",
+        "template": "generic",
+        "facets": [
+          { "path": "stats.kind", "label": "Kind", "kind": "enum", "vocabulary": "bodyKind", "order": ["star", "planet", "moon", "asteroid-field"] },
+          { "path": "stats.services", "label": "Services", "kind": "enum", "vocabulary": "service" },
+          { "path": "stats.orbits", "label": "Orbits", "kind": "enum", "ref": true },
+          { "path": "derived.dockable", "label": "Dockable", "kind": "enum" },
+          { "path": "derived.danger", "label": "Danger", "kind": "enum", "vocabulary": "difficulty", "order": ["routine", "hard", "severe", "extreme"] }
+        ],
+        "cardFields": ["stats.kind", "derived.danger"],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["stats.kind", "stats.services"]
+      }
+    }
+  },
+  "elementals": {
+    "label": "Elementals",
+    "types": {
+      "creature": {
+        "label": "Creature",
+        "plural": "Creatures",
+        "template": "generic",
+        "facets": [
+          { "path": "derived.element", "label": "Element", "kind": "enum", "vocabulary": "element" },
+          { "path": "derived.totalCost", "label": "Cost", "kind": "range" },
+          { "path": "stats.power", "label": "Power", "kind": "range" },
+          { "path": "stats.toughness", "label": "Toughness", "kind": "range" },
+          { "path": "stats.keywords", "label": "Keywords", "kind": "enum", "vocabulary": "keyword" }
+        ],
+        "cardFields": ["derived.element", "derived.totalCost"],
+        "defaultSort": "derived.totalCost:asc",
+        "defaultFilters": ["derived.element", "derived.totalCost"]
+      },
+      "invocation": {
+        "label": "Invocation",
+        "plural": "Invocations",
+        "template": "generic",
+        "facets": [
+          { "path": "derived.element", "label": "Element", "kind": "enum", "vocabulary": "element" },
+          { "path": "derived.totalCost", "label": "Cost", "kind": "range" }
+        ],
+        "cardFields": ["derived.element", "derived.totalCost"],
+        "defaultSort": "derived.totalCost:asc",
+        "defaultFilters": ["derived.element"]
+      },
+      "ward": {
+        "label": "Ward",
+        "plural": "Wards",
+        "template": "generic",
+        "facets": [
+          { "path": "derived.element", "label": "Element", "kind": "enum", "vocabulary": "element" },
+          { "path": "derived.totalCost", "label": "Cost", "kind": "range" },
+          { "path": "stats.upkeep", "label": "Upkeep", "kind": "range" }
+        ],
+        "cardFields": ["derived.element", "derived.totalCost"],
+        "defaultSort": "derived.totalCost:asc",
+        "defaultFilters": ["derived.element"]
+      }
+    }
+  }
+}

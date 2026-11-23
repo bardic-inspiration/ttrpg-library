@@ -1,0 +1,14 @@
+{
+  "sentences": {},
+  "vocabulary": {
+    "station": { "helm": "Helm", "engineering": "Engineering", "gunnery": "Gunnery", "science": "Science", "comms": "Comms" },
+    "system": { "engines": "Engines", "shields": "Shields", "weapons": "Weapons", "sensors": "Sensors", "comms": "Comms" },
+    "shipSize": { "scout": "Scout", "frigate": "Frigate", "cruiser": "Cruiser", "carrier": "Carrier" },
+    "itemKind": { "upgrade": "Upgrade", "trade-good": "Trade good" },
+    "bodyKind": { "star": "Star", "planet": "Planet", "moon": "Moon", "asteroid-field": "Asteroid field" },
+    "service": { "trade": "Trade", "refuel": "Refuel", "discovery": "Discovery" },
+    "difficulty": { "routine": "Routine", "hard": "Hard", "severe": "Severe", "extreme": "Extreme" }
+  },
+  "plurals": {},
+  "articles": {}
+}

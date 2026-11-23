@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/elementals/invocation.schema.json",
+  "title": "An invocation card: a one-time effect.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cost", "text"],
+  "properties": {
+    "cost": { "$ref": "common.schema.json#/$defs/Cost" },
+    "text": { "$ref": "common.schema.json#/$defs/Text" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/starships-and-galaxies/station.schema.json",
+  "title": "A crew station: the post a crew member takes, and the ship system it runs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["system", "text"],
+  "properties": {
+    "system": { "$ref": "common.schema.json#/$defs/System" },
+    "text": { "$ref": "common.schema.json#/$defs/Text" }
+  }
+}

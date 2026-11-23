@@ -534,3 +534,12 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A card's source badge shows the full source name, wrapping inside a square-cornered badge when it's longer than the line. Tried at 320, 390, 820, and 1440px against truncation with an ellipsis and the full name on hover ("Bardic's Co…") and an initialism ("BCTF"). | The full name fits on one line at every width the library's sources need. Truncation and initialisms hide the name from sighted keyboard users, since a badge takes no focus, and no other part of the card or detail page shows the source | #379 |
 | The source badge comes first in the badge list and is neutral (muted text and border), not accented. | Where an entry comes from reads before what it is, without being mistaken for a type or rarity | #379 |
 | An official card's star sits in a fixed column beside the name that every card keeps, empty on homebrew cards. It is named "Official" (`role="img"`) and filled in the accent color. | A name wraps the same on every card, so nothing shifts sideways; the star is a shape with a name, never color alone | #379 |
+
+### Fixture rulesets
+
+| Decision | Why | Source |
+|---|---|---|
+| Two original rulesets, Starships & Galaxies (d10 and d100, base 10) and Elementals (a chip-cost card game whose key numbers are powers of 4), are test fixtures in `tests/fixtures/originals/`, with their own registry, never on the site. | The site's mechanics are tested against more than `dnd-5e-2024`, without the fixtures becoming content | #369 |
+| The generic tests run against them in `npm test`; their own tests run apart, in `npm run test:originals` and a CI job that runs only when they change or a milestone closes. | Generic code can't drift toward one ruleset, and work on `dnd-5e-2024` isn't slowed or blocked by another ruleset's rules | #369 |
+| `galleryConfig` takes each ruleset's phrase book as an optional argument, the repo's by default. | P4: a ruleset outside `rulesets/` reads its facet values by its own vocabulary, as `loadLibrary` already takes its module | #369 |
+| A browsable site build of the fixture rulesets is a separate step, after the tests. | The site reads `content/`, `rulesets/`, and `config/types.json` from fixed paths; pointing it elsewhere touches every page | #369 |
