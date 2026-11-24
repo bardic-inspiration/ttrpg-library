@@ -58,6 +58,11 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
   repo: code, config, skills, scripts, and the prompts a routine runs.
   Whether a routine is set up, scheduled, or turned on, and other practices
   kept outside the repo, aren't documented or tested here.
+- **The build runs on Linux and Windows.** Every npm script, and every script
+  it runs, works the same in both, so no script uses shell syntax or a
+  Unix-only command: set a variable or touch files from a Node script
+  instead. CI runs only on Linux, so `tests/portable-scripts.test.ts` checks
+  the npm scripts ([Repository layout](docs/architecture.md#repository-layout)).
 - **Never skip, disable, or weaken a test or check to get green.**
 - **Never rewrite pushed history** (no amend, rebase, or force-push). To catch
   up with `main`, merge it in.
