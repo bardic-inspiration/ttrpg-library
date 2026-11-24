@@ -129,7 +129,8 @@ library's:
 The fixture rulesets ([Fixture rulesets](rulesets.md#fixture-rulesets)) are
 the other library. `npm run build:originals` builds their site into
 `site/dist-originals/`, and `npm run dev:originals` indexes them and serves
-it. That site has the same pages as the library's, without the style guide,
+it. Both set `LIBRARY_ROOT` through `scripts/with-library/`, so they work in
+any shell. That site has the same pages as the library's, without the style guide,
 which renders the repo's example fixtures
 ([styling.md](styling.md#refinement-workflow)). It's never deployed: the
 `originals` CI job uploads it as an artifact for 7 days
