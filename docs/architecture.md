@@ -81,6 +81,7 @@ scripts/
   lane/            lane rules for the lane CI job
   links/           the link check
   build-index/     content to library.json, data copies, export bundles
+  with-library/    runs npm scripts with LIBRARY_ROOT set, in any shell (site.md "Library root")
   pr-summary/      the job summary for changed entries
   generate/        request defaults and the gap-fill picker
   import/          the import script: an import issue's file to entries
@@ -108,6 +109,11 @@ npm scripts:
 | `dev` | Run the site locally |
 | `build:originals` | `build` for the fixture rulesets' library ([Library root](site.md#library-root)) |
 | `dev:originals` | Index the fixture rulesets, then run their site locally |
+
+Every script runs the same under sh on Linux and cmd.exe on Windows, so none
+uses shell syntax or a Unix-only command; `tests/portable-scripts.test.ts`
+checks them. `build:originals` and `dev:originals` set `LIBRARY_ROOT` through
+`scripts/with-library/`, which runs npm scripts in order with it set.
 | `check` | Types, `astro check`, Stylelint, and the link check |
 | `links` | The link check alone |
 | `test` | Vitest |
