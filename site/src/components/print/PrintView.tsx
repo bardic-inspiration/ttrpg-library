@@ -5,7 +5,7 @@
 // shared pages. A Print button prints again. Any entry that can't be found or
 // loaded fails the run with a message and no dialog.
 import { useEffect, useRef, useState } from 'preact/hooks';
-import registryJson from '../../../../config/types.json' with { type: 'json' };
+import registryJson from '@library/config/types.json' with { type: 'json' };
 import type { FacetData, Registry } from '../../lib/gallery/config.ts';
 import { pageRules } from '../../lib/print.ts';
 import { fetchFresh } from '../../lib/fetch-fresh.ts';

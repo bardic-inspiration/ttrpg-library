@@ -14,7 +14,8 @@
     "skipLibCheck": true,
     "types": ["node"],
     "jsx": "react-jsx",
-    "jsxImportSource": "preact"
+    "jsxImportSource": "preact",
+    "paths": { "@library/*": ["./*"] }
   },
   "include": ["lib/**/*", "scripts/**/*", "rulesets/**/*", "tests/**/*", "vitest.config.ts", "vitest.originals.config.ts"]
 }

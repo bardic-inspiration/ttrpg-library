@@ -106,7 +106,9 @@ metadata and changed paths; it never checks out or runs PR code.
    check) and `npm test`. A text-only PR skips `npm run check`.
 4. **`originals`** (dev lane, when the fixture rulesets changed or on a
    milestone PR, after `lane`): `npm run test:originals`, the fixture
-   rulesets' own tests ([Fixture rulesets](rulesets.md#fixture-rulesets)).
+   rulesets' own tests ([Fixture rulesets](rulesets.md#fixture-rulesets)),
+   then `npm run build:originals`, their site, uploaded as an artifact for 7
+   days and never deployed ([Library root](site.md#library-root)).
 5. **`a11y`** (milestone PRs only, after `content-checks`): installs
    Playwright's Chromium and runs `npm run a11y` against the built site
    artifact ([Milestone PRs](#milestone-prs)).

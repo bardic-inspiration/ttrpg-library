@@ -74,7 +74,7 @@ schemas/component.schema.json            the envelope of a component (content-mo
 schemas/primitive.schema.json, rules-*.schema.json   rules data files (rulesets.md)
 rulesets/module.ts                       the contract every ruleset module meets
 rulesets/<ruleset>/                      everything ruleset-specific (rulesets.md)
-lib/                                     ruleset-independent helpers for scripts and the site
+lib/                                     ruleset-independent helpers for scripts and the site, and the library root (site.md)
 config/                                  types.json, defaults.json, export.json, blocklist.json, licenses.json
 scripts/
   validate/        the validator CLI and checks
@@ -106,6 +106,8 @@ npm scripts:
 | `build:index` | Validate, then write `library.json` and the data copies |
 | `build` | `build:index`, then `astro build` |
 | `dev` | Run the site locally |
+| `build:originals` | `build` for the fixture rulesets' library ([Library root](site.md#library-root)) |
+| `dev:originals` | Index the fixture rulesets, then run their site locally |
 | `check` | Types, `astro check`, Stylelint, and the link check |
 | `links` | The link check alone |
 | `test` | Vitest |

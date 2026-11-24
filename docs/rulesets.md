@@ -685,12 +685,14 @@ Two original rulesets in `tests/fixtures/originals/` test the ruleset-generic
 code against rulesets that share nothing with `dnd-5e-2024`. Each is a full
 ruleset module, with rules primitives and a rules page, and a small library
 of official and homebrew content. They aren't in `config/types.json`, so
-they're never on the site. Their registry is their own `types.json`, and
-every type uses the generic template.
+they're never on the library's site. The folder is a library root of its own,
+laid out as the repo is, so it has a site of its own, built and served apart
+([Library root](site.md#library-root)). Its registry is its own
+`config/types.json`, and every type uses the generic template.
 
 ```
 tests/fixtures/originals/
-  types.json                 the fixtures' registry
+  config/types.json          the fixtures' registry
   rulesets/<ruleset>/        ruleset.json, tables.json, phrases.json, types.ts, index.ts, schemas/, rules/
   content/<ruleset>/<type>/  entries
 ```

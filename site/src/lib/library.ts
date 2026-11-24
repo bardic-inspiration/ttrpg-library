@@ -50,11 +50,13 @@ export interface LoadedComponent {
   parent: Entry;
 }
 
-const files = import.meta.glob<Entry>('../../../content/**/*.json', { eager: true, import: 'default' });
-const modules = import.meta.glob<{ ruleset: RulesetModule }>('../../../rulesets/*/index.ts', { eager: true });
+// The library's entries and ruleset modules (docs/site.md#library-root). A glob key's form depends
+// on where the library sits, so modules are matched by the ruleset folder that ends the key.
+const files = import.meta.glob<Entry>('@library/content/**/*.json', { eager: true, import: 'default' });
+const modules = import.meta.glob<{ ruleset: RulesetModule }>('@library/rulesets/*/index.ts', { eager: true });
 
 export function rulesetModule(id: string): RulesetModule {
-  const module = modules[`../../../rulesets/${id}/index.ts`];
+  const module = Object.entries(modules).find(([key]) => key.endsWith(`/rulesets/${id}/index.ts`))?.[1];
   if (!module) throw new Error(`No ruleset module for "${id}"`);
   return module.ruleset;
 }

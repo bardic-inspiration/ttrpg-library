@@ -99,7 +99,8 @@ jobs:
       - run: npm test
 
   # docs/rulesets.md#fixture-rulesets: the original-ruleset fixtures' own tests, which `npm test`
-  # leaves out, on a dev PR that changes them or closes a milestone.
+  # leaves out, and their site (docs/site.md#library-root), uploaded to browse but never deployed,
+  # on a dev PR that changes them or closes a milestone.
   originals:
     needs: lane
     if: needs.lane.outputs.lane == 'dev' && needs.lane.outputs.originals-changed == 'true'
@@ -113,6 +114,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:originals
+      - run: npm run build:originals
+      - uses: actions/upload-artifact@v7
+        with:
+          name: site-originals
+          path: site/dist-originals
+          retention-days: 7
 
   # docs/workflow.md#milestone-prs: accessibility checks against the site
   # content-checks built (docs/styling.md#accessibility), on milestone PRs only.

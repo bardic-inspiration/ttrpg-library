@@ -132,7 +132,9 @@ Target: WCAG 2.2 AA.
 
 ### Refinement workflow
 
-- **Style guide.** `/styleguide/` (unlinked, `noindex`) renders from the test
+- **Style guide.** `/styleguide/` (unlinked, `noindex`; the source is
+  `site/src/styleguide/StyleGuide.astro`, added as a route only in the repo's
+  own build, [Library root](site.md#library-root)) renders from the test
   fixtures: every token as a swatch or sample; the type scale and typefaces;
   every template in each mode, with print previews in the wide and narrow print layouts; gallery
   cards with and without art; filter controls in their states; and the export

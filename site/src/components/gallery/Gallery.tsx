@@ -2,7 +2,7 @@
 // library.json once, then filters, searches, and sorts in memory, keeping the view in the query
 // string. The logic lives in lib/gallery/; this file is the view.
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import registryJson from '../../../../config/types.json' with { type: 'json' };
+import registryJson from '@library/config/types.json' with { type: 'json' };
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
 import { defaultScope, galleryConfig, isScopePath, sortChoices, validSort, type FacetData, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
 import { isActive, isDefaultScope, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';

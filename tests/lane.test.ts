@@ -236,7 +236,7 @@ describe('checkLane milestone (docs/workflow.md#milestone-prs)', () => {
 
 describe('checkLane originalsChanged (docs/rulesets.md#fixture-rulesets)', () => {
   it('is true when the original-ruleset fixtures or their own tests change', () => {
-    for (const path of ['tests/fixtures/originals/types.json', 'tests/originals/elementals.test.ts']) {
+    for (const path of ['tests/fixtures/originals/config/types.json', 'tests/originals/elementals.test.ts']) {
       expect(checkLane({ branch: 'dev/x', paths: ['site/a.astro', path], labels: [] }).originalsChanged).toBe(true);
     }
   });
