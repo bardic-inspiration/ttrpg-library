@@ -24,7 +24,7 @@ interface Exporter {
   kind: "print" | "download";         // the Print button, or a format in Download's menu
   label: string;                      // "Print", or the format's name: "PNG", "JSON"
   scopes: Array<"entry" | "set">;     // single entry, filtered or selected set, or both
-  types?: string[];                   // the entry types it offers on an entry's page; all when absent
+  types?: string[];                   // the <ruleset>/<type> keys it offers on an entry's page; all when absent
   keysOnly?: boolean;                 // true: it reads only each entry's ruleset, type, and id
   run(items: Array<{ entry: Entry; derived: Derived; names?: Names }>, options: ExportOptions): Promise<ExportReport | void>;
   // a keysOnly exporter's items are Array<{ entry: { ruleset; type; id } }>
@@ -45,8 +45,11 @@ interface ExportReport {
   build error.
 - The detail page and the gallery build their [controls](#controls) from the
   exporters that offer the scope they need (`configuredControls` in the
-  registry); the detail page also passes its entry's type, so an exporter with
-  `types` appears only on those entries' pages. The detail page has its entry,
+  registry); the detail page also passes its entry's ruleset and type, so an
+  exporter with `types` appears only on those entries' pages. Its `types` are
+  `<ruleset>/<type>` keys, as the type filter's are ([site.md](site.md#gallery)),
+  so a type of another ruleset with the same id, such as a fixture ruleset's
+  `creature`, isn't offered it. The detail page has its entry,
   derived values, and the names of the entries and rules it links to at build
   time; a gallery set action fetches them from each entry's export bundle
   ([site.md](site.md#index-build)), so an exporter that reads entries receives
@@ -236,8 +239,8 @@ entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
 
 - **Types:** creature to `Creature`, spell to `Spell`, item to `MagicItem`,
   condition to `Condition`, and equipment to `Item`, with its weapon and
-  armor summaries. Page types, rules pages, and every other type aren't
-  covered: Download doesn't offer them, and a set export skips and lists them.
+  armor summaries, all in `dnd-5e-2024`. Page types, rules pages, every
+  other type, and every other ruleset's types aren't covered: Download doesn't offer them, and a set export skips and lists them.
 - **The file** is one object of record lists keyed by Open5e endpoint:
   `{ "creatures": […], "spells": […], "magicitems": […], "conditions": […],
   "items": […] }`, with only the lists that have records. Entry scope
@@ -324,4 +327,4 @@ module.
 |---|---|
 | A print density, margin, or breakpoint | `tokens/print.css` ([Print layout](#print-layout)) |
 | An export format | One `download` exporter module, listed in `config/export.json`; it joins Download's menu wherever it offers the scope |
-| A translator | A folder in `site/src/translators/` with its export and import sides, its schema, and fixtures from the target in `tests/fixtures/<target>/`; an exporter that wraps it, with `types`; its round-trip, schema, and field-name tests ([Translators](#translators)) |
+| A translator | A folder in `site/src/translators/` with its export and import sides, its schema, and fixtures from the target in `tests/fixtures/<target>/`; an exporter that wraps it, with `types` as `<ruleset>/<type>` keys; its round-trip, schema, and field-name tests ([Translators](#translators)) |

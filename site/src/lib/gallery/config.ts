@@ -6,6 +6,7 @@ import { PUBLISHER } from '../../../../rulesets/module.ts';
 import type { PhraseBook } from '../../../../lib/wording/book.ts';
 import { phraseBook } from '../phrases.ts';
 import { formerTypes } from '../redirects.ts';
+import { typeKey } from '../type-key.ts';
 
 export type { Facet, LibraryRecord, Registry };
 
@@ -81,8 +82,8 @@ export interface TypeInfo {
   defaultSort: SortKey;
 }
 
-/** A type's key, `<ruleset>/<type>`: the data's own hierarchy, and the type filter's value (docs/site.md#gallery). */
-export const typeKey = (ruleset: string, type: string): string => `${ruleset}/${type}`;
+/** A type's key is also the type filter's value (docs/site.md#gallery). */
+export { typeKey };
 
 /** The pseudo-paths every record has besides its facets (docs/site.md#gallery "Sort"). */
 export const NAME = 'name';

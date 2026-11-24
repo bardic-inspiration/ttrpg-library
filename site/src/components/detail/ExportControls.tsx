@@ -47,7 +47,7 @@ export default function ExportControls({ item, base, page = false, ready: initia
   return (
     <div class="export-controls">
       <ExportButtons
-        controls={configuredControls('entry', { download: !page, type: item.entry.type })}
+        controls={configuredControls('entry', { download: !page, entry: item.entry })}
         run={run}
         disabled={busy}
         menuId={`export-formats-${item.entry.id}`}

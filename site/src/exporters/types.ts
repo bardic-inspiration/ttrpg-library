@@ -72,7 +72,11 @@ interface ExporterBase {
   /** The Print button's text, or the format's name in the Download menu ("PNG", "JSON"). */
   label: string;
   scopes: ExportScope[];
-  /** The entry types it offers on an entry's page; every type when absent. A set export skips and reports the rest. */
+  /**
+   * The entry types it offers on an entry's page, as `<ruleset>/<type>` keys, so a type of
+   * another ruleset with the same id isn't offered; every type when absent. A set export
+   * skips and reports the rest.
+   */
   types?: string[];
 }
 
