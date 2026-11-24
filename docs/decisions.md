@@ -527,6 +527,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A ruleset, source, or author counts what checking it adds: its entries under the search and the other filters, ignoring the rest of the set. Clear filters returns the set to its default instead of emptying it. | An additive checkbox's count is what it adds; clearing shouldn't leave an empty Library | #380 |
 | The Ruleset node always starts open, so a fresh Library shows why only official content is listed. | The default narrows the results; the reader should see it | #380 |
 | The type filter's values are `<ruleset>/<type>`, with that ruleset's type label, in the URL and the redirects from old galleries. A bare type id still reads as that type in every ruleset, and a former key, bare or qualified, as the current one. Gallery URLs leave `/` unencoded. | The site follows the data's hierarchy, where a ruleset holds its types, so two rulesets' `creature` stay apart; old links keep working (P9) | #388 |
+| A path two types share stays one filter, but each record reads it by its own type's facet: labels, sort order, and groups. | The filter's URL form is unchanged, and no type reads another's vocabulary | #388 |
 
 ### Library cards
 

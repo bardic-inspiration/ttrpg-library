@@ -198,6 +198,14 @@ function typeFilterAliases(registry: Registry): Record<string, string[]> {
   return aliases;
 }
 
+/**
+ * The definition a record reads a path by: its own type's facet, so a path two types share
+ * keeps each type's vocabulary, order, and groups, else the Library's filter for the path.
+ */
+export function recordDef(config: GalleryConfig, record: Pick<LibraryRecord, 'ruleset' | 'type'>, path: string): FilterDef | undefined {
+  return config.types.get(typeKey(record.ruleset, record.type))?.facets.find((f) => f.path === path) ?? filterDef(config, path);
+}
+
 const TAG_KEY = /^[a-z][a-z0-9-]*$/;
 
 /** A `tags.<key>` path for a valid tag key (docs/content-model.md#tags), or undefined. */

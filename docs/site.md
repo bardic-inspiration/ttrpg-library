@@ -403,7 +403,11 @@ Conditions › Poisoned, narrow those entries.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
   filter's value never matches it. A path two types share (`stats.level` on
   spells and feats) is one filter: each type lists its own entries' values, and
-  a value checked under one applies to both.
+  a value checked under one applies to both. Each type still reads the path by
+  its own facet: its vocabulary's labels, its declared order when sorting, and
+  its own groups when matching (`recordDef` in `config.ts`), so Starships &
+  Galaxies' items and celestial bodies, which share `stats.kind`, keep their
+  own kinds.
 - The tree's ref names and groups come from the build: the gallery island
   passes the names of every ref a ref facet holds, and each grouped type's
   groups (`site/src/lib/gallery/facet-data.ts`). A category reads by its
