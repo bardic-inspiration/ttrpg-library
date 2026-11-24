@@ -33,7 +33,7 @@ describe('former type keys', () => {
 
   it('let an old type filter select the renamed type', () => {
     const home = galleryConfig(reg);
-    expect(parseQuery('?f.type=magic-item', home).filters.get('type')).toEqual({ kind: 'enum', values: ['item'] });
+    expect(parseQuery('?f.type=magic-item', home).filters.get('type')).toEqual({ kind: 'enum', values: ['dnd-5e-2024/item'] });
     expect(selectEntries(parsePrintQuery(whole('?f.type=magic-item')), records, reg, NO_FACET_DATA).records.map((r) => r.id)).toEqual([
       'wand-of-frost-lances',
     ]);
@@ -61,9 +61,9 @@ describe('redirect pages', () => {
     const typePaths = await paths(import('../../site/src/pages/[ruleset]/[type]/index.astro'));
     const moved = (type: string) => typePaths.find((p) => p.params.type === type)?.props.moved;
     for (const type of Object.keys(reg['dnd-5e-2024']!.types)) expect(moved(type), type).toBe(`/${libraryQuery(reg, 'dnd-5e-2024', type)}`);
-    expect(moved('creature')).toBe('/?sort=stats.cr:asc&f.ruleset=dnd-5e-2024&f.type=creature');
+    expect(moved('creature')).toBe('/?sort=stats.cr:asc&f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/creature');
     expect(moved('magic-item')).toBe(moved('item'));
-    expect(moved('item')).toMatch(/f\.type=item$/);
+    expect(moved('item')).toMatch(/f\.type=dnd-5e-2024\/item$/);
   });
 
   it('the Library reads a redirect’s query as the old gallery’s view', () => {
@@ -71,7 +71,7 @@ describe('redirect pages', () => {
     expect(state.sort).toEqual({ path: 'stats.cr', dir: 'asc' });
     expect([...state.filters]).toEqual([
       ['ruleset', { kind: 'enum', values: ['dnd-5e-2024'] }],
-      ['type', { kind: 'enum', values: ['creature'] }],
+      ['type', { kind: 'enum', values: ['dnd-5e-2024/creature'] }],
     ]);
   });
 });

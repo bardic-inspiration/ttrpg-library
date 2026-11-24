@@ -90,7 +90,7 @@ export function parseQuery(search: string, config: GalleryConfig): GalleryState 
                     .map(decode)
                     .filter((v): v is string => !!v)
                     .map((v) => v.toLowerCase())
-                    .map((v) => def.aliases?.[v] ?? v),
+                    .flatMap((v) => def.aliases?.[v] ?? [v]),
                 ),
               ],
             };
@@ -102,9 +102,14 @@ export function parseQuery(search: string, config: GalleryConfig): GalleryState 
   return state;
 }
 
-/** RFC 3986 encoding, so `,` and `.` stay free to separate values and range bounds. */
+/**
+ * RFC 3986 encoding, so `,` and `.` stay free to separate values and range bounds. A `/`, which a
+ * query may hold as is, stays literal, so `f.type=dnd-5e-2024/spell` reads as written.
+ */
 const encode = (text: string): string =>
-  encodeURIComponent(text).replace(/[!'()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+  encodeURIComponent(text)
+    .replace(/[!'()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)
+    .replace(/%2F/g, '/');
 
 /**
  * Writes gallery state as a query string (with a leading `?`, or `''` for the

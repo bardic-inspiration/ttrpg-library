@@ -5,7 +5,7 @@ import type { Facet, LibraryRecord, Registry } from '../../../../scripts/build-i
 import { PUBLISHER } from '../../../../rulesets/module.ts';
 import type { PhraseBook } from '../../../../lib/wording/book.ts';
 import { phraseBook } from '../phrases.ts';
-import { typeAliases } from '../redirects.ts';
+import { formerTypes } from '../redirects.ts';
 
 export type { Facet, LibraryRecord, Registry };
 
@@ -20,8 +20,11 @@ export interface FilterDef {
   order?: string[];
   /** Display labels for stored values, such as type ids to type labels, or a vocabulary's names. */
   labels?: Record<string, string>;
-  /** Former values read as current ones, such as a renamed type's old key (docs/site.md#redirects). */
-  aliases?: Record<string, string>;
+  /**
+   * Values that stand for others: a bare type id for that type in every ruleset, and a renamed
+   * type's old key for its current one (docs/site.md#redirects). Keys and values are case-folded.
+   */
+  aliases?: Record<string, string[]>;
   /** Its values are ref keys, read by their targets' names (in `labels`). */
   ref?: boolean;
   /** Its values are the type's groups, nested; a group matches every leaf group in it. */
@@ -77,6 +80,9 @@ export interface TypeInfo {
   /** The registry's `defaultSort`, which the redirect from the type's old gallery carries. */
   defaultSort: SortKey;
 }
+
+/** A type's key, `<ruleset>/<type>`: the data's own hierarchy, and the type filter's value (docs/site.md#gallery). */
+export const typeKey = (ruleset: string, type: string): string => `${ruleset}/${type}`;
 
 /** The pseudo-paths every record has besides its facets (docs/site.md#gallery "Sort"). */
 export const NAME = 'name';
@@ -136,12 +142,12 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
   for (const [rulesetId, ruleset] of Object.entries(registry)) {
     rulesetLabels[rulesetId] = ruleset.label;
     for (const [typeId, type] of Object.entries(ruleset.types)) {
-      typeLabels[typeId] = type.label;
+      typeLabels[typeKey(rulesetId, typeId)] = type.label;
       const facets = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data, books));
       const cardFields = ((type.cardFields as string[] | undefined) ?? [])
         .map((path) => facets.find((facet) => facet.path === path))
         .filter((facet): facet is FilterDef => facet !== undefined);
-      types.set(`${rulesetId}/${typeId}`, {
+      types.set(typeKey(rulesetId, typeId), {
         ruleset: rulesetId,
         type: typeId,
         label: type.label,
@@ -154,7 +160,7 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
     }
   }
 
-  const aliases = typeAliases(registry);
+  const aliases = typeFilterAliases(registry);
   const rulesetFilter: FilterDef = { path: RULESET, label: 'Ruleset', kind: 'enum', order: Object.keys(rulesetLabels), labels: rulesetLabels };
   const sourceFilter: FilterDef = { path: SOURCE, label: 'Source', kind: 'enum' };
   const authorFilter: FilterDef = { path: AUTHOR, label: 'Author', kind: 'enum' };
@@ -172,6 +178,24 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
     types,
     publishers: data.publishers,
   };
+}
+
+/**
+ * The type filter's aliases: a bare type id for every ruleset's type of that id, so `f.type=spell`
+ * keeps working, and a former key, bare or qualified, for the current one.
+ */
+function typeFilterAliases(registry: Registry): Record<string, string[]> {
+  const aliases: Record<string, string[]> = {};
+  const add = (from: string, to: string) => {
+    const list = (aliases[from.toLowerCase()] ??= []);
+    if (!list.includes(to.toLowerCase())) list.push(to.toLowerCase());
+  };
+  for (const [ruleset, config] of Object.entries(registry)) for (const type of Object.keys(config.types)) add(type, typeKey(ruleset, type));
+  for (const { ruleset, from, to } of formerTypes(registry)) {
+    add(from, typeKey(ruleset, to));
+    add(typeKey(ruleset, from), typeKey(ruleset, to));
+  }
+  return aliases;
 }
 
 const TAG_KEY = /^[a-z][a-z0-9-]*$/;
@@ -202,7 +226,9 @@ export function typesInScope(config: GalleryConfig, filters: ReadonlyMap<string,
   };
   const allowed = (path: string, value: string) => values(path).length === 0 || values(path).includes(value);
   const byRuleset = values(SOURCE).length === 0 && values(AUTHOR).length === 0;
-  return [...config.types.values()].filter((t) => (!byRuleset || allowed(RULESET, t.ruleset)) && allowed(TYPE, t.type));
+  return [...config.types.values()].filter(
+    (t) => (!byRuleset || allowed(RULESET, t.ruleset)) && allowed(TYPE, typeKey(t.ruleset, t.type).toLowerCase()),
+  );
 }
 
 /** The part of an active filter `typesInScope` reads; the gallery state's filter values fit it. */

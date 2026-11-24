@@ -135,6 +135,19 @@ describe('the gallery', () => {
     ]);
     expect(await view('?f.ruleset=starships-and-galaxies&f.type=ship&sort=stats.size:asc')).toEqual(['wren', 'longhaul', 'reaver', 'bastion']);
   });
+
+  it('keeps a type filter value and its label per ruleset (#388)', async () => {
+    const { config, records } = await setup();
+    // Both rulesets have a `creature`; each is its own value of the type filter, with its own label.
+    expect(config.filters.find((f) => f.path === 'type')!.labels).toMatchObject({
+      'starships-and-galaxies/creature': 'Crew member',
+      'elementals/creature': 'Creature',
+    });
+    const creatures = (await view(`?${BOTH}&f.type=elementals/creature`)).sort();
+    expect(creatures).toEqual(records.filter((r) => r.ruleset === 'elementals' && r.type === 'creature').map((r) => r.id).sort());
+    // A bare type id is that type in every ruleset, so older links keep working.
+    expect((await view(`?${BOTH}&f.type=creature`)).length).toBe(records.filter((r) => r.type === 'creature').length);
+  });
 });
 
 describe('the site', () => {

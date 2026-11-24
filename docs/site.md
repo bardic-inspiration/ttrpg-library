@@ -271,7 +271,7 @@ redirect to the Library with the matching filter set
 - `/<ruleset>/` to `/?f.ruleset=<ruleset>`, which puts the whole ruleset,
   homebrew included, in the ruleset set (see "Filters" under
   [Gallery](#gallery)).
-- `/<ruleset>/<type>/` to `/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<type>`,
+- `/<ruleset>/<type>/` to `/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<ruleset>/<type>`,
   so the view opens as the type's gallery did: its registry `defaultSort`
   (left out when it is `name:asc`), and its `defaultFilters` open because the
   page opens with the type checked. A detail page's type link goes to the same view.
@@ -285,7 +285,8 @@ such as `item`'s `["magic-item"]`, and from them:
   type.
 - **Print and gallery queries** read an old key as the current one: an
   `ids` key such as `magic-item/wand-of-wonder`, and an old value of the
-  `type` filter (`f.type=magic-item`).
+  `type` filter, bare or with its ruleset (`f.type=magic-item`,
+  `f.type=dnd-5e-2024/magic-item`).
 
 Entries, refs, and `library.json` use only current keys; the validator
 rejects an old type like any unknown one. `site/src/lib/redirects.ts` reads
@@ -363,7 +364,7 @@ Conditions › Poisoned, narrow those entries.
     its entries under the search and the other filters, whatever else in the
     set is checked.
 - **Types.** Then the types, each a checkbox for the type filter (`f.type`)
-  with its count, the entries of it among the results (so checking one type
+  under its key, `<ruleset>/<type>`, and its own ruleset's label, with its count, the entries of it among the results (so checking one type
   leaves the others at 0), and a disclosure holding its facets. A type shows when the
   library has entries of it, or it's checked.
 - **Fields.** A type's facets follow in registry order. Facets whose paths
@@ -437,7 +438,11 @@ written only when it differs from the default: a query naming any of
 shows official spells and `?f.ruleset=dnd-5e-2024&f.type=spell` every spell,
 and `f.ruleset=` with no value is an empty set. Keys and values are
 URL-encoded, so a comma inside a value is `%2C` and a bare comma separates
-values. Enum values are case-folded. The type filter is `f.type`. Unknown
+values; a `/` stays as is. Enum values are case-folded. The type filter is
+`f.type`, and its values are `<ruleset>/<type>`, as the data nests a type in
+its ruleset (`f.type=dnd-5e-2024/spell`). A bare type id reads as that type
+in every ruleset, so `?f.type=spell` shows official spells of any ruleset, and
+the gallery writes it back qualified. Unknown
 parameters, filters on paths the Library doesn't have, a sort the filters
 don't offer (wherever the filters come in the query), and malformed values are
 ignored; of several sorts, the last one offered applies. The gallery rewrites the URL as the view changes,

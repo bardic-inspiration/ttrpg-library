@@ -526,6 +526,7 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The URL carries the ruleset set only when it differs from the default; a query naming any part of it sets the whole set, and `f.ruleset=` with no value is an empty set. Old gallery links (`/<ruleset>/`) keep `f.ruleset`, so they show the whole ruleset, homebrew included. | One view has one URL, and old links keep showing what they showed | #380 |
 | A ruleset, source, or author counts what checking it adds: its entries under the search and the other filters, ignoring the rest of the set. Clear filters returns the set to its default instead of emptying it. | An additive checkbox's count is what it adds; clearing shouldn't leave an empty Library | #380 |
 | The Ruleset node always starts open, so a fresh Library shows why only official content is listed. | The default narrows the results; the reader should see it | #380 |
+| The type filter's values are `<ruleset>/<type>`, with that ruleset's type label, in the URL and the redirects from old galleries. A bare type id still reads as that type in every ruleset, and a former key, bare or qualified, as the current one. Gallery URLs leave `/` unencoded. | The site follows the data's hierarchy, where a ruleset holds its types, so two rulesets' `creature` stay apart; old links keep working (P9) | #388 |
 
 ### Library cards
 

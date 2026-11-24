@@ -1,13 +1,13 @@
 // Reading a filter or sort path off a library.json record (docs/site.md#index-build, docs/site.md#gallery).
 
 import { formatValue } from '../format.ts';
-import { AUTHOR, CREATED, NAME, RULESET, SOURCE, TYPE, tagKey, type FilterDef, type LibraryRecord } from './config.ts';
+import { AUTHOR, CREATED, NAME, RULESET, SOURCE, TYPE, tagKey, typeKey, type FilterDef, type LibraryRecord } from './config.ts';
 
-/** The raw value at a path: `name`, `createdAt`, `type`, `ruleset`, `source`, `author`, a facet, or `tags.<key>`. */
+/** The raw value at a path: `name`, `createdAt`, `type` (as `<ruleset>/<type>`), `ruleset`, `source`, `author`, a facet, or `tags.<key>`. */
 export function valueAt(record: LibraryRecord, path: string): unknown {
   if (path === NAME) return record.name;
   if (path === CREATED) return record.createdAt;
-  if (path === TYPE) return record.type;
+  if (path === TYPE) return typeKey(record.ruleset, record.type);
   if (path === RULESET) return record.ruleset;
   if (path === SOURCE) return record.source;
   if (path === AUTHOR) return record.author;
