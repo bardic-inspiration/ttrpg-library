@@ -3,7 +3,9 @@
 
 import type { PhraseBook } from '../../../lib/wording/book.ts';
 
-const books = import.meta.glob<PhraseBook>('../../../rulesets/*/phrases.json', { eager: true, import: 'default' });
+// The library's phrase books (docs/site.md#library-root), matched by the ruleset folder ending the key.
+const books = import.meta.glob<PhraseBook>('@library/rulesets/*/phrases.json', { eager: true, import: 'default' });
 
 /** A ruleset's phrase book, or undefined for a ruleset with none. */
-export const phraseBook = (ruleset: string): PhraseBook | undefined => books[`../../../rulesets/${ruleset}/phrases.json`];
+export const phraseBook = (ruleset: string): PhraseBook | undefined =>
+  Object.entries(books).find(([key]) => key.endsWith(`/rulesets/${ruleset}/phrases.json`))?.[1];

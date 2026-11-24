@@ -4,7 +4,7 @@
 import Base from '../layouts/Base.astro';
 import { loadRules } from '../lib/rules';
 import { url } from '../lib/url';
-import registry from '../../../config/types.json';
+import registry from '@library/config/types.json';
 
 const labels: Record<string, string> = Object.fromEntries(Object.entries(registry).map(([id, config]) => [id, config.label]));
 const rulesets = loadRules().map((data) => ({

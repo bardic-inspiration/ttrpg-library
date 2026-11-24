@@ -23,7 +23,7 @@ export type OriginalRuleset = (typeof RULESETS)[number];
 const readJson = async (path: string): Promise<any> => JSON.parse(await readFile(path, 'utf8'));
 
 /** The fixtures' registry, their own config/types.json. */
-export const originalsRegistry = (root = ORIGINALS): Promise<Registry> => readJson(join(root, 'types.json'));
+export const originalsRegistry = (root = ORIGINALS): Promise<Registry> => readJson(join(root, 'config/types.json'));
 
 const options = async (root: string) => ({ rulesetsRoot: join(root, 'rulesets'), registry: await originalsRegistry(root) });
 

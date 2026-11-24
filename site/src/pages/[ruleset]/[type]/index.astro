@@ -8,7 +8,7 @@ import { formerTypes } from '../../../lib/redirects';
 import { libraryQuery } from '../../../lib/gallery/library-url';
 import type { Registry } from '../../../lib/gallery/config';
 import { url } from '../../../lib/url';
-import registryJson from '../../../../../config/types.json';
+import registryJson from '@library/config/types.json';
 
 export const getStaticPaths = (() => {
   const registry = registryJson as unknown as Registry;

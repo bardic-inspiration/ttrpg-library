@@ -10,8 +10,9 @@ import { allComponents, entryNames, linkAll, refPaths, refTargets, rulesetModule
 import type { RefTarget } from './refs.ts';
 import { sectionId, type TocItem } from './accordion.ts';
 
-const definitions = import.meta.glob<RulesetDefinition>('../../../rulesets/*/ruleset.json', { eager: true, import: 'default' });
-const ruleFiles = import.meta.glob<unknown>('../../../rulesets/*/rules/**/*.json', { eager: true, import: 'default' });
+// The library's rulesets (docs/site.md#library-root).
+const definitions = import.meta.glob<RulesetDefinition>('@library/rulesets/*/ruleset.json', { eager: true, import: 'default' });
+const ruleFiles = import.meta.glob<unknown>('@library/rulesets/*/rules/**/*.json', { eager: true, import: 'default' });
 
 /**
  * One ruleset's rules data from its files, keyed by their path inside

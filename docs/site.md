@@ -72,7 +72,8 @@ Two flags change what a facet's values are:
    with its ruleset module, resolves refs, and computes back-references. It
    never computes a rules value itself.
 2. It writes `site/public/library.json`, the index, and copies each entry's raw
-   JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export. Beside each
+   JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export (another
+   library's own folder for another library; [Library root](#library-root)). Beside each
    copy it writes the entry's export bundle, `<id>.export.json`:
    `{ "entry": …, "derived": …, "names": … }`, as an exporter receives it
    ([export.md](export.md#exporter-interface)). `names` holds the name of each
@@ -107,6 +108,33 @@ stays lean: full entries and derived values are fetched only for export, from
 the export bundles. `library.json` and `data/` are built in CI and git-ignored,
 so PRs contain only entry files.
 
+### Library root
+
+The site and `build:index` read one library: a folder holding `content/`,
+`rulesets/`, and `config/types.json`. It's the repo itself unless
+`LIBRARY_ROOT` names another folder, relative to the repo root.
+`lib/library-root.ts` resolves it, and `site/astro.config.mjs` maps the
+`@library` import alias to it, which every glob of entries, ruleset modules,
+rules files, and phrase books, and every registry import, goes through. Site
+code that's specific to `dnd-5e-2024` imports that ruleset directly.
+
+Each library has its own folders, so another build never overwrites the
+library's:
+
+| Library | Index and data | Built site |
+|---|---|---|
+| The repo | `site/public/` | `site/dist/` |
+| Any other, by its folder's name | `site/public-<name>/` | `site/dist-<name>/` |
+
+The fixture rulesets ([Fixture rulesets](rulesets.md#fixture-rulesets)) are
+the other library. `npm run build:originals` builds their site into
+`site/dist-originals/`, and `npm run dev:originals` indexes them and serves
+it. That site has the same pages as the library's, without the style guide,
+which renders the repo's example fixtures
+([styling.md](styling.md#refinement-workflow)). It's never deployed: the
+`originals` CI job uploads it as an artifact for 7 days
+([CI checks](workflow.md#ci-checks)).
+
 ### Fresh data
 
 `library.json`, the raw files, the export bundles, and print fragments live at
@@ -128,7 +156,7 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 | `/<ruleset>/rules/extensions/` | The ruleset's Extensions page |
 | `/print/` | Print view for one or many entries ([export.md](export.md#print)) |
 | `/about/` | What the library is, SRD attribution, licenses |
-| `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)) |
+| `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)); only the repo's library has it ([Library root](#library-root)) |
 
 The top bar reads **Library | Rulesets | About | Contribute**
 (`site/src/components/SiteNav.astro`). Contribute links to the repository. The

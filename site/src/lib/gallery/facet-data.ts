@@ -2,7 +2,7 @@
 // the names a ref facet's values read by, the groups a groups facet nests its values in, and each
 // ruleset's publisher, whom an author of "publisher" reads as.
 
-import registryJson from '../../../../config/types.json' with { type: 'json' };
+import registryJson from '@library/config/types.json' with { type: 'json' };
 import type { GroupTree, RulesData, RulesGroup } from '../../../../lib/rules.ts';
 import { entryNames, loadEntries, type LoadedEntry } from '../library.ts';
 import { loadRules, rulesetPublishers } from '../rules.ts';

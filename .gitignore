@@ -10,6 +10,9 @@ coverage/
 # so PRs contain only entry files.
 site/public/library.json
 site/public/data/
+# Another library's site (docs/site.md#library-root), such as the fixture rulesets'.
+site/public-*/
+site/dist-*/
 
 # Playwright
 playwright-report/
