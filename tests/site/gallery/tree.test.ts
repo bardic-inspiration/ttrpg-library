@@ -49,6 +49,17 @@ function find(nodes: TreeNode[], ...labels: string[]): TreeNode | undefined {
 
 const values = (node: TreeNode | undefined): ValueNode[] => (node?.kind === 'enum' ? node.values : []);
 
+/** Every ruleset's types, from the Types group under each ruleset in the Ruleset node. */
+const types = (nodes: TreeNode[]): TreeNode[] =>
+  nodes
+    .filter((n) => n.id === 'ruleset' && n.kind === 'field')
+    .flatMap((n) => (n.kind === 'field' ? n.children : []))
+    .flatMap((r) => (r.kind === 'type' ? r.children : []))
+    .flatMap((g) => (g.kind === 'field' && g.label === 'Types' ? g.children : []));
+
+/** The node reached by following labels from a type's. */
+const ofType = (nodes: TreeNode[], ...labels: string[]) => find(types(nodes), ...labels);
+
 /** Every facet path in a tree. */
 const paths = (nodes: TreeNode[]): string[] =>
   nodes.flatMap((n) => (n.kind === 'type' || n.kind === 'field' ? paths(n.children) : [n.def.path]));
@@ -56,14 +67,14 @@ const paths = (nodes: TreeNode[]): string[] =>
 describe('creature/air-elemental through Creature › Immunities › Conditions', () => {
   it('lists its condition immunities by name, as a ref facet over condition keys', () => {
     const home = galleryConfig(reg, data);
-    const conditions = find(tree(elemental, home), 'Creature', 'Immunities', 'Conditions');
+    const conditions = ofType(tree(elemental, home), 'Creature', 'Immunities', 'Conditions');
     expect(conditions?.kind).toBe('enum');
     expect(values(conditions).map((v) => v.label)).toEqual([
       'Exhaustion', 'Grappled', 'Paralyzed', 'Petrified', 'Poisoned', 'Prone', 'Restrained', 'Unconscious',
     ]);
     expect(values(conditions).find((v) => v.label === 'Poisoned')).toMatchObject({ key: 'condition/poisoned', count: 1, selected: false });
     // Damage immunities sit beside them, in the same Immunities node.
-    expect(values(find(tree(elemental, home), 'Creature', 'Immunities', 'Damage')).map((v) => v.label)).toEqual(['Poison', 'Thunder']);
+    expect(values(ofType(tree(elemental, home), 'Creature', 'Immunities', 'Damage')).map((v) => v.label)).toEqual(['Poison', 'Thunder']);
   });
 
   it('filters by a condition, in the gallery URL form, and checks the value', () => {
@@ -72,21 +83,21 @@ describe('creature/air-elemental through Creature › Immunities › Conditions'
     const state = parseQuery(query, creature);
     expect(computeView(elemental, creature, state, searchIndex(elemental)).results.map((r) => r.id)).toEqual(['air-elemental']);
     expect(computeView(elemental, creature, parseQuery('?f.stats.immunities.conditions=condition%2Fblinded', creature), searchIndex(elemental)).results).toEqual([]);
-    const node = find(tree(elemental, creature, query), 'Creature', 'Immunities', 'Conditions');
+    const node = ofType(tree(elemental, creature, query), 'Creature', 'Immunities', 'Conditions');
     expect(node?.open).toBe(true);
     expect(values(node).find((v) => v.key === 'condition/poisoned')?.selected).toBe(true);
   });
 
   it('opens a checked type’s default filters, as its old gallery did', () => {
     const library = galleryConfig(reg, data);
-    const closed = find(tree(elemental, library), 'Creature');
+    const closed = ofType(tree(elemental, library), 'Creature');
     expect(closed?.kind === 'type' && closed.children.map(labelOf)).toEqual(['CR', 'Size', 'Creature type', 'Abilities', 'AC', 'HP', 'XP', 'Immunities']);
-    expect(find(tree(elemental, library), 'Creature', 'CR')?.open).toBe(false);
+    expect(ofType(tree(elemental, library), 'Creature', 'CR')?.open).toBe(false);
     const nodes = tree(elemental, library, '?f.type=creature');
-    expect(find(nodes, 'Creature')?.open).toBe(true);
-    expect(find(nodes, 'Creature', 'CR')?.open).toBe(true);
-    expect(find(nodes, 'Creature', 'Size')?.open).toBe(false);
-    expect(find(nodes, 'Creature', 'Abilities', 'STR')?.kind).toBe('range');
+    expect(ofType(nodes, 'Creature')?.open).toBe(true);
+    expect(ofType(nodes, 'Creature', 'CR')?.open).toBe(true);
+    expect(ofType(nodes, 'Creature', 'Size')?.open).toBe(false);
+    expect(ofType(nodes, 'Creature', 'Abilities', 'STR')?.kind).toBe('range');
   });
 });
 
@@ -102,7 +113,7 @@ describe('Equipment › Weapon › Martial › Melee', () => {
   });
 
   it('nests a groups facet’s values as the groups file nests them, pruned to groups with members', () => {
-    const groups = values(find(tree(gear, equipment), 'Equipment', 'Group'));
+    const groups = values(ofType(tree(gear, equipment), 'Equipment', 'Group'));
     expect(groups.map((g) => g.label)).toEqual(['Weapon', 'Adventuring Gear']);
     const weapon = groups[0]!;
     expect(weapon.count).toBe(2);
@@ -121,22 +132,23 @@ describe('Equipment › Weapon › Martial › Melee', () => {
   });
 
   it('opens the groups down to a selected one', () => {
-    const groups = values(find(tree(gear, equipment, '?f.stats.group=martial-melee-weapons'), 'Equipment', 'Group'));
+    const groups = values(ofType(tree(gear, equipment, '?f.stats.group=martial-melee-weapons'), 'Equipment', 'Group'));
     const martial = groups[0]!.children.find((g) => g.label === 'Martial')!;
     expect([groups[0]!.open, martial.open, martial.children[0]!.selected]).toEqual([true, true, true]);
   });
 
   it('lists the nodes that start open, down to the groups, by the ids the island gives them', () => {
     const nodes = tree(gear, equipment, '?f.stats.group=martial-melee-weapons');
-    const group = find(nodes, 'Equipment', 'Group')!;
+    const group = ofType(nodes, 'Equipment', 'Group')!;
     expect([...openAtStart(nodes)].filter((id) => id.startsWith('dnd-5e-2024/equipment'))).toEqual([
       'dnd-5e-2024/equipment',
       group.id,
       `${group.id}-weapons`,
       `${group.id}-weapons-martial-weapons`,
     ]);
-    // The ruleset set's section starts open; nothing else does without a filter in it.
-    expect(openAtStart(tree(gear, equipment))).toEqual(new Set(['ruleset']));
+    // The Ruleset node, each ruleset, and its Types start open, so every type shows; nothing else
+    // does without a filter in it.
+    expect(openAtStart(tree(gear, equipment))).toEqual(new Set(['ruleset', 'ruleset/dnd-5e-2024', 'ruleset/dnd-5e-2024:types']));
   });
 });
 
@@ -175,13 +187,13 @@ describe('a custom weapon through Equipment › Weapon › Property and Mastery'
   afterAll(() => rm(knifeRepo, { recursive: true, force: true }));
 
   it('lists its properties and mastery by name, as ref facets beside its damage type', () => {
-    const weapon = find(tree(records, config), 'Equipment', 'Weapon');
+    const weapon = ofType(tree(records, config), 'Equipment', 'Weapon');
     expect(weapon?.kind === 'field' && weapon.children.map(labelOf)).toEqual(['Damage type', 'Property', 'Mastery']);
-    expect(values(find(tree(records, config), 'Equipment', 'Weapon', 'Property')).map((v) => [v.label, v.key])).toEqual([
+    expect(values(ofType(tree(records, config), 'Equipment', 'Weapon', 'Property')).map((v) => [v.label, v.key])).toEqual([
       ['Finesse', 'weapon-property/finesse'],
       ['Light', 'weapon-property/light'],
     ]);
-    expect(values(find(tree(records, config), 'Equipment', 'Weapon', 'Mastery')).map((v) => [v.label, v.key])).toEqual([['Nick', 'mastery-property/nick']]);
+    expect(values(ofType(tree(records, config), 'Equipment', 'Weapon', 'Mastery')).map((v) => [v.label, v.key])).toEqual([['Nick', 'mastery-property/nick']]);
   });
 
   it('filters by a property and by a mastery', () => {
@@ -211,7 +223,7 @@ describe('every facet of every type', () => {
     const home = galleryConfig(reg, data);
     const nodes = tree(full(), home);
     for (const [type, config] of Object.entries(reg['dnd-5e-2024']!.types)) {
-      const node = nodes.find((n) => n.kind === 'type' && n.id === `dnd-5e-2024/${type}`);
+      const node = types(nodes).find((n) => n.kind === 'type' && n.id === `dnd-5e-2024/${type}`);
       expect(node, type).toBeDefined();
       expect(paths(node?.kind === 'type' ? node.children : []), type).toEqual(config.facets.map((f) => f.path));
     }
@@ -224,7 +236,7 @@ describe('every facet of every type', () => {
   it('checks a type as the type filter, counting the entries of each type it shows', () => {
     const home = galleryConfig(reg, data);
     const typeValue = (nodes: TreeNode[], key: string) => {
-      const node = nodes.find((n) => n.kind === 'type' && n.value.key === key);
+      const node = types(nodes).find((n) => n.kind === 'type' && n.value.key === key);
       return node?.kind === 'type' ? node.value : undefined;
     };
     expect(typeValue(tree(full(), home), 'dnd-5e-2024/feat')).toMatchObject({ selected: false, count: 1 });
@@ -264,11 +276,11 @@ describe('every facet of every type', () => {
     const nodes = tree(records, home);
     const label = 'D&D 5e';
     // An official source is pinned first, though "Ember Codex" sorts before it.
-    expect(values(find(nodes, 'Ruleset', label, 'Source')).map((v) => [v.label, v.count])).toEqual([
+    expect(values(find(nodes, 'Ruleset', label, 'Source and author', 'Source')).map((v) => [v.label, v.count])).toEqual([
       ['SRD 5.2', 1],
       ['Ember Codex', 1],
     ]);
-    expect(values(find(nodes, 'Ruleset', label, 'Author')).map((v) => [v.key, v.label, v.count])).toEqual([
+    expect(values(find(nodes, 'Ruleset', label, 'Source and author', 'Author')).map((v) => [v.key, v.label, v.count])).toEqual([
       ['bardic-inspiration', 'bardic-inspiration', 2],
       ['publisher', 'Wizards of the Coast', 1],
     ]);
@@ -277,7 +289,7 @@ describe('every facet of every type', () => {
     const filtered = tree(records, home, '?f.author=publisher');
     expect(filtered[0]?.open).toBe(true);
     expect(find(filtered, 'Ruleset', label)?.open).toBe(true);
-    expect(find(filtered, 'Ruleset', label, 'Author')?.open).toBe(true);
+    expect(find(filtered, 'Ruleset', label, 'Source and author', 'Author')?.open).toBe(true);
     const view = computeView(records, home, parseQuery('?f.source=srd%205.2', home), searchIndex(records));
     expect(view.results.map((r) => r.id)).toEqual(['fireball']);
   });
@@ -298,13 +310,31 @@ describe('the ruleset set adds entries (#380)', () => {
     const home = galleryConfig(reg, { ...data, publishers: { 'dnd-5e-2024': 'Wizards of the Coast' } });
     expect(ids(home, '')).toEqual(['fireball', 'goblin']);
     const nodes = filterTree(home, parseQuery('', home), records(), searchIndex(records()));
-    const author = values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Author'));
+    const author = values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Source and author', 'Author'));
     expect(author.map((v) => [v.label, v.selected])).toEqual([
       ['bardic-inspiration', false],
       ['Wizards of the Coast', true],
       ['someone', false],
     ]);
-    expect(openAtStart(nodes)).toEqual(new Set(['ruleset', 'ruleset/dnd-5e-2024', 'ruleset/dnd-5e-2024:author']));
+    expect(openAtStart(nodes)).toEqual(new Set(['ruleset', 'ruleset/dnd-5e-2024', 'ruleset/dnd-5e-2024:meta', 'ruleset/dnd-5e-2024:author', 'ruleset/dnd-5e-2024:types']));
+  });
+
+  it('keeps each ruleset’s types under it, counted among the results, whether or not the set holds it (#395)', () => {
+    const other = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as Registry;
+    const home = galleryConfig(other, data);
+    const two = [...records(), record({ id: 'stranger', ruleset: 'other' })];
+    const nodes = filterTree(home, parseQuery('', home), two, searchIndex(two));
+    const rulesetOf = (label: string) => find(nodes, 'Ruleset', label);
+    expect(rulesetOf('Other')?.kind === 'type' && rulesetOf('Other')!.open).toBe(true);
+    // Only the publisher is checked, so Other's creature is out of the results but still listed.
+    const creature = find(nodes, 'Ruleset', 'Other', 'Types', 'Creature');
+    expect(creature?.kind === 'type' && [creature.id, creature.value.count]).toEqual(['other/creature', 0]);
+    const own = find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Types', 'Creature');
+    expect(own?.kind === 'type' && [own.id, own.value.count]).toEqual(['dnd-5e-2024/creature', 1]);
+    // A checked type of a ruleset with no entries keeps its ruleset in the tree, so it can be cleared.
+    const stale = filterTree(home, parseQuery('?f.type=other/spell', home), records(), searchIndex(records()));
+    const spell = find(stale, 'Ruleset', 'Other', 'Types', 'Spell');
+    expect(spell?.kind === 'type' && [spell.value.selected, spell.value.count]).toEqual([true, 0]);
   });
 
   it('adds each checked ruleset, source, or author to the results, and the other filters narrow them', () => {
@@ -324,13 +354,13 @@ describe('the ruleset set adds entries (#380)', () => {
   it('counts a source or author by what checking it adds, under the other filters', () => {
     const home = galleryConfig(reg, data);
     const nodes = filterTree(home, parseQuery('?f.type=spell', home), records(), searchIndex(records()));
-    expect(values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Source')).map((v) => [v.label, v.count])).toEqual([
+    expect(values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Source and author', 'Source')).map((v) => [v.label, v.count])).toEqual([
       ['SRD 5.2', 1],
       ['Ember Codex', 1],
       ['Moss Notes', 0],
     ]);
     // A type counts the entries of it in the results: only the official spell by default.
-    expect(find(nodes, 'Spell')?.kind === 'type' && (find(nodes, 'Spell') as { value: ValueNode }).value.count).toBe(1);
+    expect(ofType(nodes, 'Spell')?.kind === 'type' && (ofType(nodes, 'Spell') as { value: ValueNode }).value.count).toBe(1);
   });
 });
 
@@ -343,7 +373,7 @@ describe('official sources first in the Source menu (#375)', () => {
       record({ id: 'c', source: 'Basic Rules', author: 'publisher' }),
       record({ id: 'd', source: 'Moss Notes', author: 'someone' }),
     ];
-    const source = values(find(tree(records, home), 'Ruleset', 'D&D 5e', 'Source')).map((v) => v.label);
+    const source = values(find(tree(records, home), 'Ruleset', 'D&D 5e', 'Source and author', 'Source')).map((v) => v.label);
     expect(source).toEqual(['Basic Rules', 'Zephyr Rules', 'Ash Tome', 'Moss Notes']);
   });
 });
@@ -358,27 +388,27 @@ describe('a path two types share (#296)', () => {
   it('opens and checks a category only under the type whose entries have it', () => {
     const home = galleryConfig(reg, data);
     const nodes = tree(records(), home, '?f.type=feat&f.stats.category=origin');
-    expect(find(nodes, 'Feat')?.open).toBe(true);
-    expect(find(nodes, 'Feat', 'Category')?.open).toBe(true);
-    expect(values(find(nodes, 'Feat', 'Category')).map((v) => [v.key, v.selected])).toEqual([['origin', true]]);
-    expect(find(nodes, 'Item')?.open).toBe(false);
-    expect(find(nodes, 'Item', 'Category')?.open).toBe(false);
-    expect(values(find(nodes, 'Item', 'Category')).map((v) => [v.key, v.selected])).toEqual([['wondrous', false]]);
+    expect(ofType(nodes, 'Feat')?.open).toBe(true);
+    expect(ofType(nodes, 'Feat', 'Category')?.open).toBe(true);
+    expect(values(ofType(nodes, 'Feat', 'Category')).map((v) => [v.key, v.selected])).toEqual([['origin', true]]);
+    expect(ofType(nodes, 'Item')?.open).toBe(false);
+    expect(ofType(nodes, 'Item', 'Category')?.open).toBe(false);
+    expect(values(ofType(nodes, 'Item', 'Category')).map((v) => [v.key, v.selected])).toEqual([['wondrous', false]]);
   });
 
   it('keeps a selected value no entry has visible under every type, so it can be cleared', () => {
     const home = galleryConfig(reg, data);
     const nodes = tree(records(), home, '?f.stats.category=gone');
-    for (const type of ['Feat', 'Item']) expect(values(find(nodes, type, 'Category')).find((v) => v.key === 'gone')?.selected, type).toBe(true);
+    for (const type of ['Feat', 'Item']) expect(values(ofType(nodes, type, 'Category')).find((v) => v.key === 'gone')?.selected, type).toBe(true);
   });
 
   it('opens a shared range under a checked type only, and under every type when none is checked', () => {
     const home = galleryConfig(reg, data);
     const checked = tree(records(), home, '?f.type=spell&f.stats.level=2..');
-    expect(find(checked, 'Spell', 'Level')?.open).toBe(true);
-    expect(find(checked, 'Feat')?.open).toBe(false);
-    expect(find(checked, 'Feat', 'Prerequisite level')?.open).toBe(false);
+    expect(ofType(checked, 'Spell', 'Level')?.open).toBe(true);
+    expect(ofType(checked, 'Feat')?.open).toBe(false);
+    expect(ofType(checked, 'Feat', 'Prerequisite level')?.open).toBe(false);
     const unchecked = tree(records(), home, '?f.stats.level=2..');
-    expect([find(unchecked, 'Spell', 'Level')?.open, find(unchecked, 'Feat', 'Prerequisite level')?.open]).toEqual([true, true]);
+    expect([ofType(unchecked, 'Spell', 'Level')?.open, ofType(unchecked, 'Feat', 'Prerequisite level')?.open]).toEqual([true, true]);
   });
 });

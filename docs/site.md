@@ -332,17 +332,24 @@ when `false`. A `rarity`-formatted field reads as a badge carrying
 to four on wide screens.
 
 **Filters** are a nested accordion checkbox tree built from the registry
-(`site/src/lib/gallery/tree.ts`) in two sets. The **ruleset set** comes first,
-in its own list, divided from the rest by a break line. It is additive: it
-chooses which entries are in the results at all. The other filters, type, then
-field, then any subfield, then value, such as Creature › Immunities ›
-Conditions › Poisoned, narrow those entries.
+(`site/src/lib/gallery/tree.ts`). The Ruleset node comes first, in its own
+list, divided from the Tags by a break line. It holds each ruleset, and in
+each ruleset two groups: **Source and author**, what the ruleset's entries
+are and where they come from, then **Types**, its types, each holding its
+fields, then any subfield, then values, such as Ruleset › D&D 5e › Types ›
+Creature › Immunities › Conditions › Poisoned. The rulesets, sources, and
+authors are the **ruleset set**, which is additive: it chooses which entries
+are in the results at all. The types, their facets, and the tags narrow those
+entries.
 
-- **Ruleset set.** A Ruleset node, always first and open at the start, even
-  when the library holds one ruleset. Inside it, each ruleset the library has
-  entries of, or that is checked, is a checkbox for the ruleset filter
-  (`f.ruleset`), and a disclosure holding its **Source** and **Author**
-  filters (`f.source`, `f.author`) over its own entries
+- **Ruleset node.** Always first and open at the start, even when the library
+  holds one ruleset. Inside it, each ruleset the library has entries of, that
+  is checked, or that holds a checked type, is a checkbox for the ruleset
+  filter (`f.ruleset`) with a disclosure holding its two groups. Each ruleset,
+  and its Types group, start open, so every type shows when the tree first
+  does.
+- **Source and author.** A ruleset's **Source** and **Author** filters
+  (`f.source`, `f.author`) over its own entries
   ([Source and author](content-model.md#source-and-author)). An author of
   `"publisher"` reads as the ruleset's publisher, from `ruleset.json`
   (`rulesetPublishers` in `site/src/lib/rules.ts`), such as Wizards of the
@@ -351,6 +358,7 @@ Conditions › Poisoned, narrow those entries.
   official content carries, are pinned above its other sources, each part
   keeping its order: SRD 5.2 comes before a homebrew collection whatever its
   name.
+- **The ruleset set.**
   - **Additive.** An entry is in the results when it matches any checked
     ruleset, source, or author (`SCOPE_PATHS` in
     `site/src/lib/gallery/config.ts`, `applyFilters` in `view.ts`): checking
@@ -364,10 +372,14 @@ Conditions › Poisoned, narrow those entries.
   - **Counts.** A ruleset, source, or author counts what checking it adds:
     its entries under the search and the other filters, whatever else in the
     set is checked.
-- **Types.** Then the types, each a checkbox for the type filter (`f.type`)
-  under its key, `<ruleset>/<type>`, and its own ruleset's label, with its count, the entries of it among the results (so checking one type
-  leaves the others at 0), and a disclosure holding its facets. A type shows when the
-  library has entries of it, or it's checked.
+- **Types.** A ruleset's Types group holds its types, each a checkbox for the
+  type filter (`f.type`) under its key, `<ruleset>/<type>`, with its
+  ruleset's label, its count, the entries of it among the results (so
+  checking one type leaves the others at 0), and a disclosure holding its
+  facets. A type shows when the library has entries of it, or it's checked,
+  whether or not the ruleset set holds its ruleset: out of the set, it counts
+  0. Two rulesets' types of the same label, such as two rulesets' Creature,
+  each sit under their own ruleset.
 - **Fields.** A type's facets follow in registry order. Facets whose paths
   share a field below `stats` or `derived` sit in a node named for it by the
   wording layer's `label`: `stats.immunities.damage` and
