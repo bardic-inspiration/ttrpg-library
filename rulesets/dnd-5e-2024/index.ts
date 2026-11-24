@@ -7,10 +7,11 @@ import { checkClass, checkClassFeature, checkClassLinks, checkSubclassLinks, der
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
 import { refLabels } from './refs.ts';
+import { renderTokens } from './tokens.ts';
 import definition from './ruleset.json' with { type: 'json' };
 import phrasesJson from './phrases.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
-import type { BackgroundStats, ClassFeatureStats, ClassStats, CreatureStats, EquipmentStats, FeatStats, ItemStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
+import type { BackgroundStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EquipmentStats, FeatStats, ItemStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
 
 export const tables = tablesJson as Tables;
 export const phrases = phrasesJson as unknown as PhraseBook;
@@ -52,6 +53,9 @@ export const ruleset: RulesetModule = {
   deriveLinked(type, key, stats, entries) {
     if (type === 'class') return { ...deriveClassLinked(key.slice('class/'.length), stats as ClassStats, entries) };
     return {};
+  },
+  renderTokens(type, text, derived) {
+    return type === 'creature' ? renderTokens(text, derived as unknown as DerivedCreature, tables) : text;
   },
   refLabels,
   phrases,

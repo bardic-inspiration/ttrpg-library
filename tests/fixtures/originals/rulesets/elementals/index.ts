@@ -55,6 +55,16 @@ export function checkCreature(stats: CreatureStats, rules?: RulesData): Issue[] 
 
 const isCard = (type: string) => type === 'creature' || type === 'invocation' || type === 'ward';
 
+/** A `{…}` token, other than a `{ref:…}` link. The one token is `{cost}`, a card's total cost. */
+const TOKEN = /\{(?!ref:)([^{}]*)\}/g;
+
+/** An error for each token in a card's text other than `{cost}`. */
+function checkTokens(stats: CardStats): Issue[] {
+  return [...(stats.text ?? '').matchAll(TOKEN)]
+    .filter((match) => match[1] !== 'cost')
+    .map((match) => ({ level: 'error', path: 'stats.text', message: `unknown token ${match[0]}; the one token is {cost}` }));
+}
+
 export const ruleset: RulesetModule = {
   definition,
   phrases: phrasesJson as unknown as PhraseBook,
@@ -62,9 +72,18 @@ export const ruleset: RulesetModule = {
     return isCard(type) ? { ...deriveCard(stats as CardStats, rules) } : {};
   },
   check(type, stats, rules) {
-    if (type === 'creature') return checkCreature(stats as CreatureStats, rules);
-    if (isCard(type) && !deriveCard(stats as CardStats, rules).element) return [{ level: 'error', path: 'stats.cost', message: 'no element blends these colors' }];
-    return [];
+    if (!isCard(type)) return [];
+    const tokens = checkTokens(stats as CardStats);
+    if (type === 'creature') return [...checkCreature(stats as CreatureStats, rules), ...tokens];
+    if (!deriveCard(stats as CardStats, rules).element) return [{ level: 'error', path: 'stats.cost', message: 'no element blends these colors' }, ...tokens];
+    return tokens;
+  },
+  renderTokens(type, text, derived) {
+    if (!isCard(type)) return text;
+    return text.replace(TOKEN, (raw, body: string) => {
+      if (body !== 'cost') throw new Error(`unknown token ${raw}`);
+      return String(derived.totalCost);
+    });
   },
   refLabels(type, path) {
     if (type === 'element' && /^stats\.blend\[\d+\]$/.test(path)) return { forward: 'Blend of', back: 'Blends into' };

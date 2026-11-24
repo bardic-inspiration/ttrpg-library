@@ -73,7 +73,9 @@ for a rule that depends on it. An optional `deriveLinked` computes values that r
 other entries, given the entry's key and every entry and component of its
 ruleset, each with its `author` so it can tell official content (`isOfficial`); the site merges
 them into the entry's derived values, as a class's spell list is the spells
-that name it ([Classes](#classes)).
+that name it ([Classes](#classes)). An optional `renderTokens` renders the
+ruleset's text tokens in one text of an entry, from the entry's derived
+values ([Text tokens](#text-tokens)).
 
 `dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, an
 item's `spells[].spell`) are "Casts" / "Cast by"; a background's `feat` is
@@ -192,6 +194,17 @@ type), rules text (`Text`), and the embedded `StatBlock`. Each definition's shap
 
 ### Text tokens
 
+A text token shows a derived value inside prose, so the number is never
+written down. Each ruleset defines its own: its module's `renderTokens`
+replaces the tokens in one text of an entry of a given type from the entry's
+derived values, leaving `{ref:…}` alone, and throws on a bad token. Its
+`check` reports bad tokens, so validation catches them before a build. A
+ruleset with no tokens leaves `renderTokens` out, and its text shows as
+written. The generic template renders every text in an entry's `stats`
+through it ([Templates](site.md#templates)); a ruleset's own templates call
+its tokens where they place its prose.
+
+`dnd-5e-2024`'s tokens are in `tokens.ts`, for creatures only.
 Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `onFailureOrSuccess`,
 `spellcasting.note`, `legendaryActions.intro`) may show a derived value only
 through a token. `tokens.ts` renders tokens from the same derivations as the
@@ -725,7 +738,9 @@ tests/fixtures/originals/
   - `creature`, `invocation` (a one-time effect), and `ward` (a lasting one,
     with optional upkeep). Derived for each: its element, read from the rules
     data, its total cost, and the base elements it beats and is beaten by.
-    Checks: some element blends its colors. A creature's power and toughness
+    Text token: `{cost}`, the card's total cost, in its `text`.
+    Checks: some element blends its colors, and a card's text uses no other
+    token. A creature's power and toughness
     go in steps of 4, and their sum over 8 per chip is a warning.
 
 Tests run in two places:
