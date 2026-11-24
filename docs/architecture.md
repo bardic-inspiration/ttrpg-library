@@ -109,11 +109,6 @@ npm scripts:
 | `dev` | Run the site locally |
 | `build:originals` | `build` for the fixture rulesets' library ([Library root](site.md#library-root)) |
 | `dev:originals` | Index the fixture rulesets, then run their site locally |
-
-Every script runs the same under sh on Linux and cmd.exe on Windows, so none
-uses shell syntax or a Unix-only command; `tests/portable-scripts.test.ts`
-checks them. `build:originals` and `dev:originals` set `LIBRARY_ROOT` through
-`scripts/with-library/`, which runs npm scripts in order with it set.
 | `check` | Types, `astro check`, Stylelint, and the link check |
 | `links` | The link check alone |
 | `test` | Vitest |
@@ -124,13 +119,20 @@ checks them. `build:originals` and `dev:originals` set `LIBRARY_ROOT` through
 | `import` | Import one import issue's file into `content/` ([Imports](generation.md#imports)) |
 | `srd-coverage` | List the SRD entries the library lacks |
 
+Every script runs the same under sh on Linux and cmd.exe on Windows, so none
+uses shell syntax or a Unix-only command; `tests/portable-scripts.test.ts`
+checks them. `build:originals` and `dev:originals` set `LIBRARY_ROOT` through
+`scripts/with-library/`, which runs npm scripts in order with it set.
+
 ### Terms
 
 - **Entry:** one item in the library, such as a creature, stored as one JSON
   file. Either an SRD entry or a custom entry.
 - **Ruleset:** a game system's rules, as one module in `rulesets/<ruleset>/`.
-  The one ruleset is `dnd-5e-2024`.
-- **Type:** a kind of entry within a ruleset: `creature`, `item`, `spell`.
+  The library's one ruleset is `dnd-5e-2024`; two fixture rulesets test the
+  generic code ([Fixture rulesets](rulesets.md#fixture-rulesets)).
+- **Type:** a kind of entry within a ruleset, such as `creature`, `spell`,
+  or `class`.
 - **Envelope:** the fixed keys every entry has, around its `stats`.
 - **Stats:** an entry's rules data, validated by its type's schema.
 - **Derived value:** a number the ruleset computes from an entry's inputs, such

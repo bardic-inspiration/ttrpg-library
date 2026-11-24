@@ -515,8 +515,7 @@ indexes.
   names an SRD class is listed there under "Spells", not in the class's
   spell list. A label with links on both sides shows in both sections, and
   a page without homebrew links has no Homebrew section. A homebrew page's
-  links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`; filtering
-  homebrew by volume is #353).
+  links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`).
 - The type, linked to the Library filtered to it ([Redirects](#redirects)).
 - Tags as chips; a chip opens the Library filtered to the entry's ruleset,
   type, and that tag.

@@ -27,7 +27,7 @@ handled ([Revisions](docs/generation.md#revisions)).
 
 Every subscribed event is a turn, so watch only what may need work:
 
-- **Content PRs from an owner-started session** (an SRD import batch, a link
+- **Content PRs from an owner-started session** (an SRD batch, a link
   pass) aren't watched. The owner reviews and merges them, and says when the
   next step can start.
 - **Once the owner turns on auto-merge**, unsubscribe; GitHub merges the PR

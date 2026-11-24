@@ -8,8 +8,8 @@ overlap.
 
 Sessions start with no memory of earlier ones. Decisions, follow-ups, and
 open questions go into the docs, the track specs, issues, and PR descriptions,
-never only into a chat. Because they do, a session can stay small: one issue,
-or one batch of an import stage, per session, and a new session for the next.
+never only into a chat. Because they do, a session can stay small: one issue
+per session, and a new session for the next.
 A long session costs more on every turn as its context grows.
 
 ## Lanes
@@ -179,8 +179,9 @@ nothing. The next milestone review takes up every item in it.
 Milestone issues, in milestone order (or, when no milestone is open, the
 "Spot Fixes" issue below), then track issues, in the order
 [`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
-sub-issues (GitHub's order) are one queue. Work for the next version goes under the "Later" issue
-(#118), outside the queue.
+sub-issues (GitHub's order) are one queue. Work earmarked for a future version goes in that version's
+"Spec Considerations" issue (#118 for v1.2.0, #370 for v2.0.0), outside the
+queue.
 
 - **The active queue** is the one open tracking issue labeled `queue`: the
   current milestone, or the "Spot Fixes" issue. It is tied to a version;
