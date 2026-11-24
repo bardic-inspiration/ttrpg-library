@@ -121,7 +121,7 @@
     border-block-end: var(--filters-break);
 
     /* The break line replaces the last ruleset's own divider. */
-    & .tree__node--type:last-child {
+    & > .tree__node > .tree__children > .tree__node--type:last-child {
       border-block-end: none;
     }
   }

@@ -9,6 +9,7 @@ import EntryTemplate from '../site/src/components/templates/EntryTemplate.astro'
 import { galleryConfig, recordDef, type GalleryConfig, type LibraryRecord } from '../site/src/lib/gallery/config.ts';
 import { facetData } from '../site/src/lib/gallery/facet-data.ts';
 import { parseQuery } from '../site/src/lib/gallery/state.ts';
+import { filterTree } from '../site/src/lib/gallery/tree.ts';
 import { displayValue } from '../site/src/lib/gallery/values.ts';
 import { computeView, searchIndex } from '../site/src/lib/gallery/view.ts';
 import { entryNames, refPaths } from '../site/src/lib/library.ts';
@@ -135,6 +136,29 @@ describe('the gallery', () => {
       'ember-sprite',
     ]);
     expect(await view('?f.ruleset=starships-and-galaxies&f.type=ship&sort=stats.size:asc')).toEqual(['wren', 'longhaul', 'reaver', 'bastion']);
+  });
+
+  it('puts each ruleset’s types under that ruleset in the filter tree, after its source and author (#395)', async () => {
+    const { config, records } = await setup();
+    const nodes = filterTree(config, parseQuery('', config), records, searchIndex(records));
+    const ruleset = nodes.find((n) => n.id === 'ruleset');
+    const rulesets = ruleset?.kind === 'field' ? ruleset.children : [];
+    const groups = (id: string) => rulesets.find((n) => n.id === `ruleset/${id}`);
+    const inside = (id: string) => {
+      const node = groups(id);
+      return node?.kind === 'type' ? node.children.map((g) => (g.kind === 'field' ? [g.label, g.children.map((c) => c.id)] : [])) : [];
+    };
+    // A ruleset's own creature sits under it, though both rulesets have one.
+    expect(inside('starships-and-galaxies')).toEqual([
+      ['Source and author', ['ruleset/starships-and-galaxies:source', 'ruleset/starships-and-galaxies:author']],
+      ['Types', ['starships-and-galaxies/creature', 'starships-and-galaxies/ship', 'starships-and-galaxies/item', 'starships-and-galaxies/celestial-body']],
+    ]);
+    expect(inside('elementals')).toEqual([
+      ['Source and author', ['ruleset/elementals:source', 'ruleset/elementals:author']],
+      ['Types', ['elementals/creature', 'elementals/invocation', 'elementals/ward']],
+    ]);
+    // Nothing but the Ruleset node and the Tags sits at the top.
+    expect(nodes.every((n) => n.id === 'ruleset' || n.id === 'tags')).toBe(true);
   });
 
   it('keeps a type filter value and its label per ruleset, and a shared facet path per type (#388)', async () => {

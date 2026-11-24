@@ -43,7 +43,7 @@ export function FilterTree(props: TreeProps) {
         return next;
       }),
   };
-  // The ruleset set is its own list at the top, divided from the narrowing filters by a break line.
+  // The Ruleset node is its own list at the top, divided from the Tags by a break line.
   const rulesets = props.nodes.filter((node) => node.id === RULESET);
   const rest = props.nodes.filter((node) => node.id !== RULESET);
   return (
