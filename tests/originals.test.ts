@@ -184,6 +184,18 @@ describe('the site', () => {
     }
   });
 
+  it('shows an entry\'s derived values on its page, labeled', async () => {
+    const { all, rules } = await originalsSite();
+    const names = entryNames(all, rules);
+    const page = async (id: string) => {
+      const { entry, derived } = all.find(({ entry }) => entry.id === id)!;
+      return textOf(await render(EntryTemplate, { entry, derived, names, paths: refPaths(rules, all) }));
+    };
+    const ship = await page('longhaul');
+    for (const line of ['Crew 4', 'Hull 50']) expect(ship).toContain(line);
+    expect(await page('steam-wraith')).toContain('Element steam');
+  });
+
   it('renders each rules page with every primitive at its anchor', async () => {
     const { all, rules, modules } = await originalsSite();
     for (const data of rules) {

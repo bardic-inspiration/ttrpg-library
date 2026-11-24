@@ -1,6 +1,7 @@
 ---
 // The fallback for a type with no template of its own (`generic`,
-// docs/site.md#templates): the fixed keys, `stats` as a definition list, and tags. Optional
+// docs/site.md#templates): the fixed keys, `stats` and then the ruleset's derived values as one
+// definition list, and tags. Optional
 // fields display by presence alone (docs/content-model.md#situational-fields): an omitted key has no line, and a
 // present one always does, even at 0 or false.
 import { renderMarkdown } from '../../lib/markdown';
@@ -13,7 +14,7 @@ import StatBlockHeader from './parts/StatBlockHeader.astro';
 
 type Props = TemplateProps;
 
-const { entry, names, paths, mode, level = 2 } = Astro.props;
+const { entry, derived, names, paths, mode, level = 2 } = Astro.props;
 const refs = { names, ruleset: entry.ruleset, paths };
 const tags = Object.entries(entry.tags ?? {}).map(([key, value]) => ({
   label: key,
@@ -23,6 +24,6 @@ const tags = Object.entries(entry.tags ?? {}).map(([key, value]) => ({
 <StatBlock name={entry.name} type={entry.type} mode={mode}>
   <StatBlockHeader name={entry.name} subtitle={entry.summary} level={level} />
   {present(entry.description) && <div class="generic__description" set:html={renderMarkdown(entry.description, refs)} />}
-  <PropertyList lines={genericLines(entry.stats, names)} refs={refs} />
+  <PropertyList lines={[...genericLines(entry.stats, names), ...genericLines(derived, names)]} refs={refs} />
   {tags.length > 0 && <PropertyList lines={tags} />}
 </StatBlock>

@@ -186,4 +186,21 @@ describe('generic template (docs/site.md#templates)', () => {
     }
     expect(text).not.toContain('Cursed');
   });
+
+  it('shows derived values after stats, labeled the same way, in the order the ruleset derives them', async () => {
+    const entry: Entry = {
+      ruleset: 'dnd-5e-2024',
+      author: 'bardic-inspiration',
+      type: 'location',
+      id: 'ember-gate',
+      name: 'Ember Gate',
+      summary: 'A gate of cooling slag.',
+      stats: { size: 'large' },
+      meta: { createdAt: '2026-11-02', source: { kind: 'manual' } },
+    };
+    const text = textOf(await render(entry, { crew: 4, systemPoints: 0, dockable: false, beatenBy: ['red', 'blue'] }));
+    for (const line of ['Size large', 'Crew 4', 'System points 0', 'Dockable No', 'Beaten by red, blue']) expect(text).toContain(line);
+    expect(text.indexOf('Size large')).toBeLessThan(text.indexOf('Crew 4'));
+    expect(text.indexOf('Crew 4')).toBeLessThan(text.indexOf('Beaten by'));
+  });
 });
