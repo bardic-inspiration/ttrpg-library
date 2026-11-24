@@ -510,7 +510,8 @@ nothing invalid reaches the site.
 
 | To add | Touch |
 |---|---|
-| A world, campaign, author, or theme | A tag on entries |
+| A world, campaign, or theme | A tag on entries |
+| A collection or author | The entry's `source` and `author` ([Source and author](#source-and-author)) |
 | A field a schema validates | The type's schema, plus the template if it displays |
 | Art for an entry | Commit the file under `assets/images/` and set `image` |
 | A check for every type | `scripts/validate/`, with a fixture for its error |

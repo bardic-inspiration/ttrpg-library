@@ -3,8 +3,9 @@
 ## Purpose
 
 Everything specific to a ruleset: its schemas, rules tables, derived values,
-text tokens, consistency checks, and how its types print. The one ruleset is
-`dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0). Its content, rules, and
+text tokens, consistency checks, and how its types print. The library's one
+ruleset is `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0); two fixture
+rulesets test the generic code ([Fixture rulesets](#fixture-rulesets)). Its content, rules, and
 component types are listed in
 [`ruleset.json`](../rulesets/dnd-5e-2024/ruleset.json). What every entry
 shares is in [content-model.md](content-model.md).

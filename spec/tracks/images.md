@@ -153,4 +153,5 @@ the processing.
 
 - Generated art.
 - External image hosting.
-- Art for authors publishing their own content: a later version (#118).
+- Art for authors publishing their own content: in-app publishing,
+  earmarked for v2.0.0 (#370).

@@ -5,7 +5,7 @@
 How entries are requested, generated, imported, and revised. Claude routines
 turn GitHub issues into entries and open one PR per batch, then revise the batch from the
 owner's review comments. The human role is request, review, and merge. SRD
-import stages use the same skills in sessions the owner starts.
+entry upkeep uses the same skills in sessions the owner starts.
 
 ## Behavior
 
@@ -330,25 +330,20 @@ every content rule applies to them.
 
 ### SRD import
 
-The full SRD import bypassed requests: each stage was a sub-issue of its
-milestone, without the `request` label, so routines never took it, worked in
-sessions the owner started. Every stage is done. SRD entry upkeep (link
-passes, corrections, review) works the same way, with its issue under the
-current queue (a milestone, a "Spot Fixes" issue, or a track issue) ([Dev Queue](../AGENTS.md#dev-queue)),
-through the `generate` and `revise` skills. A stage session ran the
-`generate` skill on a batch picked from
-`npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress`
-claim, on branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs
-that day). The PR used `content.md` and said `Refs #<stage>`; the PR that
-finished the stage used `Closes #<stage>`.
+The library holds the whole SRD 5.2, so `npm run srd-coverage` reports
+nothing missing. SRD entries never come through routines: SRD work (a link
+pass, a transcription fix, a missed entry) is a dev-queue issue without the
+`request` label, under the current queue (a milestone, a "Spot Fixes" issue,
+or a track issue) ([Dev Queue](../AGENTS.md#dev-queue)), worked in a session
+the owner starts through the `generate` and `revise` skills. The `generate`
+skill takes such an issue as an SRD import stage: no `in-progress` claim, the
+branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs that
+day), `Refs #<stage>` on each PR, and `Closes #<stage>` on the last. A link
+pass turns plain-text mentions of library entries into links, on a
+`revise/<stage>-<YYYYMMDD>` branch.
 
-The stage sessions followed the `srd-import` skill, archived for the record
-at `.claude/archive/srd-import/SKILL.md`, which wrapped the `generate` and
-`revise` skills: one batch per type, transcription from the PDF's text layer,
-verification against the PDF through the templates, format-fix dev issues for
-gaps (a fix's PR added no entries; they came in the next batch), and a link
-pass once a stage's batches merged (a `revise/<stage>-<YYYYMMDD>` PR turning
-plain-text mentions of library entries into links).
+The full import was worked in stages with the `srd-import` skill, archived
+for the record at `.claude/archive/srd-import/SKILL.md`.
 
 ## Where the rules live
 

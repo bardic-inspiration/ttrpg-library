@@ -53,8 +53,8 @@ other section that doesn't apply.
   service goes to the Testing backlog instead.
 - **Open questions:** what isn't settled yet. No part with an open question is
   built.
-- **Out of scope:** what the track deliberately leaves out, pointing to the
-  "Later" issue (#118) for what's earmarked there.
+- **Out of scope:** what the track deliberately leaves out, pointing to a version's
+  "Spec Considerations" issue (#118, #370) for what's earmarked there.
 
 The reasons behind a design go in its PR and in `docs/decisions.md`, not here,
 so nothing is lost when a built part is deleted.

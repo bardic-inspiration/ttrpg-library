@@ -73,6 +73,6 @@ closed, or they import nothing.
 - Licensed content from any source.
 - Closed formats: Fantasy Grounds, Roll20, and D&D Beyond.
 - Authors publishing their own content through the importer, and imports of
-  an author's own non-CC work on their written consent: a later version
-  (#118).
+  an author's own non-CC work on their written consent: in-app publishing,
+  earmarked for v2.0.0 (#370).
 - SRD content from any target: SRD entries come from the official PDF.

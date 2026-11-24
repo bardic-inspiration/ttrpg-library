@@ -11,8 +11,8 @@ things up and prep sessions, on a phone at the table or a laptop at a desk.
 
 - **Look things up.** Browse, filter, and search entries.
 - **Take entries with you.** Print any entry or rules page, and download most
-  entries as JSON or PNG. Creatures, spells, and magic items also download for
-  Open5e. Classes, subclasses, and species only print.
+  entries as JSON or PNG. Creatures, spells, magic items, and custom
+  conditions and equipment also download for Open5e. Classes, subclasses, and species only print.
 - **Know what's what.** SRD 5.2 entries are reproduced as published, and
   original entries are kept separate.
 
