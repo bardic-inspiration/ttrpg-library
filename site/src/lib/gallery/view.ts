@@ -2,34 +2,50 @@
 // over library.json records, so the island stays a thin view.
 
 import MiniSearch from 'minisearch';
-import { NAME, filterDef, isScopePath, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
+import { NAME, isScopePath, recordDef, tagKey, typeKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
 
+/**
+ * A filter as matched: its values, and for a groups facet the leaf groups each type's groups
+ * stand for, by `<ruleset>/<type>`, since a path two types share keeps each type's groups.
+ */
+export type MatchedValue = FilterValue | { kind: 'enum'; values: string[]; byType: Map<string, string[]> };
+
 /** Whether one record passes one filter. A record missing the value never matches. */
-export function matches(record: LibraryRecord, path: string, value: FilterValue): boolean {
+export function matches(record: LibraryRecord, path: string, value: MatchedValue): boolean {
   if (value.kind === 'range') {
     const n = numberAt(record, path);
     return n !== undefined && (value.min === undefined || n >= value.min) && (value.max === undefined || n <= value.max);
   }
   const keys = new Set(enumValues(valueAt(record, path)).map((v) => v.key));
-  return value.values.some((v) => keys.has(v));
+  const values = ('byType' in value && value.byType.get(typeKey(record.ruleset, record.type))) || value.values;
+  return values.some((v) => keys.has(v));
 }
 
 /**
  * The filters as matched: a group of a groups facet stands for every leaf group in it
- * (docs/rulesets.md#rules-groups), since entries name only their leaf.
+ * (docs/rulesets.md#rules-groups), since entries name only their leaf, and each type reads
+ * the group by its own groups.
  */
-export function matchedFilters(config: GalleryConfig, filters: Map<string, FilterValue>): Map<string, FilterValue> {
-  const out = new Map<string, FilterValue>();
+export function matchedFilters(config: GalleryConfig, filters: Map<string, FilterValue>): Map<string, MatchedValue> {
+  const out = new Map<string, MatchedValue>();
   for (const [path, value] of filters) {
-    const groups = filterDef(config, path)?.groups;
-    if (!groups || value.kind !== 'enum') {
+    const grouped = [...config.types.values()].flatMap((info) => {
+      const groups = info.facets.find((f) => f.path === path)?.groups;
+      return groups ? [{ key: typeKey(info.ruleset, info.type), groups }] : [];
+    });
+    if (grouped.length === 0 || value.kind !== 'enum') {
       out.set(path, value);
       continue;
     }
-    const leaves = new Map(groups.map((g) => [g.id.toLowerCase(), g.leaves.map((l) => l.toLowerCase())]));
-    out.set(path, { kind: 'enum', values: [...new Set(value.values.flatMap((v) => leaves.get(v) ?? [v]))] });
+    const byType = new Map(
+      grouped.map(({ key, groups }) => {
+        const leaves = new Map(groups.map((g) => [g.id.toLowerCase(), g.leaves.map((l) => l.toLowerCase())]));
+        return [key, [...new Set(value.values.flatMap((v) => leaves.get(v) ?? [v]))]];
+      }),
+    );
+    out.set(path, { kind: 'enum', values: value.values, byType });
   }
   return out;
 }
@@ -40,7 +56,7 @@ export function matchedFilters(config: GalleryConfig, filters: Map<string, Filte
  * one path skips that filter; skipping one of the ruleset set's skips the whole set, so a ruleset,
  * source, or author counts what checking it adds.
  */
-export function applyFilters(records: LibraryRecord[], filters: Map<string, FilterValue>, except?: string): LibraryRecord[] {
+export function applyFilters(records: LibraryRecord[], filters: Map<string, MatchedValue>, except?: string): LibraryRecord[] {
   const active = [...filters].filter(([path, value]) => path !== except && isActive(value));
   const scope = active.filter(([path]) => isScopePath(path));
   const narrowing = active.filter(([path]) => !isScopePath(path));
@@ -94,9 +110,8 @@ function sortValue(record: LibraryRecord, key: SortKey, def: FilterDef | undefin
 
 /** Sorts by one key; entries missing the value go last in either direction, ties by name, then ruleset, type, and id. */
 export function sortRecords(records: LibraryRecord[], key: SortKey, config: GalleryConfig): LibraryRecord[] {
-  const def = filterDef(config, key.path);
   const sign = key.dir === 'asc' ? 1 : -1;
-  const keyed = records.map((record) => ({ record, value: sortValue(record, key, def) }));
+  const keyed = records.map((record) => ({ record, value: sortValue(record, key, recordDef(config, record, key.path)) }));
   return keyed
     .sort((a, b) => {
       if (a.value === undefined || b.value === undefined) {

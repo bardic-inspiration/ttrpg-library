@@ -21,7 +21,7 @@ describe('defaults', () => {
     expect(library.filters[0]).toMatchObject({ path: 'ruleset', labels: { 'dnd-5e-2024': 'D&D 5e' } });
     expect(library.filters[1]).toMatchObject({ path: 'source', label: 'Source', kind: 'enum' });
     expect(library.filters[2]).toMatchObject({ path: 'author', label: 'Author', kind: 'enum' });
-    expect(library.filters[3]).toMatchObject({ path: 'type', labels: { creature: 'Creature', spell: 'Spell' } });
+    expect(library.filters[3]).toMatchObject({ path: 'type', labels: { 'dnd-5e-2024/creature': 'Creature', 'dnd-5e-2024/spell': 'Spell' } });
     expect(sortChoices(library).map((c) => c.path)).not.toEqual(expect.arrayContaining(['ruleset', 'source', 'author', 'type']));
   });
 });
@@ -36,7 +36,7 @@ describe('parseQuery and toQuery', () => {
     expect(state.filters.get('stats.cr')).toEqual({ kind: 'range', min: 2, max: 8 });
     expect(state.filters.get('tags.theme')).toEqual({ kind: 'enum', values: ['fire'] });
     const written = toQuery(state, library);
-    expect(written).toBe('?q=frost&sort=stats.cr:desc&f.type=creature&f.stats.cr=2..8&f.stats.creatureType=dragon,fiend&f.tags.theme=fire');
+    expect(written).toBe('?q=frost&sort=stats.cr:desc&f.type=dnd-5e-2024/creature&f.stats.cr=2..8&f.stats.creatureType=dragon,fiend&f.tags.theme=fire');
     expect(parseQuery(written, library)).toEqual(state);
   });
 
@@ -69,11 +69,11 @@ describe('parseQuery and toQuery', () => {
 
   it('writes filters in the Library’s order, tags after facets, and leaves out the default sort', () => {
     const state = parseQuery('?f.tags.theme=fire&f.stats.cr=1..&f.type=creature&f.stats.size=medium&f.ruleset=dnd-5e-2024&sort=name:asc', library);
-    expect(toQuery(state, library)).toBe('?f.ruleset=dnd-5e-2024&f.type=creature&f.stats.cr=1..&f.stats.size=medium&f.tags.theme=fire');
+    expect(toQuery(state, library)).toBe('?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/creature&f.stats.cr=1..&f.stats.size=medium&f.tags.theme=fire');
   });
 
   it('reads the ruleset and type filters', () => {
-    expect(parseQuery('?f.type=spell', library).filters.get('type')).toEqual({ kind: 'enum', values: ['spell'] });
+    expect(parseQuery('?f.type=spell', library).filters.get('type')).toEqual({ kind: 'enum', values: ['dnd-5e-2024/spell'] });
     expect(parseQuery('?f.ruleset=DND-5e-2024', library).filters.get('ruleset')).toEqual({ kind: 'enum', values: ['dnd-5e-2024'] });
   });
 });
@@ -83,8 +83,8 @@ describe('the ruleset set in the URL (#380)', () => {
     const state = parseQuery('', library);
     expect(state.filters.get('author')).toEqual({ kind: 'enum', values: ['publisher'] });
     expect(toQuery(state, library)).toBe('');
-    expect(toQuery(parseQuery('?f.type=spell', library), library)).toBe('?f.type=spell');
-    expect(toQuery(parseQuery('?f.author=publisher&f.type=spell', library), library)).toBe('?f.type=spell');
+    expect(toQuery(parseQuery('?f.type=spell', library), library)).toBe('?f.type=dnd-5e-2024/spell');
+    expect(toQuery(parseQuery('?f.author=publisher&f.type=spell', library), library)).toBe('?f.type=dnd-5e-2024/spell');
   });
 
   it('takes the whole set from a query that names any of it, and writes a set other than the default', () => {
@@ -98,7 +98,7 @@ describe('the ruleset set in the URL (#380)', () => {
   it('reads and writes an empty set as f.ruleset with no value', () => {
     const state = parseQuery('?f.ruleset=&f.type=spell', library);
     expect([...state.filters.keys()]).toEqual(['type']);
-    expect(toQuery(state, library)).toBe('?f.ruleset=&f.type=spell');
+    expect(toQuery(state, library)).toBe('?f.ruleset=&f.type=dnd-5e-2024/spell');
   });
 });
 
@@ -108,12 +108,12 @@ describe('sort choices follow the filters', () => {
   const facetsOf = (type: string) => library.types.get(`dnd-5e-2024/${type}`)!.facets.map((f) => f.path);
 
   it('offers name, date added, and only the checked type’s facets, in registry order', () => {
-    expect(paths(new Map([['type', enumFilter(['spell'])]]))).toEqual(['name', 'createdAt', ...facetsOf('spell')]);
-    expect(paths(new Map([['type', enumFilter(['spell'])]]))).not.toContain('stats.cr');
+    expect(paths(new Map([['type', enumFilter(['dnd-5e-2024/spell'])]]))).toEqual(['name', 'createdAt', ...facetsOf('spell')]);
+    expect(paths(new Map([['type', enumFilter(['dnd-5e-2024/spell'])]]))).not.toContain('stats.cr');
   });
 
   it('offers each checked type’s facets once, in registry order, a shared path as one choice', () => {
-    const both = paths(new Map([['type', enumFilter(['spell', 'feat'])]]));
+    const both = paths(new Map([['type', enumFilter(['dnd-5e-2024/spell', 'dnd-5e-2024/feat'])]]));
     expect(both).toEqual(['name', 'createdAt', ...new Set([...facetsOf('feat'), ...facetsOf('spell')])]);
     expect(both.filter((p) => p === 'stats.level')).toHaveLength(1);
   });
@@ -128,7 +128,7 @@ describe('sort choices follow the filters', () => {
   });
 
   it('falls back to the default sort when the filters no longer offer the chosen one', () => {
-    const spells = new Map([['type', enumFilter(['spell'])]]);
+    const spells = new Map([['type', enumFilter(['dnd-5e-2024/spell'])]]);
     expect(validSort(library, { path: 'stats.cr', dir: 'desc' }, spells)).toEqual(library.defaultSort);
     expect(validSort(library, { path: 'stats.level', dir: 'desc' }, spells)).toEqual({ path: 'stats.level', dir: 'desc' });
   });
@@ -136,6 +136,6 @@ describe('sort choices follow the filters', () => {
   it('ignores a sort in the URL the filters don’t offer, wherever the filters come in it', () => {
     expect(parseQuery('?sort=stats.cr:desc&f.type=spell', library).sort).toEqual(library.defaultSort);
     expect(parseQuery('?sort=stats.level:desc&sort=stats.cr:asc&f.type=spell', library).sort).toEqual({ path: 'stats.level', dir: 'desc' });
-    expect(toQuery(parseQuery('?sort=stats.cr:desc&f.type=spell', library), library)).toBe('?f.type=spell');
+    expect(toQuery(parseQuery('?sort=stats.cr:desc&f.type=spell', library), library)).toBe('?f.type=dnd-5e-2024/spell');
   });
 });

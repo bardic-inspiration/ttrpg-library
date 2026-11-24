@@ -138,7 +138,7 @@ computed numbers, so translators read `derived` rather than recomputing.
   the print dialog ([Print layout](#print-layout)). `ids`
   lists `<type>/<id>` keys and prints them in the given order, ignoring repeats.
   Without `ids`, the query is read as the Library's, with the gallery's own
-  parsing and filtering, so `f.type` narrows by type, and results print in the
+  parsing and filtering, so `f.type` narrows by type (`<ruleset>/<type>`), and results print in the
   gallery's order. The page is given the build's facet data, as the Library's
   island is (`libraryFacetData` in `site/src/lib/gallery/facet-data.ts`), so
   a group filter matches every group in it and a ref facet sorts by its

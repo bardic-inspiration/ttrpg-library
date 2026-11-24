@@ -5,7 +5,7 @@
 import type MiniSearch from 'minisearch';
 import { isOfficial } from '../../../../rulesets/module.ts';
 import { label } from '../../../../lib/wording/grammar.ts';
-import { AUTHOR, RULESET, SOURCE, TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo } from './config.ts';
+import { AUTHOR, RULESET, SOURCE, TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo, typeKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, valueAt } from './values.ts';
 import { bounds, chips, hasValues, withoutFilter } from './view.ts';
@@ -274,7 +274,7 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
   const owners = (path: string) => [...config.types.values()].filter((info) => info.facets.some((f) => f.path === path)).length;
   const ctx: Context = { config, state, records, others, owners };
   const selected = selectedValues(state.filters.get(TYPE));
-  const checked = [...config.types.values()].filter((info) => selected.includes(info.type.toLowerCase()));
+  const checked = [...config.types.values()].filter((info) => selected.includes(typeKey(info.ruleset, info.type).toLowerCase()));
   const tags = tagsNode(ctx, new Set(checked.flatMap((info) => info.defaultFilters)));
   // A type counts its entries among the results, so checking one type leaves the rest at 0.
   const shown = others('');
@@ -283,7 +283,7 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
   if (rulesets) nodes.push(rulesets);
   for (const info of config.types.values()) {
     const own = ofType(records, info);
-    const key = info.type.toLowerCase();
+    const key = typeKey(info.ruleset, info.type).toLowerCase();
     if (own.length === 0 && !selected.includes(key)) continue;
     const defaults = new Set(selected.includes(key) ? info.defaultFilters : []);
     const claims = selected.length === 0 || selected.includes(key);

@@ -227,12 +227,12 @@ describe('every facet of every type', () => {
       const node = nodes.find((n) => n.kind === 'type' && n.value.key === key);
       return node?.kind === 'type' ? node.value : undefined;
     };
-    expect(typeValue(tree(full(), home), 'feat')).toMatchObject({ selected: false, count: 1 });
+    expect(typeValue(tree(full(), home), 'dnd-5e-2024/feat')).toMatchObject({ selected: false, count: 1 });
     // Checking Spells hides every other type, so they count 0 before any spell facet is set (#296).
     const nodes = tree(full(), home, '?f.type=spell');
-    expect(typeValue(nodes, 'spell')).toMatchObject({ selected: true, count: 1 });
-    expect(typeValue(nodes, 'feat')).toMatchObject({ selected: false, count: 0 });
-    expect(typeValue(nodes, 'item')).toMatchObject({ selected: false, count: 0 });
+    expect(typeValue(nodes, 'dnd-5e-2024/spell')).toMatchObject({ selected: true, count: 1 });
+    expect(typeValue(nodes, 'dnd-5e-2024/feat')).toMatchObject({ selected: false, count: 0 });
+    expect(typeValue(nodes, 'dnd-5e-2024/item')).toMatchObject({ selected: false, count: 0 });
   });
 
   /** Each ruleset under the Ruleset node, as label and count. */

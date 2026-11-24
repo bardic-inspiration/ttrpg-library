@@ -6,9 +6,10 @@ import { describe, expect, it } from 'vitest';
 import { placeRules, ruleKey } from '../lib/rules.ts';
 import RulesPage from '../site/src/components/rules/RulesPage.astro';
 import EntryTemplate from '../site/src/components/templates/EntryTemplate.astro';
-import { galleryConfig, type GalleryConfig, type LibraryRecord } from '../site/src/lib/gallery/config.ts';
+import { galleryConfig, recordDef, type GalleryConfig, type LibraryRecord } from '../site/src/lib/gallery/config.ts';
 import { facetData } from '../site/src/lib/gallery/facet-data.ts';
 import { parseQuery } from '../site/src/lib/gallery/state.ts';
+import { displayValue } from '../site/src/lib/gallery/values.ts';
 import { computeView, searchIndex } from '../site/src/lib/gallery/view.ts';
 import { entryNames, refPaths } from '../site/src/lib/library.ts';
 import { rulesContext } from '../site/src/lib/rules.ts';
@@ -134,6 +135,29 @@ describe('the gallery', () => {
       'ember-sprite',
     ]);
     expect(await view('?f.ruleset=starships-and-galaxies&f.type=ship&sort=stats.size:asc')).toEqual(['wren', 'longhaul', 'reaver', 'bastion']);
+  });
+
+  it('keeps a type filter value and its label per ruleset, and a shared facet path per type (#388)', async () => {
+    const { config, records } = await setup();
+    // Both rulesets have a `creature`; each is its own value of the type filter, with its own label.
+    expect(config.filters.find((f) => f.path === 'type')!.labels).toMatchObject({
+      'starships-and-galaxies/creature': 'Crew member',
+      'elementals/creature': 'Creature',
+    });
+    const creatures = (await view(`?${BOTH}&f.type=elementals/creature`)).sort();
+    expect(creatures).toEqual(records.filter((r) => r.ruleset === 'elementals' && r.type === 'creature').map((r) => r.id).sort());
+    // A bare type id is that type in every ruleset, so older links keep working.
+    expect((await view(`?${BOTH}&f.type=creature`)).length).toBe(records.filter((r) => r.type === 'creature').length);
+    // Items and celestial bodies share `stats.kind`; each reads and sorts by its own vocabulary.
+    const body = records.find((r) => r.id === 'pale-sun')!;
+    expect(displayValue(recordDef(config, body, 'stats.kind')!, body.facets['stats.kind'])).toBe('Star');
+    expect(await view('?f.ruleset=starships-and-galaxies&f.type=starships-and-galaxies/celestial-body&sort=stats.kind:asc')).toEqual([
+      'pale-sun',
+      'harrow',
+      'veil',
+      'shard',
+      'grinder',
+    ]);
   });
 });
 

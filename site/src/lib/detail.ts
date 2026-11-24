@@ -21,7 +21,7 @@ export function tagChips(entry: Entry): TagChip[] {
       return {
         key,
         value,
-        path: `?f.ruleset=${encodeURIComponent(entry.ruleset)}&f.type=${encodeURIComponent(entry.type)}&${encodeURIComponent(`f.tags.${key}`)}=${encodeURIComponent(value)}`,
+        path: `?f.ruleset=${encodeURIComponent(entry.ruleset)}&f.type=${encodeURIComponent(entry.ruleset)}/${encodeURIComponent(entry.type)}&${encodeURIComponent(`f.tags.${key}`)}=${encodeURIComponent(value)}`,
       };
     }),
   );
