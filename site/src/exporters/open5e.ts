@@ -1,8 +1,9 @@
 // Open5e export (docs/export.md#open5e): the Open5e translator's export side as a Download
-// format, for the types it covers. Entry scope downloads `<id>.open5e.json`, set scope
+// format, for the types it covers in its ruleset. Entry scope downloads `<id>.open5e.json`, set scope
 // `library-<YYYYMMDD>.open5e.json`; both resolve with the translator's skip report, which the
 // site shows after the download. When nothing in the scope exports, nothing downloads. The
 // translator loads only when a download runs.
+import { typeKey } from '../lib/type-key.ts';
 import { OPEN5E } from '../translators/open5e/meta.ts';
 import type { TranslatorItem } from '../translators/types.ts';
 import { resolveIO } from './io.ts';
@@ -14,7 +15,7 @@ export const open5e: Exporter = {
   kind: 'download',
   label: OPEN5E.label,
   scopes: ['entry', 'set'],
-  types: [...OPEN5E.types],
+  types: OPEN5E.types.map((type) => typeKey(OPEN5E.ruleset, type)),
   async run(items, options) {
     const io = resolveIO(options);
     const { open5e: translator } = await import('../translators/open5e/index.ts');

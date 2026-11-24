@@ -32,8 +32,16 @@ describe('export controls (docs/export.md#controls)', () => {
   });
 
   it('offers a translator only on the entry types it covers (docs/export.md#translators)', () => {
-    expect(ids(configuredControls('entry', { type: 'creature' }).downloads)).toEqual(['png', 'json', 'open5e']);
-    expect(ids(configuredControls('entry', { type: 'feat' }).downloads)).toEqual(['png', 'json']);
+    const entry = (ruleset: string, type: string) => configuredControls('entry', { entry: { ruleset, type } }).downloads;
+    expect(ids(entry('dnd-5e-2024', 'creature'))).toEqual(['png', 'json', 'open5e']);
+    expect(ids(entry('dnd-5e-2024', 'feat'))).toEqual(['png', 'json']);
+  });
+
+  it("doesn't offer a translator on a type of another ruleset that shares its id (docs/export.md#exporter-interface)", () => {
+    const entry = (ruleset: string, type: string) => configuredControls('entry', { entry: { ruleset, type } }).downloads;
+    expect(ids(entry('starships-and-galaxies', 'creature'))).toEqual(['png', 'json']);
+    expect(ids(entry('starships-and-galaxies', 'item'))).toEqual(['png', 'json']);
+    expect(ids(entry('elementals', 'creature'))).toEqual(['png', 'json']);
   });
 
   it('leaves Download out on request', () => {

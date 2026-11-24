@@ -151,7 +151,7 @@ describe('Open5e export (docs/export.md#open5e)', () => {
     expect(report?.downloaded).toBe(false);
   });
 
-  it('is offered for the types the translator covers', () => {
-    expect(open5e.types).toEqual(['creature', 'spell', 'item', 'condition', 'equipment']);
+  it('is offered for the types the translator covers, in its ruleset', () => {
+    expect(open5e.types).toEqual(['creature', 'spell', 'item', 'condition', 'equipment'].map((type) => `dnd-5e-2024/${type}`));
   });
 });
