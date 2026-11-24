@@ -174,26 +174,33 @@ describe('the site', () => {
   });
 
   it('renders every entry with its name, summary, and stats', async () => {
-    const { all, rules } = await originalsSite();
+    const { all, rules, modules } = await originalsSite();
     const names = entryNames(all, rules);
     const paths = refPaths(rules, all);
     for (const { entry, derived } of all) {
-      const text = textOf(await render(EntryTemplate, { entry, derived, names, paths }));
+      const text = textOf(await render(EntryTemplate, { entry, derived, names, paths, module: modules.get(entry.ruleset) }));
       expect(text).toContain(entry.name);
       expect(text).toContain(entry.summary);
     }
   });
 
   it('shows an entry\'s derived values on its page, labeled', async () => {
-    const { all, rules } = await originalsSite();
+    const { all, rules, modules } = await originalsSite();
     const names = entryNames(all, rules);
     const page = async (id: string) => {
       const { entry, derived } = all.find(({ entry }) => entry.id === id)!;
-      return textOf(await render(EntryTemplate, { entry, derived, names, paths: refPaths(rules, all) }));
+      return textOf(await render(EntryTemplate, { entry, derived, names, paths: refPaths(rules, all), module: modules.get(entry.ruleset) }));
     };
     const ship = await page('longhaul');
     for (const line of ['Crew 4', 'Hull 50']) expect(ship).toContain(line);
     expect(await page('steam-wraith')).toContain('Element steam');
+  });
+
+  it('renders a ruleset\'s own text tokens on its generic pages', async () => {
+    const { all, rules, modules } = await originalsSite();
+    const { entry, derived } = all.find(({ entry }) => entry.id === 'smoke-signal')!;
+    const html = await render(EntryTemplate, { entry, derived, names: entryNames(all, rules), paths: refPaths(rules, all), module: modules.get('elementals') });
+    expect(textOf(html)).toContain('Text Draw 2 chips from the pool, then draw a card.');
   });
 
   it('renders each rules page with every primitive at its anchor', async () => {

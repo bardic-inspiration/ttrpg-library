@@ -1,6 +1,7 @@
 // What every type template shares (docs/site.md#templates): the props it takes, its
 // render modes, and which component the registry's `template` name selects.
 
+import type { RulesetModule } from '../../../rulesets/module.ts';
 import type { Entry } from './library.ts';
 
 /** `screen` for gallery detail, `capture` for PNG, `print` for the print view. */
@@ -26,6 +27,8 @@ export interface TemplateProps {
   mode?: TemplateMode;
   /** Heading level of the entry name; section headings sit one below it. Default 2. */
   level?: number;
+  /** The entry's ruleset module, for its text tokens; the library's module for `entry.ruleset` by default. */
+  module?: Pick<RulesetModule, 'renderTokens'>;
   /** A page type's components, shown after its template (docs/content-model.md#components). */
   components?: { entry: { type: string; id: string; name: string; stats: unknown } }[];
 }

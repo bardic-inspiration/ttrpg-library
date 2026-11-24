@@ -10,7 +10,7 @@
       "fire": 1,
       "wind": 1
     },
-    "text": "Draw 4 chips from the pool."
+    "text": "Draw {cost} chips from the pool, then draw a card."
   },
   "meta": {
     "createdAt": "2026-11-23",

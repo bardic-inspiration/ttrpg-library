@@ -63,6 +63,22 @@ describe('checks', () => {
   });
 });
 
+describe('text tokens', () => {
+  it('render {cost} as the card\'s total cost, leaving refs', () => {
+    expect(ruleset.renderTokens?.('invocation', 'Draw {cost} chips. A {ref:element/wind} card.', { totalCost: 2 })).toBe(
+      'Draw 2 chips. A {ref:element/wind} card.',
+    );
+  });
+
+  it('fail an unknown token in a card\'s text', async () => {
+    const devil = await originalsJson(CREATURE('dust-devil'));
+    devil.stats.text = 'Gain {life} life.';
+    expect((await resultWith({ [CREATURE('dust-devil')]: devil })).errors).toEqual([
+      `${CREATURE('dust-devil')}: stats.text: unknown token {life}; the one token is {cost}`,
+    ]);
+  });
+});
+
 describe('ref labels', () => {
   it('name a blend’s parts, from each end', () => {
     expect(ruleset.refLabels('element', 'stats.blend[0]')).toEqual({ forward: 'Blend of', back: 'Blends into' });

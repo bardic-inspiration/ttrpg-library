@@ -525,7 +525,10 @@ indexes.
   `item-card`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
   `stats` and then the ruleset's derived values as one definition list, and
   tags. A derived value is labeled as a stored one is, from its key, and
-  listed in the order the ruleset's module returns it. `EntryTemplate` picks the component
+  listed in the order the ruleset's module returns it. Each text in `stats`
+  renders the ruleset's text tokens through its module's `renderTokens`
+  ([Text tokens](rulesets.md#text-tokens)); a template's `module` prop
+  supplies the module where the library's own isn't the entry's, as in tests. `EntryTemplate` picks the component
   from the registry's `template`, falling back to `generic`. The generic
   lines render a ref as its target's name, linked to its page or rules
   anchor; a rules page renders a primitive's `stats` with the same lines.

@@ -81,6 +81,13 @@ export interface RulesetModule {
    * The site merges them into the entry's derived values. Optional.
    */
   deriveLinked?(type: string, key: string, stats: unknown, entries: readonly LinkedEntry[]): Record<string, unknown>;
+  /**
+   * Renders the ruleset's text tokens (docs/rulesets.md#text-tokens) in one text of an entry of `type`,
+   * from the entry's derived values, so a token shows only what the module derives. `{ref:…}` is left
+   * as written. Throws on a bad token; `check` reports bad tokens first. Optional: without it, or for a
+   * type with no tokens, text shows as written.
+   */
+  renderTokens?(type: string, text: string, derived: Record<string, unknown>): string;
   /** The ruleset's phrase book (docs/site.md#wording): its fixed sentences and the display names of its enum values. */
   phrases: PhraseBook;
   /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (docs/content-model.md#references). */

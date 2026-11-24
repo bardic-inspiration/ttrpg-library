@@ -13,7 +13,7 @@ import { openAround, sectionId } from '../../site/src/lib/accordion.ts';
 import { pageContents } from '../../site/src/lib/rules.ts';
 import { fixtureSite } from './fixture.ts';
 
-const { data, all, ctx } = await fixtureSite();
+const { data, all, ctx, module } = await fixtureSite();
 const page = (id: string) => data.pages.find((p) => p.id === id)!;
 /** Renders a component, without Astro's scoped-style attributes. */
 const render = async (component: any, props: Record<string, unknown>) =>
@@ -66,7 +66,7 @@ describe('links to rules', () => {
 
   it('render a ref object in the generic template as the name linked to the anchor', async () => {
     const note = all.find(({ entry }) => entry.id === 'field-notes')!;
-    const html = await render(EntryTemplate, { entry: note.entry, derived: note.derived, names: ctx.names, paths: ctx.paths });
+    const html = await render(EntryTemplate, { entry: note.entry, derived: note.derived, names: ctx.names, paths: ctx.paths, module });
     expect(html).toContain('<a class="ref-link" href="/fixture-rules/rules/tools/#gear-ladder">Ladder</a>');
     expect(html).toContain('href="/fixture-rules/rules/glossary/#term-advantage">Advantage</a>');
   });

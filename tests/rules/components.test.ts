@@ -161,7 +161,7 @@ describe('the site', async () => {
 
   it('renders the components after the parent’s template, in order, at their anchors', async () => {
     const names = entryNames(all, [data]);
-    const html = await render(EntryTemplate, { ...handbook, names, paths: refPaths([data], all), components: handbook.components, level: 2 });
+    const html = await render(EntryTemplate, { ...handbook, names, paths: refPaths([data], all), components: handbook.components, level: 2, module });
     expect(html).toContain('<details class="accordion page-component" id="chapter-handbook-basics" data-type="chapter"><summary class="accordion__summary"><h3>Basics</h3>');
     expect(html).toContain('<details class="accordion page-component" id="chapter-handbook-advanced" data-type="chapter"><summary class="accordion__summary"><h3>Advanced</h3>');
     expect(html.indexOf('id="chapter-handbook-basics"')).toBeLessThan(html.indexOf('id="chapter-handbook-advanced"'));
