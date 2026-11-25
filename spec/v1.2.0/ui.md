@@ -115,15 +115,6 @@ gallery cards.
 
 ## Open questions
 
-- **Chip range facets:** a chip facet lists its values as chips "for
-  small-range facets such as spell level and CR", but both are range facets,
-  with min and max inputs and `min..max` URLs. Either chips stand in for the
-  inputs (a pressed set filters as an enum, `f.stats.level=1,3`, and old
-  range links need handling), or range facets keep their inputs and
-  [`display`](../../docs/content-model.md#display) changes only their cards.
-  Also: whether CR's chip reads its bare value ("1/8") or "CR 1/8". Until
-  this is decided, range facets keep their inputs and CR isn't marked (#420).
-
 - **Flattened filters and checkbox state (#421):** with one ruleset, the
   sections don't group by ruleset, so no ruleset checkbox is left. Either the
   ruleset filter (`f.ruleset`) is set only by URL and the `/<ruleset>/`

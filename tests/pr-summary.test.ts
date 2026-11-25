@@ -69,10 +69,10 @@ describe('renderSummary', () => {
     ]);
     expect(markdown).toContain('## Changed entries');
     expect(markdown).toContain('| Change | Name | Type | Summary field | Summary |');
-    expect(markdown).toContain('| modified | Cinder Hound | creature | 2 | A soot-black hunting hound that exhales a cone of embers and tracks prey by the smell of smoke. |');
+    expect(markdown).toContain('| modified | Cinder Hound | creature | CR: 2 | A soot-black hunting hound that exhales a cone of embers and tracks prey by the smell of smoke. |');
     // The summary field reads as its facet does: a spell level by its format, a rarity by its vocabulary.
-    expect(markdown).toContain('| added | Frost Lance | spell | Level 1 | A spear of ice that pierces a target and slows its movement. |');
-    expect(markdown).toContain('| removed | Old Ring | item | Very Rare | A ring \\| of old. |');
+    expect(markdown).toContain('| added | Frost Lance | spell | Level: 1 | A spear of ice that pierces a target and slows its movement. |');
+    expect(markdown).toContain('| removed | Old Ring | item | Rarity: Very Rare | A ring \\| of old. |');
     // An entry that can't be read falls back to the id and type its path gives.
     expect(markdown).toContain('| removed | `lost-ring` | item |  |  |');
   });

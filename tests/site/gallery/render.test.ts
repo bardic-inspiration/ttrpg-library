@@ -30,7 +30,7 @@ describe('Gallery', () => {
     expect(html.match(/<article class="card linked-card"/g)).toHaveLength(5);
     expect(html).toContain('data-type="creature"');
     expect(html).toContain('<dt>CR</dt><dd>2</dd>');
-    expect(html).toContain('<dt>Level</dt><dd>Level 1</dd>');
+    expect(html).toContain('<dt>Level</dt><dd>1</dd>');
     expect(html).not.toContain('art-placeholder');
     expect(html).not.toContain('Art placeholder');
     expect(html).not.toContain('card__art');
@@ -51,21 +51,31 @@ describe('Gallery', () => {
   it('reads the repo’s chip fields from its schemas (docs/content-model.md#display)', () => {
     expect(chipFacets(registry as never, loadSchemas())).toEqual({
       'dnd-5e-2024/class': ['stats.hitDie'],
+      'dnd-5e-2024/creature': ['stats.cr'],
       'dnd-5e-2024/feat': ['stats.category'],
       'dnd-5e-2024/item': ['stats.category'],
       'dnd-5e-2024/spell': ['stats.level', 'stats.school'],
     });
   });
 
-  it('shows a chip field on a card as its value alone, a badge, and its filter values as chips', () => {
+  it('shows a chip field on a card as its label and value, a badge, and its filter values as chips', () => {
     const facetData = { ...NO_FACET_DATA, chips: { 'dnd-5e-2024/spell': ['stats.level', 'stats.school'] } };
     const html = render({ initialQuery: '?f.type=spell', facetData });
-    expect(html).toContain('<li class="badge">Level 1</li>');
+    expect(html).toContain('<li class="badge">Level: 1</li>');
+    expect(html).not.toContain('Level: Level');
     expect(html).not.toContain('<dt>Level</dt>');
     expect(html).not.toContain('<dt>School</dt>');
     expect(html).toMatch(/<ul class="tree__values tree__chips" id="filter-dnd-5e-2024-spell-stats-school-panel"[^>]*><li><button type="button" class="chip" aria-pressed="false">/);
     expect(html).not.toContain('<input type="checkbox" id="filter-dnd-5e-2024-spell-stats-school-');
     // A range facet keeps its min and max inputs, whatever its display.
+    expect(html).toContain('tree__range');
+  });
+
+  it('reads CR as a chip with its label, and keeps its range inputs', () => {
+    const facetData = { ...NO_FACET_DATA, chips: { 'dnd-5e-2024/creature': ['stats.cr'] } };
+    const html = render({ initialQuery: '?f.type=creature', facetData });
+    expect(html).toContain('<li class="badge">CR: 2</li>');
+    expect(html).not.toContain('<dt>CR</dt>');
     expect(html).toContain('tree__range');
   });
 

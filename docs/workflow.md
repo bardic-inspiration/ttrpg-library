@@ -93,7 +93,7 @@ metadata and changed paths; it never checks out or runs PR code.
    `npm ci`, `npm run validate`, and `npm run build`. When content changed,
    `scripts/pr-summary/` writes the job summary from the validator's result
    for the PR: a table of the changed entries with name (a component's as
-   "Parent › Name"), type, summary field (read as its facet reads it), and
+   "Parent › Name"), type, summary field (its facet's label and value, "Level: 3"), and
    summary, a removed entry's read from the merge base; for each changed
    creature, its AC, derived HP, and each action's attack bonus, DC, and
    damage with its average; every warning the validator reports, which

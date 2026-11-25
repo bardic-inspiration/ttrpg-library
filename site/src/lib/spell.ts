@@ -3,17 +3,16 @@
 // is authored and only formatted. Optional fields display by presence alone (docs/content-model.md#situational-fields).
 
 import { present, whenPresent } from './display.ts';
-import { formatSpellLevel } from './format.ts';
 import { concat, countOf, joinWith, link, markdown, name, pluralOf, say, sayText, text, toMarkdown, type Phrase } from './wording.ts';
 import type { SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 
 /**
  * "Level 1 Evocation (Sorcerer, Wizard)", or "Evocation Cantrip (…)" at level 0, as markdown with
- * each class linked. The level reads as the gallery's `spell-level` format does.
+ * each class linked.
  */
 export function levelLine(s: SpellStats): string {
   const school = name('school', s.school);
-  const head = s.level === 0 ? say('spell.cantrip', { school }) : say('spell.leveled', { level: formatSpellLevel(s.level).replace(/^Level /, ''), school });
+  const head = s.level === 0 ? say('spell.cantrip', { school }) : say('spell.leveled', { level: String(s.level), school });
   return toMarkdown(concat(head, ' (', joinWith(s.classes.map((c) => link(c.ref)), ', '), ')'));
 }
 
