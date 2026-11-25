@@ -29,13 +29,13 @@ const { title, items, level, refs } = Astro.props;
   @layer components {
     .action-list :global(.action-list__heading) {
       font-family: var(--statblock-heading-font);
-      font-size: var(--text-h4);
+      font-size: var(--statblock-heading-size);
       color: var(--accent);
-      margin-block-end: var(--space-3xs);
+      margin-block-end: var(--flow-line);
     }
 
     .action-list > :global(* + *) {
-      margin-block-start: var(--space-3xs);
+      margin-block-start: var(--flow-line);
     }
   }
 </style>

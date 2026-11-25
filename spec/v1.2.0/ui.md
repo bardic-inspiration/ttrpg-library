@@ -16,8 +16,10 @@ shared components).
 
 ## Current
 
-- [Styling](../../docs/styling.md): tokens, the palette, and the style guide
-  at `/styleguide/`.
+- [Styling](../../docs/styling.md): tokens, the palette, the style guide
+  at `/styleguide/`, and its
+  [standards](../../docs/styling.md#hierarchy-and-standards) for text roles,
+  headings, rhythm, and underlines.
 - [Gallery](../../docs/site.md#gallery): cards, the filter tree, sort, and
   selection and set actions.
 - [Detail page](../../docs/site.md#detail-page) and
@@ -30,15 +32,6 @@ shared components).
 
 ## Design
 
-### Style guide and hierarchy
-
-The first task: a reassessment of the stylesheet and of the hierarchy of
-text and headings, producing a style guide for the site and the standards it
-implements. The aesthetic issues below are settled through it, under one
-structure, rather than one by one. Link underlines are dense across the site
-(nav, card titles, every ref in a stat block), and the guide sets where they
-go.
-
 ### Interaction patterns
 
 1. **Inventory** every interactive pattern: filter tree disclosures,
@@ -49,8 +42,6 @@ go.
      The filter tree and the collapsible reference lists use it.
    - **Click targets:** the whole card opens its entry, with the cart control
      above that link.
-   - **Underlines:** links in rules text stay underlined; nav links, card
-     titles, and headings underline on hover and focus.
    - **Buttons:** a fixed set of primary, secondary, and icon variants, each
      with a fixed placement.
    - **Controls:** when to use a checkbox, a chip, or a toggle.

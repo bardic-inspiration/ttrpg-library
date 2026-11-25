@@ -589,3 +589,11 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Accents fold by Unicode decomposition (NFD) with combining marks dropped, then lowercase, on both the name and the query; a blank or all-space query matches everything. | The plainest fold that makes "naive" find "Naïve", with no locale tables | #417 |
 | `plainText` and the schema walk's `refAndTextValues`, which only built the search text, are removed with it. | No code without a caller | #417 |
 | The Library's search placeholder reads "Name". | It names what search matches, now that it reads names only | #417 |
+
+### Style guide
+
+| Decision | Reason | Source |
+|---|---|---|
+| Page headings are sized by level (`h1` to `h6`, with `h5` and `h6` at body size); a component's headings are sized by component tokens, since `Heading.astro` sets their level from where the component nests. | P10: one token per role; a card or stat block reads the same at any depth | #402, #418 |
+| The spacing rhythm is four semantic aliases of the spacing scale, `--flow-line`, `--flow-text`, `--flow-block`, and `--flow-section`, which the shared flows read in place of raw `--space-*` steps. Values are unchanged. | P10: changing the rhythm is one token edit | #418 |
+| Links in headings, any `nav` (the contents list too), and the site header underline only on hover and focus, through one `base.css` rule; running text, ref lists, and the footer keep underlines. | The spec's underline rule, applied by element so new headings and navs follow it; links among text keep a non-color cue (WCAG 1.4.1) | #402, #418 |

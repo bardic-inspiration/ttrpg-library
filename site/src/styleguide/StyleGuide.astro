@@ -55,6 +55,8 @@ const contentTokens = names(content, /^--(accent|rarity)-/);
 const fontTokens = names(semantic, /^--font-(heading|body|ui)$/);
 const textTokens = names(semantic, /^--text-/);
 const spaceTokens = names(semantic, /^--space-/);
+const flowTokens = names(semantic, /^--flow-/);
+const headingLevels = [1, 2, 3, 4, 5, 6];
 const radiusTokens = names(semantic, /^--radius-/);
 const shadowTokens = names(semantic, /^--shadow-/);
 const durationTokens = names(semantic, /^--duration-/);
@@ -137,12 +139,32 @@ const modes = ['screen', 'capture'] as const;
         <li><p class="sg-sample" style={`font-size: var(${name})`}>Cinder Hound</p><code>{name}</code></li>
       ))}
     </ul>
+    <h3>Headings</h3>
+    <p class="measure">A page heading's size comes from its level. Samples, not headings, so this page's outline stays its own.</p>
+    <ul class="sg-list">
+      {headingLevels.map((level) => (
+        <li><p class="sg-heading" style={`font-size: var(--text-h${level})`}>Heading level {level}</p><code>h{level} · --text-h{level}</code></li>
+      ))}
+    </ul>
+    <h3>Links</h3>
+    <ul class="sg-list">
+      <li><p>Rules text keeps its underline: the target has the <a href="#sg-type">Grappled</a> condition.</p><code>running text</code></li>
+      <li><nav aria-label="Sample navigation"><a href="#sg-type">Library</a></nav><code>nav and the site header: underline on hover and focus</code></li>
+      <li><h4><a href="#sg-type">Cinder Hound</a></h4><code>headings and card titles: underline on hover and focus</code></li>
+    </ul>
   </section>
 
   <section class="sg-section" aria-labelledby="sg-scales">
     <h2 id="sg-scales">Spacing, radii, shadows, durations</h2>
     <ul class="sg-list">
       {spaceTokens.map((name) => (
+        <li><span class="sg-bar" style={`inline-size: var(${name})`}></span><code>{name}</code> <small>{resolveToken(palette, name)}</small></li>
+      ))}
+    </ul>
+    <h3>Rhythm</h3>
+    <p class="measure">The gap between siblings: a label and its value, paragraphs, blocks in a section, a page's sections.</p>
+    <ul class="sg-list">
+      {flowTokens.map((name) => (
         <li><span class="sg-bar" style={`inline-size: var(${name})`}></span><code>{name}</code> <small>{resolveToken(palette, name)}</small></li>
       ))}
     </ul>
@@ -336,6 +358,12 @@ const modes = ['screen', 'capture'] as const;
     }
 
     .sg-sample {
+      line-height: var(--leading-heading);
+    }
+
+    .sg-heading {
+      font-family: var(--font-heading);
+      font-weight: var(--font-weight-label);
       line-height: var(--leading-heading);
     }
 
