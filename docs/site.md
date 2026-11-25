@@ -575,7 +575,12 @@ thousand entries. Past about 2,000, revisit the index size.
 - `description` as lore, visually distinct from rules text.
 - Forward refs and back-refs as links
   ([content-model.md](content-model.md#references)); a page type's include
-  its components' ([content-model.md](content-model.md#components)).
+  its components' ([content-model.md](content-model.md#components)). Each
+  label's links are a shared disclosure (`Details`,
+  [Shared components](styling.md#shared-components)) that starts open, with
+  the label as its toggle. A target listed under a specific label isn't
+  listed again under the generic "References" or "Referenced by"
+  ([The ruleset module](rulesets.md#the-ruleset-module)).
 - **Homebrew links.** On an official entry's page, links to homebrew entries
   ([Source and author](content-model.md#source-and-author)) are moved out of Links into a
   **Homebrew** section after it, under the same labels: a custom spell that

@@ -80,6 +80,11 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(html).not.toContain('github.com');
   });
 
+  it('lists each label\'s links in a disclosure that starts open', async () => {
+    const html = await render('frost-lance');
+    expect(html).toMatch(/<details class="entry-detail__refs" open><summary class="disclosure entry-detail__refs-label"><span class="chevron" aria-hidden="true"><\/span>Cast by<\/summary>/);
+  });
+
   it('credits an imported entry\'s author, source, and license (docs/content-model.md#meta)', async () => {
     const loaded = lib.byId('cinder-hound');
     const license = { id: 'CC-BY-4.0', author: 'A. Author', url: 'https://example.com/hounds' };

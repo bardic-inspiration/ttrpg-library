@@ -634,3 +634,11 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | A primitive's record has `source` `null`, `author` `"publisher"`, an empty `summary`, and `createdAt` `null`. Its card shows no summary or source line, and a date sort puts it last. | P3: a primitive stores no source, summary, or `meta`, and nothing is invented for it; the publisher author makes it official, so it shows on a fresh Library | #424 |
 | A primitive with a card also has a raw copy (its rules file), an export bundle (the primitive with its ruleset), and a print fragment (its type's template), so Download and Print take it from the cart like an entry. | The cart's actions run on every key it holds; an action that couldn't load one would run on nothing | #424 |
 | The Open5e export reports a weapon property's note as not carried, and writes a weapon's `is_martial` as a boolean, as Open5e's schema has it. | SRD weapons now export, and Lance's "unless mounted" has no Open5e field to go in; a translator never guesses a mapping | #424 |
+
+### Entry pages
+
+| Decision | Reason | Source |
+|---|---|---|
+| Each label's link list on a detail page is its own disclosure, the label as its toggle, and starts open; a rules page's links, already inside an accordion section, stay a plain list. | Collapsible without hiding anything a page showed before; a disclosure inside a section would nest two toggles | #425 |
+| A ruleset marks its generic labels with `generic` in `RefLabels`, and a target under a specific label is dropped from the generic group on both sides ("References" too), on detail and rules pages alike; groups keep their first-seen order. | The spec's "Referenced by" rule applies the same way to its forward twin; one grouping helper serves every page (P3) | #425 |
+| Provenance drops the source issues entirely, not only their links. The About page's links to `ATTRIBUTION.md` and the source stay until the owner decides (asked on #425). | A bare "#134" names nothing a reader can use; the About links carry licensing credit | #425 |

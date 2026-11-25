@@ -165,7 +165,8 @@ its own), or restyles the chevron, the disclosure, or the card link.
   panel it names with `aria-controls`; it can show only its chevron
   (`iconOnly`), with its label as its accessible name. `Details` is a
   `<details>` whose `<summary>` is the toggle. The filter tree, the Filters
-  menu's toggle, accordion sections, and the export report use it.
+  menu's toggle, accordion sections, a detail page's link lists, and the
+  export report use it.
 - **Click targets** (`CardLink.tsx`). The whole card opens its entry: the
   title's link covers the card, and the card's root carries `linked-card`,
   which lifts every other control on the card (the "In cart" checkbox) above
