@@ -93,6 +93,7 @@ tests/                                   Vitest suites and fixtures
 .claude/                                 session settings, hooks, skills, and archived skills
 .github/                                 workflows, labeler, issue and PR templates, Dependabot
 docs/                                    these docs (README.md is the index)
+spec/v1.2.0/                             the version spec: v1.2.0's design not yet built
 spec/tracks/                             development tracks' specs: ongoing design not yet built
 AGENTS.md, CLAUDE.md, README.md          working guide and repo intro
 CHANGELOG.md                             what each release changed (workflow.md "Releases")
@@ -150,6 +151,8 @@ checks them. `build:originals` and `dev:originals` set `LIBRARY_ROOT` through
 - **Lane:** the kind of a PR, content or dev, set by its branch prefix.
 - **Track:** ongoing development outside a version's build, with a tracking
   issue and its unbuilt design in `spec/tracks/`.
+- **Version spec:** a version's unbuilt design, one file per area, in
+  `spec/v<version>/`.
 
 ## Where the rules live
 

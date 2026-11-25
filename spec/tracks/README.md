@@ -12,6 +12,7 @@ skill, guideline, or routine prompt cites it.
 |---|---|---|---|
 | Integrations | #315 | [`integrations.md`](integrations.md) | The translators area (#116) and the rest of Milestone 8 (#220) |
 | Images | #316 | [`images.md`](images.md) | The art area (#117) and Milestone 9's art tasks (#221) |
+| Rulesets | #403 | [`rulesets.md`](rulesets.md) | The "second published ruleset" item in #118 |
 
 ## Track files
 
@@ -54,7 +55,7 @@ other section that doesn't apply.
 - **Open questions:** what isn't settled yet. No part with an open question is
   built.
 - **Out of scope:** what the track deliberately leaves out, pointing to a version's
-  "Spec Considerations" issue (#118, #370) for what's earmarked there.
+  "Spec Considerations" issue (#370) for what's earmarked there.
 
 The reasons behind a design go in its PR and in `docs/decisions.md`, not here,
 so nothing is lost when a built part is deleted.

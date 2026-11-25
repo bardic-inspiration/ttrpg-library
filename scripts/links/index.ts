@@ -40,8 +40,11 @@ export function anchors(markdown: string): Set<string> {
   return found;
 }
 
-/** A citation of a doc anywhere in a file: `docs/<file>.md` or `spec/tracks/<file>.md`, with an optional anchor. */
-const CITATION = /(?<![\w./-])((?:docs|spec\/tracks)\/[\w./-]*?\.md)(?:#([\w-]+))?/g;
+/**
+ * A citation of a doc anywhere in a file: `docs/<file>.md`, `spec/tracks/<file>.md`, or a version
+ * spec's `spec/v<version>/<file>.md`, with an optional anchor.
+ */
+const CITATION = /(?<![\w./-])((?:docs|spec\/tracks|spec\/v\d+\.\d+\.\d+)\/[\w./-]*?\.md)(?:#([\w-]+))?/g;
 /** An inline Markdown link or image target. */
 const LINK = /\]\(([^)\s]+)\)/g;
 const SECTION = /§\s?\d+(?:\.\d+)*/g;
