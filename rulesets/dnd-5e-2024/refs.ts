@@ -14,7 +14,7 @@ const STARTING: RefLabels = { forward: 'Starting equipment', back: 'Starting equ
 const SPELLS: RefLabels = { forward: 'Spells', back: 'Classes' };
 const CLASSES: RefLabels = { forward: 'Classes', back: 'Spells' };
 const SUBCLASS: RefLabels = { forward: 'Subclass of', back: 'Subclasses' };
-const OTHER: RefLabels = { forward: 'References', back: 'Referenced by' };
+const OTHER: RefLabels = { forward: 'References', back: 'Referenced by', generic: true };
 
 /**
  * Spell lists are "Casts", creature gear is "Gear", condition immunities "Immune to", an item's base

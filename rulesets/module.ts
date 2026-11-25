@@ -55,6 +55,11 @@ export const isOfficial = (entry: object): boolean => (entry as { author?: unkno
 export interface RefLabels {
   forward: string;
   back: string;
+  /**
+   * The labels for any field without labels of its own ("References" / "Referenced by"). A target
+   * listed under a specific label isn't listed again under these (docs/content-model.md#references).
+   */
+  generic?: true;
 }
 
 export interface RulesetModule {

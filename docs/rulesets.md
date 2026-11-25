@@ -89,7 +89,11 @@ is; a class's `spells` are "Spells" / "Classes", and a spell's `classes`
 creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
 `properties` and `mastery` are "Properties" / "Weapons" and "Mastery" /
 "Weapons"; any other field, including a `{ref:…}` token in text, is
-"References" / "Referenced by".
+"References" / "Referenced by". These are the ruleset's generic labels
+(`generic` in `RefLabels`): a target listed under a specific label isn't
+listed again under them, so Acid Arrow lists the dragons that cast it, and
+name it in their text, once, under "Cast by" (`groupRefs` in
+`site/src/lib/refs.ts`).
 
 ### Rules data
 
