@@ -361,8 +361,8 @@ describe('the pages', async () => {
     expect(toc).toMatch(
       /href="#section-core-sorcerer-traits">Core Sorcerer Traits<[\s\S]*href="#section-sorcerer-class-features">Sorcerer Class Features<\/a><ul><li><a href="#class-feature-sorcerer-spellcasting">Level 1: Spellcasting<[\s\S]*href="#section-metamagic-options">Metamagic Options<\/a><ul><li><a href="#class-option-sorcerer-careful-spell">Careful Spell<[\s\S]*href="#section-sorcerer-subclasses">/,
     );
-    expect(html).toContain('<details class="accordion class-section" id="section-core-sorcerer-traits"><summary class="accordion__summary"><h3>Core Sorcerer Traits</h3></summary>');
-    expect(html).toContain('<details class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><summary class="accordion__summary"><h4>Level 1: Spellcasting</h4></summary>');
+    expect(html).toContain('<details class="accordion class-section" id="section-core-sorcerer-traits"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h3>Core Sorcerer Traits</h3></summary>');
+    expect(html).toContain('<details class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h4>Level 1: Spellcasting</h4></summary>');
     // A section holding features keeps its heading and intro open over them.
     expect(html).toContain('<section class="class-section" id="section-sorcerer-class-features"><h3>Sorcerer Class Features</h3>');
     // Every toc link lands on an id on the page.

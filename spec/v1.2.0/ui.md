@@ -19,7 +19,9 @@ shared components).
 - [Styling](../../docs/styling.md): tokens, the palette, the style guide
   at `/styleguide/`, and its
   [standards](../../docs/styling.md#hierarchy-and-standards) for text roles,
-  headings, rhythm, and underlines.
+  headings, rhythm, and underlines, and its
+  [shared components](../../docs/styling.md#shared-components): the
+  disclosure, the card link, buttons, and the checkbox, chip, and toggle.
 - [Gallery](../../docs/site.md#gallery): cards, the filter tree, sort, and
   selection and set actions.
 - [Detail page](../../docs/site.md#detail-page) and
@@ -31,23 +33,6 @@ shared components).
 - [Controls](../../docs/export.md#controls): Print and Download.
 
 ## Design
-
-### Interaction patterns
-
-1. **Inventory** every interactive pattern: filter tree disclosures,
-   accordions, contents lists, the Download menu, cards, buttons, link
-   underlines, and checkbox, chip, and toggle controls.
-2. **One rule each** in the style guide:
-   - **Disclosure:** one component, chevron on the left, rotating when open.
-     The filter tree and the collapsible reference lists use it.
-   - **Click targets:** the whole card opens its entry, with the cart control
-     above that link.
-   - **Buttons:** a fixed set of primary, secondary, and icon variants, each
-     with a fixed placement.
-   - **Controls:** when to use a checkbox, a chip, or a toggle.
-3. **Shared components** for each, shown on `/styleguide/`.
-4. **Migrate in one pass**, with a test that fails when a page builds its own
-   disclosure or card link.
 
 ### Chip or text
 
@@ -110,7 +95,7 @@ gallery cards.
 
 ### Entry and long pages
 
-- **Reference lists are collapsible**, with the shared disclosure.
+- **Reference lists are collapsible**, with the shared disclosure (`Details`).
 - **A ref listed under a specific label** ("Cast by", "Casts") isn't listed
   again under the generic "Referenced by".
 - **No GitHub references on the site** except the Contribute link: the
@@ -140,8 +125,6 @@ gallery cards.
 
 ## Done when
 
-- `/styleguide/` shows every shared component, and a test fails when a page
-  builds its own disclosure or card link.
 - The schema `display` keyword drives chips on cards and in filters, and
   validation rejects it anywhere else.
 - The Library has the flattened filters, the cart, and cards for SRD

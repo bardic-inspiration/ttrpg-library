@@ -7,6 +7,8 @@ import type { FilterValue } from '../../lib/gallery/state.ts';
 import { openAtStart, valueId, type TreeNode, type ValueNode } from '../../lib/gallery/tree.ts';
 import { parseNumber } from '../../lib/gallery/values.ts';
 import { formatValue } from '../../lib/format.ts';
+import { Checkbox } from '../shared/Controls.tsx';
+import { DisclosureButton } from '../shared/Disclosure.tsx';
 
 export const idFor = (path: string) => `filter-${path.replace(/[^a-z0-9-]/gi, '-')}`;
 
@@ -46,29 +48,36 @@ export function FilterTree(props: TreeProps) {
   return (
     <ul class="tree">
       {props.nodes.map((node) => (
-        <Node key={node.id} node={node} shared={shared} />
+        <Node key={node.id} node={node} shared={shared} reserve={nodesReserve(props.nodes)} />
       ))}
     </ul>
   );
 }
 
-/** A disclosure button for a node, naming it; its panel follows it. */
+/**
+ * A node's disclosure, naming it; its panel follows it. A checkable node's disclosure shows only its
+ * chevron, named by `describe`, since the checkbox beside it carries the label.
+ */
 function Disclosure({ id, label, open, toggle, describe }: { id: string; label: string; open: boolean; toggle: Toggle; describe?: string }) {
   return (
-    <button
-      type="button"
+    <DisclosureButton
       class="tree__toggle"
       id={`${idFor(id)}-toggle`}
-      aria-expanded={open}
-      aria-controls={`${idFor(id)}-panel`}
-      {...(describe ? { 'aria-label': describe } : {})}
-      onClick={() => toggle(id, !open)}
-    >
-      <span class="tree__chevron" aria-hidden="true" />
-      {describe ? null : label}
-    </button>
+      controls={`${idFor(id)}-panel`}
+      open={open}
+      onToggle={(next) => toggle(id, next)}
+      label={describe ?? label}
+      iconOnly={describe !== undefined}
+    />
   );
 }
+
+/** Whether a list's checkable rows keep a chevron's slot, so their boxes align with a sibling's chevron. */
+const nodesReserve = (nodes: TreeNode[]) => nodes.some((n) => n.kind === 'type' && n.children.length > 0);
+const valuesReserve = (values: ValueNode[]) => values.some((v) => v.children.length > 0);
+
+/** The empty slot a checkable row without a disclosure keeps where the chevron would be. */
+const Slot = () => <span class="tree__slot" aria-hidden="true" />;
 
 function Count({ n }: { n: number }) {
   return (
@@ -80,24 +89,25 @@ function Count({ n }: { n: number }) {
 }
 
 /** A checkable value, with its nested values (a group's) behind its own disclosure. */
-function Value({ id, value, onToggle, shared }: { id: string; value: ValueNode; onToggle: (key: string) => void; shared: Shared }) {
+function Value({ id, value, onToggle, shared, reserve }: { id: string; value: ValueNode; onToggle: (key: string) => void; shared: Shared; reserve: boolean }) {
   const own = valueId(id, value.key);
   const open = value.children.length > 0 && shared.isOpen(own);
   return (
     <li class="tree__value">
       <div class="tree__row">
-        <input type="checkbox" id={idFor(own)} checked={value.selected} onChange={() => onToggle(value.key)} />
-        <label for={idFor(own)}>
-          {value.label} <Count n={value.count} />
-        </label>
-        {value.children.length > 0 && (
+        {value.children.length > 0 ? (
           <Disclosure id={own} label={value.label} open={open} toggle={shared.toggle} describe={`Groups in ${value.label}`} />
+        ) : (
+          reserve && <Slot />
         )}
+        <Checkbox id={idFor(own)} checked={value.selected} onChange={() => onToggle(value.key)}>
+          {value.label} <Count n={value.count} />
+        </Checkbox>
       </div>
       {value.children.length > 0 && (
         <ul class="tree__values" id={`${idFor(own)}-panel`} hidden={!open}>
           {value.children.map((child) => (
-            <Value key={child.key} id={own} value={child} onToggle={onToggle} shared={shared} />
+            <Value key={child.key} id={own} value={child} onToggle={onToggle} shared={shared} reserve={valuesReserve(value.children)} />
           ))}
         </ul>
       )}
@@ -105,7 +115,7 @@ function Value({ id, value, onToggle, shared }: { id: string; value: ValueNode; 
   );
 }
 
-function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
+function Node({ node, shared, reserve = false }: { node: TreeNode; shared: Shared; reserve?: boolean }) {
   const open = shared.isOpen(node.id);
   const panel = `${idFor(node.id)}-panel`;
   if (node.kind === 'type') {
@@ -115,23 +125,23 @@ function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
     return (
       <li class="tree__node tree__node--type">
         <div class="tree__row">
-          <input
-            type="checkbox"
+          {node.children.length > 0 ? (
+            <Disclosure id={node.id} label={node.value.label} open={open} toggle={shared.toggle} describe={`${node.value.label} filters`} />
+          ) : (
+            reserve && <Slot />
+          )}
+          <Checkbox
             id={idFor(node.id)}
             checked={node.value.selected}
             onChange={() => shared.onEnum(node.path, values.includes(key) ? values.filter((v) => v !== key) : [...values, key])}
-          />
-          <label for={idFor(node.id)}>
+          >
             {node.value.label} <Count n={node.value.count} />
-          </label>
-          {node.children.length > 0 && (
-            <Disclosure id={node.id} label={node.value.label} open={open} toggle={shared.toggle} describe={`${node.value.label} filters`} />
-          )}
+          </Checkbox>
         </div>
         {node.children.length > 0 && (
           <ul class="tree__children" id={panel} hidden={!open}>
             {node.children.map((child) => (
-              <Node key={child.id} node={child} shared={shared} />
+              <Node key={child.id} node={child} shared={shared} reserve={nodesReserve(node.children)} />
             ))}
           </ul>
         )}
@@ -144,7 +154,7 @@ function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
         <Disclosure id={node.id} label={node.label} open={open} toggle={shared.toggle} />
         <ul class="tree__children" id={panel} hidden={!open}>
           {node.children.map((child) => (
-            <Node key={child.id} node={child} shared={shared} />
+            <Node key={child.id} node={child} shared={shared} reserve={nodesReserve(node.children)} />
           ))}
         </ul>
       </li>
@@ -170,7 +180,7 @@ function Node({ node, shared }: { node: TreeNode; shared: Shared }) {
       <Disclosure id={node.id} label={node.def.label} open={open} toggle={shared.toggle} />
       <ul class="tree__values" id={panel} hidden={!open} aria-labelledby={`${idFor(node.id)}-toggle`}>
         {node.values.map((value) => (
-          <Value key={value.key} id={node.id} value={value} onToggle={onToggle} shared={shared} />
+          <Value key={value.key} id={node.id} value={value} onToggle={onToggle} shared={shared} reserve={valuesReserve(node.values)} />
         ))}
       </ul>
     </li>

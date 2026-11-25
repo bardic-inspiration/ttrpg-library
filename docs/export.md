@@ -71,12 +71,13 @@ Every place that exports shows at most two buttons, **Print** and
 scope: the entry, or the Library's selection, or its filtered results when
 nothing is selected.
 
-- **Print** runs the `print` exporter.
+- **Print** runs the `print` exporter. It is the place's primary button
+  ([Shared components](styling.md#shared-components)).
 - **Download** opens a small menu of the `download` exporters that offer the
   scope, in config order. Choosing a format closes the menu and downloads the
-  file. The menu is a disclosure: the button carries `aria-expanded`, Escape
-  closes the menu and returns focus to Download, and it closes when focus
-  leaves it. With no format for the scope, there is no Download button.
+  file. It is the shared menu button: the button carries `aria-expanded`,
+  Escape closes the menu and returns focus to Download, and it closes when
+  focus leaves it. With no format for the scope, there is no Download button.
 
 | Where | Print | Download |
 |---|---|---|

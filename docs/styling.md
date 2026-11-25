@@ -133,6 +133,50 @@ shows.
   `tests/site/hierarchy.test.ts` checks the heading sizes, the rhythm tokens,
   and the underline rule.
 
+### Shared components
+
+Every interactive pattern has one rule and one component, in
+`site/src/components/shared/`, styled by `shared.css` beside them. Pages and
+other components build these patterns only through them.
+`tests/site/shared-components.test.ts` scans `site/src/` and fails when a file
+outside that folder renders its own `<details>`, `<summary>`, `aria-expanded`,
+`<button>`, or checkbox, renders a card without `CardLink` (or with an `<a>` of
+its own), or restyles the chevron, the disclosure, or the card link.
+`/styleguide/` shows each one.
+
+- **Disclosure** (`Disclosure.tsx`, and `Disclosure.astro` for Astro pages,
+  with the same markup). One toggle, with the chevron on its left, pointing
+  right when closed and turning down when open. `DisclosureButton` opens a
+  panel it names with `aria-controls`; it can show only its chevron
+  (`iconOnly`), with its label as its accessible name. `Details` is a
+  `<details>` whose `<summary>` is the toggle. The filter tree, the Filters
+  menu's toggle, accordion sections, and the export report use it.
+- **Click targets** (`CardLink.tsx`). The whole card opens its entry: the
+  title's link covers the card, and the card's root carries `linked-card`,
+  which lifts every other control on the card (the Select checkbox) above
+  that link and shows the link's focus ring around the card.
+- **Buttons** (`Button.tsx`, and `Button.astro` for Astro pages). A fixed set
+  of variants, each with a fixed placement:
+
+  | Variant | For | Placement |
+  |---|---|---|
+  | Primary | A place's one main action: Print | First in its row |
+  | Secondary | Every other action: Download, Clear filters, Clear selection | After the primary, or first when there is none |
+  | Icon | An icon alone, named by its `label` for assistive technology | At the end of the row or card it acts on |
+
+  `MenuButton` is a secondary button that opens a small menu below it, as
+  Download does ([Controls](export.md#controls)). Choosing an item closes the
+  menu, returns focus to the button, and runs it. Escape closes it and
+  returns focus too, and it closes when focus leaves it.
+- **Controls** (`Controls.tsx`):
+  - A **checkbox** (`Checkbox`, the box and its label) is one of a list of
+    independent choices, any number of them on: filter types and values, and
+    a card's Select.
+  - A **chip** (`Chip`, `aria-pressed`) is one value of a small range, such as
+    a spell level, shown as the value alone.
+  - A **toggle** (`Toggle`, `role="switch"`) is one setting of the view, on or
+    off by itself, not one of a list.
+
 ### Accessibility
 
 Target: WCAG 2.2 AA.
@@ -182,7 +226,8 @@ Target: WCAG 2.2 AA.
   `site/src/styleguide/StyleGuide.astro`, added as a route only in the repo's
   own build, [Library root](site.md#library-root)) renders from the test
   fixtures: every token as a swatch or sample; the type scale and typefaces;
-  the heading levels, the link underlines, and the rhythm;
+  the heading levels, the link underlines, and the rhythm; the shared
+  components in their states;
   every template in each mode, with print previews in the wide and narrow print layouts; gallery
   cards with and without art; filter controls in their states; and the export
   controls with Download's menu closed and open. Edit a
@@ -205,6 +250,7 @@ Target: WCAG 2.2 AA.
 
 - `site/src/styles/`: the layers and `tokens/`.
 - `stylelint.config.mjs` and `tests/stylelint.test.ts`.
+- `site/src/components/shared/` and `tests/site/shared-components.test.ts`.
 - `tests/site/motion.test.ts`, `tests/site/palette.test.ts`, and
   `site/src/lib/design-tokens.ts`.
 - `scripts/a11y/`, `scripts/snapshots/`, and `scripts/browser/`.
@@ -222,4 +268,5 @@ Target: WCAG 2.2 AA.
 | Card size, grid density, gaps | `tokens/components.css` |
 | Print density, margins, or the page-width breakpoint | `tokens/print.css` |
 | Stat-block structure or order | The template's parts in `site/src/components/templates/` |
+| A disclosure, button, card link, or control, everywhere it appears | Its component in `site/src/components/shared/`, or its knobs in `tokens/components.css` (`--disclosure-*`, `--button-*`, `--chip-*`, `--toggle-*`) |
 | A quick experiment | `overrides.css`, then move the result into tokens or the component |

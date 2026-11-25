@@ -146,32 +146,14 @@
     font-weight: var(--font-weight-label);
   }
 
-  .tree__toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
-    padding: var(--space-3xs);
-    border-color: transparent;
-    background: transparent;
-    font-weight: var(--font-weight-label);
-    text-align: start;
-
-    &[aria-expanded='true'] .tree__chevron {
-      transform: rotate(90deg);
-    }
+  /* A checkable row's chevron, or the slot it keeps for one, leads the row. */
+  .tree__slot {
+    flex: none;
+    inline-size: var(--disclosure-icon-size);
   }
 
   .tree__node[data-active] > .tree__toggle {
     text-decoration: underline;
-  }
-
-  /* A right-pointing triangle, turned down when open. */
-  .tree__chevron {
-    inline-size: 0;
-    block-size: 0;
-    border-block: calc(var(--tree-chevron) / 2) solid transparent;
-    border-inline-start: var(--tree-chevron) solid currentcolor;
-    transition: transform var(--duration-quick);
   }
 
   .tree__count {
@@ -252,7 +234,7 @@
     font-size: var(--card-title-size);
     overflow-wrap: anywhere;
 
-    & a {
+    & .card-link {
       color: var(--color-text);
       text-decoration-color: var(--accent);
     }
@@ -317,6 +299,9 @@
     font-family: var(--control-font);
     font-size: var(--text-small);
     color: var(--color-text-muted);
-    cursor: pointer;
+
+    & label {
+      cursor: pointer;
+    }
   }
 }

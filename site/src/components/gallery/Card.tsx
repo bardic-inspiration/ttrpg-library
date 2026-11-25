@@ -1,11 +1,14 @@
 // One gallery card (docs/site.md#gallery "Cards"): art when the entry has it,
 // name with a star slot, source and type badges, the type's card fields, and the
-// summary, with a selection checkbox. Accents come from data-type (and data-rarity),
+// summary, with a selection checkbox. The whole card opens its entry, through the shared card link,
+// and the checkbox sits above that link (docs/styling.md#shared-components "Click targets"). Accents come from data-type (and data-rarity),
 // never per-type CSS.
 import { isOfficial } from '../../../../rulesets/module.ts';
 import type { FilterDef, LibraryRecord } from '../../lib/gallery/config.ts';
 import { displayValue, valueAt } from '../../lib/gallery/values.ts';
 import StarIcon from '../../icons/Star.tsx';
+import CardLink, { linkedCard } from '../shared/CardLink.tsx';
+import { Checkbox } from '../shared/Controls.tsx';
 
 export interface CardProps {
   record: LibraryRecord;
@@ -50,13 +53,13 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, selected
   const { lines, badges } = fields(record, cardFields);
   const id = `card-${record.type}-${record.id}`;
   return (
-    <article class="card" data-type={record.type} aria-labelledby={`${id}-name`}>
+    <article class={`card ${linkedCard}`} data-type={record.type} aria-labelledby={`${id}-name`}>
       {imageSrc && <img class="card__art" src={imageSrc} alt={record.name} loading="lazy" />}
       <div class="card__body">
         {/* The star's slot is on every card, so the name wraps the same with or without it. */}
         <div class="card__head">
           <h2 class="card__name" id={`${id}-name`}>
-            <a href={record.url}>{record.name}</a>
+            <CardLink href={record.url}>{record.name}</CardLink>
           </h2>
           <span class="card__official">
             {isOfficial(record) && (
@@ -86,17 +89,11 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, selected
           </dl>
         )}
         <p class="card__summary">{record.summary}</p>
-        <label class="card__select">
-          <input
-            type="checkbox"
-            checked={selected}
-            disabled={!onSelect}
-            onChange={(event) => onSelect?.((event.currentTarget as HTMLInputElement).checked)}
-          />
-          <span>
+        <span class="card__select">
+          <Checkbox id={`${id}-select`} checked={selected} onChange={onSelect}>
             Select<span class="visually-hidden"> {record.name}</span>
-          </span>
-        </label>
+          </Checkbox>
+        </span>
       </div>
     </article>
   );
