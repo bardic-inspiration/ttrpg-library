@@ -33,7 +33,8 @@ Pull request on a gen/ branch (content lane, "Closes #n")
         ├── review comments ──► routine revises, re-validates, pushes, replies
         │
         ▼
-Merge to main ──► deploy.yml: build the index (derive) → astro build → Pages
+Merge to main ──► deploy.yml: build the index (derive) → astro build → Pages preview (next/)
+Release tag ─────► deploy.yml: the same build of the tag → Pages production
 ```
 
 Each stage has its doc: requests, routines, and revision in
