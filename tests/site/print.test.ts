@@ -117,7 +117,7 @@ describe('selectEntries', () => {
       record({ id: 'path-of-a', type: 'subclass', name: 'Path of A', facets: { 'stats.class': 'class/aardvark' } }),
       record({ id: 'path-of-z', type: 'subclass', name: 'Path of Z', facets: { 'stats.class': 'class/zebra' } }),
     ];
-    const names = { names: { 'class/aardvark': 'Zealot', 'class/zebra': 'Abjurer' }, groups: {}, publishers: {} };
+    const names = { names: { 'class/aardvark': 'Zealot', 'class/zebra': 'Abjurer' }, groups: {}, publishers: {}, chips: {} };
     const ids = selectEntries(parsePrintQuery(whole('?sort=stats.class:asc')), subclasses, reg, names).records.map((r) => r.id);
     expect(ids).toEqual(['path-of-z', 'path-of-a']);
   });

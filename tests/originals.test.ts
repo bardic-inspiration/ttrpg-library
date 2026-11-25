@@ -2,7 +2,8 @@
 // validation, the index build, the gallery's filters and sorts, and the site's loading and rendering
 // take two rulesets that share nothing with dnd-5e-2024 through the same paths.
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
-import { describe, expect, it } from 'vitest';
+import { rm } from 'node:fs/promises';
+import { afterEach, describe, expect, it } from 'vitest';
 import { placeRules, ruleKey } from '../lib/rules.ts';
 import RulesPage from '../site/src/components/rules/RulesPage.astro';
 import EntryTemplate from '../site/src/components/templates/EntryTemplate.astro';
@@ -14,10 +15,15 @@ import { displayValue } from '../site/src/lib/gallery/values.ts';
 import { computeView } from '../site/src/lib/gallery/view.ts';
 import { entryNames, refPaths } from '../site/src/lib/library.ts';
 import { rulesContext } from '../site/src/lib/rules.ts';
-import { buildOriginals, originalPhrases, originalsRegistry, originalsSite, RULESETS, validateOriginals } from './originals/fixture.ts';
+import { brokenOriginals, buildOriginals, originalPhrases, originalSchemas, originalsJson, originalsRegistry, originalsSite, RULESETS, validateOriginals } from './originals/fixture.ts';
 import { textOf, withoutContents } from './site/library-fixtures.ts';
 
 const BOTH = `f.ruleset=${RULESETS.join(',')}`;
+
+const temps: string[] = [];
+afterEach(async () => {
+  await Promise.all(temps.splice(0).map((dir) => rm(dir, { recursive: true, force: true })));
+});
 
 describe('validation', () => {
   it('passes both rulesets, every entry and rules file, with no warnings', async () => {
@@ -29,6 +35,19 @@ describe('validation', () => {
     expect(rules.map((r) => [r.ruleset, r.primitives.length])).toEqual([
       ['starships-and-galaxies', 5],
       ['elementals', 10],
+    ]);
+  });
+
+  it('fails a ruleset whose schema misplaces display, naming the schema file (docs/content-model.md#display)', async () => {
+    const ship = await originalsJson('rulesets/starships-and-galaxies/schemas/ship.schema.json');
+    ship.properties.size.display = 'pill';
+    ship.properties.systems.display = 'chip';
+    const root = await brokenOriginals({ 'rulesets/starships-and-galaxies/schemas/ship.schema.json': ship });
+    temps.push(root);
+    const errors = (await validateOriginals(root)).errors.map((e) => `${e.file}: ${e.message}`);
+    expect(errors).toEqual([
+      'rulesets/starships-and-galaxies/schemas/ship.schema.json: /properties/size: display must be "chip"',
+      'rulesets/starships-and-galaxies/schemas/ship.schema.json: /properties/systems: display "chip" is only for a string, number, boolean, or string-array field',
     ]);
   });
 
@@ -82,7 +101,7 @@ describe('the gallery', () => {
     const registry = await originalsRegistry();
     const { all, rules, modules } = await originalsSite();
     const publishers = Object.fromEntries([...modules].map(([id, m]) => [id, m.definition.publisher]));
-    const data = facetData(registry, all, entryNames(all, rules), rules, publishers);
+    const data = facetData(registry, all, entryNames(all, rules), rules, publishers, await originalSchemas());
     return { config: galleryConfig(registry, data, originalPhrases(modules)), records: (await buildOriginals()).records };
   };
   const view = async (query: string) => {
@@ -103,6 +122,16 @@ describe('the gallery', () => {
       'elementals/ward',
     ]);
     expect(config.publishers).toEqual({ 'starships-and-galaxies': 'Fixture Press', elementals: 'Fixture Games' });
+  });
+
+  it('reads a field as a chip where its schema says so, and as text elsewhere (docs/content-model.md#display)', async () => {
+    const { config } = await setup();
+    const chips = [...config.types].flatMap(([key, t]) => t.facets.filter((f) => f.display === 'chip').map((f) => `${key} ${f.path}`));
+    expect(chips).toEqual([
+      'starships-and-galaxies/ship stats.size',
+      'starships-and-galaxies/celestial-body stats.kind',
+      'elementals/creature stats.keywords',
+    ]);
   });
 
   it('reads a facet’s values by its ruleset’s vocabulary, and a ref facet’s by target name', async () => {

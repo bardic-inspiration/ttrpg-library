@@ -188,7 +188,8 @@ its own), or restyles the chevron, the disclosure, or the card link.
     independent choices, any number of them on: filter types and values, and
     a card's Select.
   - A **chip** (`Chip`, `aria-pressed`) is one value of a small range, such as
-    a spell level, shown as the value alone.
+    a spell level, shown as the value alone: a chip facet's filter values
+    ([Display](content-model.md#display)).
   - A **toggle** (`Toggle`, `role="switch"`) is one setting of the view, on or
     off by itself, not one of a list.
 

@@ -316,6 +316,30 @@ template, including the generic fallback, decides from presence alone, through
 one shared helper ([site.md](site.md#templates)), never by testing a value
 against `0`, `false`, or emptiness.
 
+### Display
+
+A field's schema can say how its value reads on the Library: with
+`"display": "chip"`, it reads as a chip, and a field without the keyword reads
+as text. This is how a value reads, not whether it displays (the rule above
+decides that). The keyword sits in the type's schema beside the field, or in
+a shared definition the field refers to, so it serves any ruleset and a field
+shared through `common.schema.json` carries it once.
+
+- **Cards:** a chip field shows its value alone, as a badge, one badge per
+  value of an array. A text field shows its label and value
+  ([Gallery](site.md#gallery) "Cards").
+- **Filters:** an enum facet on a chip field lists its values as chips
+  rather than checkboxes ([Gallery](site.md#gallery) "Filters"). A range
+  facet keeps its min and max inputs.
+- **Validation:** `display` takes only `chip`, and only on a field a facet
+  could read: a string, number, boolean, or array of strings, by its `type`
+  or the values its `enum` or `const` allows. Anything else fails, naming
+  the schema file and the JSON pointer of the node
+  (`rulesets/<ruleset>/schemas/<type>.schema.json: /properties/size: …`).
+
+`dnd-5e-2024` marks spell level and school, feat category, item category, and
+a class's Hit Point Die: small ranges whose values read without a label.
+
 ### SRD and custom entries
 
 Every entry is either an **SRD entry**, reproduced from SRD 5.2, or a **custom
@@ -471,6 +495,7 @@ Checks for every type and ruleset:
 | Blocklist match in any text-bearing field ([licensing.md](licensing.md#blocklist)) | error |
 | Placeholder text in any text-bearing field: `TODO`, `TBD`, `FIXME`, or `XXX` as a whole word in capitals, or "lorem ipsum" in any case | error |
 | `image` path valid and file exists; size limits | error / warning |
+| A schema's `display` is `chip`, on a string, number, boolean, or string-array field ([Display](#display)) | error |
 
 Each ruleset adds its own checks ([rulesets.md](rulesets.md#consistency-checks)).
 The validator skips a ruleset's warnings on official content, whose numbers and

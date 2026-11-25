@@ -200,7 +200,7 @@ describe('filter values', () => {
   });
 
   it('sorts ref values, and records by a ref, by the target’s name', () => {
-    const config = galleryConfig(reg, { names: { 'class/bard': 'Bard', 'class/wizard': 'Wizard', 'class/cleric': 'Cleric' }, groups: {}, publishers: {} });
+    const config = galleryConfig(reg, { names: { 'class/bard': 'Bard', 'class/wizard': 'Wizard', 'class/cleric': 'Cleric' }, groups: {}, publishers: {}, chips: {} });
     const defaultSort = config.types.get('dnd-5e-2024/subclass')!.defaultSort;
     const subs = [
       record({ id: 'lore', type: 'subclass', facets: { 'stats.class': 'class/bard' } }),

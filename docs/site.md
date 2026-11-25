@@ -25,7 +25,7 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `template` | Card and print component; a missing template falls back to the generic layout |
 | `guideline` | The type's guideline file ([generation.md](generation.md#guidelines)) |
 | `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts |
-| `cardFields` | Facets shown on gallery cards |
+| `cardFields` | Facets shown on gallery cards; whether one reads as a chip is its schema's ([Display](content-model.md#display)) |
 | `defaultSort` | `<path>:<asc|desc>`: the sort the Library opens on from the type's old gallery URL and its detail page's type link ([Redirects](#redirects)) |
 | `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet stays in the tree, closed |
 | `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, species, class, subclass), which have none |
@@ -320,7 +320,9 @@ Select checkbox sits above that link
 A boolean card field (concentration, ritual,
 attunement) reads as a badge labeled with the facet when `true` and is left out
 when `false`. A `rarity`-formatted field reads as a badge carrying
-`data-rarity`. Other fields read as label and value. One column on phones, up
+`data-rarity`. A chip field ([Display](content-model.md#display)) reads as its
+value alone, a badge per value: a spell's level reads "Level 2", not
+"Level Level 2". Other fields read as label and value. One column on phones, up
 to four on wide screens.
 
 **Filters** are a nested accordion checkbox tree built from the registry
@@ -379,7 +381,8 @@ are in the results at all. The types and their facets narrow those entries.
   reads as AC. A facet shows when some entry of its type has a value for it,
   or it's active.
 - **Values.** An enum facet lists its values vertically as checkboxes,
-  each with its count: the entries of its type it matches under the search and
+  or, on a chip field ([Display](content-model.md#display)), as a wrapping
+  row of chips (`aria-pressed`) whose values don't nest, each with its count: the entries of its type it matches under the search and
   every other active filter. Values come in declared order (ordered enums),
   by name (ref facets), or alphabetically, plus any selected value no entry
   has. A groups facet's values nest, each group with its own disclosure. A

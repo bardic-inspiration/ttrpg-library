@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["kind", "text"],
   "properties": {
-    "kind": { "enum": ["star", "planet", "moon", "asteroid-field"] },
+    "kind": { "enum": ["star", "planet", "moon", "asteroid-field"], "display": "chip" },
     "orbits": { "$ref": "common.schema.json#/$defs/CelestialRef" },
     "services": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["trade", "refuel", "discovery"] } },
     "hazards": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Hazard" } },

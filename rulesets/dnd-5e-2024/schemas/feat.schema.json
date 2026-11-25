@@ -22,6 +22,7 @@
   ],
   "properties": {
     "category": {
+      "display": "chip",
       "description": "The feat's category, printed under its name: \"Origin Feat\", \"General Feat\", \"Fighting Style Feat\", \"Epic Boon Feat\".",
       "enum": [
         "origin",

@@ -114,6 +114,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   for (const id of Object.keys(registry)) {
     const ruleset = await loadRuleset(id, rulesetsRoot);
     rulesets.set(id, ruleset);
+    for (const { file, message } of ruleset?.schemaIssues ?? []) error(`rulesets/${id}/schemas/${file}`, message);
     // Every ruleset names its publisher, whose entries are official (docs/rulesets.md#the-ruleset-module).
     const publisher: unknown = ruleset?.module.definition.publisher;
     if (ruleset && (typeof publisher !== 'string' || publisher.trim() === '')) error(`rulesets/${id}/ruleset.json`, 'publisher: missing; name who publishes the ruleset');

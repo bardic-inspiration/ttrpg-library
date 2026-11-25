@@ -30,6 +30,8 @@ export interface FilterDef {
   ref?: boolean;
   /** Its values are the type's groups, nested; a group matches every leaf group in it. */
   groups?: GroupInfo[];
+  /** Its schema reads it as a chip (docs/content-model.md#display): the value alone on cards, chips in the filters. */
+  display?: 'chip';
 }
 
 /** One group a groups facet offers (docs/rulesets.md#rules-groups). */
@@ -51,9 +53,11 @@ export interface FacetData {
   groups: Record<string, GroupInfo[]>;
   /** Ruleset id → its publisher, the name an author of `"publisher"` reads as (docs/content-model.md#source-and-author). */
   publishers: Record<string, string>;
+  /** `<ruleset>/<type>` → its facet paths whose schema declares `"display": "chip"` (docs/content-model.md#display). */
+  chips: Record<string, string[]>;
 }
 
-export const NO_FACET_DATA: FacetData = { names: {}, groups: {}, publishers: {} };
+export const NO_FACET_DATA: FacetData = { names: {}, groups: {}, publishers: {}, chips: {} };
 
 export interface SortKey {
   path: string;
@@ -114,10 +118,11 @@ export function parseSortKey(value: string | undefined): SortKey | undefined {
 
 /**
  * A facet as a filter. A vocabulary's names become its labels (docs/site.md#wording), and so do
- * a ref facet's target names and a groups facet's group labels.
+ * a ref facet's target names and a groups facet's group labels. A chip field's facet carries its display.
  */
 const facetDef = (facet: Facet, ruleset: string, type: string, data: FacetData, books: PhraseBooks): FilterDef => {
-  const { groups: grouped, ...rest } = facet;
+  const { groups: grouped, ...own } = facet;
+  const rest = data.chips[`${ruleset}/${type}`]?.includes(facet.path) ? { ...own, display: 'chip' as const } : own;
   if (grouped) {
     const groups = data.groups[`${ruleset}/${type}`] ?? [];
     return { ...rest, groups, labels: Object.fromEntries(groups.map((g) => [g.id, g.label])) };

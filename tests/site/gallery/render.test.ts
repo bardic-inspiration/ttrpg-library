@@ -3,7 +3,9 @@ import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import { beforeAll, describe, expect, it } from 'vitest';
 import Gallery from '../../../site/src/components/gallery/Gallery.tsx';
-import type { LibraryRecord } from '../../../site/src/lib/gallery/config.ts';
+import { NO_FACET_DATA, type LibraryRecord } from '../../../site/src/lib/gallery/config.ts';
+import { chipFacets, loadSchemas } from '../../../site/src/lib/gallery/facet-data.ts';
+import registry from '../../../config/types.json' with { type: 'json' };
 import { fixtureRecords, whole } from './helpers.ts';
 
 let records: LibraryRecord[];
@@ -44,6 +46,27 @@ describe('Gallery', () => {
     expect(html).toMatch(/<img class="card__art" src="[^"]*cinder-hound\.webp" alt="Cinder Hound"/);
     expect(html).not.toContain('art-placeholder');
     expect(html).not.toContain('Art placeholder');
+  });
+
+  it('reads the repo’s chip fields from its schemas (docs/content-model.md#display)', () => {
+    expect(chipFacets(registry as never, loadSchemas())).toEqual({
+      'dnd-5e-2024/class': ['stats.hitDie'],
+      'dnd-5e-2024/feat': ['stats.category'],
+      'dnd-5e-2024/item': ['stats.category'],
+      'dnd-5e-2024/spell': ['stats.level', 'stats.school'],
+    });
+  });
+
+  it('shows a chip field on a card as its value alone, a badge, and its filter values as chips', () => {
+    const facetData = { ...NO_FACET_DATA, chips: { 'dnd-5e-2024/spell': ['stats.level', 'stats.school'] } };
+    const html = render({ initialQuery: '?f.type=spell', facetData });
+    expect(html).toContain('<li class="badge">Level 1</li>');
+    expect(html).not.toContain('<dt>Level</dt>');
+    expect(html).not.toContain('<dt>School</dt>');
+    expect(html).toMatch(/<ul class="tree__values tree__chips" id="filter-dnd-5e-2024-spell-stats-school-panel"[^>]*><li><button type="button" class="chip" aria-pressed="false">/);
+    expect(html).not.toContain('<input type="checkbox" id="filter-dnd-5e-2024-spell-stats-school-');
+    // A range facet keeps its min and max inputs, whatever its display.
+    expect(html).toContain('tree__range');
   });
 
   it('announces the result count in a polite live region', () => {

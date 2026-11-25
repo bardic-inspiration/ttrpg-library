@@ -20,7 +20,7 @@
       "then": { "required": ["join"] },
       "else": { "not": { "required": ["join"] } }
     },
-    "hitDie": { "description": "Printed \"D12 per Barbarian level\".", "enum": ["d6", "d8", "d10", "d12"] },
+    "hitDie": { "description": "Printed \"D12 per Barbarian level\".", "enum": ["d6", "d8", "d10", "d12"], "display": "chip" },
     "savingThrows": {
       "description": "Exactly two abilities, printed \"Strength and Constitution\".",
       "type": "array",
