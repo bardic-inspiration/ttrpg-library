@@ -58,23 +58,20 @@ builds in one artifact:
 A release now publishes: tagging the release PR's squash commit deploys it
 to production. The release PR's steps don't change.
 
+- **No patch releases while a version is in development.** Every tag is a
+  point on `main`, so once the next version's work has merged, a patch tag
+  would publish it unfinished. Spot Fixes then ship with the next minor
+  release. A patch release is made only while `main` holds nothing past the
+  last release but Spot Fixes. Branches and the lane check don't change.
+
 ## Done when
 
 - `deploy.yml` builds the latest `v*` tag at the site base and `main` under
   `next/`, in one Pages artifact, on a push to `main`, a `v*` tag, and
   `workflow_dispatch`.
-- `docs/workflow.md` "Deploy" and "Releases" describe the two sites.
+- `docs/workflow.md` "Deploy" and "Releases" describe the two sites, and
+  "Releases" says when a patch release can be made.
 - Seeing both sites live on GitHub Pages is a Testing backlog item.
-
-## Open questions
-
-- **Patch releases while v1.2.0 is built.** Production follows the latest
-  tag, and every tag is a point on `main`. Once v1.2.0 work has merged, a
-  patch tag (`v1.1.1`) on `main` would publish the unfinished v1.2.0 to
-  production. Either no patch releases are made while a version is in
-  development (Spot Fixes ship with v1.2.0), or patches come from a branch
-  cut at the last release tag, which the lane check and branch rules don't
-  allow today.
 
 ## Out of scope
 
