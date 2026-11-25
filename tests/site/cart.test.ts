@@ -7,6 +7,7 @@ import { act } from 'preact/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import ExportControls from '../../site/src/components/detail/ExportControls.tsx';
 import Gallery from '../../site/src/components/gallery/Gallery.tsx';
+import HeaderActions from '../../site/src/components/header/HeaderActions.tsx';
 import {
   CART_EVENT,
   CART_STORAGE_KEY,
@@ -18,6 +19,7 @@ import {
   writeCart,
   type CartStore,
 } from '../../site/src/lib/cart.ts';
+import { resetView } from '../../site/src/lib/library-view.ts';
 import { fixtureRecords } from './gallery/helpers.ts';
 import { fixtureLibrary } from './library-fixtures.ts';
 
@@ -43,6 +45,7 @@ const blocked: CartStore = {
 
 beforeEach(() => {
   resetPageCart();
+  resetView();
   window.localStorage.clear();
 });
 
@@ -116,6 +119,9 @@ describe('the cart control', () => {
     root.remove();
   });
 
+  /** The Library: the gallery, and the page header's set export beside it (docs/site.md#page-header). */
+  const library = (query: string) =>
+    h('div', null, h(HeaderActions, { base: BASE, library: true }), h(Gallery, { indexUrl: '', base: BASE, records, initialQuery: query }));
   const box = (name: string) => [...root.querySelectorAll('label')].find((label) => label.textContent === `In cart: ${name}`);
   const input = (name: string) => root.querySelector<HTMLInputElement>(`#${box(name)!.htmlFor}`)!;
 
@@ -130,7 +136,7 @@ describe('the cart control', () => {
     // A new page: the Library reads the cart back from local storage.
     render(null, root);
     resetPageCart();
-    await act(() => render(h(Gallery, { indexUrl: '', base: BASE, records, initialQuery: '?f.ruleset=dnd-5e-2024' }), root));
+    await act(() => render(library('?f.ruleset=dnd-5e-2024'), root));
     expect(input('Frost Lance').checked).toBe(true);
     expect(input('Cinder Hound').checked).toBe(false);
     expect(root.querySelector('.gallery__cart')?.textContent).toContain('1 in cart');
@@ -138,7 +144,7 @@ describe('the cart control', () => {
   });
 
   it('adds and removes entries from cards, and the set actions target the cart in the order they were added', async () => {
-    await act(() => render(h(Gallery, { indexUrl: '', base: BASE, records, initialQuery: '?f.ruleset=dnd-5e-2024' }), root));
+    await act(() => render(library('?f.ruleset=dnd-5e-2024'), root));
     expect(root.querySelector('.set-actions')?.textContent).toContain(`Print ${records.length} entries`);
     await act(() => input('Wand of Frost Lances').click());
     await act(() => input('Cinder Hound').click());

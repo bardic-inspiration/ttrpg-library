@@ -82,7 +82,7 @@ the cart is empty ([Gallery](site.md#gallery) "Cart and set actions").
 | Where | Print | Download |
 |---|---|---|
 | A card entry's detail page | The print view | PNG, JSON, and Open5e for the types it covers |
-| The Library, for the cart or the filtered results | The print view | JSON, Open5e |
+| The page header, for the cart, or on the Library the filtered results ([Page header](site.md#page-header)) | The print view | JSON, Open5e |
 | A page type's page (class, subclass, species) | The print view | None |
 | A rules page | The browser's print of the page | None |
 
@@ -101,7 +101,7 @@ the cart is empty ([Gallery](site.md#gallery) "Cart and set actions").
   lists each skip under its entry's name: the field's path, then the reason.
   When nothing in the scope exports, nothing downloads, and the status says
   "Nothing here exports as Open5e." with the same list.
-- Every control needs JavaScript: the detail page's and the Library's render
+- Every control needs JavaScript: the detail page's and the header's render
   once their island hydrates, and a rules page's stays hidden until its script
   runs. None of them print.
 

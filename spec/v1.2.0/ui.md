@@ -33,6 +33,8 @@ shared components).
   [Equipment](../../docs/rulesets.md#equipment): SRD equipment and conditions
   as sections of rules pages only.
 - [Controls](../../docs/export.md#controls): Print and Download.
+- [Page header](../../docs/site.md#page-header): search and the set export on
+  every page.
 
 ## Design
 
@@ -44,10 +46,6 @@ shared components).
   section groups its values under each ruleset's label. A checkbox shows
   whether the current results include what it stands for, so a ruleset whose
   entries show reads checked.
-- **Search and the set export move into the standard page header**, on
-  every page. Search opens the Library with the query; Print and Download act
-  on the cart or, on the Library, the filtered results. A detail page's own
-  export controls stay where they are.
 
 ### SRD equipment and conditions as cards
 

@@ -152,6 +152,7 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 The top bar reads **Library | Rulesets | About | Contribute**
 (`site/src/components/SiteNav.astro`), then the print cart's count ("Cart: 3";
 [Gallery](#gallery) "Cart and set actions"), shown once its script runs.
+Search and the set export follow it in the header ([Page header](#page-header)).
 Contribute links to the repository. The
 current page's link is marked `aria-current="page"`, and Rulesets is marked
 current on every rules page too. The
@@ -287,6 +288,32 @@ Entries, refs, and `library.json` use only current keys; the validator
 rejects an old type like any unknown one. `site/src/lib/redirects.ts` reads
 the registry's former keys for the pages, print, and the gallery.
 
+### Page header
+
+Every page's header holds the top bar ([Pages and navigation](#pages-and-navigation)),
+then search and the set export (`site/src/components/header/HeaderActions.tsx`,
+one Preact island in `layouts/Base.astro`). On narrow screens they wrap below
+the top bar.
+
+- **Search** is a form, labeled "Search", whose field (placeholder "Name")
+  opens the Library with the query, `/?q=<query>`, so it works without
+  JavaScript. The query reads as the Library's search ([Gallery](#gallery)
+  "Search") under the default filters. On the Library it searches the gallery
+  as the reader types instead, keeping the other filters and the sort, and
+  shows the query the Library's URL holds.
+- **The set export** is Print and Download ([Controls](export.md#controls)).
+  On the Library, they act on the cart when it holds anything, and on the
+  filtered results otherwise ([Gallery](#gallery) "Cart and set actions"). On
+  every other page, they act on the cart: Print and Download first load
+  `library.json`, so the cart's entries drop out when the library no longer
+  has them, and are disabled while the cart is empty. Each button's accessible
+  name says what it targets ("Print 3 in cart", "Download 12 entries"). They
+  need JavaScript, so they render once the island hydrates. A detail page's
+  and a rules page's own export controls stay on the page.
+- The gallery and the header talk through window events
+  (`site/src/lib/library-view.ts`): the gallery publishes its query, records,
+  and results as they change, and the header asks it to search.
+
 ### Gallery
 
 **Loading.** The Library at `/` is one Preact island
@@ -295,13 +322,14 @@ the registry's former keys for the pages, print, and the gallery.
 filters it in memory. Without JavaScript, the page shows a plain list of every
 entry by name, linked to its detail page.
 
-**Layout.** Search sits on top of the filter menu. On desktop, from a viewport
+**Layout.** Search and the set export sit in the page header
+([Page header](#page-header)). On desktop, from a viewport
 of `64rem`, the menu is a sidebar beside the results and always shows. On
 phones and tablets it stacks above the results in a container closed by
 default, so results show on the first screen; a Filters button
 (`aria-expanded`) opens it. The breakpoint and the columns are tokens in
 `tokens/components.css` ([styling.md](styling.md#tokens)). Sort, the result
-count, and the set actions head the results. The page keeps the scrollbar's
+count, and the cart's count head the results. The page keeps the scrollbar's
 room (`scrollbar-gutter: stable` in `layout.css`) whether or not it scrolls, so
 the menu and results don't shift sideways as filtering makes the page shorter
 or longer than the window.
@@ -483,16 +511,17 @@ author, and type filters, then the facets in registry order, with the default so
   unreadable, the cart lasts only for the page. It isn't in the URL. The
   cart controls and the count need JavaScript, so they show only once their
   island or script runs.
-- When the Library loads `library.json`, entries it no longer has drop out of
-  the cart. A detail page's count can include them until then.
+- When the Library loads `library.json`, or the header's Print or Download
+  loads it on another page, entries it no longer has drop out of the cart.
+  A detail page's count can include them until then.
 - The results' summary says "N in cart", with an **Empty cart** button, while
   the cart holds anything.
-- Beside the result count are Print and Download
-  ([Controls](export.md#controls)); Download's menu offers the set-scope
-  formats, JSON now.
+- Print and Download sit in the page header ([Page header](#page-header),
+  [Controls](export.md#controls)); Download's menu offers the set-scope
+  formats.
 - An action targets the cart when it holds anything: its entries in the order
-  they were added, whatever the filters show. Otherwise it targets the whole
-  filtered set in the gallery's order. Each button's accessible name says
+  they were added, whatever the filters show. Otherwise, on the Library, it
+  targets the whole filtered set in the gallery's order. Each button's accessible name says
   which ("Print 3 in cart", "Download 12 entries"), and both are disabled
   when they'd target nothing.
 - An action whose exporter reads entries in full, such as Open5e, first

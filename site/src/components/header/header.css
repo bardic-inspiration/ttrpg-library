@@ -1,0 +1,42 @@
+/*
+ * The page header's search and set export (docs/site.md#page-header, docs/styling.md#styling-system:
+ * an island's styles sit in one stylesheet beside its components). They wrap below the top bar
+ * on narrow screens.
+ */
+@layer components {
+  .header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs) var(--space-s);
+    font-family: var(--control-font);
+  }
+
+  .header-search {
+    display: flex;
+    flex: 1 1 var(--header-search-width);
+    align-items: center;
+    gap: var(--space-2xs);
+
+    & input {
+      flex: 1;
+      min-inline-size: 0;
+    }
+  }
+
+  /* Set actions (docs/export.md#controls): export the cart or the filtered set. */
+  .set-actions {
+    display: grid;
+    gap: var(--space-3xs);
+  }
+
+  .set-actions__status {
+    color: var(--color-text-muted);
+  }
+
+  @media print {
+    .header-actions {
+      display: none;
+    }
+  }
+}

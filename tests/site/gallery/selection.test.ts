@@ -3,7 +3,7 @@
 import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import { describe, expect, it } from 'vitest';
-import SetActions from '../../../site/src/components/gallery/SetActions.tsx';
+import SetActions from '../../../site/src/components/export/SetActions.tsx';
 import { configuredControls, modules } from '../../../site/src/exporters/index.ts';
 import { bundleUrl, loadExportItems, rawFileUrl, runSetExport } from '../../../site/src/exporters/io.ts';
 import { cartKey } from '../../../site/src/lib/cart.ts';

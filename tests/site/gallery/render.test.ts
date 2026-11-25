@@ -113,25 +113,26 @@ describe('Gallery', () => {
     expect(html).toContain('<ul class="tree__values" id="filter-dnd-5e-2024-creature-stats-creatureType-panel" aria-labelledby="filter-dnd-5e-2024-creature-stats-creatureType-toggle">');
   });
 
-  it('puts the search above the filter menu, which a toggle opens on phones and tablets', () => {
+  it('opens the filter menu with a toggle on phones and tablets, and leaves search to the page header (docs/site.md#page-header)', () => {
     const html = render({});
-    expect(html).toMatch(/class="gallery__menu"><div class="gallery__search" role="search">.*<button type="button" class="disclosure gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters"><span class="chevron" aria-hidden="true"><\/span>.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
+    expect(html).not.toContain('role="search"');
+    expect(html).toMatch(/class="gallery__menu"><button type="button" class="disclosure gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters"><span class="chevron" aria-hidden="true"><\/span>.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
     expect(html).not.toContain('data-open');
   });
 
   it('labels every control', () => {
     const html = render({ initialQuery: '?f.stats.cr=1..' });
-    for (const id of ['gallery-q', 'gallery-sort', 'gallery-dir', 'filter-dnd-5e-2024-creature-stats-cr-min', 'filter-dnd-5e-2024-creature-stats-cr-max']) {
+    for (const id of ['gallery-sort', 'gallery-dir', 'filter-dnd-5e-2024-creature-stats-cr-min', 'filter-dnd-5e-2024-creature-stats-cr-max']) {
       expect(html).toContain(`for="${id}"`);
       expect(html).toContain(`id="${id}"`);
     }
     expect(html).toContain('In cart<span class="visually-hidden">: Cinder Hound</span>');
   });
 
-  it('offers set actions on the filtered set beside the result count', () => {
+  it('leaves the set export to the page header (docs/site.md#page-header)', () => {
     const html = render({ initialQuery: '?f.type=spell' });
-    expect(html).toMatch(/class="gallery__summary">.*class="set-actions"/);
-    expect(html).toContain('Print<span class="visually-hidden"> 1 entry</span>');
+    expect(html).toContain('class="gallery__summary"');
+    expect(html).not.toContain('set-actions');
   });
 
   it('links each card to its detail page', () => {
