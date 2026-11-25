@@ -7,7 +7,7 @@ import { fetchFresh } from '../../lib/fetch-fresh.ts';
 import { defaultScope, galleryConfig, isScopePath, sortChoices, validSort, type FacetData, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
 import { isActive, isDefaultScope, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
 import { filterTree } from '../../lib/gallery/tree.ts';
-import { computeView, searchIndex } from '../../lib/gallery/view.ts';
+import { computeView } from '../../lib/gallery/view.ts';
 import FilterIcon from '../../icons/Filter.tsx';
 import SearchIcon from '../../icons/Search.tsx';
 import SortIcon from '../../icons/Sort.tsx';
@@ -60,8 +60,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     if (query !== window.location.search) window.history.replaceState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
   }, [state, config, initialQuery]);
 
-  const index = useMemo(() => searchIndex(records ?? []), [records]);
-  const view = useMemo(() => computeView(records ?? [], config, state, index), [records, config, state, index]);
+  const view = useMemo(() => computeView(records ?? [], config, state), [records, config, state]);
 
   if (failed) return <p class="gallery__status">The library couldn’t be loaded. Try reloading the page.</p>;
   if (!records) return <p class="gallery__status">Loading the library…</p>;
@@ -79,7 +78,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
       else next.filters.delete(path);
     });
 
-  const tree = filterTree(config, state, records, index);
+  const tree = filterTree(config, state, records);
   const choices = sortChoices(config, state.filters);
 
   return (
@@ -93,7 +92,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
             <input
               id="gallery-q"
               type="search"
-              placeholder="Name or text"
+              placeholder="Name"
               value={state.q}
               onInput={(e) => {
                 const q = (e.currentTarget as HTMLInputElement).value;
@@ -177,7 +176,6 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
             <p role="status" class="gallery__count">
               {resultText(view.results.length)}
             </p>
-            {view.byRelevance && <p class="gallery__note">Sorted by relevance while searching.</p>}
             {selected.size > 0 && (
               <p class="gallery__selection">
                 {selected.size} selected{' '}

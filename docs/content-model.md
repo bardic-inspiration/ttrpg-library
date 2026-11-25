@@ -187,8 +187,7 @@ Traveler's Clothes}" reads "Traveler's Clothes", linked to the primitive
 "Clothes, Traveler's". A `|` separator, as first designed, would split a table
 cell. Templates compose such links too, for a group's qualifier in a base item
 ("Melee") and a counted item's plural ("Javelins"). A token
-renders as that name linked to the target's detail page, and reads as the name
-in search text. It takes inline markup around it: a spell name is written
+renders as that name linked to the target's detail page. It takes inline markup around it: a spell name is written
 `*{ref:spell/cure-wounds}*`, as SRD text italicizes spell names. Because the
 token renders the name, SRD text keeps its words when a mention becomes a
 link: "becomes a {ref:creature/zombie}" reads "becomes a Zombie". A token
@@ -261,9 +260,9 @@ features and a species' traits are components.
   again at a later level adds the level to the first one's id:
   `barbarian-improved-brutal-strike-17` (error otherwise).
 - **Hidden from the library:** no `library.json` record, gallery card, search
-  result, detail page, raw data file, or print key of its own. Its parent's
-  search text holds its name and text, so a search for a feature finds its
-  class ([site.md](site.md#index-build)).
+  result, detail page, raw data file, or print key of its own
+  ([site.md](site.md#index-build)). Search reads names only, so a search for
+  a feature doesn't find its class ([Gallery](site.md#gallery) "Search").
 - **On its parent's page,** after the parent's template, each component is a
   section with its name as a heading, anchored at `#<type>-<id>`
   ([site.md](site.md#detail-page)).

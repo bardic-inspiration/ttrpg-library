@@ -6,12 +6,11 @@
 import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { SITE_BASE } from '../../lib/site.ts';
-import { validateLibrary, type ValidationError, type ValidComponent, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
-import { objectRefs, replaceRefTokens, type Link } from '../validate/refs.ts';
+import { validateLibrary, type ValidationError, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
+import type { Link } from '../validate/refs.ts';
 import { loadRegistry, RULESETS_ROOT } from '../validate/schema.ts';
 import { ruleNames } from '../../lib/rules.ts';
-import { plainText } from '../validate/text.ts';
-import { isFlag, refAndTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
+import { isFlag, type Schema, type SchemaSet } from './schema-walk.ts';
 
 /** One facet in config/types.json (docs/site.md#type-registry). */
 export interface Facet {
@@ -55,7 +54,6 @@ export interface LibraryRecord {
   createdAt: string;
   refs: Link[];
   refBy: Link[];
-  search: string;
 }
 
 export interface BuildResult {
@@ -81,7 +79,7 @@ export interface BuildOptions extends ValidateOptions {
   registry?: Registry;
 }
 
-/** A ruleset's raw schemas, for the facets and search text that read them. */
+/** A ruleset's raw schemas, for the facets that read them. */
 async function loadSchemas(ruleset: string, rulesetsRoot: string): Promise<{ files: Map<string, Schema> }> {
   const dir = join(rulesetsRoot, ruleset, 'schemas');
   const files = new Map<string, Schema>();
@@ -124,42 +122,6 @@ function facetValues(item: ValidEntry, facets: Facet[], schemas: SchemaSet): Rec
   return out;
 }
 
-/** Every `name` string in `stats`, at any depth, in document order: actions, traits, and the like. */
-function names(value: unknown): string[] {
-  if (Array.isArray(value)) return value.flatMap(names);
-  if (typeof value !== 'object' || value === null) return [];
-  return Object.entries(value).flatMap(([key, child]) => (key === 'name' && typeof child === 'string' ? [child] : names(child)));
-}
-
-/** A ruleset text token such as `{dmg:1d4:fire}` (docs/rulesets.md#text-tokens): markup, not words. */
-const TOKEN = /\{[^{}]*\}/g;
-
-/**
- * The docs/site.md#index-build `search` text: the names in `stats` (every ref names its target),
- * then `description` and the rules text, with markup stripped and
- * each `{ref:…}` link read as its display text or its target's name. A ref to one of `own`, the
- * entry's components, is left to that component's part of the text, which starts with its name.
- */
-function searchText(
-  item: Pick<ValidComponent, 'entry' | 'texts'>,
-  schemas: SchemaSet,
-  nameOf: Map<string, string>,
-  own: ReadonlySet<string> = new Set(),
-): string {
-  const refNames = refAndTextValues(item.entry.stats, schemas).flatMap((value) => {
-    if (typeof value === 'string') return [value];
-    const { ref } = value as { ref: string };
-    const name = own.has(ref) ? undefined : nameOf.get(ref);
-    return name ? [name] : [];
-  });
-  // A {ref:…} link reads as its display text or its target's name; other tokens, a malformed
-  // {ref:…} among them, are dropped.
-  const texts = item.texts.map(({ text }) =>
-    plainText(replaceRefTokens(text, (token) => ` ${token.text ?? nameOf.get(token.key) ?? ''} `).replace(TOKEN, ' ')),
-  );
-  return [...names(item.entry.stats), ...refNames, ...texts].join(' ').replace(/\s+/g, ' ').trim();
-}
-
 const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
 /**
@@ -172,19 +134,11 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
   const registry = options.registry ?? (await loadRegistry());
   const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
 
-  // A {ref:…} link reads as its target's name in search text, whether the target is an entry or a primitive.
+  // The names of the entries and rules an entry links to, for its export bundle.
   const nameOf = new Map([
     ...rules.flatMap((data) => [...ruleNames(data)]),
     ...[...entries, ...components].map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name] as [string, string]),
   ]);
-  // A component has no record of its own; its parent's search text holds it (docs/site.md#index-build).
-  const componentByKey = new Map(components.map((c) => [`${c.entry.type}/${c.entry.id}`, c]));
-  // In the order the parent lists them.
-  const componentsOf = (entry: ValidEntry['entry']): ValidComponent[] =>
-    objectRefs(entry.stats).flatMap(({ ref }) => {
-      const c = componentByKey.get(ref);
-      return c && c.parent === `${entry.type}/${entry.id}` ? [c] : [];
-    });
   const schemaFiles = new Map<string, { files: Map<string, Schema> }>();
   const sorted = [...entries].sort(
     (a, b) => compare(a.entry.ruleset, b.entry.ruleset) || compare(a.entry.type, b.entry.type) || compare(a.entry.id, b.entry.id),
@@ -198,11 +152,6 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
     const files = loaded.files;
     const schemasOf = (type: string): SchemaSet => ({ root: files.get(`${type}.schema.json`) ?? {}, files });
     const schemas = schemasOf(entry.type);
-    const parts = componentsOf(entry);
-    const search = [
-      searchText(item, schemas, nameOf, new Set(parts.map((c) => `${c.entry.type}/${c.entry.id}`))),
-      ...parts.map((c) => `${c.entry.name} ${searchText(c, schemasOf(c.entry.type), nameOf)}`),
-    ].join(' ').replace(/\s+/g, ' ').trim();
     const config = registry[entry.ruleset]?.types[entry.type];
     const meta = entry.meta as { createdAt: string };
     records.push({
@@ -219,7 +168,6 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
       createdAt: meta.createdAt,
       refs: item.refs,
       refBy: item.refBy,
-      search,
     });
   }
   return {

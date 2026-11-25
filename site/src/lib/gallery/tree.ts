@@ -3,7 +3,6 @@
 // registry facets.
 // Pure, so the island only renders it.
 
-import type MiniSearch from 'minisearch';
 import { isOfficial } from '../../../../rulesets/module.ts';
 import { label } from '../../../../lib/wording/grammar.ts';
 import { AUTHOR, RULESET, SOURCE, TYPE, filterDef, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo, typeKey } from './config.ts';
@@ -34,7 +33,7 @@ export type TreeNode =
   | { kind: 'enum'; id: string; def: FilterDef; open: boolean; values: ValueNode[] }
   | { kind: 'range'; id: string; def: FilterDef; open: boolean; bounds: { min: number; max: number } | undefined };
 
-/** What the tree reads besides the config: the Library's records, the state, and the search index. */
+/** What the tree reads besides the config: the Library's records and the state. */
 interface Context {
   config: GalleryConfig;
   state: GalleryState;
@@ -260,11 +259,11 @@ function rulesetNode(ctx: Context, types: Map<string, TreeNode[]>): TreeNode | u
  * type's registry default filters start open, and so does every node with an active filter of
  * its own in it.
  */
-export function filterTree(config: GalleryConfig, state: GalleryState, records: LibraryRecord[], index: MiniSearch<LibraryRecord>): TreeNode[] {
+export function filterTree(config: GalleryConfig, state: GalleryState, records: LibraryRecord[]): TreeNode[] {
   const cache = new Map<string, LibraryRecord[]>();
   const others = (path: string) => {
     let hit = cache.get(path);
-    if (!hit) cache.set(path, (hit = withoutFilter(config, records, state, index, path)));
+    if (!hit) cache.set(path, (hit = withoutFilter(config, records, state, path)));
     return hit;
   };
   const owners = (path: string) => [...config.types.values()].filter((info) => info.facets.some((f) => f.path === path)).length;

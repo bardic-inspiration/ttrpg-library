@@ -2,7 +2,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { galleryConfig, sortChoices, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
-import { chips, computeView, searchIndex, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
+import { chips, computeView, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
 import { fixtureRecords, record, registry, whole } from './helpers.ts';
 
 let reg: Registry;
@@ -15,14 +15,18 @@ beforeAll(async () => {
 });
 
 const view = (records: LibraryRecord[], config: GalleryConfig, query: string) =>
-  computeView(records, config, parseQuery(whole(query), config), searchIndex(records)).results.map((r) => r.name);
+  computeView(records, config, parseQuery(whole(query), config)).results.map((r) => r.name);
 
 describe('finding the example entries', () => {
-  it('by name, with prefix and light fuzzy matching', () => {
+  it('by a substring of the name, ignoring case', () => {
     expect(view(fixtures, library, '?q=cinder')).toEqual(['Cinder Hound']);
-    expect(view(fixtures, library, '?q=cind')).toEqual(['Cinder Hound']);
-    expect(view(fixtures, library, '?q=cimder')).toEqual(['Cinder Hound']);
+    expect(view(fixtures, library, '?q=CIND')).toEqual(['Cinder Hound']);
+    expect(view(fixtures, library, '?q=hound')).toEqual(['Cinder Hound']);
     expect(view(fixtures, library, '?q=frost')).toHaveLength(2);
+  });
+
+  it('with no fuzzy matching', () => {
+    expect(view(fixtures, library, '?q=cimder')).toEqual([]);
   });
 
   it('ignores an old tag filter, as any filter on a path the Library lacks', () => {
@@ -69,12 +73,43 @@ describe('filter logic', () => {
     expect(view(named, library, '?q=ember&f.stats.cr=4..')).toEqual(['Ember Drake']);
   });
 
-  it('orders by relevance while searching: a name match beats a text match', () => {
-    const named = [
-      record({ id: 'x', name: 'Glacier Toad', search: 'It spits a frost bolt.' }),
-      record({ id: 'y', name: 'Frost Toad', search: 'It hops.' }),
+  it('matches the name only, not the summary', () => {
+    const named = [record({ id: 'glacier-toad', name: 'Glacier Toad', summary: 'It spits a frost bolt.' }), record({ id: 'frost-toad', name: 'Frost Toad' })];
+    expect(view(named, library, '?q=frost')).toEqual(['Frost Toad']);
+  });
+
+  it('ignores accents in the name and the query', () => {
+    const named = [record({ id: 'naive-golem', name: 'Naïve Golem' }), record({ id: 'stone-golem', name: 'Stone Golem' })];
+    expect(view(named, library, '?q=naive')).toEqual(['Naïve Golem']);
+    expect(view(named, library, '?q=NAÏVE')).toEqual(['Naïve Golem']);
+  });
+
+  it('ignores a blank query', () => {
+    expect(view(fixtures, library, '?q=%20%20')).toEqual(view(fixtures, library, ''));
+  });
+});
+
+describe('the spec cases for name search (docs/site.md#gallery "Search")', () => {
+  it('finds the Barbarian by "barb" but not by "rage", a feature it names', () => {
+    const barbarian = [record({ id: 'barbarian', type: 'class', name: 'Barbarian', summary: 'A fierce warrior fueled by Rage.' })];
+    expect(view(barbarian, library, '?q=barb')).toEqual(['Barbarian']);
+    expect(view(barbarian, library, '?q=rage')).toEqual([]);
+  });
+
+  it('finds Acid Arrow by "ACID" and by "arrow"', () => {
+    const spells = [record({ id: 'acid-arrow', type: 'spell', name: 'Acid Arrow' }), record({ id: 'fireball', type: 'spell', name: 'Fireball' })];
+    expect(view(spells, library, '?q=ACID')).toEqual(['Acid Arrow']);
+    expect(view(spells, library, '?q=arrow')).toEqual(['Acid Arrow']);
+  });
+
+  it('keeps the active sort: "bandit" by CR descending lists the captain first', () => {
+    const bandits = [
+      record({ id: 'bandit', name: 'Bandit', facets: { 'stats.cr': 0.125 } }),
+      record({ id: 'bandit-captain', name: 'Bandit Captain', facets: { 'stats.cr': 2 } }),
+      record({ id: 'cultist', name: 'Cultist', facets: { 'stats.cr': 0.125 } }),
     ];
-    expect(view(named, library, '?q=frost')).toEqual(['Frost Toad', 'Glacier Toad']);
+    expect(view(bandits, library, '?q=bandit&sort=stats.cr:desc')).toEqual(['Bandit Captain', 'Bandit']);
+    expect(view(bandits, library, '?q=bandit&sort=stats.cr:asc')).toEqual(['Bandit', 'Bandit Captain']);
   });
 });
 
@@ -149,9 +184,8 @@ describe('filter values', () => {
 
   it('counts each value against the search and every other filter, showing stored case', () => {
     const state = parseQuery(whole('?f.stats.cr=..2&f.stats.creatureType=beast'), library);
-    const index = searchIndex(records);
     const def = library.filters.find((f) => f.path === 'stats.creatureType')!;
-    const result = chips(def, records, withoutFilter(library, records, state, index, def.path), state.filters.get(def.path));
+    const result = chips(def, records, withoutFilter(library, records, state, def.path), state.filters.get(def.path));
     expect(result).toEqual([
       { key: 'beast', stored: 'beast', count: 1 },
       { key: 'dragon', stored: 'dragon', count: 1 },

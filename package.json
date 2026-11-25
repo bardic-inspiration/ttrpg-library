@@ -35,7 +35,6 @@
     "astro": "^7.4.4",
     "html-to-image": "^1.11.13",
     "marked": "^18.1.2",
-    "minisearch": "^7.2.0",
     "postcss": "^8.5.32",
     "preact": "^11.1.1"
   },

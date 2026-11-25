@@ -82,24 +82,13 @@ Two flags change what a facet's values are:
 
 Each `library.json` record holds the entry's `id`, `ruleset`, `source` (or
 `null`), `author`, `type`, `name`, `summary`, `url` (the detail page under the site base), `image` (the stored
-path, or `null`), `facets`, `createdAt`, `refs`, `refBy`, and
-`search`:
-
-- `facets` holds the registry's facet paths in registry order, read from
-  `stats` and the derived values. A facet whose optional value is omitted is
-  left out, except an optional flag, which reads as `false`.
-- `search` holds the names in `stats` plus `description` and rules text with
-  markup stripped. Names are every `name` in `stats` (actions, traits), every
-  ref in `stats` read as its target's name, whatever its field (`RefOrText`
-  or a typed ref, such as a background's feat and equipment), and every plain
-  string at a `RefOrText` field. Rules text is every markdown-subset field,
-  with markdown and ruleset tokens removed and each `{ref:…}` token read as
-  its target's name.
+path, or `null`), `facets`, `createdAt`, `refs`, and `refBy`. `facets` holds
+the registry's facet paths in registry order, read from `stats` and the
+derived values. A facet whose optional value is omitted is left out, except
+an optional flag, which reads as `false`.
 
 A component ([content-model.md](content-model.md#components)) has no record,
-raw file, or export bundle. Its parent's `search` adds each component's name
-and the same names and text, in the order the parent lists them, so the
-parent's own refs to its components aren't read a second time.
+raw file, or export bundle.
 
 Records are sorted by ruleset, type, then `id`, and the file is written without
 timestamps, so two builds of the same content are byte-identical. The index
@@ -437,10 +426,14 @@ facet (size) by its first item. Ties break by name, then ruleset, type, and id,
 so the order never depends on `library.json` order. Entries missing the sort
 value go last in either direction. The Library starts on `name:asc`.
 
-**Search.** MiniSearch over `name` (boost 3), `summary` (2), and `search`
-(1), with prefix and light fuzzy matching. Search narrows within
-active filters; results order by relevance when there's a query, otherwise by
-the active sort.
+**Search.** A filter on names: an entry matches when its `name` contains the
+query, ignoring case and accents, so "barb" and "BARB" find the Barbarian and
+"naive" finds "Naïve". Nothing else is searched, not the summary, the rules
+text, or a component's name: "Rage" doesn't find the Barbarian. A blank query
+matches everything. Search narrows the results like any other filter, and they
+keep the active sort, so "bandit" by CR descending lists the Bandit Captain
+before the Bandit. There's no search index: the query is matched against the
+records in memory.
 
 **URL state.** Query, sort, and filters live in the query string, so any view
 can be bookmarked or linked:
@@ -482,8 +475,7 @@ author, and type filters, then the facets in registry order, with the default so
   ([Exporter interface](export.md#exporter-interface)).
 
 **Scale.** The index is loaded once and filtered in memory, sized for a few
-thousand entries. Past about 2,000, revisit the index size and prebuilt search
-indexes.
+thousand entries. Past about 2,000, revisit the index size.
 
 ### Detail page
 
@@ -595,7 +587,7 @@ one house style ([SRD and custom entries](content-model.md#srd-and-custom-entrie
   - a **phrase** is composed text as a list of parts: plain text, markdown
     already written (a `Text` field placed in a line), or a link by key with
     optional display text. `toMarkdown` renders it for templates, links as
-    `{ref:…}` tokens; `toPlain` reads it for search and exports.
+    `{ref:…}` tokens; `toPlain` reads it as plain text for subtitles and exports.
   - **grammar:** one `titleCase` (minor words lowercase but first),
     `capitalize`, `label` (a key as a sentence-case label), `list` ("A, B, and
     C", or "or"), `plural` and `counted` ("y" to "ies", else "s", with the

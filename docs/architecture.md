@@ -52,7 +52,6 @@ and the gallery in [site.md](site.md); CI and lanes in
 | Site generator | Astro, static output | One HTML page per entry; the gallery is a client-side island |
 | Island framework | Preact | Small runtime, enough for filters and search |
 | Schema validation | Ajv, JSON Schema draft 2020-12 | Schemas are plain JSON files |
-| Search | MiniSearch | Field boosting, prefix and fuzzy matching |
 | Markdown in text fields | `marked`, sanitized | A limited subset ([content-model.md](content-model.md#text-fields)) |
 | PNG capture | `html-to-image` | Fonts self-hosted so capture is faithful |
 | Styling | Plain CSS | Custom properties, cascade layers, nesting, container queries ([styling.md](styling.md)) |

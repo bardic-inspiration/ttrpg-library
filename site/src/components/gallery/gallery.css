@@ -10,8 +10,7 @@
     gap: var(--space-m);
   }
 
-  .gallery__status,
-  .gallery__note {
+  .gallery__status {
     color: var(--color-text-muted);
   }
 

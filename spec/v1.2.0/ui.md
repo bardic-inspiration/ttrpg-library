@@ -1,6 +1,6 @@
 ---
 issue: 402
-depends: [tags]
+depends: []
 ---
 
 # Site UI revision
