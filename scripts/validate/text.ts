@@ -69,25 +69,6 @@ function tableProblems(table: Tokens.Table): string[] {
  */
 const BROKEN_TABLE_LINE = /^\s*\|/m;
 
-/**
- * `text` with its markdown removed: the words a reader sees, separated by
- * single spaces. Used for the index's `search` text (docs/site.md#index-build).
- */
-export function plainText(text: string): string {
-  const flatten = (tokens: Token[]): string =>
-    tokens
-      .map((token) => {
-        const kids = children(token);
-        const inner = kids.length > 0 ? flatten(kids) : 'text' in token && typeof token.text === 'string' ? token.text : '';
-        // Block tokens and line breaks separate words; inline tokens abut.
-        return INLINE.has(token.type) ? inner : ` ${inner} `;
-      })
-      .join('');
-  return flatten(new Lexer().lex(text)).replace(/\s+/g, ' ').trim();
-}
-
-const INLINE = new Set(['text', 'strong', 'em', 'codespan', 'escape', 'del']);
-
 /** The disallowed constructs in `text`, each once, in order of first appearance. */
 export function markdownViolations(text: string): string[] {
   const found = new Set<string>();

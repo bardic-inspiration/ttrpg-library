@@ -1,7 +1,6 @@
 // Filtering, search, sort, and value counts (docs/site.md#gallery). Pure functions
 // over library.json records, so the island stays a thin view.
 
-import MiniSearch from 'minisearch';
 import { NAME, isScopePath, recordDef, typeKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
@@ -65,21 +64,16 @@ export function applyFilters(records: LibraryRecord[], filters: Map<string, Matc
   return records.filter((record) => inScope(record) && narrowing.every(([path, value]) => matches(record, path, value)));
 }
 
-/** The search index (docs/site.md#gallery): name ×3, summary ×2, search text ×1, with prefix and light fuzzy matching. */
-export function searchIndex(records: LibraryRecord[]): MiniSearch<LibraryRecord> {
-  const index = new MiniSearch<LibraryRecord>({
-    idField: 'url',
-    fields: ['name', 'summary', 'search'],
-    extractField: (record, field) => String((record as unknown as Record<string, unknown>)[field] ?? ''),
-    searchOptions: { boost: { name: 3, summary: 2, search: 1 }, prefix: true, fuzzy: 0.2 },
-  });
-  index.addAll(records);
-  return index;
-}
+/** Text folded for matching: lowercase, with accents stripped, so "é" matches "e". */
+const fold = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
-/** Records matching a query, best first. An empty query returns undefined: no search. */
-export function search(index: MiniSearch<LibraryRecord>, q: string): string[] | undefined {
-  return q.trim() === '' ? undefined : index.search(q.trim()).map((result) => String(result.id));
+/**
+ * Records whose name contains the query (docs/site.md#gallery "Search"), ignoring case and
+ * accents. A blank query leaves the records as they are.
+ */
+export function searchNames(records: LibraryRecord[], q: string): LibraryRecord[] {
+  const query = fold(q.trim());
+  return query === '' ? records : records.filter((record) => fold(record.name).includes(query));
 }
 
 const compareText = (a: string, b: string) => a.localeCompare(b, 'en', { sensitivity: 'base' });
@@ -170,36 +164,15 @@ export const hasValues = (path: string, records: LibraryRecord[]): boolean =>
 
 export interface GalleryView {
   results: LibraryRecord[];
-  /** Whether results are in relevance order (a query is present) rather than the active sort. */
-  byRelevance: boolean;
 }
 
-/** The records to show for a state: filters, then search; ordered by relevance or the sort. */
-export function computeView(
-  records: LibraryRecord[],
-  config: GalleryConfig,
-  state: GalleryState,
-  index: MiniSearch<LibraryRecord>,
-): GalleryView {
+/** The records to show for a state: filtered, searched by name, and in the active sort. */
+export function computeView(records: LibraryRecord[], config: GalleryConfig, state: GalleryState): GalleryView {
   const filtered = applyFilters(records, matchedFilters(config, state.filters));
-  const hits = search(index, state.q);
-  if (hits === undefined) return { results: sortRecords(filtered, state.sort, config), byRelevance: false };
-  const byUrl = new Map(filtered.map((r) => [r.url, r]));
-  return { results: hits.map((id) => byUrl.get(id)).filter((r): r is LibraryRecord => r !== undefined), byRelevance: true };
+  return { results: sortRecords(searchNames(filtered, state.q), state.sort, config) };
 }
 
 /** Records passing the search and every filter except one, for that filter's value counts. */
-export function withoutFilter(
-  config: GalleryConfig,
-  records: LibraryRecord[],
-  state: GalleryState,
-  index: MiniSearch<LibraryRecord>,
-  path: string,
-): LibraryRecord[] {
-  const filtered = applyFilters(records, matchedFilters(config, state.filters), path);
-  const hits = search(index, state.q);
-  if (hits === undefined) return filtered;
-  const ids = new Set(hits);
-  return filtered.filter((r) => ids.has(r.url));
+export function withoutFilter(config: GalleryConfig, records: LibraryRecord[], state: GalleryState, path: string): LibraryRecord[] {
+  return searchNames(applyFilters(records, matchedFilters(config, state.filters), path), state.q);
 }
-

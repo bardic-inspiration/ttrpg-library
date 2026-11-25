@@ -5,8 +5,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildIndex, writeIndex } from '../scripts/build-index/index.ts';
 import { loadRegistry } from '../scripts/validate/schema.ts';
-import { isFlag, refAndTextValues, type Schema } from '../scripts/build-index/schema-walk.ts';
-import { plainText } from '../scripts/validate/text.ts';
+import { isFlag, type Schema } from '../scripts/build-index/schema-walk.ts';
 import { ruleset } from '../rulesets/dnd-5e-2024/index.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
 
@@ -43,7 +42,7 @@ describe('library.json records', () => {
     expect(records).toHaveLength(5);
     for (const record of records) {
       expect(Object.keys(record)).toEqual([
-        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'facets', 'createdAt', 'refs', 'refBy', 'search',
+        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'facets', 'createdAt', 'refs', 'refBy',
       ]);
     }
   });
@@ -143,47 +142,6 @@ describe('library.json records', () => {
     const facets = records.find((r) => r.id === 'cinder-hound')?.facets;
     expect(facets?.['derived.xp']).toBe(12345);
     expect(facets?.['derived.hp.average']).toBe(999);
-  });
-});
-
-describe('search text', () => {
-  it('holds action and trait names, description, and rules text, with markup and tokens stripped', async () => {
-    const hound = await cinderHound();
-    hound.description = 'Bred in **forges**, they *smolder*.\n\n- loyal\n- hungry';
-    const lib = await temp([hound]);
-    const { records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
-    const search = records[0]!.search;
-    for (const word of ['Bite', 'Ember Breath', 'Smoldering Hide', 'Bred in forges, they smolder.', 'loyal hungry', 'within 5 feet of it takes']) {
-      expect(search).toContain(word);
-    }
-    expect(search).not.toMatch(/[*{}]/);
-    expect(search).not.toMatch(/\s{2}/);
-  });
-
-  it('names spells, by target name for a ref and as written for plain text', async () => {
-    const hound = await cinderHound();
-    hound.stats.spellcasting = { ability: 'cha', atWill: [{ ref: 'spell/frost-lance' }, 'Light'] };
-    hound.stats.gear = ['Iron Collar'];
-    const lib = await temp([hound, await frostLance()]);
-    const { errors, records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
-    expect(errors).toEqual([]);
-    const search = records.find((r) => r.id === 'cinder-hound')!.search;
-    expect(search).toContain('Frost Lance');
-    expect(search).toContain('Light');
-    expect(search).toContain('Iron Collar');
-    expect(search).not.toContain('spell/frost-lance');
-  });
-
-  it('names every ref by its target, whatever its field: a background finds its feat and equipment', async () => {
-    const files = ['feat/magic-initiate.json', 'background/acolyte.json'];
-    const entries = await Promise.all(files.map(async (file) => JSON.parse(await readFile(join(FIXTURES, file), 'utf8'))));
-    const lib = await temp(entries);
-    const { errors, records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
-    expect(errors).toEqual([]);
-    // A FeatRef and EquipmentRefs, none of them RefOrText; the feat's note is a qualifier, not a name.
-    expect(records.find((r) => r.id === 'acolyte')!.search).toBe(
-      "Magic Initiate Calligrapher's Supplies Calligrapher's Supplies Book Holy Symbol Parchment Robe",
-    );
   });
 });
 
@@ -331,36 +289,9 @@ describe('the type registry', () => {
 });
 
 describe('schema walk', () => {
-  it('finds values at RefOrText fields, through $ref and nested objects', async () => {
-    const stats = { spellcasting: { ability: 'cha', atWill: ['Light'], perDay: { '1': [{ ref: 'spell/x' }] } }, gear: ['Rope'], actions: [{ name: 'Bite' }] };
-    expect(refAndTextValues(stats, await schemaSet('creature'))).toEqual([['Light'], [{ ref: 'spell/x' }], ['Rope']].flat());
-  });
-
-  it('finds every ref, whatever its field, but plain text only at RefOrText fields', async () => {
-    const stats = {
-      feat: { ref: 'feat/magic-initiate', note: 'Cleric' },
-      tool: { ref: 'equipment/calligraphers-supplies' },
-      skills: ['insight'],
-      equipment: [{ items: [{ ref: 'equipment/book', note: 'prayers' }, '20 Arrows'], gp: 8 }, { gp: 50 }],
-    };
-    expect(refAndTextValues(stats, await schemaSet('background'))).toEqual([
-      { ref: 'feat/magic-initiate', note: 'Cleric' },
-      { ref: 'equipment/calligraphers-supplies' },
-      { ref: 'equipment/book', note: 'prayers' },
-    ]);
-  });
-
   it('tells an optional flag from a required boolean', async () => {
     expect(isFlag('cursed', await schemaSet('item'))).toBe(true);
     expect(isFlag('attunement.required', await schemaSet('item'))).toBe(false);
     expect(isFlag('ritual', await schemaSet('spell'))).toBe(false);
-  });
-});
-
-describe('plainText', () => {
-  it('strips the markdown subset, keeping words and punctuation', () => {
-    expect(plainText('A **bold** and *italic* word.\n\n- one\n- two\n\n1. three\n\nline  \nbreak')).toBe(
-      'A bold and italic word. one two three line break',
-    );
   });
 });

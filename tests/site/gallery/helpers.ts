@@ -28,7 +28,6 @@ export function record(overrides: Partial<LibraryRecord> & { id: string }): Libr
     createdAt: '2026-01-01',
     refs: [],
     refBy: [],
-    search: '',
     ...overrides,
   };
 }

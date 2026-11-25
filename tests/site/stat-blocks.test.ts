@@ -5,7 +5,6 @@ import { readFile, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { afterEach, describe, expect, it } from 'vitest';
-import { buildIndex } from '../../scripts/build-index/index.ts';
 import { validateLibrary } from '../../scripts/validate/index.ts';
 import { PROJECT_ROOT } from '../../scripts/validate/schema.ts';
 import EntryDetail from '../../site/src/components/detail/EntryDetail.astro';
@@ -71,15 +70,6 @@ describe('statBlocks schema (docs/rulesets.md#embedded-stat-blocks, docs/ruleset
       { label: 'HP', value: '19 (3d10 + 3)' },
     ]);
     expect(coreLines({ ...sprite(), ac: '11' }).map((l) => l.label)).toEqual(['AC']);
-  });
-
-  it('puts the block names in search text', async () => {
-    const spell = await frostLance();
-    spell.stats.statBlocks = [sprite()];
-    const { records } = await buildIndex(await library([spell]));
-    const record = records.find((r) => r.type === 'spell')!;
-    expect(record.search).toContain('Frost Sprite');
-    expect(record.search).toContain('Chill');
   });
 });
 

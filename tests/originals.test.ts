@@ -11,7 +11,7 @@ import { facetData } from '../site/src/lib/gallery/facet-data.ts';
 import { parseQuery } from '../site/src/lib/gallery/state.ts';
 import { filterTree } from '../site/src/lib/gallery/tree.ts';
 import { displayValue } from '../site/src/lib/gallery/values.ts';
-import { computeView, searchIndex } from '../site/src/lib/gallery/view.ts';
+import { computeView } from '../site/src/lib/gallery/view.ts';
 import { entryNames, refPaths } from '../site/src/lib/library.ts';
 import { rulesContext } from '../site/src/lib/rules.ts';
 import { buildOriginals, originalPhrases, originalsRegistry, originalsSite, RULESETS, validateOriginals } from './originals/fixture.ts';
@@ -87,7 +87,7 @@ describe('the gallery', () => {
   };
   const view = async (query: string) => {
     const { config, records } = await setup();
-    return computeView(records, config, parseQuery(query, config), searchIndex(records)).results.map((r) => r.id);
+    return computeView(records, config, parseQuery(query, config)).results.map((r) => r.id);
   };
 
   it('offers each ruleset and its types', async () => {
@@ -140,7 +140,7 @@ describe('the gallery', () => {
 
   it('puts each ruleset’s types under that ruleset in the filter tree, after its source and author (#395)', async () => {
     const { config, records } = await setup();
-    const nodes = filterTree(config, parseQuery('', config), records, searchIndex(records));
+    const nodes = filterTree(config, parseQuery('', config), records);
     const ruleset = nodes.find((n) => n.id === 'ruleset');
     const rulesets = ruleset?.kind === 'field' ? ruleset.children : [];
     const groups = (id: string) => rulesets.find((n) => n.id === `ruleset/${id}`);

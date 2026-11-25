@@ -31,7 +31,6 @@ import sampleArt from '../assets/sample-art.svg';
 import { galleryConfig, type Registry } from '../lib/gallery/config';
 import { parseQuery } from '../lib/gallery/state';
 import { filterTree } from '../lib/gallery/tree';
-import { searchIndex } from '../lib/gallery/view';
 import registryJson from '../../../config/types.json';
 import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { PROJECT_ROOT } from '../../../scripts/validate/schema.ts';
@@ -78,11 +77,10 @@ const fixtureEntries = loadLibrary(
 const entryNames = namesOf(fixtureEntries);
 const registry = registryJson as unknown as Registry;
 const home = galleryConfig(registry);
-const fixtureIndex = searchIndex(fixtures.records);
 // The filter tree as the Library opens it, and with filters set, which opens the nodes holding them.
 const treeAt = (query: string) => {
   const state = parseQuery(query, home);
-  return { nodes: filterTree(home, state, fixtures.records, fixtureIndex), filters: state.filters };
+  return { nodes: filterTree(home, state, fixtures.records), filters: state.filters };
 };
 const filterStates = [
   { title: 'As the Library opens it', ...treeAt('') },
@@ -184,7 +182,7 @@ const modes = ['screen', 'capture'] as const;
         <button type="button" class="sg-focused">Focused</button>
       </div>
       <div class="cluster">
-        <label>Search <input type="search" placeholder="Name or text" /></label>
+        <label>Search <input type="search" placeholder="Name" /></label>
         <label><input type="checkbox" checked /> Selected</label>
       </div>
 
