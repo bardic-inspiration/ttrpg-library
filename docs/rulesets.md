@@ -354,7 +354,8 @@ those that name it, not those that name a group it belongs to).
 The SRD's 180 weapons, armor, tools, pieces of adventuring gear, and mounts
 and vehicles are primitives in `rules/equipment/`; custom equipment is an
 entry under `content/dnd-5e-2024/equipment/`, authored from a request and shown
-as a card. Weapon properties and mastery properties are two primitive-only
+as a card. Each SRD piece of equipment has a Library card too, which opens its
+section ([Gallery](site.md#gallery)). Weapon properties and mastery properties are two primitive-only
 rules types, `weapon-property` and `mastery-property`, with keys of their own
 so the Ammunition property doesn't collide with the Ammunition gear.
 
@@ -428,7 +429,8 @@ lists every term by name, with the conditions cross-listed among them as
 
 `condition` is a rules type that takes extensions
 ([Rules data](#rules-data)). The 15 SRD conditions are primitives in
-`rules/condition/`, shown on the Conditions page (`rules/pages.json`), and
+`rules/condition/`, shown on the Conditions page (`rules/pages.json`), each
+with a Library card that opens its section ([Gallery](site.md#gallery)), and
 there is no condition enum or table. A custom condition is an entry under
 `content/dnd-5e-2024/condition/`, authored from a request like any content,
 shown as a card, and listed on the Conditions page and the Extensions page.

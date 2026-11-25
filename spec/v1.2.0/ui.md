@@ -31,7 +31,8 @@ shared components).
   contents list, and links.
 - [Rules pages](../../docs/site.md#rules-pages) and
   [Equipment](../../docs/rulesets.md#equipment): SRD equipment and conditions
-  as sections of rules pages only.
+  as sections of rules pages, and as Library cards that open those sections
+  ([Index build](../../docs/site.md#index-build)).
 - [Controls](../../docs/export.md#controls): Print and Download.
 - [Page header](../../docs/site.md#page-header): search and the set export on
   every page.
@@ -46,18 +47,6 @@ shared components).
   section groups its values under each ruleset's label. A checkbox shows
   whether the current results include what it stands for, so a ruleset whose
   entries show reads checked.
-
-### SRD equipment and conditions as cards
-
-The SRD's equipment and conditions are rules primitives, so the Library
-counts Condition and Equipment by their custom entries alone. They gain
-gallery cards.
-
-- **Each primitive has a card** in the Library under its type, filtered and
-  sorted with the type's custom entries.
-- **The card opens the primitive's section on its rules page.** Primitives
-  have no detail page, and refs to them still land on that section.
-- **Print and the cart** take a primitive's card like any other.
 
 ### Entry and long pages
 

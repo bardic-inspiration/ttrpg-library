@@ -2,11 +2,12 @@
 // An entry's print fragment (docs/export.md#print): bare markup, with no page shell,
 // that the print view (`/print/`) fetches and inserts. Served at
 // `print/<ruleset>/<type>/<id>/`, so a print run loads only the entries it
-// names. The print view's page carries the styles.
+// names. A primitive with a gallery card has one too, in its type's template.
+// The print view's page carries the styles.
 import type { GetStaticPaths } from 'astro';
 import PrintEntry from '../../../../components/print/PrintEntry.astro';
 import { entryNames, loadEntries, refPaths, type LoadedEntry } from '../../../../lib/library';
-import { loadRules } from '../../../../lib/rules';
+import { loadRules, primitiveCards } from '../../../../lib/rules';
 
 export const partial = true;
 
@@ -15,7 +16,7 @@ export const getStaticPaths = (() => {
   const all = loadEntries(rules);
   const names = entryNames(all, rules);
   const paths = refPaths(rules, all);
-  return all.map((loaded) => ({
+  return [...all, ...primitiveCards(rules).map((card) => card.loaded)].map((loaded) => ({
     params: { ruleset: loaded.entry.ruleset, type: loaded.entry.type, id: loaded.entry.id },
     props: { loaded, names, paths },
   }));

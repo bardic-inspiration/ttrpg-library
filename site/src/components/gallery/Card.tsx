@@ -1,5 +1,5 @@
 // One gallery card (docs/site.md#gallery "Cards"): art when the entry has it,
-// name with a star slot, the type badge, the type's card fields, the summary, and
+// name with a star slot, the type badge, the type's card fields, the summary (a primitive has none), and
 // the source on a smaller line below it, with the cart control. The whole card opens its entry, through the shared card link,
 // and the cart control sits above that link (docs/styling.md#shared-components "Click targets"). Accents come from data-type (and data-rarity),
 // never per-type CSS.
@@ -91,7 +91,7 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, inCart, 
             ))}
           </dl>
         )}
-        <p class="card__summary">{record.summary}</p>
+        {record.summary && <p class="card__summary">{record.summary}</p>}
         {record.source && <p class="card__source">{record.source}</p>}
         <CartToggle id={`${id}-cart`} name={record.name} inCart={inCart} onChange={onCart} />
       </div>

@@ -7,7 +7,7 @@ import { print } from '../../site/src/exporters/print.ts';
 import type { ExportItem } from '../../site/src/exporters/types.ts';
 import { facetData } from '../../site/src/lib/gallery/facet-data.ts';
 import { loadPrintRun, selectEntries } from '../../site/src/lib/print-run.ts';
-import { loadRules } from '../../site/src/lib/rules.ts';
+import { loadRules, primitiveCards } from '../../site/src/lib/rules.ts';
 import { readTokens, tokensIn } from '../../site/src/lib/design-tokens.ts';
 import {
   SHORT_ATTRIBUTION,
@@ -193,6 +193,14 @@ describe('loadPrintRun', () => {
     expect(run.ok && run.fragments.map((f) => f.record.id)).toEqual(['longsword-plus']);
   });
 
+  it('prints an SRD primitive from its card like an entry (docs/site.md#gallery "Cards")', async () => {
+    const index = await fixtureRecords({ primitives: true });
+    const { fetch, fetched } = site({}, index);
+    const run = await loadPrintRun('?ids=condition/blinded,spell/frost-lance', BASE, reg, data, fetch);
+    expect(run.ok && run.fragments.map((f) => f.record.id)).toEqual(['blinded', 'frost-lance']);
+    expect(fetched).toContain('/ttrpg-library/print/dnd-5e-2024/condition/blinded/');
+  });
+
   it('fails with a message when an id has no entry', async () => {
     const run = await loadPrintRun('?ids=creature/cinder-hound,creature/nope', BASE, reg, data, site().fetch);
     expect(run).toMatchObject({ ok: false, message: 'No entry matches “creature/nope”.' });
@@ -220,6 +228,20 @@ describe('print fragment (docs/export.md#print)', () => {
     expect(html).toContain('data-mode="print"');
     expect(html).toMatch(/<h2[^>]*>Cinder Hound<\/h2>/);
     expect(html).not.toContain('<html');
+  });
+
+  it('renders a primitive with a card in its type\'s template, as a custom one prints', async () => {
+    const { experimental_AstroContainer: AstroContainer } = await import('astro/container');
+    const { default: PrintEntry } = await import('../../site/src/components/print/PrintEntry.astro');
+    const container = await AstroContainer.create();
+    const cards = primitiveCards(rules);
+    expect(cards.map((c) => c.loaded.entry.type).filter((t, i, a) => a.indexOf(t) === i).sort()).toEqual(['condition', 'equipment']);
+    const blinded = cards.find((c) => c.loaded.entry.id === 'blinded')!;
+    expect(blinded.path).toBe('dnd-5e-2024/rules/conditions/#condition-blinded');
+    const html = await container.renderToString(PrintEntry, { props: { loaded: blinded.loaded, names: lib.names } });
+    expect(html).toMatch(/^\s*<article class="print-entry[^"]*" data-id="blinded" data-name="Blinded" data-type="condition"/);
+    expect(html).toMatch(/<h2[^>]*>Blinded<\/h2>/);
+    expect(html).toMatch(/Can(&#39;|'|’)t See/);
   });
 });
 

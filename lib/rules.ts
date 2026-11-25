@@ -263,3 +263,12 @@ export const ruleNames = (data: RulesData): Map<string, string> =>
     ...data.primitives.map((p) => [ruleKey(p), p.name] as const),
     ...typedGroups(data).map((g) => [ruleKey(g), g.name] as const),
   ]);
+
+/**
+ * The primitives that get a gallery card (docs/site.md#gallery): those of a rules type that takes
+ * extensions and is in the type registry, so they sit beside the type's custom entries.
+ */
+export const cardedPrimitives = (data: RulesData, registered: (type: string) => boolean): Primitive[] => {
+  const types = new Set(data.types.filter((t) => t.extensions && registered(t.type)).map((t) => t.type));
+  return data.primitives.filter((p) => types.has(p.type));
+};
