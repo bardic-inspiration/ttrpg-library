@@ -147,15 +147,15 @@ describe('Gallery', () => {
     const official = (r: LibraryRecord): LibraryRecord => ({ ...r, source: 'SRD 5.2', author: 'publisher' });
     const card = (html: string, name: string) => html.split('<article').find((part) => part.includes(`>${name}</a>`)) ?? '';
 
-    it('shows the source first in the badge list, and no source badge for an entry with none', () => {
+    it('shows the source on its own line below the summary, not as a badge, and no line for an entry with none', () => {
       const withSource = records.map((r) => (r.id === 'frost-lance' ? { ...r, source: "Bardic's Compendium of Test Fixtures" } : r));
       const html = render({ records: withSource, initialQuery: '?f.type=spell' });
-      expect(card(html, 'Frost Lance')).toMatch(
-        /<ul class="card__badges"><li class="badge badge--source">Bardic(&#39;|')s Compendium of Test Fixtures<\/li><li class="badge">Spell<\/li>/,
-      );
+      const lance = card(html, 'Frost Lance');
+      expect(lance).toMatch(/<ul class="card__badges"><li class="badge">Spell<\/li>/);
+      expect(lance).toMatch(/<p class="card__summary">[^<]*<\/p><p class="card__source">Bardic(&#39;|')s Compendium of Test Fixtures<\/p>/);
+      expect(html).not.toContain('badge--source');
       const bare = render({ records: records.map((r) => ({ ...r, source: null })), initialQuery: '?f.type=spell' });
-      expect(card(bare, 'Frost Lance')).toMatch(/<ul class="card__badges"><li class="badge">Spell<\/li>/);
-      expect(bare).not.toContain('badge--source');
+      expect(bare).not.toContain('card__source');
     });
 
     it('stars official cards with an accessible name, and reserves the same slot on every other card', () => {
