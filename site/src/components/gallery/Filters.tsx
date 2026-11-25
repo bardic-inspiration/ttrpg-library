@@ -1,13 +1,13 @@
 // The filter tree (docs/site.md#gallery "Filters", docs/styling.md#accessibility): a nested
-// accordion of disclosure buttons, with values as checkboxes that keep their counts and range
-// facets as min and max inputs inside their node. The tree's shape comes from lib/gallery/tree.ts.
+// accordion of disclosure buttons, with values as checkboxes that keep their counts, a chip
+// facet's values as chips, and range facets as min and max inputs inside their node. The tree's shape comes from lib/gallery/tree.ts.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { FilterDef } from '../../lib/gallery/config.ts';
 import type { FilterValue } from '../../lib/gallery/state.ts';
 import { openAtStart, valueId, type TreeNode, type ValueNode } from '../../lib/gallery/tree.ts';
 import { parseNumber } from '../../lib/gallery/values.ts';
 import { formatValue } from '../../lib/format.ts';
-import { Checkbox } from '../shared/Controls.tsx';
+import { Checkbox, Chip } from '../shared/Controls.tsx';
 import { DisclosureButton } from '../shared/Disclosure.tsx';
 
 export const idFor = (path: string) => `filter-${path.replace(/[^a-z0-9-]/gi, '-')}`;
@@ -175,6 +175,23 @@ function Node({ node, shared, reserve = false }: { node: TreeNode; shared: Share
   const selected = current?.kind === 'enum' ? current.values : [];
   const onToggle = (key: string) =>
     shared.onEnum(node.def.path, selected.includes(key) ? selected.filter((v) => v !== key) : [...selected, key]);
+  // A chip facet (docs/content-model.md#display) lists its values as chips, unless they nest.
+  if (node.def.display === 'chip' && !valuesReserve(node.values)) {
+    return (
+      <li class="tree__node" data-active={active || undefined}>
+        <Disclosure id={node.id} label={node.def.label} open={open} toggle={shared.toggle} />
+        <ul class="tree__values tree__chips" id={panel} hidden={!open} aria-labelledby={`${idFor(node.id)}-toggle`}>
+          {node.values.map((value) => (
+            <li key={value.key}>
+              <Chip pressed={value.selected} onChange={() => onToggle(value.key)}>
+                {value.label} <Count n={value.count} />
+              </Chip>
+            </li>
+          ))}
+        </ul>
+      </li>
+    );
+  }
   return (
     <li class="tree__node" data-active={active || undefined}>
       <Disclosure id={node.id} label={node.def.label} open={open} toggle={shared.toggle} />

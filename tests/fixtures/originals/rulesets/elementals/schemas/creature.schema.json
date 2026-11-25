@@ -9,7 +9,7 @@
     "cost": { "$ref": "common.schema.json#/$defs/Cost" },
     "power": { "$ref": "common.schema.json#/$defs/Stat" },
     "toughness": { "$ref": "common.schema.json#/$defs/Stat" },
-    "keywords": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["swift", "guard", "drain"] } },
+    "keywords": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["swift", "guard", "drain"] }, "display": "chip" },
     "text": { "$ref": "common.schema.json#/$defs/Text" }
   }
 }

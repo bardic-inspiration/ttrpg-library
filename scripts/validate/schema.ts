@@ -8,6 +8,7 @@ import { Ajv2020, type ErrorObject, type ValidateFunction } from 'ajv/dist/2020.
 import addFormatsModule from 'ajv-formats';
 import type { RulesetModule } from '../../rulesets/module.ts';
 import type { Registry } from '../build-index/index.ts';
+import { displayIssues, type Schema } from '../build-index/schema-walk.ts';
 
 // ajv-formats ships CommonJS; under NodeNext its default import is the module object.
 const addFormats = addFormatsModule as unknown as typeof addFormatsModule.default;
@@ -46,6 +47,9 @@ function newAjv(): Ajv2020 {
       return true;
     },
   });
+  // `"display": "chip"` says how a field reads on cards and in filters (docs/content-model.md#display).
+  // It never affects an entry; loadRuleset checks where it sits.
+  ajv.addKeyword('display');
   return ajv;
 }
 
@@ -138,6 +142,8 @@ export interface LoadedRuleset {
   module: RulesetModule;
   /** `stats` validators by type, for types with a schema file. */
   stats: Map<string, ValidateFunction>;
+  /** Misplaced or malformed keywords in the schema files, by file name (docs/content-model.md#display). */
+  schemaIssues: { file: string; message: string }[];
 }
 
 /**
@@ -163,6 +169,10 @@ export async function loadRuleset(id: string, rulesetsRoot: string = RULESETS_RO
     schemaFiles.filter((f) => f.endsWith('.schema.json')).map(async (f) => ({ file: f, schema: (await readJson(join(dir, 'schemas', f))) as object })),
   );
   for (const { schema } of schemas) ajv.addSchema(schema);
+  const files = new Map(schemas.map(({ file, schema }) => [file, schema as Schema]));
+  const schemaIssues = schemas.flatMap(({ file, schema }) =>
+    displayIssues(schema as Schema, { root: schema as Schema, files }).map((message) => ({ file, message })),
+  );
   const stats = new Map<string, ValidateFunction>();
   for (const { file, schema } of schemas) {
     const type = file.replace(/\.schema\.json$/, '');
@@ -170,7 +180,7 @@ export async function loadRuleset(id: string, rulesetsRoot: string = RULESETS_RO
     const validate = ajv.getSchema((schema as { $id: string }).$id);
     if (validate) stats.set(type, validate);
   }
-  return { module: ruleset, stats };
+  return { module: ruleset, stats, schemaIssues };
 }
 
 /** config/types.json (docs/site.md#type-registry): the rulesets and types it registers, and each type's display keys. */

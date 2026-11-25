@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildIndex, writeIndex } from '../scripts/build-index/index.ts';
 import { loadRegistry } from '../scripts/validate/schema.ts';
-import { isFlag, type Schema } from '../scripts/build-index/schema-walk.ts';
+import { displayIssues, isChip, isFlag, type Schema } from '../scripts/build-index/schema-walk.ts';
 import { ruleset } from '../rulesets/dnd-5e-2024/index.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
 
@@ -293,5 +293,41 @@ describe('schema walk', () => {
     expect(isFlag('cursed', await schemaSet('item'))).toBe(true);
     expect(isFlag('attunement.required', await schemaSet('item'))).toBe(false);
     expect(isFlag('ritual', await schemaSet('spell'))).toBe(false);
+  });
+
+  it('reads a chip field beside the field or through its shared definition (docs/content-model.md#display)', async () => {
+    expect(isChip('level', await schemaSet('spell'))).toBe(true);
+    expect(isChip('name', await schemaSet('spell'))).toBe(false);
+    const common: Schema = { $defs: { Size: { enum: ['s', 'm'], display: 'chip' } } };
+    const set = { root: { type: 'object', properties: { size: { $ref: 'common.schema.json#/$defs/Size' } } }, files: new Map([['common.schema.json', common]]) };
+    expect(isChip('size', set)).toBe(true);
+  });
+
+  it('allows display only as "chip", only on a string, number, boolean, or string-array field', () => {
+    const doc: Schema = {
+      type: 'object',
+      $defs: { Kind: { enum: ['a', 'b'] }, Box: { type: 'object' } },
+      properties: {
+        level: { type: 'integer', display: 'chip' },
+        kind: { $ref: '#/$defs/Kind', display: 'chip' },
+        flag: { const: true, display: 'chip' },
+        tags: { type: 'array', items: { $ref: '#/$defs/Kind' }, display: 'chip' },
+        display: { type: 'string' },
+        loud: { type: 'string', display: 'badge' },
+        box: { $ref: '#/$defs/Box', display: 'chip' },
+        boxes: { type: 'array', items: { type: 'object' }, display: 'chip' },
+        nums: { type: 'array', items: { type: 'integer' }, display: 'chip' },
+        maybe: { anyOf: [{ type: 'string' }, { type: 'null' }], display: 'chip' },
+        nested: { type: 'object', properties: { deep: { type: 'object', display: 'chip' } } },
+      },
+    };
+    expect(displayIssues(doc, { root: doc, files: new Map() })).toEqual([
+      '/properties/loud: display must be "chip"',
+      '/properties/box: display "chip" is only for a string, number, boolean, or string-array field',
+      '/properties/boxes: display "chip" is only for a string, number, boolean, or string-array field',
+      '/properties/nums: display "chip" is only for a string, number, boolean, or string-array field',
+      '/properties/maybe: display "chip" is only for a string, number, boolean, or string-array field',
+      '/properties/nested/properties/deep: display "chip" is only for a string, number, boolean, or string-array field',
+    ]);
   });
 });

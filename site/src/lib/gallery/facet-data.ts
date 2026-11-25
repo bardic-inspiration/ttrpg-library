@@ -1,12 +1,45 @@
 // What the filter tree reads from the build besides library.json (docs/site.md#gallery "Filters"):
-// the names a ref facet's values read by, the groups a groups facet nests its values in, and each
-// ruleset's publisher, whom an author of "publisher" reads as.
+// the names a ref facet's values read by, the groups a groups facet nests its values in, each
+// ruleset's publisher, whom an author of "publisher" reads as, and the facets that read as chips.
 
 import registryJson from '@library/config/types.json' with { type: 'json' };
 import type { GroupTree, RulesData, RulesGroup } from '../../../../lib/rules.ts';
 import { entryNames, loadEntries, type LoadedEntry } from '../library.ts';
 import { loadRules, rulesetPublishers } from '../rules.ts';
+import { isChip, type Schema } from '../../../../scripts/build-index/schema-walk.ts';
 import type { FacetData, GroupInfo, Registry } from './config.ts';
+
+/** Every ruleset's schema files, by ruleset id and then file name, such as `common.schema.json`. */
+export type RulesetSchemas = Record<string, Map<string, Schema>>;
+
+const schemaFiles = import.meta.glob<Schema>('@library/rulesets/*/schemas/*.schema.json', { eager: true, import: 'default' });
+
+/** The library's schema files, read at build time. */
+export function loadSchemas(): RulesetSchemas {
+  const out: RulesetSchemas = {};
+  for (const [path, schema] of Object.entries(schemaFiles)) {
+    const match = /rulesets\/([^/]+)\/schemas\/([^/]+)$/.exec(path);
+    if (match) (out[match[1] as string] ??= new Map()).set(match[2] as string, schema);
+  }
+  return out;
+}
+
+/** Per type, its `stats.*` facets whose schema declares `"display": "chip"` (docs/content-model.md#display). */
+export function chipFacets(registry: Registry, schemas: RulesetSchemas): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  for (const [ruleset, { types }] of Object.entries(registry)) {
+    const files = schemas[ruleset];
+    for (const [type, config] of Object.entries(types)) {
+      const root = files?.get(`${type}.schema.json`);
+      if (!files || !root) continue;
+      const paths = config.facets
+        .map((f) => f.path)
+        .filter((path) => path.startsWith('stats.') && isChip(path.slice('stats.'.length), { root, files }));
+      if (paths.length > 0) out[`${ruleset}/${type}`] = paths;
+    }
+  }
+  return out;
+}
 
 interface Source {
   entry: { ruleset: string; type: string; stats: unknown };
@@ -54,7 +87,7 @@ export function groupInfo(tree: GroupTree): GroupInfo[] {
 
 /**
  * The facet data for the gallery: the name of every ref a ref facet holds in `entries`, the
- * groups of every type with a groups facet, and each ruleset's publisher.
+ * groups of every type with a groups facet, each ruleset's publisher, and the chip facets.
  */
 export function facetData(
   registry: Registry,
@@ -62,8 +95,9 @@ export function facetData(
   names: Map<string, string>,
   rules: RulesData[],
   publishers: Record<string, string> = rulesetPublishers(),
+  schemas: RulesetSchemas = loadSchemas(),
 ): FacetData {
-  const out: FacetData = { names: {}, groups: {}, publishers };
+  const out: FacetData = { names: {}, groups: {}, publishers, chips: chipFacets(registry, schemas) };
   for (const source of entries) {
     const facets = registry[source.entry.ruleset]?.types[source.entry.type]?.facets ?? [];
     for (const facet of facets.filter((f) => f.ref)) {

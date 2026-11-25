@@ -22,6 +22,8 @@ shared components).
   headings, rhythm, and underlines, and its
   [shared components](../../docs/styling.md#shared-components): the
   disclosure, the card link, buttons, and the checkbox, chip, and toggle.
+- [Display](../../docs/content-model.md#display): the schema's `display`
+  keyword, chips on cards and in enum facets' filters.
 - [Gallery](../../docs/site.md#gallery): cards, the filter tree, sort, and
   selection and set actions.
 - [Detail page](../../docs/site.md#detail-page) and
@@ -33,23 +35,6 @@ shared components).
 - [Controls](../../docs/export.md#controls): Print and Download.
 
 ## Design
-
-### Chip or text
-
-A field's schema declares how its value reads, with a `display` keyword:
-`"display": "chip"` renders it as a chip, and a field without it renders as
-text. The keyword sits in the type's schema beside the field, so it serves
-any ruleset, and a field shared through a ruleset's shared definitions
-carries it once.
-
-- **Cards:** a chip field shows its value alone, as a chip; a text field
-  shows its label and value. This ends the repeated labels ("Level Level 2",
-  "Category General").
-- **Filters:** a facet on a chip field lists its values as chips rather than
-  checkboxes, for small-range facets such as spell level and CR.
-- **Validation:** `display` takes only `chip`, and only on a field a facet
-  could read (a string, number, boolean, or array of strings); anything else
-  fails (P2).
 
 ### The Library
 
@@ -125,14 +110,21 @@ gallery cards.
 
 ## Done when
 
-- The schema `display` keyword drives chips on cards and in filters, and
-  validation rejects it anywhere else.
 - The Library has the flattened filters, the cart, and cards for SRD
   equipment and conditions.
 - The page revisions above are built, with screenshots at 390, 820, and
   1440px, and the milestone's accessibility review filed.
 
 ## Open questions
+
+- **Chip range facets:** a chip facet lists its values as chips "for
+  small-range facets such as spell level and CR", but both are range facets,
+  with min and max inputs and `min..max` URLs. Either chips stand in for the
+  inputs (a pressed set filters as an enum, `f.stats.level=1,3`, and old
+  range links need handling), or range facets keep their inputs and
+  [`display`](../../docs/content-model.md#display) changes only their cards.
+  Also: whether CR's chip reads its bare value ("1/8") or "CR 1/8". Until
+  this is decided, range facets keep their inputs and CR isn't marked (#420).
 
 - **The Rulesets page redesign:** a full redesign of today's bare list of
   each ruleset's rules pages, through a design process of its own. Not built

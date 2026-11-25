@@ -30,6 +30,7 @@ interface Badge {
  * true (concentration, ritual, attunement) and are left out when false. A
  * rarity reads as a badge carrying data-rarity, so it takes the rarity accent;
  * its text label means color is never the only signal (docs/styling.md#accessibility).
+ * A chip field (docs/content-model.md#display) reads as its value alone, a badge per value.
  */
 function fields(record: LibraryRecord, cardFields: FilterDef[]) {
   const lines: { label: string; value: string }[] = [];
@@ -41,6 +42,8 @@ function fields(record: LibraryRecord, cardFields: FilterDef[]) {
       if (value) badges.push({ text: def.label });
     } else if (def.vocabulary === 'rarity' && typeof value === 'string') {
       badges.push({ text: displayValue(def, value), rarity: value });
+    } else if (def.display === 'chip') {
+      for (const v of Array.isArray(value) ? value : [value]) badges.push({ text: displayValue(def, v) });
     } else {
       const text = Array.isArray(value) ? value.map((v) => displayValue(def, v)).join(', ') : displayValue(def, value);
       lines.push({ label: def.label, value: text });
@@ -72,8 +75,8 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, selected
         <ul class="card__badges">
           {record.source && <li class="badge badge--source">{record.source}</li>}
           <li class="badge">{typeLabel}</li>
-          {badges.map((badge) => (
-            <li class="badge" key={badge.text} data-rarity={badge.rarity}>
+          {badges.map((badge, i) => (
+            <li class="badge" key={i} data-rarity={badge.rarity}>
               {badge.text}
             </li>
           ))}

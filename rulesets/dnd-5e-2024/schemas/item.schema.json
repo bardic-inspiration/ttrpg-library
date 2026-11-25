@@ -8,6 +8,7 @@
   "required": ["category", "rarity", "attunement", "effect"],
   "properties": {
     "category": {
+      "display": "chip",
       "description": "The item's category.",
       "enum": ["armor", "potion", "ring", "rod", "scroll", "staff", "wand", "weapon", "wondrous-item"]
     },

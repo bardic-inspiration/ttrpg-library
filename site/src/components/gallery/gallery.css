@@ -126,6 +126,12 @@
     display: none;
   }
 
+  /* A chip facet's values (docs/content-model.md#display): chips in a wrapping row. */
+  .tree__chips {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   .tree__node--type {
     padding-block: var(--space-3xs);
     border-block-end: var(--border-width) solid var(--color-border);
