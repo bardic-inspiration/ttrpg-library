@@ -284,8 +284,8 @@ const modes = ['screen', 'capture'] as const;
               typeLabel={cardInfo(record).label}
               cardFields={cardInfo(record).cardFields}
               imageSrc={i === 0 ? sampleArt.src : undefined}
-              selected={i === 1}
-              onSelect={noop}
+              inCart={i === 1}
+              onCart={noop}
             />
           </li>
         ))}

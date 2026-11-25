@@ -168,7 +168,7 @@ its own), or restyles the chevron, the disclosure, or the card link.
   menu's toggle, accordion sections, and the export report use it.
 - **Click targets** (`CardLink.tsx`). The whole card opens its entry: the
   title's link covers the card, and the card's root carries `linked-card`,
-  which lifts every other control on the card (the Select checkbox) above
+  which lifts every other control on the card (the "In cart" checkbox) above
   that link and shows the link's focus ring around the card.
 - **Buttons** (`Button.tsx`, and `Button.astro` for Astro pages). A fixed set
   of variants, each with a fixed placement:
@@ -176,7 +176,7 @@ its own), or restyles the chevron, the disclosure, or the card link.
   | Variant | For | Placement |
   |---|---|---|
   | Primary | A place's one main action: Print | First in its row |
-  | Secondary | Every other action: Download, Clear filters, Clear selection | After the primary, or first when there is none |
+  | Secondary | Every other action: Download, Clear filters, Empty cart | After the primary, or first when there is none |
   | Icon | An icon alone, named by its `label` for assistive technology | At the end of the row or card it acts on |
 
   `MenuButton` is a secondary button that opens a small menu below it, as
@@ -186,7 +186,7 @@ its own), or restyles the chevron, the disclosure, or the card link.
 - **Controls** (`Controls.tsx`):
   - A **checkbox** (`Checkbox`, the box and its label) is one of a list of
     independent choices, any number of them on: filter types and values, and
-    a card's Select.
+    the "In cart" control on cards and detail pages.
   - A **chip** (`Chip`, `aria-pressed`) is one value of a small range, such as
     a spell level, shown as the value alone: a chip facet's filter values
     ([Display](content-model.md#display)).

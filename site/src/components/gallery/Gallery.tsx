@@ -11,7 +11,9 @@ import { computeView } from '../../lib/gallery/view.ts';
 import FilterIcon from '../../icons/Filter.tsx';
 import SearchIcon from '../../icons/Search.tsx';
 import SortIcon from '../../icons/Sort.tsx';
+import { cartKey, pruneCart, setInCart, writeCart } from '../../lib/cart.ts';
 import { setTarget } from '../../lib/gallery/selection.ts';
+import { useCart } from '../cart/useCart.ts';
 import Button from '../shared/Button.tsx';
 import { DisclosureButton } from '../shared/Disclosure.tsx';
 import Card from './Card.tsx';
@@ -43,7 +45,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
   const [state, setState] = useState<GalleryState>(() =>
     parseQuery(initialQuery ?? (typeof window === 'undefined' ? '' : window.location.search), config),
   );
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const cart = useCart();
   // The filter menu's container on phones and tablets, closed by default; on desktop it's a sidebar and always shows.
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -54,6 +56,11 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
       .then(setRecords)
       .catch(() => setFailed(true));
   }, [indexUrl, given]);
+
+  // An entry the library no longer has drops out of the cart once the library loads.
+  useEffect(() => {
+    if (records && !given) pruneCart(new Set(records.map(cartKey)));
+  }, [records, given]);
 
   // Keep the URL in step with the view, without adding a history entry per keystroke.
   useEffect(() => {
@@ -81,6 +88,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     });
 
   const tree = filterTree(config, state, records);
+  const inCart = new Set(cart);
   const choices = sortChoices(config, state.filters);
 
   return (
@@ -179,13 +187,13 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
             <p role="status" class="gallery__count">
               {resultText(view.results.length)}
             </p>
-            {selected.size > 0 && (
-              <p class="gallery__selection">
-                {selected.size} selected{' '}
-                <Button onClick={() => setSelected(new Set())}>Clear selection</Button>
+            {cart.length > 0 && (
+              <p class="gallery__cart">
+                {cart.length} in cart{' '}
+                <Button onClick={() => writeCart([])}>Empty cart</Button>
               </p>
             )}
-            <SetActions target={setTarget(records, view.results, selected)} base={base} />
+            <SetActions target={setTarget(records, view.results, cart)} base={base} />
           </div>
           <ul class="gallery__grid">
             {view.results.map((record) => {
@@ -197,13 +205,8 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
                     typeLabel={typeInfo?.label ?? record.type}
                     cardFields={typeInfo?.cardFields ?? []}
                     imageSrc={record.image ? `${base}${record.image}` : undefined}
-                    selected={selected.has(record.url)}
-                    onSelect={(on) => {
-                      const next = new Set(selected);
-                      if (on) next.add(record.url);
-                      else next.delete(record.url);
-                      setSelected(next);
-                    }}
+                    inCart={inCart.has(cartKey(record))}
+                    onCart={(on) => setInCart(cartKey(record), on)}
                   />
                 </li>
               );

@@ -81,7 +81,7 @@
     font-weight: var(--font-weight-label);
   }
 
-  /* Set actions (docs/site.md#gallery "Selection"): export the selection or the filtered set. */
+  /* Set actions (docs/site.md#gallery "Cart and set actions"): export the cart or the filtered set. */
   .set-actions {
     display: grid;
     gap: var(--space-3xs);
@@ -294,19 +294,5 @@
     font-size: var(--text-small);
     color: var(--card-source-text);
     overflow-wrap: anywhere;
-  }
-
-  .card__select {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3xs);
-    justify-self: start;
-    font-family: var(--control-font);
-    font-size: var(--text-small);
-    color: var(--color-text-muted);
-
-    & label {
-      cursor: pointer;
-    }
   }
 }

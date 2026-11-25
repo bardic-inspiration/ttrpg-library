@@ -1,14 +1,14 @@
 // One gallery card (docs/site.md#gallery "Cards"): art when the entry has it,
 // name with a star slot, the type badge, the type's card fields, the summary, and
-// the source on a smaller line below it, with a selection checkbox. The whole card opens its entry, through the shared card link,
-// and the checkbox sits above that link (docs/styling.md#shared-components "Click targets"). Accents come from data-type (and data-rarity),
+// the source on a smaller line below it, with the cart control. The whole card opens its entry, through the shared card link,
+// and the cart control sits above that link (docs/styling.md#shared-components "Click targets"). Accents come from data-type (and data-rarity),
 // never per-type CSS.
 import { isOfficial } from '../../../../rulesets/module.ts';
 import type { FilterDef, LibraryRecord } from '../../lib/gallery/config.ts';
 import { displayValue, valueAt } from '../../lib/gallery/values.ts';
 import StarIcon from '../../icons/Star.tsx';
 import CardLink, { linkedCard } from '../shared/CardLink.tsx';
-import { Checkbox } from '../shared/Controls.tsx';
+import CartToggle from '../cart/CartToggle.tsx';
 
 export interface CardProps {
   record: LibraryRecord;
@@ -16,8 +16,9 @@ export interface CardProps {
   cardFields: FilterDef[];
   /** The art's URL under the site base, when the entry has art. */
   imageSrc?: string;
-  selected: boolean;
-  onSelect?: (selected: boolean) => void;
+  /** Whether the entry is in the print cart. */
+  inCart: boolean;
+  onCart?: (inCart: boolean) => void;
 }
 
 interface Badge {
@@ -52,7 +53,7 @@ function fields(record: LibraryRecord, cardFields: FilterDef[]) {
   return { lines, badges };
 }
 
-export default function Card({ record, typeLabel, cardFields, imageSrc, selected, onSelect }: CardProps) {
+export default function Card({ record, typeLabel, cardFields, imageSrc, inCart, onCart }: CardProps) {
   const { lines, badges } = fields(record, cardFields);
   const id = `card-${record.type}-${record.id}`;
   return (
@@ -92,11 +93,7 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, selected
         )}
         <p class="card__summary">{record.summary}</p>
         {record.source && <p class="card__source">{record.source}</p>}
-        <span class="card__select">
-          <Checkbox id={`${id}-select`} checked={selected} onChange={onSelect}>
-            Select<span class="visually-hidden"> {record.name}</span>
-          </Checkbox>
-        </span>
+        <CartToggle id={`${id}-cart`} name={record.name} inCart={inCart} onChange={onCart} />
       </div>
     </article>
   );

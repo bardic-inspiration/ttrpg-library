@@ -1,6 +1,6 @@
-// The gallery's set actions (docs/site.md#gallery "Selection", docs/export.md#controls): Print and
+// The gallery's set actions (docs/site.md#gallery "Cart and set actions", docs/export.md#controls): Print and
 // Download, built from the configured set-scope exporters. Each runs on the
-// selection, or on the whole filtered set when nothing is selected. Unless the
+// cart, or on the whole filtered set when the cart is empty. Unless the
 // exporter reads only the entries' keys, their export bundles are fetched first;
 // if any fails, nothing runs and the status message says so. What a format left
 // out is listed below the status.
