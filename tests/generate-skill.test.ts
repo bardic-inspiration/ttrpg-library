@@ -19,7 +19,7 @@ describe(SKILL, () => {
   });
 
   it('names every config/defaults.json key it depends on', () => {
-    for (const key of ['ruleset', 'count', 'tags', 'gapFill.count', 'validateRetries']) {
+    for (const key of ['ruleset', 'count', 'gapFill.count', 'validateRetries']) {
       expect(skill).toContain(`\`defaults.${key}\``);
     }
   });

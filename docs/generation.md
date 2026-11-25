@@ -18,8 +18,7 @@ every issue starts in a lane.
   ([`.github/ISSUE_TEMPLATE/content-request.yml`](../.github/ISSUE_TEMPLATE/content-request.yml),
   label `request`): type (the form lists every type in `config/types.json`), count (a 1–10 dropdown,
   since issue forms have no number field; a free-form request may ask for
-  more), brief, tags (one `key: value` per line, comma-separated for lists),
-  and ruleset. Blank fields take the values in `config/defaults.json`.
+  more), brief, and ruleset. Blank fields take the values in `config/defaults.json`.
 - **Revise request** (`revise-request.yml`, label `revise`): the entries, one
   per line as `<type>/<id>` (or a bare `id` when only one type has it), and an
   instruction, both required. For changes to merged entries.
@@ -87,7 +86,7 @@ never starved by new work. `docs/routines.md` writes it out for the routine.
    hours is treated as unclaimed.
 
 A manual run may name issues, or pass an inline request (type, count, brief,
-tags) handled as if it were an issue but without one. It still does steps 1–3,
+ruleset) handled as if it were an issue but without one. It still does steps 1–3,
 but steps 4 and 5 take only what it was given: named issues must be open
 `import` or `request` issues without `needs-info`, and any other is reported
 and left alone. An inline request is always a content request. It never
@@ -97,12 +96,10 @@ reports the question instead.
 ### Defaults
 
 `config/defaults.json` holds the ruleset, count, the `author` and optional
-`source` of custom entries, tags, gap-fill settings, and the validation retry
-budget a run uses. Defaults apply only to fields a request leaves out, and
-request tags merge over default tags. A `source:` or `author:` line in a
-request's tags is the entry's field, not a tag, and takes the place of the
-default. The default `author` can't be `"publisher"`, and neither `source` nor
-`author` is a default tag key ([Source and author](content-model.md#source-and-author)). `count` and
+`source` of custom entries, gap-fill settings, and the validation retry
+budget a run uses. Defaults apply only to fields a request leaves out: a
+request that names a `source` or `author` sets the entries' own. The default
+`author` can't be `"publisher"` ([Source and author](content-model.md#source-and-author)). `count` and
 `gapFill.count` are whole numbers of at least 1. A request's count is taken on
 trust, and no batch has a size limit. `scripts/generate/defaults.ts` loads and
 checks the file and applies it to a request.
@@ -112,7 +109,7 @@ checks the file and applies it to a request.
 ### The generate skill
 
 `.claude/skills/generate/SKILL.md` is generic across types and rulesets. Its
-inputs are the ruleset, type, count, brief, tags, and issue numbers, or a gap
+inputs are the ruleset, type, count, brief, and issue numbers, or a gap
 bucket, or an SRD import stage. Its steps:
 
 1. Read `config/types.json`, `config/defaults.json`, the ruleset module (the
@@ -128,7 +125,7 @@ bucket, or an SRD import stage. Its steps:
 4. Set `source` and `author` ([Source and author](content-model.md#source-and-author)):
    `"SRD 5.2"` and `"publisher"` on SRD entries, and the request's on custom
    ones. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
-   `meta.source.issues` (or `meta.source.gapFill`). Apply request and default tags.
+   `meta.source.issues` (or `meta.source.gapFill`).
 5. Run `npm run validate`; fix and retry up to `validateRetries` times. If it
    still fails, comment the errors on the issue, remove `in-progress`, and stop
    without a PR. A gap-fill run or inline request reports the errors in the run
@@ -304,7 +301,7 @@ every content rule applies to them.
   the work's title as `source` and its author as `author`
   ([Source and author](content-model.md#source-and-author)),
   `meta.source.kind: import`, the issue, and `meta.source.license` (the
-  license id, author, and source URL), `tags` of `defaults.tags`, and a
+  license id, author, and source URL), and a
   drafted `summary` the run rewrites. It appends the work's
   line to `ATTRIBUTION.md` ([Imported works](licensing.md#imported-works)),
   and prints the issue's skip-list section. It exits 2 with the reason when

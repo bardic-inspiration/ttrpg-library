@@ -20,7 +20,6 @@ export interface Entry {
   summary: string;
   description?: string;
   stats: unknown;
-  tags?: Record<string, unknown>;
   image?: string;
   meta: {
     createdAt: string;

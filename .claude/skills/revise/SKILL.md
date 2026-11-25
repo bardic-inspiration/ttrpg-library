@@ -106,7 +106,7 @@ Edit only the affected files.
 - **`regenerate <id>`.** Delete the entry's file and write a fresh entry
   under the same brief, following the `generate` skill's steps 2 to 4: a new
   name and its slug as the `id`, avoiding collisions with the library and the
-  rest of the batch, with the old entry's `meta.source` and tags. If other
+  rest of the batch, with the old entry's `meta.source`. If other
   entries reference the old `id`, point those refs at the new one in the same
   round.
 - **`meta.updatedAt`.** Set it to today's date, `YYYY-MM-DD`, on every entry

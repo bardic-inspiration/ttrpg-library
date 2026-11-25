@@ -1,14 +1,13 @@
 ---
 // The body of a detail page (docs/site.md#detail-page): art when the entry has it, name,
 // type, and summary; the type template; the description as lore; forward refs and
-// back-refs, an official page's links to homebrew in a Homebrew section after them; tag chips into
-// the Library, filtered; and provenance. The
-// page passes its export controls (an island) in the `export` slot.
+// back-refs, an official page's links to homebrew in a Homebrew section after them; and provenance.
+// The page passes its export controls (an island) in the `export` slot.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
 import { groupPageRefs, groupRefs, splitHomebrew, type RefTarget } from '../../lib/refs';
 import { isOfficial } from '../../../../rulesets/module';
-import { provenance, tagChips } from '../../lib/detail';
+import { provenance } from '../../lib/detail';
 import { renderMarkdown } from '../../lib/markdown';
 import { present } from '../../lib/display';
 import { url } from '../../lib/url';
@@ -41,7 +40,6 @@ const links = loaded.components
 // An SRD page lists its links to homebrew in a Homebrew section of their own, after its SRD links.
 const allGroups = [...links.forward, ...links.back];
 const { official: linkGroups, homebrew: homebrewGroups } = isOfficial(entry) ? splitHomebrew(allGroups) : { official: allGroups, homebrew: [] };
-const chips = tagChips(entry);
 const source = provenance(entry);
 // A slash isn't a break point, so "Antipathy/Sympathy" could set a phone page's width.
 const nameParts = entry.name.split('/');
@@ -90,17 +88,6 @@ const nameParts = entry.name.split('/');
       </dl>
     </section>
   ))}
-
-  {chips.length > 0 && (
-    <section aria-labelledby="tags-heading">
-      <h2 id="tags-heading">Tags</h2>
-      <ul class="entry-detail__tags">
-        {chips.map((chip) => (
-          <li><a class="tag-chip" href={url(chip.path)}><span class="tag-chip__key">{chip.key}:</span> {chip.value}</a></li>
-        ))}
-      </ul>
-    </section>
-  )}
 
   <p class="entry-detail__provenance">
     <small>
@@ -178,30 +165,6 @@ const nameParts = entry.name.split('/');
       & dt {
         font-weight: var(--font-weight-strong);
       }
-    }
-
-    .entry-detail__tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2xs);
-      padding: 0;
-      list-style: none;
-    }
-
-    .tag-chip {
-      display: inline-block;
-      font-family: var(--control-font);
-      font-size: var(--text-small);
-      color: var(--control-text);
-      background: var(--control-bg);
-      border: var(--control-border);
-      border-radius: var(--chip-radius);
-      padding: var(--control-padding-block) var(--control-padding-inline);
-      text-decoration: none;
-    }
-
-    .tag-chip__key {
-      color: var(--color-text-muted);
     }
 
     .entry-detail__provenance {

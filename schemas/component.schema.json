@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/component.schema.json",
   "title": "Component envelope (docs/content-model.md#components)",
-  "description": "A component's fixed keys: an entry's envelope without summary, description, tags, or image, since it has no card and is read only on its parent's page. `stats` is validated by the ruleset's schema for the component type.",
+  "description": "A component's fixed keys: an entry's envelope without summary, description, or image, since it has no card and is read only on its parent's page. `stats` is validated by the ruleset's schema for the component type.",
   "type": "object",
   "additionalProperties": false,
   "required": ["ruleset", "author", "type", "id", "name", "stats", "meta"],

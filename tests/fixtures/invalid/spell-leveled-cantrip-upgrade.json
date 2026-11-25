@@ -40,9 +40,6 @@
     "higherLevels": "The damage increases by 1d8 for each spell slot level above 1.",
     "cantripUpgrade": "The damage increases by 1d8 at levels 5, 11, and 17."
   },
-  "tags": {
-    "theme": "ice"
-  },
   "meta": {
     "createdAt": "2026-11-02",
     "source": {

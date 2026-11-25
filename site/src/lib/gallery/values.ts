@@ -1,9 +1,9 @@
 // Reading a filter or sort path off a library.json record (docs/site.md#index-build, docs/site.md#gallery).
 
 import { formatValue } from '../format.ts';
-import { AUTHOR, CREATED, NAME, RULESET, SOURCE, TYPE, tagKey, typeKey, type FilterDef, type LibraryRecord } from './config.ts';
+import { AUTHOR, CREATED, NAME, RULESET, SOURCE, TYPE, typeKey, type FilterDef, type LibraryRecord } from './config.ts';
 
-/** The raw value at a path: `name`, `createdAt`, `type` (as `<ruleset>/<type>`), `ruleset`, `source`, `author`, a facet, or `tags.<key>`. */
+/** The raw value at a path: `name`, `createdAt`, `type` (as `<ruleset>/<type>`), `ruleset`, `source`, `author`, or a facet. */
 export function valueAt(record: LibraryRecord, path: string): unknown {
   if (path === NAME) return record.name;
   if (path === CREATED) return record.createdAt;
@@ -11,14 +11,12 @@ export function valueAt(record: LibraryRecord, path: string): unknown {
   if (path === RULESET) return record.ruleset;
   if (path === SOURCE) return record.source;
   if (path === AUTHOR) return record.author;
-  const key = tagKey(path);
-  if (key !== undefined) return record.tags[key];
   return record.facets[path];
 }
 
 /**
  * The values an enum filter matches on, as case-folded keys mapped to the
- * stored form for display (docs/content-model.md#tags: comparisons ignore case, display keeps it).
+ * stored form for display (docs/site.md#gallery "Filters": comparisons ignore case, display keeps it).
  * Arrays give one value per item; booleans and numbers read as text.
  */
 export function enumValues(value: unknown): { key: string; stored: string | number | boolean }[] {

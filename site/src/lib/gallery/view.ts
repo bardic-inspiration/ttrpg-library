@@ -2,7 +2,7 @@
 // over library.json records, so the island stays a thin view.
 
 import MiniSearch from 'minisearch';
-import { NAME, isScopePath, recordDef, tagKey, typeKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
+import { NAME, isScopePath, recordDef, typeKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
 
@@ -65,16 +65,13 @@ export function applyFilters(records: LibraryRecord[], filters: Map<string, Matc
   return records.filter((record) => inScope(record) && narrowing.every(([path, value]) => matches(record, path, value)));
 }
 
-/** The search index (docs/site.md#gallery): name ×3, summary ×2, tag values ×1.5, search text ×1, with prefix and light fuzzy matching. */
+/** The search index (docs/site.md#gallery): name ×3, summary ×2, search text ×1, with prefix and light fuzzy matching. */
 export function searchIndex(records: LibraryRecord[]): MiniSearch<LibraryRecord> {
   const index = new MiniSearch<LibraryRecord>({
     idField: 'url',
-    fields: ['name', 'summary', 'tags', 'search'],
-    extractField: (record, field) =>
-      field === 'tags'
-        ? Object.values(record.tags).flatMap((v) => (Array.isArray(v) ? v : [v])).map(String).join(' ')
-        : String((record as unknown as Record<string, unknown>)[field] ?? ''),
-    searchOptions: { boost: { name: 3, summary: 2, tags: 1.5, search: 1 }, prefix: true, fuzzy: 0.2 },
+    fields: ['name', 'summary', 'search'],
+    extractField: (record, field) => String((record as unknown as Record<string, unknown>)[field] ?? ''),
+    searchOptions: { boost: { name: 3, summary: 2, search: 1 }, prefix: true, fuzzy: 0.2 },
   });
   index.addAll(records);
   return index;
@@ -130,7 +127,7 @@ export function sortRecords(records: LibraryRecord[], key: SortKey, config: Gall
 
 export interface Chip {
   key: string;
-  /** The stored form, shown as stored (docs/content-model.md#tags). */
+  /** The stored form, shown as stored (docs/site.md#gallery "Filters"). */
   stored: string | number | boolean;
   count: number;
 }
@@ -206,4 +203,3 @@ export function withoutFilter(
   return filtered.filter((r) => ids.has(r.url));
 }
 
-export { tagKey };

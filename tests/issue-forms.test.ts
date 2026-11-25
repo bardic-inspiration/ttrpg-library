@@ -43,7 +43,6 @@ describe('content-request.yml', () => {
       ['Type', 'dropdown', true],
       ['Count', 'dropdown', false],
       ['Brief', 'textarea', true],
-      ['Tags', 'textarea', false],
       ['Ruleset', 'input', false],
     ]);
   });

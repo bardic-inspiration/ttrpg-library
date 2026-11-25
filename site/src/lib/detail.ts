@@ -1,31 +1,10 @@
-// Links and lines for the detail page (docs/site.md#detail-page) that aren't the type
-// template: tag chips into the Library filtered to the type and tag, and provenance.
+// Lines for the detail page (docs/site.md#detail-page) that aren't the type template:
+// provenance.
 
 import licenses from '../../../config/licenses.json' with { type: 'json' };
 import type { Licenses } from '../../../lib/licenses.ts';
 import { REPO_URL } from '../../../lib/site.ts';
 import type { Entry } from './library.ts';
-
-export interface TagChip {
-  key: string;
-  value: string;
-  /** Path under the site base: the Library filtered to the entry's ruleset, type, and this tag (docs/site.md#gallery URL state). */
-  path: string;
-}
-
-/** One chip per tag value; an array tag gives one per item. */
-export function tagChips(entry: Entry): TagChip[] {
-  return Object.entries(entry.tags ?? {}).flatMap(([key, raw]) =>
-    (Array.isArray(raw) ? raw : [raw]).map((item) => {
-      const value = String(item);
-      return {
-        key,
-        value,
-        path: `?f.ruleset=${encodeURIComponent(entry.ruleset)}&f.type=${encodeURIComponent(entry.ruleset)}/${encodeURIComponent(entry.type)}&${encodeURIComponent(`f.tags.${key}`)}=${encodeURIComponent(value)}`,
-      };
-    }),
-  );
-}
 
 export interface Provenance {
   createdAt: string;

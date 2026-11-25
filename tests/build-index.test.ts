@@ -43,7 +43,7 @@ describe('library.json records', () => {
     expect(records).toHaveLength(5);
     for (const record of records) {
       expect(Object.keys(record)).toEqual([
-        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'facets', 'tags', 'createdAt', 'refs', 'refBy', 'search',
+        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'facets', 'createdAt', 'refs', 'refBy', 'search',
       ]);
     }
   });
@@ -59,7 +59,6 @@ describe('library.json records', () => {
       name: 'Cinder Hound',
       url: '/ttrpg-library/dnd-5e-2024/creature/cinder-hound/',
       image: null,
-      tags: { theme: 'fire', environment: ['underdark', 'mountains'] },
       refs: [],
       refBy: [],
     });
@@ -272,7 +271,8 @@ describe('the type registry', () => {
       for (const field of config.cardFields as string[]) expect(paths).toContain(field);
       // The default sort is a facet, or a path every record has (docs/site.md#gallery "Sort").
       expect([...paths, 'name', 'createdAt']).toContain(String(config.defaultSort).replace(/:(asc|desc)$/, ''));
-      for (const filter of config.defaultFilters as string[]) if (!filter.startsWith('tags.')) expect(paths).toContain(filter);
+      // Every default filter is one of the type's facets.
+      for (const filter of config.defaultFilters as string[]) expect(paths).toContain(filter);
     }
   });
 

@@ -7,41 +7,17 @@ depends: []
 
 ## Goal
 
-Remove tags, which were placeholders, and make search a filter on names.
-Both shrink the index and the filter menu before the UI revision builds on
-them. It serves P3 (one place per fact: organization comes from typed
-fields and arrangements, not free-form tags) and P11 (a lean index).
+Make search a filter on names, which shrinks the index before the UI
+revision builds on it. Tags are already gone. It serves P11 (a lean index).
 
 ## Current
 
-- [Tags](../../docs/content-model.md#tags): the open `tags` map, and every
-  key a `tags.<key>` filter.
-- [Index build](../../docs/site.md#index-build): `tags` and `search` in each
+- [Index build](../../docs/site.md#index-build): `search` in each
   `library.json` record.
-- [Gallery](../../docs/site.md#gallery): the Tags node in the filter tree,
-  `f.tags.*` in the URL, and MiniSearch over name, summary, tag values, and
-  `search`.
-- [Detail page](../../docs/site.md#detail-page): tags as chips.
-- [Type registry](../../docs/site.md#type-registry): `tags.theme` in most
-  types' `defaultFilters`.
-- [Requests](../../docs/generation.md#requests) and
-  [Defaults](../../docs/generation.md#defaults): request tags and
-  `defaults.tags`, applied by the `generate` skill.
+- [Gallery](../../docs/site.md#gallery): MiniSearch over name, summary, and
+  `search`, with results in relevance order while searching.
 
 ## Design
-
-### Tags removed
-
-- **The envelope has no `tags`.** The schema rejects the key, like any
-  unknown key (P2).
-- **Gone with it:** the `tags` record field in `library.json`, the Tags
-  node in the filter tree, tag chips on detail pages, `tags.*` paths in
-  `defaultFilters`, the request form's Tags field, `defaults.tags`, and the
-  `generate` and `revise` skills' tag steps.
-- **Old URLs:** an `f.tags.*` parameter is ignored, as any filter on a path
-  the Library doesn't have already is.
-- P2's "Organization (tags) stays open" is retired: P2 applies to every
-  field.
 
 ### Search filters by name
 
@@ -65,22 +41,16 @@ fields and arrangements, not free-form tags) and P11 (a lean index).
 
 ## Migration
 
-- Strip `tags` from every entry that has it: one migration commit, made by a
-  script, under the `migration` label.
-- Remove `tags.*` from every type's `defaultFilters` in `config/types.json`,
-  and `tags` from `config/defaults.json`.
-- Tests and fixtures that build entries with tags or search records: fixed in
-  one pass ([`AGENTS.md`](../../AGENTS.md) "Dev workflow").
+- Tests and fixtures that build search records: fixed in one pass
+  ([`AGENTS.md`](../../AGENTS.md) "Dev workflow").
 
 ## Done when
 
-- Validation rejects `tags` on an entry, and no entry has it.
-- `library.json` records have neither `tags` nor `search`, and MiniSearch
-  isn't a dependency.
-- The Library filters by name substring, keeps the active sort with a query,
-  and ignores `f.tags.*`.
-- The docs above describe what's built, and `docs/decisions.md` records the
-  retired half of P2.
+- `library.json` records have no `search`, and MiniSearch isn't a
+  dependency.
+- The Library filters by name substring and keeps the active sort with a
+  query.
+- The docs above describe what's built.
 
 ## Out of scope
 

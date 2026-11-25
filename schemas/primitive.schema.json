@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/primitive.schema.json",
   "title": "Ruleset primitive (docs/rulesets.md#rules-data)",
-  "description": "One SRD rule kept with its ruleset at rulesets/<ruleset>/rules/<type>/<id>.json. Every primitive is an SRD rule, reproduced unmodified, so it has no summary, meta, tags, description, or image. `stats` is validated by the ruleset's schema for the type, the same schema an extension's stats use.",
+  "description": "One SRD rule kept with its ruleset at rulesets/<ruleset>/rules/<type>/<id>.json. Every primitive is an SRD rule, reproduced unmodified, so it has no summary, meta, description, or image. `stats` is validated by the ruleset's schema for the type, the same schema an extension's stats use.",
   "type": "object",
   "additionalProperties": false,
   "required": ["type", "id", "name", "stats"],

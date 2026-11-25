@@ -280,7 +280,7 @@ entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
   matches becomes `{dmg:…}`, and a DC becomes `{dc:<ability>}`, except an
   escape DC or an ability check's, which stay `{dc=<n>}`
   ([Text tokens](rulesets.md#text-tokens)).
-- **Not carried:** `summary`, `description`, `tags`, and `image`; a
+- **Not carried:** `summary`, `description`, and `image`; a
   creature's extra sizes, swarm, descriptors, gear, lair, speed and senses
   notes, condition immunity notes, and legendary action uses and intro (so
   its legendary actions don't import); an item whose rarity varies (not

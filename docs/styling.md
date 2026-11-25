@@ -142,8 +142,8 @@ Target: WCAG 2.2 AA.
   token, and every affected
   surface updates under `npm run dev`.
 - **Stress fixtures:** a creature with legendary actions and spellcasting, a
-  long item, a cantrip and a 9th-level spell, a very long name, and an
-  entry with many tags. Layouts are judged against the hard cases.
+  long item, a cantrip and a 9th-level spell, and a very long name. Layouts
+  are judged against the hard cases.
 - **Snapshots on demand.** `npm run snapshots [label]` captures the style guide,
   the home page, and one detail page per type from the built site, full-page
   at 390, 820, and 1440px wide (an 800px viewport height), into the git-ignored

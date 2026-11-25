@@ -13,7 +13,7 @@ What each release changed is in [`CHANGELOG.md`](../CHANGELOG.md), and why in
 | File | Covers | Read it when |
 |---|---|---|
 | [`architecture.md`](architecture.md) | What the library is, the pipeline, technology, repo layout, npm scripts, and the shared terms | Starting out, or looking for where something lives |
-| [`content-model.md`](content-model.md) | Entries in every ruleset: envelope, IDs, tags, meta, text, tables, images, refs, situational fields, SRD vs custom entries, validation | Writing or validating any entry, or changing what an entry is |
+| [`content-model.md`](content-model.md) | Entries in every ruleset: envelope, IDs, meta, text, tables, images, refs, situational fields, SRD vs custom entries, validation | Writing or validating any entry, or changing what an entry is |
 | [`rulesets.md`](rulesets.md) | The ruleset module, derived values, tokens, and how each type in [`ruleset.json`](../rulesets/dnd-5e-2024/ruleset.json) prints | Working on `rulesets/`, a type's schema, or a stat block's wording |
 | [`generation.md`](generation.md) | Requests, labels, the run order, defaults, the `generate` and `revise` skills, guidelines, routine prompts, gap buckets, SRD import | Changing how routines or skills work |
 | [`site.md`](site.md) | The type registry, index build, pages, gallery, detail page, templates | Working on `site/`, `config/types.json`, or the index builder |

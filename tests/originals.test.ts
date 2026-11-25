@@ -157,8 +157,8 @@ describe('the gallery', () => {
       ['Source and author', ['ruleset/elementals:source', 'ruleset/elementals:author']],
       ['Types', ['elementals/creature', 'elementals/invocation', 'elementals/ward']],
     ]);
-    // Nothing but the Ruleset node and the Tags sits at the top.
-    expect(nodes.every((n) => n.id === 'ruleset' || n.id === 'tags')).toBe(true);
+    // Nothing but the Ruleset node sits at the top.
+    expect(nodes.map((n) => n.id)).toEqual(['ruleset']);
   });
 
   it('keeps a type filter value and its label per ruleset, and a shared facet path per type (#388)', async () => {

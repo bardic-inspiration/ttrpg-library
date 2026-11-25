@@ -11,7 +11,6 @@ const base = (): Defaults => ({
   ruleset: 'dnd-5e-2024',
   count: 5,
   author: 'bardic-inspiration',
-  tags: {},
   gapFill: { enabled: true, count: 3 },
   validateRetries: 3,
 });
@@ -67,19 +66,8 @@ describe('checkDefaults', () => {
     );
   });
 
-  it('applies the docs/content-model.md#tags tag rules to default tags', () => {
-    expect(checkDefaults({ ...base(), tags: { world: 'Aldmere', themes: ['frost'] } }, registry)).toEqual([]);
-    expect(checkDefaults({ ...base(), tags: { World: 'x' } }, registry)).toContainEqual(expect.stringMatching(/tags/));
-    expect(checkDefaults({ ...base(), tags: { world: { a: 1 } } }, registry)).toContainEqual(
-      expect.stringMatching(/tags/),
-    );
-  });
-
-  it('rejects source and author as tags, since they are envelope fields (docs/content-model.md#source-and-author)', () => {
-    expect(checkDefaults({ ...base(), tags: { source: 'x', author: 'y' } }, registry)).toEqual([
-      expect.stringMatching(/^tags\.source: is an envelope field/),
-      expect.stringMatching(/^tags\.author: is an envelope field/),
-    ]);
+  it('rejects default tags, since entries have none', () => {
+    expect(checkDefaults({ ...base(), tags: {} }, registry)).toEqual(['tags: unknown key']);
   });
 
   it('requires an author other than "publisher", and takes an optional source', () => {
@@ -100,7 +88,6 @@ describe('applyDefaults', () => {
       ruleset: 'dnd-5e-2024',
       count: 5,
       author: 'bardic-inspiration',
-      tags: {},
     });
   });
 
@@ -110,16 +97,9 @@ describe('applyDefaults', () => {
     expect(request.ruleset).toBe('other');
   });
 
-  it('merges request tags over default tags', () => {
-    const defaults = { ...base(), tags: { world: 'Aldmere', campaign: 'Ashfall' } };
-    const request = applyDefaults({ type: 'creature', tags: { world: 'Vell', theme: ['ice'] } }, defaults);
-    expect(request.tags).toEqual({ world: 'Vell', campaign: 'Ashfall', theme: ['ice'] });
-    expect(defaults.tags).toEqual({ world: 'Aldmere', campaign: 'Ashfall' });
-  });
-
-  it('lifts a source or author line out of the request tags, over the defaults', () => {
-    const request = applyDefaults({ type: 'spell', tags: { source: 'Ember Codex', author: 'A. Author', theme: 'fire' } }, { ...base(), source: 'Default Book' });
-    expect(request).toMatchObject({ source: 'Ember Codex', author: 'A. Author', tags: { theme: 'fire' } });
+  it('takes a request\'s source and author over the defaults', () => {
+    const request = applyDefaults({ type: 'spell', source: 'Ember Codex', author: 'A. Author' }, { ...base(), source: 'Default Book' });
+    expect(request).toMatchObject({ source: 'Ember Codex', author: 'A. Author' });
     expect(applyDefaults({ type: 'spell' }, { ...base(), source: 'Default Book' }).source).toBe('Default Book');
     expect(applyDefaults({ type: 'spell' }, base())).not.toHaveProperty('source');
   });

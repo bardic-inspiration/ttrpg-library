@@ -101,7 +101,7 @@ from `types`, with whether it takes extensions:
 - **Primitives** are the SRD's rules, kept with the ruleset: one file per
   primitive at `rules/<type>/<id>.json`, holding `type`, `id`, `name`, and
   `stats` (`schemas/primitive.schema.json`). The path must match, and a
-  primitive has no `summary`, `meta`, `tags`, `description`, or `image`: it
+  primitive has no `summary`, `meta`, `description`, or `image`: it
   is an SRD rule, reproduced faithfully ([SRD and custom entries](content-model.md#srd-and-custom-entries)).
 - **Extensions** are custom rules: ordinary entries under
   `content/<ruleset>/<type>/`, whose `stats` validate against the same type

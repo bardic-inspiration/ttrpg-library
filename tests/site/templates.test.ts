@@ -165,7 +165,7 @@ describe('generic template (docs/site.md#templates)', () => {
     expect(templateFor(undefined)).toBe('generic');
   });
 
-  it('renders fixed keys, stats as a definition list, and tags, by presence alone', async () => {
+  it('renders fixed keys and stats as a definition list, by presence alone', async () => {
     const entry: Entry = {
       ruleset: 'dnd-5e-2024',
       author: 'bardic-inspiration',
@@ -175,13 +175,12 @@ describe('generic template (docs/site.md#templates)', () => {
       summary: 'A gate of cooling slag at the edge of the forge district.',
       description: 'Smoke *always* curls from its hinges.',
       stats: { level: 0, open: false, guardedBy: { ref: 'creature/cinder-hound' }, size: { width: 20, height: 30 } },
-      tags: { theme: 'fire', environment: ['city', 'forge'] },
       meta: { createdAt: '2026-11-02', source: { kind: 'manual' } },
     };
     const html = await render(entry, {});
     const text = textOf(html);
     expect(html).toContain('<em>always</em>');
-    for (const line of ['Ember Gate', 'A gate of cooling slag', 'Level 0', 'Open No', 'Guarded by Cinder Hound', 'Size width 20', 'Size height 30', 'theme fire', 'environment city, forge']) {
+    for (const line of ['Ember Gate', 'A gate of cooling slag', 'Level 0', 'Open No', 'Guarded by Cinder Hound', 'Size width 20', 'Size height 30']) {
       expect(text).toContain(line);
     }
     expect(text).not.toContain('Cursed');

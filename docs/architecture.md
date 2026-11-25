@@ -147,7 +147,6 @@ checks them. `build:originals` and `dev:originals` set `LIBRARY_ROOT` through
   token such as `{dmg:2d6:fire}`, or `{ref:<type>/<id>}`.
 - **Ref:** a link from one entry to another, keyed `<type>/<id>`. Its reverse is
   a back-reference.
-- **Tag:** open organizational data on an entry, filterable in the gallery.
 - **Facet:** a `stats` or derived path the registry lifts into the index for
   filtering and sorting.
 - **Registry:** `config/types.json`, the display and generation defaults per

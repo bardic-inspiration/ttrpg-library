@@ -40,9 +40,6 @@
     "effect": "Make a ranged spell attack against a creature within range. On a hit, the target takes 3d8 Cold damage, and its Speed is reduced by 10 feet until the start of your next turn.",
     "higherLevels": "The damage increases by 1d8 for each spell slot level above 1."
   },
-  "tags": {
-    "theme": "ice"
-  },
   "meta": {
     "createdAt": "2026-11-02",
     "source": {

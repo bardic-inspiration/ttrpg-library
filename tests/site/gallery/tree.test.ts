@@ -215,7 +215,6 @@ describe('every facet of every type', () => {
         facets: Object.fromEntries(
           config.facets.map((f) => [f.path, f.kind === 'range' ? 1 : f.groups ? 'martial-melee-weapons' : f.ref ? 'condition/poisoned' : 'x']),
         ),
-        tags: { theme: 'fire' },
       }),
     );
 
@@ -227,10 +226,9 @@ describe('every facet of every type', () => {
       expect(node, type).toBeDefined();
       expect(paths(node?.kind === 'type' ? node.children : []), type).toEqual(config.facets.map((f) => f.path));
     }
-    expect(find(nodes, 'Tags', 'Theme')?.kind).toBe('enum');
-    // A tag a checked type lists among its default filters starts open too.
-    expect(find(nodes, 'Tags', 'Theme')?.open).toBe(false);
-    expect(find(tree(full(), home, '?f.type=creature'), 'Tags', 'Theme')?.open).toBe(true);
+    // The Ruleset node is the only top-level node, and an old tag filter adds none.
+    expect(nodes.map((n) => n.id)).toEqual(['ruleset']);
+    expect(tree(full(), home, '?f.type=creature&f.tags.theme=fire').map((n) => n.id)).toEqual(['ruleset']);
   });
 
   it('checks a type as the type filter, counting the entries of each type it shows', () => {
@@ -266,7 +264,7 @@ describe('every facet of every type', () => {
     ]);
   });
 
-  it('puts Source and Author under each ruleset, not under Tags, with "publisher" read as its publisher (docs/content-model.md#source-and-author)', () => {
+  it('puts Source and Author under each ruleset, with "publisher" read as its publisher (docs/content-model.md#source-and-author)', () => {
     const home = galleryConfig(reg, { ...data, publishers: { 'dnd-5e-2024': 'Wizards of the Coast' } });
     const records = [
       record({ id: 'fireball', type: 'spell', source: 'SRD 5.2', author: 'publisher' }),
@@ -284,7 +282,6 @@ describe('every facet of every type', () => {
       ['bardic-inspiration', 'bardic-inspiration', 2],
       ['publisher', 'Wizards of the Coast', 1],
     ]);
-    expect(find(nodes, 'Tags')).toBeUndefined();
     // An active author filter opens the Ruleset node down to its value, and filters the results.
     const filtered = tree(records, home, '?f.author=publisher');
     expect(filtered[0]?.open).toBe(true);

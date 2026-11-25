@@ -113,7 +113,7 @@ const encode = (text: string): string =>
 
 /**
  * Writes gallery state as a query string (with a leading `?`, or `''` for the
- * default view). Filters follow the Library's filter order, then tags by key, so
+ * default view). Filters follow the Library's filter order, so
  * one view always has one URL. The default sort and the default ruleset set are
  * left out; an empty ruleset set is `f.ruleset=`.
  */

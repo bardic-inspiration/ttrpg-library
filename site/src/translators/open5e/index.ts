@@ -40,7 +40,6 @@ const ENVELOPE: [keyof TranslatorItem['entry'], string][] = [
   ['author', 'Open5e has no field for an author.'],
   ['summary', 'Open5e has no field for a summary.'],
   ['description', 'Open5e has no field for a description.'],
-  ['tags', 'Open5e has no field for tags.'],
   ['image', 'Open5e\'s illustrations need credits the library doesn\'t store.'],
 ];
 

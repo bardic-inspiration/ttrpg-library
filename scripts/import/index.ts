@@ -2,7 +2,7 @@
 // issue's file and turns what it returns into library entries. It checks the license against the
 // source allowlist, resolves names against the library, skips what a custom entry can't be (an SRD
 // name, a blocklisted term, a name or id the library already has), writes `source`, `author`, `summary`,
-// `tags`, and `meta`, and returns the skip list and the work's ATTRIBUTION.md line. The `generate` skill runs it.
+// and `meta`, and returns the skip list and the work's ATTRIBUTION.md line. The `generate` skill runs it.
 
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -11,7 +11,6 @@ import { ruleNames } from '../../lib/rules.ts';
 import { termMatcher } from '../../lib/text.ts';
 import { open5e } from '../../site/src/translators/open5e/index.ts';
 import type { ImportedEntry, Skip, Translator } from '../../site/src/translators/types.ts';
-import type { Tags } from '../generate/defaults.ts';
 import { loadLicenses, validateLibrary } from '../validate/index.ts';
 import { PROJECT_ROOT } from '../validate/schema.ts';
 import { checkBlocklist, loadBlocklist } from '../validate/text.ts';
@@ -36,8 +35,6 @@ export interface ImportRequest {
   ruleset: string;
   /** `meta.createdAt`, as YYYY-MM-DD. */
   date: string;
-  /** Default tags (config/defaults.json), under the entries' own. */
-  tags?: Tags;
 }
 
 /** A written entry: the envelope, ready to save at `content/<ruleset>/<type>/<id>.json`. */
@@ -46,7 +43,6 @@ export interface WrittenEntry extends ImportedEntry {
   source: string;
   author: string;
   summary: string;
-  tags: Tags;
   meta: {
     createdAt: string;
     source: { kind: 'import'; issues: number[]; license: { id: string; author: string; url: string } };
@@ -144,7 +140,6 @@ export function runImport(request: ImportRequest, library: ImportLibrary): Impor
       summary: draftSummary(label, request.author),
       ...(entry.description === undefined ? {} : { description: entry.description }),
       stats: entry.stats,
-      tags: { ...request.tags },
       meta: {
         createdAt: request.date,
         source: { kind: 'import', issues: [request.issue], license: { id: request.license, author: request.author, url: request.url } },

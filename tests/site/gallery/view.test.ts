@@ -25,11 +25,8 @@ describe('finding the example entries', () => {
     expect(view(fixtures, library, '?q=frost')).toHaveLength(2);
   });
 
-  it('by tag, as a filter and through search', () => {
-    const theme = fixtures.find((r) => r.id === 'cinder-hound')!.tags.theme;
-    expect(theme).toBe('fire');
-    expect(view(fixtures, library, '?f.tags.theme=fire')).toEqual(['Cinder Hound']);
-    expect(view(fixtures, library, '?f.tags.theme=FIRE')).toEqual(['Cinder Hound']);
+  it('ignores an old tag filter, as any filter on a path the Library lacks', () => {
+    expect(view(fixtures, library, '?f.tags.theme=fire')).toEqual(view(fixtures, library, ''));
   });
 
   it('by facet', () => {
@@ -51,8 +48,8 @@ describe('finding the example entries', () => {
 
 describe('filter logic', () => {
   const records = [
-    record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5 }, tags: { theme: 'Fire' } }),
-    record({ id: 'b', facets: { 'stats.creatureType': 'fiend', 'stats.cr': 1 }, tags: { theme: ['ice', 'Storm'] } }),
+    record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5, 'stats.size': 'Huge' } }),
+    record({ id: 'b', facets: { 'stats.creatureType': 'fiend', 'stats.cr': 1, 'stats.size': ['small', 'Medium'] } }),
     record({ id: 'c', facets: { 'stats.creatureType': 'beast', 'stats.cr': 9 } }),
   ];
 
@@ -62,9 +59,9 @@ describe('filter logic', () => {
   });
 
   it('matches string values case-insensitively, inside arrays too, and never matches a missing value', () => {
-    expect(view(records, library, '?f.tags.theme=fire')).toEqual(['a']);
-    expect(view(records, library, '?f.tags.theme=storm')).toEqual(['b']);
-    expect(view(records, library, '?f.tags.theme=fire,ice,storm&sort=name:asc')).toEqual(['a', 'b']);
+    expect(view(records, library, '?f.stats.size=huge')).toEqual(['a']);
+    expect(view(records, library, '?f.stats.size=medium')).toEqual(['b']);
+    expect(view(records, library, '?f.stats.size=huge,small,medium&sort=name:asc')).toEqual(['a', 'b']);
   });
 
   it('search narrows within the active filters', () => {
@@ -145,8 +142,8 @@ describe('the Library’s default sort', () => {
 
 describe('filter values', () => {
   const records = [
-    record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5 }, tags: { theme: 'Fire' } }),
-    record({ id: 'b', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 1 }, tags: { theme: 'fire', world: 'Greyhawk' } }),
+    record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5, 'stats.environment': 'Coast' } }),
+    record({ id: 'b', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 1, 'stats.environment': 'coast' } }),
     record({ id: 'c', facets: { 'stats.creatureType': 'beast', 'stats.cr': 1 } }),
   ];
 
@@ -159,8 +156,8 @@ describe('filter values', () => {
       { key: 'beast', stored: 'beast', count: 1 },
       { key: 'dragon', stored: 'dragon', count: 1 },
     ]);
-    const theme = chips({ path: 'tags.theme', label: 'theme', kind: 'enum' }, records, records);
-    expect(theme).toEqual([{ key: 'fire', stored: 'Fire', count: 2 }]);
+    const environment = chips({ path: 'stats.environment', label: 'environment', kind: 'enum' }, records, records);
+    expect(environment).toEqual([{ key: 'coast', stored: 'Coast', count: 2 }]);
   });
 
   it('keeps a selected value no record has, so it can be cleared', () => {

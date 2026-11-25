@@ -15,17 +15,17 @@ Every entry is one JSON file at `content/<ruleset>/<type>/<id>.json`, and the
 path must match the entry's `ruleset`, `type`, and `id`. Every entry, in every
 ruleset, has the same envelope, written in this order: `ruleset`, `source`
 (optional), `author`, `type`, `id`, `name`, `summary`, `description`
-(optional), `stats`, `tags` (optional), and `meta`, plus an optional `image`.
-Unknown top-level keys are rejected.
+(optional), `stats`, and `meta`, plus an optional `image`.
+Unknown top-level keys are rejected, `tags` among them: organization comes
+from typed fields, not free-form tags.
 
-The envelope has four zones:
+The envelope has three zones:
 
 - **`source` and `author`** place the entry within its ruleset
   ([Source and author](#source-and-author)).
 - **`stats`** holds the rules data, validated strictly by the ruleset's schema
   for the type. Unknown keys fail. It holds inputs only, never a value the
   ruleset derives ([rulesets.md](rulesets.md#inputs-and-derived-values)).
-- **`tags`** holds open organization ([Tags](#tags)).
 - **`meta`** holds provenance ([Meta](#meta)).
 
 `ruleset` must name a folder in `rulesets/` and a ruleset in
@@ -51,19 +51,6 @@ with a schema file and a registry entry. Anything else fails as unknown.
   distance of 2 or less), so a reviewer can catch "Frost Lance" beside "Frost
   Lances". It skips a pair when both are SRD entries, since neither name can
   change: "Fireball" and "Fire Bolt" are both canonical.
-
-### Tags
-
-- `tags` is a flat map. Values are a string, number, boolean, or array of
-  strings; nested objects are rejected. Nothing else in `tags` is ever
-  rejected for being unknown.
-- Every tag key becomes a gallery filter, `tags.<key>`, with no configuration.
-- Conventional keys, not enforced: `world`, `campaign`, `theme`,
-  `environment`.
-- `source` and `author` are envelope fields ([Source and author](#source-and-author)),
-  so neither is a tag key; the schema rejects both in `tags`.
-- Filtering compares strings case-insensitively; display keeps the stored
-  case.
 
 ### Source and author
 
@@ -99,7 +86,7 @@ Other rulesets settle their licensing case by case.
 `meta` records when an entry was created and revised, and where it came from:
 the source kind (`routine`, `revise`, `manual`, or `import`), the issues it
 fulfilled, and the gap bucket that produced it ([generation.md](generation.md#gap-buckets)). It shows on the detail page as a provenance line and
-`meta.createdAt` is sortable, but meta isn't a tag.
+`meta.createdAt` is sortable.
 
 An imported entry ([Imports](generation.md#imports)) has
 `meta.source.kind: import` and a `meta.source.license` block: `id`, the
@@ -260,7 +247,7 @@ features and a species' traits are components.
 - **Stored like an entry**, at `content/<ruleset>/<type>/<id>.json`, with the
   component envelope (`schemas/component.schema.json`): `ruleset`,
   `author`, `type`, `id`, `name`, `stats`, and `meta`, with `source` when its
-  parent has one, and no `summary`, `description`, `tags`, or `image`. The validator picks the envelope by whether the ruleset lists
+  parent has one, and no `summary`, `description`, or `image`. The validator picks the envelope by whether the ruleset lists
   the type under `components`.
 - **The parent lists its components**, in order, by `{ "ref": … }` objects
   in its `stats`, and a component doesn't name its parent: its parent is the
@@ -493,7 +480,7 @@ nothing invalid reaches the site.
 
 ## Where the rules live
 
-- `schemas/envelope.schema.json`: the envelope, tags, meta, and image, with a
+- `schemas/envelope.schema.json`: the envelope, meta, and image, with a
   description of each field. `schemas/component.schema.json`: the component
   envelope.
 - `scripts/validate/`: the CLI, the schema stage, the checks for every type,
@@ -510,7 +497,6 @@ nothing invalid reaches the site.
 
 | To add | Touch |
 |---|---|
-| A world, campaign, or theme | A tag on entries |
 | A collection or author | The entry's `source` and `author` ([Source and author](#source-and-author)) |
 | A field a schema validates | The type's schema, plus the template if it displays |
 | Art for an entry | Commit the file under `assets/images/` and set `image` |

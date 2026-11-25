@@ -24,7 +24,7 @@ reversal is noted only when it explains the reason.
 | | Principle | Meaning |
 |---|---|---|
 | P1 | Files are the database | One JSON file per entry, in the repo, reviewed as an ordinary diff. Static build and GitHub Actions; no runtime services. |
-| P2 | Fail closed | Rules data is strict. An unknown or malformed value fails CI instead of being skipped, because a silent skip loses an entry with no signal. Organization (tags) stays open. |
+| P2 | Fail closed | Rules data is strict. An unknown or malformed value fails CI instead of being skipped, because a silent skip loses an entry with no signal. It applies to every field. |
 | P3 | One source per fact | Each value, rule, or decision is held in one place. Derived values are computed, never stored. Shared logic is one helper used by every consumer. Copies drift. |
 | P4 | Configuration over code | A new type, page size, exporter, theme, or filter is a data or file addition, not a code change. |
 | P5 | SRD fidelity, custom originality | SRD entries keep SRD 5.2's rules and meaning; the site's house style may adapt their form (#273). Custom entries borrow no SRD entry name and no non-SRD intellectual property. |
@@ -575,3 +575,13 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | No patch releases while a version is in development: once its work has merged to `main`, Spot Fixes ship with the next minor release. Patches aren't cut from a release branch, so branches and the lane check stay as they are. | Every tag is a point on `main`, and production follows the latest tag; the site isn't public yet, so a fix waiting for the release costs little | #412 |
 | One Pages deploy publishes production from the latest `v*` tag at the site base and the preview from `main` under `next/`, rebuilding both on every push to `main`, pushed `v*` tag, and manual run. Each builds from its own checkout with its own Node, lockfile, and install, so a tag builds exactly as it was released. | GitHub Pages serves one site per repository; P7: merging publishes only to the preview, and tagging a release is the step that publishes to production | #414 |
 | The deploy finds the latest tag by version order (`git tag --sort=-v:refname`), not by date, so a tag made later on an older line can't replace a newer release. | P2: a predictable rule over whatever was tagged last | #414 |
+
+### Tags and search
+
+| Decision | Why | Source |
+|---|---|---|
+| Tags are removed: the envelope schema rejects `tags` as an unknown key, and `library.json` records, the filter tree, detail pages, `defaultFilters`, `config/defaults.json`, the content-request form, and the `generate` and `revise` skills drop them. A script stripped them from every entry. P2's "Organization (tags) stays open" is retired, so P2 applies to every field. | P3: organization comes from typed fields and arrangements, not free-form tags; P11: a lean index | #402, #416 |
+| An old `f.tags.*` URL parameter is ignored, as any filter on a path the Library doesn't have is. | Links keep working without a special case | #402, #416 |
+| With the Tags node gone, the Ruleset node is the filter tree's only top-level node, in one list with no break line under it. | The break line divided the ruleset set from the Tags; with nothing below it, a line would close an empty section | #416 |
+| A request sets custom entries' `source` or `author` only by naming them as fields (an inline request, or a free-form request's prose); the form's `source:` and `author:` tag lines go with its Tags field. | The tag lines were the form's only route to those fields, and adding form fields for them is outside the spec | #416 |
+| The invalid fixtures `nested-tag` and `bad-tag-key` are replaced by one, `tags-key`, that fails with `tags: unknown key`. | One fixture per error, and a tag's shape is no longer an error of its own | #416 |
