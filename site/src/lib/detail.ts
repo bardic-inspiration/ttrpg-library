@@ -1,15 +1,13 @@
 // Lines for the detail page (docs/site.md#detail-page) that aren't the type template:
-// provenance.
+// provenance. Source issues aren't shown: an entry page links nothing on GitHub but Contribute.
 
 import licenses from '../../../config/licenses.json' with { type: 'json' };
 import type { Licenses } from '../../../lib/licenses.ts';
-import { REPO_URL } from '../../../lib/site.ts';
 import type { Entry } from './library.ts';
 
 export interface Provenance {
   createdAt: string;
   updatedAt?: string;
-  issues: { number: number; url: string }[];
   /** An imported entry's credit (docs/content-model.md#meta): the author, the source, and the license by name. */
   credit?: { author: string; source: string; license: string; licenseUrl: string };
 }
@@ -17,7 +15,6 @@ export interface Provenance {
 export const provenance = (entry: Entry): Provenance => ({
   createdAt: entry.meta.createdAt,
   ...(entry.meta.updatedAt ? { updatedAt: entry.meta.updatedAt } : {}),
-  issues: (entry.meta.source.issues ?? []).map((number) => ({ number, url: `${REPO_URL}/issues/${number}` })),
   ...(entry.meta.source.license ? { credit: creditOf(entry.meta.source.license) } : {}),
 });
 

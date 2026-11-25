@@ -584,8 +584,9 @@ thousand entries. Past about 2,000, revisit the index size.
   a page without homebrew links has no Homebrew section. A homebrew page's
   links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`).
 - The type, linked to the Library filtered to it ([Redirects](#redirects)).
-- A provenance line: created and updated dates, and source issues linked to
-  GitHub. An imported entry's line adds "Adapted from a work by <author>",
+- A provenance line: created and updated dates. It doesn't name the entry's
+  source issues: an entry page links nothing on GitHub but the nav's Contribute
+  link. An imported entry's line adds "Adapted from a work by <author>",
   linked to the source, "licensed under <license>", linked to its legal code
   ([Meta](content-model.md#meta)).
 - Export controls below the summary: Print and Download, or Print alone on a

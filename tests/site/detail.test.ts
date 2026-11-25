@@ -70,12 +70,14 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(html).toContain('class="entry-detail__type" href="/?sort=stats.cr:asc&amp;f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature"');
   });
 
-  it('shows provenance with source issues linked to GitHub', async () => {
+  // The Contribute link in the site nav is the site's only GitHub link (docs/site.md#detail-page).
+  it('shows provenance without its source issues, and links nothing on GitHub', async () => {
     const { meta } = lib.byId('cinder-hound').entry;
-    const issue = meta.source.issues![0];
+    expect(meta.source.issues!.length).toBeGreaterThan(0);
     const html = await render('cinder-hound');
-    expect(textOf(html)).toContain(`Added ${meta.createdAt}. From #${issue}.`);
-    expect(html).toContain(`href="https://github.com/bardic-inspiration/ttrpg-library/issues/${issue}"`);
+    expect(textOf(html)).toContain(`Added ${meta.createdAt}.`);
+    expect(textOf(html)).not.toMatch(/From #\d/);
+    expect(html).not.toContain('github.com');
   });
 
   it('credits an imported entry\'s author, source, and license (docs/content-model.md#meta)', async () => {
@@ -90,7 +92,7 @@ describe('detail page (docs/site.md#detail-page)', () => {
     });
     const container = await AstroContainer.create();
     const html = await container.renderToString(EntryDetail, { props: { loaded: { ...loaded, entry }, names: lib.names, targets: lib.targets } });
-    expect(textOf(html)).toContain('From #7. Adapted from a work by A. Author, licensed under Creative Commons Attribution 4.0 International.');
+    expect(textOf(html)).toContain('Adapted from a work by A. Author, licensed under Creative Commons Attribution 4.0 International.');
     expect(html).toContain('href="https://example.com/hounds"');
     expect(html).toContain('href="https://creativecommons.org/licenses/by/4.0/legalcode"');
     expect(provenance(loaded.entry).credit).toBeUndefined();

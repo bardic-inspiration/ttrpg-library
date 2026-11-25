@@ -92,13 +92,6 @@ const nameParts = entry.name.split('/');
   <p class="entry-detail__provenance">
     <small>
       Added {source.createdAt}{present(source.updatedAt) && `, revised ${source.updatedAt}`}.
-      {source.issues.length > 0 && (
-        <>
-          {' '}From {source.issues.map((issue, i) => (
-            <>{i > 0 && ', '}<a href={issue.url}>#{issue.number}</a></>
-          ))}.
-        </>
-      )}
       {source.credit && (
         <>
           {' '}Adapted from <a href={source.credit.source}>a work by {source.credit.author}</a>, licensed under{' '}
