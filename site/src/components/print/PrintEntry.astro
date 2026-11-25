@@ -32,6 +32,19 @@ const { entry, derived } = loaded;
       --text-small: var(--print-small-size);
       --text-h4: var(--print-section-size);
       --text-h3: var(--print-heading-size);
+      --text-h5: var(--print-font-size);
+      --text-h6: var(--print-font-size);
+
+      /*
+       * A custom property resolves where it's declared, so the component size
+       * tokens declared on :root as text roles (tokens/components.css) keep their
+       * screen sizes here unless they're declared again, against the print roles above.
+       */
+      --site-title-size: var(--text-h4);
+      --card-title-size: var(--text-h4);
+      --entry-summary-size: var(--text-h4);
+      --statblock-title-size: var(--text-h3);
+      --statblock-heading-size: var(--text-h4);
 
       font-size: var(--text-body);
 
