@@ -5,6 +5,7 @@
       "Bash(npm run validate)",
       "Bash(npm run build)",
       "Bash(npm run build:index)",
+      "Bash(npm run build:preview)",
       "Bash(npm run check)",
       "Bash(npm run links)",
       "Bash(npm run a11y)",

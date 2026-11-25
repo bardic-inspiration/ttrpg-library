@@ -220,6 +220,23 @@ install, validate, and build steps, then `actions/upload-pages-artifact` and
 `id-token: write`, in the concurrency group `pages` without cancelling runs in
 progress. The Pages source is GitHub Actions.
 
+**The site base** is `SITE_BASE`, read by `lib/site.ts`: `/ttrpg-library/`,
+production's, when it's unset or empty. Astro's `base`, the URLs in
+`library.json`, and the Open5e document's permalink follow it. A build at any
+other base is a **preview**, and `npm run build:preview` builds one at
+`/ttrpg-library/next/`, setting the variable from a Node script
+(`scripts/build-preview/`). `npm run a11y` and `npm run snapshots` serve the
+built site under `SITE_BASE` too, so a preview build is checked with it set as
+it was built.
+
+**The preview:** every page of a preview build carries
+`<meta name="robots" content="noindex">` and a notice above the header
+(`site/src/components/PreviewNotice.astro`) naming it a preview of the next
+version. The notice links to the same path under production's base. Once the
+page loads, its script asks production for that page through `fetchFresh`
+([Fresh data](site.md#fresh-data)), and when production doesn't have it,
+points the link at production's Library instead.
+
 ### Releases
 
 A release is a tagged point on `main`, not a deploy: the site deploys on every
