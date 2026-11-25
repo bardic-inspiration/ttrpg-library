@@ -25,7 +25,7 @@ shared components).
 - [Display](../../docs/content-model.md#display): the schema's `display`
   keyword, chips on cards and in enum facets' filters.
 - [Gallery](../../docs/site.md#gallery): cards, the filter tree, sort, and
-  selection and set actions.
+  the print cart and set actions.
 - [Detail page](../../docs/site.md#detail-page) and
   [Accordion pages](../../docs/site.md#accordion-pages): sections, the
   contents list, and links.
@@ -48,21 +48,6 @@ shared components).
   every page. Search opens the Library with the query; Print and Download act
   on the cart or, on the Library, the filtered results. A detail page's own
   export controls stay where they are.
-
-### The print cart
-
-A cart replaces the cards' Select checkboxes.
-
-- **Adding:** a control on each card and detail page adds the entry to the
-  cart or removes it. The header shows the cart's count.
-- **Persistence:** the cart lives in the browser's local storage, keyed by
-  `<ruleset>/<type>/<id>`, so it survives page changes and reloads in that
-  browser. Every read and write is wrapped so the site works with storage
-  blocked, the cart then lasting only for the page. It isn't in the URL.
-- **Acting on it:** Print and Download target the cart when it holds
-  anything, in the order entries were added, and otherwise the filtered
-  results, with accessible names that say which, as today.
-- An entry removed from the library drops out of the cart on the next load.
 
 ### SRD equipment and conditions as cards
 

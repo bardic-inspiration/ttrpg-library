@@ -1,7 +1,9 @@
 ---
 // The top bar (docs/site.md#pages-and-navigation): Library, Rulesets, About, and Contribute,
 // which links to the repository. The current section is marked for assistive technology: the
-// Library on `/`, Rulesets on its page and every rules page.
+// Library on `/`, Rulesets on its page and every rules page. After the links, the print cart's
+// count (docs/site.md#gallery "Cart and set actions"), which needs JavaScript, so it stays hidden
+// until the script shows it.
 import { REPO_URL } from '../../../lib/site.ts';
 import { url } from '../lib/url';
 
@@ -21,12 +23,36 @@ const links: { label: string; href: string; current: Current }[] = [
       <li><a href={link.href} aria-current={link.current}>{link.label}</a></li>
     ))}
   </ul>
+  <p class="site-nav__cart" data-cart-count hidden>Cart: <span>0</span></p>
 </nav>
+
+<script>
+  import { onCartChange, readCart } from '../lib/cart.ts';
+
+  for (const count of document.querySelectorAll<HTMLElement>('[data-cart-count]')) {
+    const show = () => {
+      const n = String(readCart().length);
+      const value = count.querySelector('span');
+      if (value && value.textContent !== n) value.textContent = n;
+    };
+    show();
+    onCartChange(show);
+    count.hidden = false;
+  }
+</script>
 
 <style>
   @layer components {
     .site-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--space-s);
       font-family: var(--font-ui);
+    }
+
+    .site-nav__cart {
+      color: var(--color-text-muted);
     }
 
     .site-nav__list {

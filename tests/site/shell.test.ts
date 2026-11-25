@@ -59,6 +59,12 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     ]);
   });
 
+  it('shows the print cart’s count after the links, hidden until its script runs (docs/site.md#gallery "Cart and set actions")', async () => {
+    const html = await renderBase({ title: 'Test' });
+    const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
+    expect(nav).toMatch(/<\/ul>\s*<p class="site-nav__cart[^"]*" data-cart-count hidden[^>]*>Cart: <span[^>]*>0<\/span><\/p>/);
+  });
+
   it('writes Open Graph tags when a page gives them', async () => {
     const html = await renderBase({ title: 'Test', og: { title: 'Cinder Hound', description: 'A hound.', image: '/ttrpg-library/art.png', type: 'article' } });
     expect(html).toContain('<meta property="og:title" content="Cinder Hound">');

@@ -125,7 +125,7 @@ describe('Gallery', () => {
       expect(html).toContain(`for="${id}"`);
       expect(html).toContain(`id="${id}"`);
     }
-    expect(html).toContain('Select<span class="visually-hidden"> Cinder Hound</span>');
+    expect(html).toContain('In cart<span class="visually-hidden">: Cinder Hound</span>');
   });
 
   it('offers set actions on the filtered set beside the result count', () => {

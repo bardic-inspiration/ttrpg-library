@@ -1,31 +1,31 @@
-// What a gallery set action runs on (docs/site.md#gallery "Selection", docs/export.md#exporter-interface): the
-// selection when anything is selected, otherwise the whole filtered set.
-// Selection lives in the page as record URLs, not in the query string.
+// What a gallery set action runs on (docs/site.md#gallery "Cart and set actions",
+// docs/export.md#exporter-interface): the print cart when it holds anything, otherwise the whole
+// filtered set.
+import { cartKey } from '../cart.ts';
 import type { LibraryRecord } from './config.ts';
 
 export interface SetTarget {
   /** The entries the action receives, in order. */
   records: LibraryRecord[];
-  /** Whether they are the selection (true) or the filtered set (false). */
-  selection: boolean;
+  /** Whether they are the cart (true) or the filtered set (false). */
+  cart: boolean;
 }
 
 /**
- * The entries a set action receives. With a selection: the selected results in
- * the gallery's current order, then selected entries the filters hide, in
- * index order. Without one: every result, in the gallery's current order.
+ * The entries a set action receives. With anything in the cart: the cart's entries in the order
+ * they were added, whatever the filters show, leaving out keys the library doesn't have. With an
+ * empty cart: every result, in the gallery's current order.
  */
-export function setTarget(all: LibraryRecord[], results: LibraryRecord[], selected: ReadonlySet<string>): SetTarget {
-  if (selected.size === 0) return { records: results, selection: false };
-  const shown = results.filter((record) => selected.has(record.url));
-  const shownUrls = new Set(shown.map((record) => record.url));
-  const hidden = all.filter((record) => selected.has(record.url) && !shownUrls.has(record.url));
-  return { records: [...shown, ...hidden], selection: true };
+export function setTarget(all: LibraryRecord[], results: LibraryRecord[], cart: readonly string[]): SetTarget {
+  if (cart.length === 0) return { records: results, cart: false };
+  const byKey = new Map(all.map((record) => [cartKey(record), record]));
+  const records = cart.flatMap((key) => byKey.get(key) ?? []);
+  return { records, cart: true };
 }
 
-/** Says what a set action targets: "3 selected", "1 entry", "12 entries". */
-export function targetText({ records, selection }: SetTarget): string {
+/** Says what a set action targets: "3 in cart", "1 entry", "12 entries". */
+export function targetText({ records, cart }: SetTarget): string {
   const n = records.length;
-  if (selection) return `${n} selected`;
+  if (cart) return `${n} in cart`;
   return n === 1 ? '1 entry' : `${n} entries`;
 }

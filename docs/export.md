@@ -68,8 +68,8 @@ interface ExportReport {
 
 Every place that exports shows at most two buttons, **Print** and
 **Download** (`components/export/ExportButtons.tsx`). Each acts on its place's
-scope: the entry, or the Library's selection, or its filtered results when
-nothing is selected.
+scope: the entry, or the print cart, or the Library's filtered results when
+the cart is empty ([Gallery](site.md#gallery) "Cart and set actions").
 
 - **Print** runs the `print` exporter. It is the place's primary button
   ([Shared components](styling.md#shared-components)).
@@ -82,7 +82,7 @@ nothing is selected.
 | Where | Print | Download |
 |---|---|---|
 | A card entry's detail page | The print view | PNG, JSON, and Open5e for the types it covers |
-| The Library, for the selection or the filtered results | The print view | JSON, Open5e |
+| The Library, for the cart or the filtered results | The print view | JSON, Open5e |
 | A page type's page (class, subclass, species) | The print view | None |
 | A rules page | The browser's print of the page | None |
 

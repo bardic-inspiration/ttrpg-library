@@ -150,7 +150,9 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 | `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)); only the repo's library has it ([Library root](#library-root)) |
 
 The top bar reads **Library | Rulesets | About | Contribute**
-(`site/src/components/SiteNav.astro`). Contribute links to the repository. The
+(`site/src/components/SiteNav.astro`), then the print cart's count ("Cart: 3";
+[Gallery](#gallery) "Cart and set actions"), shown once its script runs.
+Contribute links to the repository. The
 current page's link is marked `aria-current="page"`, and Rulesets is marked
 current on every rules page too. The
 footer carries the SRD 5.2 attribution statement on every page. The site is
@@ -306,7 +308,7 @@ or longer than the window.
 
 **Cards.** Each card shows art (only when the entry has it), name, type badge,
 `cardFields`, summary, and source. The whole card opens its entry, and its
-Select checkbox sits above that link
+cart control sits above that link ([Cart and set actions](#gallery))
 ([Shared components](styling.md#shared-components)).
 
 - **Official star.** An official entry's card has a star in the top right
@@ -315,7 +317,7 @@ Select checkbox sits above that link
   star's slot, a fixed column beside the name, so a name wraps the same with
   or without the star.
 - **Source line.** The entry's `source` is a smaller, muted line after the
-  summary, above Select, so it never reads as a type or rarity. It shows in
+  summary, above the cart control, so it never reads as a type or rarity. It shows in
   full however long it is, wrapping when it's longer than the card's line. An
   entry with no source has no source line.
 
@@ -465,18 +467,34 @@ ignored; of several sorts, the last one offered applies. The gallery rewrites th
 replacing the history entry, in one canonical form: the ruleset, source,
 author, and type filters, then the facets in registry order, with the default sort and ignored parameters left out.
 
-**Selection and set actions.**
+**Cart and set actions.**
 
-- Cards have a checkbox. Selection lives in the page, not the URL. A selected
-  entry that the filters hide stays selected and is counted in "N selected".
+- **The print cart** gathers entries to print or download
+  (`site/src/lib/cart.ts`). Each card, and each detail page beside its export
+  controls, has the shared checkbox "In cart"
+  (`components/cart/CartToggle.tsx`), named with the entry's name for
+  assistive technology. Checking it adds the entry to the end of the cart, and
+  unchecking it removes it. The header shows the cart's count, "Cart: 3",
+  after the top bar's links ([Pages and navigation](#pages-and-navigation)).
+- The cart lives in the browser's local storage under `ttrpg-library:cart`,
+  as a list of `<ruleset>/<type>/<id>` keys in the order they were added, so
+  it survives page changes and reloads in that browser, and every open tab
+  follows it. Every read and write is wrapped: with storage blocked or
+  unreadable, the cart lasts only for the page. It isn't in the URL. The
+  cart controls and the count need JavaScript, so they show only once their
+  island or script runs.
+- When the Library loads `library.json`, entries it no longer has drop out of
+  the cart. A detail page's count can include them until then.
+- The results' summary says "N in cart", with an **Empty cart** button, while
+  the cart holds anything.
 - Beside the result count are Print and Download
   ([Controls](export.md#controls)); Download's menu offers the set-scope
   formats, JSON now.
-- An action targets the selection when anything is selected: the selected
-  results in the gallery's order, then selected entries the filters hide, in
-  index order. Otherwise it targets the whole filtered set in the gallery's
-  order. Each button's accessible name says which ("Print 3 selected",
-  "Download 12 entries"), and both are disabled when they'd target nothing.
+- An action targets the cart when it holds anything: its entries in the order
+  they were added, whatever the filters show. Otherwise it targets the whole
+  filtered set in the gallery's order. Each button's accessible name says
+  which ("Print 3 in cart", "Download 12 entries"), and both are disabled
+  when they'd target nothing.
 - An action whose exporter reads entries in full, such as Open5e, first
   fetches the export bundles of its entries. If any fails to load, nothing
   runs, and a polite status region says so. Print and JSON read only the
@@ -520,7 +538,8 @@ thousand entries. Past about 2,000, revisit the index size.
   linked to the source, "licensed under <license>", linked to its legal code
   ([Meta](content-model.md#meta)).
 - Export controls below the summary: Print and Download, or Print alone on a
-  page type ([Controls](export.md#controls)). A Preact island renders them once
+  page type ([Controls](export.md#controls)), and the "In cart" checkbox
+  ([Cart and set actions](#gallery)). A Preact island renders them once
   hydrated, since every export needs JavaScript; a failed export shows a
   message in a polite status region.
 - `<title>` and Open Graph tags (name, summary, and art when present).

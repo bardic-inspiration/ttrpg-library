@@ -1,0 +1,17 @@
+/* The cart control's styles (docs/styling.md#styling-system: an island's styles sit in one
+   stylesheet beside its components). It sits on cards and on the detail page. */
+@layer components {
+  .cart-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    justify-self: start;
+    font-family: var(--control-font);
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+
+    & label {
+      cursor: pointer;
+    }
+  }
+}
