@@ -8,7 +8,8 @@ import { LIBRARY_ALIAS, REPO_ROOT, libraryRoot, siteDirs } from '../lib/library-
 const root = libraryRoot();
 const { publicDir, outDir } = siteDirs(root);
 
-// docs/architecture.md#technology: static output, Preact islands, served from the Pages project path.
+// docs/architecture.md#technology: static output, Preact islands, served from the site base
+// (docs/workflow.md#deploy).
 export default defineConfig({
   site: 'https://bardic-inspiration.github.io',
   base: SITE_BASE,
@@ -16,7 +17,11 @@ export default defineConfig({
   trailingSlash: 'always',
   publicDir,
   outDir,
-  vite: { resolve: { alias: { [LIBRARY_ALIAS]: root } } },
+  vite: {
+    resolve: { alias: { [LIBRARY_ALIAS]: root } },
+    // lib/site.ts reads the base from the environment; browser bundles get this build's value.
+    define: { 'process.env.SITE_BASE': JSON.stringify(SITE_BASE) },
+  },
   integrations: [
     preact(),
     // The style guide renders the repo's example fixtures (docs/styling.md#refinement-workflow), so

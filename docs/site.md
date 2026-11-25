@@ -165,7 +165,8 @@ current page's link is marked `aria-current="page"`, and Rulesets is marked
 current on every rules page too. The
 footer carries the SRD 5.2 attribution statement on every page. The site is
 served under the base `/ttrpg-library/`
-([architecture.md](architecture.md#technology)).
+([architecture.md](architecture.md#technology)); a preview build's pages
+also carry a preview notice above the header ([Deploy](workflow.md#deploy)).
 
 ### Rules pages
 

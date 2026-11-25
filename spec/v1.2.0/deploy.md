@@ -19,7 +19,8 @@ the preview).
   publishes it to GitHub Pages on every push.
 - [Releases](../../docs/workflow.md#releases): a release is a tagged point on
   `main`, not a deploy.
-- `lib/site.ts`: `SITE_BASE`, the one site base, `/ttrpg-library/`.
+- [Deploy](../../docs/workflow.md#deploy) "The site base" and "The
+  preview": `SITE_BASE`, `npm run build:preview`, and the preview notice.
 
 ## Design
 
@@ -40,21 +41,14 @@ builds in one artifact:
 - **The deploy runs** on a push to `main`, on a pushed `v*` tag, and on
   `workflow_dispatch`. Every run rebuilds both, so the artifact always holds
   the latest tag and the latest `main`.
-- **The site base is set per build.** The preview build sets it to
-  `/ttrpg-library/next/` through an environment variable that
-  `lib/site.ts` reads, with `/ttrpg-library/` as the default, so Astro's
-  `base` and the URLs in `library.json` both follow it. It's set from a Node
-  script, not shell syntax ([`AGENTS.md`](../../AGENTS.md) "Rules").
+- **The preview build** is `npm run build:preview`, which sets the site base
+  to `/ttrpg-library/next/`.
 - **Before the first release that knows about this**, production is built
   from the `v1.1.0` tag, whose code has the default base. A tag's code
   needs nothing from the preview, so any older tag builds as it always did.
 
 ### The preview
 
-- **Every preview page says it's a preview**: a notice at the top of each
-  page names it the next version and links to the same path on production,
-  or production's Library where the path doesn't exist there.
-- **Not indexed:** preview pages carry `<meta name="robots" content="noindex">`.
 - **Content waits for the release.** Content merged to `main` shows on the
   preview, and on production only once a release tags it. Releases name
   their content changes in the changelog as they do now.
@@ -69,9 +63,6 @@ to production. The release PR's steps don't change.
 - `deploy.yml` builds the latest `v*` tag at the site base and `main` under
   `next/`, in one Pages artifact, on a push to `main`, a `v*` tag, and
   `workflow_dispatch`.
-- A test checks that the site base follows the environment variable and
-  defaults to `/ttrpg-library/`, and that a preview build's pages carry the
-  notice and `noindex` while a production build's don't.
 - `docs/workflow.md` "Deploy" and "Releases" describe the two sites.
 - Seeing both sites live on GitHub Pages is a Testing backlog item.
 
