@@ -21,7 +21,7 @@ const rulesets = loadRules().map((data) => ({
   {rulesets.map((ruleset) => (
     <section aria-labelledby={`ruleset-${ruleset.id}`}>
       <h2 id={`ruleset-${ruleset.id}`}>{ruleset.label}</h2>
-      <ul>
+      <ul class="link-list">
         {ruleset.pages.map((page) => (
           <li><a href={url(page.path)}>{page.title}</a></li>
         ))}

@@ -82,10 +82,72 @@ on one page, and tests catch accessibility regressions.
   400 italic load. Self-hosting keeps PNG captures faithful.
 - **Type scale:** a modular scale (ratio 1.2), `--font-size--1` to
   `--font-size-5`, fluid with `clamp()` on screen and fixed point sizes in
-  print.
+  print. [Standards](#standards) assigns its steps to roles.
 - **Icons:** a few Lucide icons (ISC) inlined as SVG components in
   `site/src/icons/`, colored with `currentColor`. Entry types have no icons; the
   type badge carries the label.
+
+### Standards
+
+The style guide's rules for text, headings, spacing, and links. Each is a set
+of semantic tokens, and `/styleguide/` shows them under "Standards".
+`tests/site/hierarchy.test.ts` checks the heading and link rules.
+
+#### Type and headings
+
+- **Text roles.** Body text is step 0 (`--text-body`), small text step −1
+  (`--text-small`), and a lead line that isn't a heading, such as an entry's
+  summary or the site's name in the header, step 1 (`--text-lead`). Headings
+  use Alegreya SC at weight 500; body text uses Alegreya.
+- **The outline.** Each page has one `h1`, its title, and heading levels never
+  skip. Templates take their level from the page through `Heading`, so a
+  template nests under the page's headings at any depth.
+- **Page ladder: size follows level.** Outside a stat block, a heading's size
+  comes from its level, one scale step per level: `h1` step 4 (`--text-h1`),
+  `h2` step 3, `h3` step 2, `h4` step 1, and `h5` and `h6` step 0. `base.css`
+  sets them, and only it, the print view's sizes, and the style guide read
+  the `--text-h*` tokens.
+- **Stat block ladder: size follows role.** Inside a stat block, headings are
+  sized by role, whatever their level: the name step 2
+  (`--text-statblock-name`), a section (Traits, Actions, an accordion
+  section, an item's Spells) step 1 (`--text-statblock-heading`), and a
+  section nested in one, or an embedded stat block's sections, step 0
+  (`--text-statblock-subheading`). An embedded stat block's name is a section
+  heading. Stat block names and sections take the entry's accent. A gallery
+  card's title is step 1 (`--text-card-title`).
+- **Print** maps both ladders to its point sizes
+  ([Print layout](export.md#print-layout)).
+
+#### Spacing
+
+The spacing scale's steps are assigned to what they separate:
+
+| Token | Step | Between |
+|---|---|---|
+| `--flow-heading-after` | `--size-1` | A heading and what follows it |
+| `--flow-text` | `--size-2` | Paragraphs and list items in one passage |
+| `--flow-block` | `--size-4` | Components, or a section's parts |
+| `--flow-section` | `--size-6` | Page regions, each under its own heading |
+
+A heading sits closer to what it heads than to what precedes it: `base.css`
+puts `--flow-heading-after` after every heading, and a component's own flow
+sets the space before.
+
+#### Links
+
+- **Underlined in running text.** A link in rules text, lore, or any
+  sentence is underlined, so it never reads by color alone.
+- **Quiet where its place says it's a link.** Links in navigation (`nav`), in
+  headings (a card's title, a cross-listed rule), and in link lists (a
+  contents list, a detail page's Links, a rules page's refs, the Rulesets
+  page) have no underline until hover or keyboard focus. A list of links
+  takes the `link-list` class; a single standalone link, such as the site's
+  name or an entry's type badge, takes `link-quiet`.
+- **The current page** in the site nav is ink with a heavier underline
+  (`--link-current-thickness`) that stays.
+- `base.css` holds every underline rule, at zero specificity, so a component
+  can set a link's color but no file except `base.css` turns an underline
+  off.
 
 ### Accessibility
 
@@ -136,6 +198,8 @@ Target: WCAG 2.2 AA.
   `site/src/styleguide/StyleGuide.astro`, added as a route only in the repo's
   own build, [Library root](site.md#library-root)) renders from the test
   fixtures: every token as a swatch or sample; the type scale and typefaces;
+  the [standards](#standards): both heading ladders, the spacing roles, and
+  each kind of link;
   every template in each mode, with print previews in the wide and narrow print layouts; gallery
   cards with and without art; filter controls in their states; and the export
   controls with Download's menu closed and open. Edit a
@@ -158,7 +222,8 @@ Target: WCAG 2.2 AA.
 
 - `site/src/styles/`: the layers and `tokens/`.
 - `stylelint.config.mjs` and `tests/stylelint.test.ts`.
-- `tests/site/motion.test.ts`, `tests/site/palette.test.ts`, and
+- `tests/site/hierarchy.test.ts`, `tests/site/motion.test.ts`,
+  `tests/site/palette.test.ts`, and
   `site/src/lib/design-tokens.ts`.
 - `scripts/a11y/`, `scripts/snapshots/`, and `scripts/browser/`.
 
@@ -170,6 +235,7 @@ Target: WCAG 2.2 AA.
 | The palette everywhere | `tokens/primitives.css` |
 | A type or rarity color | `tokens/content.css` |
 | Fonts or the type scale | `tokens/primitives.css` (families and scale) and `semantic.css` (roles) |
+| A heading's size, a spacing role, or link underlines | `tokens/semantic.css` (`--text-*`, `--flow-*`, `--link-*`) |
 | Card size, grid density, gaps | `tokens/components.css` |
 | Print density, margins, or the page-width breakpoint | `tokens/print.css` |
 | Stat-block structure or order | The template's parts in `site/src/components/templates/` |

@@ -104,6 +104,21 @@ const { id, level, mode = 'screen', type, class: className } = Astro.props;
       transform: translateY(calc(var(--accordion-chevron) * -0.4)) rotate(135deg);
     }
 
+    /*
+     * Inside a stat block, a section's heading takes the stat block ladder
+     * (docs/styling.md#type-and-headings), like the stat block's other sections, and a section
+     * nested in one takes the step below.
+     */
+    :global(.statblock) :is(.accordion__summary, section.accordion) > :global(:is(h2, h3, h4, h5, h6)) {
+      font-family: var(--statblock-heading-font);
+      font-size: var(--text-statblock-heading);
+      color: var(--accent);
+    }
+
+    :global(.statblock) .accordion :is(details.accordion > .accordion__summary, section.accordion) > :global(:is(h2, h3, h4, h5, h6)) {
+      font-size: var(--text-statblock-subheading);
+    }
+
     /* One column as wide as the section: an `auto` track would grow to a wide table's width. */
     .accordion__body {
       display: grid;

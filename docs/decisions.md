@@ -589,3 +589,15 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | Accents fold by Unicode decomposition (NFD) with combining marks dropped, then lowercase, on both the name and the query; a blank or all-space query matches everything. | The plainest fold that makes "naive" find "Naïve", with no locale tables | #417 |
 | `plainText` and the schema walk's `refAndTextValues`, which only built the search text, are removed with it. | No code without a caller | #417 |
 | The Library's search placeholder reads "Name". | It names what search matches, now that it reads names only | #417 |
+
+### Style guide
+
+| Decision | Why | Source |
+|---|---|---|
+| The style guide's standards are semantic tokens, written in [Standards](styling.md#standards) and shown under "Standards" on `/styleguide/`, rather than a separate document. | P10: one place to edit and see the rules; P3: the doc describes the tokens, not a copy of them | #402, #418 |
+| Two heading ladders: outside a stat block a heading's size follows its level, one scale step per level (the existing `h1` to `h4` steps, with `h5` and `h6` at body size); inside a stat block size follows role (name, section, nested section), whatever the level. A class page's sections inside its stat block drop from step 2 to step 1 and take the accent, as Traits and Actions do, and an embedded stat block's name becomes a section heading. | P6: a template reads the same at any nesting depth; the class page's sections were the same size as its name | #402, #418 |
+| Only `base.css`, the print view, and the style guide read the `--text-h*` tokens; a non-heading line that was borrowing `--text-h4` (an entry's summary, the site's name) reads `--text-lead`. | P8: a test can hold "size follows level" only if nothing else borrows a level's size | #418 |
+| Spacing roles: `--flow-heading-after`, `--flow-text`, `--flow-block`, and `--flow-section` name the existing steps by what they separate, and every heading gets the small space after it. | A heading sat flush against the list below it (a detail page's Links) | #418 |
+| Quiet links (navigation, headings, link lists, and single links marked `link-quiet`) underline only on hover and focus; contents lists, a detail page's Links, rules pages' refs, and the Rulesets page count as link lists. Refs in rules text stay underlined, so a stat block's refs keep theirs. | WCAG 1.4.1: a link among words needs more than color; a list of links doesn't. The design issue named nav, card titles, and headings, and a link list is the same case | #402, #418 |
+| The current page's nav link is ink with a heavier underline that stays, where it was ink with none. | With the other nav links quiet, color alone would mark the current one | #418 |
+| Every underline rule is in `base.css` at zero specificity, and a test fails if another file turns an underline off. | P8, P3: one place decides underlines | #418 |

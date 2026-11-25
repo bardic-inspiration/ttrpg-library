@@ -21,7 +21,7 @@ const { official, homebrew } = splitHomebrew([...grouped.forward, ...grouped.bac
 {[official, homebrew].map((groups, i) => groups.length > 0 && (
   <>
     {i === 1 && <p class="rule-links__homebrew">Homebrew</p>}
-    <dl class="rule-links">
+    <dl class="rule-links link-list">
       {groups.map((group) => (
         <>
           <dt>{group.label}</dt>

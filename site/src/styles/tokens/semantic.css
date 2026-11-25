@@ -29,13 +29,26 @@
     --font-weight-label: var(--weight-medium);
     --font-weight-strong: var(--weight-bold);
 
+    /*
+     * Text sizes (docs/styling.md#type-and-headings). The page ladder sizes a heading by its
+     * level, one scale step per level. The stat block ladder sizes the headings inside a stat
+     * block, whatever their level, so a template reads the same nested at any depth.
+     */
     --text-small: var(--font-size--1);
     --text-body: var(--font-size-0);
+    --text-h6: var(--font-size-0);
+    --text-h5: var(--font-size-0);
     --text-h4: var(--font-size-1);
     --text-h3: var(--font-size-2);
     --text-h2: var(--font-size-3);
     --text-h1: var(--font-size-4);
     --text-display: var(--font-size-5);
+    --text-statblock-name: var(--font-size-2);
+    --text-statblock-heading: var(--font-size-1);
+    --text-statblock-subheading: var(--font-size-0);
+    --text-card-title: var(--font-size-1);
+    /* A lead line that isn't a heading: an entry's summary, the site's name in the header. */
+    --text-lead: var(--font-size-1);
 
     --leading-body: var(--leading-normal);
     --leading-heading: var(--leading-tight);
@@ -50,6 +63,17 @@
     --space-xl: var(--size-7);
     --space-2xl: var(--size-8);
     --space-card: var(--size-4);
+
+    /*
+     * Flow (docs/styling.md#spacing): the space between siblings, by what they are. Text is
+     * paragraphs and list items in one passage; a block is a component or a section's parts;
+     * a section is a page region under its own heading. A heading sits closer to what follows
+     * it than to what precedes it.
+     */
+    --flow-text: var(--size-2);
+    --flow-block: var(--size-4);
+    --flow-section: var(--size-6);
+    --flow-heading-after: var(--size-1);
 
     --measure: var(--size-measure);
     --content-width: var(--size-content);
@@ -68,6 +92,17 @@
     --duration-quick: var(--duration-fast);
     --duration-base: var(--duration-normal);
     --duration-gentle: var(--duration-slow);
+
+    /*
+     * Links (docs/styling.md#links): underlined in running text; quiet links (navigation,
+     * headings, link lists) underline on hover and focus. The current page's nav link keeps a
+     * heavier underline.
+     */
+    --link-color: var(--color-accent);
+    --link-hover-color: var(--color-text);
+    --link-underline-thickness: var(--stroke-thin);
+    --link-underline-offset: var(--size-1);
+    --link-current-thickness: var(--stroke-medium);
 
     --focus-ring-width: var(--stroke-medium);
     --focus-ring-offset: var(--stroke-medium);

@@ -81,7 +81,7 @@ describe('a rules page', () => {
     expect(html).toContain('id="term-disadvantage"');
     // Advantage links Disadvantage in its text, and the note links Advantage.
     // Field Notes is homebrew, so it's listed under Homebrew, apart from the SRD links (docs/site.md#rules-pages).
-    expect(html).toMatch(/id="term-advantage"[\s\S]*References[\s\S]*Disadvantage[\s\S]*<\/dl>\s*<p class="rule-links__homebrew">Homebrew<\/p>\s*<dl class="rule-links">\s*<dt>Referenced by<\/dt>[\s\S]*Field Notes/);
+    expect(html).toMatch(/id="term-advantage"[\s\S]*References[\s\S]*Disadvantage[\s\S]*<\/dl>\s*<p class="rule-links__homebrew">Homebrew<\/p>\s*<dl class="rule-links link-list">\s*<dt>Referenced by<\/dt>[\s\S]*Field Notes/);
     expect(html).toMatch(/id="term-disadvantage"[\s\S]*Referenced by[\s\S]*href="\/fixture-rules\/rules\/glossary\/#term-advantage">Advantage/);
     expect(text).not.toContain('Extensions');
   });

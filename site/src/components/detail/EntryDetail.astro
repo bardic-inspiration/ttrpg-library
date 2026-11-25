@@ -53,7 +53,7 @@ const nameParts = entry.name.split('/');
     )}
     <div class="entry-detail__intro">
       <h1>{nameParts.map((part, i) => <>{i > 0 && <>/<wbr /></>}{part}</>)}</h1>
-      <p><a class="entry-detail__type" href={`${url()}${libraryQuery(registry as unknown as Registry, entry.ruleset, entry.type)}`}>{typeLabel}</a></p>
+      <p><a class="entry-detail__type link-quiet" href={`${url()}${libraryQuery(registry as unknown as Registry, entry.ruleset, entry.type)}`}>{typeLabel}</a></p>
       <p class="entry-detail__summary">{entry.summary}</p>
       <slot name="export" />
     </div>
@@ -74,7 +74,7 @@ const nameParts = entry.name.split('/');
   ].map(({ id, heading, groups }) => groups.length > 0 && (
     <section aria-labelledby={id}>
       <h2 id={id}>{heading}</h2>
-      <dl class="entry-detail__links">
+      <dl class="entry-detail__links link-list">
         {groups.map((group) => (
           <>
             <dt>{group.label}</dt>
@@ -115,7 +115,7 @@ const nameParts = entry.name.split('/');
     .entry-detail {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-l);
+      gap: var(--flow-section);
       max-inline-size: var(--measure);
     }
 
@@ -128,7 +128,7 @@ const nameParts = entry.name.split('/');
 
     .entry-detail__intro {
       display: grid;
-      gap: var(--space-2xs);
+      gap: var(--flow-text);
     }
 
     .entry-detail__type {
@@ -139,11 +139,10 @@ const nameParts = entry.name.split('/');
       border: var(--badge-border);
       border-radius: var(--chip-radius);
       padding: 0 var(--space-2xs);
-      text-decoration: none;
     }
 
     .entry-detail__summary {
-      font-size: var(--text-h4);
+      font-size: var(--text-lead);
     }
 
     .lore {
@@ -153,7 +152,7 @@ const nameParts = entry.name.split('/');
       padding-inline-start: var(--space-s);
 
       & > :global(* + *) {
-        margin-block-start: var(--space-2xs);
+        margin-block-start: var(--flow-text);
       }
     }
 

@@ -54,7 +54,16 @@ const colorTokens = names(semantic, /^--color-/);
 const contentTokens = names(content, /^--(accent|rarity)-/);
 const fontTokens = names(semantic, /^--font-(heading|body|ui)$/);
 const textTokens = names(semantic, /^--text-/);
+// The two heading ladders (docs/styling.md#type-and-headings).
+const pageLadder = [1, 2, 3, 4, 5, 6].map((n) => ({ label: `h${n}`, token: `--text-h${n}` }));
+const statblockLadder = [
+  { label: 'Stat block name', token: '--text-statblock-name' },
+  { label: 'Stat block section', token: '--text-statblock-heading' },
+  { label: 'Nested section', token: '--text-statblock-subheading' },
+  { label: 'Gallery card title', token: '--text-card-title' },
+];
 const spaceTokens = names(semantic, /^--space-/);
+const flowTokens = names(semantic, /^--flow-/);
 const radiusTokens = names(semantic, /^--radius-/);
 const shadowTokens = names(semantic, /^--shadow-/);
 const durationTokens = names(semantic, /^--duration-/);
@@ -136,6 +145,36 @@ const modes = ['screen', 'capture'] as const;
       {textTokens.map((name) => (
         <li><p class="sg-sample" style={`font-size: var(${name})`}>Cinder Hound</p><code>{name}</code></li>
       ))}
+    </ul>
+  </section>
+
+  <section class="sg-section" aria-labelledby="sg-standards">
+    <h2 id="sg-standards">Standards</h2>
+    <p class="measure">The rules in docs/styling.md#standards, as the tokens render them.</p>
+    <h3>Page headings: size follows level</h3>
+    <ul class="sg-list">
+      {pageLadder.map(({ label: name, token }) => (
+        <li><p class="sg-heading" style={`font-size: var(${token})`}>{name} Cinder Hound</p><code>{token}</code></li>
+      ))}
+    </ul>
+    <h3>Stat block headings: size follows role</h3>
+    <ul class="sg-list">
+      {statblockLadder.map(({ label: name, token }) => (
+        <li><p class="sg-heading sg-heading--statblock" style={`font-size: var(${token})`}>{name}</p><code>{token}</code></li>
+      ))}
+    </ul>
+    <h3>Spacing roles</h3>
+    <ul class="sg-list">
+      {flowTokens.map((name) => (
+        <li><span class="sg-bar" style={`inline-size: var(${name})`}></span><code>{name}</code> <small>{resolveToken(palette, name)}</small></li>
+      ))}
+    </ul>
+    <h3>Links</h3>
+    <ul class="sg-list">
+      <li><p>Rules text: the target has the <a href="#sg-standards">Grappled</a> condition.</p><code>underlined</code></li>
+      <li><nav aria-label="Quiet link sample"><a href="#sg-standards">Navigation, heading, or link list</a></nav><code>quiet</code></li>
+      <li><nav aria-label="Hovered link sample" class="sg-link-hover"><a href="#sg-standards">The same, hovered or focused</a></nav><code>quiet :hover, :focus-visible</code></li>
+      <li><nav aria-label="Current link sample"><a href="#sg-standards" aria-current="page">The current page in the nav</a></nav><code>[aria-current]</code></li>
     </ul>
   </section>
 
@@ -286,6 +325,22 @@ const modes = ['screen', 'capture'] as const;
       color: var(--color-text);
       border: var(--border-width) solid var(--color-border);
       padding: var(--space-s);
+    }
+
+    .sg-heading {
+      font-family: var(--font-heading);
+      font-weight: var(--font-weight-label);
+      line-height: var(--leading-heading);
+    }
+
+    .sg-heading--statblock {
+      font-family: var(--statblock-heading-font);
+      color: var(--color-accent);
+    }
+
+    .sg-link-hover a {
+      color: var(--link-hover-color);
+      text-decoration-line: underline;
     }
 
     .sg-section {

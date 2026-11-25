@@ -67,7 +67,7 @@ describe('detail page (docs/site.md#detail-page)', () => {
     const html = await render('cinder-hound');
     expect(html).not.toContain('f.tags.');
     expect(html).not.toMatch(/>Tags</);
-    expect(html).toContain('class="entry-detail__type" href="/?sort=stats.cr:asc&amp;f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature"');
+    expect(html).toContain('class="entry-detail__type link-quiet" href="/?sort=stats.cr:asc&amp;f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature"');
   });
 
   it('shows provenance with source issues linked to GitHub', async () => {

@@ -15,10 +15,13 @@
     font-size: var(--text-body);
   }
 
+  /* The page ladder (docs/styling.md#type-and-headings): a heading's size follows its level. */
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
     font-weight: var(--font-weight-label);
     line-height: var(--leading-heading);
@@ -28,20 +31,50 @@
   h2 { font-size: var(--text-h2); }
   h3 { font-size: var(--text-h3); }
   h4 { font-size: var(--text-h4); }
+  h5 { font-size: var(--text-h5); }
+  h6 { font-size: var(--text-h6); }
+
+  /* A heading sits close to what it heads (docs/styling.md#spacing). */
+  :is(h1, h2, h3, h4, h5, h6) + * {
+    margin-block-start: var(--flow-heading-after);
+  }
 
   small {
     font-size: var(--text-small);
   }
 
+  /*
+   * Links (docs/styling.md#links). A link in running text is underlined, so it never reads by
+   * color alone. A quiet link stands on its own, where its place says it's a link: navigation,
+   * a heading, a link list, or a single link marked .link-quiet. It underlines on hover and
+   * focus. :where() keeps these at zero specificity, so a component can restyle a link's color.
+   */
   a {
-    color: var(--color-accent);
-    text-decoration-thickness: var(--border-width);
-    text-underline-offset: var(--space-3xs);
+    color: var(--link-color);
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--link-underline-thickness);
+    text-underline-offset: var(--link-underline-offset);
     transition: color var(--duration-quick);
 
     &:hover {
-      color: var(--color-text);
+      color: var(--link-hover-color);
     }
+  }
+
+  :where(nav, h1, h2, h3, h4, h5, h6, .link-list) a,
+  a:where(.link-quiet) {
+    text-decoration-line: none;
+
+    &:where(:hover, :focus-visible) {
+      text-decoration-line: underline;
+    }
+  }
+
+  /* The current page's nav link: ink, with a heavier underline that stays. */
+  nav a:where([aria-current]) {
+    color: var(--color-text);
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--link-current-thickness);
   }
 
   :focus-visible {

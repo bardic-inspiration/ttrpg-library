@@ -29,9 +29,9 @@ const { title, items, level, refs } = Astro.props;
   @layer components {
     .action-list :global(.action-list__heading) {
       font-family: var(--statblock-heading-font);
-      font-size: var(--text-h4);
+      font-size: var(--text-statblock-heading);
       color: var(--accent);
-      margin-block-end: var(--space-3xs);
+      margin-block-end: var(--flow-heading-after);
     }
 
     .action-list > :global(* + *) {

@@ -34,6 +34,18 @@ const details = detailLines(block);
 
 <style>
   @layer components {
+    /*
+     * A stat block inside another is one of its sections (docs/styling.md#type-and-headings):
+     * its name takes a section heading's size, and its own sections the step below.
+     */
+    .embedded-statblock :global(.statblock-header .statblock-header__name) {
+      font-size: var(--text-statblock-heading);
+    }
+
+    .embedded-statblock :global(.action-list .action-list__heading) {
+      font-size: var(--text-statblock-subheading);
+    }
+
     .embedded-statblock > :global(* + *) {
       margin-block-start: var(--statblock-gap);
       padding-block-start: var(--statblock-gap);

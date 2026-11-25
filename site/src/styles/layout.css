@@ -57,6 +57,6 @@
   }
 
   .site-main__inner > * + * {
-    margin-block-start: var(--space-s);
+    margin-block-start: var(--flow-block);
   }
 }
