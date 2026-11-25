@@ -11,6 +11,9 @@
     --header-bg: var(--color-surface);
     --header-border-color: var(--color-border);
     --footer-text-color: var(--color-text-muted);
+    /* The preview notice above the header (docs/workflow.md#deploy). */
+    --preview-notice-bg: var(--color-bg);
+    --preview-notice-rule: var(--border-width-strong) solid var(--color-accent);
 
     /* Gallery grid and cards. */
     --card-min-width: var(--size-card-min);

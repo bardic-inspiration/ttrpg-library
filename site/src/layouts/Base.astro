@@ -22,7 +22,9 @@ import '../styles/base.css';
 import '../styles/layout.css';
 import '../styles/utilities.css';
 import '../styles/overrides.css';
+import { isPreview } from '../../../lib/site.ts';
 import Footer from '../components/Footer.astro';
+import PreviewNotice from '../components/PreviewNotice.astro';
 import SiteNav from '../components/SiteNav.astro';
 import { redirectScript } from '../lib/redirects';
 import { url } from '../lib/url';
@@ -38,6 +40,8 @@ interface Props {
 }
 
 const { title, noindex = false, og, redirect } = Astro.props;
+// A preview build's pages say so and stay out of search indexes (docs/workflow.md#deploy).
+const preview = isPreview();
 const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
 ---
 <!doctype html>
@@ -45,7 +49,7 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {(noindex || redirect) && <meta name="robots" content="noindex" />}
+    {(noindex || redirect || preview) && <meta name="robots" content="noindex" />}
     {redirect && (
       <>
         <link rel="canonical" href={absolute(redirect)} />
@@ -66,6 +70,7 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
     )}
   </head>
   <body>
+    {preview && <PreviewNotice />}
     <header class="site-header">
       <div class="site-header__inner">
         <a class="site-header__home" href={url()}>TTRPG Content Library</a>

@@ -33,7 +33,8 @@ Pull request on a gen/ branch (content lane, "Closes #n")
         ├── review comments ──► routine revises, re-validates, pushes, replies
         │
         ▼
-Merge to main ──► deploy.yml: build the index (derive) → astro build → Pages
+Merge to main ──► deploy.yml: build the index (derive) → astro build → Pages preview (next/)
+Release tag ─────► deploy.yml: the same build of the tag → Pages production
 ```
 
 Each stage has its doc: requests, routines, and revision in
@@ -62,7 +63,8 @@ and the gallery in [site.md](site.md); CI and lanes in
 
 The site is served from `https://bardic-inspiration.github.io/ttrpg-library/`.
 Astro's `base` is `/ttrpg-library/`, held in `lib/site.ts`, and every internal
-link goes through it.
+link goes through it. A build can set another base through `SITE_BASE`, as the
+preview does ([Deploy](workflow.md#deploy)).
 
 ### Repository layout
 
@@ -81,7 +83,8 @@ scripts/
   lane/            lane rules for the lane CI job
   links/           the link check
   build-index/     content to library.json, data copies, export bundles
-  with-library/    runs npm scripts with LIBRARY_ROOT set, in any shell (site.md "Library root")
+  with-library/    runs npm scripts with a variable such as LIBRARY_ROOT set, in any shell (site.md "Library root")
+  build-preview/   `build` at the preview's site base (workflow.md "Deploy")
   pr-summary/      the job summary for changed entries
   generate/        request defaults and the gap-fill picker
   import/          the import script: an import issue's file to entries
@@ -107,6 +110,7 @@ npm scripts:
 | `validate` | Validate every entry |
 | `build:index` | Validate, then write `library.json` and the data copies |
 | `build` | `build:index`, then `astro build` |
+| `build:preview` | `build` at the preview's site base, `/ttrpg-library/next/` ([Deploy](workflow.md#deploy)) |
 | `dev` | Run the site locally |
 | `build:originals` | `build` for the fixture rulesets' library ([Library root](site.md#library-root)) |
 | `dev:originals` | Index the fixture rulesets, then run their site locally |
@@ -123,7 +127,8 @@ npm scripts:
 Every script runs the same under sh on Linux and cmd.exe on Windows, so none
 uses shell syntax or a Unix-only command; `tests/portable-scripts.test.ts`
 checks them. `build:originals` and `dev:originals` set `LIBRARY_ROOT` through
-`scripts/with-library/`, which runs npm scripts in order with it set.
+`scripts/with-library/`, which runs npm scripts in order with it set, and
+`build:preview` sets `SITE_BASE` the same way.
 
 ### Terms
 

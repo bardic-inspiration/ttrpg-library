@@ -3,7 +3,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { libraryRuns } from '../scripts/with-library/index.ts';
+import { libraryRuns, npmRuns } from '../scripts/with-library/index.ts';
 import { PROJECT_ROOT } from '../scripts/validate/schema.ts';
 
 /** Why a script won't run the same under sh and cmd.exe, or undefined if it will. */
@@ -64,5 +64,13 @@ describe('libraryRuns (docs/site.md#library-root)', () => {
 
   it('looks npm up through a shell when npm didn’t start it', () => {
     expect(libraryRuns('x', ['build'], {}, '/node')).toEqual([{ command: 'npm', args: ['run', 'build'], env: { LIBRARY_ROOT: 'x' }, shell: true }]);
+  });
+});
+
+describe('npmRuns (docs/workflow.md#deploy)', () => {
+  it('runs each script with the given variables added to the environment', () => {
+    expect(npmRuns({ SITE_BASE: '/ttrpg-library/next/' }, ['build'], { npm_execpath: '/npm-cli.js', SITE_BASE: '/old/' }, '/node')).toEqual([
+      { command: '/node', args: ['/npm-cli.js', 'run', 'build'], env: { npm_execpath: '/npm-cli.js', SITE_BASE: '/ttrpg-library/next/' }, shell: false },
+    ]);
   });
 });

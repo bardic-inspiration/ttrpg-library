@@ -214,22 +214,62 @@ job, so docs-only and text-only PRs get it, and in `npm run check`.
 
 ### Deploy
 
-`deploy.yml` runs on push to `main` and on `workflow_dispatch`: the same
-install, validate, and build steps, then `actions/upload-pages-artifact` and
-`actions/deploy-pages`. Permissions are `contents: read`, `pages: write`, and
-`id-token: write`, in the concurrency group `pages` without cancelling runs in
-progress. The Pages source is GitHub Actions.
+`deploy.yml` publishes two builds of the site in one GitHub Pages artifact:
+
+| Site | Built from | Served at |
+|---|---|---|
+| **Production** | The latest release tag (`v*`, by version order) | The site base, `/ttrpg-library/` |
+| **Preview** | `main` | `/ttrpg-library/next/` |
+
+It runs on a push to `main`, on a pushed `v*` tag, and on
+`workflow_dispatch`, and every run rebuilds both, so the artifact always holds
+the latest tag and the latest `main`. Each build runs from its own checkout
+(`production/` and `preview/`), with that checkout's `.nvmrc`, lockfile, code,
+and content: install, validate, then `npm run build` for production and
+`npm run build:preview` for the preview. A tag's code needs nothing from the
+preview, so any tag builds as it did when it was made. The two outputs are
+combined into one folder, the preview's under `next/`, and uploaded with
+`actions/upload-pages-artifact`, then published by `actions/deploy-pages`.
+Permissions are `contents: read`, `pages: write`, and `id-token: write`, in
+the concurrency group `pages` without cancelling runs in progress. The Pages
+source is GitHub Actions.
+
+**Content waits for the release.** Content merged to `main` shows on the
+preview, and on production only once a release tags it.
+
+**The site base** is `SITE_BASE`, read by `lib/site.ts`: `/ttrpg-library/`,
+production's, when it's unset or empty. Astro's `base`, the URLs in
+`library.json`, and the Open5e document's permalink follow it. A build at any
+other base is a **preview**, and `npm run build:preview` builds one at
+`/ttrpg-library/next/`, setting the variable from a Node script
+(`scripts/build-preview/`). `npm run a11y` and `npm run snapshots` serve the
+built site under `SITE_BASE` too, so a preview build is checked with it set as
+it was built.
+
+**The preview:** every page of a preview build carries
+`<meta name="robots" content="noindex">` and a notice above the header
+(`site/src/components/PreviewNotice.astro`) naming it a preview of the next
+version. The notice links to the same path under production's base. Once the
+page loads, its script asks production for that page through `fetchFresh`
+([Fresh data](site.md#fresh-data)), and when production doesn't have it,
+points the link at production's Library instead.
 
 ### Releases
 
-A release is a tagged point on `main`, not a deploy: the site deploys on every
-merge ([Deploy](#deploy)), and content PRs never make a release by themselves.
+A release is a tagged point on `main`, and tagging it publishes it: the pushed
+tag deploys the release to production ([Deploy](#deploy)). Merges to `main`
+publish only to the preview, and content PRs never make a release by
+themselves; releases name their content changes in the changelog.
 
 - **Version numbers** take [Semantic Versioning](https://semver.org/)'s
   `MAJOR.MINOR.PATCH` form, read for a site with one user and no outside API:
   - **Minor** (`v1.2.0`): a planned version, built through its milestones.
   - **Patch** (`v1.1.1`): fixes from the Spot Fixes queue, released between
-    planned versions.
+    planned versions. A patch release is made only while `main` holds nothing
+    past the last release but Spot Fixes. Every tag is a point on `main`, so
+    once the next version's work has merged, a patch tag would publish it
+    unfinished; Spot Fixes then ship with the next minor release. Branches
+    and the lane check don't change for this.
   - **Major**: kept for a change the owner names, such as opening the site to
     more users or breaking the published entry files for outside readers.
 - **Tags** are `v<version>`, on the release PR's squash commit on `main`, each
@@ -268,6 +308,8 @@ Set by hand by the owner:
   block force-pushes and deletion. No required approvals: routines open PRs
   under the owner's identity, GitHub blocks self-approval, and the merge is the
   approval.
+- **The `github-pages` environment** allows deployments from `main` and from
+  `v*` tags, so a pushed release tag can deploy ([Deploy](#deploy)).
 - **Merge method:** squash only, with the PR title as the commit message.
   Delete head branches after merge.
 - **Labels:** the content issue labels ([generation.md](generation.md#labels)),

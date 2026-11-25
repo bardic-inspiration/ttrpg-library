@@ -1,10 +1,12 @@
-# docs/workflow.md#deploy: build and publish the site to GitHub Pages on every push to
-# main. The Pages source must be set to GitHub Actions.
+# docs/workflow.md#deploy: build production from the latest release tag and the preview from
+# main, and publish both to GitHub Pages in one artifact. The Pages source must be set to GitHub
+# Actions.
 name: deploy
 
 on:
   push:
     branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:
@@ -21,17 +23,59 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: main
+          path: preview
+          fetch-depth: 0
+          fetch-tags: true
+      - id: tag
+        name: Find the latest release tag
+        run: |
+          tag="$(git -C preview tag --list 'v*' --sort=-v:refname | head -n 1)"
+          if [ -z "$tag" ]; then echo "No v* tag to build production from" >&2; exit 1; fi
+          echo "Production builds from $tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.tag.outputs.tag }}
+          path: production
+
       - uses: actions/setup-node@v7
         with:
-          node-version-file: .nvmrc
+          node-version-file: production/.nvmrc
           check-latest: true
           cache: npm
+          cache-dependency-path: production/package-lock.json
       - run: npm ci
+        working-directory: production
       - run: npm run validate
+        working-directory: production
       - run: npm run build
+        working-directory: production
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: preview/.nvmrc
+          check-latest: true
+          cache: npm
+          cache-dependency-path: preview/package-lock.json
+      - run: npm ci
+        working-directory: preview
+      - run: npm run validate
+        working-directory: preview
+      - run: npm run build:preview
+        working-directory: preview
+
+      - id: combine
+        name: Combine the two builds
+        run: |
+          mkdir pages
+          cp -R production/site/dist/. pages/
+          rm -rf pages/next
+          cp -R preview/site/dist pages/next
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: site/dist
+          path: pages
 
   deploy:
     needs: build

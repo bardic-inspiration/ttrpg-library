@@ -18,12 +18,12 @@ characters (#398), and the site UI revision (#402).
 
 ## Areas
 
-One file per area, in build order. Each area depends on the ones before it
+One file per area, in build order; an area's order is its milestone's number, and a
+built area leaves the table. Each area depends on the ones before it
 that its front matter names.
 
 | Order | Area | Design issue | Builds |
 |---|---|---|---|
-| 1 | [`deploy.md`](deploy.md) | #118 | A production site built from the latest release, and a preview built from `main` |
 | 2 | [`tags.md`](tags.md) | #402 | Tags removed; search becomes a name filter |
 | 3 | [`ui.md`](ui.md) | #402 | The style guide, shared components, and the Library and page revisions |
 | 4 | [`characters.md`](characters.md) | #398 | The `character` type, its profile page, and the `generate` umbrella |

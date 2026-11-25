@@ -565,6 +565,17 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | From #118, the second published ruleset becomes the Rulesets track (#403), the character sheet builder moves to v2.0.0 (#370), and the prebuilt search index is cut. #118 has nothing left earmarked, and later v1.2.0 work amends its spec. | A ruleset needs no version boundary; search becomes a name filter, which needs no search index | #118, #403 |
 | Maps are generated SVG diagrams this version. They're diagrams, not art, so the Images track's rule against generated art covers art only. | Structure before the spatial schema, which waits on the `core` repo's map model | #374 |
 
+### Production and preview
+
+| Decision | Reason | Source |
+|---|---|---|
+| `SITE_BASE` sets the site base, defaulting to production's `/ttrpg-library/`; a build at any other base is a preview. One variable decides both, and the site's Vite config defines it for browser bundles, so the Open5e permalink follows it too. | P3: one source for the base and for whether a build is the preview | #413 |
+| The preview notice links to the same path on production, and the page's script asks production for that page and points the link at production's Library when it isn't there. A build can't see the other site's pages, and the deploy combining them would have to rewrite the preview's HTML to know. Without scripts the link stays on the same path. | P1: a static check in the page, no deploy step that edits built pages | #413 |
+| `npm run build:preview` builds the site at the preview's base through a Node script, by the same runner `build:originals` uses. `npm run a11y` and `snapshots` read the base from `SITE_BASE`, so they check a preview build when it's set as the site was built. | `AGENTS.md` "Rules": no shell syntax for setting a variable | #413 |
+| No patch releases while a version is in development: once its work has merged to `main`, Spot Fixes ship with the next minor release. Patches aren't cut from a release branch, so branches and the lane check stay as they are. | Every tag is a point on `main`, and production follows the latest tag; the site isn't public yet, so a fix waiting for the release costs little | #412 |
+| One Pages deploy publishes production from the latest `v*` tag at the site base and the preview from `main` under `next/`, rebuilding both on every push to `main`, pushed `v*` tag, and manual run. Each builds from its own checkout with its own Node, lockfile, and install, so a tag builds exactly as it was released. | GitHub Pages serves one site per repository; P7: merging publishes only to the preview, and tagging a release is the step that publishes to production | #414 |
+| The deploy finds the latest tag by version order (`git tag --sort=-v:refname`), not by date, so a tag made later on an older line can't replace a newer release. | P2: a predictable rule over whatever was tagged last | #414 |
+
 ### Tags and search
 
 | Decision | Why | Source |

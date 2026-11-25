@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { a11yPages } from '../scripts/a11y/index.ts';
+import { a11yPages, detailPath } from '../scripts/a11y/index.ts';
 import { resolvePath } from '../scripts/serve/index.ts';
 
 const record = (type: string, id: string, facets: Record<string, unknown>) => ({
@@ -68,5 +68,18 @@ describe('resolvePath (static site server)', () => {
     expect(resolvePath('/dist', '/other/')).toBeUndefined();
     expect(resolvePath('/dist', '/ttrpg-library/../../etc/passwd')).toBeUndefined();
     expect(resolvePath('/dist', '/ttrpg-library/%2e%2e/secret')).toBeUndefined();
+  });
+});
+
+describe('detailPath (docs/workflow.md#deploy)', () => {
+  const record = { id: 'lich', type: 'creature', ruleset: 'dnd-5e-2024', name: 'Lich', facets: {} };
+
+  it('is the path under the site base, production’s or the preview’s', () => {
+    expect(detailPath({ ...record, url: '/ttrpg-library/dnd-5e-2024/creature/lich/' }, '/ttrpg-library/')).toBe('dnd-5e-2024/creature/lich/');
+    expect(detailPath({ ...record, url: '/ttrpg-library/next/dnd-5e-2024/creature/lich/' }, '/ttrpg-library/next/')).toBe('dnd-5e-2024/creature/lich/');
+  });
+
+  it('fails on a url outside the base', () => {
+    expect(() => detailPath({ ...record, url: '/ttrpg-library/next/dnd-5e-2024/creature/lich/' }, '/other/')).toThrow('SITE_BASE');
   });
 });
