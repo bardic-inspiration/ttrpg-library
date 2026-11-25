@@ -116,7 +116,7 @@ describe('a rules page', () => {
 
   it('lists its extensions at the bottom, searchable, linked to their cards', async () => {
     const html = await render(RulesPage, { ctx, page: page('tools') });
-    expect(html).toMatch(/<details class="accordion rules-page__extensions" id="section-extensions"><summary class="accordion__summary"><h2>Extensions<\/h2>[\s\S]*<input type="search"[\s\S]*href="\/fixture-rules\/gear\/mallet\/">Mallet<\/a>/);
+    expect(html).toMatch(/<details class="accordion rules-page__extensions" id="section-extensions"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"><\/span><h2>Extensions<\/h2>[\s\S]*<input type="search"[\s\S]*href="\/fixture-rules\/gear\/mallet\/">Mallet<\/a>/);
   });
 });
 
@@ -144,15 +144,15 @@ describe('a rules page as an accordion page', () => {
   it('renders each titled prose section and primitive collapsed, its subsections inside it, after the table of contents', async () => {
     const html = await render(RulesPage, { ctx, page: page('glossary') });
     expect(html).toMatch(/<h1>Glossary<\/h1><ul class="export-buttons"[^>]*>[\s\S]*?<\/ul>(?:<script[^>]*><\/script>)?<nav class="toc" aria-label="Contents">[\s\S]*<a href="#term-advantage">Advantage<\/a>[\s\S]*<\/nav>/);
-    expect(html).toMatch(/<details class="accordion rule-prose" id="section-conventions"><summary class="accordion__summary"><h2>Conventions<\/h2><\/summary><div class="accordion__body">[\s\S]*<h3>Tags<\/h3>[\s\S]*<\/details>/);
-    expect(html).toContain('<details class="accordion rule" id="term-advantage" data-type="term"><summary class="accordion__summary"><h2>Advantage</h2></summary>');
+    expect(html).toMatch(/<details class="accordion rule-prose" id="section-conventions"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"><\/span><h2>Conventions<\/h2><\/summary><div class="accordion__body">[\s\S]*<h3>Tags<\/h3>[\s\S]*<\/details>/);
+    expect(html).toContain('<details class="accordion rule" id="term-advantage" data-type="term"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h2>Advantage</h2></summary>');
     expect(html).not.toMatch(/<details[^>]* open/);
   });
 
   it('keeps a group open over its members, each collapsed', async () => {
     const html = await render(RulesPage, { ctx, page: page('tools') });
     expect(html).toContain('<section class="rule-group" id="gear-hand-tools" data-type="gear"><h3>Hand Tools');
-    expect(html).toContain('<details class="accordion rule" id="gear-hammer" data-type="gear"><summary class="accordion__summary"><h4>Hammer</h4></summary>');
+    expect(html).toContain('<details class="accordion rule" id="gear-hammer" data-type="gear"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h4>Hammer</h4></summary>');
   });
 });
 

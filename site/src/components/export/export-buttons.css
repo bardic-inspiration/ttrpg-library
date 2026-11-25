@@ -17,41 +17,6 @@
     display: inline-flex;
   }
 
-  .export-buttons__download {
-    position: relative;
-  }
-
-  .export-buttons__button {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3xs);
-  }
-
-  .export-buttons__menu {
-    position: absolute;
-    inset-block-start: calc(100% + var(--space-3xs));
-    inset-inline-start: 0;
-    z-index: 1;
-    display: grid;
-    gap: var(--space-3xs);
-    min-inline-size: 100%;
-    padding: var(--space-3xs);
-    list-style: none;
-    background: var(--color-surface);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-control);
-    box-shadow: var(--shadow-raised);
-
-    &[hidden] {
-      display: none;
-    }
-  }
-
-  .export-buttons__format {
-    inline-size: 100%;
-    text-align: start;
-  }
-
   @media print {
     .export-buttons {
       display: none;

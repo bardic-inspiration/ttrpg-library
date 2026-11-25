@@ -1,0 +1,211 @@
+/*
+ * The shared interaction components (docs/styling.md#shared-components): the disclosure, buttons,
+ * the menu button, the card link, and the checkbox, chip, and toggle controls. Every page builds
+ * these through the components beside this file, never on its own, so each pattern has one look
+ * and one behavior. Tokens only; knobs live in tokens/components.css.
+ */
+@layer components {
+  /*
+   * Disclosure: a toggle with the chevron on its left, pointing right when closed and turning down
+   * when open. A button toggle reads aria-expanded; a <details> summary reads the open attribute.
+   */
+  .disclosure {
+    display: flex;
+    align-items: baseline;
+    gap: var(--disclosure-gap);
+    cursor: pointer;
+    list-style: none;
+    text-align: start;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  button.disclosure {
+    padding: var(--space-3xs);
+    border-color: transparent;
+    background: transparent;
+    font-weight: var(--font-weight-label);
+  }
+
+  summary.disclosure {
+    padding-block: var(--space-2xs);
+  }
+
+  .chevron {
+    flex: none;
+    inline-size: var(--disclosure-chevron);
+    block-size: var(--disclosure-chevron);
+    border-block-start: var(--border-width-strong) solid currentcolor;
+    border-inline-end: var(--border-width-strong) solid currentcolor;
+    transform: translateY(calc(var(--disclosure-chevron) * -0.2)) rotate(45deg);
+    transition: transform var(--duration-quick);
+  }
+
+  .disclosure[aria-expanded='true'] > .chevron,
+  details[open] > .disclosure > .chevron {
+    transform: translateY(calc(var(--disclosure-chevron) * -0.4)) rotate(135deg);
+  }
+
+  /* An icon-only disclosure is square, so its chevron sits centered in its target. */
+  .disclosure--icon {
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--disclosure-icon-size);
+    block-size: var(--disclosure-icon-size);
+    padding: 0;
+  }
+
+  /*
+   * Buttons: primary for a place's one main action, secondary for every other, icon for an icon
+   * alone with an accessible name (docs/styling.md#shared-components "Buttons").
+   */
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--button-gap);
+  }
+
+  .button--primary {
+    background: var(--button-primary-bg);
+    color: var(--button-primary-text);
+    border-color: var(--button-primary-bg);
+    font-weight: var(--font-weight-label);
+
+    &:hover:not(:disabled) {
+      background: var(--button-primary-hover-bg);
+      border-color: var(--button-primary-hover-bg);
+    }
+  }
+
+  .button--icon {
+    justify-content: center;
+    padding: var(--control-padding-block);
+  }
+
+  /* The menu button: a secondary button that opens a small menu below it. */
+  .menu-button {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .menu-button__menu {
+    position: absolute;
+    inset-block-start: calc(100% + var(--space-3xs));
+    inset-inline-start: 0;
+    z-index: 2;
+    display: grid;
+    gap: var(--space-3xs);
+    min-inline-size: 100%;
+    padding: var(--space-3xs);
+    list-style: none;
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-control);
+    box-shadow: var(--shadow-raised);
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .menu-button__item {
+    inline-size: 100%;
+    text-align: start;
+  }
+
+  /*
+   * The card link: the card's title link covers the whole card, so a click anywhere on it opens the
+   * entry. Every other control on the card sits above the link, and the card shows the link's focus.
+   */
+  .linked-card {
+    position: relative;
+
+    &:has(.card-link:focus-visible) {
+      outline: var(--focus-ring);
+      outline-offset: var(--focus-ring-offset);
+    }
+
+    &:hover .card-link {
+      text-decoration-line: underline;
+    }
+
+    & :is(button, input, label, select, textarea, a:not(.card-link)) {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  .card-link {
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+
+    &:focus-visible {
+      outline: 0;
+    }
+  }
+
+  /* Checkbox: the box and its label, side by side. */
+  .checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    cursor: pointer;
+  }
+
+  /* Chip: a pressable pill for one value of a small range. */
+  .chip {
+    border-radius: var(--chip-radius);
+    padding-inline: var(--space-2xs);
+
+    &[aria-pressed='true'] {
+      background: var(--chip-pressed-bg);
+      color: var(--chip-pressed-text);
+      border-color: var(--chip-pressed-bg);
+    }
+  }
+
+  /* Toggle: a switch whose track fills when it's on. */
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-3xs);
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .toggle__track {
+    position: relative;
+    flex: none;
+    inline-size: var(--toggle-track-width);
+    block-size: var(--toggle-track-height);
+    border-radius: var(--chip-radius);
+    background: var(--toggle-off-bg);
+    transition: background-color var(--duration-quick);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset-block: var(--border-width-strong);
+      inset-inline-start: var(--border-width-strong);
+      aspect-ratio: 1;
+      border-radius: var(--chip-radius);
+      background: var(--toggle-thumb-bg);
+      transition: transform var(--duration-quick);
+    }
+  }
+
+  .toggle[aria-checked='true'] > .toggle__track {
+    background: var(--toggle-on-bg);
+
+    &::after {
+      transform: translateX(calc(var(--toggle-track-width) - var(--toggle-track-height)));
+    }
+  }
+}

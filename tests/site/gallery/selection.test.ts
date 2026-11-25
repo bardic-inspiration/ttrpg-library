@@ -154,7 +154,7 @@ describe('SetActions', () => {
     const open = renderToString(h(SetActions, { target: setTarget(all, all, urls(a!, b!)), base: BASE, open: true }));
     expect(open).toMatch(/aria-expanded="true"/);
     expect(open).not.toMatch(/<ul id="set-actions-formats"[^>]*hidden/);
-    const formats = [...open.matchAll(/class="export-buttons__format">([^<]+)</g)].map((m) => m[1]);
+    const formats = [...open.matchAll(/class="menu-button__item">([^<]+)</g)].map((m) => m[1]);
     expect(formats).toEqual(['JSON', 'Open5e']);
   });
 

@@ -25,7 +25,7 @@ describe('Gallery', () => {
   it('renders a card per result, with the type badge and card fields, and no art when there is none', () => {
     const html = render({});
     // The three example entries, and the two classes Frost Lance names.
-    expect(html.match(/<article class="card"/g)).toHaveLength(5);
+    expect(html.match(/<article class="card linked-card"/g)).toHaveLength(5);
     expect(html).toContain('data-type="creature"');
     expect(html).toContain('<dt>CR</dt><dd>2</dd>');
     expect(html).toContain('<dt>Level</dt><dd>Level 1</dd>');
@@ -58,7 +58,7 @@ describe('Gallery', () => {
     expect(html).not.toContain('aria-pressed');
     expect(html).toMatch(/<input type="checkbox" id="filter-dnd-5e-2024-spell" checked\/><label for="filter-dnd-5e-2024-spell">Spell <span class="tree__count">1<span class="visually-hidden"> entry<\/span><\/span><\/label>/);
     expect(html).toMatch(/<input type="checkbox" id="filter-dnd-5e-2024-creature"\/>/);
-    expect(html).toMatch(/<button type="button" class="tree__toggle" id="filter-dnd-5e-2024-creature-toggle" aria-expanded="false" aria-controls="filter-dnd-5e-2024-creature-panel" aria-label="Creature filters">/);
+    expect(html).toMatch(/<button type="button" class="disclosure disclosure--icon tree__toggle" id="filter-dnd-5e-2024-creature-toggle" aria-expanded="false" aria-controls="filter-dnd-5e-2024-creature-panel" aria-label="Creature filters"><span class="chevron" aria-hidden="true"><\/span><\/button>/);
     expect(html).toMatch(/<ul class="tree__children" id="filter-dnd-5e-2024-creature-panel" hidden>/);
   });
 
@@ -82,7 +82,7 @@ describe('Gallery', () => {
 
   it('puts the search above the filter menu, which a toggle opens on phones and tablets', () => {
     const html = render({});
-    expect(html).toMatch(/class="gallery__menu"><div class="gallery__search" role="search">.*<button type="button" class="gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters">.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
+    expect(html).toMatch(/class="gallery__menu"><div class="gallery__search" role="search">.*<button type="button" class="disclosure gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters"><span class="chevron" aria-hidden="true"><\/span>.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
     expect(html).not.toContain('data-open');
   });
 
@@ -115,7 +115,7 @@ describe('Gallery', () => {
 
   it('starts a fresh Library on the official content alone: the two SRD classes, not the homebrew fixtures', () => {
     const html = renderToString(h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records, initialQuery: '' }));
-    expect(html.match(/<article class="card"/g)).toHaveLength(2);
+    expect(html.match(/<article class="card linked-card"/g)).toHaveLength(2);
     expect(html).not.toContain('Cinder Hound');
     expect(html).not.toContain('gallery__clear');
   });

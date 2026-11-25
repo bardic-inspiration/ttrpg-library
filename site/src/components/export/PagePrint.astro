@@ -7,6 +7,7 @@
 import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import PrintIcon from '../../icons/Print';
+import Button from '../shared/Button.astro';
 import './export-buttons.css';
 
 // The shared icon, rendered here to markup, so the page ships no Preact for one button.
@@ -14,10 +15,7 @@ const icon = renderToString(h(PrintIcon, null));
 ---
 <ul class="export-buttons" aria-label="Export" data-page-print hidden>
   <li class="export-buttons__item">
-    <button type="button" class="export-buttons__button">
-      <Fragment set:html={icon} />
-      Print
-    </button>
+    <Button variant="primary"><Fragment set:html={icon} />Print</Button>
   </li>
 </ul>
 

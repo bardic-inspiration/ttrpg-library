@@ -34,10 +34,8 @@
     --filters-gap: var(--space-s);
     --filter-count-text: var(--color-text-muted);
     --tree-indent: var(--space-s);
-    --tree-chevron: var(--space-2xs);
 
-    /* Accordion pages: a section's chevron, and the table of contents' column width. */
-    --accordion-chevron: var(--space-2xs);
+    /* Accordion pages: the table of contents' column width. */
     --toc-column-width: var(--size-card-min);
 
     /* A detail page's summary line, under its title. */
@@ -73,6 +71,22 @@
     --control-padding-block: var(--space-3xs);
     --control-padding-inline: var(--space-2xs);
     --chip-radius: var(--radius-chip);
+
+    /* Shared components (docs/styling.md#shared-components). */
+    --disclosure-chevron: var(--space-2xs);
+    --disclosure-gap: var(--space-2xs);
+    --disclosure-icon-size: var(--icon-size);
+    --button-gap: var(--space-3xs);
+    --button-primary-bg: var(--color-accent);
+    --button-primary-text: var(--color-surface);
+    --button-primary-hover-bg: var(--color-text);
+    --chip-pressed-bg: var(--color-accent);
+    --chip-pressed-text: var(--color-surface);
+    --toggle-track-width: var(--space-l);
+    --toggle-track-height: var(--space-s);
+    --toggle-on-bg: var(--color-accent);
+    --toggle-off-bg: var(--color-control-border);
+    --toggle-thumb-bg: var(--color-surface);
 
     /* Badges. */
     --badge-font: var(--font-ui);

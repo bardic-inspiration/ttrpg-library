@@ -12,6 +12,8 @@ import FilterIcon from '../../icons/Filter.tsx';
 import SearchIcon from '../../icons/Search.tsx';
 import SortIcon from '../../icons/Sort.tsx';
 import { setTarget } from '../../lib/gallery/selection.ts';
+import Button from '../shared/Button.tsx';
+import { DisclosureButton } from '../shared/Disclosure.tsx';
 import Card from './Card.tsx';
 import { FilterTree } from './Filters.tsx';
 import SetActions from './SetActions.tsx';
@@ -102,15 +104,17 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
               }}
             />
           </div>
-          <button
-            type="button"
+          <DisclosureButton
             class="gallery__filters-toggle"
-            aria-expanded={filtersOpen}
-            aria-controls="gallery-filters"
-            onClick={() => setFiltersOpen(!filtersOpen)}
-          >
-            <FilterIcon /> Filters
-          </button>
+            controls="gallery-filters"
+            open={filtersOpen}
+            onToggle={setFiltersOpen}
+            label={
+              <>
+                <FilterIcon /> Filters
+              </>
+            }
+          />
           <section id="gallery-filters" class="gallery__filters" aria-label="Filters" data-open={filtersOpen || undefined}>
             <FilterTree
               nodes={tree}
@@ -119,8 +123,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
               onRange={(path, min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
             />
             {(!isDefaultScope(state.filters) || [...state.filters.keys()].some((path) => !isScopePath(path))) && (
-              <button
-                type="button"
+              <Button
                 class="gallery__clear"
                 onClick={() =>
                   update((next) => {
@@ -129,7 +132,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
                 }
               >
                 Clear filters
-              </button>
+              </Button>
             )}
           </section>
         </div>
@@ -179,9 +182,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
             {selected.size > 0 && (
               <p class="gallery__selection">
                 {selected.size} selected{' '}
-                <button type="button" onClick={() => setSelected(new Set())}>
-                  Clear selection
-                </button>
+                <Button onClick={() => setSelected(new Set())}>Clear selection</Button>
               </p>
             )}
             <SetActions target={setTarget(records, view.results, selected)} base={base} />

@@ -127,7 +127,7 @@ describe('the page', async () => {
   });
 
   it('shows each trait on screen as a collapsed section at its anchor, after a table of contents', () => {
-    expect(html).toContain('<details class="accordion species-trait" id="species-trait-dragonborn-darkvision" data-type="species-trait"><summary class="accordion__summary"><h3>Darkvision</h3></summary>');
+    expect(html).toContain('<details class="accordion species-trait" id="species-trait-dragonborn-darkvision" data-type="species-trait"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h3>Darkvision</h3></summary>');
     expect(html).not.toMatch(/<details[^>]* open/);
     expect(html).toMatch(/<nav class="toc" aria-label="Contents">[\s\S]*<a href="#species-trait-dragonborn-draconic-ancestry">Draconic Ancestry<\/a>[\s\S]*<a href="#species-trait-dragonborn-draconic-flight">Draconic Flight<\/a>[\s\S]*<\/nav>/);
     expect(html.indexOf('class="toc"')).toBeLessThan(html.indexOf('<details'));

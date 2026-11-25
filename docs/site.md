@@ -216,8 +216,9 @@ whose components render after its template) are long pages laid out as
 accordion sections with a jump-to table of contents
 (`site/src/components/templates/parts/`):
 
-- **A section** (`Accordion`) is a `<details>` that starts collapsed, its
-  heading inside the `<summary>`, which toggles it. Its id is its anchor:
+- **A section** (`Accordion`) is the shared disclosure
+  ([Shared components](styling.md#shared-components)), a `<details>` that
+  starts collapsed, its heading inside the `<summary>`, which toggles it. Its id is its anchor:
   `<type>-<id>` for a primitive, group, or component, and `section-<slug>` for
   any other titled section (`sectionId` in `site/src/lib/accordion.ts`), such
   as "Core Barbarian Traits" at `#section-core-barbarian-traits`.
@@ -302,7 +303,9 @@ the menu and results don't shift sideways as filtering makes the page shorter
 or longer than the window.
 
 **Cards.** Each card shows art (only when the entry has it), name, source and
-type badges, `cardFields`, and summary.
+type badges, `cardFields`, and summary. The whole card opens its entry, and its
+Select checkbox sits above that link
+([Shared components](styling.md#shared-components)).
 
 - **Official star.** An official entry's card has a star in the top right
   corner, beside its name ([Source and author](content-model.md#source-and-author)),

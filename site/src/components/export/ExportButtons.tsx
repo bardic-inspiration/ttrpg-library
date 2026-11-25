@@ -1,12 +1,12 @@
 // Print and Download (docs/export.md#controls): the controls every exporting place shares. Print
-// runs the print exporter. Download opens a small menu of the formats that offer
-// the place's scope; choosing one closes the menu and runs it. The menu is a
-// disclosure: Escape closes it and returns focus to Download, and it closes when
-// focus leaves it. The caller runs exporters and reports failures.
-import { useRef, useState } from 'preact/hooks';
+// runs the print exporter, as the place's primary button. Download is the shared menu button
+// (docs/styling.md#shared-components "Buttons"), opening a small menu of the formats that offer
+// the place's scope; choosing one closes the menu and runs it. The caller runs exporters and
+// reports failures.
 import type { ExportControlSet, Exporter } from '../../exporters/index.ts';
 import DownloadIcon from '../../icons/Download.tsx';
 import PrintIcon from '../../icons/Print.tsx';
+import Button, { MenuButton } from '../shared/Button.tsx';
 import './export-buttons.css';
 
 export interface ExportButtonsProps {
@@ -21,66 +21,32 @@ export interface ExportButtonsProps {
   open?: boolean;
 }
 
-export default function ExportButtons({ controls, run, disabled = false, which, menuId, open: initial = false }: ExportButtonsProps) {
-  const [open, setOpen] = useState(initial);
-  const toggle = useRef<HTMLButtonElement>(null);
+export default function ExportButtons({ controls, run, disabled = false, which, menuId, open }: ExportButtonsProps) {
   const hidden = which ? <span class="visually-hidden"> {which}</span> : null;
-  const close = (refocus: boolean) => {
-    setOpen(false);
-    if (refocus) toggle.current?.focus();
-  };
-  const choose = (exporter: Exporter) => {
-    close(true);
-    run(exporter);
-  };
-
   return (
     <ul class="export-buttons" aria-label="Export">
       {controls.print && (
         <li class="export-buttons__item">
-          <button type="button" class="export-buttons__button" disabled={disabled} onClick={() => controls.print && run(controls.print)}>
+          <Button variant="primary" disabled={disabled} onClick={() => controls.print && run(controls.print)}>
             <PrintIcon />
             {controls.print.label}
             {hidden}
-          </button>
+          </Button>
         </li>
       )}
       {controls.downloads.length > 0 && (
-        <li
-          class="export-buttons__item export-buttons__download"
-          onKeyDown={(event) => {
-            if (event.key === 'Escape' && open) {
-              event.stopPropagation();
-              close(true);
-            }
-          }}
-          onFocusOut={(event) => {
-            const next = event.relatedTarget as Node | null;
-            if (!next || !(event.currentTarget as HTMLElement).contains(next)) setOpen(false);
-          }}
-        >
-          <button
-            type="button"
-            ref={toggle}
-            class="export-buttons__button"
-            aria-expanded={open}
-            aria-controls={menuId}
+        <li class="export-buttons__item">
+          <MenuButton
+            id={menuId}
+            menuLabel="Formats"
             disabled={disabled}
-            onClick={() => setOpen(!open)}
+            open={open}
+            items={controls.downloads.map((exporter) => ({ key: exporter.id, label: exporter.label, onSelect: () => run(exporter) }))}
           >
             <DownloadIcon />
             Download
             {hidden}
-          </button>
-          <ul id={menuId} class="export-buttons__menu" aria-label="Formats" hidden={!open || disabled}>
-            {controls.downloads.map((exporter) => (
-              <li key={exporter.id}>
-                <button type="button" class="export-buttons__format" onClick={() => choose(exporter)}>
-                  {exporter.label}
-                </button>
-              </li>
-            ))}
-          </ul>
+          </MenuButton>
         </li>
       )}
     </ul>
