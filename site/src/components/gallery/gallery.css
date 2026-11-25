@@ -249,7 +249,7 @@
   }
 
   .card__name {
-    font-size: var(--text-h4);
+    font-size: var(--card-title-size);
     overflow-wrap: anywhere;
 
     & a {

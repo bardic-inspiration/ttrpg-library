@@ -108,15 +108,15 @@ const { id, level, mode = 'screen', type, class: className } = Astro.props;
     .accordion__body {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-2xs);
-      padding-block-end: var(--space-s);
+      gap: var(--flow-text);
+      padding-block-end: var(--flow-block);
     }
 
     section.accordion {
       border: 0;
 
       & + section.accordion {
-        margin-block-start: var(--space-s);
+        margin-block-start: var(--flow-block);
       }
 
       & > .accordion__body {

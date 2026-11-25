@@ -87,6 +87,52 @@ on one page, and tests catch accessibility regressions.
   `site/src/icons/`, colored with `currentColor`. Entry types have no icons; the
   type badge carries the label.
 
+### Hierarchy and standards
+
+The style guide's standards, which the tokens implement and `/styleguide/`
+shows.
+
+- **Text roles.** Each role reads one semantic token:
+
+  | Role | Token | Step |
+  |---|---|---|
+  | Display (unused by pages today) | `--text-display` | 5 |
+  | Page title, `h1` | `--text-h1` | 4 |
+  | Page section, `h2` | `--text-h2` | 3 |
+  | Subsection, `h3` | `--text-h3` | 2 |
+  | Minor heading, `h4` | `--text-h4` | 1 |
+  | `h5` and `h6` | `--text-h5`, `--text-h6` | 0 |
+  | Body and rules text | `--text-body` | 0 |
+  | Labels, counts, badges, notes, the footer | `--text-small` | −1 |
+
+- **Headings.** A page has one `h1`, its title. A page heading's size comes
+  from its level, in `base.css`. A component's own headings (a card's name, a
+  stat block's name and section headings) take their level from where the
+  component nests (`Heading.astro`), so their size comes from a component
+  token instead: `--card-title-size`, `--statblock-title-size`,
+  `--statblock-heading-size`. The site title and a detail page's summary line
+  read `--site-title-size` and `--entry-summary-size`. Headings use
+  `--font-heading` (small caps) at the label weight and the tight leading.
+- **Rhythm.** The gap a flow of siblings takes is one of four tokens, aliases
+  of the spacing scale:
+
+  | Token | Between |
+  |---|---|
+  | `--flow-line` | A label and its value, a heading and the list under it |
+  | `--flow-text` | Paragraphs and list items of one text |
+  | `--flow-block` | Blocks of one section: a stat block and its notes, accordion sections, the main column's children |
+  | `--flow-section` | A page's sections: a detail page's parts, a rules page's sections |
+
+  Inside a component (a card, a stat block, a control), its own gaps read
+  the `--space-*` scale or its component tokens.
+- **Underlines.** Links in running text (rules text, lore, ref lists, the
+  footer) stay underlined, so they never rely on color alone. Links in
+  headings (card titles among them), in a `nav` (the site nav, the contents
+  list), and in the site header underline only on hover and focus. One rule in
+  `base.css` sets this; a component doesn't set a link's underline itself.
+  `tests/site/hierarchy.test.ts` checks the heading sizes, the rhythm tokens,
+  and the underline rule.
+
 ### Accessibility
 
 Target: WCAG 2.2 AA.
@@ -136,6 +182,7 @@ Target: WCAG 2.2 AA.
   `site/src/styleguide/StyleGuide.astro`, added as a route only in the repo's
   own build, [Library root](site.md#library-root)) renders from the test
   fixtures: every token as a swatch or sample; the type scale and typefaces;
+  the heading levels, the link underlines, and the rhythm;
   every template in each mode, with print previews in the wide and narrow print layouts; gallery
   cards with and without art; filter controls in their states; and the export
   controls with Download's menu closed and open. Edit a
@@ -170,6 +217,8 @@ Target: WCAG 2.2 AA.
 | The palette everywhere | `tokens/primitives.css` |
 | A type or rarity color | `tokens/content.css` |
 | Fonts or the type scale | `tokens/primitives.css` (families and scale) and `semantic.css` (roles) |
+| A heading level's size or the rhythm | `tokens/semantic.css` (`--text-h*`, `--flow-*`) |
+| A component heading's size | `tokens/components.css` (`--card-title-size`, `--statblock-*-size`, …) |
 | Card size, grid density, gaps | `tokens/components.css` |
 | Print density, margins, or the page-width breakpoint | `tokens/print.css` |
 | Stat-block structure or order | The template's parts in `site/src/components/templates/` |

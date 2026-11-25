@@ -31,6 +31,8 @@
 
     --text-small: var(--font-size--1);
     --text-body: var(--font-size-0);
+    --text-h6: var(--font-size-0);
+    --text-h5: var(--font-size-0);
     --text-h4: var(--font-size-1);
     --text-h3: var(--font-size-2);
     --text-h2: var(--font-size-3);
@@ -50,6 +52,15 @@
     --space-xl: var(--size-7);
     --space-2xl: var(--size-8);
     --space-card: var(--size-4);
+
+    /*
+     * The spacing rhythm (docs/styling.md#hierarchy-and-standards): the gap a flow of siblings
+     * takes, from a label to its value up to one section of a page to the next.
+     */
+    --flow-line: var(--space-3xs);
+    --flow-text: var(--space-2xs);
+    --flow-block: var(--space-s);
+    --flow-section: var(--space-l);
 
     --measure: var(--size-measure);
     --content-width: var(--size-content);
