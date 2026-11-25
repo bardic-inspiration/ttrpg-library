@@ -92,6 +92,17 @@ an optional flag, which reads as `false`.
 A component ([content-model.md](content-model.md#components)) has no record,
 raw file, or export bundle.
 
+A primitive of a rules type that takes extensions and is in the registry, such
+as an SRD condition or piece of equipment, has a record too, so it gets a
+gallery card beside its type's custom entries (`cardedPrimitives` in
+`lib/rules.ts`). Its record reads as the ruleset's own: `source` `null`,
+`author` `"publisher"`, `summary` empty, `url` its section on its rules page,
+`image` `null`, and `createdAt` `null`, since a primitive has no `meta`. Its
+facets read its `stats` and its derived values as an extension's do, and its
+`refs` and `refBy` are its links. Its raw copy is its rules file, and its
+export bundle's `entry` is the primitive with its ruleset: `ruleset`, `type`,
+`id`, `name`, and `stats`.
+
 Records are sorted by ruleset, type, then `id`, and the file is written without
 timestamps, so two builds of the same content are byte-identical. The index
 stays lean: full entries and derived values are fetched only for export, from
@@ -338,6 +349,17 @@ or longer than the window.
 `cardFields`, summary, and source. The whole card opens its entry, and its
 cart control sits above that link ([Cart and set actions](#gallery))
 ([Shared components](styling.md#shared-components)).
+
+- **SRD equipment and conditions.** Each primitive with a record
+  ([Index build](#index-build)) has a card under its type, filtered, counted,
+  and sorted with the type's custom entries: Condition counts the SRD's 15
+  conditions and the custom ones. The card is official, so it shows on a fresh
+  Library and has the star; it has no summary or source line, and sorting by
+  date added puts it last. It opens the primitive's section on its rules page,
+  since a primitive has no detail page, and refs to it still land there. Print
+  and the cart take it like any other card, and its print fragment is its
+  type's template ([Print](export.md#print)). Without JavaScript, the Library's
+  list links it to that section.
 
 - **Official star.** An official entry's card has a star in the top right
   corner, beside its name ([Source and author](content-model.md#source-and-author)),

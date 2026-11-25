@@ -189,19 +189,20 @@ describe('a custom weapon through Equipment › Weapon › Property and Mastery'
   it('lists its properties and mastery by name, as ref facets beside its damage type', () => {
     const weapon = ofType(tree(records, config), 'Equipment', 'Weapon');
     expect(weapon?.kind === 'field' && weapon.children.map(labelOf)).toEqual(['Damage type', 'Property', 'Mastery']);
-    expect(values(ofType(tree(records, config), 'Equipment', 'Weapon', 'Property')).map((v) => [v.label, v.key])).toEqual([
-      ['Finesse', 'weapon-property/finesse'],
-      ['Light', 'weapon-property/light'],
-    ]);
-    expect(values(ofType(tree(records, config), 'Equipment', 'Weapon', 'Mastery')).map((v) => [v.label, v.key])).toEqual([['Nick', 'mastery-property/nick']]);
+    // The SRD weapons' cards sit beside it, so their properties and masteries are listed too.
+    const property = values(ofType(tree(records, config), 'Equipment', 'Weapon', 'Property')).map((v) => [v.label, v.key]);
+    expect(property).toContainEqual(['Finesse', 'weapon-property/finesse']);
+    expect(property).toContainEqual(['Light', 'weapon-property/light']);
+    expect(values(ofType(tree(records, config), 'Equipment', 'Weapon', 'Mastery')).map((v) => [v.label, v.key])).toContainEqual(['Nick', 'mastery-property/nick']);
   });
 
-  it('filters by a property and by a mastery', () => {
+  it('filters by a property and by a mastery, beside the SRD weapons', () => {
     const ids = (query: string) => computeView(records, config, parseQuery(whole(query), config)).results.map((r) => r.id);
-    expect(ids('?f.stats.weapon.properties=weapon-property%2Ffinesse')).toEqual(['reef-knife']);
-    expect(ids('?f.stats.weapon.properties=weapon-property%2Fheavy')).toEqual([]);
-    expect(ids('?f.stats.weapon.mastery=mastery-property%2Fnick')).toEqual(['reef-knife']);
-    expect(ids('?f.stats.weapon.mastery=mastery-property%2Fsap')).toEqual([]);
+    expect(ids('?f.stats.weapon.properties=weapon-property%2Ffinesse')).toEqual(expect.arrayContaining(['reef-knife', 'dagger', 'rapier']));
+    expect(ids('?f.stats.weapon.properties=weapon-property%2Fheavy')).not.toContain('reef-knife');
+    expect(ids('?f.stats.weapon.properties=weapon-property%2Fheavy')).toContain('greatsword');
+    expect(ids('?f.stats.weapon.mastery=mastery-property%2Fnick')).toContain('reef-knife');
+    expect(ids('?f.stats.weapon.mastery=mastery-property%2Fsap')).not.toContain('reef-knife');
   });
 });
 

@@ -6,7 +6,7 @@ import Gallery from '../../../site/src/components/gallery/Gallery.tsx';
 import { NO_FACET_DATA, type LibraryRecord } from '../../../site/src/lib/gallery/config.ts';
 import { chipFacets, loadSchemas } from '../../../site/src/lib/gallery/facet-data.ts';
 import registry from '../../../config/types.json' with { type: 'json' };
-import { fixtureRecords, whole } from './helpers.ts';
+import { fixtureRecords, record, whole } from './helpers.ts';
 
 let records: LibraryRecord[];
 beforeAll(async () => {
@@ -152,6 +152,48 @@ describe('Gallery', () => {
     expect(html.match(/<article class="card linked-card"/g)).toHaveLength(2);
     expect(html).not.toContain('Cinder Hound');
     expect(html).not.toContain('gallery__clear');
+  });
+
+  describe('SRD equipment and conditions as cards (docs/site.md#gallery "Cards")', () => {
+    let all: LibraryRecord[];
+    beforeAll(async () => {
+      all = await fixtureRecords({ primitives: true });
+    });
+    const card = (html: string, name: string) => html.split('<article').find((part) => part.includes(`>${name}</a>`)) ?? '';
+    const fresh = (initialQuery = '') => renderToString(h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records: all, initialQuery }));
+
+    it('shows on a fresh Library as official content, beside the SRD classes', () => {
+      const html = fresh();
+      const primitives = all.filter((r) => r.createdAt === null).length;
+      expect(html.match(/<article class="card linked-card"/g)).toHaveLength(2 + primitives);
+      expect(html).toContain('>Blinded</a>');
+      expect(html).toContain('>Longsword</a>');
+    });
+
+    it('opens its section on the rules page, with the official star, no summary, and no source line', () => {
+      const blinded = card(fresh('?f.type=condition'), 'Blinded');
+      expect(blinded).toContain('href="/ttrpg-library/dnd-5e-2024/rules/conditions/#condition-blinded"');
+      expect(blinded).toContain('aria-label="Official"');
+      expect(blinded).not.toContain('card__summary');
+      expect(blinded).not.toContain('card__source');
+      expect(blinded).toContain('In cart');
+    });
+
+    it('sits under its type beside its custom entries, sorted with them', () => {
+      const fading = record({ id: 'fading', type: 'condition', name: 'Fading', author: 'bardic-inspiration' });
+      const html = renderToString(
+        h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records: [...all, fading], initialQuery: whole('?f.type=condition') }),
+      );
+      const names = [...html.matchAll(/<a class="card-link" href="[^"]*">([^<]+)<\/a>/g)].map((m) => m[1]);
+      expect(names).toHaveLength(16);
+      expect(names.indexOf('Fading')).toBe(names.indexOf('Exhaustion') + 1);
+      expect(card(html, 'Fading')).toContain('card__summary');
+    });
+
+    it('takes its type\'s card fields from its stats and derived values', () => {
+      const longsword = card(fresh('?f.type=equipment'), 'Longsword');
+      expect(longsword).toContain('<dt>Cost (GP)</dt><dd>15</dd>');
+    });
   });
 
   describe('where an entry comes from (#379)', () => {

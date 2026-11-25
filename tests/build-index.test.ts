@@ -38,8 +38,9 @@ describe('library.json records', () => {
   it('have exactly the docs/site.md#index-build keys, in order', async () => {
     const { errors, records } = await buildIndex(valid);
     expect(errors).toEqual([]);
-    // The three example entries, and the two classes Frost Lance names.
-    expect(records).toHaveLength(5);
+    // The three example entries, and the two classes Frost Lance names, then a card per SRD condition and equipment primitive.
+    expect(records.filter((r) => r.createdAt !== null)).toHaveLength(5);
+    expect(records.length).toBeGreaterThan(5);
     for (const record of records) {
       expect(Object.keys(record)).toEqual([
         'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'facets', 'createdAt', 'refs', 'refBy',
@@ -145,6 +146,53 @@ describe('library.json records', () => {
   });
 });
 
+describe('ruleset primitives (docs/site.md#index-build)', () => {
+  it('get a record for each primitive of a rules type that takes extensions, and none for the others', async () => {
+    const { records } = await buildIndex(valid);
+    const primitives = records.filter((r) => r.createdAt === null);
+    const types = new Set(primitives.map((r) => r.type));
+    expect([...types].sort()).toEqual(['condition', 'equipment']);
+    expect(primitives.filter((r) => r.type === 'condition')).toHaveLength(15);
+  });
+
+  it('read as official SRD rules with no summary, opening their section on the rules page', async () => {
+    const { records } = await buildIndex(valid);
+    const blinded = records.find((r) => r.type === 'condition' && r.id === 'blinded')!;
+    expect(blinded).toEqual({
+      id: 'blinded',
+      ruleset: 'dnd-5e-2024',
+      source: null,
+      author: 'publisher',
+      type: 'condition',
+      name: 'Blinded',
+      summary: '',
+      url: '/ttrpg-library/dnd-5e-2024/rules/conditions/#condition-blinded',
+      image: null,
+      facets: {},
+      createdAt: null,
+      refs: expect.any(Array),
+      refBy: expect.any(Array),
+    });
+  });
+
+  it('lift facets from their stats and derived values, as an extension does', async () => {
+    const { records } = await buildIndex(valid);
+    const longsword = records.find((r) => r.type === 'equipment' && r.id === 'longsword')!;
+    expect(longsword.facets).toMatchObject({ 'stats.group': 'martial-melee-weapons', 'derived.costGp': 15, 'stats.weapon.mastery': 'mastery-property/sap' });
+    expect(longsword.url).toMatch(/\/dnd-5e-2024\/rules\/[a-z-]+\/#equipment-longsword$/);
+  });
+
+  it('write a raw copy of the primitive and its export bundle', async () => {
+    const out = await tempDir();
+    await writeIndex(valid, out, await buildIndex(valid));
+    const file = join(ROOT, 'rulesets/dnd-5e-2024/rules/equipment/acid.json');
+    expect(await readFile(join(out, 'data/dnd-5e-2024/equipment/acid.json'), 'utf8')).toBe(await readFile(file, 'utf8'));
+    const primitive = JSON.parse(await readFile(file, 'utf8')) as { type: string; stats: unknown };
+    const bundle = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024/equipment/acid.export.json'), 'utf8')) as Record<string, unknown>;
+    expect(bundle).toEqual({ entry: { ruleset: 'dnd-5e-2024', ...primitive }, derived: expect.objectContaining({ costGp: 25 }), names: expect.any(Object) });
+  });
+});
+
 describe('the build', () => {
   it('fails, with no records, when validation fails', async () => {
     const broken = await cinderHound();
@@ -172,7 +220,8 @@ describe('the build', () => {
     const out = await tempDir();
     await writeIndex(valid, out, await buildIndex(valid));
     const library = JSON.parse(await readFile(join(out, 'library.json'), 'utf8')) as { id: string }[];
-    expect(library.map((r) => r.id)).toEqual(['sorcerer', 'wizard', 'cinder-hound', 'wand-of-frost-lances', 'frost-lance']);
+    const entries = library.filter((r) => !['condition', 'equipment'].includes((r as { type?: string }).type ?? ''));
+    expect(entries.map((r) => r.id)).toEqual(['sorcerer', 'wizard', 'cinder-hound', 'wand-of-frost-lances', 'frost-lance']);
     for (const path of ['creature/cinder-hound.json', 'item/wand-of-frost-lances.json', 'spell/frost-lance.json']) {
       expect(await readFile(join(out, 'data/dnd-5e-2024', path), 'utf8')).toBe(await readFile(join(valid, 'dnd-5e-2024', path), 'utf8'));
     }
@@ -199,7 +248,8 @@ describe('the build', () => {
     await writeIndex(valid, out, await buildIndex(valid));
     const lib = await temp([await cinderHound()]);
     await writeIndex(lib.content, out, await buildIndex(lib.content, { assetsRoot: lib.repo }));
-    expect(await readdir(join(out, 'data/dnd-5e-2024'))).toEqual(['creature']);
+    expect(await readdir(join(out, 'data/dnd-5e-2024'))).toEqual(['condition', 'creature', 'equipment']);
+    expect(await readdir(join(out, 'data/dnd-5e-2024/creature'))).toEqual(['cinder-hound.export.json', 'cinder-hound.json']);
   });
 
   it('is byte-identical across two independent builds', async () => {

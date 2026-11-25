@@ -117,6 +117,8 @@ computed numbers, so translators read `derived` rather than recomputing.
   `library-<YYYYMMDD>.json`, dated by the reader's clock. If any file fails to
   fetch, nothing downloads.
 - Raw files come from `data/<ruleset>/<type>/<id>.json` under the site base.
+  A primitive with a gallery card downloads its rules file as it's stored
+  ([Index build](site.md#index-build)).
 
 ### PNG
 
@@ -149,7 +151,9 @@ computed numbers, so translators read `derived` rather than recomputing.
   targets' names ([site.md](site.md#gallery)).
 - **Print fragments.** The build emits each entry's print fragment at
   `print/<ruleset>/<type>/<id>/`: the template in `print` mode
-  (`components/print/PrintEntry.astro`) as bare markup. The print view
+  (`components/print/PrintEntry.astro`) as bare markup. A primitive with a
+  gallery card ([site.md](site.md#gallery)) has one too, in its type's
+  template, as a custom one of its type prints. The print view
   (`components/print/PrintView.tsx`, logic in `site/src/lib/print.ts` and
   `print-run.ts`) resolves its entries against `library.json`, fetches only
   their fragments, and inserts them. Page weight follows the selection, not the
@@ -293,8 +297,8 @@ entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
   creature's extra sizes, swarm, descriptors, gear, lair, speed and senses
   notes, condition immunity notes, and legendary action uses and intro (so
   its legendary actions don't import); an item whose rarity varies (not
-  exported), its base item, charges, spells, and curse; embedded stat blocks;
-  and any `adjust`. Each is reported where it occurs.
+  exported), its base item, charges, spells, and curse; a weapon property's
+  note ("unless mounted"); embedded stat blocks; and any `adjust`. Each is reported where it occurs.
 - **Equipment groups.** Open5e gives an item a category, not a group, so
   import reads a group only from a weapon's or armor's summary or the
   Adventuring Gear category. Other equipment (tools, mounts, vehicles)

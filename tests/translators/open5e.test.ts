@@ -79,7 +79,9 @@ describe('Open5e round trip (docs/export.md#open5e)', () => {
         continue;
       }
       const back = open5e.import(JSON.parse(out.data), context).entries[0];
-      const original = { name: b.entry.name, summary: b.entry.summary, description: b.entry.description, stats: unordered(b.entry.stats) };
+      // A primitive's bundle carries no summary or description.
+      const { summary, description } = b.entry as { summary?: string; description?: string };
+      const original = { name: b.entry.name, summary, description, stats: unordered(b.entry.stats) };
       const after = back && { name: back.name, summary: undefined, description: back.description, stats: unordered(back.stats) };
       for (const diff of after ? diffPaths(original, after, '') : ['']) {
         if (!reported(diff, skips)) unreported.push(`${key} ${diff}`);

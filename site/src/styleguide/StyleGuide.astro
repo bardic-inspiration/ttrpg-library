@@ -75,8 +75,15 @@ const icons = [
   ['Download', DownloadIcon], ['Print', PrintIcon],
 ] as const;
 
-// Cards, filters, and templates render the example fixtures, which have one entry per type.
-const fixtures = await buildIndex(`${PROJECT_ROOT}/tests/fixtures/library/valid`);
+// Cards, filters, and templates render the example fixtures, which have one entry per type. The
+// index also gives every SRD condition and equipment primitive a card; the cards and filters take one,
+// Blinded, to show a primitive's card.
+const index = await buildIndex(`${PROJECT_ROOT}/tests/fixtures/library/valid`);
+const isEntry = (i: number) => index.records[i]!.createdAt !== null;
+const fixtures = {
+  records: index.records.filter((r, i) => isEntry(i) || (r.type === 'condition' && r.id === 'blinded')),
+  files: index.files.filter((_, i) => isEntry(i)),
+};
 const fixtureEntries = loadLibrary(
   fixtures.files.map((file) => JSON.parse(readFileSync(`${PROJECT_ROOT}/tests/fixtures/library/valid/${file}`, 'utf8')) as Entry),
 );

@@ -29,6 +29,9 @@ export function exportEquipment(item: TranslatorItem, skips: Skips): Record5e {
   }
   if (s.cost && s.cost.unit !== 'gp') skips.add('stats.cost', 'Open5e gives costs in gold pieces, so the coin doesn\'t read back.');
   const weapon = s.weapon;
+  for (const [i, p] of (weapon?.properties ?? []).entries()) {
+    if (p.note !== undefined) skips.add(`stats.weapon.properties[${i}].note`, 'Open5e has no field for a weapon property\'s note.');
+  }
   const range = weapon?.range ? `Range ${weapon.range.normal}/${weapon.range.long}` : undefined;
   const detail = (ref: string): string | null => {
     if (ref === 'weapon-property/versatile') return weapon?.versatile ?? null;
@@ -57,7 +60,7 @@ export function exportEquipment(item: TranslatorItem, skips: Skips): Record5e {
           ],
           is_melee: String(s.group.includes('melee')),
           is_simple: s.group.startsWith('simple'),
-          is_martial: String(s.group.startsWith('martial')),
+          is_martial: s.group.startsWith('martial'),
           is_improvised: false,
           distance_unit: 'feet',
         }
