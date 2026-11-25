@@ -1,6 +1,6 @@
 // One gallery card (docs/site.md#gallery "Cards"): art when the entry has it,
-// name with a star slot, source and type badges, the type's card fields, and the
-// summary, with a selection checkbox. The whole card opens its entry, through the shared card link,
+// name with a star slot, the type badge, the type's card fields, the summary, and
+// the source on a smaller line below it, with a selection checkbox. The whole card opens its entry, through the shared card link,
 // and the checkbox sits above that link (docs/styling.md#shared-components "Click targets"). Accents come from data-type (and data-rarity),
 // never per-type CSS.
 import { isOfficial } from '../../../../rulesets/module.ts';
@@ -73,7 +73,6 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, selected
           </span>
         </div>
         <ul class="card__badges">
-          {record.source && <li class="badge badge--source">{record.source}</li>}
           <li class="badge">{typeLabel}</li>
           {badges.map((badge, i) => (
             <li class="badge" key={i} data-rarity={badge.rarity}>
@@ -92,6 +91,7 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, selected
           </dl>
         )}
         <p class="card__summary">{record.summary}</p>
+        {record.source && <p class="card__source">{record.source}</p>}
         <span class="card__select">
           <Checkbox id={`${id}-select`} checked={selected} onChange={onSelect}>
             Select<span class="visually-hidden"> {record.name}</span>

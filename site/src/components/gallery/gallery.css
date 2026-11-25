@@ -264,18 +264,6 @@
     padding: 0 var(--space-2xs);
   }
 
-  /*
-   * The source shows in full, whatever its length (docs/site.md#gallery "Cards"): a name longer
-   * than the card's line wraps inside its badge instead of overflowing the card.
-   */
-  .badge--source {
-    max-inline-size: 100%;
-    overflow-wrap: anywhere;
-    color: var(--badge-source-text);
-    border: var(--badge-source-border);
-    border-radius: var(--badge-source-radius);
-  }
-
   .card__fields {
     display: flex;
     flex-wrap: wrap;
@@ -295,6 +283,17 @@
 
   .card__summary {
     font-size: var(--text-small);
+  }
+
+  /*
+   * The source, on a smaller muted line below the summary (docs/site.md#gallery "Cards"). It shows
+   * in full, whatever its length, wrapping instead of overflowing the card.
+   */
+  .card__source {
+    font-family: var(--card-source-font);
+    font-size: var(--text-small);
+    color: var(--card-source-text);
+    overflow-wrap: anywhere;
   }
 
   .card__select {

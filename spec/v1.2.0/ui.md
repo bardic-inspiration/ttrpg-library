@@ -38,8 +38,6 @@ shared components).
 
 ### The Library
 
-- **Cards** keep the official star. The source moves from a badge to a
-  smaller line at the bottom of the card.
 - **Filters, flattened** to two sections, **Source** and **Types**, in place
   of the Ruleset node and its groups. Source holds the sources and authors,
   official ones pinned first, as today. With more than one ruleset, each
@@ -125,6 +123,20 @@ gallery cards.
   [`display`](../../docs/content-model.md#display) changes only their cards.
   Also: whether CR's chip reads its bare value ("1/8") or "CR 1/8". Until
   this is decided, range facets keep their inputs and CR isn't marked (#420).
+
+- **Flattened filters and checkbox state (#421):** with one ruleset, the
+  sections don't group by ruleset, so no ruleset checkbox is left. Either the
+  ruleset filter (`f.ruleset`) is set only by URL and the `/<ruleset>/`
+  redirects, or each section shows the ruleset's label even with one. With
+  several, it's open whether the label is a checkbox for `f.ruleset` in both
+  sections, in one, or in neither. Also open: whether "a checkbox shows whether
+  the current results include what it stands for" covers only the ruleset set
+  or types and values too, and what clicking a box does when it reads checked
+  only from the results. On a fresh Library, D&D 5e's official entries show,
+  but `f.ruleset` doesn't hold it, so a click that adds it would turn 965
+  results into 1296 with no visible change to the box. One answer is a mixed
+  state while only some of its entries show. Until this is decided, the
+  Library keeps the Ruleset node and its groups.
 
 - **The Rulesets page redesign:** a full redesign of today's bare list of
   each ruleset's rules pages, through a design process of its own. Not built

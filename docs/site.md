@@ -302,8 +302,8 @@ room (`scrollbar-gutter: stable` in `layout.css`) whether or not it scrolls, so
 the menu and results don't shift sideways as filtering makes the page shorter
 or longer than the window.
 
-**Cards.** Each card shows art (only when the entry has it), name, source and
-type badges, `cardFields`, and summary. The whole card opens its entry, and its
+**Cards.** Each card shows art (only when the entry has it), name, type badge,
+`cardFields`, summary, and source. The whole card opens its entry, and its
 Select checkbox sits above that link
 ([Shared components](styling.md#shared-components)).
 
@@ -312,10 +312,10 @@ Select checkbox sits above that link
   named "Official" for assistive technology and on hover. Every card keeps the
   star's slot, a fixed column beside the name, so a name wraps the same with
   or without the star.
-- **Source badge.** The entry's `source` heads the badge list, before the type,
-  in a neutral, square-cornered badge so it never reads as a type or rarity.
-  It shows in full however long it is; a name longer than the card's line
-  wraps inside its badge. An entry with no source has no source badge.
+- **Source line.** The entry's `source` is a smaller, muted line after the
+  summary, above Select, so it never reads as a type or rarity. It shows in
+  full however long it is, wrapping when it's longer than the card's line. An
+  entry with no source has no source line.
 
 A boolean card field (concentration, ritual,
 attunement) reads as a badge labeled with the facet when `true` and is left out
