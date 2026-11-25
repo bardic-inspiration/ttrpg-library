@@ -3,8 +3,8 @@ import { formatSpellLevel, formatTitle, formatValue } from '../../site/src/lib/f
 import { name } from '../../site/src/lib/wording.ts';
 
 describe('display formatters (docs/site.md#type-registry `format`)', () => {
-  it('formats spell levels', () => {
-    expect([0, 1, 2, 3, 4, 9].map(formatSpellLevel)).toEqual(['Cantrip', 'Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 9']);
+  it('formats spell levels as the value alone, since the field’s label names it', () => {
+    expect([0, 1, 2, 3, 4, 9].map(formatSpellLevel)).toEqual(['Cantrip', '1', '2', '3', '4', '9']);
   });
 
   it('reads rarities from the vocabulary (docs/site.md#wording)', () => {

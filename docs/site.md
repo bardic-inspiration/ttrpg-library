@@ -42,11 +42,13 @@ value reads by its display name there, the same name its page shows:
 optional display formatter:
 
 - `cr` reads fractions ("1/8");
-- `spell-level` reads 0 as "Cantrip" and any other level as "Level 3";
+- `spell-level` reads 0 as "Cantrip" and any other level as its number;
 - `title` reads a slug with no vocabulary, such as an equipment group's id,
   in title case ("Hand Tools").
 
-Without either, a value reads as stored, which keeps free text as written.
+Without either, a value reads as stored, which keeps free text as written. A
+format reads the value alone, never the field's label: where a value needs
+naming, the display adds the label once ("Level: 3", "CR: 1/8").
 
 Two flags change what a facet's values are:
 
@@ -320,9 +322,10 @@ Select checkbox sits above that link
 A boolean card field (concentration, ritual,
 attunement) reads as a badge labeled with the facet when `true` and is left out
 when `false`. A `rarity`-formatted field reads as a badge carrying
-`data-rarity`. A chip field ([Display](content-model.md#display)) reads as its
-value alone, a badge per value: a spell's level reads "Level 2", not
-"Level Level 2". Other fields read as label and value. One column on phones, up
+`data-rarity`. A chip field ([Display](content-model.md#display)) reads as
+`<label>: <value>`, a badge per value: a spell's level reads "Level: 2" or
+"Level: Cantrip", a creature's CR "CR: 1/8". Other fields read as a label
+line and its value ("Level" and "2"). One column on phones, up
 to four on wide screens.
 
 **Filters** are a nested accordion checkbox tree built from the registry

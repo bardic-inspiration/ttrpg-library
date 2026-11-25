@@ -71,7 +71,7 @@ function at(value: unknown, path: string): unknown {
   return current;
 }
 
-/** The type's `summaryField` value (docs/site.md#type-registry), read as its facet reads it: by vocabulary or format. */
+/** The type's `summaryField` as its facet's label and value (docs/site.md#type-registry), the value read by vocabulary or format. */
 function summaryField(entry: Head, registry: Registry, modules: Map<string, RulesetModule>): string | undefined {
   if (typeof entry.ruleset !== 'string' || typeof entry.type !== 'string') return undefined;
   const config = registry[entry.ruleset]?.types[entry.type];
@@ -81,8 +81,8 @@ function summaryField(entry: Head, registry: Registry, modules: Map<string, Rule
   if (value === undefined) return undefined;
   const facet = config?.facets.find((f) => f.path === path);
   const book = modules.get(entry.ruleset)?.phrases;
-  if (facet?.vocabulary && book && typeof value === 'string') return vocabularyName(book, facet.vocabulary, value) ?? value;
-  return formatValue(value, facet?.format);
+  const text = facet?.vocabulary && book && typeof value === 'string' ? (vocabularyName(book, facet.vocabulary, value) ?? value) : formatValue(value, facet?.format);
+  return facet ? `${facet.label}: ${text}` : text;
 }
 
 /** One action's attack bonus, DC, and damage, as the stat block derives them; undefined for one with none. */

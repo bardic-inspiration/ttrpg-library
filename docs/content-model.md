@@ -325,20 +325,22 @@ decides that). The keyword sits in the type's schema beside the field, or in
 a shared definition the field refers to, so it serves any ruleset and a field
 shared through `common.schema.json` carries it once.
 
-- **Cards:** a chip field shows its value alone, as a badge, one badge per
-  value of an array. A text field shows its label and value
+- **Cards:** a chip field shows its label and value as a badge,
+  `<label>: <value>` ("Level: 3", "CR: 1/8"), one badge per value of an
+  array. A text field shows its label and value
   ([Gallery](site.md#gallery) "Cards").
 - **Filters:** an enum facet on a chip field lists its values as chips
-  rather than checkboxes ([Gallery](site.md#gallery) "Filters"). A range
-  facet keeps its min and max inputs.
+  rather than checkboxes ([Gallery](site.md#gallery) "Filters"), without the
+  label, which the facet's node already shows. A range facet keeps its min
+  and max inputs, which accept fractions and decimals.
 - **Validation:** `display` takes only `chip`, and only on a field a facet
   could read: a string, number, boolean, or array of strings, by its `type`
   or the values its `enum` or `const` allows. Anything else fails, naming
   the schema file and the JSON pointer of the node
   (`rulesets/<ruleset>/schemas/<type>.schema.json: /properties/size: …`).
 
-`dnd-5e-2024` marks spell level and school, feat category, item category, and
-a class's Hit Point Die: small ranges whose values read without a label.
+`dnd-5e-2024` marks spell level and school, a creature's CR, feat category,
+item category, and a class's Hit Point Die.
 
 ### SRD and custom entries
 
