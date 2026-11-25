@@ -2,7 +2,7 @@ import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import EntryDetail from '../../site/src/components/detail/EntryDetail.astro';
-import { provenance, tagChips } from '../../site/src/lib/detail.ts';
+import { provenance } from '../../site/src/lib/detail.ts';
 import { fixtureLibrary, textOf } from './library-fixtures.ts';
 
 const lib = await fixtureLibrary();
@@ -63,11 +63,10 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(html).toMatch(/<img class="art-frame art-frame--image[^"]*" src="[^"]*cinder-hound\.webp" alt="Cinder Hound"/);
   });
 
-  it('links each tag to the Library filtered by the type and the tag, and the type to the Library filtered by it', async () => {
+  it('links the type to the Library filtered by it, and has no tag links', async () => {
     const html = await render('cinder-hound');
-    expect(html).toContain('/?f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature&amp;f.tags.theme=fire"');
-    expect(html).toContain('/?f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature&amp;f.tags.environment=underdark"');
-    expect(html).toContain('/?f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature&amp;f.tags.environment=mountains"');
+    expect(html).not.toContain('f.tags.');
+    expect(html).not.toMatch(/>Tags</);
     expect(html).toContain('class="entry-detail__type" href="/?sort=stats.cr:asc&amp;f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature"');
   });
 
@@ -132,15 +131,6 @@ describe('detail page (docs/site.md#detail-page)', () => {
 });
 
 describe('detail helpers (docs/site.md#gallery, docs/site.md#detail-page)', () => {
-  it('encodes tag values in gallery URL form', () => {
-    const { entry } = lib.byId('cinder-hound');
-    const chips = tagChips({ ...entry, tags: { world: 'Ash, Ember', lair: true } });
-    expect(chips.map((c) => c.path)).toEqual([
-      '?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/creature&f.tags.world=Ash%2C%20Ember',
-      '?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/creature&f.tags.lair=true',
-    ]);
-  });
-
   it('includes the revision date only when there is one', () => {
     const { entry } = lib.byId('cinder-hound');
     expect(provenance(entry).updatedAt).toBeUndefined();

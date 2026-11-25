@@ -15,7 +15,6 @@ export interface TranslatorEntry {
   summary?: string;
   description?: string;
   stats: unknown;
-  tags?: Record<string, unknown>;
   image?: string;
   meta?: unknown;
 }

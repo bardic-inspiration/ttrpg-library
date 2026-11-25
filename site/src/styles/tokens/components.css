@@ -30,8 +30,6 @@
     --filter-count-text: var(--color-text-muted);
     --tree-indent: var(--space-s);
     --tree-chevron: var(--space-2xs);
-    /* The break line under the ruleset set, at the top of the filter menu. */
-    --filters-break: var(--border-width-strong) solid var(--color-border);
 
     /* Accordion pages: a section's chevron, and the table of contents' column width. */
     --accordion-chevron: var(--space-2xs);

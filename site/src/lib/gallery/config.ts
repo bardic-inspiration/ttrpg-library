@@ -10,7 +10,7 @@ import { typeKey } from '../type-key.ts';
 
 export type { Facet, LibraryRecord, Registry };
 
-/** A filterable path: a registry facet, the `ruleset`, `source`, `author`, or `type` filter, or a `tags.<key>`. */
+/** A filterable path: a registry facet, or the `ruleset`, `source`, `author`, or `type` filter. */
 export interface FilterDef {
   path: string;
   label: string;
@@ -207,20 +207,9 @@ export function recordDef(config: GalleryConfig, record: Pick<LibraryRecord, 'ru
   return config.types.get(typeKey(record.ruleset, record.type))?.facets.find((f) => f.path === path) ?? filterDef(config, path);
 }
 
-const TAG_KEY = /^[a-z][a-z0-9-]*$/;
-
-/** A `tags.<key>` path for a valid tag key (docs/content-model.md#tags), or undefined. */
-export const tagKey = (path: string): string | undefined => {
-  const key = path.startsWith('tags.') ? path.slice('tags.'.length) : undefined;
-  return key !== undefined && TAG_KEY.test(key) ? key : undefined;
-};
-
-/** The definition of a filter path: a known facet, `ruleset`, `source`, `author`, `type`, or any tag key. */
+/** The definition of a filter path: a known facet, `ruleset`, `source`, `author`, or `type`; undefined for any other path. */
 export function filterDef(config: GalleryConfig, path: string): FilterDef | undefined {
-  const known = config.filters.find((f) => f.path === path);
-  if (known) return known;
-  const key = tagKey(path);
-  return key === undefined ? undefined : { path, label: key.replace(/-/g, ' '), kind: 'enum' };
+  return config.filters.find((f) => f.path === path);
 }
 
 /**

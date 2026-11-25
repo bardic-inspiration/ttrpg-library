@@ -93,7 +93,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
             <input
               id="gallery-q"
               type="search"
-              placeholder="Name, tag, or text"
+              placeholder="Name or text"
               value={state.q}
               onInput={(e) => {
                 const q = (e.currentTarget as HTMLInputElement).value;

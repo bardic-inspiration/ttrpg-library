@@ -115,17 +115,6 @@
     list-style: none;
   }
 
-  /* The ruleset set (docs/site.md#gallery "Filters"): its own section, above a break line. */
-  .tree--rulesets {
-    padding-block-end: var(--space-2xs);
-    border-block-end: var(--filters-break);
-
-    /* The break line replaces the last ruleset's own divider. */
-    & > .tree__node > .tree__children > .tree__node--type:last-child {
-      border-block-end: none;
-    }
-  }
-
   .tree__children,
   .tree__values,
   .tree__panel {

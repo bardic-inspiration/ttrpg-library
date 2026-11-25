@@ -25,7 +25,6 @@ export function record(overrides: Partial<LibraryRecord> & { id: string }): Libr
     url: `/ttrpg-library/dnd-5e-2024/${overrides.type ?? 'creature'}/${overrides.id}/`,
     image: null,
     facets: {},
-    tags: {},
     createdAt: '2026-01-01',
     refs: [],
     refBy: [],

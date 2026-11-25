@@ -27,7 +27,7 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts |
 | `cardFields` | Facets shown on gallery cards |
 | `defaultSort` | `<path>:<asc|desc>`: the sort the Library opens on from the type's old gallery URL and its detail page's type link ([Redirects](#redirects)) |
-| `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet and tag stays in the tree, closed |
+| `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet stays in the tree, closed |
 | `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, species, class, subclass), which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
@@ -46,8 +46,7 @@ optional display formatter:
 - `title` reads a slug with no vocabulary, such as an equipment group's id,
   in title case ("Hand Tools").
 
-Without either, a value reads as stored, which keeps tag values and free text
-as written.
+Without either, a value reads as stored, which keeps free text as written.
 
 Two flags change what a facet's values are:
 
@@ -83,7 +82,7 @@ Two flags change what a facet's values are:
 
 Each `library.json` record holds the entry's `id`, `ruleset`, `source` (or
 `null`), `author`, `type`, `name`, `summary`, `url` (the detail page under the site base), `image` (the stored
-path, or `null`), `facets`, `tags` (or `{}`), `createdAt`, `refs`, `refBy`, and
+path, or `null`), `facets`, `createdAt`, `refs`, `refBy`, and
 `search`:
 
 - `facets` holds the registry's facet paths in registry order, read from
@@ -332,17 +331,16 @@ when `false`. A `rarity`-formatted field reads as a badge carrying
 to four on wide screens.
 
 **Filters** are a nested accordion checkbox tree built from the registry
-(`site/src/lib/gallery/tree.ts`). The Ruleset node comes first, in its own
-list, divided from the Tags by a break line. It holds each ruleset, and in
+(`site/src/lib/gallery/tree.ts`). The Ruleset node is its only top-level
+node. It holds each ruleset, and in
 each ruleset two groups: **Source and author**, what the ruleset's entries
 are and where they come from, then **Types**, its types, each holding its
 fields, then any subfield, then values, such as Ruleset › D&D 5e › Types ›
 Creature › Immunities › Conditions › Poisoned. The rulesets, sources, and
 authors are the **ruleset set**, which is additive: it chooses which entries
-are in the results at all. The types, their facets, and the tags narrow those
-entries.
+are in the results at all. The types and their facets narrow those entries.
 
-- **Ruleset node.** Always first and open at the start, even when the library
+- **Ruleset node.** Always present and open at the start, even when the library
   holds one ruleset. Inside it, each ruleset the library has entries of, that
   is checked, or that holds a checked type, is a checkbox for the ruleset
   filter (`f.ruleset`) with a disclosure holding its two groups. Each ruleset,
@@ -387,10 +385,7 @@ entries.
   Abilities. A field only one facet sits in adds no node, so `stats.ac.value`
   reads as AC. A facet shows when some entry of its type has a value for it,
   or it's active.
-- **Tags** follow the types as one Tags node, holding every tag key in the
-  library and any tag filtered on. Source and author aren't tags, so they
-  never appear here.
-- **Values.** An enum facet or tag lists its values vertically as checkboxes,
+- **Values.** An enum facet lists its values vertically as checkboxes,
   each with its count: the entries of its type it matches under the search and
   every other active filter. Values come in declared order (ordered enums),
   by name (ref facets), or alphabetically, plus any selected value no entry
@@ -401,8 +396,7 @@ entries.
   change nothing. While an input has focus its text stays as typed; when focus
   leaves, it shows the filter's value (`0.125` reads `1/8` for CR).
 - **Open nodes.** When the tree first shows, from the page's URL, a checked
-  type's registry `defaultFilters` start open, in its node and, for a tag, in
-  Tags, and every node holding an active filter starts open, down to the value
+  type's registry `defaultFilters` start open, in its node, and every node holding an active filter starts open, down to the value
   (`openAtStart` in `tree.ts`). From then on, only a node's own disclosure opens
   or closes it, and only that node: checking or unchecking a type or a value,
   and Clear filters, never opens or closes any node. A node keeps its state while
@@ -414,7 +408,8 @@ entries.
   shared range starts open only under a checked type, or under each type when
   none is checked.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
-  filter's value never matches it. A path two types share (`stats.level` on
+  filter's value never matches it. Matching compares strings
+  case-insensitively; a value displays in its stored case. A path two types share (`stats.level` on
   spells and feats) is one filter: each type lists its own entries' values, and
   a value checked under one applies to both. Each type still reads the path by
   its own facet: its vocabulary's labels, its declared order when sorting, and
@@ -441,14 +436,14 @@ facet (size) by its first item. Ties break by name, then ruleset, type, and id,
 so the order never depends on `library.json` order. Entries missing the sort
 value go last in either direction. The Library starts on `name:asc`.
 
-**Search.** MiniSearch over `name` (boost 3), `summary` (2), tag values (1.5),
-and `search` (1), with prefix and light fuzzy matching. Search narrows within
+**Search.** MiniSearch over `name` (boost 3), `summary` (2), and `search`
+(1), with prefix and light fuzzy matching. Search narrows within
 active filters; results order by relevance when there's a query, otherwise by
 the active sort.
 
 **URL state.** Query, sort, and filters live in the query string, so any view
 can be bookmarked or linked:
-`?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8&f.tags.theme=fire`.
+`?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8`.
 Ranges use `min..max` (either side may be empty). The ruleset set is
 written only when it differs from the default: a query naming any of
 `f.ruleset`, `f.source`, or `f.author` sets the whole set, so `?f.type=spell`
@@ -460,11 +455,12 @@ values; a `/` stays as is. Enum values are case-folded. The type filter is
 its ruleset (`f.type=dnd-5e-2024/spell`). A bare type id reads as that type
 in every ruleset, so `?f.type=spell` shows official spells of any ruleset, and
 the gallery writes it back qualified. Unknown
-parameters, filters on paths the Library doesn't have, a sort the filters
+parameters, filters on paths the Library doesn't have (such as an old
+`f.tags.theme`), a sort the filters
 don't offer (wherever the filters come in the query), and malformed values are
 ignored; of several sorts, the last one offered applies. The gallery rewrites the URL as the view changes,
 replacing the history entry, in one canonical form: the ruleset, source,
-author, and type filters, then the facets in registry order, then tags by key, with the default sort and ignored parameters left out.
+author, and type filters, then the facets in registry order, with the default sort and ignored parameters left out.
 
 **Selection and set actions.**
 
@@ -517,8 +513,6 @@ indexes.
   a page without homebrew links has no Homebrew section. A homebrew page's
   links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`).
 - The type, linked to the Library filtered to it ([Redirects](#redirects)).
-- Tags as chips; a chip opens the Library filtered to the entry's ruleset,
-  type, and that tag.
 - A provenance line: created and updated dates, and source issues linked to
   GitHub. An imported entry's line adds "Adapted from a work by <author>",
   linked to the source, "licensed under <license>", linked to its legal code
@@ -534,8 +528,7 @@ indexes.
 - One component per type template, `background-card`, `class-page`,
   `condition-card`, `creature-stat-block`, `equipment-card`, `feat-card`,
   `item-card`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
-  `stats` and then the ruleset's derived values as one definition list, and
-  tags. A derived value is labeled as a stored one is, from its key, and
+  `stats` and then the ruleset's derived values as one definition list. A derived value is labeled as a stored one is, from its key, and
   listed in the order the ruleset's module returns it. Each text in `stats`
   renders the ruleset's text tokens through its module's `renderTokens`
   ([Text tokens](rulesets.md#text-tokens)); a template's `module` prop
@@ -636,7 +629,6 @@ one house style ([SRD and custom entries](content-model.md#srd-and-custom-entrie
 
 | To add | Touch |
 |---|---|
-| A filter or sort on a tag | Nothing |
 | A filter or sort on a `stats` field | A facet in the registry |
 | A template for a type | A component in `site/src/components/templates/`, named in the registry, and a composer in `site/src/lib/` |
 | Wording for a type | Its sentences and vocabulary in `rulesets/<ruleset>/phrases.json` |

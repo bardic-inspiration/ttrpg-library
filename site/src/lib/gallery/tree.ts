@@ -1,12 +1,12 @@
 // The filter tree (docs/site.md#gallery "Filters"): the Ruleset node, with each ruleset's source
 // and author, and its types; then each type's field, any subfield, and value, built from its
-// registry facets; then the Tags.
+// registry facets.
 // Pure, so the island only renders it.
 
 import type MiniSearch from 'minisearch';
 import { isOfficial } from '../../../../rulesets/module.ts';
 import { label } from '../../../../lib/wording/grammar.ts';
-import { AUTHOR, RULESET, SOURCE, TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo, typeKey } from './config.ts';
+import { AUTHOR, RULESET, SOURCE, TYPE, filterDef, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo, typeKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, valueAt } from './values.ts';
 import { bounds, chips, hasValues, withoutFilter } from './view.ts';
@@ -193,22 +193,6 @@ function nest(
   return out;
 }
 
-/** The Tags node: every tag key in the Library, or filtered on, each with its values. */
-function tagsNode(ctx: Context, defaults: Set<string>): TreeNode | undefined {
-  const keys = new Set(ctx.records.flatMap((r) => Object.keys(r.tags)));
-  for (const path of ctx.state.filters.keys()) {
-    const key = tagKey(path);
-    if (key !== undefined) keys.add(key);
-  }
-  const children = [...keys]
-    .sort()
-    .map((key) => filterDef(ctx.config, `tags.${key}`))
-    .filter((def): def is FilterDef => def !== undefined)
-    .map((def) => facetNode(ctx, { ...def, label: label(def.label) }, ctx.records, 'tags:', defaults.has(def.path)))
-    .filter((node): node is TreeNode => node !== undefined);
-  return children.length === 0 ? undefined : { kind: 'field', id: 'tags', label: 'Tags', open: isOpen(children), children };
-}
-
 /**
  * A ruleset's sources with its official ones pinned first: a source is official when official
  * content carries it (docs/content-model.md#source-and-author). Each part keeps its order.
@@ -270,7 +254,7 @@ function rulesetNode(ctx: Context, types: Map<string, TreeNode[]>): TreeNode | u
 
 /**
  * The Library's filter tree: the Ruleset node, holding each ruleset's types, each a value of the
- * type filter holding its own facets, then the Tags. Each type lists only its own
+ * type filter holding its own facets. Each type lists only its own
  * records' values, with counts of its own records, though a path two types share is one filter
  * (docs/site.md#gallery "Filters"). A type counts its entries among the results. A checked
  * type's registry default filters start open, and so does every node with an active filter of
@@ -286,8 +270,6 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
   const owners = (path: string) => [...config.types.values()].filter((info) => info.facets.some((f) => f.path === path)).length;
   const ctx: Context = { config, state, records, others, owners };
   const selected = selectedValues(state.filters.get(TYPE));
-  const checked = [...config.types.values()].filter((info) => selected.includes(typeKey(info.ruleset, info.type).toLowerCase()));
-  const tags = tagsNode(ctx, new Set(checked.flatMap((info) => info.defaultFilters)));
   // A type counts its entries among the results, so checking one type leaves the rest at 0.
   const shown = others('');
   const types = new Map<string, TreeNode[]>();
@@ -319,5 +301,5 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
   const nodes: TreeNode[] = [];
   const rulesets = rulesetNode(ctx, types);
   if (rulesets) nodes.push(rulesets);
-  return tags ? [...nodes, tags] : nodes;
+  return nodes;
 }

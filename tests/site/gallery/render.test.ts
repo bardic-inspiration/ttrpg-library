@@ -105,12 +105,12 @@ describe('Gallery', () => {
     expect(render({})).toContain('href="/ttrpg-library/dnd-5e-2024/creature/cinder-hound/"');
   });
 
-  it('puts the Ruleset node in its own list above the Tags, with each ruleset’s types inside it (#380, #395)', () => {
+  it('puts the Ruleset node alone in the filter tree, with each ruleset’s types inside it (#380, #395)', () => {
     const html = render({});
-    const [before, rulesets = '', rest = ''] = html.split(/<ul class="tree tree--rulesets">|<ul class="tree">/);
+    const [before, tree = ''] = html.split('<ul class="tree">');
     expect(before).not.toContain('Creature');
-    expect(rulesets).toMatch(/Ruleset.*Source and author.*Types.*Creature/);
-    expect(rest).not.toContain('tree__node--type');
+    expect(tree).toMatch(/Ruleset.*Source and author.*Types.*Creature/);
+    expect(html.match(/<ul class="tree">/g)).toHaveLength(1);
   });
 
   it('starts a fresh Library on the official content alone: the two SRD classes, not the homebrew fixtures', () => {

@@ -52,7 +52,6 @@ const outcome = runImport(
     license: values.license!,
     ruleset,
     date: values.date ?? new Date().toISOString().slice(0, 10),
-    tags: defaults.tags,
   },
   await loadImportLibrary(ruleset),
 );

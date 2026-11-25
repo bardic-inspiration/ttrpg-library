@@ -52,7 +52,6 @@ export interface LibraryRecord {
   url: string;
   image: string | null;
   facets: Record<string, unknown>;
-  tags: Record<string, unknown>;
   createdAt: string;
   refs: Link[];
   refBy: Link[];
@@ -217,7 +216,6 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
       url: `${SITE_BASE}${entry.ruleset}/${entry.type}/${entry.id}/`,
       image: typeof entry.image === 'string' ? entry.image : null,
       facets: facetValues(item, config?.facets ?? [], schemas),
-      tags: (entry.tags as Record<string, unknown> | undefined) ?? {},
       createdAt: meta.createdAt,
       refs: item.refs,
       refBy: item.refBy,

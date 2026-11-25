@@ -14,7 +14,7 @@
         ],
         "cardFields": ["stats.abilities", "stats.feat"],
         "defaultSort": "name:asc",
-        "defaultFilters": ["stats.abilities", "tags.theme"]
+        "defaultFilters": ["stats.abilities"]
       },
       "class": {
         "label": "Class",
@@ -34,7 +34,7 @@
         ],
         "cardFields": ["stats.primaryAbility.abilities", "stats.hitDie"],
         "defaultSort": "name:asc",
-        "defaultFilters": ["stats.primaryAbility.abilities", "tags.theme"]
+        "defaultFilters": ["stats.primaryAbility.abilities"]
       },
       "condition": {
         "label": "Condition",
@@ -44,7 +44,7 @@
         "facets": [],
         "cardFields": [],
         "defaultSort": "name:asc",
-        "defaultFilters": ["tags.theme"]
+        "defaultFilters": []
       },
       "creature": {
         "label": "Creature",
@@ -75,7 +75,7 @@
         ],
         "cardFields": ["stats.cr", "stats.size", "stats.creatureType"],
         "defaultSort": "stats.cr:asc",
-        "defaultFilters": ["stats.cr", "stats.creatureType", "tags.theme"],
+        "defaultFilters": ["stats.cr", "stats.creatureType"],
         "summaryField": "stats.cr",
         "gapBuckets": [{ "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }]
       },
@@ -93,7 +93,7 @@
         ],
         "cardFields": ["stats.group", "derived.costGp"],
         "defaultSort": "derived.costGp:asc",
-        "defaultFilters": ["stats.group", "tags.theme"]
+        "defaultFilters": ["stats.group"]
       },
       "feat": {
         "label": "Feat",
@@ -113,7 +113,7 @@
         ],
         "cardFields": ["stats.category", "stats.level"],
         "defaultSort": "stats.category:asc",
-        "defaultFilters": ["stats.category", "tags.theme"],
+        "defaultFilters": ["stats.category"],
         "summaryField": "stats.category",
         "gapBuckets": [{ "path": "stats.category", "enum": ["origin", "general", "fighting-style", "epic-boon"] }]
       },
@@ -137,7 +137,7 @@
         ],
         "cardFields": ["stats.rarity", "stats.category", "stats.attunement.required"],
         "defaultSort": "stats.rarity:asc",
-        "defaultFilters": ["stats.rarity", "stats.category", "tags.theme"],
+        "defaultFilters": ["stats.rarity", "stats.category"],
         "summaryField": "stats.rarity",
         "gapBuckets": [{ "path": "stats.rarity", "enum": ["common", "uncommon", "rare", "very-rare", "legendary"] }]
       },
@@ -159,7 +159,7 @@
         ],
         "cardFields": ["derived.sizes", "stats.speed"],
         "defaultSort": "name:asc",
-        "defaultFilters": ["derived.sizes", "tags.theme"]
+        "defaultFilters": ["derived.sizes"]
       },
       "spell": {
         "label": "Spell",
@@ -176,7 +176,7 @@
         ],
         "cardFields": ["stats.level", "stats.school", "stats.duration.concentration", "stats.ritual"],
         "defaultSort": "stats.level:asc",
-        "defaultFilters": ["stats.level", "stats.school", "tags.theme"],
+        "defaultFilters": ["stats.level", "stats.school"],
         "summaryField": "stats.level",
         "gapBuckets": [
           { "path": "stats.level", "bins": [[0, 0], [1, 3], [4, 6], [7, 9]] },
@@ -196,7 +196,7 @@
         ],
         "cardFields": ["stats.class"],
         "defaultSort": "stats.class:asc",
-        "defaultFilters": ["stats.class", "tags.theme"]
+        "defaultFilters": ["stats.class"]
       }
     }
   }
