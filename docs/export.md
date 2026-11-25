@@ -190,6 +190,14 @@ one breakpoint between them, `@media print and (width < 6.5in)`:
   property, so the breakpoint is written once, as that `@media` rule.
 - On screen the print view shows the wide layout. The style guide previews
   each layout by setting `data-print-layout` on a preview.
+- `PrintEntry.astro` maps the text roles to the print sizes: body, small, and
+  `h5` and `h6` to the body size, `h4` to the section size, `h3` to the
+  heading size. It also declares again each component size token that
+  `tokens/components.css` builds on a text role (`--statblock-title-size`,
+  `--statblock-heading-size`, `--card-title-size`, …), with the same role. A
+  custom property resolves where it's declared, so without that the token
+  keeps the `:root` screen size. `tests/site/print.test.ts` checks every such
+  token, so a new one needs its line in `PrintEntry.astro`.
 
 ### Translators
 
