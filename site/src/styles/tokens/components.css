@@ -12,6 +12,8 @@
     --header-border-color: var(--color-border);
     --footer-text-color: var(--color-text-muted);
     --site-title-size: var(--text-h4);
+    /* The header's search field (docs/site.md#page-header): the width it grows from. */
+    --header-search-width: var(--size-card-min);
     /* The preview notice above the header (docs/workflow.md#deploy). */
     --preview-notice-bg: var(--color-bg);
     --preview-notice-rule: var(--border-width-strong) solid var(--color-accent);

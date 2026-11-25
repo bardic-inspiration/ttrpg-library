@@ -65,6 +65,13 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     expect(nav).toMatch(/<\/ul>\s*<p class="site-nav__cart[^"]*" data-cart-count hidden[^>]*>Cart: <span[^>]*>0<\/span><\/p>/);
   });
 
+  it('puts search in the page header after the top bar, opening the Library with the query (docs/site.md#page-header)', async () => {
+    const html = await renderBase({ title: 'Test' });
+    const header = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
+    expect(header).toMatch(/<\/nav>[\s\S]*<form class="header-search" role="search" action="\/" method="get">/);
+    expect(header).toContain('name="q"');
+  });
+
   it('writes Open Graph tags when a page gives them', async () => {
     const html = await renderBase({ title: 'Test', og: { title: 'Cinder Hound', description: 'A hound.', image: '/ttrpg-library/art.png', type: 'article' } });
     expect(html).toContain('<meta property="og:title" content="Cinder Hound">');

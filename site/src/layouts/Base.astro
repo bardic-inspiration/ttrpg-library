@@ -1,6 +1,7 @@
 ---
 // Page shell (docs/site.md#pages-and-navigation, docs/styling.md#styling-system). Loads the fonts and the global styles in
-// cascade-layer order, and wraps every page in the header, main column, and footer.
+// cascade-layer order, and wraps every page in the header, main column, and footer. The header
+// holds the top bar, then search and the set export (docs/site.md#page-header).
 import '@fontsource/alegreya/400.css';
 import '@fontsource/alegreya/400-italic.css';
 import '@fontsource/alegreya/500.css';
@@ -26,6 +27,7 @@ import { isPreview } from '../../../lib/site.ts';
 import Footer from '../components/Footer.astro';
 import PreviewNotice from '../components/PreviewNotice.astro';
 import SiteNav from '../components/SiteNav.astro';
+import HeaderActions from '../components/header/HeaderActions';
 import { redirectScript } from '../lib/redirects';
 import { url } from '../lib/url';
 
@@ -75,6 +77,7 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
       <div class="site-header__inner">
         <a class="site-header__home" href={url()}>TTRPG Content Library</a>
         <SiteNav />
+        <HeaderActions client:load base={url()} library={Astro.url.pathname === url()} />
       </div>
     </header>
     <main class="site-main">
