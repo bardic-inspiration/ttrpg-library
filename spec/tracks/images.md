@@ -151,7 +151,8 @@ the processing.
 
 ## Out of scope
 
-- Generated art.
+- Generated art. Map diagrams are generated, but they're diagrams, not art,
+  and outside this track ([Diagrams, not art](../v1.2.0/maps.md#diagrams-not-art)).
 - External image hosting.
 - Art for authors publishing their own content: in-app publishing,
   earmarked for v2.0.0 (#370).

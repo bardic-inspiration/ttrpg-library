@@ -62,6 +62,17 @@ describe('checkLinks', () => {
     ]);
   });
 
+  it('checks citations of a version spec in code', () => {
+    const files = repo({
+      'spec/v0.0.0/maps.md': '# Maps\n\n## Design\n',
+      'tests/a.ts': '// spec/v0.0.0/maps.md#design\n// spec/v0.0.0/maps.md#gone\n// spec/v0.0.0/tiles.md\n',
+    });
+    expect(checkLinks(files, (path) => files.has(path))).toEqual([
+      'tests/a.ts:2: spec/v0.0.0/maps.md#gone: no such heading',
+      'tests/a.ts:3: spec/v0.0.0/tiles.md: no such file',
+    ]);
+  });
+
   it('fails on a missing heading', () => {
     const files = repo({ 'docs/content-model.md': DOC, 'scripts/a.ts': '\n// docs/content-model.md#gone\n' });
     expect(checkLinks(files, (path) => files.has(path))).toEqual([
