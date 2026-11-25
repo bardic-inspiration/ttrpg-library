@@ -95,12 +95,10 @@ shared components).
   state while only some of its entries show. Until this is decided, the
   Library keeps the Ruleset node and its groups.
 
-- **The About page's GitHub links (#425):** the site is to have no GitHub
-  references but Contribute, and entry pages now have none. The About page
-  still links `ATTRIBUTION.md` on GitHub, the full credits that the
-  licenses' attribution points to, and "The source is on GitHub". Open:
-  whether both go (and where the full credits are then published), or
-  whether they stay as licensing credit.
+- **The About page's source link (#425):** the site is to have no GitHub
+  references but Contribute, and entry pages now have none. The About page's
+  link to `ATTRIBUTION.md` on GitHub stays, as licensing credit. Open: whether
+  "The source is on GitHub", which duplicates Contribute, goes.
 
 - **The Rulesets page redesign:** a full redesign of today's bare list of
   each ruleset's rules pages, through a design process of its own. Not built
