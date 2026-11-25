@@ -54,7 +54,8 @@
 
   /*
    * Underlines (docs/styling.md#hierarchy-and-standards): links in running text stay underlined;
-   * links in headings, navigation, and the site header underline only on hover and focus.
+   * links in headings, navigation, and the site header underline only on hover and focus. The
+   * current page's link keeps a heavier underline at rest, so it isn't marked by color alone.
    */
   :is(h1, h2, h3, h4, h5, h6, nav, .site-header) a {
     text-decoration-line: none;
@@ -62,6 +63,11 @@
     &:hover,
     &:focus-visible {
       text-decoration-line: underline;
+    }
+
+    &[aria-current] {
+      text-decoration-line: underline;
+      text-decoration-thickness: var(--border-width-strong);
     }
   }
 

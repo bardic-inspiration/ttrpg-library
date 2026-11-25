@@ -13,12 +13,14 @@ interface Props {
   items: ActionBlock[];
   level: number;
   refs?: TextRefs;
+  /** A section of a stat block nested in another entry's, a step smaller. */
+  nested?: boolean;
 }
 
-const { title, items, level, refs } = Astro.props;
+const { title, items, level, refs, nested = false } = Astro.props;
 ---
 <section class="action-list">
-  <Heading level={level} class="action-list__heading">{title}</Heading>
+  <Heading level={level} class:list={['statblock-heading', nested && 'statblock-heading--nested', 'action-list__heading']}>{title}</Heading>
   <slot />
   {items.map((item) => (
     <RulesText class="action-list__item" label={item.name} text={item.body} refs={refs} />
@@ -28,9 +30,6 @@ const { title, items, level, refs } = Astro.props;
 <style>
   @layer components {
     .action-list :global(.action-list__heading) {
-      font-family: var(--statblock-heading-font);
-      font-size: var(--statblock-heading-size);
-      color: var(--accent);
       margin-block-end: var(--flow-line);
     }
 

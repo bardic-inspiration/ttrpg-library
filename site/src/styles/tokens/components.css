@@ -47,6 +47,8 @@
     /* A component's headings are sized by role, since their level depends on where it nests. */
     --statblock-title-size: var(--text-h3);
     --statblock-heading-size: var(--text-h4);
+    /* A section nested in a stat block's section (a class feature under Class Features): a step smaller. */
+    --statblock-subheading-size: var(--text-h5);
     --statblock-label-font: var(--font-heading);
     --statblock-rule-color: var(--accent);
     --statblock-rule-width: var(--border-width-strong);
