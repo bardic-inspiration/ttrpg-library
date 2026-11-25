@@ -35,7 +35,7 @@ const contents: TocItem[] = traits.map(({ trait, id }) => ({ id, label: trait.na
         <TableOfContents items={contents} />
         <div>
           {traits.map(({ trait, id, text }) => (
-            <Accordion class="species-trait" id={id} type={trait.type} level={level + 1}>
+            <Accordion class="species-trait" id={id} type={trait.type} level={level + 1} headingClass="statblock-heading">
               <Fragment slot="title">{trait.name}</Fragment>
               <RulesText text={text} refs={refs} />
             </Accordion>

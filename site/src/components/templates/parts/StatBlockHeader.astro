@@ -11,12 +11,14 @@ interface Props {
   subtitle: string | { text: string; href?: string }[] | { markdown: string; refs?: TextRefs };
   /** The name's heading level; section headings sit one below it. */
   level: number;
+  /** The name of a stat block inside another entry: sized as that entry's section heading. */
+  section?: boolean;
 }
 
-const { name, subtitle, level } = Astro.props;
+const { name, subtitle, level, section = false } = Astro.props;
 ---
 <header class="statblock-header">
-  <Heading level={level} class="statblock-header__name">{name}</Heading>
+  <Heading level={level} class={section ? 'statblock-heading' : 'statblock-header__name'}>{name}</Heading>
   {typeof subtitle === 'object' && 'markdown' in subtitle ? (
     <p class="statblock-header__subtitle" set:html={renderInlineMarkdown(subtitle.markdown, subtitle.refs)} />
   ) : (

@@ -14,18 +14,20 @@ interface Props {
   /** A primitive's or component's type, for its accent. */
   type?: string;
   class?: string;
+  /** Classes on the heading, such as a stat block's section heading. */
+  headingClass?: string;
 }
 
-const { id, level, mode = 'screen', type, class: className } = Astro.props;
+const { id, level, mode = 'screen', type, class: className, headingClass } = Astro.props;
 ---
 {mode === 'screen' ? (
   <Disclosure class={['accordion', className].filter(Boolean).join(' ')} id={id} data-type={type} summaryClass="accordion__summary">
-    <Heading slot="summary" level={level}><slot name="title" /></Heading>
+    <Heading slot="summary" level={level} class={headingClass}><slot name="title" /></Heading>
     <div class="accordion__body"><slot /></div>
   </Disclosure>
 ) : (
   <section class:list={['accordion', className]} id={id} data-type={type}>
-    <Heading level={level}><slot name="title" /></Heading>
+    <Heading level={level} class={headingClass}><slot name="title" /></Heading>
     <div class="accordion__body"><slot /></div>
   </section>
 )}

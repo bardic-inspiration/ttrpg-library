@@ -113,6 +113,18 @@ shows.
   `--statblock-heading-size`. The site title and a detail page's summary line
   read `--site-title-size` and `--entry-summary-size`. Headings use
   `--font-heading` (small caps) at the label weight and the tight leading.
+- **Stat block sections.** Every section heading inside a stat block carries
+  the `statblock-heading` class, which `StatBlock.astro` styles once: the
+  stat block heading font, the entry's accent, and `--statblock-heading-size`.
+  That covers a creature's Traits and Actions, an item's Spells, a class's,
+  subclass's, or species' sections (an `Accordion`'s `headingClass`), and the
+  name of a stat block embedded in an item or spell (`StatBlockHeader`'s
+  `section`), which reads as a section of the entry that holds it. A section
+  nested in one, such as a class feature under Class Features or an embedded
+  stat block's Actions, adds `statblock-heading--nested` and reads
+  `--statblock-subheading-size`, a step smaller (the `h5` role). The print
+  view maps each of these tokens to its print size
+  ([Print layout](export.md#print-layout)).
 - **Rhythm.** The gap a flow of siblings takes is one of four tokens, aliases
   of the spacing scale:
 
@@ -128,10 +140,13 @@ shows.
 - **Underlines.** Links in running text (rules text, lore, ref lists, the
   footer) stay underlined, so they never rely on color alone. Links in
   headings (card titles among them), in a `nav` (the site nav, the contents
-  list), and in the site header underline only on hover and focus. One rule in
-  `base.css` sets this; a component doesn't set a link's underline itself.
-  `tests/site/hierarchy.test.ts` checks the heading sizes, the rhythm tokens,
-  and the underline rule.
+  list), and in the site header underline only on hover and focus. The link
+  to the current page (`aria-current`, the site nav's) keeps a heavier
+  underline (`--border-width-strong`) at rest, so it isn't marked by color
+  alone. One rule in `base.css` sets this; a component doesn't set a link's
+  underline itself. `tests/site/hierarchy.test.ts` checks the heading sizes,
+  the stat block section headings in screen and print, the rhythm tokens, and
+  the underline rule.
 
 ### Shared components
 

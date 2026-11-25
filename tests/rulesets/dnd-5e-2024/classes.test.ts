@@ -336,18 +336,18 @@ describe('the pages', async () => {
 
   it('prints the class page in the SRD’s order, with each feature and option at its anchor', () => {
     const order = [
-      '<h3>Core Sorcerer Traits</h3>',
-      '<h3>Becoming a Sorcerer …</h3>',
+      '<h3 class="statblock-heading">Core Sorcerer Traits</h3>',
+      '<h3 class="statblock-heading">Becoming a Sorcerer …</h3>',
       '<li>Gain all the traits in the Core Sorcerer Traits table.</li>',
       '<caption>Sorcerer Features</caption>',
-      '<h3>Sorcerer Class Features</h3>',
+      '<h3 class="statblock-heading">Sorcerer Class Features</h3>',
       'id="class-feature-sorcerer-spellcasting"',
-      '<h4>Level 4: Ability Score Improvement</h4>',
-      '<h3>Metamagic Options</h3>',
+      '<h4 class="statblock-heading statblock-heading--nested">Level 4: Ability Score Improvement</h4>',
+      '<h3 class="statblock-heading">Metamagic Options</h3>',
       'id="class-option-sorcerer-careful-spell"',
-      '<h3>Sorcerer Spell List</h3>',
+      '<h3 class="statblock-heading">Sorcerer Spell List</h3>',
       '<caption>Cantrips (Level 0 Sorcerer Spells)</caption>',
-      '<h3>Sorcerer Subclasses</h3>',
+      '<h3 class="statblock-heading">Sorcerer Subclasses</h3>',
     ].map((needle) => withoutContents(html).indexOf(needle));
     expect(order.every((i) => i >= 0)).toBe(true);
     expect(order).toEqual([...order].sort((a, b) => a - b));
@@ -361,10 +361,10 @@ describe('the pages', async () => {
     expect(toc).toMatch(
       /href="#section-core-sorcerer-traits">Core Sorcerer Traits<[\s\S]*href="#section-sorcerer-class-features">Sorcerer Class Features<\/a><ul><li><a href="#class-feature-sorcerer-spellcasting">Level 1: Spellcasting<[\s\S]*href="#section-metamagic-options">Metamagic Options<\/a><ul><li><a href="#class-option-sorcerer-careful-spell">Careful Spell<[\s\S]*href="#section-sorcerer-subclasses">/,
     );
-    expect(html).toContain('<details class="accordion class-section" id="section-core-sorcerer-traits"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h3>Core Sorcerer Traits</h3></summary>');
-    expect(html).toContain('<details class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h4>Level 1: Spellcasting</h4></summary>');
+    expect(html).toContain('<details class="accordion class-section" id="section-core-sorcerer-traits"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h3 class="statblock-heading">Core Sorcerer Traits</h3></summary>');
+    expect(html).toContain('<details class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h4 class="statblock-heading statblock-heading--nested">Level 1: Spellcasting</h4></summary>');
     // A section holding features keeps its heading and intro open over them.
-    expect(html).toContain('<section class="class-section" id="section-sorcerer-class-features"><h3>Sorcerer Class Features</h3>');
+    expect(html).toContain('<section class="class-section" id="section-sorcerer-class-features"><h3 class="statblock-heading">Sorcerer Class Features</h3>');
     // Every toc link lands on an id on the page.
     for (const [, id] of toc.matchAll(/href="#([^"]+)"/g)) expect(html).toContain(`id="${id}"`);
   });
@@ -373,7 +373,7 @@ describe('the pages', async () => {
     const printed = (await (await AstroContainer.create()).renderToString(EntryTemplate, { props: { ...sorcerer, names, paths, components: sorcerer.components, mode: 'print' } })).replace(/ data-astro-cid-\w+/g, '');
     expect(printed).not.toContain('<details');
     expect(printed).not.toContain('class="toc"');
-    expect(printed).toContain('<section class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><h4>Level 1: Spellcasting</h4>');
+    expect(printed).toContain('<section class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><h4 class="statblock-heading statblock-heading--nested">Level 1: Spellcasting</h4>');
   });
 
   it('links a feature in the Features table to its anchor, and the class to its subclasses', () => {
@@ -386,7 +386,7 @@ describe('the pages', async () => {
     expect(page).toContain('Sorcerer Subclass: Draconic Sorcery</h2>');
     expect(page).toContain('Breathe the Magic of Dragons');
     expect(page).toContain('id="class-feature-draconic-sorcery-dragon-wings"');
-    expect(page).toContain('<h3>Level 14: Dragon Wings</h3>');
+    expect(page).toContain('<h3 class="statblock-heading">Level 14: Dragon Wings</h3>');
     expect(page).toContain('<caption>Draconic Spells</caption>');
     const { forward } = groupPageRefs(loaded, loaded.components!, refTargets(all, [data]), ruleset.refLabels);
     expect(forward[0]).toEqual({ label: 'Subclass of', targets: [{ type: 'class', name: 'Sorcerer', path: 'dnd-5e-2024/class/sorcerer/', official: true }] });

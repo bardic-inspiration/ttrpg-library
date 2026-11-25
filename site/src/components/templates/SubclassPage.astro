@@ -33,7 +33,7 @@ const contents: TocItem[] = features.map(({ id, heading }) => ({ id, label: head
   {mode === 'screen' && <TableOfContents items={contents} />}
   <div class="subclass-features">
     {features.map(({ feature, id, heading }) => (
-      <Accordion class="subclass-feature" id={id} type={feature.type} level={level + 1} mode={mode}>
+      <Accordion class="subclass-feature" id={id} type={feature.type} level={level + 1} mode={mode} headingClass="statblock-heading">
         <Fragment slot="title">{heading}</Fragment>
         <RulesText text={(feature.stats as ClassFeatureStats).text} refs={refs} />
       </Accordion>
