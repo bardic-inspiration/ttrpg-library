@@ -121,14 +121,6 @@
       }
     ]
   },
-  "tags": {
-    "environment": "underdark",
-    "theme": [
-      "subterranean",
-      "caves",
-      "beasts"
-    ]
-  },
   "meta": {
     "createdAt": "2026-11-21",
     "source": {
