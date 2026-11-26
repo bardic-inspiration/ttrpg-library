@@ -638,8 +638,9 @@ hold only inputs:
 - **`feats`:** each a feat ref with its `source`, where it came from: the
   background, the species (Human's Versatile grants an origin feat), or a
   class with the class `level` whose feature grants it. A feat's `note` is
-  the choice it's taken with ("Magic Initiate (Cleric)"), and `abilities`
-  the increases it places, such as an Ability Score Improvement's.
+  the choice it's taken with (`"Cleric"` for Magic Initiate (Cleric)), and
+  `abilities` the increases it places, such as an Ability Score
+  Improvement's.
 - **`options`:** class option refs. Each is a component of one of its
   classes' option lists, so the list it sits in isn't stored.
 - **`choices`:** the `skills`, `expertise`, `tools`, and `languages`
@@ -694,8 +695,9 @@ with the modifiers of the features, feats, and traits it has
   weapon's two-handed dice, its properties, and its mastery;
 - each casting class's spellcasting ability, save DC, and attack bonus, with
   its cantrips and prepared spells at its level; spell slots from the
-  Multiclass Spellcaster table at the full caster levels plus half the half
-  caster levels, rounded up; and a pact caster's Pact Magic slots apart;
+  Multiclass Spellcaster table at the full caster levels plus half of each
+  half caster class's levels, rounded up; and a pact caster's Pact Magic
+  slots apart;
 - its `spells` by spell level, cantrips first, each level's in the order
   the build lists them, leaving out a level with none;
 - the features each class and subclass gives up to the class's level, each
@@ -725,7 +727,8 @@ one, in this order:
   and each later class's "As a Multiclass <Class>" text.
 - **Attacks:** a paragraph per equipped weapon, led by its linked name:
   "***Longsword.*** +6 to hit, 1d8 + 3 Slashing damage, or 1d10 + 3
-  two-handed; Versatile; Mastery: Sap", with a ranged weapon's range.
+  two-handed; Versatile; Mastery: Sap", with the weapon's range when it has
+  one (a ranged or thrown weapon).
 - **Spellcasting:** per casting class, its ability, spell save DC, attack
   bonus, and cantrip and prepared counts; its spell slots and Pact Magic
   slots; and its spells by level ("Cantrips", "Level 1", …), linked.
@@ -1036,10 +1039,10 @@ warnings below on an SRD entry.
 | Character | No placed increase takes a score above 20, or above its feat's `max`; a feat with an Ability Score Improvement's `total` places exactly that many points, among its `from` abilities, and a feat with fixed increases places none | error |
 | Character | With more than one class, each class's primary ability is 13 or more in the final scores (all of them for an "and", one for an "or"), the starting class's included | error |
 | Character | A subclass belongs to its class, and is present exactly when the class's level reaches its first subclass level | error |
-| Character | One feat from the background, its origin feat; a species feat for each `feat` grant of its traits, and a class feat for each `feat` grant of a feature at that class level, of a category the grant allows, every grant filled; a class's feat from one of the character's classes at a level it has; each feat's `level` at most the character's, and its `requires` met by the final scores; only a repeatable feat twice | error |
+| Character | One feat from the background, its origin feat; a species feat for each `feat` grant of its traits, and a class feat for each `feat` grant of a feature at that class level, of a category the grant allows, every grant filled; a background feat from the character's background, a species feat from its species, and a class's feat from one of its classes at a level it has; each feat's `level` at most the character's, and its `requires` met by the final scores; only a repeatable feat twice | error |
 | Character | Each choice's source is something the character has: its species or a trait of it, its background, a class or subclass, a feature it has at its levels, or a feat | error |
 | Character | Each entry with a `choice` has one `option` named under it, one of its options; a feat grant's `or` is named only to take it; no other entry has an option, and none has two | error |
-| Character | Each source's skills, Expertise, tools, and languages are exactly the counts it gives ([Grants](#grants)), from its lists: the starting class's skills and `start` grants, a later class's `multiclass` grants, the background's tool when it offers a choice and its two languages, and each trait's, feature's (at each of its levels), and feat's grants; no skill is proficient twice, the background's and those given outright included; Expertise only in a skill the character is proficient in | error |
+| Character | Each source's skills, Expertise, tools, and languages are exactly the counts it gives ([Grants](#grants)), from its lists: the starting class's skills and `start` grants, a later class's `multiclass` grants, the background's tool when it offers a choice and its two languages, and each trait's, feature's (at each of its levels), and feat's grants; no skill is proficient twice, the background's and those given outright included; Expertise only in a skill the character is proficient in, and never in one skill twice | error |
 | Character | Each option is on an option list of one of the character's classes, and each list holds exactly the count its features' `options` grants give at the class's level | error |
 | Character | Each spell is on an always-prepared list the character has, or on a list of one of its casting classes (the spell's `classes`, or the class's `spells`; for prepared spells, its `spell-lists` too) at a level that class's own slots cast, or on a feat's, feature's, or trait's `spells` grant's list; and the spells fit the classes' cantrips and prepared spells at their levels and those grants' picks | error |
 | Character | A feat's `spells` picks come from the class list its `note` names, one of the grant's `from` | error |
