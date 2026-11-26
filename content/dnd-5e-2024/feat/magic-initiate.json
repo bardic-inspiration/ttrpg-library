@@ -22,7 +22,25 @@
         "text": "Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list."
       }
     ],
-    "repeatable": "You can take this feat more than once, but you must choose a different spell list each time."
+    "repeatable": "You can take this feat more than once, but you must choose a different spell list each time.",
+    "grants": [
+      {
+        "kind": "spells",
+        "cantrips": 2,
+        "level1": 1,
+        "from": [
+          {
+            "ref": "class/cleric"
+          },
+          {
+            "ref": "class/druid"
+          },
+          {
+            "ref": "class/wizard"
+          }
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

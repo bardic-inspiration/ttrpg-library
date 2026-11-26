@@ -264,7 +264,24 @@
           }
         ]
       }
-    ]
+    ],
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          }
+        ],
+        "armor": [
+          "light-armor"
+        ]
+      },
+      "multiclass": {
+        "armor": [
+          "light-armor"
+        ]
+      }
+    }
   },
   "meta": {
     "createdAt": "2026-11-10",

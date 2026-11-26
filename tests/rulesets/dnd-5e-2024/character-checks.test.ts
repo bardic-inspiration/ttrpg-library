@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { Issue } from '../../../rulesets/module.ts';
-import { FIXTURES, withGrants } from '../../helpers.ts';
+import { FIXTURES } from '../../helpers.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const CONTENT = join(ROOT, 'content/dnd-5e-2024');
@@ -14,7 +14,7 @@ const dir = async (path: string) => Promise.all((await readdir(path)).sort().map
 
 /** Every entry, component, and primitive a character can name, by key. */
 const stats = new Map<string, { type: string; stats: unknown }>();
-for (const type of await readdir(CONTENT)) for (const e of await withGrants(await dir(join(CONTENT, type)))) stats.set(`${e.type}/${e.id}`, { type: e.type, stats: e.stats });
+for (const type of await readdir(CONTENT)) for (const e of await dir(join(CONTENT, type))) stats.set(`${e.type}/${e.id}`, { type: e.type, stats: e.stats });
 const rulesDir = join(ROOT, 'rulesets/dnd-5e-2024/rules');
 for (const file of (await readdir(rulesDir, { recursive: true })).filter((f) => f.endsWith('.json') && f.includes('/'))) {
   const p = await readJson(join(rulesDir, file));
@@ -66,7 +66,8 @@ describe('character consistency checks', () => {
   });
 
   it('take class levels 1 to 20, with no class repeated', () => {
-    expect(messages(issuesOf('sister-maelis', (s) => (s.classes[0].level = 20)))).toEqual([]);
+    // At level 20 the Cleric's Ability Score Improvements and Epic Boon each owe a feat; the levels themselves pass.
+    expect(messages(issuesOf('sister-maelis', (s) => (s.classes[0].level = 20))).filter((m) => m.startsWith('stats.classes'))).toEqual([]);
     expect(messages(issuesOf('brannoc-ashguard', (s) => (s.classes[0].level = 19)))).toContainEqual(expect.stringMatching(/^stats\.classes: .*21/));
     expect(messages(issuesOf('brannoc-ashguard', (s) => s.classes.push({ class: { ref: 'class/wizard' }, level: 1 })))).toContainEqual(
       expect.stringMatching(/^stats\.classes\[2\]\.class: class\/wizard is taken twice/),
@@ -196,6 +197,19 @@ describe('grants (docs/rulesets.md#grants)', () => {
     ]);
   });
 
+  it('take an origin or general feat from Ability Score Improvement, and an Epic Boon, origin, or general feat from Epic Boon', () => {
+    const at = (level: number, ref: string) => (s: Record<string, any>) => {
+      s.classes[0].level = level;
+      s.feats.push({ ref, source: { ref: 'class/fighter', level } });
+    };
+    const ofFeat = (issues: Issue[]) => messages(issues).filter((m) => m.startsWith('stats.feats[2]'));
+    expect(messages(issuesOf('brannoc-ashguard', at(4, 'feat/alert')))).toEqual([]);
+    // A Fighting Style feat's prerequisite (Fighting Style Feature) isn't data, so the feature doesn't allow it.
+    expect(ofFeat(issuesOf('brannoc-ashguard', at(4, 'feat/archery')))).toEqual([expect.stringMatching(/no feature of class\/fighter level 4 grants a fighting-style feat/)]);
+    for (const ref of ['feat/boon-of-combat-prowess', 'feat/alert']) expect(ofFeat(issuesOf('brannoc-ashguard', at(19, ref)))).toEqual([]);
+    expect(ofFeat(issuesOf('brannoc-ashguard', at(19, 'feat/archery')))).toEqual([expect.stringMatching(/no feature of class\/fighter level 19 grants a fighting-style feat/)]);
+  });
+
   it("take a species feat only from a trait that grants one, and fill it", () => {
     expect(messages(issuesOf('sister-maelis', (s) => s.feats.splice(1, 1)))).toEqual([expect.stringMatching(/^stats\.feats: species-trait\/human-versatile grants a feat \(origin\); take one/)]);
     expect(messages(issuesOf('brannoc-ashguard', (s) => s.feats.push({ ref: 'feat/alert', source: { ref: 'species/dwarf' } })))).toEqual([
@@ -309,11 +323,21 @@ describe('grants (docs/rulesets.md#grants)', () => {
     const proficiency = (issues: Issue[]) => messages(issues).filter((m) => m.includes('proficiency with'));
     expect(proficiency(issuesOf('sister-maelis', monk('shortsword')))).toEqual([]);
     expect(proficiency(issuesOf('sister-maelis', monk('longsword')))).toEqual([expect.stringMatching(/no proficiency with equipment\/longsword/)]);
-    // Without every class's training, the character's is unknown.
-    expect(messages(issuesOf('sister-maelis', (s) => {
+    // A later Warlock's training is Light armor, which adds nothing to the Cleric's.
+    const warlock = (s: Record<string, any>) => {
       withLater('class/warlock', 1)(s);
       s.options = refs('class-option', ['warlock-armor-of-shadows']);
       s.equipped = refs('equipment', ['plate-armor']);
-    }))).toEqual([]);
+    };
+    expect(messages(issuesOf('sister-maelis', warlock))).toEqual([expect.stringMatching(/no training with equipment\/plate-armor/)]);
+    // Without every class's training, the character's is unknown.
+    const entry = stats.get('class/warlock')!;
+    const { training: _, ...untrained } = entry.stats as Record<string, unknown>;
+    stats.set('class/warlock', { ...entry, stats: untrained });
+    try {
+      expect(messages(issuesOf('sister-maelis', warlock))).toEqual([]);
+    } finally {
+      stats.set('class/warlock', entry);
+    }
   });
 });

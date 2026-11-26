@@ -9,7 +9,15 @@
     "levels": [
       7
     ],
-    "text": "You gain another Fighting Style feat of your choice."
+    "text": "You gain another Fighting Style feat of your choice.",
+    "grants": [
+      {
+        "kind": "feat",
+        "categories": [
+          "fighting-style"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

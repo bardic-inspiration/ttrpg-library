@@ -849,10 +849,45 @@ origin languages (SRD 5.2 "Character Creation": a character's origin is a
 background, a species, and two languages). The species and a subclass give
 nothing themselves; their traits and features do.
 
-The library's entries get grants, training, and requires in a migration
-(#488); until then `tests/fixtures/grants.json` gives them to the entries
-the character fixtures use. A class without `training` leaves the
-character's unknown, so the training warning waits for every class's.
+Every class has `training` (the schema requires it), and a `multiclass`
+one where its "As a Multiclass Character" text gives training; the Monk,
+Sorcerer, and Wizard give none. Class `grants` are the Bard's three
+instruments and the Monk's Artisan's Tool or instrument at `start`, and the
+Bard's skill and instrument and the Ranger's and Rogue's skill from their
+lists at `multiclass`. A tool the class gives outright, such as the Rogue's
+Thieves' Tools, is no pick. A class missing from the library leaves the
+character's training unknown, so the training warning waits for every
+class's.
+
+In the library, these entries carry grants:
+
+- **Feats:** each class's Ability Score Improvement (`origin` and `general`)
+  and Epic Boon (`epic-boon`, `origin`, and `general`), both printing "or
+  another feat of your choice for which you qualify"; the Fighter's,
+  Paladin's, and Ranger's Fighting Style and the Champion's Additional
+  Fighting Style (`fighting-style`); and Versatile (`origin`). A Fighting
+  Style feat's prerequisite (Fighting Style Feature) isn't data, so
+  Ability Score Improvement and Epic Boon don't allow one.
+- **Skills, Expertise, and languages:** Primal Knowledge, the College of
+  Lore's and the custom College of Echoes' Bonus Proficiencies, Skillful,
+  Keen Senses, and Skilled; the Bard's, Ranger's, and Rogue's Expertise,
+  Scholar, and Deft Explorer; and Thieves' Cant.
+- **Options:** Metamagic and Eldritch Invocations.
+- **Spells:** Magic Initiate, and the always-prepared lists that don't
+  depend on a choice: the Life Domain, Oath of Devotion, Draconic, and Fiend
+  spells, Druidic, Paladin's Smite, Faithful Steed, Favored Enemy, Contact
+  Patron, and Words of Creation.
+- **Requires:** Grappler (Strength or Dexterity 13).
+
+The rest stays text. Grants are picks, so a proficiency an entry gives
+outright (College of Echoes' Performance, Druidic's language) isn't one. An
+alternative to a feature's feat (Paladin's Blessed Warrior, Ranger's
+Druidic Warrior), a spell list that depends on a choice (Circle of the Land,
+Elven Lineage, Gnomish Lineage, Fiendish Legacy), and spells the character
+chooses to keep prepared (Magical Discoveries, Mystic Arcanum, Spell
+Mastery, Signature Spells) have no grant form yet
+([`spec/v1.2.0/characters.md`](../spec/v1.2.0/characters.md#open-questions)).
+A build that takes one fails the feat or spell check.
 
 ### Item modifiers
 

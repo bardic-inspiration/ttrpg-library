@@ -9,7 +9,52 @@
     "levels": [
       3
     ],
-    "text": "Your connection to this divine domain ensures you always have certain spells ready. When you reach a Cleric level specified in the Life Domain Spells table, you thereafter always have the listed spells prepared.\n\n**Life Domain Spells**\n\n| Cleric Level | Prepared Spells |\n|---|---|\n| 3 | *{ref:spell/aid}*, *{ref:spell/bless}*, *{ref:spell/cure-wounds}*, *{ref:spell/lesser-restoration}* |\n| 5 | *{ref:spell/mass-healing-word}*, *{ref:spell/revivify}* |\n| 7 | *{ref:spell/aura-of-life}*, *{ref:spell/death-ward}* |\n| 9 | *{ref:spell/greater-restoration}*, *{ref:spell/mass-cure-wounds}* |"
+    "text": "Your connection to this divine domain ensures you always have certain spells ready. When you reach a Cleric level specified in the Life Domain Spells table, you thereafter always have the listed spells prepared.\n\n**Life Domain Spells**\n\n| Cleric Level | Prepared Spells |\n|---|---|\n| 3 | *{ref:spell/aid}*, *{ref:spell/bless}*, *{ref:spell/cure-wounds}*, *{ref:spell/lesser-restoration}* |\n| 5 | *{ref:spell/mass-healing-word}*, *{ref:spell/revivify}* |\n| 7 | *{ref:spell/aura-of-life}*, *{ref:spell/death-ward}* |\n| 9 | *{ref:spell/greater-restoration}*, *{ref:spell/mass-cure-wounds}* |",
+    "grants": [
+      {
+        "kind": "spells",
+        "byLevel": {
+          "3": [
+            {
+              "ref": "spell/aid"
+            },
+            {
+              "ref": "spell/bless"
+            },
+            {
+              "ref": "spell/cure-wounds"
+            },
+            {
+              "ref": "spell/lesser-restoration"
+            }
+          ],
+          "5": [
+            {
+              "ref": "spell/mass-healing-word"
+            },
+            {
+              "ref": "spell/revivify"
+            }
+          ],
+          "7": [
+            {
+              "ref": "spell/aura-of-life"
+            },
+            {
+              "ref": "spell/death-ward"
+            }
+          ],
+          "9": [
+            {
+              "ref": "spell/greater-restoration"
+            },
+            {
+              "ref": "spell/mass-cure-wounds"
+            }
+          ]
+        }
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

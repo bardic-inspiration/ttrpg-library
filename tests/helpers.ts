@@ -19,20 +19,6 @@ export async function wandOfFrostLances(): Promise<Record<string, any>> {
   return JSON.parse(await readFile(join(FIXTURES, 'library/valid/dnd-5e-2024/item/wand-of-frost-lances.json'), 'utf8'));
 }
 
-
-/**
- * The `grants`, `training`, and `requires` the character fixtures need, by entry key, which the
- * library's entries don't hold yet (docs/rulesets.md#grants). Gives them to each listed entry.
- */
-export async function withGrants<T extends { type: string; id: string; stats: unknown }>(entries: T[]): Promise<T[]> {
-  const grants: Record<string, Record<string, unknown>> = JSON.parse(await readFile(join(FIXTURES, 'grants.json'), 'utf8'));
-  for (const entry of entries) {
-    const fields = grants[`${entry.type}/${entry.id}`];
-    if (fields) Object.assign(entry.stats as Record<string, unknown>, structuredClone(fields));
-  }
-  return entries;
-}
-
 const EXAMPLE = join(FIXTURES, 'library/valid/dnd-5e-2024');
 
 const readDir = async (dir: string): Promise<Record<string, any>[]> =>

@@ -9,7 +9,14 @@
   "stats": {
     "category": "origin",
     "text": "You gain proficiency in any combination of three skills or tools of your choice.",
-    "repeatable": "You can take this feat more than once."
+    "repeatable": "You can take this feat more than once.",
+    "grants": [
+      {
+        "kind": "skills",
+        "count": 3,
+        "withTools": true
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

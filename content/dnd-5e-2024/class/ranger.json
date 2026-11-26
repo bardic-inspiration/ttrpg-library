@@ -179,6 +179,53 @@
         15,
         15
       ]
+    },
+    "grants": {
+      "multiclass": [
+        {
+          "kind": "skills",
+          "count": 1,
+          "from": [
+            "animal-handling",
+            "athletics",
+            "insight",
+            "investigation",
+            "nature",
+            "perception",
+            "stealth",
+            "survival"
+          ]
+        }
+      ]
+    },
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          },
+          {
+            "group": "martial-weapons"
+          }
+        ],
+        "armor": [
+          "light-armor",
+          "medium-armor",
+          "shields"
+        ]
+      },
+      "multiclass": {
+        "weapons": [
+          {
+            "group": "martial-weapons"
+          }
+        ],
+        "armor": [
+          "light-armor",
+          "medium-armor",
+          "shields"
+        ]
+      }
     }
   },
   "meta": {

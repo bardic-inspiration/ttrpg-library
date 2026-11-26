@@ -9,7 +9,17 @@
     "levels": [
       2
     ],
-    "text": "Thanks to your travels, you gain the following benefits.\n\n***Expertise.*** Choose one of your skill proficiencies with which you lack Expertise. You gain Expertise in that skill.\n\n***Languages.*** You know two languages of your choice from the language tables in \"Character Creation.\""
+    "text": "Thanks to your travels, you gain the following benefits.\n\n***Expertise.*** Choose one of your skill proficiencies with which you lack Expertise. You gain Expertise in that skill.\n\n***Languages.*** You know two languages of your choice from the language tables in \"Character Creation.\"",
+    "grants": [
+      {
+        "kind": "expertise",
+        "count": 1
+      },
+      {
+        "kind": "languages",
+        "count": 2
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

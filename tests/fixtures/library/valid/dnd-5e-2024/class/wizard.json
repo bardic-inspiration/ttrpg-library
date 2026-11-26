@@ -48,7 +48,16 @@
     ],
     "subclassLevels": [
       1
-    ]
+    ],
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          }
+        ]
+      }
+    }
   },
   "meta": {
     "createdAt": "2026-11-10",

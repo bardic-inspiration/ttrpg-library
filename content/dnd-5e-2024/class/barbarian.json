@@ -195,7 +195,34 @@
           "4"
         ]
       }
-    ]
+    ],
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          },
+          {
+            "group": "martial-weapons"
+          }
+        ],
+        "armor": [
+          "light-armor",
+          "medium-armor",
+          "shields"
+        ]
+      },
+      "multiclass": {
+        "weapons": [
+          {
+            "group": "martial-weapons"
+          }
+        ],
+        "armor": [
+          "shields"
+        ]
+      }
+    }
   },
   "meta": {
     "createdAt": "2026-11-10",

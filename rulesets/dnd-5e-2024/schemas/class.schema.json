@@ -5,7 +5,7 @@
   "description": "A page type: its features and options are components it lists in order. Stored inputs only; derives the proficiency bonus and spell slots by level, and its Features table rows and spell list from the library. Cross-field rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["primaryAbility", "hitDie", "savingThrows", "skills", "weapons", "armor", "equipment", "multiclass", "features", "subclassLevels"],
+  "required": ["primaryAbility", "hitDie", "savingThrows", "skills", "weapons", "armor", "equipment", "multiclass", "features", "subclassLevels", "training"],
   "properties": {
     "primaryAbility": {
       "description": "Printed \"Strength or Dexterity\", \"Dexterity and Wisdom\"; `join` is required with two or more abilities, and only then.",
