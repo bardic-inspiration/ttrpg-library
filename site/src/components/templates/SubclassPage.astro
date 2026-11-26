@@ -2,10 +2,11 @@
 // The dnd-5e-2024 subclass page (registry template `subclass-page`, docs/rulesets.md#subclasses,
 // docs/site.md#templates): "<Class> Subclass: <Name>", its tagline, its intro, then each feature as
 // "Level 3: Frenzy", anchored at `#class-feature-<id>`, in level order. On screen it is an
-// accordion page (docs/site.md#accordion-pages): a table of contents, then each feature collapsed.
+// accordion page (docs/site.md#accordion-pages): a structured summary, with the features by
+// level, then each feature collapsed.
 import { anchorId } from '../../../../lib/rules';
 import type { ClassFeatureStats, SubclassStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
-import { featureHeading, subclassHeading } from '../../lib/class';
+import { featureHeading, featuresByLevel, subclassHeading } from '../../lib/class';
 import type { TemplateProps } from '../../lib/template';
 import { type TocItem } from '../../lib/accordion';
 import Accordion from './parts/Accordion.astro';
@@ -25,7 +26,7 @@ const features = components.map(({ entry: feature }) => ({
   id: anchorId(`${feature.type}/${feature.id}`),
   heading: featureHeading(feature.name, feature.stats as ClassFeatureStats),
 }));
-const contents: TocItem[] = features.map(({ id, heading }) => ({ id, label: heading }));
+const contents: TocItem[] = featuresByLevel(features.map(({ feature, id }) => ({ id, name: feature.name, stats: feature.stats as ClassFeatureStats })));
 ---
 <StatBlock name={`${entry.name} subclass`} type="subclass" mode={mode}>
   <StatBlockHeader name={subclassHeading(className, entry.name)} subtitle={s.tagline} level={level} />

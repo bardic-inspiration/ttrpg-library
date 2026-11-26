@@ -1,10 +1,12 @@
 // Text for a dnd-5e-2024 class and subclass (docs/rulesets.md#classes, docs/rulesets.md#subclasses):
-// the Core Traits lines, the "Becoming a <Class> …" bullets, the Features table, feature and option
-// headings, and the spell list, worded through the phrase book. Tables are markdown pipe tables,
-// with each feature and spell a `{ref:…}` token, so they render with the site's table style.
+// the Core Traits lines, the "Becoming a <Class> as a Level 1 or Multiclass Character" bullets, the
+// Features table, feature and option headings, the summary's features by level, and the spell
+// list, worded through the phrase book. Tables are markdown pipe tables, with each feature and
+// spell a `{ref:…}` token, so they render with the site's table style.
 
 import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import type { ClassFeatureStats, ClassOptionStats, ClassStats, DerivedClass, LinkedClass } from '../../../rulesets/dnd-5e-2024/types.ts';
+import type { TocItem } from './accordion.ts';
 import { startingEquipment } from './starting-equipment.ts';
 import type { PropertyLine } from './template.ts';
 import { escapeMarkdown, joinWith, link, list, markdown, name, say, sayMarkdown, sayText, toMarkdown, withArticle, withNote, type Phrase } from './wording.ts';
@@ -41,11 +43,28 @@ export const classWords = (className: string) => ({
   subclasses: sayText('class.subclasses', { class: className }),
 });
 
-/** "Level 1: Rage", at the level the feature is described at. */
-export const featureHeading = (featureName: string, s: ClassFeatureStats): string => {
+/** The level a feature is described at: its first. */
+const featureLevel = (s: ClassFeatureStats): number => {
   const first = s.levels[0]!;
-  return sayText('classFeature.heading', { level: String(typeof first === 'number' ? first : first.level), name: featureName });
+  return typeof first === 'number' ? first : first.level;
 };
+
+/** "Level 1: Rage", at the level the feature is described at. */
+export const featureHeading = (featureName: string, s: ClassFeatureStats): string =>
+  sayText('classFeature.heading', { level: String(featureLevel(s)), name: featureName });
+
+/**
+ * A page's features by level, for its structured summary (docs/site.md#accordion-pages): a
+ * "Level 1" line per level, in page order, holding a link to each feature's section by name.
+ */
+export function featuresByLevel(features: { id: string; name: string; stats: ClassFeatureStats }[]): TocItem[] {
+  const levels = new Map<number, TocItem[]>();
+  for (const f of features) {
+    const level = featureLevel(f.stats);
+    levels.set(level, [...(levels.get(level) ?? []), { id: f.id, label: f.name }]);
+  }
+  return [...levels].map(([level, children]) => ({ label: sayText('classFeature.level', { level: String(level) }), children }));
+}
 
 /** A markdown pipe table with a title: a bold paragraph above it. */
 const table = (title: string, header: string[], rows: string[][]): string =>

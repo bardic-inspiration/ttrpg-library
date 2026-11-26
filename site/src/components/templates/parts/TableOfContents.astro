@@ -1,8 +1,10 @@
 ---
-// An accordion page's jump-to table of contents (docs/site.md#accordion-pages): a link to each
-// section, with the sections nested in one listed under it. A link opens its section and scrolls
-// to it. Shown on screen only.
-import type { TocItem } from '../../../lib/accordion';
+// A page's structured summary (docs/site.md#accordion-pages): a `nav` labeled "Contents" that
+// lists the page's sections grouped as the page groups them. A line whose sections nest nothing
+// reads as its label, then a run of links to them ("Level 1: Rage, Unarmored Defense"); a deeper
+// one lists its lines under its label. A label without an id groups lines and links nowhere.
+// Shown on screen only.
+import { isRun, type TocItem } from '../../../lib/accordion';
 
 interface Props {
   items: TocItem[];
@@ -14,12 +16,24 @@ const { items, nested = false } = Astro.props;
 ---
 {nested ? (
   <ul>
-    {items.map((item) => (
-      <li>
-        <a href={`#${item.id}`}>{item.label}</a>
-        {item.children && item.children.length > 0 && <Astro.self items={item.children} nested />}
-      </li>
-    ))}
+    {items.map((item) => {
+      const label = item.id ? <a href={`#${item.id}`}>{item.label}</a> : <span class="toc__label">{item.label}</span>;
+      if (isRun(item)) {
+        return (
+          <li class="toc__run">
+            {label}: {item.children!.map((child, i) => (
+              <>{i > 0 && ', '}{child.id ? <a href={`#${child.id}`}>{child.label}</a> : child.label}</>
+            ))}
+          </li>
+        );
+      }
+      return (
+        <li>
+          {label}
+          {item.children && item.children.length > 0 && <Astro.self items={item.children} nested />}
+        </li>
+      );
+    })}
   </ul>
 ) : (
   items.length > 0 && (
@@ -57,6 +71,16 @@ const { items, nested = false } = Astro.props;
 
     .toc li:not(:has(ul)) {
       break-inside: avoid;
+    }
+
+    /* A run's later lines hang under its label. */
+    .toc__run {
+      padding-inline-start: var(--space-s);
+      text-indent: calc(-1 * var(--space-s));
+    }
+
+    .toc__label {
+      font-weight: var(--font-weight-strong);
     }
   }
 </style>

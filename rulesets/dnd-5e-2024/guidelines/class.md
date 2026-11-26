@@ -68,8 +68,8 @@ A custom class is balanced against the SRD class nearest it in role.
 - List features in `features` in printed order: by level, then table order
   within a level. The template prints each as "Level 1: <Name>" and builds
   the Features table from their `levels`; don't write either.
-- Don't write the sentences the template words: "Becoming a <Class> …", the
-  "As a Level 1 Character" bullets, the class features' intro, and the spell
+- Don't write the sentences the template words: "Becoming a <Class> as a
+  Level 1 or Multiclass Character", the "As a Level 1 Character" bullets, the class features' intro, and the spell
   list's intro. `multiclass` is the bullets under "As a Multiclass
   Character", as a list.
 - A feature's sub-rules are titled paragraphs in its text ("***Cantrips.***
