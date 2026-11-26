@@ -1,6 +1,6 @@
 // The page header's search and set export (docs/site.md#page-header), on every page. Search is a
-// form that opens the Library with the query (`?q=`), so it works without JavaScript; on the
-// Library it searches the gallery as the reader types instead. Print and Download act on the
+// form that opens a ruleset's Library with the query (`?q=`), so it works without JavaScript; on
+// that Library it searches the gallery as the reader types instead. Print and Download act on the
 // print cart, or, on the Library, on the filtered results while the cart is empty. They need
 // JavaScript, so they render only once the island hydrates.
 import { useEffect, useState } from 'preact/hooks';
@@ -15,9 +15,11 @@ import SetActions from '../export/SetActions.tsx';
 import './header.css';
 
 export interface HeaderActionsProps {
-  /** The site base URL, ending in `/`: the Library. */
+  /** The site base URL, ending in `/`, where library.json is. */
   base: string;
-  /** The page is the Library, whose gallery the search and the set export follow. */
+  /** The Library search opens: the page's ruleset's, or the home ruleset's. Defaults to `base`. */
+  search?: string;
+  /** The page is that Library, whose gallery the search and the set export follow. */
   library?: boolean;
   /** Renders before hydration; for tests. */
   ready?: boolean;
@@ -35,7 +37,7 @@ async function libraryCart(base: string, keys: TargetEntry[]): Promise<TargetEnt
   return setTarget(all, [], keys.map(cartKey)).records;
 }
 
-export default function HeaderActions({ base, library = false, ready: initial = false }: HeaderActionsProps) {
+export default function HeaderActions({ base, search = base, library = false, ready: initial = false }: HeaderActionsProps) {
   const [ready, setReady] = useState(initial);
   const [view, setView] = useState<LibraryView | undefined>(() => (library ? currentView() : undefined));
   const [q, setQ] = useState(view?.q ?? '');
@@ -63,7 +65,7 @@ export default function HeaderActions({ base, library = false, ready: initial = 
       <form
         class="header-search"
         role="search"
-        action={base}
+        action={search}
         method="get"
         onSubmit={(e) => {
           if (library) e.preventDefault();

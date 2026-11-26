@@ -29,7 +29,10 @@ import PreviewNotice from '../components/PreviewNotice.astro';
 import SiteNav from '../components/SiteNav.astro';
 import HeaderActions from '../components/header/HeaderActions';
 import { redirectScript } from '../lib/redirects';
+import { homeRuleset, libraryPath, pageRuleset } from '../lib/gallery/library-url';
+import type { Registry } from '../lib/gallery/config';
 import { url } from '../lib/url';
+import registryJson from '@library/config/types.json';
 
 interface Props {
   title: string;
@@ -39,9 +42,17 @@ interface Props {
   og?: { title: string; description: string; image?: string; type?: 'website' | 'article' };
   /** A path under the site base this page has moved to, with any query (docs/site.md#redirects): the page sends the reader there, adding its own query and keeping the fragment. */
   redirect?: string;
+  /** The script that sends the reader on, in place of the one `redirect` implies (`/`'s, docs/site.md#redirects). */
+  redirectWith?: string;
 }
 
-const { title, noindex = false, og, redirect } = Astro.props;
+const { title, noindex = false, og, redirect, redirectWith } = Astro.props;
+// Search opens, and the set export follows, the Library of the page's ruleset, or of the home
+// ruleset off every ruleset's pages (docs/site.md#page-header).
+const registry = registryJson as unknown as Registry;
+const here = Astro.url.pathname;
+const ruleset = (here.startsWith(url()) && pageRuleset(registry, here.slice(url().length))) || homeRuleset(registry);
+const library = url(libraryPath(ruleset));
 // A preview build's pages say so and stay out of search indexes (docs/workflow.md#deploy).
 const preview = isPreview();
 const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
@@ -55,7 +66,7 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
     {redirect && (
       <>
         <link rel="canonical" href={absolute(redirect)} />
-        <script is:inline set:html={redirectScript(redirect)} />
+        <script is:inline set:html={redirectWith ?? redirectScript(redirect)} />
         <meta http-equiv="refresh" content={`0; url=${redirect}`} />
       </>
     )}
@@ -75,9 +86,9 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
     {preview && <PreviewNotice />}
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="site-header__home" href={url()}>TTRPG Content Library</a>
+        <a class="site-header__home" href={url(libraryPath(homeRuleset(registry)))}>TTRPG Content Library</a>
         <SiteNav />
-        <HeaderActions client:load base={url()} library={Astro.url.pathname === url()} />
+        <HeaderActions client:load base={url()} search={library} library={here === library} />
       </div>
     </header>
     <main class="site-main">

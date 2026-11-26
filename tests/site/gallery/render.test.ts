@@ -139,12 +139,20 @@ describe('Gallery', () => {
     expect(render({})).toContain('href="/ttrpg-library/dnd-5e-2024/creature/cinder-hound/"');
   });
 
-  it('puts the Ruleset node alone in the filter tree, with each ruleset’s types inside it (#380, #395)', () => {
+  it('puts Sources, with Official and Homebrew, then Types in the filter tree, with no Ruleset node', () => {
     const html = render({});
     const [before, tree = ''] = html.split('<ul class="tree">');
     expect(before).not.toContain('Creature');
-    expect(tree).toMatch(/Ruleset.*Source and author.*Types.*Creature/);
+    expect(tree).toMatch(/Sources.*Official.*Homebrew.*Types.*Creature/);
+    expect(tree).not.toContain('Ruleset');
     expect(html.match(/<ul class="tree">/g)).toHaveLength(1);
+  });
+
+  it('shows only its own ruleset’s entries, and offers only its types', () => {
+    const stranger = { ...records[0]!, ruleset: 'other', id: 'stranger', name: 'Stranger Card', author: 'publisher' };
+    const html = renderToString(h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records: [...records, stranger], initialQuery: '', ruleset: 'dnd-5e-2024' }));
+    expect(html).not.toContain('Stranger Card');
+    expect(html.match(/<article class="card linked-card"/g)).toHaveLength(2);
   });
 
   it('starts a fresh Library on the official content alone: the two SRD classes, not the homebrew fixtures', () => {

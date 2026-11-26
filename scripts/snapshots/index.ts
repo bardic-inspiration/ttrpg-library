@@ -1,5 +1,5 @@
 // Which pages `npm run snapshots` captures (docs/styling.md#refinement-workflow), read from the built
-// library.json: the home page, the style guide, and the first detail page of
+// library.json: the home page (the first entry's ruleset's Library), the style guide, and the first detail page of
 // each type that has an entry, each at the phone, tablet, and desktop widths a
 // UI PR shows (docs/workflow.md#ui-screenshots). Also the rules for the output folder's label.
 
@@ -22,7 +22,7 @@ export function snapshotFile(page: SnapshotPage, width: number): string {
 
 export function snapshotPages(records: IndexRecord[]): SnapshotPage[] {
   return [
-    { file: 'home', path: '' },
+    { file: 'home', path: records[0] ? `${records[0].ruleset}/` : '' },
     { file: 'styleguide', path: 'styleguide/' },
     ...firstOfEachType(records).map((r) => ({ file: `${r.ruleset}-${r.type}`, path: detailPath(r) })),
   ];

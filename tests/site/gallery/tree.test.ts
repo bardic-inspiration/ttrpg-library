@@ -8,6 +8,7 @@ import { galleryConfig, type FacetData, type GalleryConfig, type LibraryRecord, 
 import { facetData } from '../../../site/src/lib/gallery/facet-data.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
 import { filterTree, openAtStart, type TreeNode, type ValueNode } from '../../../site/src/lib/gallery/tree.ts';
+import { rulesetRegistry } from '../../../site/src/lib/gallery/library-url.ts';
 import { computeView } from '../../../site/src/lib/gallery/view.ts';
 import { entryNames, loadLibrary, type Entry } from '../../../site/src/lib/library.ts';
 import { loadRules } from '../../../site/src/lib/rules.ts';
@@ -49,13 +50,8 @@ function find(nodes: TreeNode[], ...labels: string[]): TreeNode | undefined {
 
 const values = (node: TreeNode | undefined): ValueNode[] => (node?.kind === 'enum' ? node.values : []);
 
-/** Every ruleset's types, from the Types group under each ruleset in the Ruleset node. */
-const types = (nodes: TreeNode[]): TreeNode[] =>
-  nodes
-    .filter((n) => n.id === 'ruleset' && n.kind === 'field')
-    .flatMap((n) => (n.kind === 'field' ? n.children : []))
-    .flatMap((r) => (r.kind === 'type' ? r.children : []))
-    .flatMap((g) => (g.kind === 'field' && g.label === 'Types' ? g.children : []));
+/** The types, from the Types node. */
+const types = (nodes: TreeNode[]): TreeNode[] => nodes.flatMap((n) => (n.kind === 'field' && n.id === 'types' ? n.children : []));
 
 /** The node reached by following labels from a type's. */
 const ofType = (nodes: TreeNode[], ...labels: string[]) => find(types(nodes), ...labels);
@@ -146,9 +142,9 @@ describe('Equipment › Weapon › Martial › Melee', () => {
       `${group.id}-weapons`,
       `${group.id}-weapons-martial-weapons`,
     ]);
-    // The Ruleset node, each ruleset, and its Types start open, so every type shows; nothing else
-    // does without a filter in it.
-    expect(openAtStart(tree(gear, equipment))).toEqual(new Set(['ruleset', 'ruleset/dnd-5e-2024', 'ruleset/dnd-5e-2024:types']));
+    // Sources and Types start open, so Official and every type show; nothing else does without a
+    // filter in it.
+    expect(openAtStart(tree(gear, equipment))).toEqual(new Set(['sources', 'types']));
   });
 });
 
@@ -227,9 +223,9 @@ describe('every facet of every type', () => {
       expect(node, type).toBeDefined();
       expect(paths(node?.kind === 'type' ? node.children : []), type).toEqual(config.facets.map((f) => f.path));
     }
-    // The Ruleset node is the only top-level node, and an old tag filter adds none.
-    expect(nodes.map((n) => n.id)).toEqual(['ruleset']);
-    expect(tree(full(), home, '?f.type=creature&f.tags.theme=fire').map((n) => n.id)).toEqual(['ruleset']);
+    // Sources and Types are the only top-level nodes, and an old tag filter adds none.
+    expect(nodes.map((n) => n.id)).toEqual(['sources', 'types']);
+    expect(tree(full(), home, '?f.type=creature&f.tags.theme=fire').map((n) => n.id)).toEqual(['sources', 'types']);
   });
 
   it('checks a type as the type filter, counting the entries of each type it shows', () => {
@@ -246,50 +242,16 @@ describe('every facet of every type', () => {
     expect(typeValue(nodes, 'dnd-5e-2024/item')).toMatchObject({ selected: false, count: 0 });
   });
 
-  /** Each ruleset under the Ruleset node, as label and count. */
-  const rulesets = (nodes: TreeNode[]) =>
-    nodes[0]?.kind === 'field' ? nodes[0].children.flatMap((n) => (n.kind === 'type' ? [[n.value.label, n.value.count, n.value.selected]] : [])) : [];
-
-  it('shows the Ruleset node first and open, with each ruleset counted among the other filters’ results', () => {
-    const home = galleryConfig(reg, data);
-    const nodes = tree(full(), home);
-    expect(nodes[0]).toMatchObject({ kind: 'field', id: 'ruleset', label: 'Ruleset', open: true });
-    expect(rulesets(nodes)).toEqual([[reg['dnd-5e-2024']!.label, full().length, true]]);
-    // Its count is what checking it adds, so a narrower ruleset set leaves it unchanged.
-    expect(rulesets(tree(full(), home, '?f.author=publisher'))).toEqual([[reg['dnd-5e-2024']!.label, full().length, false]]);
+  it('has no Ruleset node: a Library offers only its own ruleset, and nothing groups by ruleset', () => {
     const other = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as Registry;
     const two = [...full(), record({ id: 'stranger', ruleset: 'other' })];
-    expect(rulesets(tree(two, galleryConfig(other, data)))).toEqual([
-      [reg['dnd-5e-2024']!.label, full().length, true],
-      ['Other', 1, false],
-    ]);
-  });
-
-  it('puts Source and Author under each ruleset, with "publisher" read as its publisher (docs/content-model.md#source-and-author)', () => {
-    const home = galleryConfig(reg, { ...data, publishers: { 'dnd-5e-2024': 'Wizards of the Coast' } });
-    const records = [
-      record({ id: 'fireball', type: 'spell', source: 'SRD 5.2', author: 'publisher' }),
-      record({ id: 'frost-lance', type: 'spell', source: 'Ember Codex', author: 'bardic-inspiration' }),
-      record({ id: 'cinder-hound', author: 'bardic-inspiration' }),
-    ];
-    const nodes = tree(records, home);
-    const label = 'D&D 5e';
-    // An official source is pinned first, though "Ember Codex" sorts before it.
-    expect(values(find(nodes, 'Ruleset', label, 'Source and author', 'Source')).map((v) => [v.label, v.count])).toEqual([
-      ['SRD 5.2', 1],
-      ['Ember Codex', 1],
-    ]);
-    expect(values(find(nodes, 'Ruleset', label, 'Source and author', 'Author')).map((v) => [v.key, v.label, v.count])).toEqual([
-      ['bardic-inspiration', 'bardic-inspiration', 2],
-      ['publisher', 'Wizards of the Coast', 1],
-    ]);
-    // An active author filter opens the Ruleset node down to its value, and filters the results.
-    const filtered = tree(records, home, '?f.author=publisher');
-    expect(filtered[0]?.open).toBe(true);
-    expect(find(filtered, 'Ruleset', label)?.open).toBe(true);
-    expect(find(filtered, 'Ruleset', label, 'Source and author', 'Author')?.open).toBe(true);
-    const view = computeView(records, home, parseQuery('?f.source=srd%205.2', home));
-    expect(view.results.map((r) => r.id)).toEqual(['fireball']);
+    const own = galleryConfig(rulesetRegistry(other, 'dnd-5e-2024'), data);
+    const nodes = tree(two.filter((r) => r.ruleset === 'dnd-5e-2024'), own);
+    expect(nodes.map(labelOf)).toEqual(['Sources', 'Types']);
+    expect(types(nodes).every((n) => n.id.startsWith('dnd-5e-2024/'))).toBe(true);
+    expect(rulesetRegistry(other, 'other')).toEqual({ other: other.other });
+    // An unregistered ruleset leaves the whole registry, as the style guide's gallery has it.
+    expect(rulesetRegistry(other, undefined)).toBe(other);
   });
 });
 
@@ -304,35 +266,55 @@ describe('the ruleset set adds entries (#380)', () => {
   const ids = (config: GalleryConfig, query: string) =>
     computeView(records(), config, parseQuery(query, config)).results.map((r) => r.id).sort();
 
-  it('starts on the official content alone, with the publisher checked', () => {
-    const home = galleryConfig(reg, { ...data, publishers: { 'dnd-5e-2024': 'Wizards of the Coast' } });
+  it('starts on the official content alone, with Official checked', () => {
+    const home = galleryConfig(reg, data);
     expect(ids(home, '')).toEqual(['fireball', 'goblin']);
     const nodes = filterTree(home, parseQuery('', home), records());
-    const author = values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Source and author', 'Author'));
-    expect(author.map((v) => [v.label, v.selected])).toEqual([
-      ['bardic-inspiration', false],
-      ['Wizards of the Coast', true],
-      ['someone', false],
+    expect(nodes[0]).toMatchObject({ kind: 'field', id: 'sources', label: 'Sources', open: true });
+    const official = find(nodes, 'Sources', 'Official');
+    expect(official?.kind === 'type' && [official.path, official.value.key, official.value.selected, official.value.count, official.children]).toEqual([
+      'author', 'publisher', true, 2, [],
     ]);
-    expect(openAtStart(nodes)).toEqual(new Set(['ruleset', 'ruleset/dnd-5e-2024', 'ruleset/dnd-5e-2024:meta', 'ruleset/dnd-5e-2024:author', 'ruleset/dnd-5e-2024:types']));
+    expect(openAtStart(nodes)).toEqual(new Set(['sources', 'types']));
   });
 
-  it('keeps each ruleset’s types under it, counted among the results, whether or not the set holds it (#395)', () => {
-    const other = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as Registry;
-    const home = galleryConfig(other, data);
-    const two = [...records(), record({ id: 'stranger', ruleset: 'other' })];
-    const nodes = filterTree(home, parseQuery('', home), two);
-    const rulesetOf = (label: string) => find(nodes, 'Ruleset', label);
-    expect(rulesetOf('Other')?.kind === 'type' && rulesetOf('Other')!.open).toBe(true);
-    // Only the publisher is checked, so Other's creature is out of the results but still listed.
-    const creature = find(nodes, 'Ruleset', 'Other', 'Types', 'Creature');
-    expect(creature?.kind === 'type' && [creature.id, creature.value.count]).toEqual(['other/creature', 0]);
-    const own = find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Types', 'Creature');
-    expect(own?.kind === 'type' && [own.id, own.value.count]).toEqual(['dnd-5e-2024/creature', 1]);
-    // A checked type of a ruleset with no entries keeps its ruleset in the tree, so it can be cleared.
-    const stale = filterTree(home, parseQuery('?f.type=other/spell', home), records());
-    const spell = find(stale, 'Ruleset', 'Other', 'Types', 'Spell');
-    expect(spell?.kind === 'type' && [spell.value.selected, spell.value.count]).toEqual([true, 0]);
+  it('puts the homebrew sources and authors under Homebrew, without the official ones', () => {
+    const home = galleryConfig(reg, { ...data, publishers: { 'dnd-5e-2024': 'Wizards of the Coast' } });
+    const nodes = filterTree(home, parseQuery('', home), records());
+    expect(find(nodes, 'Sources')?.kind === 'field' && (find(nodes, 'Sources') as { children: TreeNode[] }).children.map(labelOf)).toEqual(['Official', 'Homebrew']);
+    expect(values(find(nodes, 'Sources', 'Homebrew', 'Source')).map((v) => [v.label, v.count, v.selected])).toEqual([
+      ['Ember Codex', 1, false],
+      ['Moss Notes', 1, false],
+    ]);
+    expect(values(find(nodes, 'Sources', 'Homebrew', 'Author')).map((v) => [v.key, v.count, v.selected])).toEqual([
+      ['bardic-inspiration', 2, false],
+      ['someone', 1, false],
+    ]);
+    // Homebrew is a group, not a checkbox, and starts closed until a filter in it is active.
+    expect(find(nodes, 'Sources', 'Homebrew')).toMatchObject({ kind: 'field', open: false });
+    const checked = filterTree(home, parseQuery('?f.author=publisher,someone', home), records());
+    expect(find(checked, 'Sources', 'Homebrew')?.open).toBe(true);
+    expect(find(checked, 'Sources', 'Homebrew', 'Author')?.open).toBe(true);
+    expect(find(checked, 'Sources', 'Official')?.kind === 'type' && (find(checked, 'Sources', 'Official') as { value: ValueNode }).value.selected).toBe(true);
+    expect(ids(home, '?f.author=publisher,someone')).toEqual(['fireball', 'goblin', 'moss-imp']);
+  });
+
+  it('reads each box checked only when its filter holds it', () => {
+    const home = galleryConfig(reg, data);
+    // The whole ruleset shows every entry, but no box in Sources holds it, so none reads checked.
+    const nodes = filterTree(home, parseQuery('?f.ruleset=dnd-5e-2024', home), records());
+    const official = find(nodes, 'Sources', 'Official');
+    expect(official?.kind === 'type' && official.value.selected).toBe(false);
+    expect(values(find(nodes, 'Sources', 'Homebrew', 'Source')).some((v) => v.selected)).toBe(false);
+    // With no type checked, no type reads checked, though each has results.
+    expect(types(nodes).some((n) => n.kind === 'type' && n.value.selected)).toBe(false);
+  });
+
+  it('has no homebrew group when every entry is official', () => {
+    const home = galleryConfig(reg, data);
+    const official = records().filter((r) => r.author === 'publisher');
+    const nodes = filterTree(home, parseQuery('', home), official);
+    expect((find(nodes, 'Sources') as { children: TreeNode[] }).children.map(labelOf)).toEqual(['Official']);
   });
 
   it('adds each checked ruleset, source, or author to the results, and the other filters narrow them', () => {
@@ -349,30 +331,17 @@ describe('the ruleset set adds entries (#380)', () => {
     expect(ids(home, '?f.ruleset=&f.type=spell')).toEqual([]);
   });
 
-  it('counts a source or author by what checking it adds, under the other filters', () => {
+  it('counts Official, a source, or an author by what checking it adds, under the other filters', () => {
     const home = galleryConfig(reg, data);
     const nodes = filterTree(home, parseQuery('?f.type=spell', home), records());
-    expect(values(find(nodes, 'Ruleset', reg['dnd-5e-2024']!.label, 'Source and author', 'Source')).map((v) => [v.label, v.count])).toEqual([
-      ['SRD 5.2', 1],
+    const official = find(nodes, 'Sources', 'Official');
+    expect(official?.kind === 'type' && official.value.count).toBe(1);
+    expect(values(find(nodes, 'Sources', 'Homebrew', 'Source')).map((v) => [v.label, v.count])).toEqual([
       ['Ember Codex', 1],
       ['Moss Notes', 0],
     ]);
     // A type counts the entries of it in the results: only the official spell by default.
     expect(ofType(nodes, 'Spell')?.kind === 'type' && (ofType(nodes, 'Spell') as { value: ValueNode }).value.count).toBe(1);
-  });
-});
-
-describe('official sources first in the Source menu (#375)', () => {
-  it('pins every official source above the homebrew ones, each part keeping its order', async () => {
-    const home = galleryConfig(await registry(), data);
-    const records = [
-      record({ id: 'a', source: 'Ash Tome', author: 'bardic-inspiration' }),
-      record({ id: 'b', source: 'Zephyr Rules', author: 'publisher' }),
-      record({ id: 'c', source: 'Basic Rules', author: 'publisher' }),
-      record({ id: 'd', source: 'Moss Notes', author: 'someone' }),
-    ];
-    const source = values(find(tree(records, home), 'Ruleset', 'D&D 5e', 'Source and author', 'Source')).map((v) => v.label);
-    expect(source).toEqual(['Basic Rules', 'Zephyr Rules', 'Ash Tome', 'Moss Notes']);
   });
 });
 

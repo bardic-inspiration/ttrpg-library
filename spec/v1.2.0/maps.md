@@ -88,8 +88,9 @@ zones only; entries that use it reference it:
 - **Card:** the diagram as a thumbnail, name, and scale.
 - **Facets:** none yet. They're judged once maps exist.
 - **Where:** in `dnd-5e-2024`'s Library, the ruleset a map belongs to in
-  this version ([`ui.md`](ui.md) "The Library": each ruleset's Library shows
-  the maps compatible with it).
+  this version, since each ruleset's Library shows its own entries
+  ([Gallery](../../docs/site.md#gallery)). A map that serves several rulesets
+  shows in each of their Libraries, once one can (Out of scope).
 
 ### Generation
 

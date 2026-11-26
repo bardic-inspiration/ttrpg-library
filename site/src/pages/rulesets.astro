@@ -1,8 +1,10 @@
 ---
-// The Rulesets section (docs/site.md#pages-and-navigation): each ruleset's rules pages, in its
-// rules/pages.json order, and its Extensions page when it has one (docs/site.md#rules-pages).
+// The Rulesets section (docs/site.md#pages-and-navigation): each ruleset, linked to its Library,
+// then its rules pages, in its rules/pages.json order, and its Extensions page when it has one
+// (docs/site.md#rules-pages).
 import Base from '../layouts/Base.astro';
 import { loadRules } from '../lib/rules';
+import { libraryPath } from '../lib/gallery/library-url';
 import { url } from '../lib/url';
 import registry from '@library/config/types.json';
 
@@ -10,6 +12,7 @@ const labels: Record<string, string> = Object.fromEntries(Object.entries(registr
 const rulesets = loadRules().map((data) => ({
   id: data.ruleset,
   label: labels[data.ruleset] ?? data.ruleset,
+  library: libraryPath(data.ruleset),
   pages: [
     ...data.pages.map((page) => ({ title: page.title, path: `${data.ruleset}/rules/${page.id}/` })),
     ...(data.types.some((t) => t.extensions) ? [{ title: 'Extensions', path: `${data.ruleset}/rules/extensions/` }] : []),
@@ -21,6 +24,7 @@ const rulesets = loadRules().map((data) => ({
   {rulesets.map((ruleset) => (
     <section aria-labelledby={`ruleset-${ruleset.id}`}>
       <h2 id={`ruleset-${ruleset.id}`}>{ruleset.label}</h2>
+      <p><a href={url(ruleset.library)}>{ruleset.label} Library</a></p>
       <ul>
         {ruleset.pages.map((page) => (
           <li><a href={url(page.path)}>{page.title}</a></li>

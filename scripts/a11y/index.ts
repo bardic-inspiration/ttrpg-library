@@ -1,6 +1,6 @@
-// Which pages `npm run a11y` checks (docs/styling.md#accessibility): the Library and the Rulesets
-// and About pages, then, read from the built library.json, the Library filtered to a type and a
-// facet, one detail page per type that has an entry, and the print view (docs/export.md#print)
+// Which pages `npm run a11y` checks (docs/styling.md#accessibility): each ruleset's Library and the
+// Rulesets and About pages, then, read from the built library.json, a Library filtered to a type and
+// a facet, one detail page per type that has an entry, and the print view (docs/export.md#print)
 // showing those same entries. A type with no entries has no detail page to check yet. Then every rules
 // page (docs/site.md#rules-pages), and the Extensions page of a ruleset that has one.
 
@@ -42,8 +42,10 @@ export interface RulesPageRef {
 }
 
 export function a11yPages(records: IndexRecord[], rulesPages: RulesPageRef[] = []): A11yPage[] {
+  // Each ruleset's Library, from the rulesets the entries and rules pages name; the home URL when none does.
+  const rulesets = [...new Set([...records.map((r) => r.ruleset), ...rulesPages.map((p) => p.ruleset)])];
   const pages: A11yPage[] = [
-    { label: 'Library', path: '' },
+    ...(rulesets.length === 0 ? [{ label: 'Library', path: '' }] : rulesets.map((ruleset) => ({ label: `Library: ${ruleset}`, path: `${ruleset}/` }))),
     { label: 'Rulesets', path: 'rulesets/' },
     { label: 'About', path: 'about/' },
   ];
@@ -52,7 +54,7 @@ export function a11yPages(records: IndexRecord[], rulesPages: RulesPageRef[] = [
     const filter = filterFor(first);
     pages.push({
       label: `Library, filtered to ${first.type}`,
-      path: `?f.type=${encodeURIComponent(first.type)}${filter ? `&${filter}` : ''}`,
+      path: `${first.ruleset}/?f.type=${encodeURIComponent(first.type)}${filter ? `&${filter}` : ''}`,
     });
   }
   const firsts = firstOfEachType(records);
@@ -66,8 +68,7 @@ export function a11yPages(records: IndexRecord[], rulesPages: RulesPageRef[] = [
       ready: '.print-entry',
     });
   }
-  const rulesets = [...new Set(rulesPages.map((p) => p.ruleset))];
-  for (const ruleset of rulesets) {
+  for (const ruleset of new Set(rulesPages.map((p) => p.ruleset))) {
     const own = rulesPages.filter((p) => p.ruleset === ruleset);
     for (const page of own) pages.push({ label: `rules page: ${page.title}`, path: `${ruleset}/rules/${page.id}/` });
     if (own.some((p) => p.extensions)) pages.push({ label: 'rules page: Extensions', path: `${ruleset}/rules/extensions/` });

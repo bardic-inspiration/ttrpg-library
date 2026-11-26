@@ -225,8 +225,8 @@ Target: WCAG 2.2 AA.
 - **Automated check.** `npm run a11y` runs axe-core through Playwright on the
   built site and fails on any
   serious or critical violation. It serves `site/dist` under the site base and
-  checks the Library (the home page), the Rulesets page, and the About page.
-  From `library.json` it adds the Library filtered to the first record's type
+  checks each ruleset's Library, the Rulesets page, and the About page.
+  From `library.json` it adds the first record's ruleset's Library filtered to its type
   and its first facet value, the first detail page of each type that has an
   entry, and the print view of those entries, checked once loaded (with
   `window.print` stubbed). Then it checks every rules page in each ruleset's
@@ -254,8 +254,8 @@ Target: WCAG 2.2 AA.
   long item, a cantrip and a 9th-level spell, and a very long name. Layouts
   are judged against the hard cases.
 - **Snapshots on demand.** `npm run snapshots [label]` captures the style guide,
-  the home page, and one detail page per type from the built site, full-page
-  at 390, 820, and 1440px wide (an 800px viewport height), into the git-ignored
+  the home page (the first entry's ruleset's Library), and one detail page per
+  type from the built site, full-page at 390, 820, and 1440px wide (an 800px viewport height), into the git-ignored
   `snapshots/<label>/` folder as `<page>-<width>.png`. These are the widths a
   UI PR shows ([UI screenshots](workflow.md#ui-screenshots)). A label is one
   plain folder name; without one it's the current UTC time. It's not a CI
