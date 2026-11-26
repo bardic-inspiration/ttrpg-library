@@ -2,7 +2,7 @@
 // what a class derives from its own stats and from the library, and the checks on both types and
 // their class-feature components.
 
-import { isOfficial, type Issue, type LinkedEntry, type LinkTarget } from '../module.ts';
+import { isOfficial, type Issue, type LinkedEntry, type LinkedLibrary, type LinkTarget } from '../module.ts';
 import type { ClassFeatureStats, ClassSpell, ClassStats, DerivedClass, FeatureLevel, LinkedClass, SpellStats, SubclassStats, Tables } from './types.ts';
 
 const LEVELS = Array.from({ length: 20 }, (_, i) => i + 1);
@@ -31,13 +31,13 @@ export function deriveClass(stats: ClassStats, tables: Tables): DerivedClass {
  * names it plus its own `spells`; and its subclasses. An official class's spell list and subclasses
  * are official entries only; homebrew that names it shows in its page's Homebrew links (docs/site.md#detail-page).
  */
-export function deriveClassLinked(id: string, stats: ClassStats, entries: readonly LinkedEntry[]): LinkedClass {
-  const byKey = new Map(entries.map((e) => [`${e.type}/${e.id}`, e]));
-  const self = byKey.get(`class/${id}`);
+export function deriveClassLinked(id: string, stats: ClassStats, library: LinkedLibrary): LinkedClass {
+  const { entries, resolve } = library;
+  const self = resolve(`class/${id}`);
   const listed = self && isOfficial(self) ? (e: LinkedEntry) => isOfficial(e) : () => true;
   const featureRows = LEVELS.map((level) => ({
     features: stats.features.flatMap(({ ref }) => {
-      const feature = byKey.get(ref)?.stats as ClassFeatureStats | undefined;
+      const feature = resolve(ref)?.stats as ClassFeatureStats | undefined;
       const at = feature?.levels.find((l) => levelOf(l) === level);
       if (at === undefined) return [];
       return [typeof at === 'number' ? { ref } : { ref, note: at.note }];
