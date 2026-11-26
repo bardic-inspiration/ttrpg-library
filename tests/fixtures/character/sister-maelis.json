@@ -1,0 +1,29 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "sister-maelis",
+  "name": "Sister Maelis",
+  "summary": "A human acolyte and Life Domain Cleric who mends wounds on the road.",
+  "description": "Maelis left her temple's infirmary to walk the roads its patients came from. She carries more bandages than coin.",
+  "stats": {
+    "species": { "ref": "species/human" },
+    "background": { "ref": "background/acolyte" },
+    "classes": [{ "class": { "ref": "class/cleric" }, "level": 3, "subclass": { "ref": "subclass/life-domain" } }],
+    "abilities": {
+      "base": { "str": 13, "dex": 10, "con": 14, "int": 8, "wis": 15, "cha": 10 },
+      "background": { "wis": 2, "cha": 1 }
+    },
+    "feats": [
+      { "ref": "feat/magic-initiate", "note": "Cleric", "source": { "ref": "background/acolyte" } },
+      { "ref": "feat/alert", "source": { "ref": "species/human" } }
+    ],
+    "choices": [
+      { "source": { "ref": "class/cleric" }, "skills": ["medicine", "persuasion"] },
+      { "source": { "ref": "species-trait/human-skillful" }, "skills": ["perception"] }
+    ],
+    "equipped": [{ "ref": "equipment/scale-mail" }, { "ref": "equipment/shield" }, { "ref": "equipment/mace" }],
+    "spells": [{ "ref": "spell/cure-wounds" }]
+  },
+  "meta": { "createdAt": "2026-11-26", "source": { "kind": "manual", "issues": [429] } }
+}

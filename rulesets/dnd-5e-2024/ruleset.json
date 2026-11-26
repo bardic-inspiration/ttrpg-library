@@ -3,6 +3,7 @@
   "publisher": "Wizards of the Coast",
   "types": [
     "background",
+    "character",
     "class",
     "creature",
     "feat",

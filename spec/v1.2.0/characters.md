@@ -23,87 +23,19 @@ adds owners and editing, not a second type.
 - [Inputs and derived values](../../docs/rulesets.md#inputs-and-derived-values)
   and [Consistency checks](../../docs/rulesets.md#consistency-checks).
 - [Classes](../../docs/rulesets.md#classes): class data (proficiencies,
-  `multiclass`, `spellcasting`, features by level) and `deriveLinked`, the
-  one derivation today that reads other entries.
+  `multiclass`, `spellcasting`, features by level).
 - [Species](../../docs/rulesets.md#species),
   [Backgrounds](../../docs/rulesets.md#backgrounds),
   [Feats](../../docs/rulesets.md#feats), and
   [Equipment](../../docs/rulesets.md#equipment).
+- [Characters](../../docs/rulesets.md#characters): the type, its inputs,
+  and its derivations from the entries it names, on the shared
+  `deriveLinked` path.
 - [Creatures](../../docs/rulesets.md#creatures): the stat block type, which
   stays apart.
 - [The generate skill](../../docs/generation.md#the-generate-skill).
 
 ## Design
-
-### Character and creature
-
-Two types, kept apart:
-
-| Type | Is | Values come from |
-|---|---|---|
-| **Character** | A build | Refs to library entries plus inputs; the ruleset derives the rest |
-| **Creature** | A stat block | Its own fields, as today |
-
-The site stores no PC or NPC role. Characters and creatures are each
-referenced anywhere a ref may name them, as any entry is; there is no NPC
-type or NPC part.
-
-### A snapshot
-
-A character is one build at one level: its current state, not a record of
-choices level by level.
-
-### Stats
-
-`character` is a content type in `dnd-5e-2024`, at
-`content/dnd-5e-2024/character/<id>.json`. Its `stats` hold only inputs:
-
-- **`species`**, **`background`:** refs.
-- **`classes`:** in the order taken, each a class ref, its level, and its
-  subclass ref once the class's subclass level is reached. The first is the
-  starting class, whose saving throws and level 1 hit points apply.
-- **`abilities`:** the six base scores, bought with point buy, and the
-  background's increases: +2 and +1, or +1 to all three, among the
-  background's three abilities.
-- **`feats`:** each a feat ref with where it came from (the background, or a
-  class level whose feature grants a feat) and any choice the feat asks for,
-  such as an Ability Score Improvement's increases.
-- **`options`:** class option refs, under each option list the class levels
-  allow.
-- **`choices`:** the skill, tool, language, and expertise picks the species,
-  background, and classes offer.
-- **`equipped`:** refs to the armor, shield, and weapons the character
-  wears and wields, each an SRD equipment primitive or an item. There is no
-  inventory.
-- **`spells`:** spell refs: cantrips and the spells prepared, which the
-  profile lists.
-
-The envelope's `summary` and `description` hold who the character is.
-
-### Derived
-
-The ruleset derives, from the inputs and the entries they reference:
-
-- the total level, proficiency bonus, final ability scores and modifiers,
-  saving throws, skills, and Passive Perception;
-- Hit Points at the fixed value per level (the Hit Point Die's maximum at
-  level 1, then its fixed average), plus the Constitution modifier per
-  level;
-- Initiative and Speed;
-- Armor Class from the equipped armor and shield and the Dexterity rule of
-  the armor's category, and attacks from the equipped weapons (bonus, damage,
-  and properties);
-- spellcasting: each class's ability, save DC, and attack bonus, and spell
-  slots from the Multiclass Spellcaster or Pact Magic table;
-- the features each class and subclass gives at its level, the species'
-  traits, and the proficiencies each source grants.
-
-This generalizes `deriveLinked`: a derivation may read the entries an entry
-references, and the build resolves them before deriving. Encounters use it
-too ([`encounters.md`](encounters.md)).
-
-The point costs and the XP budgets aren't in `tables.json` yet; this area
-adds the point costs, from SRD 5.2's "Character Creation".
 
 ### Modifiers
 
@@ -178,7 +110,7 @@ Only legal builds under `dnd-5e-2024` validate. New consistency checks
 | Class levels total 1 to 20; no class repeats |
 | With more than one class, each class's multiclass prerequisite is met by the final scores, the starting class's included |
 | A subclass belongs to its class and is present exactly when the class's level reaches its subclass level |
-| One feat from the background, which is its origin feat; each other feat comes from a class level that grants one, meets its prerequisite, and only a repeatable feat repeats |
+| One feat from the background, which is its origin feat, and one origin feat from a species trait that grants one (Human's Versatile); each other feat comes from a class level that grants one, meets its prerequisite, and only a repeatable feat repeats |
 | Options and choices fill exactly the counts their sources allow at the character's levels |
 | Each spell is on a list of one of its classes, at a level its slots can cast, and cantrips and prepared spells are within each class's counts |
 | Equipped armor and weapons the character lacks proficiency with (warning) |
@@ -247,10 +179,20 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
 
 - The `character` type validates, derives, and renders its profile, with
   the checks above, against the cases.
-- Derivations can read referenced entries, and classes use the same path.
 - The Library filters characters by class, background, species, and level.
 - `generate` routes by type, and makes a preset from an inline request.
 - The docs describe the type, its derivations, and the umbrella skill.
+
+## Open questions
+
+- **Modifiers: which design (#429).** "Modifiers" above and the design
+  recorded in #476 differ: who migrates the SRD entries (the pilot, or #476
+  after it), whether items carry `modifiers` (with `byVariant`,
+  attunement, `check-bonus`, and `ability-set`), the armor condition's form
+  (`while` keys, or a list of allowed armor types), Unarmored Movement's
+  speed (`byLevel`, or the class table's column), and whether Jack of All
+  Trades reaches Initiative (the SRD text says only skill checks). The
+  character's derivations apply no modifiers until it's decided.
 
 ## Out of scope
 

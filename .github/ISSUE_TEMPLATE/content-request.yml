@@ -15,6 +15,7 @@ body:
       description: The kind of entry to generate.
       options:
         - background
+        - character
         - class
         - condition
         - creature

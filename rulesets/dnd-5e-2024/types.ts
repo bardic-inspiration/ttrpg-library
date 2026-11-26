@@ -209,6 +209,8 @@ export interface Tables {
   skills: Record<string, Ability>;
   damageTypes: string[];
   creatureTypes: string[];
+  /** The Ability Score Point Costs table: the budget, and the cost of each base score. */
+  pointBuy: { budget: number; costs: Record<string, number> };
   /** The Character Advancement table's Proficiency Bonus, levels 1–20. */
   proficiencyBonusByLevel: number[];
   /** The Multiclass Spellcaster table: slots per spell level (1 first), levels 1–20. */
@@ -416,4 +418,96 @@ export interface SubclassStats {
   tagline: string;
   text: string;
   features: Ref[];
+}
+
+/** Increases by ability, as a background or feat places them. */
+export type Increases = Partial<Record<Ability, number>>;
+
+/** character.schema.json (docs/rulesets.md#characters): one build at one level, as refs and choices. */
+export interface CharacterStats {
+  species: Ref;
+  background: Ref;
+  /** In the order taken; the first is the starting class. */
+  classes: { class: Ref; level: number; subclass?: Ref }[];
+  abilities: { base: Record<Ability, number>; background: Increases };
+  feats?: { ref: string; note?: string; source: { ref: string; level?: number }; abilities?: Increases }[];
+  options?: Ref[];
+  choices?: { source: Ref; skills?: string[]; expertise?: string[]; tools?: Ref[]; languages?: string[] }[];
+  equipped?: { ref: string; base?: Ref }[];
+  spells?: Ref[];
+}
+
+/** A character's derived values from its own stats, which the index lifts for its facets. */
+export interface DerivedCharacter {
+  /** The total of its class levels. */
+  level: number;
+  proficiencyBonus: number;
+  /** The point-buy cost of its base scores, or undefined when a score is outside the table. */
+  pointCost?: number;
+}
+
+/** One equipped weapon's attack. */
+export interface CharacterAttack {
+  /** The equipped entry: equipment, or an item. */
+  ref: string;
+  /** The equipment it's an attack with: `ref` itself, or an item's base. */
+  weapon: string;
+  ability: Ability;
+  attackBonus: number;
+  damage: { dice?: string; flat?: number; modifier: number; type: string; display: string };
+  /** The two-handed damage of a Versatile weapon. */
+  versatile?: { dice: string; display: string };
+  range?: { normal: number; long: number };
+  properties: Ref[];
+  mastery: Ref;
+}
+
+/** One class's spellcasting. */
+export interface CharacterSpellcasting {
+  class: string;
+  ability: Ability;
+  saveDc: number;
+  attackBonus: number;
+  /** Cantrips known and spells prepared at the class's level, from its Features table. */
+  cantrips: number;
+  prepared: number;
+}
+
+/** The skill, saving throw, training, tool, and language proficiencies, each with its source. */
+export interface CharacterProficiencies {
+  /** The starting class's saving throws. */
+  saves: { source: string; abilities: Ability[] };
+  skills: { skill: string; source: string }[];
+  expertise: { skill: string; source: string }[];
+  /**
+   * Weapon and armor training as each class prints it: the starting class's Core Traits, and a later
+   * class's "As a Multiclass Character" text.
+   */
+  training: { source: string; weapons?: string; armor?: string; tools?: string; multiclass?: string }[];
+  tools: { source: string; ref: string; note?: string }[];
+  languages: { source: string; language: string }[];
+}
+
+/** A character's derived values from the entries it references (docs/rulesets.md#characters). */
+export interface LinkedCharacter {
+  scores: Record<Ability, number>;
+  abilityMods: Record<Ability, number>;
+  saves: Record<Ability, number>;
+  /** Every skill's bonus, and its proficiency when it has one. */
+  skills: Record<string, { bonus: number; proficiency?: Proficiency }>;
+  passivePerception: number;
+  hp: number;
+  initiative: number;
+  speed: number;
+  /** Armor Class, with the equipped armor and shield it reads. */
+  ac: { value: number; armor?: string; shield?: string };
+  attacks: CharacterAttack[];
+  spellcasting: CharacterSpellcasting[];
+  /** Slots per spell level (1 first) from the Multiclass Spellcaster table; omitted with no full or half caster level. */
+  spellSlots?: number[];
+  /** Pact Magic slots and their level, from a pact caster's level. */
+  pactSlots?: { slots: number; slotLevel: number };
+  /** The features each class, subclass, and species gives at the character's levels, by source. */
+  features: { source: string; features: { ref: string; level?: number }[] }[];
+  proficiencies: CharacterProficiencies;
 }

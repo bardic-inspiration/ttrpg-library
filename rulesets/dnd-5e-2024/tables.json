@@ -1,5 +1,5 @@
 {
-  "source": "SRD 5.2, \"Monsters\": Challenge Rating table (Experience Points by Challenge Rating, Proficiency Bonus by Challenge Rating); \"Creature Size\" table; \"Skills\" table. \"Character Creation\": Character Advancement table (Proficiency Bonus by level), Multiclass Spellcaster table (spell slots per spell level). \"Warlock\": Warlock Features table (Spell Slots and Slot Level columns).",
+  "source": "SRD 5.2, \"Monsters\": Challenge Rating table (Experience Points by Challenge Rating, Proficiency Bonus by Challenge Rating); \"Creature Size\" table; \"Skills\" table. \"Character Creation\": Ability Score Point Costs table (the point-buy budget and costs), Character Advancement table (Proficiency Bonus by level), Multiclass Spellcaster table (spell slots per spell level). \"Warlock\": Warlock Features table (Spell Slots and Slot Level columns).",
   "challengeRatings": [
     {
       "cr": 0,
@@ -253,6 +253,7 @@
     "undead"
   ],
   "proficiencyBonusByLevel": [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6],
+  "pointBuy": { "budget": 27, "costs": { "8": 0, "9": 1, "10": 2, "11": 3, "12": 4, "13": 5, "14": 7, "15": 9 } },
   "multiclassSpellSlots": [
     [2],
     [3],

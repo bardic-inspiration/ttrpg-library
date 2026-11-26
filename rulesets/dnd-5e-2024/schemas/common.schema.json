@@ -89,6 +89,33 @@
         "ref": { "description": "The class, as class/<id>.", "type": "string", "pattern": "^class/[a-z0-9]+(-[a-z0-9]+)*$" }
       }
     },
+    "SubclassRef": {
+      "description": "A link to a subclass (docs/rulesets.md#subclasses). A typed ref: it allows only subclass keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The subclass, as subclass/<id>.", "type": "string", "pattern": "^subclass/[a-z0-9]+(-[a-z0-9]+)*$" }
+      }
+    },
+    "SpeciesRef": {
+      "description": "A link to a species (docs/rulesets.md#species). A typed ref: it allows only species keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The species, as species/<id>.", "type": "string", "pattern": "^species/[a-z0-9]+(-[a-z0-9]+)*$" }
+      }
+    },
+    "BackgroundRef": {
+      "description": "A link to a background (docs/rulesets.md#backgrounds). A typed ref: it allows only background keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The background, as background/<id>.", "type": "string", "pattern": "^background/[a-z0-9]+(-[a-z0-9]+)*$" }
+      }
+    },
     "ClassFeatureRef": {
       "description": "A link to a class feature, a component of a class or subclass (docs/content-model.md#components). A typed ref: it allows only class-feature keys.",
       "type": "object",
