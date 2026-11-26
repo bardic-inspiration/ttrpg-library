@@ -83,39 +83,6 @@ after the build, as `modifiers` did.
 A character has no `adjust`: every value is a modeled effect or stays text,
 so there is nothing to warn about.
 
-### The profile
-
-A character's page is a **profile**, not a play sheet: what a DM needs to
-run the character, or a player needs to copy a preset onto their own sheet.
-It has no fill-in boxes and nothing tracked at the table (current HP, spent
-slots, inventory).
-
-- **Identity:** name, species, background, and class levels with subclasses
-  ("Fighter 3 (Champion) / Wizard 2").
-- **Abilities:** each score, modifier, and saving throw.
-- **Combat:** Armor Class, Hit Points, Initiative, Speed, proficiency bonus,
-  and Passive Perception.
-- **Skills and proficiencies:** skills with their bonuses, expertise
-  marked; armor, weapons, tools, and languages.
-- **Attacks:** one line per equipped weapon.
-- **Spellcasting:** per class, ability, save DC, and attack bonus; spell
-  slots; and the spell list by level, each spell linked.
-- **Features:** the class, subclass, species, and feat features by name,
-  each linked to its section.
-- **Equipment:** every equipped item, linked, marking the attuned ones.
-- **Description:** the character's lore.
-
-It's built from the shared components ([`ui.md`](ui.md)) and laid out at
-390, 820, and 1440px, and in print.
-
-### In the Library
-
-- **Facets:** class, background, and species (ref facets), and level (a
-  range, of the derived total level).
-- **Card:** name, class levels, species, background, and summary.
-- **Exports:** Print, PNG, and JSON, as for any type. No translator takes
-  characters.
-
 ### Generation
 
 `generate` becomes an **umbrella**: the shared steps (inputs, collisions,

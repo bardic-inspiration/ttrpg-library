@@ -1,0 +1,132 @@
+---
+// The dnd-5e-2024 character profile (registry template `character-profile`, docs/rulesets.md#characters,
+// docs/site.md#templates): what a DM needs to run the character, or a player to copy a preset onto a
+// sheet. Its identity, combat lines, abilities, skills and proficiencies, attacks, spellcasting, features,
+// and equipment, then in print and capture its description, which the detail page shows itself. It has
+// no fill-in boxes and nothing tracked at the table. Every number comes from the derived values.
+import type { CharacterStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import {
+  abilityRows,
+  attackText,
+  classLevels,
+  combatLines,
+  equipmentItems,
+  featureLines,
+  identityLines,
+  multiclassTraining,
+  proficiencyLines,
+  skillItems,
+  slotLines,
+  spellcastingLines,
+  spellLines,
+  type Character,
+} from '../../lib/character';
+import { present } from '../../lib/display';
+import { renderInlineMarkdown, renderMarkdown } from '../../lib/markdown';
+import type { TemplateProps } from '../../lib/template';
+import AbilityTable from './parts/AbilityTable.astro';
+import Heading from './parts/Heading.astro';
+import PropertyList from './parts/PropertyList.astro';
+import RulesText from './parts/RulesText.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, derived, names, paths, mode = 'screen', level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+const s = entry.stats as CharacterStats;
+const d = derived as unknown as Character;
+const casting = [...spellcastingLines(d, names), ...slotLines(d)];
+const spells = spellLines(d);
+const equipment = equipmentItems(s);
+const sub = level + 1;
+---
+<StatBlock name={`${entry.name} character`} type="character" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={classLevels(s, names)} level={level} />
+  <PropertyList lines={identityLines(s)} refs={refs} />
+  <PropertyList lines={combatLines(d)} />
+  <AbilityTable rows={abilityRows(d)} />
+  <section class="character-section">
+    <Heading level={sub} class="statblock-heading">Skills</Heading>
+    <ul class="character-skills">
+      {skillItems(d).map((item) => (
+        <li>
+          {item.skill} <span class="character-skills__bonus">{item.bonus}</span>
+          {item.mark && <span class="character-skills__mark">({item.mark})</span>}
+        </li>
+      ))}
+    </ul>
+  </section>
+  <section class="character-section">
+    <Heading level={sub} class="statblock-heading">Proficiencies</Heading>
+    <PropertyList lines={proficiencyLines(d)} refs={refs} />
+    {multiclassTraining(d, names).map((text) => <RulesText text={text} refs={refs} />)}
+  </section>
+  {d.attacks.length > 0 && (
+    <section class="character-section">
+      <Heading level={sub} class="statblock-heading">Attacks</Heading>
+      {d.attacks.map((attack) => <RulesText text={attackText(attack)} refs={refs} />)}
+    </section>
+  )}
+  {casting.length > 0 && (
+    <section class="character-section">
+      <Heading level={sub} class="statblock-heading">Spellcasting</Heading>
+      <PropertyList lines={casting} />
+      {spells.length > 0 && <PropertyList lines={spells} refs={refs} />}
+    </section>
+  )}
+  <section class="character-section">
+    <Heading level={sub} class="statblock-heading">Features</Heading>
+    <PropertyList lines={featureLines(s, d, names)} refs={refs} />
+  </section>
+  {equipment.length > 0 && (
+    <section class="character-section">
+      <Heading level={sub} class="statblock-heading">Equipment</Heading>
+      <ul class="character-equipment">
+        {equipment.map((item) => <li set:html={renderInlineMarkdown(item, refs)} />)}
+      </ul>
+    </section>
+  )}
+  {mode !== 'screen' && present(entry.description) && (
+    <section class="character-section">
+      <Heading level={sub} class="statblock-heading">Description</Heading>
+      <div class="character-lore" set:html={renderMarkdown(entry.description!, refs)} />
+    </section>
+  )}
+</StatBlock>
+
+<style>
+  @layer components {
+    .character-section > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+
+    .character-skills {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--skill-column-width)), 1fr));
+      column-gap: var(--statblock-column-gap);
+      padding: 0;
+      list-style: none;
+    }
+
+    .character-skills__bonus {
+      font-weight: var(--font-weight-strong);
+    }
+
+    .character-skills__mark {
+      font-size: var(--text-small);
+      color: var(--color-text-muted);
+      margin-inline-start: var(--space-2xs);
+    }
+
+    .character-lore {
+      font-style: italic;
+      color: var(--color-text-muted);
+    }
+
+    .character-equipment {
+      padding-inline-start: var(--space-m);
+    }
+  }
+</style>

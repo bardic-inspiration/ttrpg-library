@@ -557,6 +557,8 @@ export interface LinkedCharacter {
   spellSlots?: number[];
   /** Pact Magic slots and their level, from a pact caster's level. */
   pactSlots?: { slots: number; slotLevel: number };
+  /** Its spells by spell level, cantrips (0) first, each level's in the order `stats.spells` lists them; a level with none is left out. */
+  spells: { level: number; spells: string[] }[];
   /** The features each class, subclass, and species gives at the character's levels, by source. */
   features: { source: string; features: { ref: string; level?: number }[] }[];
   proficiencies: CharacterProficiencies;

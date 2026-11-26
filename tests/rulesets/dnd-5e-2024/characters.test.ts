@@ -4,6 +4,11 @@ import { readFile, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { validateLibrary } from '../../../scripts/validate/index.ts';
+import { buildIndex } from '../../../scripts/build-index/index.ts';
+import { loadRegistry } from '../../../scripts/validate/schema.ts';
+import { galleryConfig, type Registry } from '../../../site/src/lib/gallery/config.ts';
+import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
+import { computeView } from '../../../site/src/lib/gallery/view.ts';
 import { loadLibrary, type Entry } from '../../../site/src/lib/library.ts';
 import { rulesData } from '../../../site/src/lib/rules.ts';
 import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
@@ -167,6 +172,25 @@ describe('the multiclass case: Fighter 3 (Champion) / Wizard 2, a dwarf soldier'
     expect(d).not.toHaveProperty('pactSlots');
   });
 
+  it('lists its spells by spell level, in the order the build lists them', () => {
+    expect(d.spells).toEqual([{ level: 1, spells: ['spell/shield', 'spell/magic-missile'] }]);
+  });
+
+  it('puts cantrips first, and leaves out a level with no spells', async () => {
+    const more = await derivedOf('brannoc-ashguard', (stats) => {
+      stats.spells = [{ ref: 'spell/misty-step' }, { ref: 'spell/shield' }, { ref: 'spell/fire-bolt' }];
+    });
+    expect(more.spells).toEqual([
+      { level: 0, spells: ['spell/fire-bolt'] },
+      { level: 1, spells: ['spell/shield'] },
+      { level: 2, spells: ['spell/misty-step'] },
+    ]);
+    const none = await derivedOf('brannoc-ashguard', (stats) => {
+      delete stats.spells;
+    });
+    expect(none.spells).toEqual([]);
+  });
+
   it("lists each class's and subclass's features up to its level, and the species' traits", () => {
     const by = Object.fromEntries(d.features.map((f) => [f.source, f.features.map((x) => `${x.ref.slice('class-feature/'.length)}${x.level ? `@${x.level}` : ''}`)]));
     expect(by['class/fighter']).toEqual([
@@ -217,6 +241,7 @@ describe('the single-class case: Cleric 3 (Life Domain), a human acolyte', async
   it('derives its spellcasting and slots, and the Life Domain feature at level 3', () => {
     expect(d.spellcasting).toEqual([{ class: 'class/cleric', ability: 'wis', saveDc: 13, attackBonus: 5, cantrips: 3, prepared: 6 }]);
     expect(d.spellSlots).toEqual([4, 2]);
+    expect(d.spells).toEqual([{ level: 1, spells: ['spell/cure-wounds'] }]);
     expect(d.features.find((f) => f.source === 'subclass/life-domain')!.features.map((f) => f.ref)).toContain('class-feature/life-domain-disciple-of-life');
   });
 
@@ -479,5 +504,32 @@ describe('item modifier schema', { timeout: VALIDATION_TIMEOUT }, () => {
     });
     expect(result.errors.some((m) => m.includes('cloak-of-protection.json') && m.includes('modifiers'))).toBe(true);
     expect(result.errors.some((m) => m.includes('sister-maelis'))).toBe(false);
+  });
+});
+
+describe('in the Library (docs/rulesets.md#characters)', { timeout: VALIDATION_TIMEOUT }, async () => {
+  const lib = await tempLibrary(await all());
+  temps.push(lib.repo);
+  const { errors, records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
+  const characters = records.filter((r) => r.type === 'character');
+  const config = galleryConfig((await loadRegistry()) as unknown as Registry);
+  const found = (query: string) =>
+    computeView(characters, config, parseQuery(`?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/character&${query}`, config)).results.map((r) => r.id);
+
+  it('lifts its classes, total level, species, and background as facets', () => {
+    expect(errors).toEqual([]);
+    expect(characters.find((r) => r.id === 'brannoc-ashguard')?.facets).toEqual({
+      'stats.classes.class': ['class/fighter', 'class/wizard'],
+      'derived.level': 5,
+      'stats.species': 'species/dwarf',
+      'stats.background': 'background/soldier',
+    });
+  });
+
+  it('filters by each of them', () => {
+    expect(found('f.stats.classes.class=class/wizard')).toEqual(['brannoc-ashguard']);
+    expect(found('f.derived.level=1..3')).toEqual(['sister-maelis']);
+    expect(found('f.stats.species=species/human')).toEqual(['sister-maelis']);
+    expect(found('f.stats.background=background/soldier')).toEqual(['brannoc-ashguard']);
   });
 });

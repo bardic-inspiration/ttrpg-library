@@ -97,14 +97,28 @@ async function loadSchemas(ruleset: string, rulesetsRoot: string): Promise<{ fil
   return { files };
 }
 
-/** The value at a dotted path such as `stats.abilities.str`, or undefined. */
+/**
+ * The value at a dotted path such as `stats.abilities.str`, or undefined. Through an array of objects
+ * the rest of the path reads each item, `stats.classes.class` giving every class's `class`: nested
+ * arrays flatten, each value once in first-seen order, and undefined when no item has it.
+ */
 function at(value: unknown, path: string): unknown {
-  let current = value;
-  for (const key of path.split('.')) {
-    if (typeof current !== 'object' || current === null || Array.isArray(current)) return undefined;
-    current = (current as Record<string, unknown>)[key];
+  return walk(value, path.split('.'));
+}
+
+function walk(current: unknown, keys: string[]): unknown {
+  if (keys.length === 0) return current;
+  if (Array.isArray(current)) {
+    const values = current.flatMap((item) => {
+      if (typeof item !== 'object' || item === null || Array.isArray(item)) return [];
+      const value = walk(item, keys);
+      return value === undefined ? [] : Array.isArray(value) ? value : [value];
+    });
+    const unique = values.filter((v, i) => values.findIndex((w) => JSON.stringify(w) === JSON.stringify(v)) === i);
+    return unique.length > 0 ? unique : undefined;
   }
-  return current;
+  if (typeof current !== 'object' || current === null) return undefined;
+  return walk((current as Record<string, unknown>)[keys[0]!], keys.slice(1));
 }
 
 /** A ref facet's value as keys: a ref object reads as its `ref`, an array item by item. */

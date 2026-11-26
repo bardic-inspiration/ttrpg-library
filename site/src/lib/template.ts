@@ -36,6 +36,7 @@ export interface TemplateProps {
 /** Template names (`config/types.json` `template`) that have their own component; others use `generic`. */
 export const TEMPLATES = [
   'background-card',
+  'character-profile',
   'class-page',
   'condition-card',
   'creature-stat-block',

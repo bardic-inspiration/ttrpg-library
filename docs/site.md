@@ -33,7 +33,11 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
 
 A facet's `kind` is `range` (numbers) or `enum` (strings, string arrays,
-booleans); an omitted optional flag reads as `false`. Ordered enums (rarity,
+booleans); an omitted optional flag reads as `false`. A path through an
+array of objects reads the rest of the path in each item: a character's
+`stats.classes.class` is every class it has, nested arrays flatten, each
+value is kept once in first-seen order, and the facet is left out when no
+item has a value. Ordered enums (rarity,
 size) declare `"order": [...]`, so sorting is semantic. A facet's
 `vocabulary` names a phrase book vocabulary ([Wording](#wording)), and each
 value reads by its display name there, the same name its page shows:
@@ -57,7 +61,8 @@ Two flags change what a facet's values are:
   reads it by its target's name and sorts by that name, in values and in
   sorted records. A creature's `stats.immunities.conditions`, a spell's
   `stats.classes`, a background's `stats.feat`, a subclass's
-  `stats.class`, and equipment's `stats.weapon.properties` and
+  `stats.class`, a character's `stats.classes.class`, `stats.species`, and
+  `stats.background`, and equipment's `stats.weapon.properties` and
   `stats.weapon.mastery` are ref facets.
 - **`groups`:** the values are the type's leaf groups
   ([Rules groups](rulesets.md#rules-groups)), offered nested as the groups
@@ -635,7 +640,7 @@ thousand entries. Past about 2,000, revisit the index size.
 
 ### Templates
 
-- One component per type template, `background-card`, `class-page`,
+- One component per type template, `background-card`, `character-profile`, `class-page`,
   `condition-card`, `creature-stat-block`, `equipment-card`, `feat-card`,
   `item-card`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
   `stats` and then the ruleset's derived values as one definition list. A derived value is labeled as a stored one is, from its key, and
