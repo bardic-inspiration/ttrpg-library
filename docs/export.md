@@ -297,7 +297,7 @@ entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
   creature's extra sizes, swarm, descriptors, gear, lair, speed and senses
   notes, condition immunity notes, and legendary action uses and intro (so
   its legendary actions don't import); an item whose rarity varies (not
-  exported), its base item, charges, spells, and curse; a weapon property's
+  exported), its base item, charges, spells, curse, and modifiers; a weapon property's
   note ("unless mounted"); embedded stat blocks; and any `adjust`. Each is reported where it occurs.
 - **Equipment groups.** Open5e gives an item a category, not a group, so
   import reads a group only from a weapon's or armor's summary or the

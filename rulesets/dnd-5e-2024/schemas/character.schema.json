@@ -95,7 +95,7 @@
       }
     },
     "equipped": {
-      "description": "The armor, shield, and weapons the character wears and wields: SRD equipment or items. An item whose base item is more than one piece of equipment names the one it is in `base`. There is no inventory.",
+      "description": "What the character wears, wields, or attunes to: SRD equipment, or any item that can be equipped or attuned to. An item whose base item is more than one piece of equipment names the one it is in `base`; one with variants names its `variant`; one the character is attuned to has `attuned`. There is no inventory.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -104,7 +104,9 @@
         "required": ["ref"],
         "properties": {
           "ref": { "type": "string", "pattern": "^(equipment|item)/[a-z0-9]+(-[a-z0-9]+)*$" },
-          "base": { "$ref": "common.schema.json#/$defs/EquipmentRef" }
+          "base": { "$ref": "common.schema.json#/$defs/EquipmentRef" },
+          "variant": { "description": "The item's variant, as its modifiers' `byVariant` keys it: \"+1\".", "type": "string", "minLength": 1 },
+          "attuned": { "description": "The character is attuned to the item.", "const": true }
         }
       }
     },

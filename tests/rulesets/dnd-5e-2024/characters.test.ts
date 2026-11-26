@@ -135,15 +135,15 @@ describe('the multiclass case: Fighter 3 (Champion) / Wizard 2, a dwarf soldier'
     expect(d.proficiencies.expertise).toEqual([{ skill: 'history', source: 'class-feature/wizard-scholar' }]);
   });
 
-  it('derives fixed Hit Points: the d10 maximum, then 6 per Fighter level and 4 per Wizard level, plus Constitution per level', () => {
-    expect(d.hp).toBe(10 + 6 + 6 + 4 + 4 + 2 * 5);
+  it('derives fixed Hit Points: the d10 maximum, then 6 per Fighter level and 4 per Wizard level, plus Constitution and Dwarven Toughness per level', () => {
+    expect(d.hp).toBe(10 + 6 + 6 + 4 + 4 + 2 * 5 + 5);
   });
 
-  it('derives Initiative, Speed, and Armor Class from the equipped item’s base armor', () => {
+  it('derives Initiative, Speed, and Armor Class from the equipped item’s base armor, its variant, and Defense', () => {
     expect(d.initiative).toBe(0);
     expect(d.speed).toBe(30);
-    // Chain Mail: 16, with no Dexterity.
-    expect(d.ac).toEqual({ value: 16, armor: 'item/armor-1-2-or-3' });
+    // Chain Mail: 16, with no Dexterity; +1 Armor; Defense +1.
+    expect(d.ac).toEqual({ value: 16 + 1 + 1, armor: 'item/armor-1-2-or-3' });
   });
 
   it('derives an attack per equipped weapon', () => {
@@ -230,9 +230,9 @@ describe('the single-class case: Cleric 3 (Life Domain), a human acolyte', async
 });
 
 /**
- * A character's derived values with `modifiers` given to library entries by key, as fixtures: the
- * library's own entries carry none until they're migrated. `character` is a fixture's id, or a
- * character's stats, added as `character/probe`.
+ * A character's derived values with `modifiers` given to library entries by key, as fixtures, in
+ * place of any the entry carries. `character` is a fixture's id, or a character's stats, added as
+ * `character/probe`.
  */
 const withModifiers = async (character: string | Record<string, any>, modifiers: Record<string, unknown[]>, change: (stats: Record<string, any>) => void = () => {}) => {
   const entries = await all();
@@ -268,13 +268,12 @@ const MONK = {
 };
 
 describe('modifiers (docs/rulesets.md#modifiers)', () => {
-  it('give the multiclass case its Defense and Dwarven Toughness, with no adjust', async () => {
-    const mods = { 'feat/defense': [{ kind: 'ac-bonus', value: 1, while: ['armored'] }], 'species-trait/dwarf-dwarven-toughness': [{ kind: 'hp-per-level', value: 1 }] };
-    const d = await withModifiers('brannoc-ashguard', mods);
-    expect(d.ac.value).toBe(17);
+  it("give the multiclass case its Defense, Dwarven Toughness, and +1 Armor from the library's entries, with no adjust", async () => {
+    const d = await derivedOf('brannoc-ashguard');
+    expect(d.ac.value).toBe(18);
     expect(d.hp).toBe(45);
     // Defense applies only in armor.
-    const bare = await withModifiers('brannoc-ashguard', mods, (stats) => {
+    const bare = await derivedOf('brannoc-ashguard', (stats) => {
       stats.equipped = [{ ref: 'equipment/longsword' }];
     });
     expect(bare.ac.value).toBe(10);
@@ -286,8 +285,8 @@ describe('modifiers (docs/rulesets.md#modifiers)', () => {
       'class-feature/fighter-second-wind': [{ kind: 'hp-per-level', value: 1, per: 'class' }],
       'class-feature/fighter-extra-attack': [{ kind: 'ac-bonus', value: 5 }],
     });
-    expect(d.hp).toBe(40 + 3);
-    expect(d.ac.value).toBe(16);
+    expect(d.hp).toBe(45 + 3);
+    expect(d.ac.value).toBe(18);
   });
 
   it('pick the highest Armor Class formula, and a speed and die by the class level, while unarmored', async () => {
@@ -397,5 +396,88 @@ describe('modifier schema', { timeout: VALIDATION_TIMEOUT }, () => {
     });
     expect(bad.errors.some((m) => m.includes('feat/defense.json') && m.includes('modifiers'))).toBe(true);
     expect(bad.errors.some((m) => m.includes('dwarf-dwarven-toughness.json') && m.includes('modifiers'))).toBe(true);
+  });
+});
+
+describe('item modifiers (docs/rulesets.md#item-modifiers)', () => {
+  it("give a weapon's variant bonus to its own attack and damage only", async () => {
+    const d = await derivedOf('brannoc-ashguard', (stats) => {
+      stats.equipped = [{ ref: 'item/weapon-1-2-or-3', base: { ref: 'equipment/longsword' }, variant: '+2' }, { ref: 'equipment/longbow' }];
+    });
+    expect(d.attacks.map((a) => [a.ref, a.attackBonus, a.damage.display, a.versatile?.display])).toEqual([
+      ['item/weapon-1-2-or-3', 6 + 2, '1d8 + 5', '1d10 + 5'],
+      // Archery isn't Brannoc's, so the longbow takes only Dexterity and the proficiency bonus.
+      ['equipment/longbow', 3, '1d8', undefined],
+    ]);
+    const unnamed = await derivedOf('brannoc-ashguard', (stats) => {
+      stats.equipped[0].variant = undefined;
+    });
+    expect(unnamed.ac.value).toBe(16 + 1);
+  });
+
+  it('apply a worn item only while attuned, when it requires attunement', async () => {
+    const cloak = (attuned: boolean) =>
+      derivedOf('sister-maelis', (stats) => {
+        stats.equipped.push({ ref: 'item/cloak-of-protection', ...(attuned && { attuned: true }) });
+      });
+    const base = await derivedOf('sister-maelis');
+    const off = await cloak(false);
+    expect([off.ac.value, off.saves]).toEqual([base.ac.value, base.saves]);
+    const on = await cloak(true);
+    expect(on.ac.value).toBe(base.ac.value + 1);
+    expect(on.saves.wis).toBe(base.saves.wis + 1);
+    // Armor equipped with a worn item stays the armor.
+    expect(on.ac.armor).toBe('equipment/scale-mail');
+  });
+
+  it('add a check bonus to every skill, Passive Perception, and Initiative', async () => {
+    const base = await derivedOf('sister-maelis');
+    const d = await derivedOf('sister-maelis', (stats) => {
+      stats.equipped.push({ ref: 'item/stone-of-good-luck-luckstone', attuned: true });
+    });
+    expect(d.skills.insight!.bonus).toBe(base.skills.insight!.bonus + 1);
+    expect(d.skills.arcana!.bonus).toBe(base.skills.arcana!.bonus + 1);
+    expect(d.passivePerception).toBe(base.passivePerception + 1);
+    expect(d.initiative).toBe(base.initiative + 1);
+    expect(d.saves.str).toBe(base.saves.str + 1);
+  });
+
+  it('set a score unless it is already higher, by variant for a belt', async () => {
+    const worn = (equipped: Record<string, unknown>[], change: (stats: Record<string, any>) => void = () => {}) =>
+      derivedOf('brannoc-ashguard', (stats) => {
+        stats.equipped.push(...equipped);
+        change(stats);
+      });
+    const d = await worn([{ ref: 'item/gauntlets-of-ogre-power', attuned: true }, { ref: 'item/headband-of-intellect', attuned: true }]);
+    expect(d.scores).toMatchObject({ str: 19, int: 19 });
+    expect(d.attacks[0]!.attackBonus).toBe(3 + 4);
+    const strong = await worn([{ ref: 'item/gauntlets-of-ogre-power', attuned: true }], (stats) => {
+      stats.abilities.base.str = 18;
+    });
+    expect(strong.scores.str).toBe(20);
+    const belt = await worn([{ ref: 'item/belt-of-giant-strength', variant: 'storm', attuned: true }]);
+    expect(belt.scores.str).toBe(29);
+  });
+
+  it('give bracers their bonus only with no armor and no shield', async () => {
+    const bare = await derivedOf('brannoc-ashguard', (stats) => {
+      stats.equipped = [{ ref: 'equipment/longsword' }, { ref: 'item/bracers-of-defense', attuned: true }];
+    });
+    expect(bare.ac.value).toBe(10 + 2);
+    const armored = await derivedOf('brannoc-ashguard', (stats) => {
+      stats.equipped.push({ ref: 'item/bracers-of-defense', attuned: true });
+    });
+    expect(armored.ac.value).toBe(18);
+  });
+});
+
+describe('item modifier schema', { timeout: VALIDATION_TIMEOUT }, () => {
+  it("rejects a feature's kind on an item, and passes a worn item with a variant and attunement", async () => {
+    const result = await validate((entries) => {
+      entries.find((e) => e.id === 'cloak-of-protection')!.stats.modifiers = [{ kind: 'skill-floor', proficiency: 'half' }];
+      entries.find((e) => e.id === 'sister-maelis')!.stats.equipped.push({ ref: 'item/belt-of-giant-strength', variant: 'hill', attuned: true });
+    });
+    expect(result.errors.some((m) => m.includes('cloak-of-protection.json') && m.includes('modifiers'))).toBe(true);
+    expect(result.errors.some((m) => m.includes('sister-maelis'))).toBe(false);
   });
 });

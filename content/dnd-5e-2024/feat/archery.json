@@ -9,7 +9,14 @@
   "stats": {
     "category": "fighting-style",
     "prerequisite": "Fighting Style Feature",
-    "text": "You gain a +2 bonus to attack rolls you make with Ranged weapons."
+    "text": "You gain a +2 bonus to attack rolls you make with Ranged weapons.",
+    "modifiers": [
+      {
+        "kind": "attack-bonus",
+        "value": 2,
+        "weapon": "ranged"
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

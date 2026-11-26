@@ -27,7 +27,7 @@
       { "source": { "ref": "class-feature/wizard-scholar" }, "expertise": ["history"] }
     ],
     "equipped": [
-      { "ref": "item/armor-1-2-or-3", "base": { "ref": "equipment/chain-mail" } },
+      { "ref": "item/armor-1-2-or-3", "base": { "ref": "equipment/chain-mail" }, "variant": "+1" },
       { "ref": "equipment/longsword" }
     ],
     "spells": [{ "ref": "spell/shield" }, { "ref": "spell/magic-missile" }]

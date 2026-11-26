@@ -78,7 +78,7 @@ slots, inventory).
   slots; and the spell list by level, each spell linked.
 - **Features:** the class, subclass, species, and feat features by name,
   each linked to its section.
-- **Equipment:** what's equipped, linked.
+- **Equipment:** every equipped item, linked, marking the attuned ones.
 - **Description:** the character's lore.
 
 It's built from the shared components ([`ui.md`](ui.md)) and laid out at
@@ -107,7 +107,7 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
 
 - A fighter-wizard multiclass: `class/fighter` 3 with `subclass/champion`
   and `class/wizard` 2, `species/dwarf`, `background/soldier` with its
-  origin feat `feat/savage-attacker`, wearing `item/armor-1-2-or-3`, with
+  origin feat `feat/savage-attacker`, wearing `item/armor-1-2-or-3` (+1), with
   `spell/shield` and `spell/magic-missile` prepared.
 - The same build with Intelligence 12: fails the Wizard's multiclass
   prerequisite.
@@ -115,30 +115,6 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
 - A single-class `class/cleric` with `subclass/life-domain` and
   `spell/cure-wounds`, on `species/human` with `background/acolyte`: the
   simplest profile.
-
-## Migration
-
-No library entry carries [modifiers](../../docs/rulesets.md#modifiers) yet.
-#476 adds them, as a dev PR with the `migration` label:
-
-- **Features, feats, and traits** with an always-on effect: Barbarian and
-  Monk Unarmored Defense, Unarmored Movement, Fast Movement, Roving,
-  Draconic Resilience (its Armor Class formula and its Hit Points per
-  Sorcerer level), Jack of All Trades, Defense, Archery, Dwarven Toughness,
-  and the custom Swift Foot. No entry's `text` changes.
-- **Items:** `item` stats get `modifiers` too, applying only while the item
-  is equipped, and attuned when it requires attunement; on armor or a
-  weapon, a modifier applies to that item itself. `byVariant` gives a value
-  per variant (+1/+2/+3 Armor and Weapon). It adds the kinds `check-bonus`
-  and `ability-set` (a score raised to a value unless it's already higher:
-  Gauntlets of Ogre Power, Amulet of Health, Headband of Intellect, Belt of
-  Giant Strength).
-- **Equipped items:** `equipped` takes any item a character can wear,
-  wield, or attune to, not only armor, shields, and weapons: wondrous
-  items, rings, rods, staffs, and wands among them. Each equipped item
-  that requires attunement has an `attuned` flag, and its modifiers apply
-  only while it's attuned. The profile's Equipment lists every equipped
-  item, marking the attuned ones.
 
 ## Done when
 

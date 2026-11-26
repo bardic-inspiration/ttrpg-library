@@ -39,7 +39,17 @@
     "attunement": {
       "required": false
     },
-    "effect": "You have a bonus to {ref:glossary/armor-class} while wearing this armor. The bonus is determined by its rarity."
+    "effect": "You have a bonus to {ref:glossary/armor-class} while wearing this armor. The bonus is determined by its rarity.",
+    "modifiers": [
+      {
+        "kind": "ac-bonus",
+        "byVariant": {
+          "+1": 1,
+          "+2": 2,
+          "+3": 3
+        }
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-04",

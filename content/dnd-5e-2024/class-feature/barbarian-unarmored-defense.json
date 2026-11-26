@@ -9,7 +9,20 @@
     "levels": [
       1
     ],
-    "text": "While you aren't wearing any armor, your base {ref:glossary/armor-class} equals 10 plus your Dexterity and Constitution modifiers. You can use a {ref:equipment/shield} and still gain this benefit."
+    "text": "While you aren't wearing any armor, your base {ref:glossary/armor-class} equals 10 plus your Dexterity and Constitution modifiers. You can use a {ref:equipment/shield} and still gain this benefit.",
+    "modifiers": [
+      {
+        "kind": "ac-formula",
+        "base": 10,
+        "abilities": [
+          "dex",
+          "con"
+        ],
+        "while": [
+          "unarmored"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

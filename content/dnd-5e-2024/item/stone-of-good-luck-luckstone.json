@@ -12,7 +12,17 @@
     "attunement": {
       "required": true
     },
-    "effect": "While this polished agate is on your person, you gain a +1 bonus to ability checks and saving throws."
+    "effect": "While this polished agate is on your person, you gain a +1 bonus to ability checks and saving throws.",
+    "modifiers": [
+      {
+        "kind": "check-bonus",
+        "value": 1
+      },
+      {
+        "kind": "save-bonus",
+        "value": 1
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-04",

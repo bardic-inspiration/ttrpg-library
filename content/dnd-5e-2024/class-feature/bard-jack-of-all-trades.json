@@ -9,7 +9,13 @@
     "levels": [
       2
     ],
-    "text": "You can add half your Proficiency Bonus (round down) to any ability check you make that uses a skill proficiency you lack and that doesn't otherwise use your Proficiency Bonus.\n\nFor example, if you make a Strength (Athletics) check and lack Athletics proficiency, you can add half your Proficiency Bonus to the check."
+    "text": "You can add half your Proficiency Bonus (round down) to any ability check you make that uses a skill proficiency you lack and that doesn't otherwise use your Proficiency Bonus.\n\nFor example, if you make a Strength (Athletics) check and lack Athletics proficiency, you can add half your Proficiency Bonus to the check.",
+    "modifiers": [
+      {
+        "kind": "skill-floor",
+        "proficiency": "half"
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

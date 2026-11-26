@@ -9,7 +9,16 @@
     "levels": [
       15
     ],
-    "text": "Your cunning mind is exceptionally difficult to control. You gain proficiency in Wisdom and Charisma saving throws."
+    "text": "Your cunning mind is exceptionally difficult to control. You gain proficiency in Wisdom and Charisma saving throws.",
+    "modifiers": [
+      {
+        "kind": "save-proficiency",
+        "abilities": [
+          "wis",
+          "cha"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

@@ -9,7 +9,16 @@
     "levels": [
       5
     ],
-    "text": "Your speed increases by 10 feet while you aren't wearing Heavy armor."
+    "text": "Your speed increases by 10 feet while you aren't wearing Heavy armor.",
+    "modifiers": [
+      {
+        "kind": "speed-bonus",
+        "value": 10,
+        "while": [
+          "no-heavy-armor"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",
