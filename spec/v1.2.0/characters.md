@@ -53,6 +53,7 @@ Only legal builds under `dnd-5e-2024` validate. New consistency checks
 | One feat from the background, which is its origin feat, and one origin feat from a species trait that grants one (Human's Versatile); each other feat comes from a class level that grants one, meets its prerequisite, and only a repeatable feat repeats |
 | Options and choices fill exactly the counts their sources allow at the character's levels |
 | Each spell is on a list of one of its classes, at a level its slots can cast, and cantrips and prepared spells are within each class's counts |
+| No more than three equipped items are attuned, and only an item that requires attunement is |
 | Equipped armor and weapons the character lacks proficiency with (warning) |
 | Any `adjust` (warning), as on creatures |
 
@@ -132,6 +133,12 @@ No library entry carries [modifiers](../../docs/rulesets.md#modifiers) yet.
   and `ability-set` (a score raised to a value unless it's already higher:
   Gauntlets of Ogre Power, Amulet of Health, Headband of Intellect, Belt of
   Giant Strength).
+- **Equipped items:** `equipped` takes any item a character can wear,
+  wield, or attune to, not only armor, shields, and weapons: wondrous
+  items, rings, rods, staffs, and wands among them. Each equipped item
+  that requires attunement has an `attuned` flag, and its modifiers apply
+  only while it's attuned. The profile's Equipment lists every equipped
+  item, marking the attuned ones.
 
 ## Done when
 
@@ -140,13 +147,6 @@ No library entry carries [modifiers](../../docs/rulesets.md#modifiers) yet.
 - The Library filters characters by class, background, species, and level.
 - `generate` routes by type, and makes a preset from an inline request.
 - The docs describe the type, its derivations, and the umbrella skill.
-
-## Open questions
-
-- **Worn items (#476).** Whether `equipped` takes wondrous items and rings,
-  with an `attuned` flag and a limit of three attuned items. Until it does,
-  only armor, shields, and weapons apply, so cloaks, rings, and amulets
-  can't.
 
 ## Out of scope
 
