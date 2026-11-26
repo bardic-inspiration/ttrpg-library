@@ -44,12 +44,6 @@ Only legal builds under `dnd-5e-2024` validate, with the checks in
 [Consistency checks](../../docs/rulesets.md#consistency-checks) and the
 grants they read ([Grants](../../docs/rulesets.md#grants)).
 
-#### Grants
-
-The library's entries get `grants`, a class's `grants` and `training`, and a
-feat's `requires` in a migration (#488), as `modifiers` did, which also
-settles the feat categories Ability Score Improvement and Epic Boon allow.
-
 ### Generation
 
 `generate` becomes an **umbrella**: the shared steps (inputs, collisions,
@@ -81,6 +75,17 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
 - The Library filters characters by class, background, species, and level.
 - `generate` routes by type, and makes a preset from an inline request.
 - The docs describe the type, its derivations, and the umbrella skill.
+
+## Open questions
+
+- **Grant forms the vocabulary lacks (#490):** an alternative to a
+  feature's feat (Paladin's Blessed Warrior, Ranger's Druidic Warrior), a
+  spell list that depends on a choice (Circle of the Land, Elven Lineage,
+  Gnomish Lineage, Fiendish Legacy), spells the character chooses to keep
+  prepared (Magical Discoveries, Mystic Arcanum, Spell Mastery, Signature
+  Spells), and proficiencies an entry gives outright. These stay text
+  ([Grants](../../docs/rulesets.md#grants)), so a build that takes one fails
+  the feat or spell check. Open: their forms.
 
 ## Out of scope
 

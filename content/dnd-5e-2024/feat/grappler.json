@@ -27,7 +27,14 @@
         "name": "Fast Wrestler",
         "text": "You don't have to spend extra movement to move a creature {ref:condition/grappled} by you if the creature is your size or smaller."
       }
-    ]
+    ],
+    "requires": {
+      "abilities": [
+        "str",
+        "dex"
+      ],
+      "min": 13
+    }
   },
   "meta": {
     "createdAt": "2026-11-10",

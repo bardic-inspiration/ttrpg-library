@@ -10,7 +10,13 @@
       2,
       9
     ],
-    "text": "You gain Expertise (see \"Rules Glossary\") in two of your skill proficiencies of your choice. Performance and Persuasion are recommended if you have proficiency in them.\n\nAt Bard level 9, you gain Expertise in two more of your skill proficiencies of your choice."
+    "text": "You gain Expertise (see \"Rules Glossary\") in two of your skill proficiencies of your choice. Performance and Persuasion are recommended if you have proficiency in them.\n\nAt Bard level 9, you gain Expertise in two more of your skill proficiencies of your choice.",
+    "grants": [
+      {
+        "kind": "expertise",
+        "count": 2
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

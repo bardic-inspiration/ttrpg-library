@@ -142,6 +142,15 @@
         24,
         25
       ]
+    },
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          }
+        ]
+      }
     }
   },
   "meta": {

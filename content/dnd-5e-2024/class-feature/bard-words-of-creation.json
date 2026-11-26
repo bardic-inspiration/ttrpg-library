@@ -9,7 +9,22 @@
     "levels": [
       20
     ],
-    "text": "You have mastered two of the Words of Creation: the words of life and death. You therefore always have the *{ref:spell/power-word-heal}* and *{ref:spell/power-word-kill}* spells prepared. When you cast either spell, you can target a second creature with it if that creature is within 10 feet of the first target."
+    "text": "You have mastered two of the Words of Creation: the words of life and death. You therefore always have the *{ref:spell/power-word-heal}* and *{ref:spell/power-word-kill}* spells prepared. When you cast either spell, you can target a second creature with it if that creature is within 10 feet of the first target.",
+    "grants": [
+      {
+        "kind": "spells",
+        "byLevel": {
+          "20": [
+            {
+              "ref": "spell/power-word-heal"
+            },
+            {
+              "ref": "spell/power-word-kill"
+            }
+          ]
+        }
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

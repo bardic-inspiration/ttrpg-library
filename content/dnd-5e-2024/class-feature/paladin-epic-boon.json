@@ -9,7 +9,17 @@
     "levels": [
       19
     ],
-    "text": "You gain an Epic Boon feat (see \"Feats\") or another feat of your choice for which you qualify. {ref:feat/boon-of-truesight} is recommended."
+    "text": "You gain an Epic Boon feat (see \"Feats\") or another feat of your choice for which you qualify. {ref:feat/boon-of-truesight} is recommended.",
+    "grants": [
+      {
+        "kind": "feat",
+        "categories": [
+          "epic-boon",
+          "origin",
+          "general"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

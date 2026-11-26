@@ -9,7 +9,13 @@
     "levels": [
       3
     ],
-    "text": "You gain proficiency with three skills of your choice."
+    "text": "You gain proficiency with three skills of your choice.",
+    "grants": [
+      {
+        "kind": "skills",
+        "count": 3
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

@@ -6,7 +6,13 @@
   "id": "human-skillful",
   "name": "Skillful",
   "stats": {
-    "text": "You gain proficiency in one skill of your choice."
+    "text": "You gain proficiency in one skill of your choice.",
+    "grants": [
+      {
+        "kind": "skills",
+        "count": 1
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

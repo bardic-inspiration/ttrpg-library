@@ -12,7 +12,16 @@
       12,
       16
     ],
-    "text": "You gain the {ref:feat/ability-score-improvement} feat (see \"Feats\") or another feat of your choice for which you qualify. You gain this feature again at Paladin levels 8, 12, and 16."
+    "text": "You gain the {ref:feat/ability-score-improvement} feat (see \"Feats\") or another feat of your choice for which you qualify. You gain this feature again at Paladin levels 8, 12, and 16.",
+    "grants": [
+      {
+        "kind": "feat",
+        "categories": [
+          "origin",
+          "general"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

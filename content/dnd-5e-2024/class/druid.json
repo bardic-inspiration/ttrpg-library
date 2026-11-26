@@ -184,6 +184,25 @@
         21,
         22
       ]
+    },
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          }
+        ],
+        "armor": [
+          "light-armor",
+          "shields"
+        ]
+      },
+      "multiclass": {
+        "armor": [
+          "light-armor",
+          "shields"
+        ]
+      }
     }
   },
   "meta": {

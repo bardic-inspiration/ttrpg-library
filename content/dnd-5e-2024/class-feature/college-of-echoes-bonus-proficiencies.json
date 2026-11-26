@@ -9,7 +9,13 @@
     "levels": [
       3
     ],
-    "text": "You gain proficiency in the Performance skill and one other skill of your choice."
+    "text": "You gain proficiency in the Performance skill and one other skill of your choice.",
+    "grants": [
+      {
+        "kind": "skills",
+        "count": 1
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-21",

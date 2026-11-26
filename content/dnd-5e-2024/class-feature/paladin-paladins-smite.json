@@ -9,7 +9,19 @@
     "levels": [
       2
     ],
-    "text": "You always have the *{ref:spell/divine-smite}* spell prepared. In addition, you can cast it without expending a spell slot, but you must finish a {ref:glossary/long-rest} before you can cast it in this way again."
+    "text": "You always have the *{ref:spell/divine-smite}* spell prepared. In addition, you can cast it without expending a spell slot, but you must finish a {ref:glossary/long-rest} before you can cast it in this way again.",
+    "grants": [
+      {
+        "kind": "spells",
+        "byLevel": {
+          "2": [
+            {
+              "ref": "spell/divine-smite"
+            }
+          ]
+        }
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

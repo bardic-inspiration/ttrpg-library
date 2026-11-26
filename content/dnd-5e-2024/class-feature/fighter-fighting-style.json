@@ -9,7 +9,15 @@
     "levels": [
       1
     ],
-    "text": "You have honed your martial prowess and gain a Fighting Style feat of your choice (see \"Feats\"). {ref:feat/defense} is recommended.\n\nWhenever you gain a Fighter level, you can replace the feat you chose with a different Fighting Style feat."
+    "text": "You have honed your martial prowess and gain a Fighting Style feat of your choice (see \"Feats\"). {ref:feat/defense} is recommended.\n\nWhenever you gain a Fighter level, you can replace the feat you chose with a different Fighting Style feat.",
+    "grants": [
+      {
+        "kind": "feat",
+        "categories": [
+          "fighting-style"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

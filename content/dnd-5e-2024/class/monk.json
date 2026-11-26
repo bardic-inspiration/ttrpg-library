@@ -205,7 +205,40 @@
           "+30 ft."
         ]
       }
-    ]
+    ],
+    "grants": {
+      "start": [
+        {
+          "kind": "tools",
+          "count": 1,
+          "from": [
+            {
+              "ref": "equipment/artisans-tools"
+            },
+            {
+              "ref": "equipment/musical-instrument"
+            }
+          ]
+        }
+      ]
+    },
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          },
+          {
+            "group": "martial-weapons",
+            "properties": [
+              {
+                "ref": "weapon-property/light"
+              }
+            ]
+          }
+        ]
+      }
+    }
   },
   "meta": {
     "createdAt": "2026-11-10",
