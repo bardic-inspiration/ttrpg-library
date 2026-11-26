@@ -339,6 +339,22 @@ export type ItemModifier =
 
 export type FeatCategory = 'origin' | 'general' | 'fighting-style' | 'epic-boon';
 
+/** One thing an entry gives a character to pick or have, as data (common.schema.json `Grant`, docs/rulesets.md#grants). */
+export type Grant =
+  | { kind: 'feat'; categories: FeatCategory[] }
+  | { kind: 'skills'; count: number; from?: string[]; withTools?: true }
+  | { kind: 'expertise'; count: number; from?: string[] }
+  | { kind: 'tools'; count: number; from?: Ref[] }
+  | { kind: 'languages'; count: number }
+  | { kind: 'options'; list: string; column?: string; byLevel?: Record<string, number> }
+  | { kind: 'spells'; cantrips?: number; level1?: number; from?: Ref[]; byLevel?: Record<string, Ref[]> };
+
+/** Weapon proficiencies and armor training as data (common.schema.json `Training`). */
+export interface Training {
+  weapons?: { group: 'simple-weapons' | 'martial-weapons'; properties?: Ref[] }[];
+  armor?: ('light-armor' | 'medium-armor' | 'heavy-armor' | 'shields')[];
+}
+
 /** feat.schema.json (docs/rulesets.md#feats): titled `benefits` or one `text`. */
 export interface FeatStats {
   category: FeatCategory;
@@ -348,6 +364,9 @@ export interface FeatStats {
   text?: string;
   repeatable?: string;
   modifiers?: Modifier[];
+  grants?: Grant[];
+  /** Its ability prerequisite: any one of `abilities` at `min` or more, or all with `join` "and". */
+  requires?: { abilities: Ability[]; min: number; join?: 'and' | 'or' };
 }
 
 export interface DerivedFeat {
@@ -391,6 +410,7 @@ export interface DerivedSpecies {
 export interface SpeciesTraitStats {
   text: string;
   modifiers?: Modifier[];
+  grants?: Grant[];
 }
 
 /** class.schema.json (docs/rulesets.md#classes): a page type whose features and options are components. */
@@ -410,6 +430,9 @@ export interface ClassStats {
   spellcasting?: { ability: Ability; progression: 'full' | 'half' | 'pact'; cantrips?: number[]; prepared: number[] };
   optionLists?: { name: string; text: string; options: Ref[] }[];
   spells?: Ref[];
+  /** Picks as the starting class, beside `skills`, and as a later class. */
+  grants?: { start?: Grant[]; multiclass?: Grant[] };
+  training?: { start: Training; multiclass?: Training };
 }
 
 /** A class's derived values from its own stats (docs/rulesets.md#classes), one per level 1–20. */
@@ -449,6 +472,7 @@ export interface ClassFeatureStats {
   levels: FeatureLevel[];
   text: string;
   modifiers?: Modifier[];
+  grants?: Grant[];
 }
 
 /** class-option.schema.json: one option of a class's option list. */

@@ -43,6 +43,11 @@ Every character is custom: the SRD prints no pregenerated characters
   and class level whose feature grants it.
 - Each group of `choices` names the entry that offers it, and holds only
   its picks.
+- Fill every pick a source gives, exactly
+  ([Grants](../../../docs/rulesets.md#grants)): each feat a feature or trait
+  grants, each skill, Expertise, tool, and language pick, and each option
+  list's count. The two origin languages, beside Common, go under the
+  background.
 
 ## Dependencies and SRD references
 

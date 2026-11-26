@@ -23,7 +23,7 @@
     ],
     "choices": [
       { "source": { "ref": "class/fighter" }, "skills": ["history", "perception"] },
-      { "source": { "ref": "background/soldier" }, "tools": [{ "ref": "equipment/gaming-set", "note": "dice" }] },
+      { "source": { "ref": "background/soldier" }, "tools": [{ "ref": "equipment/gaming-set", "note": "dice" }], "languages": ["Dwarvish", "Giant"] },
       { "source": { "ref": "class-feature/wizard-scholar" }, "expertise": ["history"] }
     ],
     "equipped": [

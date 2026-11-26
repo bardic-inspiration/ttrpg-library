@@ -56,7 +56,7 @@ const fixedHp = (die: number): number => die / 2 + 1;
 const dieSize = (die: ClassStats['hitDie']): number => Number(die.slice(1));
 
 /** Equipment an equipped entry is: itself, or an item's one base item or its named `base`. */
-function equipmentOf(library: LinkedLibrary, equipped: { ref: string; base?: { ref: string } }): { key: string; stats: EquipmentStats } | undefined {
+export function equipmentOf(library: LinkedLibrary, equipped: { ref: string; base?: { ref: string } }): { key: string; stats: EquipmentStats } | undefined {
   if (equipped.ref.startsWith('equipment/')) return { key: equipped.ref, stats: need<EquipmentStats>(library, equipped.ref).stats };
   const item = need<ItemStats>(library, equipped.ref).stats;
   const key = equipped.base?.ref ?? (item.baseItem?.oneOf?.length === 1 ? item.baseItem.oneOf[0]!.ref : undefined);
@@ -98,7 +98,7 @@ const itemValue = ({ modifier, variant }: ItemEffect): number =>
   modifier.byVariant ? (variant === undefined ? 0 : (modifier.byVariant[variant] ?? 0)) : (modifier.value ?? 0);
 
 /** The value a `byLevel` table gives at a level: the one from the highest key at or below it. */
-function atLevel<T>(table: Record<string, T>, level: number): T | undefined {
+export function atLevel<T>(table: Record<string, T>, level: number): T | undefined {
   const key = Object.keys(table)
     .map(Number)
     .filter((k) => k <= level)

@@ -14,7 +14,7 @@ import { rulesData } from '../../../site/src/lib/rules.ts';
 import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { DerivedCharacter, LinkedCharacter } from '../../../rulesets/dnd-5e-2024/types.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
-import { FIXTURES, tempLibrary } from '../../helpers.ts';
+import { FIXTURES, tempLibrary, withGrants } from '../../helpers.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const CONTENT = join(ROOT, 'content/dnd-5e-2024');
@@ -23,10 +23,11 @@ const dir = async (path: string) =>
   Promise.all((await readdir(path)).sort().map((f) => readJson(join(path, f)) as Promise<Entry & Record<string, any>>));
 
 /** The fixtures and the whole library, which they name; the library has no characters of its own to stand in for. */
-const loadAll = async () => [
-  ...(await dir(join(FIXTURES, 'character'))),
-  ...(await Promise.all((await readdir(CONTENT)).filter((type) => type !== 'character').map((type) => dir(join(CONTENT, type))))).flat(),
-];
+const loadAll = async () =>
+  withGrants([
+    ...(await dir(join(FIXTURES, 'character'))),
+    ...(await Promise.all((await readdir(CONTENT)).filter((type) => type !== 'character').map((type) => dir(join(CONTENT, type))))).flat(),
+  ]);
 let library: ReturnType<typeof loadAll> | undefined;
 const all = async () => structuredClone(await (library ??= loadAll()));
 
@@ -421,6 +422,28 @@ describe('modifier schema', { timeout: VALIDATION_TIMEOUT }, () => {
     });
     expect(bad.errors.some((m) => m.includes('feat/defense.json') && m.includes('modifiers'))).toBe(true);
     expect(bad.errors.some((m) => m.includes('dwarf-dwarven-toughness.json') && m.includes('modifiers'))).toBe(true);
+  });
+});
+
+describe('grant schema', { timeout: VALIDATION_TIMEOUT }, () => {
+  it('validates grants on a feature, a trait, and a feat, a class\'s grants and training, and a feat\'s requires; rejects an unknown kind or a missing field', async () => {
+    // The fixtures' grants (tests/fixtures/grants.json) are on every entry the passing validation reads.
+    const set = (entries: Record<string, any>[], key: string, fields: Record<string, unknown>) => Object.assign(entries.find((e) => `${e.type}/${e.id}` === key)!.stats, fields);
+    const bad = await validate((entries) => {
+      set(entries, 'class-feature/fighter-fighting-style', { grants: [{ kind: 'feat-choice', categories: ['fighting-style'] }] });
+      set(entries, 'species-trait/human-skillful', { grants: [{ kind: 'skills' }] });
+      set(entries, 'class-feature/sorcerer-metamagic', { grants: [{ kind: 'options', list: 'Metamagic Options' }] });
+      set(entries, 'feat/magic-initiate', { grants: [{ kind: 'spells', cantrips: 2, byLevel: { '1': [{ ref: 'spell/bless' }] } }] });
+      set(entries, 'feat/grappler', { requires: { abilities: ['str'] } });
+      set(entries, 'class/monk', { training: { start: { weapons: [{ group: 'exotic-weapons' }] } } });
+      set(entries, 'class/bard', { grants: { later: [] } });
+    });
+    for (const file of ['fighter-fighting-style.json', 'human-skillful.json', 'sorcerer-metamagic.json', 'magic-initiate.json']) {
+      expect(bad.errors.some((m) => m.includes(file) && m.includes('grants'))).toBe(true);
+    }
+    expect(bad.errors.some((m) => m.includes('grappler.json') && m.includes('requires'))).toBe(true);
+    expect(bad.errors.some((m) => m.includes('monk.json') && m.includes('training'))).toBe(true);
+    expect(bad.errors.some((m) => m.includes('bard.json') && m.includes('grants'))).toBe(true);
   });
 });
 

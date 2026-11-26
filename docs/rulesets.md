@@ -645,7 +645,9 @@ hold only inputs:
 - **`choices`:** the `skills`, `expertise`, `tools`, and `languages`
   picked, each group under the `source` that offers it: the species or one
   of its traits, the background, a class, a subclass, a class feature
-  (Scholar's Expertise), or a feat.
+  (Scholar's Expertise), or a feat. Each source's picks fill exactly what it
+  gives ([Grants](#grants)). The two languages every character picks beside
+  Common at its origin go under the background.
 - **`equipped`:** what the character wears, wields, or attunes to: SRD
   equipment, or any item that can be equipped or attuned to, such as
   armor, weapons, rings, rods, staffs, wands, and wondrous items. An item whose base item could be several pieces of
@@ -799,6 +801,59 @@ custom Swift Foot; the feats Defense, Archery, Alert, and Ability Score
 Improvement; and the species trait Dwarven Toughness. A new entry with such
 an effect carries them too.
 
+### Grants
+
+What an entry gives a character to pick or have is data too, so the checks
+can count a build's feats, picks, options, and spells
+([Consistency checks](#consistency-checks)). `class-feature`,
+`species-trait`, and `feat` stats take an optional `grants` array, each grant
+with a `kind` from a closed vocabulary (`Grant` in `common.schema.json`). A
+feature's grant is given at each of its levels up to its class's level; a
+trait's once; a feat's each time it's taken.
+
+| Kind | Example | Gives |
+|---|---|---|
+| `feat` | Fighting Style: `"categories": ["fighting-style"]`; Versatile: `["origin"]` | One feat of those categories, with the class and that level, or the species, as its `source` |
+| `skills` | Skillful: `"count": 1`; Keen Senses: `"count": 1, "from": ["insight", "perception", "survival"]`; Skilled: `"count": 3, "withTools": true` | Skill picks under the entry; with `withTools`, skill and tool picks count together |
+| `expertise` | Expertise: `"count": 2`; Scholar: `"count": 1, "from": [...]` | Expertise picks |
+| `tools` | `"count": 1, "from": [{ "ref": "equipment/musical-instrument" }]` | Tool picks |
+| `languages` | `"count": 2` | Language picks |
+| `options` | Eldritch Invocations: `"list": "Eldritch Invocation Options", "column": "Eldritch Invocations"`; Metamagic: `"byLevel": { "2": 2, "10": 4, "17": 6 }` | Options from the class's list of that name: the column's value, or `byLevel`, at the class's level |
+| `spells` | Magic Initiate: `"cantrips": 2, "level1": 1, "from": [...]`; an always-prepared list: `"byLevel": { "3": [...], "5": [...] }` | Spells outside the classes' counts |
+
+A `spells` grant's picks come from the class spell list the feat's `note`
+names ("Cleric" is `class/cleric`), one of `from` when given; they're at
+most its counts, as a class's are. An always-prepared list's spells, from
+each key's level on (the class's level for a feature, the total level for a
+trait), are the character's without a seat in any count, and the build
+lists those it wants on its profile.
+
+A class adds two fields beside its printed text:
+
+- **`grants`:** `start`, the picks it gives as the starting class beside
+  its `skills` (the Bard's three instruments), and `multiclass`, those it
+  gives as a later class (the Bard's, Ranger's, and Rogue's skill). The
+  starting class's `skills` count as a `skills` grant.
+- **`training`:** `start`, as its Core Traits print weapons and armor, and
+  `multiclass`, as its "As a Multiclass Character" text does: weapon groups
+  (`simple-weapons`, `martial-weapons`), each limited to weapons with any of
+  `properties` (the Monk's Martial weapons with Light), and armor groups
+  (`light-armor`, `medium-armor`, `heavy-armor`, `shields`).
+
+A feat adds `requires`, its ability prerequisite as data beside the printed
+`prerequisite`: `"abilities": ["str", "dex"], "min": 13`, any one by
+default, or all with `"join": "and"`, read from the final scores.
+
+The background gives its tool pick when it offers a choice, and the two
+origin languages (SRD 5.2 "Character Creation": a character's origin is a
+background, a species, and two languages). The species and a subclass give
+nothing themselves; their traits and features do.
+
+The library's entries get grants, training, and requires in a migration
+(#488); until then `tests/fixtures/grants.json` gives them to the entries
+the character fixtures use. A class without `training` leaves the
+character's unknown, so the training warning waits for every class's.
+
 ### Item modifiers
 
 `item` stats take an optional `modifiers` array too (`ItemModifier` in
@@ -921,12 +976,14 @@ warnings below on an SRD entry.
 | Character | No placed increase takes a score above 20, or above its feat's `max`; a feat with an Ability Score Improvement's `total` places exactly that many points, among its `from` abilities, and a feat with fixed increases places none | error |
 | Character | With more than one class, each class's primary ability is 13 or more in the final scores (all of them for an "and", one for an "or"), the starting class's included | error |
 | Character | A subclass belongs to its class, and is present exactly when the class's level reaches its first subclass level | error |
-| Character | One feat from the background, its origin feat; at most one from the species, an origin feat; a class's feat from one of the character's classes at a level it has; each feat's `level` at most the character's; only a repeatable feat twice | error |
+| Character | One feat from the background, its origin feat; a species feat for each `feat` grant of its traits, and a class feat for each `feat` grant of a feature at that class level, of a category the grant allows, every grant filled; a class's feat from one of the character's classes at a level it has; each feat's `level` at most the character's, and its `requires` met by the final scores; only a repeatable feat twice | error |
 | Character | Each choice's source is something the character has: its species or a trait of it, its background, a class or subclass, a feature it has at its levels, or a feat | error |
-| Character | The starting class's skills are exactly its count, from its list; the background's tool is picked exactly when it offers a choice, and its skills never are; no skill is picked twice, the background's included; Expertise only in a skill the character is proficient in | error |
-| Character | Each option is on an option list of one of the character's classes | error |
-| Character | Each spell is on the list of one of its casting classes (the spell's `classes`, or the class's `spells`) at a level that class's own slots cast, and the spells fit the classes' cantrips and prepared spells at their levels | error |
+| Character | Each source's skills, Expertise, tools, and languages are exactly the counts it gives ([Grants](#grants)), from its lists: the starting class's skills and `start` grants, a later class's `multiclass` grants, the background's tool when it offers a choice and its two languages, and each trait's, feature's (at each of its levels), and feat's grants; no skill is picked twice, the background's included; Expertise only in a skill the character is proficient in | error |
+| Character | Each option is on an option list of one of the character's classes, and each list holds exactly the count its features' `options` grants give at the class's level | error |
+| Character | Each spell is on an always-prepared list the character has, or on the list of one of its casting classes (the spell's `classes`, or the class's `spells`) at a level that class's own slots cast, or a feat's `spells` grant's list; and the spells fit the classes' cantrips and prepared spells at their levels and the feats' picks | error |
+| Character | A feat's `spells` picks come from the class list its `note` names, one of the grant's `from` | error |
 | Character | No more than three equipped items are attuned, and only an item that requires attunement is | error |
+| Character | Equipped armor without training, or a weapon without proficiency, from the starting class's `training` or a later class's `multiclass` training, when every class has `training` | warning |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).
