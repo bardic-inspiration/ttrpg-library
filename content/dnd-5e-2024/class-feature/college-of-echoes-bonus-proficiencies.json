@@ -10,6 +10,14 @@
       3
     ],
     "text": "You gain proficiency in the Performance skill and one other skill of your choice.",
+    "modifiers": [
+      {
+        "kind": "skill-proficiency",
+        "skills": [
+          "performance"
+        ]
+      }
+    ],
     "grants": [
       {
         "kind": "skills",

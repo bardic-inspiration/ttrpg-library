@@ -647,7 +647,9 @@ hold only inputs:
   of its traits, the background, a class, a subclass, a class feature
   (Scholar's Expertise), or a feat. Each source's picks fill exactly what it
   gives ([Grants](#grants)). The two languages every character picks beside
-  Common at its origin go under the background.
+  Common at its origin go under the background. A group's `option` names
+  the option taken of its source's choice ("Wood Elf"), or of its feat
+  grant's `or` ("Blessed Warrior").
 - **`equipped`:** what the character wears, wields, or attunes to: SRD
   equipment, or any item that can be equipped or attuned to, such as
   armor, weapons, rings, rods, staffs, wands, and wondrous items. An item whose base item could be several pieces of
@@ -669,7 +671,8 @@ up to 15 costing 9), omitted when a score is outside the table.
 
 From the library (`deriveLinked`, with the entries its refs name), each
 with the modifiers of the features, feats, and traits it has
-([Modifiers](#modifiers)) and of its equipped items
+([Modifiers](#modifiers)), and of the options it names of their choices
+([Grants](#grants)), and of its equipped items
 ([Item modifiers](#item-modifiers)):
 
 - the final `scores` (the base, the background's increases, and each
@@ -700,7 +703,8 @@ with the modifiers of the features, feats, and traits it has
 - the proficiencies by source: the starting class's saving throws, the
   skills and Expertise, weapon and armor training as each class prints it
   (the starting class's Core Traits, a later class's "As a Multiclass
-  Character" text), the tools, and the languages.
+  Character" text), the tools, and the languages, each with those an entry
+  gives outright.
 
 A character's page is a **profile** (`character-profile`), not a play
 sheet: what a DM needs to run the character, or a player needs to copy a
@@ -775,7 +779,9 @@ Fields the kinds share:
 | `ac-bonus` | Defense: `"value": 1, "while": ["armored"]` | Armor Class, after the shield |
 | `save-proficiency` | Slippery Mind: `"abilities": ["wis", "cha"]`; `"all"` | Saving throws |
 | `save-bonus` | Aura of Protection: `"value": "cha", "min": 1` | Every saving throw |
-| `skill-proficiency` | `"skills": ["history"]`, with `"expertise": true` for Expertise | Skills and Passive Perception |
+| `skill-proficiency` | Bonus Proficiencies (College of Echoes): `"skills": ["performance"]`, with `"expertise": true` for Expertise | Skills and Passive Perception |
+| `tool-proficiency` | Hearth Blessing: `"tools": [{ "ref": "equipment/cooks-utensils" }]` | Tool proficiencies |
+| `language` | Druidic: `"languages": ["Druidic"]` | Languages |
 | `skill-floor` | Jack of All Trades: `"proficiency": "half"` | Skills without proficiency, and Passive Perception; not Initiative, which isn't a skill check |
 | `initiative-bonus` | Alert: `"value": "proficiency"` | Initiative |
 | `speed-bonus` | Fast Movement: `"value": 10, "while": ["no-heavy-armor"]` | Speed |
@@ -787,7 +793,8 @@ Fields the kinds share:
 | `damage-die` | Martial Arts: `"byLevel": { "1": "1d6", "5": "1d8" }, "weapon": "monk"`, or a fixed `die` | The damage die, when larger than the weapon's |
 
 Bonuses of a kind add together. A choice a feature offers, such as a skill
-of the character's choosing, is a pick in `choices`, not a modifier. An
+of the character's choosing, is a pick in `choices`, not a modifier; a
+proficiency it gives outright is a modifier, not a grant. An
 effect that depends on the situation or a choice made in play, such as
 Great Weapon Fighting, Rage, or Advantage on Initiative, isn't modeled and
 stays text only.
@@ -798,8 +805,12 @@ and Monk Unarmored Defense, Unarmored Movement, Martial Arts (its attack
 ability and die), Fast Movement, Primal Champion, Roving, Draconic
 Resilience, Jack of All Trades, Slippery Mind, Aura of Protection, and the
 custom Swift Foot; the feats Defense, Archery, Alert, and Ability Score
-Improvement; and the species trait Dwarven Toughness. A new entry with such
-an effect carries them too.
+Improvement; the species trait Dwarven Toughness, and Elven Lineage's Wood
+Elf option (Speed +5); and the proficiencies given outright: the custom
+College of Echoes' Bonus Proficiencies (Performance), Pathfinder's Eye
+(Survival, with Expertise), and Hearth Blessing (Cook's Utensils), and
+Druidic's and Thieves' Cant's languages. A new entry with such an effect
+carries them too.
 
 ### Grants
 
@@ -809,24 +820,38 @@ can count a build's feats, picks, options, and spells
 `species-trait`, and `feat` stats take an optional `grants` array, each grant
 with a `kind` from a closed vocabulary (`Grant` in `common.schema.json`). A
 feature's grant is given at each of its levels up to its class's level; a
-trait's once; a feat's each time it's taken.
+trait's once; a feat's each time it's taken. A `choice`, `options`, and a
+`spells` grant read the level themselves, so a feature gives them once.
 
 | Kind | Example | Gives |
 |---|---|---|
-| `feat` | Fighting Style: `"categories": ["fighting-style"]`; Versatile: `["origin"]` | One feat of those categories, with the class and that level, or the species, as its `source` |
+| `feat` | Fighting Style: `"categories": ["fighting-style"]`; Versatile: `["origin"]`; Paladin's Fighting Style adds `"or": { "name": "Blessed Warrior", "grants": [...] }` | One feat of those categories, with the class and that level, or the species, as its `source`; or the `or` option's grants in its place, when the build names it |
 | `skills` | Skillful: `"count": 1`; Keen Senses: `"count": 1, "from": ["insight", "perception", "survival"]`; Skilled: `"count": 3, "withTools": true` | Skill picks under the entry; with `withTools`, skill and tool picks count together |
 | `expertise` | Expertise: `"count": 2`; Scholar: `"count": 1, "from": [...]` | Expertise picks |
 | `tools` | `"count": 1, "from": [{ "ref": "equipment/musical-instrument" }]` | Tool picks |
 | `languages` | `"count": 2` | Language picks |
 | `options` | Eldritch Invocations: `"list": "Eldritch Invocation Options", "column": "Eldritch Invocations"`; Metamagic: `"byLevel": { "2": 2, "10": 4, "17": 6 }` | Options from the class's list of that name: the column's value, or `byLevel`, at the class's level |
-| `spells` | Magic Initiate: `"cantrips": 2, "level1": 1, "from": [...]`; an always-prepared list: `"byLevel": { "3": [...], "5": [...] }` | Spells outside the classes' counts |
+| `spells` | Magic Initiate: `"cantrips": 2, "level1": 1, "from": [...]`; Magical Discoveries: `"count": 2`; Spell Mastery: `"levels": { "1": 1, "2": 1 }`; Mystic Arcanum: `"pickByLevel": { "11": 6, "13": 7, "15": 8, "17": 9 }`; an always-prepared list: `"byLevel": { "3": [...], "5": [...] }` | Spells outside the classes' counts |
+| `spell-lists` | Magical Secrets: `"from": [{ "ref": "class/cleric" }, ...]` | More lists the feature's class prepares its spells from, beside its own; not its cantrips |
+| `choice` | Elven Lineage: `"options": [{ "name": "Drow", "grants": [...] }, ...]` | The grants, and the `modifiers`, of the one option the build names |
 
-A `spells` grant's picks come from the class spell list the feat's `note`
-names ("Cleric" is `class/cleric`), one of `from` when given; they're at
-most its counts, as a class's are. An always-prepared list's spells, from
-each key's level on (the class's level for a feature, the total level for a
-trait), are the character's without a seat in any count, and the build
-lists those it wants on its profile.
+A `spells` grant's picks are at most its counts, as a class's are:
+`cantrips`, `level1` spells, `count` spells that are each a cantrip or of a
+level the feature's class's own slots cast, `levels` by spell level, and
+`pickByLevel`, one spell of the level each key gives from that class level
+on. A feat's come from the class spell list its `note` names ("Cleric" is
+`class/cleric`), one of `from` when given; a feature's or trait's from any
+list in `from`, by default the feature's class's. An always-prepared list's
+spells, from each key's level on (the class's level for a feature, the
+total level for a trait), are the character's without a seat in any count,
+and the build lists those it wants on its profile.
+
+A `choice`, and a `feat` grant's `or`, hold options, each a `name` with
+`grants`, `modifiers`, or both. The build names the one it takes as its
+`option` in a `choices` group under the entry; the option's grants count as
+the entry's, and its modifiers apply as the entry's own. A choice needs an
+option named; a feat grant with an `or` gives its feat unless the `or` is
+named.
 
 A class adds two fields beside its printed text:
 
@@ -873,21 +898,21 @@ In the library, these entries carry grants:
   Keen Senses, and Skilled; the Bard's, Ranger's, and Rogue's Expertise,
   Scholar, and Deft Explorer; and Thieves' Cant.
 - **Options:** Metamagic and Eldritch Invocations.
-- **Spells:** Magic Initiate, and the always-prepared lists that don't
-  depend on a choice: the Life Domain, Oath of Devotion, Draconic, and Fiend
-  spells, Druidic, Paladin's Smite, Faithful Steed, Favored Enemy, Contact
-  Patron, and Words of Creation.
+- **Spells:** Magic Initiate; the always-prepared lists: the Life Domain,
+  Oath of Devotion, Draconic, and Fiend spells, Druidic, Paladin's Smite,
+  Faithful Steed, Favored Enemy, Contact Patron, and Words of Creation; the
+  picks of Magical Discoveries, Mystic Arcanum, Spell Mastery, and Signature
+  Spells; and Magical Secrets' lists.
+- **Alternatives and choices:** the Paladin's Blessed Warrior and the
+  Ranger's Druidic Warrior (`or`, two Cleric or Druid cantrips), and the
+  choices of Circle of the Land Spells (by land), Elven Lineage, Gnomish
+  Lineage, and Fiendish Legacy, each option's spells as always-prepared
+  lists; High Elf's cantrip is a Wizard cantrip pick, since the elf can
+  replace Prestidigitation.
 - **Requires:** Grappler (Strength or Dexterity 13).
 
-The rest stays text. Grants are picks, so a proficiency an entry gives
-outright (College of Echoes' Performance, Druidic's language) isn't one. An
-alternative to a feature's feat (Paladin's Blessed Warrior, Ranger's
-Druidic Warrior), a spell list that depends on a choice (Circle of the Land,
-Elven Lineage, Gnomish Lineage, Fiendish Legacy), and spells the character
-chooses to keep prepared (Magical Discoveries, Mystic Arcanum, Spell
-Mastery, Signature Spells) have no grant form yet
-([`spec/v1.2.0/characters.md`](../spec/v1.2.0/characters.md#open-questions)).
-A build that takes one fails the feat or spell check.
+The rest stays text: a lineage's spellcasting ability, a Drow's Darkvision,
+and a legacy's Resistance aren't derived values a character shows.
 
 ### Item modifiers
 
@@ -1013,9 +1038,10 @@ warnings below on an SRD entry.
 | Character | A subclass belongs to its class, and is present exactly when the class's level reaches its first subclass level | error |
 | Character | One feat from the background, its origin feat; a species feat for each `feat` grant of its traits, and a class feat for each `feat` grant of a feature at that class level, of a category the grant allows, every grant filled; a class's feat from one of the character's classes at a level it has; each feat's `level` at most the character's, and its `requires` met by the final scores; only a repeatable feat twice | error |
 | Character | Each choice's source is something the character has: its species or a trait of it, its background, a class or subclass, a feature it has at its levels, or a feat | error |
-| Character | Each source's skills, Expertise, tools, and languages are exactly the counts it gives ([Grants](#grants)), from its lists: the starting class's skills and `start` grants, a later class's `multiclass` grants, the background's tool when it offers a choice and its two languages, and each trait's, feature's (at each of its levels), and feat's grants; no skill is picked twice, the background's included; Expertise only in a skill the character is proficient in | error |
+| Character | Each entry with a `choice` has one `option` named under it, one of its options; a feat grant's `or` is named only to take it; no other entry has an option, and none has two | error |
+| Character | Each source's skills, Expertise, tools, and languages are exactly the counts it gives ([Grants](#grants)), from its lists: the starting class's skills and `start` grants, a later class's `multiclass` grants, the background's tool when it offers a choice and its two languages, and each trait's, feature's (at each of its levels), and feat's grants; no skill is proficient twice, the background's and those given outright included; Expertise only in a skill the character is proficient in | error |
 | Character | Each option is on an option list of one of the character's classes, and each list holds exactly the count its features' `options` grants give at the class's level | error |
-| Character | Each spell is on an always-prepared list the character has, or on the list of one of its casting classes (the spell's `classes`, or the class's `spells`) at a level that class's own slots cast, or a feat's `spells` grant's list; and the spells fit the classes' cantrips and prepared spells at their levels and the feats' picks | error |
+| Character | Each spell is on an always-prepared list the character has, or on a list of one of its casting classes (the spell's `classes`, or the class's `spells`; for prepared spells, its `spell-lists` too) at a level that class's own slots cast, or on a feat's, feature's, or trait's `spells` grant's list; and the spells fit the classes' cantrips and prepared spells at their levels and those grants' picks | error |
 | Character | A feat's `spells` picks come from the class list its `note` names, one of the grant's `from` | error |
 | Character | No more than three equipped items are attuned, and only an item that requires attunement is | error |
 | Character | Equipped armor without training, or a weapon without proficiency, from the starting class's `training` or a later class's `multiclass` training, when every class has `training` | warning |

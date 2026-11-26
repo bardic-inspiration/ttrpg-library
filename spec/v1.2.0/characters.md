@@ -66,17 +66,6 @@ grants they read ([Grants](../../docs/rulesets.md#grants)).
 - The Library filters characters by class, background, species, and level.
 - The docs describe the type and its derivations.
 
-## Open questions
-
-- **Grant forms the vocabulary lacks (#490):** an alternative to a
-  feature's feat (Paladin's Blessed Warrior, Ranger's Druidic Warrior), a
-  spell list that depends on a choice (Circle of the Land, Elven Lineage,
-  Gnomish Lineage, Fiendish Legacy), spells the character chooses to keep
-  prepared (Magical Discoveries, Mystic Arcanum, Spell Mastery, Signature
-  Spells), and proficiencies an entry gives outright. These stay text
-  ([Grants](../../docs/rulesets.md#grants)), so a build that takes one fails
-  the feat or spell check. Open: their forms.
-
 ## Out of scope
 
 - The character sheet builder, in-app authoring, and user-owned characters

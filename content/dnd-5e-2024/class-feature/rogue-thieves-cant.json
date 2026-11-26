@@ -10,6 +10,14 @@
       1
     ],
     "text": "You picked up various languages in the communities where you plied your roguish talents. You know Thieves' Cant and one other language of your choice, which you choose from the language tables in \"Character Creation.\"",
+    "modifiers": [
+      {
+        "kind": "language",
+        "languages": [
+          "Thieves' Cant"
+        ]
+      }
+    ],
     "grants": [
       {
         "kind": "languages",

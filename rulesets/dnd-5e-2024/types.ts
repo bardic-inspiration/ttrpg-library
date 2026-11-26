@@ -315,6 +315,8 @@ export type Modifier =
   | { kind: 'save-proficiency'; abilities: Ability[] | 'all' }
   | ({ kind: 'save-bonus' } & Valued)
   | { kind: 'skill-proficiency'; skills: string[]; expertise?: true }
+  | { kind: 'tool-proficiency'; tools: Ref[] }
+  | { kind: 'language'; languages: string[] }
   | { kind: 'skill-floor'; proficiency: 'half' }
   | ({ kind: 'initiative-bonus' } & Valued)
   | ({ kind: 'speed-bonus' } & Valued)
@@ -341,13 +343,34 @@ export type FeatCategory = 'origin' | 'general' | 'fighting-style' | 'epic-boon'
 
 /** One thing an entry gives a character to pick or have, as data (common.schema.json `Grant`, docs/rulesets.md#grants). */
 export type Grant =
-  | { kind: 'feat'; categories: FeatCategory[] }
+  | { kind: 'feat'; categories: FeatCategory[]; or?: GrantOption }
   | { kind: 'skills'; count: number; from?: string[]; withTools?: true }
   | { kind: 'expertise'; count: number; from?: string[] }
   | { kind: 'tools'; count: number; from?: Ref[] }
   | { kind: 'languages'; count: number }
   | { kind: 'options'; list: string; column?: string; byLevel?: Record<string, number> }
-  | { kind: 'spells'; cantrips?: number; level1?: number; from?: Ref[]; byLevel?: Record<string, Ref[]> };
+  | {
+      kind: 'spells';
+      cantrips?: number;
+      level1?: number;
+      /** Picks that are each a cantrip or of a level the feature's class's own slots cast. */
+      count?: number;
+      /** Picks by spell level. */
+      levels?: Record<string, number>;
+      /** One pick from each key's class level on, of the spell level it gives. */
+      pickByLevel?: Record<string, number>;
+      from?: Ref[];
+      byLevel?: Record<string, Ref[]>;
+    }
+  | { kind: 'choice'; options: GrantOption[] }
+  | { kind: 'spell-lists'; from: Ref[] };
+
+/** One option of a choice an entry offers, or a feat grant's `or`: what the character has when its `choices` name it. */
+export interface GrantOption {
+  name: string;
+  grants?: Grant[];
+  modifiers?: Modifier[];
+}
 
 /** Weapon proficiencies and armor training as data (common.schema.json `Training`). */
 export interface Training {
@@ -503,7 +526,7 @@ export interface CharacterStats {
   abilities: { base: Record<Ability, number>; background: Increases };
   feats?: { ref: string; note?: string; source: { ref: string; level?: number }; abilities?: Increases }[];
   options?: Ref[];
-  choices?: { source: Ref; skills?: string[]; expertise?: string[]; tools?: Ref[]; languages?: string[] }[];
+  choices?: { source: Ref; skills?: string[]; expertise?: string[]; tools?: Ref[]; languages?: string[]; option?: string }[];
   equipped?: { ref: string; base?: Ref; variant?: string; attuned?: true }[];
   spells?: Ref[];
 }

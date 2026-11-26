@@ -259,9 +259,6 @@ For each character:
    (20 or less in all, no class twice) and its `subclass` exactly when its
    level reaches the class's first subclass level. With more than one
    class, plan the scores so every class's primary ability is 13 or more.
-   Leave out an entry whose picks have no grant form yet (the end of
-   [Grants](../../../docs/rulesets.md#grants)): a build that takes one fails
-   validation.
 3. **Buy the scores.** Write the six `base` scores, each 8 to 15, spending
    the 27 points of point buy (`pointBuy` in `rulesets/<ruleset>/tables.json`).
    Place the background's increases as +2/+1 or +1/+1/+1 among its three
@@ -277,13 +274,15 @@ For each character:
      picks, the background's tool and two languages, and each trait's,
      feature's, and feat's skill, Expertise, tool, and language picks. No
      skill twice, the background's included; Expertise only in a proficient
-     skill.
+     skill. An entry with a `choice` names its `option` (Elven Lineage's
+     "Wood Elf"), and a feature whose feat grant has an `or` names that
+     option only when the build takes it in place of the feat.
    - `options`: each class's option lists, to the count its `options`
      grants give at the class's level.
    - `spells`: each casting class's cantrips and prepared spells, to its
-     counts at its level, from its list at a spell level its slots cast;
-     each feat's `spells` picks; and the always-prepared spells the profile
-     should show.
+     counts at its level, from its lists at a spell level its slots cast;
+     each feat's, feature's, and trait's `spells` picks (a chosen option's
+     included); and the always-prepared spells the profile should show.
    - `equipped`: armor, a shield, and weapons the classes' training covers,
      and items; at most three attuned, each one that requires attunement.
 5. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json`

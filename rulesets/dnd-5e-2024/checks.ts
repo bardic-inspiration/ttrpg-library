@@ -1,7 +1,7 @@
 // Consistency checks a JSON schema can't express (docs/rulesets.md#consistency-checks). They run
 // after the schema stage, so `stats` already has the shape in types.ts.
 
-import { atLevel, deriveCharacter, deriveCharacterLinked, equipmentOf } from './characters.ts';
+import { atLevel, chosenGrants, deriveCharacter, deriveCharacterLinked, equipmentOf, optionOf } from './characters.ts';
 import { deriveClass, levelOf } from './classes.ts';
 import { attackBonus, deriveCreature, saveDc } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
@@ -410,16 +410,27 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
     stats: statsOf<ClassStats>(c.class.ref, 'class'),
     subclassStats: c.subclass ? statsOf<SubclassStats>(c.subclass.ref, 'subclass') : undefined,
   }));
-  const traits = (species?.traits ?? []).map((t) => ({ ref: t.ref, stats: statsOf<SpeciesTraitStats>(t.ref, 'species-trait') }));
+  const traits = (species?.traits ?? []).map((t) => {
+    const trait = statsOf<SpeciesTraitStats>(t.ref, 'species-trait');
+    return { ref: t.ref, stats: trait, raw: trait?.grants ?? [], grants: chosenGrants(trait?.grants ?? [], optionOf(stats, t.ref)) };
+  });
   const feats = stats.feats ?? [];
   const featStats = feats.map((f) => statsOf<FeatStats>(f.ref, 'feat'));
+  /** Each feat's grants as the character takes them, with any option it names. */
+  const featGrants = featStats.map((f, i) => chosenGrants(f?.grants ?? [], optionOf(stats, feats[i]!.ref)));
 
   /** Each class's and subclass's features, with their levels up to the class's level; a feature with none isn't had. */
   const featuresOf = (c: (typeof classes)[number]) =>
     [...(c.stats?.features ?? []), ...(c.subclass && c.subclassStats?.class.ref === c.class.ref ? c.subclassStats.features : [])].flatMap(({ ref }) => {
       const feature = statsOf<ClassFeatureStats>(ref, 'class-feature');
       const levels = (feature?.levels ?? []).map(levelOf).filter((l) => l <= c.level);
-      return feature && levels.length > 0 ? [{ ref, levels, grants: feature.grants ?? [] }] : [];
+      if (!feature || levels.length === 0) return [];
+      // A choice is given once, at the feature's first level; the other grants at each of its levels.
+      const raw = feature.grants ?? [];
+      const option = optionOf(stats, ref);
+      const each = chosenGrants(raw.filter((g) => g.kind !== 'choice'), option);
+      const once = chosenGrants(raw.filter((g) => g.kind === 'choice'), option);
+      return [{ ref, levels, raw, each, once, grants: [...each, ...once] }];
     });
   const classFeatures = classes.map((c) => ({ class: c, features: featuresOf(c) }));
 
@@ -530,11 +541,13 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
   });
   const featSeats = [
     ...traits.flatMap((t) =>
-      (t.stats?.grants ?? []).flatMap((g) => (g.kind === 'feat' ? [{ source: stats.species.ref, level: undefined as number | undefined, from: t.ref, categories: g.categories }] : [])),
+      t.grants.flatMap((g) => (g.kind === 'feat' ? [{ source: stats.species.ref, level: undefined as number | undefined, from: t.ref, categories: g.categories }] : [])),
     ),
     ...classFeatures.flatMap(({ class: c, features }) =>
       features.flatMap((feature) =>
-        feature.grants.flatMap((g) => (g.kind === 'feat' ? feature.levels.map((l) => ({ source: c.class.ref, level: l as number | undefined, from: feature.ref, categories: g.categories })) : [])),
+        [...feature.each.map((g) => ({ g, levels: feature.levels })), ...feature.once.map((g) => ({ g, levels: feature.levels.slice(0, 1) }))].flatMap(({ g, levels }) =>
+          g.kind === 'feat' ? levels.map((l) => ({ source: c.class.ref, level: l as number | undefined, from: feature.ref, categories: g.categories })) : [],
+        ),
       ),
     ),
   ];
@@ -568,6 +581,25 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
   choices.forEach((c, i) => {
     if (!has.has(c.source.ref)) error(`stats.choices[${i}].source`, `${c.source.ref} isn't something the character has`);
   });
+  // Options: one under each entry with a choice, naming one of its options; one under an entry whose
+  // feat grant has an `or` only to take that option; none under any other entry.
+  const offering = new Map<string, Grant[]>([
+    ...traits.map((t) => [t.ref, t.raw] as const),
+    ...classFeatures.flatMap(({ features }) => features.map((f) => [f.ref, f.raw] as const)),
+    ...feats.map((f, i) => [f.ref, featStats[i]?.grants ?? []] as const),
+  ]);
+  choices.forEach((c, i) => {
+    if (c.option === undefined || !has.has(c.source.ref)) return;
+    const raw = offering.get(c.source.ref) ?? [];
+    const names = raw.flatMap((g) => (g.kind === 'choice' ? g.options.map((o) => o.name) : g.kind === 'feat' && g.or ? [g.or.name] : []));
+    if (names.length === 0) error(`stats.choices[${i}].option`, `${c.source.ref} offers no choice`);
+    else if (!names.includes(c.option)) error(`stats.choices[${i}].option`, `"${c.option}" isn't one of ${c.source.ref}'s options: ${names.join(', ')}`);
+    if (choices.findIndex((d) => d.source.ref === c.source.ref && d.option !== undefined) < i) error(`stats.choices[${i}].option`, `${c.source.ref}'s option is named twice`);
+  });
+  for (const [ref, raw] of offering) {
+    const choice = raw.find((g): g is Extract<Grant, { kind: 'choice' }> => g.kind === 'choice');
+    if (choice && optionOf(stats, ref) === undefined) error('stats.choices', `${ref} gives a choice of ${choice.options.map((o) => o.name).join(', ')}; name one as its option`);
+  }
   // What each source gives to pick: the starting class its skills and its `start` grants; a later
   // class its `multiclass` grants; the background its tool, when it offers a choice, and the origin
   // languages; a trait, a feat each time it's taken, and a feature at each of its levels, their grants.
@@ -579,9 +611,14 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
     else offer(c.class.ref, c.stats.grants?.multiclass ?? []);
   });
   if (background) offer(stats.background.ref, [...(background.tool.choose ? [{ kind: 'tools' as const, count: 1, from: [{ ref: background.tool.ref }] }] : []), { kind: 'languages', count: ORIGIN_LANGUAGES }]);
-  for (const t of traits) offer(t.ref, t.stats?.grants ?? []);
-  feats.forEach((f, i) => offer(f.ref, featStats[i]?.grants ?? []));
-  for (const { features } of classFeatures) for (const f of features) for (const _ of f.levels) offer(f.ref, f.grants);
+  for (const t of traits) offer(t.ref, t.grants);
+  feats.forEach((f, i) => offer(f.ref, featGrants[i]!));
+  for (const { features } of classFeatures) {
+    for (const f of features) {
+      for (const _ of f.levels) offer(f.ref, f.each);
+      offer(f.ref, f.once);
+    }
+  }
   const sources = [...new Set([...offers.keys(), ...choices.map((c) => c.source.ref)])].filter((s) => has.has(s));
   for (const source of sources) {
     const grants = offers.get(source) ?? [];
@@ -615,7 +652,8 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
     const tools = listed('tools');
     if (tools && !pooled) for (const tool of chosen.tools) if (!tools.has(tool.ref)) error('stats.choices', `${tool.ref} isn't one of the tools ${source} offers`);
   }
-  const skillPicks = [...(background?.skills ?? []), ...choices.flatMap((c) => c.skills ?? [])];
+  // The background's skills, the picks, and the skills an entry gives outright.
+  const skillPicks = derived ? derived.proficiencies.skills.map((p) => p.skill) : [...(background?.skills ?? []), ...choices.flatMap((c) => c.skills ?? [])];
   skillPicks.forEach((skill, i) => {
     if (skillPicks.indexOf(skill) < i) error('stats.choices', `${skill} is proficient twice; a source that would repeat a proficiency gives another skill`);
   });
@@ -647,30 +685,47 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
   }
 
   // Spells: each the character's from an always-prepared list it has, or seated in a casting class's
-  // cantrips or prepared spells (on its list, at a level its slots cast) or a feat's spell picks.
+  // cantrips or prepared spells (on its lists, at a level its slots cast) or in a feat's, feature's,
+  // or trait's spell picks.
   const prepared = new Set<string>();
   const alwaysPrepared = (grants: Grant[], at: number) => {
     for (const g of grants) if (g.kind === 'spells' && g.byLevel) for (const [key, refs] of Object.entries(g.byLevel)) if (Number(key) <= at) for (const r of refs) prepared.add(r.ref);
   };
   for (const { class: c, features } of classFeatures) for (const f of features) alwaysPrepared(f.grants, c.level);
-  for (const t of traits) alwaysPrepared(t.stats?.grants ?? [], level);
-  feats.forEach((f, i) => alwaysPrepared(featStats[i]?.grants ?? [], f.source.level === undefined ? level : (classLevels.get(f.source.ref) ?? level)));
+  for (const t of traits) alwaysPrepared(t.grants, level);
+  feats.forEach((f, i) => alwaysPrepared(featGrants[i]!, f.source.level === undefined ? level : (classLevels.get(f.source.ref) ?? level)));
   const onList = (spell: SpellStats, spellRef: string, classRef: string) =>
     spell.classes.some((k) => k.ref === classRef) || (statsOf<ClassStats>(classRef, 'class')?.spells ?? []).some((k) => k.ref === spellRef);
-  type SpellSeat = { list: string; cantrip: boolean; maxLevel: number; exact?: number };
+  /** A seat for one spell: from any of `lists`, a cantrip or not (either when unset), up to `maxLevel`, or exactly `exact`. */
+  type SpellSeat = { lists: string[]; cantrip?: boolean; maxLevel: number; exact?: number };
+  /** The seats a `spells` grant's picks give, from `lists`, with `slots` the highest level its class's own slots cast. */
+  const pickSeats = (g: Extract<Grant, { kind: 'spells' }>, lists: string[], slots: number, at: number): SpellSeat[] => [
+    ...Array.from({ length: g.cantrips ?? 0 }, () => ({ lists, cantrip: true, maxLevel: 0 })),
+    ...Array.from({ length: g.level1 ?? 0 }, () => ({ lists, cantrip: false, maxLevel: 1, exact: 1 })),
+    ...Array.from({ length: g.count ?? 0 }, () => ({ lists, maxLevel: slots })),
+    ...Object.entries(g.levels ?? {}).flatMap(([l, n]) => Array.from({ length: n }, () => ({ lists, cantrip: false, maxLevel: Number(l), exact: Number(l) }))),
+    ...Object.entries(g.pickByLevel ?? {}).flatMap(([key, l]) => (Number(key) <= at ? [{ lists, cantrip: false, maxLevel: l, exact: l }] : [])),
+  ];
+  const isPicks = (g: Grant): g is Extract<Grant, { kind: 'spells' }> => g.kind === 'spells' && g.byLevel === undefined;
   const spellSeats: SpellSeat[] = [
-    ...classes.flatMap((c) => {
+    ...classFeatures.flatMap(({ class: c, features }) => {
       const casting = c.stats?.spellcasting;
       if (!casting) return [];
       const maxLevel = maxSpellLevel(c.stats!, c.level, tables);
+      // A feature's `spell-lists` widen the lists its class prepares spells from, not its cantrips.
+      const wider = features.flatMap((f) => f.grants.flatMap((g) => (g.kind === 'spell-lists' ? g.from.map((k) => k.ref) : [])));
       return [
-        ...Array.from({ length: casting.cantrips?.[c.level - 1] ?? 0 }, () => ({ list: c.class.ref, cantrip: true, maxLevel: 0 })),
-        ...Array.from({ length: casting.prepared[c.level - 1]! }, () => ({ list: c.class.ref, cantrip: false, maxLevel })),
+        ...Array.from({ length: casting.cantrips?.[c.level - 1] ?? 0 }, () => ({ lists: [c.class.ref], cantrip: true, maxLevel: 0 })),
+        ...Array.from({ length: casting.prepared[c.level - 1]! }, () => ({ lists: [c.class.ref, ...wider], cantrip: false, maxLevel })),
       ];
     }),
+    ...classFeatures.flatMap(({ class: c, features }) => {
+      const slots = c.stats ? maxSpellLevel(c.stats, c.level, tables) : 0;
+      return features.flatMap((f) => f.grants.filter(isPicks).flatMap((g) => pickSeats(g, (g.from ?? [c.class]).map((k) => k.ref), slots, c.level)));
+    }),
+    ...traits.flatMap((t) => t.grants.filter(isPicks).flatMap((g) => pickSeats(g, (g.from ?? []).map((k) => k.ref), 0, level))),
     ...feats.flatMap((f, i) =>
-      (featStats[i]?.grants ?? []).flatMap((g) => {
-        if (g.kind !== 'spells' || g.byLevel) return [];
+      featGrants[i]!.filter(isPicks).flatMap((g) => {
         const list = f.note === undefined ? undefined : `class/${f.note.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
         if (list === undefined || !statsOf<ClassStats>(list, 'class')) {
           error(`stats.feats[${i}].note`, `${f.ref} gives spells from the class list its note names; ${f.note === undefined ? 'it has no note' : `"${f.note}" names no class`}`);
@@ -680,28 +735,30 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
           error(`stats.feats[${i}].note`, `${f.ref} gives spells from the ${g.from.map((k) => k.ref).join(', ')} list; the note names ${list}`);
           return [];
         }
-        return [
-          ...Array.from({ length: g.cantrips ?? 0 }, () => ({ list, cantrip: true, maxLevel: 0 })),
-          ...Array.from({ length: g.level1 ?? 0 }, () => ({ list, cantrip: false, maxLevel: 1, exact: 1 })),
-        ];
+        const from = f.source.level === undefined ? undefined : classes.find((c) => c.class.ref === f.source.ref);
+        const slots = from?.stats ? maxSpellLevel(from.stats, from.level, tables) : 0;
+        return pickSeats(g, [list], slots, from?.level ?? level);
       }),
     ),
   ];
   const fitsSeat = (spell: SpellStats, ref: string, s: SpellSeat) =>
-    s.cantrip === (spell.level === 0) && spell.level <= s.maxLevel && (s.exact === undefined || spell.level === s.exact) && onList(spell, ref, s.list);
+    (s.cantrip === undefined || s.cantrip === (spell.level === 0)) &&
+    spell.level <= s.maxLevel &&
+    (s.exact === undefined || spell.level === s.exact) &&
+    s.lists.some((list) => onList(spell, ref, list));
   const toSeat = (stats.spells ?? []).flatMap((s, index) => {
     if (prepared.has(s.ref)) return [];
     const spell = statsOf<SpellStats>(s.ref, 'spell');
     if (!spell) return [];
     if (!spellSeats.some((k) => fitsSeat(spell, s.ref, k))) {
-      error(`stats.spells[${index}]`, `${s.ref} (level ${spell.level}) isn't on the spell list of a class whose slots cast it, or one a feat gives it from`);
+      error(`stats.spells[${index}]`, `${s.ref} (level ${spell.level}) isn't on the spell list of a class whose slots cast it, or one a feat, feature, or trait gives it from`);
       return [];
     }
     return [{ index, ref: s.ref, spell }];
   });
   for (const item of seat(toSeat.length, spellSeats.length, (i, k) => fitsSeat(toSeat[i]!.spell, toSeat[i]!.ref, spellSeats[k]!)).unseated) {
     const { index, ref, spell } = toSeat[item]!;
-    error(`stats.spells[${index}]`, `${ref} is past the ${spell.level === 0 ? 'cantrips' : 'prepared spells'} its classes and feats allow at their levels`);
+    error(`stats.spells[${index}]`, `${ref} is past the ${spell.level === 0 ? 'cantrips' : 'prepared spells'} its classes, feats, features, and traits allow at their levels`);
   }
 
   // Attunement: at most three items, and only one that requires it.

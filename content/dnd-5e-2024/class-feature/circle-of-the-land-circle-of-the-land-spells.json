@@ -9,7 +9,158 @@
     "levels": [
       3
     ],
-    "text": "Whenever you finish a {ref:glossary/long-rest}, choose one type of land: arid, polar, temperate, or tropical. Consult the table below that corresponds to the chosen type; you have the spells listed for your Druid level and lower prepared.\n\n**Arid Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/blur}*, *{ref:spell/burning-hands}*, *{ref:spell/fire-bolt}* |\n| 5 | *{ref:spell/fireball}* |\n| 7 | *{ref:spell/blight}* |\n| 9 | *{ref:spell/wall-of-stone}* |\n\n**Polar Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/fog-cloud}*, *{ref:spell/hold-person}*, *{ref:spell/ray-of-frost}* |\n| 5 | *{ref:spell/sleet-storm}* |\n| 7 | *{ref:spell/ice-storm}* |\n| 9 | *{ref:spell/cone-of-cold}* |\n\n**Temperate Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/misty-step}*, *{ref:spell/shocking-grasp}*, *{ref:spell/sleep}* |\n| 5 | *{ref:spell/lightning-bolt}* |\n| 7 | *{ref:spell/freedom-of-movement}* |\n| 9 | *{ref:spell/tree-stride}* |\n\n**Tropical Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/acid-splash}*, *{ref:spell/ray-of-sickness}*, *{ref:spell/web}* |\n| 5 | *{ref:spell/stinking-cloud}* |\n| 7 | *{ref:spell/polymorph}* |\n| 9 | *{ref:spell/insect-plague}* |"
+    "text": "Whenever you finish a {ref:glossary/long-rest}, choose one type of land: arid, polar, temperate, or tropical. Consult the table below that corresponds to the chosen type; you have the spells listed for your Druid level and lower prepared.\n\n**Arid Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/blur}*, *{ref:spell/burning-hands}*, *{ref:spell/fire-bolt}* |\n| 5 | *{ref:spell/fireball}* |\n| 7 | *{ref:spell/blight}* |\n| 9 | *{ref:spell/wall-of-stone}* |\n\n**Polar Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/fog-cloud}*, *{ref:spell/hold-person}*, *{ref:spell/ray-of-frost}* |\n| 5 | *{ref:spell/sleet-storm}* |\n| 7 | *{ref:spell/ice-storm}* |\n| 9 | *{ref:spell/cone-of-cold}* |\n\n**Temperate Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/misty-step}*, *{ref:spell/shocking-grasp}*, *{ref:spell/sleep}* |\n| 5 | *{ref:spell/lightning-bolt}* |\n| 7 | *{ref:spell/freedom-of-movement}* |\n| 9 | *{ref:spell/tree-stride}* |\n\n**Tropical Land**\n\n| Druid Level | Circle Spells |\n|---|---|\n| 3 | *{ref:spell/acid-splash}*, *{ref:spell/ray-of-sickness}*, *{ref:spell/web}* |\n| 5 | *{ref:spell/stinking-cloud}* |\n| 7 | *{ref:spell/polymorph}* |\n| 9 | *{ref:spell/insect-plague}* |",
+    "grants": [
+      {
+        "kind": "choice",
+        "options": [
+          {
+            "name": "Arid Land",
+            "grants": [
+              {
+                "kind": "spells",
+                "byLevel": {
+                  "3": [
+                    {
+                      "ref": "spell/blur"
+                    },
+                    {
+                      "ref": "spell/burning-hands"
+                    },
+                    {
+                      "ref": "spell/fire-bolt"
+                    }
+                  ],
+                  "5": [
+                    {
+                      "ref": "spell/fireball"
+                    }
+                  ],
+                  "7": [
+                    {
+                      "ref": "spell/blight"
+                    }
+                  ],
+                  "9": [
+                    {
+                      "ref": "spell/wall-of-stone"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "Polar Land",
+            "grants": [
+              {
+                "kind": "spells",
+                "byLevel": {
+                  "3": [
+                    {
+                      "ref": "spell/fog-cloud"
+                    },
+                    {
+                      "ref": "spell/hold-person"
+                    },
+                    {
+                      "ref": "spell/ray-of-frost"
+                    }
+                  ],
+                  "5": [
+                    {
+                      "ref": "spell/sleet-storm"
+                    }
+                  ],
+                  "7": [
+                    {
+                      "ref": "spell/ice-storm"
+                    }
+                  ],
+                  "9": [
+                    {
+                      "ref": "spell/cone-of-cold"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "Temperate Land",
+            "grants": [
+              {
+                "kind": "spells",
+                "byLevel": {
+                  "3": [
+                    {
+                      "ref": "spell/misty-step"
+                    },
+                    {
+                      "ref": "spell/shocking-grasp"
+                    },
+                    {
+                      "ref": "spell/sleep"
+                    }
+                  ],
+                  "5": [
+                    {
+                      "ref": "spell/lightning-bolt"
+                    }
+                  ],
+                  "7": [
+                    {
+                      "ref": "spell/freedom-of-movement"
+                    }
+                  ],
+                  "9": [
+                    {
+                      "ref": "spell/tree-stride"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "Tropical Land",
+            "grants": [
+              {
+                "kind": "spells",
+                "byLevel": {
+                  "3": [
+                    {
+                      "ref": "spell/acid-splash"
+                    },
+                    {
+                      "ref": "spell/ray-of-sickness"
+                    },
+                    {
+                      "ref": "spell/web"
+                    }
+                  ],
+                  "5": [
+                    {
+                      "ref": "spell/stinking-cloud"
+                    }
+                  ],
+                  "7": [
+                    {
+                      "ref": "spell/polymorph"
+                    }
+                  ],
+                  "9": [
+                    {
+                      "ref": "spell/insect-plague"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

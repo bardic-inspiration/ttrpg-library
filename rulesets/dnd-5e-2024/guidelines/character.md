@@ -42,7 +42,7 @@ Every character is custom: the SRD prints no pregenerated characters
 - Each feat names its `source`: the background, the species, or the class
   and class level whose feature grants it.
 - Each group of `choices` names the entry that offers it, and holds only
-  its picks.
+  its picks and, for an entry that offers a choice, the `option` taken.
 - Fill every pick a source gives, exactly
   ([Grants](../../../docs/rulesets.md#grants)): each feat a feature or trait
   grants, each skill, Expertise, tool, and language pick, and each option

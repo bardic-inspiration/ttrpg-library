@@ -15,7 +15,21 @@
         "kind": "feat",
         "categories": [
           "fighting-style"
-        ]
+        ],
+        "or": {
+          "name": "Druidic Warrior",
+          "grants": [
+            {
+              "kind": "spells",
+              "cantrips": 2,
+              "from": [
+                {
+                  "ref": "class/druid"
+                }
+              ]
+            }
+          ]
+        }
       }
     ]
   },

@@ -9,7 +9,17 @@
     "levels": [
       3
     ],
-    "text": "You gain proficiency with Cook's Utensils. During a Short Rest, you can prepare a meal for a number of creatures up to your Wisdom modifier plus one; each regains an extra Hit Point Die's worth of hit points when it spends Hit Dice during that rest."
+    "text": "You gain proficiency with Cook's Utensils. During a Short Rest, you can prepare a meal for a number of creatures up to your Wisdom modifier plus one; each regains an extra Hit Point Die's worth of hit points when it spends Hit Dice during that rest.",
+    "modifiers": [
+      {
+        "kind": "tool-proficiency",
+        "tools": [
+          {
+            "ref": "equipment/cooks-utensils"
+          }
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-21",
