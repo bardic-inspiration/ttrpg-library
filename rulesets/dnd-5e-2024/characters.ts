@@ -83,7 +83,7 @@ export function chosenGrants(grants: Grant[], option: string | undefined): Grant
 }
 
 /** The modifiers the option a character names of an entry's choice, or of its feat grant's `or`, adds. */
-export function chosenModifiers(grants: Grant[], option: string | undefined): Modifier[] {
+function chosenModifiers(grants: Grant[], option: string | undefined): Modifier[] {
   if (option === undefined) return [];
   return grants.flatMap((g) => {
     const taken = g.kind === 'choice' ? g.options.find((o) => o.name === option) : g.kind === 'feat' && g.or?.name === option ? g.or : undefined;

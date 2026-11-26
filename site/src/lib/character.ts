@@ -32,7 +32,7 @@ export const identityLines = (s: CharacterStats): PropertyLine[] => [
 const feet = (n: number): string => sayText('character.feet', { feet: String(n) });
 
 /** "30 ft.", then any Climb, Swim, or Fly Speed. */
-export const speedText = (d: Character): string =>
+const speedText = (d: Character): string =>
   [feet(d.speed), ...(['climb', 'swim', 'fly'] as const).flatMap((mode) => (d.speeds?.[mode] === undefined ? [] : [`${name('speedMode', mode)} ${feet(d.speeds[mode]!)}`]))].join(', ');
 
 /** Armor Class, Hit Points, Initiative, Speed, Proficiency Bonus, and Passive Perception. */
