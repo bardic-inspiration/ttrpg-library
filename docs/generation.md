@@ -169,9 +169,7 @@ be generated, and the run asks, as for an unknown type.
   is custom (the SRD prints none, so an SRD request for one is asked
   about), and a preset creates no dependency: each ref names an entry
   already in the library, and a brief that needs one the library lacks is
-  asked about. A build leaves out the entries whose picks have no grant form
-  yet, since it would fail the checks. In the PR's Entries table, its
-  summary field is "—".
+  asked about. In the PR's Entries table, its summary field is "—".
 
 A test checks that the table names every registered type once, that each
 procedure has its section, and that a type routed to the character

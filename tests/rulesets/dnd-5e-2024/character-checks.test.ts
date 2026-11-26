@@ -341,3 +341,133 @@ describe('grants (docs/rulesets.md#grants)', () => {
     }
   });
 });
+
+describe('grant forms: alternatives, choices, spell picks, and outright proficiencies (docs/rulesets.md#grants)', () => {
+  /** Sister Maelis as a Paladin 2, whose Fighting Style grants a feat, or Blessed Warrior instead; Magic Initiate's cantrips filled. */
+  const paladin = (change: (s: Record<string, any>) => void) => (s: Record<string, any>) => {
+    s.classes = [{ class: { ref: 'class/paladin' }, level: 2 }];
+    s.abilities.base = { str: 15, dex: 10, con: 14, int: 8, wis: 10, cha: 13 };
+    s.abilities.background = { wis: 2, cha: 1 };
+    s.choices[0].source.ref = 'class/paladin';
+    s.spells.push(...refs('spell', ['light', 'thaumaturgy']));
+    change(s);
+  };
+  const defense = (s: Record<string, any>) => s.feats.push({ ref: 'feat/defense', source: { ref: 'class/paladin', level: 2 } });
+  const blessed = (s: Record<string, any>) => {
+    s.choices.push({ source: { ref: 'class-feature/paladin-fighting-style' }, option: 'Blessed Warrior' });
+    s.spells.push(...refs('spell', ['guidance', 'sacred-flame']));
+  };
+
+  it("take a feat grant's `or` in place of its feat, with the option's spell picks", () => {
+    expect(messages(issuesOf('sister-maelis', paladin(defense)))).toEqual([]);
+    expect(messages(issuesOf('sister-maelis', paladin(blessed)))).toEqual([]);
+    // Without the option, the feat is owed and the cantrips have no seat.
+    const unnamed = (s: Record<string, any>) => s.spells.push(...refs('spell', ['guidance', 'sacred-flame']));
+    expect(messages(issuesOf('sister-maelis', paladin(unnamed)))).toEqual([
+      expect.stringMatching(/^stats\.feats: class-feature\/paladin-fighting-style grants a feat at class\/paladin level 2 .*take one/),
+      expect.stringMatching(/^stats\.spells\[3\]: .*past the cantrips/),
+      expect.stringMatching(/^stats\.spells\[4\]: .*past the cantrips/),
+    ]);
+    // With the option, the feat has no seat; an option the feature doesn't offer is named.
+    expect(messages(issuesOf('sister-maelis', paladin((s) => (defense(s), blessed(s)))))).toEqual([expect.stringMatching(/^stats\.feats\[2\]: no feature of class\/paladin level 2 grants a fighting-style feat/)]);
+    const wrong = (s: Record<string, any>) => (defense(s), s.choices.push({ source: { ref: 'class-feature/paladin-fighting-style' }, option: 'Druidic Warrior' }));
+    expect(messages(issuesOf('sister-maelis', paladin(wrong)))).toEqual([expect.stringMatching(/^stats\.choices\[3\]\.option: "Druidic Warrior" isn't one of class-feature\/paladin-fighting-style's options: Blessed Warrior/)]);
+    // Blessed Warrior's cantrips are Cleric cantrips.
+    const off = (s: Record<string, any>) => (blessed(s), (s.spells[4] = { ref: 'spell/fire-bolt' }));
+    expect(messages(issuesOf('sister-maelis', paladin(off)))).toEqual([expect.stringMatching(/^stats\.spells\[4\]: spell\/fire-bolt .*isn't on the spell list/)]);
+  });
+
+  /** Sister Maelis as an Elf, with Keen Senses' skill and, unless `option` is undefined, a lineage. */
+  const elf = (option: string | undefined, spells: string[] = []) => (s: Record<string, any>) => {
+    s.species = { ref: 'species/elf' };
+    s.feats = s.feats.filter((f: { source: { ref: string } }) => f.source.ref !== 'species/human');
+    s.choices[1] = { source: { ref: 'species-trait/elf-keen-senses' }, skills: ['perception'] };
+    if (option !== undefined) s.choices.push({ source: { ref: 'species-trait/elf-elven-lineage' }, option });
+    s.spells.push(...refs('spell', spells));
+  };
+
+  it("take one option of a choice, with its always-prepared lists, picks, and modifiers", () => {
+    expect(messages(issuesOf('sister-maelis', elf(undefined)))).toEqual([expect.stringMatching(/^stats\.choices: species-trait\/elf-elven-lineage gives a choice of Drow, High Elf, Wood Elf; name one as its option/)]);
+    expect(messages(issuesOf('sister-maelis', elf('Sea Elf')))).toEqual([expect.stringMatching(/^stats\.choices\[3\]\.option: "Sea Elf" isn't one of/)]);
+    // Wood Elf at level 3: Druidcraft and Longstrider, outside the counts; Pass without Trace waits for level 5.
+    expect(messages(issuesOf('sister-maelis', elf('Wood Elf', ['druidcraft', 'longstrider'])))).toEqual([]);
+    expect(messages(issuesOf('sister-maelis', elf('Wood Elf', ['pass-without-trace'])))).toEqual([expect.stringMatching(/^stats\.spells\[1\]: spell\/pass-without-trace .*isn't on the spell list/)]);
+    // Another lineage's spells aren't the character's.
+    expect(messages(issuesOf('sister-maelis', elf('Drow', ['druidcraft'])))).toEqual([expect.stringMatching(/^stats\.spells\[1\]: spell\/druidcraft .*isn't on the spell list/)]);
+    // High Elf: one Wizard cantrip of the character's choosing.
+    expect(messages(issuesOf('sister-maelis', elf('High Elf', ['fire-bolt', 'detect-magic'])))).toEqual([]);
+    expect(messages(issuesOf('sister-maelis', elf('High Elf', ['fire-bolt', 'ray-of-frost'])))).toEqual([expect.stringMatching(/^stats\.spells\[2\]: .*past the cantrips/)]);
+    // An option only where the entry offers a choice.
+    expect(messages(issuesOf('sister-maelis', (s) => s.choices.push({ source: { ref: 'class/cleric' }, option: 'Drow' })))).toEqual([expect.stringMatching(/^stats\.choices\[3\]\.option: class\/cleric offers no choice/)]);
+    expect(messages(issuesOf('sister-maelis', (s) => (elf('Drow')(s), s.choices.push({ source: { ref: 'species-trait/elf-elven-lineage' }, option: 'Drow' }))))).toEqual([
+      expect.stringMatching(/^stats\.choices\[4\]\.option: species-trait\/elf-elven-lineage's option is named twice/),
+    ]);
+  });
+
+  /** Sister Maelis as a Bard (College of Lore) at `level`, with its picks and Ability Score Improvements, unarmored. */
+  const bard = (level: number, spells: string[]) => (s: Record<string, any>) => {
+    s.classes = [{ class: { ref: 'class/bard' }, level, subclass: { ref: 'subclass/college-of-lore' } }];
+    s.abilities.base = { str: 8, dex: 14, con: 13, int: 10, wis: 10, cha: 15 };
+    s.abilities.background = { wis: 1, cha: 2 };
+    s.choices[0] = { source: { ref: 'class/bard' }, skills: ['medicine', 'persuasion', 'deception'], tools: [{ ref: 'equipment/musical-instrument', note: 'lute' }, { ref: 'equipment/musical-instrument', note: 'flute' }, { ref: 'equipment/musical-instrument', note: 'drum' }] };
+    s.choices.push({ source: { ref: 'class-feature/bard-expertise' }, expertise: ['medicine', 'persuasion', 'deception', 'perception'] }, { source: { ref: 'class-feature/college-of-lore-bonus-proficiencies' }, skills: ['arcana', 'history', 'nature'] });
+    s.feats.push({ ref: 'feat/ability-score-improvement', source: { ref: 'class/bard', level: 4 }, abilities: { cha: 2 } }, { ref: 'feat/ability-score-improvement', source: { ref: 'class/bard', level: 8 }, abilities: { cha: 1, con: 1 } });
+    delete s.equipped;
+    s.spells = refs('spell', spells);
+  };
+
+  it("seat a feature's picks from its lists, each a cantrip or a spell its class's slots cast, and widen a class's lists", () => {
+    // Magical Discoveries: two spells from the Cleric, Druid, or Wizard list, a cantrip or of a level Bard 9 casts.
+    expect(messages(issuesOf('sister-maelis', bard(9, ['fire-bolt', 'cone-of-cold'])))).toEqual([]);
+    expect(messages(issuesOf('sister-maelis', bard(9, ['fire-bolt', 'cone-of-cold', 'fireball'])))).toEqual([expect.stringMatching(/^stats\.spells\[2\]: spell\/fireball is past the prepared spells/)]);
+    expect(messages(issuesOf('sister-maelis', bard(9, ['chain-lightning'])))).toEqual([expect.stringMatching(/^stats\.spells\[0\]: spell\/chain-lightning \(level 6\) isn't on the spell list/)]);
+    // Magical Secrets at Bard 10: the Bard prepares spells from those lists too, but not cantrips.
+    expect(messages(issuesOf('sister-maelis', bard(10, ['fire-bolt', 'cone-of-cold', 'fireball', 'lightning-bolt'])))).toEqual([]);
+    // Magical Discoveries seats two Wizard cantrips; the Bard's own cantrips stay Bard cantrips.
+    expect(messages(issuesOf('sister-maelis', bard(10, ['fire-bolt', 'ray-of-frost', 'acid-splash'])))).toEqual([expect.stringMatching(/^stats\.spells\[2\]: spell\/acid-splash is past the cantrips/)]);
+    // Picks by spell level (Spell Mastery's form), on Magical Discoveries in place of its own: exactly a level 1 and a level 2 spell.
+    const entry = stats.get('class-feature/college-of-lore-magical-discoveries')!;
+    stats.set('class-feature/college-of-lore-magical-discoveries', { ...entry, stats: { ...(entry.stats as object), grants: [{ kind: 'spells', levels: { '1': 1, '2': 1 }, from: [{ ref: 'class/wizard' }] }] } });
+    try {
+      expect(messages(issuesOf('sister-maelis', bard(9, ['shield', 'blur'])))).toEqual([]);
+      expect(messages(issuesOf('sister-maelis', bard(9, ['shield', 'burning-hands'])))).toEqual([expect.stringMatching(/^stats\.spells\[1\]: spell\/burning-hands is past the prepared spells/)]);
+    } finally {
+      stats.set('class-feature/college-of-lore-magical-discoveries', entry);
+    }
+  });
+
+  it("give a feature's choice once, with the option's lists at the class's level", () => {
+    const druid = (option: string | undefined, spells: string[]) => (s: Record<string, any>) => {
+      s.classes = [{ class: { ref: 'class/druid' }, level: 3, subclass: { ref: 'subclass/circle-of-the-land' } }];
+      s.choices[0] = { source: { ref: 'class/druid' }, skills: ['medicine', 'nature'] };
+      if (option !== undefined) s.choices.push({ source: { ref: 'class-feature/circle-of-the-land-circle-of-the-land-spells' }, option });
+      delete s.equipped;
+      s.spells = refs('spell', spells);
+    };
+    expect(messages(issuesOf('sister-maelis', druid('Arid Land', ['blur', 'burning-hands', 'fire-bolt'])))).toEqual([]);
+    expect(messages(issuesOf('sister-maelis', druid('Polar Land', ['blur'])))).toEqual([expect.stringMatching(/^stats\.spells\[0\]: spell\/blur .*isn't on the spell list/)]);
+    expect(messages(issuesOf('sister-maelis', druid(undefined, [])))).toEqual([expect.stringMatching(/circle-of-the-land-circle-of-the-land-spells gives a choice of Arid Land, Polar Land, Temperate Land, Tropical Land; name one/)]);
+  });
+
+  /** A Warlock 13 (Fiend Patron), with its invocations, skills, and Ability Score Improvements, unarmored. */
+  const warlock = (spells: string[]) => (s: Record<string, any>) => {
+    s.classes = [{ class: { ref: 'class/warlock' }, level: 13, subclass: { ref: 'subclass/fiend-patron' } }];
+    s.abilities.base = { str: 8, dex: 14, con: 14, int: 10, wis: 10, cha: 15 };
+    s.abilities.background = { wis: 2, cha: 1 };
+    s.choices[0] = { source: { ref: 'class/warlock' }, skills: ['arcana', 'deception'] };
+    s.feats.push(
+      ...[4, 8, 12].map((level) => ({ ref: 'feat/ability-score-improvement', source: { ref: 'class/warlock', level }, abilities: { dex: 1, con: 1 } })),
+    );
+    s.options = refs('class-option', ['warlock-agonizing-blast', 'warlock-armor-of-shadows', 'warlock-devils-sight', 'warlock-eldritch-mind', 'warlock-eldritch-spear', 'warlock-fiendish-vigor', 'warlock-gift-of-the-depths', 'warlock-ascendant-step']);
+    delete s.equipped;
+    s.spells = refs('spell', spells);
+  };
+
+  it('seat picks by spell level from the class level each is gained at', () => {
+    const issues = (spells: string[]) => messages(issuesOf('sister-maelis', warlock(spells)));
+    // Mystic Arcanum at Warlock 13: one level 6 and one level 7 Warlock spell; no level 8 one yet.
+    expect(issues(['true-seeing', 'plane-shift'])).toEqual([]);
+    expect(issues(['true-seeing', 'eyebite'])).toEqual([expect.stringMatching(/^stats\.spells\[1\]: .*past the prepared spells/)]);
+    expect(issues(['true-seeing', 'plane-shift', 'demiplane'])).toEqual([expect.stringMatching(/^stats\.spells\[2\]: spell\/demiplane \(level 8\) isn't on the spell list/)]);
+  });
+});

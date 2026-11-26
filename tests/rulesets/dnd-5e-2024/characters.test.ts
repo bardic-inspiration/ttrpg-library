@@ -446,6 +446,44 @@ describe('grant schema', { timeout: VALIDATION_TIMEOUT }, () => {
     expect(bad.errors.some((m) => m.includes('bard.json') && m.includes('grants'))).toBe(true);
     expect(bad.errors.some((m) => m.includes('cleric.json') && m.includes('training'))).toBe(true);
   });
+
+  it("rejects a choice of one option, an option that gives nothing, a spell pick above level 9, and a modifier's missing proficiency", async () => {
+    const set = (entries: Record<string, any>[], key: string, fields: Record<string, unknown>) => Object.assign(entries.find((e) => `${e.type}/${e.id}` === key)!.stats, fields);
+    const bad = await validate((entries) => {
+      set(entries, 'species-trait/elf-elven-lineage', { grants: [{ kind: 'choice', options: [{ name: 'Drow', grants: [{ kind: 'languages', count: 1 }] }] }] });
+      set(entries, 'species-trait/gnome-gnomish-lineage', { grants: [{ kind: 'choice', options: [{ name: 'Forest Gnome' }, { name: 'Rock Gnome' }] }] });
+      set(entries, 'class-feature/warlock-mystic-arcanum', { grants: [{ kind: 'spells', pickByLevel: { '11': 10 } }] });
+      set(entries, 'class-feature/druid-druidic', { modifiers: [{ kind: 'language' }] });
+    });
+    for (const file of ['elf-elven-lineage.json', 'gnome-gnomish-lineage.json', 'warlock-mystic-arcanum.json']) {
+      expect(bad.errors.some((m) => m.includes(file) && m.includes('grants'))).toBe(true);
+    }
+    expect(bad.errors.some((m) => m.includes('druid-druidic.json') && m.includes('modifiers'))).toBe(true);
+  });
+});
+
+describe('grant forms in derivations (docs/rulesets.md#grants)', () => {
+  it("apply a chosen option's modifiers: a Wood Elf's Speed is 35", async () => {
+    const elf = (option: string) => (s: Record<string, any>) => {
+      s.species = { ref: 'species/elf' };
+      s.choices.push({ source: { ref: 'species-trait/elf-elven-lineage' }, option });
+    };
+    expect((await derivedOf('sister-maelis', elf('Wood Elf'))).speed).toBe(35);
+    expect((await derivedOf('sister-maelis', elf('Drow'))).speed).toBe(30);
+  });
+
+  it('give the skills, tools, and languages an entry gives outright', async () => {
+    const hearth = await derivedOf('sister-maelis', (s) => (s.classes[0].subclass = { ref: 'subclass/hearth-domain' }));
+    expect(hearth.proficiencies.tools).toContainEqual({ source: 'class-feature/hearth-domain-hearth-blessing', ref: 'equipment/cooks-utensils' });
+    const rogue = await derivedOf('sister-maelis', (s) => (s.classes = [{ class: { ref: 'class/rogue' }, level: 1 }]));
+    expect(rogue.proficiencies.languages).toContainEqual({ source: 'class-feature/rogue-thieves-cant', language: "Thieves' Cant" });
+    const druid = await derivedOf('sister-maelis', (s) => (s.classes = [{ class: { ref: 'class/druid' }, level: 1 }]));
+    expect(druid.proficiencies.languages).toContainEqual({ source: 'class-feature/druid-druidic', language: 'Druidic' });
+    // Pathfinder's Eye: proficiency in Survival, with Expertise.
+    const ranger = await derivedOf('sister-maelis', (s) => (s.classes = [{ class: { ref: 'class/ranger' }, level: 3, subclass: { ref: 'subclass/trailblazer' } }]));
+    expect(ranger.skills.survival!.proficiency).toBe('expertise');
+    expect(ranger.proficiencies.skills).toContainEqual({ skill: 'survival', source: 'class-feature/trailblazer-pathfinders-eye' });
+  });
 });
 
 describe('item modifiers (docs/rulesets.md#item-modifiers)', () => {

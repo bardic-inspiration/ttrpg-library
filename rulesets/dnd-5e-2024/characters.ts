@@ -17,6 +17,7 @@ import type {
   DerivedCharacter,
   EquipmentStats,
   FeatStats,
+  Grant,
   ItemModifier,
   ItemStats,
   LinkedCharacter,
@@ -65,6 +66,30 @@ export function equipmentOf(library: LinkedLibrary, equipped: { ref: string; bas
 
 const hasProperty = (stats: EquipmentStats, property: string): boolean =>
   (stats.weapon?.properties ?? []).some((p) => p.ref === `weapon-property/${property}`);
+
+/** The option a character's `choices` name under an entry, if any (docs/rulesets.md#grants). */
+export const optionOf = (stats: CharacterStats, ref: string): string | undefined => (stats.choices ?? []).find((c) => c.source.ref === ref && c.option !== undefined)?.option;
+
+/**
+ * An entry's grants as a character takes them (docs/rulesets.md#grants): a choice's named option's
+ * grants in its place, and a feat grant's `or` in place of the feat when the option names it.
+ */
+export function chosenGrants(grants: Grant[], option: string | undefined): Grant[] {
+  return grants.flatMap((g) => {
+    if (g.kind === 'choice') return g.options.find((o) => o.name === option)?.grants ?? [];
+    if (g.kind === 'feat' && g.or) return g.or.name === option ? (g.or.grants ?? []) : [{ kind: 'feat', categories: g.categories }];
+    return [g];
+  });
+}
+
+/** The modifiers the option a character names of an entry's choice, or of its feat grant's `or`, adds. */
+export function chosenModifiers(grants: Grant[], option: string | undefined): Modifier[] {
+  if (option === undefined) return [];
+  return grants.flatMap((g) => {
+    const taken = g.kind === 'choice' ? g.options.find((o) => o.name === option) : g.kind === 'feat' && g.or?.name === option ? g.or : undefined;
+    return taken?.modifiers ?? [];
+  });
+}
 
 /** One modifier, with the entry that declares it and the level of the class it belongs to, if any. */
 interface Collected {
@@ -153,12 +178,17 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
   const feats = (stats.feats ?? []).map((f) => ({ ...f, stats: need<FeatStats>(library, f.ref).stats }));
   const collected: Collected[] = [
     ...features.flatMap((group) =>
-      group.features.flatMap(({ ref }) =>
-        (need<ClassFeatureStats | SpeciesTraitStats>(library, ref).stats.modifiers ?? []).map((modifier) => ({ modifier, source: ref, classLevel: group.classLevel })),
-      ),
+      group.features.flatMap(({ ref }) => {
+        const entry = need<ClassFeatureStats | SpeciesTraitStats>(library, ref).stats;
+        return [...(entry.modifiers ?? []), ...chosenModifiers(entry.grants ?? [], optionOf(stats, ref))].map((modifier) => ({ modifier, source: ref, classLevel: group.classLevel }));
+      }),
     ),
     ...feats.flatMap((f) =>
-      (f.stats.modifiers ?? []).map((modifier) => ({ modifier, source: f.ref, classLevel: f.source.level === undefined ? undefined : levelOfClass.get(f.source.ref) })),
+      [...(f.stats.modifiers ?? []), ...chosenModifiers(f.stats.grants ?? [], optionOf(stats, f.ref))].map((modifier) => ({
+        modifier,
+        source: f.ref,
+        classLevel: f.source.level === undefined ? undefined : levelOfClass.get(f.source.ref),
+      })),
     ),
   ];
   const ofKind = <K extends Modifier['kind']>(kind: K) => collected.filter((c): c is Collected & { modifier: Extract<Modifier, { kind: K }> } => c.modifier.kind === kind);
@@ -352,8 +382,12 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     tools: [
       ...backgroundTool,
       ...chosen.flatMap((c) => (c.tools ?? []).map((t) => ({ source: c.source.ref, ref: t.ref, ...(t.note && { note: t.note }) }))),
+      ...ofKind('tool-proficiency').flatMap((c) => c.modifier.tools.map((t) => ({ source: c.source, ref: t.ref, ...(t.note && { note: t.note }) }))),
     ],
-    languages: chosen.flatMap((c) => (c.languages ?? []).map((language) => ({ source: c.source.ref, language }))),
+    languages: [
+      ...chosen.flatMap((c) => (c.languages ?? []).map((language) => ({ source: c.source.ref, language }))),
+      ...ofKind('language').flatMap((c) => c.modifier.languages.map((language) => ({ source: c.source, language }))),
+    ],
   };
 
   return {
