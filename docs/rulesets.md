@@ -662,7 +662,9 @@ A character derives (`characters.ts`), from its own stats: its total
 `pointBuy` (SRD 5.2 "Character Creation": 27 points, a score of 8 costing 0
 up to 15 costing 9), omitted when a score is outside the table.
 
-From the library (`deriveLinked`, with the entries its refs name):
+From the library (`deriveLinked`, with the entries its refs name), each
+with the modifiers of the features, feats, and traits it has
+([Modifiers](#modifiers)):
 
 - the final `scores` (the base, the background's increases, and each
   feat's) and their modifiers;
@@ -693,6 +695,56 @@ From the library (`deriveLinked`, with the entries its refs name):
   Character" text), the tools, and the languages.
 
 Characters come only by request; they have no gap buckets.
+
+### Modifiers
+
+A feature that changes a character's derived value declares the effect as
+data, so a character needs no `adjust` for it. `class-feature`, `feat`, and
+`species-trait` stats take an optional `modifiers` array, each modifier with
+a `kind` from a closed vocabulary (`Modifier` in `common.schema.json`, which
+describes each kind's fields). A character applies the modifiers of the
+class and subclass features up to each class's level, its feats, and its
+species' traits.
+
+Fields the kinds share:
+
+- **`value`:** a number, `"proficiency"` for the proficiency bonus, or an
+  ability key for that ability's modifier, with an optional `min`.
+- **`byLevel`:** in place of `value`, a value from the level each key names
+  (`{ "2": 10, "6": 15 }`), read at the level of the feature's class: the
+  class whose features, or whose subclass's, list it, or the class a feat
+  came from. A species trait's, or a feat's from the background or species,
+  reads the total level.
+- **`while`:** conditions that must all hold: `unarmored` (no armor
+  equipped), `armored`, `no-heavy-armor`, and `no-shield`.
+- **`weapon`:** the equipped weapons it applies to: `ranged`, `melee`,
+  `one-handed-melee` (a melee weapon without Two-Handed, wielded as the only
+  weapon; a Versatile weapon's two-handed damage doesn't take it), or `monk`
+  (Simple Melee weapons, and Martial Melee weapons with Light).
+
+| Kind | Example | Derives |
+|---|---|---|
+| `ability-bonus` | Primal Champion: `"abilities": ["str", "con"], "value": 4, "max": 25`; an Ability Score Improvement's `"total": 2, "max": 20`, which caps the increases the character's feat places | Final scores, each up to `max` |
+| `ac-formula` | Unarmored Defense: `"base": 10, "abilities": ["dex", "con"], "while": ["unarmored"]` | Armor Class: the highest formula that applies, the equipped armor's or 10 + Dexterity included |
+| `ac-bonus` | Defense: `"value": 1, "while": ["armored"]` | Armor Class, after the shield |
+| `save-proficiency` | Slippery Mind: `"abilities": ["wis", "cha"]`; `"all"` | Saving throws |
+| `save-bonus` | Aura of Protection: `"value": "cha", "min": 1` | Every saving throw |
+| `skill-proficiency` | `"skills": ["history"]`, with `"expertise": true` for Expertise | Skills and Passive Perception |
+| `skill-floor` | Jack of All Trades: `"proficiency": "half"` | Skills without proficiency, and Passive Perception; not Initiative, which isn't a skill check |
+| `initiative-bonus` | Alert: `"value": "proficiency"` | Initiative |
+| `speed-bonus` | Fast Movement: `"value": 10, "while": ["no-heavy-armor"]` | Speed |
+| `speed-mode` | Roving: `"modes": ["climb", "swim"]` | Other speeds, each equal to the Speed |
+| `hp-per-level` | Dwarven Toughness: `"value": 1`; `"per": "class"` for each level of its class | Hit Points |
+| `attack-ability` | Martial Arts: `"abilities": ["dex"], "weapon": "monk"` | The attack's ability, when higher |
+| `attack-bonus` | Archery: `"value": 2, "weapon": "ranged"` | Attack bonus |
+| `damage-bonus` | Dueling: `"value": 2, "weapon": "one-handed-melee"` | Damage |
+| `damage-die` | Martial Arts: `"byLevel": { "1": "1d6", "5": "1d8" }, "weapon": "monk"`, or a fixed `die` | The damage die, when larger than the weapon's |
+
+Bonuses of a kind add together. A choice a feature offers, such as a skill
+of the character's choosing, is a pick in `choices`, not a modifier. An
+effect that depends on the situation or a choice made in play, such as
+Great Weapon Fighting, Rage, or Advantage on Initiative, isn't modeled and
+stays text only.
 
 ### Starting equipment
 

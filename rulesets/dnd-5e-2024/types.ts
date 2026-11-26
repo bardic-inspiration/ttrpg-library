@@ -293,6 +293,37 @@ export interface DerivedEquipment {
   costGp?: number;
 }
 
+/** A modifier's value: a number, the proficiency bonus, or an ability's modifier (docs/rulesets.md#modifiers). */
+export type ModifierValue = number | 'proficiency' | Ability;
+export type ModifierWhile = 'unarmored' | 'armored' | 'no-heavy-armor' | 'no-shield';
+export type ModifierWeapon = 'ranged' | 'melee' | 'one-handed-melee' | 'monk';
+
+/** A value, or one by the level of the feature's class. */
+interface Valued {
+  value?: ModifierValue;
+  min?: number;
+  byLevel?: Record<string, number>;
+  while?: ModifierWhile[];
+}
+
+/** One effect on a character's derived values, as data (common.schema.json `Modifier`). */
+export type Modifier =
+  | { kind: 'ability-bonus'; abilities?: Ability[]; value?: number; total?: number; from?: Ability[]; max: number }
+  | { kind: 'ac-formula'; base: number; abilities?: Ability[]; while?: ModifierWhile[] }
+  | ({ kind: 'ac-bonus' } & Valued)
+  | { kind: 'save-proficiency'; abilities: Ability[] | 'all' }
+  | ({ kind: 'save-bonus' } & Valued)
+  | { kind: 'skill-proficiency'; skills: string[]; expertise?: true }
+  | { kind: 'skill-floor'; proficiency: 'half' }
+  | ({ kind: 'initiative-bonus' } & Valued)
+  | ({ kind: 'speed-bonus' } & Valued)
+  | { kind: 'speed-mode'; modes: ('climb' | 'swim' | 'fly')[]; while?: ModifierWhile[] }
+  | { kind: 'hp-per-level'; value: ModifierValue; min?: number; per?: 'character' | 'class'; while?: ModifierWhile[] }
+  | { kind: 'attack-ability'; abilities: Ability[]; weapon: ModifierWeapon; while?: ModifierWhile[] }
+  | ({ kind: 'attack-bonus'; weapon: ModifierWeapon } & Valued)
+  | ({ kind: 'damage-bonus'; weapon: ModifierWeapon } & Valued)
+  | { kind: 'damage-die'; die?: string; byLevel?: Record<string, string>; weapon: ModifierWeapon; while?: ModifierWhile[] };
+
 export type FeatCategory = 'origin' | 'general' | 'fighting-style' | 'epic-boon';
 
 /** feat.schema.json (docs/rulesets.md#feats): titled `benefits` or one `text`. */
@@ -303,6 +334,7 @@ export interface FeatStats {
   benefits?: { name: string; text: string }[];
   text?: string;
   repeatable?: string;
+  modifiers?: Modifier[];
 }
 
 export interface DerivedFeat {
@@ -345,6 +377,7 @@ export interface DerivedSpecies {
 /** species-trait.schema.json: one special trait. */
 export interface SpeciesTraitStats {
   text: string;
+  modifiers?: Modifier[];
 }
 
 /** class.schema.json (docs/rulesets.md#classes): a page type whose features and options are components. */
@@ -402,6 +435,7 @@ export type FeatureLevel = number | { level: number; note: string };
 export interface ClassFeatureStats {
   levels: FeatureLevel[];
   text: string;
+  modifiers?: Modifier[];
 }
 
 /** class-option.schema.json: one option of a class's option list. */
@@ -477,6 +511,7 @@ export interface CharacterSpellcasting {
 export interface CharacterProficiencies {
   /** The starting class's saving throws. */
   saves: { source: string; abilities: Ability[] };
+  /** Each skill's proficiency, with the entry it comes from: a pick's source, or a modifier's entry. */
   skills: { skill: string; source: string }[];
   expertise: { skill: string; source: string }[];
   /**
@@ -499,6 +534,8 @@ export interface LinkedCharacter {
   hp: number;
   initiative: number;
   speed: number;
+  /** Climb, Swim, and Fly Speeds a modifier gives, each equal to the Speed. */
+  speeds?: Partial<Record<'climb' | 'swim' | 'fly', number>>;
   /** Armor Class, with the equipped armor and shield it reads. */
   ac: { value: number; armor?: string; shield?: string };
   attacks: CharacterAttack[];

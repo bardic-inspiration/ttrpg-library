@@ -12,6 +12,10 @@
     "text": {
       "description": "The trait as printed. A choice among options is titled paragraphs, and a table is a table, with tokens for its spells.",
       "$ref": "common.schema.json#/$defs/Text"
+    },
+    "modifiers": {
+      "description": "Its effects on a character's derived values (docs/rulesets.md#modifiers).",
+      "$ref": "common.schema.json#/$defs/Modifiers"
     }
   }
 }

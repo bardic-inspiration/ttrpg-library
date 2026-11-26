@@ -228,3 +228,174 @@ describe('the single-class case: Cleric 3 (Life Domain), a human acolyte', async
     expect(nimble.ac.value).toBe(14 + 2 + 2);
   });
 });
+
+/**
+ * A character's derived values with `modifiers` given to library entries by key, as fixtures: the
+ * library's own entries carry none until they're migrated. `character` is a fixture's id, or a
+ * character's stats, added as `character/probe`.
+ */
+const withModifiers = async (character: string | Record<string, any>, modifiers: Record<string, unknown[]>, change: (stats: Record<string, any>) => void = () => {}) => {
+  const entries = await all();
+  for (const [key, list] of Object.entries(modifiers)) {
+    const entry = entries.find((e) => `${e.type}/${e.id}` === key);
+    if (!entry) throw new Error(`no ${key}`);
+    (entry.stats as Record<string, any>).modifiers = list;
+  }
+  const id = typeof character === 'string' ? character : 'probe';
+  if (typeof character !== 'string') {
+    const [template] = (await dir(join(FIXTURES, 'character'))) as Record<string, any>[];
+    entries.push({ ...template!, id, name: 'Probe', stats: structuredClone(character) } as Entry & Record<string, any>);
+  }
+  change(entries.find((e) => e.type === 'character' && e.id === id)!.stats as Record<string, any>);
+  const loaded = loadLibrary(entries, [rules]).find(({ entry }) => entry.type === 'character' && entry.id === id)!;
+  return loaded.derived as unknown as DerivedCharacter & LinkedCharacter;
+};
+
+const monk = (level: number, equipped: { ref: string }[] = []) => ({
+  species: { ref: 'species/human' },
+  background: { ref: 'background/acolyte' },
+  classes: [{ class: { ref: 'class/monk' }, level, ...(level >= 3 && { subclass: { ref: 'subclass/warrior-of-the-open-hand' } }) }],
+  abilities: { base: { str: 10, dex: 15, con: 13, int: 8, wis: 15, cha: 8 }, background: { wis: 2, int: 1 } },
+  ...(equipped.length > 0 && { equipped }),
+});
+const MONK = {
+  'class-feature/monk-unarmored-defense': [{ kind: 'ac-formula', base: 10, abilities: ['dex', 'wis'], while: ['unarmored', 'no-shield'] }],
+  'class-feature/monk-unarmored-movement': [{ kind: 'speed-bonus', byLevel: { '2': 10, '6': 15 }, while: ['unarmored', 'no-shield'] }],
+  'class-feature/monk-martial-arts': [
+    { kind: 'attack-ability', abilities: ['dex'], weapon: 'monk', while: ['unarmored', 'no-shield'] },
+    { kind: 'damage-die', byLevel: { '1': '1d6', '5': '1d8' }, weapon: 'monk', while: ['unarmored', 'no-shield'] },
+  ],
+};
+
+describe('modifiers (docs/rulesets.md#modifiers)', () => {
+  it('give the multiclass case its Defense and Dwarven Toughness, with no adjust', async () => {
+    const mods = { 'feat/defense': [{ kind: 'ac-bonus', value: 1, while: ['armored'] }], 'species-trait/dwarf-dwarven-toughness': [{ kind: 'hp-per-level', value: 1 }] };
+    const d = await withModifiers('brannoc-ashguard', mods);
+    expect(d.ac.value).toBe(17);
+    expect(d.hp).toBe(45);
+    // Defense applies only in armor.
+    const bare = await withModifiers('brannoc-ashguard', mods, (stats) => {
+      stats.equipped = [{ ref: 'equipment/longsword' }];
+    });
+    expect(bare.ac.value).toBe(10);
+  });
+
+  it('take a feature only from the class levels that have it, and a per-class bonus by its class level', async () => {
+    // Fighter 3 has Second Wind (level 1) but not Extra Attack (level 5).
+    const d = await withModifiers('brannoc-ashguard', {
+      'class-feature/fighter-second-wind': [{ kind: 'hp-per-level', value: 1, per: 'class' }],
+      'class-feature/fighter-extra-attack': [{ kind: 'ac-bonus', value: 5 }],
+    });
+    expect(d.hp).toBe(40 + 3);
+    expect(d.ac.value).toBe(16);
+  });
+
+  it('pick the highest Armor Class formula, and a speed and die by the class level, while unarmored', async () => {
+    const d = await withModifiers(monk(5, [{ ref: 'equipment/quarterstaff' }]), MONK);
+    // Dex 15 (+2) and Wis 17 (+3).
+    expect(d.ac.value).toBe(10 + 2 + 3);
+    expect(d.speed).toBe(30 + 10);
+    const [staff] = d.attacks;
+    expect(staff).toMatchObject({ ability: 'dex', attackBonus: 2 + 3, damage: { dice: '1d8', display: '1d8 + 2' }, versatile: { dice: '1d8' } });
+    const armored = await withModifiers(monk(5, [{ ref: 'equipment/leather-armor' }, { ref: 'equipment/quarterstaff' }]), MONK);
+    expect(armored.ac.value).toBe(11 + 2);
+    expect(armored.speed).toBe(30);
+    expect(armored.attacks[0]).toMatchObject({ ability: 'str', damage: { dice: '1d6' } });
+    const low = await withModifiers(monk(1), MONK);
+    expect(low.speed).toBe(30);
+  });
+
+  it('add half the proficiency bonus to skills without proficiency, but not to Initiative', async () => {
+    const d = await withModifiers('brannoc-ashguard', { 'species-trait/dwarf-stonecunning': [{ kind: 'skill-floor', proficiency: 'half' }] });
+    expect(d.skills.arcana).toEqual({ bonus: 1 + 1 });
+    expect(d.skills.athletics).toEqual({ bonus: 6, proficiency: 'proficient' });
+    expect(d.passivePerception).toBe(14);
+    expect(d.initiative).toBe(0);
+  });
+
+  it('add the proficiency bonus to Initiative, and an ability modifier with a minimum to saves', async () => {
+    const d = await withModifiers('sister-maelis', {
+      'feat/alert': [{ kind: 'initiative-bonus', value: 'proficiency' }],
+      'class-feature/cleric-spellcasting': [{ kind: 'save-bonus', value: 'cha', min: 1 }],
+    });
+    expect(d.initiative).toBe(2);
+    // Cha 11 (+0), at least 1.
+    expect(d.saves).toMatchObject({ wis: 5 + 1, str: 1 + 1 });
+  });
+
+  it('give saving throw and skill proficiencies, with their sources', async () => {
+    const d = await withModifiers('sister-maelis', {
+      'class-feature/cleric-divine-order': [{ kind: 'save-proficiency', abilities: 'all' }],
+      'species-trait/human-resourceful': [{ kind: 'skill-proficiency', skills: ['arcana'] }, { kind: 'skill-proficiency', skills: ['medicine'], expertise: true }],
+    });
+    expect(d.saves.int).toBe(-1 + 2);
+    expect(d.skills.arcana).toEqual({ bonus: -1 + 2, proficiency: 'proficient' });
+    expect(d.skills.medicine).toEqual({ bonus: 3 + 4, proficiency: 'expertise' });
+    expect(d.proficiencies.skills).toContainEqual({ skill: 'arcana', source: 'species-trait/human-resourceful' });
+  });
+
+  it('raise scores up to their maximum: a placed increase, and a fixed one', async () => {
+    const d = await withModifiers(
+      'sister-maelis',
+      { 'feat/ability-score-improvement': [{ kind: 'ability-bonus', total: 2, max: 20 }], 'species-trait/human-versatile': [{ kind: 'ability-bonus', abilities: ['str', 'con'], value: 4, max: 15 }] },
+      (stats) => {
+        stats.feats.push({ ref: 'feat/ability-score-improvement', source: { ref: 'class/cleric', level: 4 }, abilities: { wis: 2 } });
+      },
+    );
+    // Wis 17 + 2 = 19; Str 13 + 4 capped at 15, Con 14 + 4 capped at 15.
+    expect(d.scores).toMatchObject({ wis: 19, str: 15, con: 15 });
+    const capped = await withModifiers('sister-maelis', { 'feat/ability-score-improvement': [{ kind: 'ability-bonus', total: 2, max: 18 }] }, (stats) => {
+      stats.feats.push({ ref: 'feat/ability-score-improvement', source: { ref: 'class/cleric', level: 4 }, abilities: { wis: 2 } });
+    });
+    expect(capped.scores.wis).toBe(18);
+  });
+
+  it('give other speeds, and a speed bonus only without heavy armor', async () => {
+    const mods = { 'species-trait/dwarf-stonecunning': [{ kind: 'speed-mode', modes: ['climb', 'swim'] }, { kind: 'speed-bonus', value: 10, while: ['no-heavy-armor'] }] };
+    const heavy = await withModifiers('brannoc-ashguard', mods);
+    expect([heavy.speed, heavy.speeds]).toEqual([30, { climb: 30, swim: 30 }]);
+    const light = await withModifiers('brannoc-ashguard', mods, (stats) => {
+      stats.equipped[0] = { ref: 'equipment/leather-armor' };
+    });
+    expect([light.speed, light.speeds]).toEqual([40, { climb: 40, swim: 40 }]);
+  });
+
+  it('add attack and damage bonuses to the weapons they name, one-handed only while it is the one weapon', async () => {
+    const mods = {
+      'feat/defense': [
+        { kind: 'attack-bonus', value: 2, weapon: 'ranged' },
+        { kind: 'damage-bonus', value: 2, weapon: 'one-handed-melee' },
+      ],
+    };
+    const one = await withModifiers('brannoc-ashguard', mods);
+    expect(one.attacks[0]).toMatchObject({ attackBonus: 6, damage: { modifier: 5, display: '1d8 + 5' }, versatile: { display: '1d10 + 3' } });
+    const two = await withModifiers('brannoc-ashguard', mods, (stats) => {
+      stats.equipped.push({ ref: 'equipment/longbow' });
+    });
+    expect(two.attacks.map((a) => [a.ref, a.attackBonus, a.damage.display])).toEqual([
+      ['equipment/longsword', 6, '1d8 + 3'],
+      ['equipment/longbow', 3 + 0 + 2, '1d8'],
+    ]);
+  });
+});
+
+describe('modifier schema', { timeout: VALIDATION_TIMEOUT }, () => {
+  it('validates modifiers on a feature, a feat, and a trait, and rejects an unknown kind or a missing field', async () => {
+    const set = (entries: Record<string, any>[], key: string, modifiers: unknown[]) => {
+      entries.find((e) => `${e.type}/${e.id}` === key)!.stats.modifiers = modifiers;
+    };
+    const ok = await validate((entries) => {
+      set(entries, 'class-feature/monk-unarmored-defense', MONK['class-feature/monk-unarmored-defense']);
+      set(entries, 'class-feature/monk-martial-arts', MONK['class-feature/monk-martial-arts']);
+      set(entries, 'feat/defense', [{ kind: 'ac-bonus', value: 1, while: ['armored'] }]);
+      set(entries, 'species-trait/dwarf-dwarven-toughness', [{ kind: 'hp-per-level', value: 1 }]);
+    });
+    expect(ok.errors).toEqual([]);
+    const bad = await validate((entries) => {
+      set(entries, 'feat/defense', [{ kind: 'ac-magic', value: 1 }]);
+      set(entries, 'species-trait/dwarf-dwarven-toughness', [{ kind: 'speed-bonus', while: ['no-heavy-armor'] }]);
+    });
+    expect(bad.errors.some((m) => m.includes('feat/defense.json') && m.includes('modifiers'))).toBe(true);
+    expect(bad.errors.some((m) => m.includes('dwarf-dwarven-toughness.json') && m.includes('modifiers'))).toBe(true);
+  });
+});
