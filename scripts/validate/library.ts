@@ -130,10 +130,15 @@ export function checkComponents(components: ComponentListing[]): FileIssue[] {
   const error = (file: string, message: string) => issues.push({ level: 'error', file, message });
   const byParent = new Map<string, ComponentListing[]>();
   for (const c of components) {
-    const parents = [...new Map(c.listedBy.map((p) => [`${p.type}/${p.id}`, p])).values()];
+    // Only an entry of a parent type lists a component; a ref object from any other type is a link to
+    // it, as a character's refs to its class's options are (docs/content-model.md#components).
+    const listings = c.listedBy.filter((p) => c.parents.includes(p.type));
+    const parents = [...new Map(listings.map((p) => [`${p.type}/${p.id}`, p])).values()];
     const key = `${c.type}/${c.id}`;
     if (parents.length === 0) {
-      error(c.file, `${key} is listed by no parent; a ${c.parents.join(' or ')} lists it by ref in its stats`);
+      const others = [...new Set(c.listedBy.map((p) => `${p.type}/${p.id}`))];
+      if (others.length > 0) error(c.file, `${key} is listed by ${others.join(' and ')}, but only a ${c.parents.join(' or ')} may list a ${c.type}`);
+      else error(c.file, `${key} is listed by no parent; a ${c.parents.join(' or ')} lists it by ref in its stats`);
       continue;
     }
     if (parents.length > 1) {
@@ -142,11 +147,7 @@ export function checkComponents(components: ComponentListing[]): FileIssue[] {
     }
     const parent = parents[0]!;
     const parentKey = `${parent.type}/${parent.id}`;
-    if (c.listedBy.length > 1) error(c.file, `${key} is listed more than once by ${parentKey}`);
-    if (!c.parents.includes(parent.type)) {
-      error(c.file, `${key} is listed by ${parentKey}, but only a ${c.parents.join(' or ')} may list a ${c.type}`);
-      continue;
-    }
+    if (listings.length > 1) error(c.file, `${key} is listed more than once by ${parentKey}`);
     if (!c.id.startsWith(`${parent.id}-`)) error(c.file, `id "${c.id}" must start with its parent's id, "${parent.id}-"`);
     for (const field of ['source', 'author'] as const) {
       if (c[field] !== parent[field]) {

@@ -656,3 +656,17 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | "Becoming a <Class> …" is written out as "Becoming a <Class> as a Level 1 or Multiclass Character", naming the two subsections the ellipsis stood for, and its anchor follows the heading. | The design brief's heading "reads as cut off"; P5 lets the site's house style adapt the SRD's form | #426 |
 | On screen a class page's stat block is as wide as its Features table needs, from its column up to the main column (a size container), with its other parts taking no width of their own; the detail page's column keeps its measure. | The Features table gets the room it needs while the detail page's width stays, as the spec keeps it | #426 |
 | The Filters toggle's display rule outranks the shared `.disclosure` rule on specificity, nested under the menu, rather than by moving it to a later layer or loosening the shared rule with `:where()`. | The shared rule stays as it is for every other disclosure, and a page doesn't move into another layer for one property | #467 |
+
+### Characters
+
+| Decision | Reason | Source |
+|---|---|---|
+| `deriveLinked` takes a `LinkedLibrary`: the ruleset's entries and components, a lookup that resolves any ref to its entry, component, or primitive, and the rules data, made once per ruleset by the build. Classes resolve their features through it, as characters resolve every ref. | A character's refs name equipment primitives and need the equipment groups; one path for every derivation that reads other entries | #429 |
+| Only an entry of a type that may list a component lists it; another type's ref object to a component is a link. A component that only other types reference is still an error, worded as before. | A character's options, and the class features and species traits that offer its picks, are refs to components it doesn't own | #429 |
+| A feat's `source` is the background, the species, or a class with the class level; the species case is Human's Versatile origin feat, and the spec's feat check counts it. | Every SRD human takes one; the spec's sources missed it | #429 |
+| `choices` are groups of picks, each under the entry that offers it; `options` is a flat list of class option refs, since each option sits in one list of its class. | Counts are checked per source, and the list an option is in is already in the data | #429 |
+| An equipped item whose base item could be several pieces of equipment names the one it is in `base`. | Armor Class and attacks read the base equipment's stats, as with `item/armor-1-2-or-3` | #429 |
+| The validator and the index derive a character's level, proficiency bonus, and point cost from its own stats; everything that reads another entry derives on the site, as a class's linked values do. | The level facet needs only the character's own stats | #429 |
+| An attack adds the proficiency bonus, and weapon and armor training is derived as each class prints it, as text. | Class training is text, so proficiency can't be read from it; the lack-of-proficiency warning needs structured training | #429 |
+| Half caster levels round up when added to the Multiclass Spellcaster level. | SRD 5.2's rule, and the same table position a single-class half caster reads | #429 |
+| The `character` registry entry has no facets or card fields, and its `character-profile` template uses the generic one, until the profile is built. | The profile, card, and facets are their own task | #429 |

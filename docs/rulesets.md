@@ -43,9 +43,9 @@ adding a ruleset is adding a folder:
 | File | Purpose |
 |---|---|
 | `ruleset.json` | ID, `publisher` ([Source and author](content-model.md#source-and-author)), list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
-| `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
+| `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability, point-buy costs) and the enums the schemas share |
 | `phrases.json` | The phrase book: the fixed sentences templates fill, the display name of each enum value, and irregular plurals and articles ([Wording](site.md#wording)) |
-| `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`, classes' in `classes.ts`) |
+| `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`, classes' in `classes.ts`, characters' in `characters.ts`) |
 | `tokens.ts` | Text tokens that render derived values inside prose |
 | `checks.ts` | Consistency checks a schema can't express (equipment's and classes' beside their derivations) |
 | `refs.ts` | `refLabels(type, path)`: how detail pages name a ref from each end |
@@ -71,10 +71,15 @@ and stats, and a lookup of an entry's key by its type and exact name in the
 same ruleset, for checks that read another entry: a background's feat must be
 an origin feat. `check` also receives whether the entry is official content,
 for a rule that depends on it. An optional `deriveLinked` computes values that read
-other entries, given the entry's key and every entry and component of its
-ruleset, each with its `author` so it can tell official content (`isOfficial`); the site merges
-them into the entry's derived values, as a class's spell list is the spells
-that name it ([Classes](#classes)). An optional `renderTokens` renders the
+other entries, given the entry's key and its ruleset's linked library
+(`LinkedLibrary` in `rulesets/module.ts`): every entry and component, each
+with its `author` so it can tell official content (`isOfficial`), a lookup
+that resolves any ref to its entry, component, or primitive, and the rules
+data. The build makes it once per ruleset, before deriving, and the site
+merges the values into the entry's derived values. A derivation reads the
+entries its refs name, as a character reads its classes and species
+([Characters](#characters)), or the entries that name it, as a class's spell
+list is the spells that name it ([Classes](#classes)). An optional `renderTokens` renders the
 ruleset's text tokens in one text of an entry, from the entry's derived
 values ([Text tokens](#text-tokens)).
 
@@ -180,7 +185,8 @@ bonus. Items derive nothing, except the ability modifiers and saves of an
 embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)); spells
 derive those too.
 Classes derive their proficiency bonus and spell slots by level
-([Classes](#classes)). Feats derive `repeatable`, whether the feat has a
+([Classes](#classes)), and characters their level, scores, saves, skills, Hit
+Points, Armor Class, attacks, and spellcasting ([Characters](#characters)). Feats derive `repeatable`, whether the feat has a
 `repeatable` note, and species derive `sizes`, the list of their sizes'
 names; both feed the Library's facets.
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
@@ -194,7 +200,7 @@ Spellcasting, text tokens, the checks, and the Open5e importer share.
 abilities, dice, damage, proficiency levels, adjustments, damage types, refs
 (`Ref`, `RefOrText`, `CountedRefOrText`, whose ref may add a `count`, and the
 typed refs, each allowing only its type's keys: `ConditionRef`,
-`EquipmentRef`, `FeatRef`, `SpellRef`, `ClassRef`, and one per component
+`EquipmentRef`, `FeatRef`, `SpellRef`, `ClassRef`, `SubclassRef`, `SpeciesRef`, `BackgroundRef`, and one per component
 type), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
 
 ### Text tokens
@@ -611,6 +617,82 @@ anchored at `#class-feature-<id>`. An always-prepared spell list is a titled
 table in a feature's text, with spell tokens.
 
 Subclasses come only by request; they have no gap buckets.
+
+### Characters
+
+A character is a ready-made build: a pregenerated character a module
+offers, or one a DM runs. It's one build at one level, its current state
+rather than a record of choices level by level. It is apart from a creature:
+a creature is a stat block whose values are its own fields, and a
+character's values come from refs to library entries plus a few inputs. The
+site stores no PC or NPC role.
+
+`schemas/character.schema.json` describes each field. A character's `stats`
+hold only inputs:
+
+- **`species`** and **`background`:** refs.
+- **`classes`:** in the order taken, each a class ref, its `level`, and its
+  `subclass` ref. The first is the starting class.
+- **`abilities`:** the six `base` scores, bought with point buy, and the
+  `background`'s increases by ability (`{ "str": 2, "con": 1 }`).
+- **`feats`:** each a feat ref with its `source`, where it came from: the
+  background, the species (Human's Versatile grants an origin feat), or a
+  class with the class `level` whose feature grants it. A feat's `note` is
+  the choice it's taken with ("Magic Initiate (Cleric)"), and `abilities`
+  the increases it places, such as an Ability Score Improvement's.
+- **`options`:** class option refs. Each is a component of one of its
+  classes' option lists, so the list it sits in isn't stored.
+- **`choices`:** the `skills`, `expertise`, `tools`, and `languages`
+  picked, each group under the `source` that offers it: the species or one
+  of its traits, the background, a class, a subclass, a class feature
+  (Scholar's Expertise), or a feat.
+- **`equipped`:** the armor, shield, and weapons worn and wielded, each SRD
+  equipment or an item. An item whose base item could be several pieces of
+  equipment names the one it is in `base` (`item/armor-1-2-or-3` with
+  `equipment/chain-mail`). There is no inventory.
+- **`spells`:** spell refs, the cantrips and prepared spells.
+
+A character's refs to class features, species traits, and class options are
+links: only a class, subclass, or species lists them as components
+([Components](content-model.md#components)).
+
+A character derives (`characters.ts`), from its own stats: its total
+`level`, its `proficiencyBonus` from the Character Advancement table, and
+`pointCost`, the point-buy cost of its base scores from `tables.json`'s
+`pointBuy` (SRD 5.2 "Character Creation": 27 points, a score of 8 costing 0
+up to 15 costing 9), omitted when a score is outside the table.
+
+From the library (`deriveLinked`, with the entries its refs name):
+
+- the final `scores` (the base, the background's increases, and each
+  feat's) and their modifiers;
+- `saves`, with the starting class's saving throws proficient;
+- every skill's bonus, with the background's two skills and the picked ones
+  proficient and Expertise doubling the proficiency bonus, and Passive
+  Perception;
+- Hit Points at the fixed value per level: the starting class's Hit Point
+  Die's maximum at level 1, then half the die plus 1 for each later level,
+  plus the Constitution modifier per level;
+- Initiative (the Dexterity modifier) and Speed (the species');
+- Armor Class: the equipped armor's AC with its Dexterity rule (`dex`, up to
+  `dexMax`), or 10 plus the Dexterity modifier with none, then the equipped
+  shield's;
+- an attack per equipped weapon: Strength for a melee weapon, Dexterity for
+  a ranged one, the higher for a Finesse weapon; the attack bonus adds the
+  proficiency bonus, and the damage its dice and modifier, with a Versatile
+  weapon's two-handed dice, its properties, and its mastery;
+- each casting class's spellcasting ability, save DC, and attack bonus, with
+  its cantrips and prepared spells at its level; spell slots from the
+  Multiclass Spellcaster table at the full caster levels plus half the half
+  caster levels, rounded up; and a pact caster's Pact Magic slots apart;
+- the features each class and subclass gives up to the class's level, each
+  with the level it's gained at, and the species' traits;
+- the proficiencies by source: the starting class's saving throws, the
+  skills and Expertise, weapon and armor training as each class prints it
+  (the starting class's Core Traits, a later class's "As a Multiclass
+  Character" text), the tools, and the languages.
+
+Characters come only by request; they have no gap buckets.
 
 ### Starting equipment
 

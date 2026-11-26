@@ -41,7 +41,7 @@ export const signed = (n: number): string => (n < 0 ? `${MINUS}${-n}` : `+${n}`)
 export const printMinus = (formula: string): string => formula.replace(/-(?=\s?\d)/g, MINUS);
 
 /** `1d8 + 2`, `1d8 - 1`, or `1d8` when the modifier is 0. */
-const withModifier = (base: string, modifier: number): string =>
+export const withModifier = (base: string, modifier: number): string =>
   modifier === 0 ? base : `${base} ${modifier < 0 ? '-' : '+'} ${Math.abs(modifier)}`;
 
 export function crRow(cr: number, tables: Tables): { row: ChallengeRatingRow; next: ChallengeRatingRow | undefined } {

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/character.schema.json",
+  "title": "dnd-5e-2024 character stats (docs/rulesets.md#characters)",
+  "description": "A ready-made build at one level: refs to library entries plus the choices the build makes. Stored inputs only; the level, scores, saves, skills, Hit Points, Armor Class, attacks, spellcasting, features, and proficiencies are derived from them and the entries they name.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["species", "background", "classes", "abilities"],
+  "properties": {
+    "species": { "$ref": "common.schema.json#/$defs/SpeciesRef" },
+    "background": { "$ref": "common.schema.json#/$defs/BackgroundRef" },
+    "classes": {
+      "description": "Its classes in the order taken, each with its level and, once the class's first subclass level is reached, its subclass. The first is the starting class, whose saving throws, proficiencies, and level 1 Hit Points apply.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["class", "level"],
+        "properties": {
+          "class": { "$ref": "common.schema.json#/$defs/ClassRef" },
+          "level": { "type": "integer", "minimum": 1, "maximum": 20 },
+          "subclass": { "$ref": "common.schema.json#/$defs/SubclassRef" }
+        }
+      }
+    },
+    "abilities": {
+      "description": "The six base scores, bought with point buy, and the background's increases: +2 and +1, or +1 to each of three, among the background's abilities.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base", "background"],
+      "properties": {
+        "base": { "$ref": "#/$defs/Scores" },
+        "background": { "$ref": "#/$defs/Increases" }
+      }
+    },
+    "feats": {
+      "description": "Each feat, with where it came from: the background's origin feat, an origin feat a species trait grants, or a class level whose feature grants a feat. A feat's `note` is the choice it's taken with, \"Magic Initiate (Cleric)\".",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref", "source"],
+        "properties": {
+          "ref": { "$ref": "common.schema.json#/$defs/FeatRef/properties/ref" },
+          "note": { "$ref": "common.schema.json#/$defs/FeatRef/properties/note" },
+          "source": {
+            "description": "The background or species that grants it, or the class and the class level whose feature grants it.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ref"],
+            "properties": {
+              "ref": { "type": "string", "pattern": "^(background|species|class)/[a-z0-9]+(-[a-z0-9]+)*$" },
+              "level": { "description": "The class level, for a class source only.", "type": "integer", "minimum": 1, "maximum": 20 }
+            },
+            "if": { "properties": { "ref": { "type": "string", "pattern": "^class/" } } },
+            "then": { "required": ["level"] },
+            "else": { "not": { "required": ["level"] } }
+          },
+          "abilities": { "description": "The ability score increases the feat asks the character to place, such as an Ability Score Improvement's.", "$ref": "#/$defs/Increases" }
+        }
+      }
+    },
+    "options": {
+      "description": "The class options taken, each a component of one of its classes' option lists.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/ClassOptionRef" }
+    },
+    "choices": {
+      "description": "The skill, Expertise, tool, and language picks, each group under the entry that offers it: a species or its trait, the background, a class, a class feature, or a feat.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source"],
+        "minProperties": 2,
+        "properties": {
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ref"],
+            "properties": {
+              "ref": { "type": "string", "pattern": "^(species|species-trait|background|class|subclass|class-feature|feat)/[a-z0-9]+(-[a-z0-9]+)*$" }
+            }
+          },
+          "skills": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/Skill" } },
+          "expertise": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/Skill" } },
+          "tools": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/EquipmentRef" } },
+          "languages": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/Line" } }
+        }
+      }
+    },
+    "equipped": {
+      "description": "The armor, shield, and weapons the character wears and wields: SRD equipment or items. An item whose base item is more than one piece of equipment names the one it is in `base`. There is no inventory.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ref"],
+        "properties": {
+          "ref": { "type": "string", "pattern": "^(equipment|item)/[a-z0-9]+(-[a-z0-9]+)*$" },
+          "base": { "$ref": "common.schema.json#/$defs/EquipmentRef" }
+        }
+      }
+    },
+    "spells": {
+      "description": "Its cantrips and prepared spells.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "common.schema.json#/$defs/SpellRef" }
+    }
+  },
+  "$defs": {
+    "Scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["str", "dex", "con", "int", "wis", "cha"],
+      "properties": {
+        "str": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "dex": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "con": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "int": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "wis": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "cha": { "type": "integer", "minimum": 1, "maximum": 30 }
+      }
+    },
+    "Increases": {
+      "description": "Increases by ability: { \"str\": 2, \"con\": 1 }.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "$ref": "common.schema.json#/$defs/Ability" },
+      "additionalProperties": { "type": "integer", "minimum": 1, "maximum": 2 }
+    }
+  }
+}

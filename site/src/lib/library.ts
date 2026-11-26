@@ -2,7 +2,7 @@
 // ruleset module, and links its refs (docs/content-model.md#references, docs/site.md#index-build step 3). Validation
 // has already run in build:index, so entries here are known good.
 
-import { isOfficial, type RulesetModule } from '../../../rulesets/module.ts';
+import { isOfficial, linkedLibrary, type RulesetModule } from '../../../rulesets/module.ts';
 import type { RefTarget } from './refs.ts';
 import { entryKey, linkEntries, objectRefs, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
 import { anchorId, ruleKey, rulePaths, typedGroups, type RulesData } from '../../../lib/rules.ts';
@@ -99,12 +99,14 @@ export function loadLibrary(
 ): LoadedEntry[] {
   const links = linkAll(entries, rules);
   // Values that read other entries, such as a class's spell list, join the entry's own (docs/rulesets.md#the-ruleset-module).
+  // Each ruleset's refs resolve once, before any entry derives from them.
   const byRuleset = Map.groupBy(entries, (e) => e.ruleset);
+  const libraries = new Map([...byRuleset].map(([id, group]) => [id, linkedLibrary(group, rules.find((r) => r.ruleset === id))]));
   const derive = (entry: Entry) => {
     const module = moduleFor(entry.ruleset);
     const own = module.derive(entry.type, entry.stats, rules.find((r) => r.ruleset === entry.ruleset));
     if (!module.deriveLinked) return own;
-    return { ...own, ...module.deriveLinked(entry.type, entryKey(entry), entry.stats, byRuleset.get(entry.ruleset) ?? []) };
+    return { ...own, ...module.deriveLinked(entry.type, entryKey(entry), entry.stats, libraries.get(entry.ruleset)!) };
   };
   const load = (entry: Entry) => ({
     entry,
@@ -112,14 +114,15 @@ export function loadLibrary(
     ...(links.get(entryKey(entry)) ?? { refs: [], refBy: [] }),
   });
   // A component is loaded onto the entry that lists it by ref, in that order (docs/content-model.md#components).
-  const isComponent = (entry: Entry) => (moduleFor(entry.ruleset).definition.components ?? []).some((c) => c.type === entry.type);
-  const components = new Map(entries.filter(isComponent).map((entry) => [entryKey(entry), entry]));
+  // Only an entry of a type that may list a component lists it; any other entry's ref to it is a link.
+  const parentsOf = (entry: Entry) => (moduleFor(entry.ruleset).definition.components ?? []).find((c) => c.type === entry.type)?.parents;
+  const components = new Map(entries.filter((entry) => parentsOf(entry)).map((entry) => [entryKey(entry), entry]));
   return entries
     .filter((entry) => !components.has(entryKey(entry)))
     .map((entry) => {
       const listed = [...new Set(objectRefs(entry.stats).map((r) => r.ref))].flatMap((key) => {
         const component = components.get(key);
-        return component ? [{ ...load(component), parent: entry }] : [];
+        return component && parentsOf(component)!.includes(entry.type) ? [{ ...load(component), parent: entry }] : [];
       });
       return listed.length > 0 ? { ...load(entry), components: listed } : load(entry);
     })

@@ -250,9 +250,11 @@ features and a species' traits are components.
   the type under `components`.
 - **The parent lists its components**, in order, by `{ "ref": … }` objects
   in its `stats`, and a component doesn't name its parent: its parent is the
-  one entry whose stats hold a ref object to it. A `{ref:…}` token is a
-  mention, not a listing. Each component is listed by exactly one entry, of a
-  type that may list it, and only once (errors).
+  one entry of a type that may list it whose stats hold a ref object to it.
+  A `{ref:…}` token is a mention, not a listing, and so is a ref object from
+  any other type, such as a character's to its class's options: a link.
+  Each component is listed by exactly one entry, and only once; one that only
+  other types reference is listed by no parent (errors).
 - **Its id starts with its parent's id and a hyphen**, then the slug of its
   name: `class-feature/barbarian-rage`. Names repeat across parents ("Extra
   Attack"), so a component's name is unique within its parent instead of its

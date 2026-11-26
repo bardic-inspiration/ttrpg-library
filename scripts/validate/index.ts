@@ -295,8 +295,8 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const withLinks = entries.map((e) => ({ ...e, ...linksOf(e) }));
   const validComponents = components
     .filter((c) => !badComponents.has(repoPath(c.file)))
-    .map(({ parents: _, ...c }) => {
-      const parent = listedBy.get(entryKey(c.entry))![0]!;
+    .map(({ parents, ...c }) => {
+      const parent = listedBy.get(entryKey(c.entry))!.find((p) => parents.includes(p.type))!;
       return { ...c, ...linksOf(c), parent: entryKey(parent) };
     });
   const ruleLinks = new Map(

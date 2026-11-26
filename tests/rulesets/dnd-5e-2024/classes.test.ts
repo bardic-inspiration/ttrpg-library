@@ -15,6 +15,7 @@ import { deriveClass, deriveClassLinked } from '../../../rulesets/dnd-5e-2024/cl
 import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { ClassStats, DerivedClass, LinkedClass, SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
+import { linkedLibrary } from '../../../rulesets/module.ts';
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
 import { withoutContents } from '../../site/library-fixtures.ts';
 
@@ -214,12 +215,12 @@ describe('derivation', () => {
       subclassLevels: [3, 6, 10, 14],
     };
     const feature = (id: string, levels: unknown[]) => ({ type: 'class-feature', id, name: id, stats: { levels, text: 'x' } });
-    const { featureRows } = deriveClassLinked('warlock', stats, [
+    const { featureRows } = deriveClassLinked('warlock', stats, linkedLibrary([
       feature('warlock-pact-magic', [1]),
       feature('warlock-mystic-arcanum', [{ level: 11, note: 'level 6 spell' }, { level: 13, note: 'level 7 spell' }]),
       feature('warlock-improved-x', [13]),
       feature('warlock-improved-x-17', [17]),
-    ]);
+    ]));
     expect(featureRows[0]).toEqual({ features: [{ ref: 'class-feature/warlock-pact-magic' }], subclass: false });
     expect(featureRows[2]).toEqual({ features: [], subclass: false });
     expect(featureRows[5]).toEqual({ features: [], subclass: true });
@@ -232,7 +233,7 @@ describe('derivation', () => {
 
   it('derives the spell list from the spells whose classes name it, and a custom class’s own spells', async () => {
     const entries = (await withSpells()).map((e) => ({ type: e.type, id: e.id, name: e.name, stats: e.stats, author: e.author }));
-    const { spellList, subclasses } = deriveClassLinked('sorcerer', await sorcerer(), entries);
+    const { spellList, subclasses } = deriveClassLinked('sorcerer', await sorcerer(), linkedLibrary(entries));
     expect(subclasses).toEqual(['subclass/draconic-sorcery']);
     // The SRD's Sorcerer cantrips, in its order.
     expect(spellList[0]!.spells.map((s) => s.ref.slice('spell/'.length))).toEqual([
@@ -243,7 +244,7 @@ describe('derivation', () => {
     const level1 = spellList[1]!.spells;
     expect(level1.find((s) => s.ref === 'spell/detect-magic')).toMatchObject({ concentration: true, ritual: true, material: false });
     expect(level1.find((s) => s.ref === 'spell/chromatic-orb')).toMatchObject({ concentration: false, ritual: false, material: true });
-    const custom = deriveClassLinked('wayfinder', { ...(await sorcerer()), spells: [{ ref: 'spell/cure-wounds' }] }, entries);
+    const custom = deriveClassLinked('wayfinder', { ...(await sorcerer()), spells: [{ ref: 'spell/cure-wounds' }] }, linkedLibrary(entries));
     expect(custom.spellList.flatMap((l) => l.spells.map((s) => s.ref))).toEqual(['spell/cure-wounds']);
   });
 
@@ -255,13 +256,13 @@ describe('derivation', () => {
     const draconic = entries.find((e) => e.type === 'subclass' && e.id === 'draconic-sorcery')!;
     const homebrewSubclass = { ...draconic, id: 'ember-soul', name: 'Ember Soul', author: 'bardic-inspiration' };
     const all = [...entries, homebrewSubclass];
-    const srd = deriveClassLinked('sorcerer', await sorcerer(), all);
+    const srd = deriveClassLinked('sorcerer', await sorcerer(), linkedLibrary(all));
     expect(srd.spellList.flatMap((l) => l.spells.map((s) => s.ref))).not.toContain('spell/rattle');
     expect(srd.subclasses).toEqual(['subclass/draconic-sorcery']);
     // The same class as homebrew: its list takes every spell and subclass that names it.
     const self = all.find((e) => e.type === 'class' && e.id === 'sorcerer')!;
     const custom = all.map((e) => (e === self ? { ...e, author: 'bardic-inspiration' } : e));
-    const homebrew = deriveClassLinked('sorcerer', await sorcerer(), custom);
+    const homebrew = deriveClassLinked('sorcerer', await sorcerer(), linkedLibrary(custom));
     expect(homebrew.spellList.flatMap((l) => l.spells.map((s) => s.ref))).toContain('spell/rattle');
     expect(homebrew.subclasses).toEqual(['subclass/draconic-sorcery', 'subclass/ember-soul']);
   });

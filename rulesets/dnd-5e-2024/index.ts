@@ -4,6 +4,7 @@ import type { RulesetModule } from '../module.ts';
 import type { PhraseBook } from '../../lib/wording/book.ts';
 import { checkBackground, checkBackgroundLinks, checkCreature, checkCreatureLinks, checkFeat, checkItem, checkSpecies, checkSpell } from './checks.ts';
 import { checkClass, checkClassFeature, checkClassLinks, checkSubclassLinks, deriveClass, deriveClassLinked } from './classes.ts';
+import { deriveCharacter, deriveCharacterLinked } from './characters.ts';
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
 import { refLabels } from './refs.ts';
@@ -11,7 +12,7 @@ import { renderTokens } from './tokens.ts';
 import definition from './ruleset.json' with { type: 'json' };
 import phrasesJson from './phrases.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
-import type { BackgroundStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EquipmentStats, FeatStats, ItemStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
+import type { BackgroundStats, CharacterStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EquipmentStats, FeatStats, ItemStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
 
 export const tables = tablesJson as Tables;
 export const phrases = phrasesJson as unknown as PhraseBook;
@@ -24,6 +25,7 @@ export const ruleset: RulesetModule = {
     if (type === 'feat') return { repeatable: (stats as FeatStats).repeatable !== undefined };
     if (type === 'species') return { sizes: (stats as SpeciesStats).sizes.map((s) => s.size) };
     if (type === 'class') return { ...deriveClass(stats as ClassStats, tables) };
+    if (type === 'character') return { ...deriveCharacter(stats as CharacterStats, tables) };
     if (type === 'spell') return deriveStatBlocks((stats as SpellStats).statBlocks, tables);
     if (type === 'item') return deriveStatBlocks((stats as ItemStats).statBlocks, tables);
     return {};
@@ -50,8 +52,9 @@ export const ruleset: RulesetModule = {
     if (type === 'subclass') return checkSubclassLinks(stats as SubclassStats, target);
     return [];
   },
-  deriveLinked(type, key, stats, entries) {
-    if (type === 'class') return { ...deriveClassLinked(key.slice('class/'.length), stats as ClassStats, entries) };
+  deriveLinked(type, key, stats, library) {
+    if (type === 'class') return { ...deriveClassLinked(key.slice('class/'.length), stats as ClassStats, library) };
+    if (type === 'character') return { ...deriveCharacterLinked(stats as CharacterStats, library, tables) };
     return {};
   },
   renderTokens(type, text, derived) {
