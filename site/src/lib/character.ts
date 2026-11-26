@@ -5,7 +5,7 @@
 
 import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
-import type { Ability, CharacterAttack, CharacterStats, DerivedCharacter, LinkedCharacter } from '../../../rulesets/dnd-5e-2024/types.ts';
+import type { CharacterAttack, CharacterStats, DerivedCharacter, LinkedCharacter } from '../../../rulesets/dnd-5e-2024/types.ts';
 import { escapeMarkdown } from './markdown.ts';
 import type { PropertyLine } from './template.ts';
 import { concat, countOf, joinWith, link, list, name, say, sayText, toMarkdown, toPlain, withNote, type Phrase } from './wording.ts';
@@ -71,7 +71,7 @@ export const skillItems = (d: Character): SkillItem[] =>
 export function proficiencyLines(d: Character): PropertyLine[] {
   const p = d.proficiencies;
   const starting = p.training.find((t) => t.multiclass === undefined);
-  const lines: PropertyLine[] = [{ label: 'Saving Throws', value: toPlain(list(p.saves.abilities.map((a: Ability) => name('ability', a)), 'and')) }];
+  const lines: PropertyLine[] = [{ label: 'Saving Throws', value: toPlain(list(tables.abilities.filter((a) => p.saves.some((s) => s.abilities.includes(a))).map((a) => name('ability', a)), 'and')) }];
   if (starting?.armor) lines.push({ label: 'Armor', value: starting.armor });
   if (starting?.weapons) lines.push({ label: 'Weapons', value: starting.weapons });
   const tools: Phrase[] = [
@@ -150,7 +150,7 @@ export function featureLines(s: CharacterStats, d: Character, names: Map<string,
   return lines;
 }
 
-/** Each equipped item, linked, with its base item, variant, and attunement noted: "Armor +1, +2, or +3 (Chain Mail, +1)". */
+/** Each equipped item, linked, with its base item, variant, and attunement noted: "Armor, +1, +2, or +3 (Chain Mail, +1)". */
 export const equipmentItems = (s: CharacterStats): string[] =>
   (s.equipped ?? []).map((e) => {
     const notes: Phrase[] = [...(e.base ? [link(e.base.ref)] : []), ...(e.variant ? [concat(e.variant)] : []), ...(e.attuned ? [say('character.attuned')] : [])];

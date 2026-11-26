@@ -570,7 +570,8 @@ export interface CharacterSpellcasting {
 /** The skill, saving throw, training, tool, and language proficiencies, each with its source. */
 export interface CharacterProficiencies {
   /** The starting class's saving throws. */
-  saves: { source: string; abilities: Ability[] };
+  /** The starting class's saving throws, then each a modifier gives outright. */
+  saves: { source: string; abilities: Ability[] }[];
   /** Each skill's proficiency, with the entry it comes from: a pick's source, or a modifier's entry. */
   skills: { skill: string; source: string }[];
   expertise: { skill: string; source: string }[];
