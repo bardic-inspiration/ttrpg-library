@@ -1,11 +1,13 @@
 // Consistency checks a JSON schema can't express (docs/rulesets.md#consistency-checks). They run
 // after the schema stage, so `stats` already has the shape in types.ts.
 
+import { deriveCharacter, deriveCharacterLinked } from './characters.ts';
+import { deriveClass } from './classes.ts';
 import { attackBonus, deriveCreature, saveDc } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
-import type { Action, BackgroundStats, CreatureStats, DerivedAction, DerivedCreature, FeatStats, ItemStats, SpeciesStats, SpellStats, Tables } from './types.ts';
+import type { Ability, Action, BackgroundStats, CharacterStats, ClassStats, CreatureStats, DerivedAction, DerivedCreature, FeatStats, ItemStats, LinkedCharacter, Modifier, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
 import { ACTION_LISTS } from './types.ts';
-import type { Issue, NameLookup } from '../module.ts';
+import type { Issue, LinkedEntry, LinkTarget, NameLookup } from '../module.ts';
 
 const MAX_ATTACK_BONUS = 17;
 const MAX_SAVE_DC = 30;
@@ -274,4 +276,273 @@ export function checkCreatureLinks(stats: CreatureStats, named: NameLookup): Iss
 /** A species' speed is a multiple of 5, as a creature's is (docs/rulesets.md#species). */
 export function checkSpecies(stats: SpeciesStats): Issue[] {
   return stats.speed % 5 === 0 ? [] : [{ level: 'error', path: 'stats.speed', message: `speed ${stats.speed} is not a multiple of 5` }];
+}
+
+/** The lowest and highest base score point buy allows (SRD 5.2 "Character Creation"). */
+const POINT_BUY_MIN = 8;
+const POINT_BUY_MAX = 15;
+/** The highest a placed increase takes a score, unless its feat says otherwise. */
+const SCORE_MAX = 20;
+/** The score a multiclass prerequisite asks of each class's primary ability. */
+const MULTICLASS_MIN = 13;
+/** The most magic items a character is attuned to at once. */
+const ATTUNEMENT_MAX = 3;
+
+/** A character's checks from its own stats (docs/rulesets.md#consistency-checks): point buy and class levels. */
+export function checkCharacter(stats: CharacterStats, tables: Tables): Issue[] {
+  const issues: Issue[] = [];
+  const error = (path: string, message: string) => issues.push({ level: 'error', path, message });
+  for (const a of tables.abilities) {
+    const score = stats.abilities.base[a];
+    if (score < POINT_BUY_MIN || score > POINT_BUY_MAX) error(`stats.abilities.base.${a}`, `a base score is ${POINT_BUY_MIN} to ${POINT_BUY_MAX} with point buy; ${a} is ${score}`);
+  }
+  const { pointCost } = deriveCharacter(stats, tables);
+  if (pointCost !== undefined && pointCost > tables.pointBuy.budget) error('stats.abilities.base', `the base scores cost ${pointCost} points; point buy allows ${tables.pointBuy.budget}`);
+  const level = stats.classes.reduce((sum, c) => sum + c.level, 0);
+  if (level > 20) error('stats.classes', `the class levels total ${level}; a character is level 1 to 20`);
+  const seen = new Set<string>();
+  stats.classes.forEach((c, i) => {
+    if (seen.has(c.class.ref)) error(`stats.classes[${i}].class`, `${c.class.ref} is taken twice; one entry holds all its levels`);
+    seen.add(c.class.ref);
+  });
+  return issues;
+}
+
+/** One casting class's limits, for matching a character's spells to the classes that can prepare them. */
+interface Caster {
+  ref: string;
+  /** The highest spell level its slots cast at its level. */
+  maxLevel: number;
+  cantrips: number;
+  prepared: number;
+}
+
+/** The highest spell level a class's own slots cast at its level, as a single-class caster's. */
+function maxSpellLevel(stats: ClassStats, level: number, tables: Tables): number {
+  const derived = deriveClass(stats, tables);
+  if (derived.pactSlots) return derived.pactSlots[level - 1]!.slotLevel;
+  return derived.spellSlots?.[level - 1]?.length ?? 0;
+}
+
+/**
+ * Whether each spell can be someone's: each to a different seat of a class it can go to, a cantrip
+ * seat or a prepared one (bipartite matching by augmenting paths). Returns the spells left out.
+ */
+function unseated(spells: { index: number; cantrip: boolean; classes: string[] }[], casters: Caster[]): number[] {
+  const seats = casters.flatMap((c) => [
+    ...Array.from({ length: c.cantrips }, () => ({ ref: c.ref, cantrip: true })),
+    ...Array.from({ length: c.prepared }, () => ({ ref: c.ref, cantrip: false })),
+  ]);
+  const holder: (number | undefined)[] = seats.map(() => undefined);
+  const fits = (s: (typeof spells)[number], seat: (typeof seats)[number]) => seat.cantrip === s.cantrip && s.classes.includes(seat.ref);
+  const place = (si: number, visited: Set<number>): boolean => {
+    for (let k = 0; k < seats.length; k++) {
+      if (visited.has(k) || !fits(spells[si]!, seats[k]!)) continue;
+      visited.add(k);
+      if (holder[k] === undefined || place(holder[k]!, visited)) {
+        holder[k] = si;
+        return true;
+      }
+    }
+    return false;
+  };
+  return spells.flatMap((s, si) => (place(si, new Set()) ? [] : [s.index]));
+}
+
+/**
+ * A character's checks that read the entries it names (docs/rulesets.md#consistency-checks): its
+ * background's increases, the final scores, multiclass prerequisites, subclasses, feats, choices,
+ * options, spells, and attunement.
+ */
+export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, tables: Tables): Issue[] {
+  const issues: Issue[] = [];
+  const error = (path: string, message: string) => issues.push({ level: 'error', path, message });
+  const statsOf = <T>(key: string, type: string): T | undefined => {
+    const found = target(key);
+    return found?.type === type ? (found.stats as T) : undefined;
+  };
+  const level = stats.classes.reduce((sum, c) => sum + c.level, 0);
+  const background = statsOf<BackgroundStats>(stats.background.ref, 'background');
+  const species = statsOf<SpeciesStats>(stats.species.ref, 'species');
+  const classes = stats.classes.map((c) => ({ ...c, stats: statsOf<ClassStats>(c.class.ref, 'class') }));
+
+  // The background's increases: +2 and +1, or +1 to each of three, among its three abilities.
+  const increases = Object.entries(stats.abilities.background) as [Ability, number][];
+  const pattern = increases.map(([, by]) => by).sort().join(',');
+  if (pattern !== '1,2' && pattern !== '1,1,1') error('stats.abilities.background', 'the background gives +2 and +1, or +1 to each of three abilities');
+  if (background) {
+    for (const [a] of increases) if (!background.abilities.includes(a)) error(`stats.abilities.background.${a}`, `${stats.background.ref} increases ${background.abilities.join(', ')}, not ${a}`);
+  }
+
+  // No placed increase takes a score above 20, or above its feat's own maximum.
+  const scores = { ...stats.abilities.base };
+  for (const [a, by] of increases) scores[a] += by;
+  for (const [a, score] of Object.entries(scores)) if (score > SCORE_MAX) error(`stats.abilities.background.${a}`, `${a} is ${score} after the background; a score can't go above ${SCORE_MAX}`);
+  (stats.feats ?? []).forEach((f, i) => {
+    const feat = statsOf<FeatStats>(f.ref, 'feat');
+    const placed = Object.entries(f.abilities ?? {}) as [Ability, number][];
+    const bonus = feat?.modifiers?.find((m): m is Extract<Modifier, { kind: 'ability-bonus' }> => m.kind === 'ability-bonus' && m.total !== undefined);
+    const max = bonus?.max ?? SCORE_MAX;
+    for (const [a, by] of placed) {
+      scores[a] += by;
+      if (scores[a] > max) error(`stats.feats[${i}].abilities.${a}`, `${f.ref} takes ${a} to ${scores[a]}; it can't go above ${max}`);
+    }
+    if (bonus) {
+      const total = placed.reduce((t, [, by]) => t + by, 0);
+      if (total !== bonus.total) error(`stats.feats[${i}].abilities`, `${f.ref} places ${bonus.total} points of increases; these total ${total}`);
+      for (const [a] of placed) if (bonus.from && !bonus.from.includes(a)) error(`stats.feats[${i}].abilities.${a}`, `${f.ref} increases ${bonus.from.join(', ')}, not ${a}`);
+    } else if (feat?.modifiers?.some((m) => m.kind === 'ability-bonus') && placed.length > 0) {
+      error(`stats.feats[${i}].abilities`, `${f.ref}'s increases are fixed; it places none`);
+    }
+  });
+
+  // What the character derives from the entries, for the checks that read final scores, proficiencies,
+  // and spellcasting. A target that failed its schema has its own error, so these checks wait for it.
+  let derived: LinkedCharacter | undefined;
+  try {
+    const resolve = (key: string): LinkedEntry | undefined => {
+      const found = target(key);
+      return found && { type: found.type, id: key.slice(key.indexOf('/') + 1), name: key, stats: found.stats };
+    };
+    derived = deriveCharacterLinked(stats, { entries: [], resolve }, tables);
+  } catch {
+    derived = undefined;
+  }
+
+  // Multiclass prerequisites: each class's primary ability at 13 or more, the starting class's included.
+  if (derived && classes.length > 1) {
+    classes.forEach((c, i) => {
+      if (!c.stats) return;
+      const { abilities, join } = c.stats.primaryAbility;
+      const meets = (a: Ability) => derived.scores[a] >= MULTICLASS_MIN;
+      const met = join === 'and' ? abilities.every(meets) : abilities.some(meets);
+      if (!met) {
+        const needs = abilities.join(join === 'and' ? ' and ' : ' or ');
+        error(`stats.classes[${i}].class`, `multiclassing with ${c.class.ref} needs ${needs} ${MULTICLASS_MIN} or more; the final scores are ${abilities.map((a) => `${a} ${derived.scores[a]}`).join(', ')}`);
+      }
+    });
+  }
+
+  // A subclass belongs to its class, and is present exactly from the class's first subclass level.
+  classes.forEach((c, i) => {
+    if (!c.stats) return;
+    const at = c.stats.subclassLevels[0];
+    if (c.subclass) {
+      const subclass = statsOf<SubclassStats>(c.subclass.ref, 'subclass');
+      if (subclass && subclass.class.ref !== c.class.ref) error(`stats.classes[${i}].subclass`, `${c.subclass.ref} is a subclass of ${subclass.class.ref}, not ${c.class.ref}`);
+      if (at === undefined || c.level < at) error(`stats.classes[${i}].subclass`, `${c.class.ref} gains its subclass at level ${at ?? '—'}; this is level ${c.level}`);
+    } else if (at !== undefined && c.level >= at) {
+      error(`stats.classes[${i}]`, `${c.class.ref} has its subclass from level ${at}; name it`);
+    }
+  });
+
+  // Feats: the background's origin feat, once; an origin feat from the species; a class's from one of
+  // the character's classes at a level it has, meeting the feat's level; only a repeatable feat twice.
+  const feats = stats.feats ?? [];
+  const fromBackground = feats.filter((f) => f.source.ref === stats.background.ref);
+  if (background && (fromBackground.length !== 1 || fromBackground[0]!.ref !== background.feat.ref)) {
+    error('stats.feats', `${stats.background.ref} grants one feat, ${background.feat.ref}`);
+  }
+  const classLevels = new Map(stats.classes.map((c) => [c.class.ref, c.level]));
+  feats.forEach((f, i) => {
+    const feat = statsOf<FeatStats>(f.ref, 'feat');
+    const { ref, level: at } = f.source;
+    if (ref.startsWith('background/') && ref !== stats.background.ref) error(`stats.feats[${i}].source`, `${ref} isn't the character's background`);
+    if (ref.startsWith('species/')) {
+      if (ref !== stats.species.ref) error(`stats.feats[${i}].source`, `${ref} isn't the character's species`);
+      else if (feat && feat.category !== 'origin') error(`stats.feats[${i}]`, `a species grants an origin feat; ${f.ref} is a ${feat.category} feat`);
+    }
+    if (ref.startsWith('class/')) {
+      const has = classLevels.get(ref);
+      if (has === undefined) error(`stats.feats[${i}].source`, `${ref} isn't one of the character's classes`);
+      else if (at !== undefined && at > has) error(`stats.feats[${i}].source.level`, `${ref} is level ${has}; it hasn't reached level ${at}`);
+    }
+    if (feat?.level !== undefined && feat.level > level) error(`stats.feats[${i}]`, `${f.ref} needs level ${feat.level}; the character is level ${level}`);
+    if (feat && feat.repeatable === undefined && feats.findIndex((g) => g.ref === f.ref) < i) error(`stats.feats[${i}]`, `${f.ref} isn't repeatable; it's taken once`);
+  });
+  if (feats.filter((f) => f.source.ref.startsWith('species/')).length > 1) error('stats.feats', 'a species grants one origin feat');
+
+  // Choices: each under a source the character has; the starting class's skills, exactly its count
+  // from its list; the background's tool, when it offers a choice; no skill picked twice; Expertise
+  // only in a proficient skill.
+  const has = new Set<string>([
+    stats.species.ref,
+    stats.background.ref,
+    ...(species?.traits.map((t) => t.ref) ?? []),
+    ...stats.classes.flatMap((c) => [c.class.ref, ...(c.subclass ? [c.subclass.ref] : [])]),
+    ...(derived?.features.flatMap((g) => g.features.map((f) => f.ref)) ?? []),
+    ...feats.map((f) => f.ref),
+  ]);
+  const choices = stats.choices ?? [];
+  choices.forEach((c, i) => {
+    if (!has.has(c.source.ref)) error(`stats.choices[${i}].source`, `${c.source.ref} isn't something the character has`);
+  });
+  const starting = classes[0]!;
+  if (starting.stats) {
+    const picked = choices.filter((c) => c.source.ref === starting.class.ref).flatMap((c) => c.skills ?? []);
+    const { choose, from } = starting.stats.skills;
+    if (picked.length !== choose) error('stats.choices', `${starting.class.ref} gives ${choose} skills; ${picked.length} are picked`);
+    for (const skill of picked) if (from && !from.includes(skill)) error('stats.choices', `${skill} isn't on ${starting.class.ref}'s skill list`);
+  }
+  if (background) {
+    choices.forEach((c, i) => {
+      if (c.source.ref !== stats.background.ref) return;
+      if (c.skills) error(`stats.choices[${i}].skills`, `${stats.background.ref}'s skills are fixed; none are picked`);
+    });
+    const tools = choices.filter((c) => c.source.ref === stats.background.ref).flatMap((c) => c.tools ?? []);
+    if (background.tool.choose) {
+      if (tools.length !== 1 || tools[0]!.ref !== background.tool.ref) error('stats.choices', `${stats.background.ref} gives one ${background.tool.ref} of the character's choice; pick it`);
+    } else if (tools.length > 0) {
+      error('stats.choices', `${stats.background.ref}'s tool is fixed; none is picked`);
+    }
+  }
+  const skillPicks = [...(background?.skills ?? []), ...choices.flatMap((c) => c.skills ?? [])];
+  skillPicks.forEach((skill, i) => {
+    if (skillPicks.indexOf(skill) < i) error('stats.choices', `${skill} is proficient twice; a source that would repeat a proficiency gives another skill`);
+  });
+  const expertise = choices.flatMap((c) => c.expertise ?? []);
+  expertise.forEach((skill, i) => {
+    if (expertise.indexOf(skill) < i) error('stats.choices', `Expertise in ${skill} is picked twice`);
+    if (derived && !derived.proficiencies.skills.some((s) => s.skill === skill)) error('stats.choices', `Expertise in ${skill} needs proficiency in it`);
+  });
+
+  // Options: each from an option list of one of the character's classes.
+  const lists = new Set(classes.flatMap((c) => (c.stats?.optionLists ?? []).flatMap((l) => l.options.map((o) => o.ref))));
+  (stats.options ?? []).forEach((o, i) => {
+    if (!lists.has(o.ref)) error(`stats.options[${i}]`, `${o.ref} isn't on an option list of the character's classes`);
+  });
+
+  // Spells: each on the list of a casting class whose slots cast its level, and within each class's
+  // cantrips and prepared spells.
+  const casters: Caster[] = classes.flatMap((c) => {
+    const casting = c.stats?.spellcasting;
+    if (!casting) return [];
+    return [{ ref: c.class.ref, maxLevel: maxSpellLevel(c.stats!, c.level, tables), cantrips: casting.cantrips?.[c.level - 1] ?? 0, prepared: casting.prepared[c.level - 1]! }];
+  });
+  const spells = (stats.spells ?? []).flatMap((s, index) => {
+    const spell = statsOf<SpellStats>(s.ref, 'spell');
+    if (!spell) return [];
+    const onList = (c: Caster) => spell.classes.some((k) => k.ref === c.ref) || (statsOf<ClassStats>(c.ref, 'class')?.spells ?? []).some((k) => k.ref === s.ref);
+    const eligible = casters.filter((c) => onList(c) && spell.level <= c.maxLevel).map((c) => c.ref);
+    if (eligible.length === 0) {
+      error(`stats.spells[${index}]`, `${s.ref} (level ${spell.level}) isn't on the spell list of a class whose slots cast it`);
+      return [];
+    }
+    return [{ index, cantrip: spell.level === 0, classes: eligible }];
+  });
+  for (const index of unseated(spells, casters)) {
+    error(`stats.spells[${index}]`, `${stats.spells![index]!.ref} is past the ${spells.find((s) => s.index === index)!.cantrip ? 'cantrips' : 'prepared spells'} its classes allow at their levels`);
+  }
+
+  // Attunement: at most three items, and only one that requires it.
+  const equipped = stats.equipped ?? [];
+  const attuned = equipped.filter((e) => e.attuned);
+  if (attuned.length > ATTUNEMENT_MAX) error('stats.equipped', `${attuned.length} items are attuned; a character attunes to ${ATTUNEMENT_MAX} at most`);
+  equipped.forEach((e, i) => {
+    if (!e.attuned) return;
+    const item = e.ref.startsWith('item/') ? statsOf<ItemStats>(e.ref, 'item') : undefined;
+    if (e.ref.startsWith('equipment/') || (item && !item.attunement.required)) error(`stats.equipped[${i}].attuned`, `${e.ref} doesn't require attunement`);
+  });
+
+  return issues;
 }
