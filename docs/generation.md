@@ -110,18 +110,17 @@ checks the file and applies it to a request.
 
 `.claude/skills/generate/SKILL.md` is generic across types and rulesets. Its
 inputs are the ruleset, type, count, brief, and issue numbers, or a gap
-bucket, or an SRD import stage. Its steps:
+bucket, or an SRD import stage. It is an umbrella: steps 1, 2, 4, 5, and 6
+are shared by every type, and step 3 routes each request to its type's
+[procedure](#procedures). A batch that mixes types runs the shared steps
+once. Its steps:
 
 1. Read `config/types.json`, `config/defaults.json`, the ruleset module (the
    type's schema, `tables.json`, tokens, guideline), `config/blocklist.json`,
    and `library.json`.
 2. List existing names and IDs to avoid collisions, and existing entries that
    match the brief's theme to avoid near-duplicate concepts.
-3. Write entries, with any new dependencies the brief implies. Prefer refs to
-   library entries over plain text. Write inputs only, use tokens for derived
-   values in prose, and use `adjust` only for a deliberate deviation, explained
-   in the PR body. For an SRD request, transcribe the SRD entries faithfully
-   instead.
+3. Write each request's entries by its type's procedure.
 4. Set `source` and `author` ([Source and author](content-model.md#source-and-author)):
    `"SRD 5.2"` and `"publisher"` on SRD entries, and the request's on custom
    ones. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
@@ -144,6 +143,39 @@ per fulfilled issue; and the bucket filled, for gap fill.
 
 A test checks that every repo path, npm script, and `config/defaults.json` key
 the skill names exists, and that `content.md` has the body sections above.
+
+### Procedures
+
+The skill's "Procedures" table routes every type in `config/types.json` to
+exactly one procedure, each a section of the skill. A type in no row can't
+be generated, and the run asks, as for an unknown type.
+
+- **Entries:** every type but `character`. Write entries, with any new
+  dependencies the brief implies. Prefer refs to library entries over plain
+  text. Write inputs only, use tokens for derived values in prose, and use
+  `adjust` only for a deliberate deviation, explained in the PR body. For an
+  SRD request, transcribe the SRD entries faithfully instead, and for an
+  import batch, run the import script ([Imports](#imports)).
+- **Characters:** `character` presets
+  ([Characters](rulesets.md#characters)), by the character guideline. Read
+  the build's entries; choose the species, background, and classes in
+  order with their levels and subclasses; buy the base scores with point
+  buy and place the background's increases; then fill exactly what the
+  build gives ([Grants](rulesets.md#grants)): its feats, skill, Expertise,
+  tool, and language picks, class options, spells, and equipped gear.
+  Choices only: the ruleset derives the rest, and the consistency checks
+  reject an illegal build, which is fixed by changing its choices.
+  Characters come only by request (they have no gap buckets), every preset
+  is custom (the SRD prints none, so an SRD request for one is asked
+  about), and a preset creates no dependency: each ref names an entry
+  already in the library, and a brief that needs one the library lacks is
+  asked about. A build leaves out the entries whose picks have no grant form
+  yet, since it would fail the checks. In the PR's Entries table, its
+  summary field is "—".
+
+A test checks that the table names every registered type once, that each
+procedure has its section, and that a type routed to the character
+procedure has no `gapBuckets`.
 
 ### Self-review
 

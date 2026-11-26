@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { read, repo, unresolved } from './repo-names.ts';
 
+interface TypeEntry {
+  gapBuckets?: unknown;
+}
+
 // docs/generation.md#the-generate-skill (The generate skill); issue #64. The skill may name only repo
 // paths, npm scripts, and config/defaults.json keys that exist.
 const SKILL = '.claude/skills/generate/SKILL.md';
@@ -21,6 +25,36 @@ describe(SKILL, () => {
   it('names every config/defaults.json key it depends on', () => {
     for (const key of ['ruleset', 'count', 'gapFill.count', 'validateRetries']) {
       expect(skill).toContain(`\`defaults.${key}\``);
+    }
+  });
+
+  // docs/generation.md#procedures: the skill routes each registered type to exactly one procedure.
+  const routes = (): Map<string, string> => {
+    const table = /^## Procedures\n([\s\S]*?)\n## /m.exec(skill)?.[1] ?? '';
+    const map = new Map<string, string>();
+    for (const row of table.matchAll(/^\| \[([^\]]+)\]\(#[^)]+\) \| (.+) \|$/gm)) {
+      for (const type of row[2]!.matchAll(/`([a-z-]+)`/g)) {
+        expect(map.has(type[1]!), `${type[1]} is routed twice`).toBe(false);
+        map.set(type[1]!, row[1]!);
+      }
+    }
+    return map;
+  };
+
+  it('routes every registered type to exactly one procedure, each with its own section', () => {
+    const map = routes();
+    const registered = Object.values(repo.registry).flatMap(({ types }) => Object.keys(types));
+    expect([...map.keys()].sort()).toEqual([...new Set(registered)].sort());
+    for (const procedure of new Set(map.values())) expect(skill).toMatch(new RegExp(`^### Procedure: ${procedure}$`, 'm'));
+  });
+
+  it('routes to the character procedure only types without gap buckets', () => {
+    const map = routes();
+    expect(map.get('character')).toBe('Characters');
+    for (const { types } of Object.values(repo.registry)) {
+      for (const [type, entry] of Object.entries(types as Record<string, TypeEntry>)) {
+        if (map.get(type) === 'Characters') expect(entry.gapBuckets, type).toBeUndefined();
+      }
     }
   });
 });
