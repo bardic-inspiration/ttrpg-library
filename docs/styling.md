@@ -157,7 +157,13 @@ other components build these patterns only through them.
 outside that folder renders its own `<details>`, `<summary>`, `aria-expanded`,
 `<button>`, or checkbox, renders a card without `CardLink` (or with an `<a>` of
 its own), or restyles the chevron, the disclosure, or the card link.
-`/styleguide/` shows each one.
+`/styleguide/` shows each one. A shared component's rules sit in the
+`components` layer, so a page's rule for the same element ties with them on
+layer, and the order the bundled stylesheets land in isn't fixed. Where a page
+sets a property a shared rule also sets, as the Filters toggle sets `display`
+to hide on desktop, its selector outranks the shared one on specificity
+(`.gallery__menu > .gallery__filters-toggle` over `.disclosure`), and
+`tests/site/gallery/filters-toggle.test.ts` checks it.
 
 - **Disclosure** (`Disclosure.tsx`, and `Disclosure.astro` for Astro pages,
   with the same markup). One toggle, with the chevron on its left, pointing
