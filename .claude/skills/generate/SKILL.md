@@ -1,6 +1,6 @@
 ---
 name: generate
-description: Generate new library entries for a content request issue, an import issue, an inline request, or a gap-fill bucket, validate them, and open a content PR. Generic across types and rulesets. Use from a routine run (docs/generation.md#run-order steps 4 to 6) or when asked to fulfil a `request` or `import` issue. Not for revisions; those use the revise skill.
+description: Generate new library entries for a content request issue, an import issue, an inline request, or a gap-fill bucket, validate them, and open a content PR. Generic across types and rulesets, with a procedure per type (character presets have their own). Use from a routine run (docs/generation.md#run-order steps 4 to 6) or when asked to fulfil a `request` or `import` issue. Not for revisions; those use the revise skill.
 ---
 
 # Generate
@@ -101,6 +101,23 @@ batch doesn't repeat a concept already in the library.
 
 ## Step 3: Write entries
 
+Write each request's entries by the procedure its type routes to
+([Procedures](../../../docs/generation.md#procedures)). Steps 1, 2, 4, 5,
+and 6 are shared: a batch that mixes types runs them once, and step 3 once
+per request.
+
+## Procedures
+
+| Procedure | Types |
+|---|---|
+| [Entries](#procedure-entries) | `background`, `class`, `condition`, `creature`, `equipment`, `feat`, `item`, `species`, `spell`, `subclass` |
+| [Characters](#procedure-characters) | `character` |
+
+Every type in `config/types.json` is in exactly one row. A type in none
+can't be generated: ask, as for a type not in the registry (Inputs).
+
+### Procedure: Entries
+
 Write each entry to `content/<ruleset>/<type>/<id>.json`, where `<id>` is the
 slug of the name: lowercase, ASCII-folded, apostrophes dropped, other
 non-alphanumerics collapsed to `-` ("Hunter's Mark" is `hunters-mark`)
@@ -134,7 +151,7 @@ non-alphanumerics collapsed to `-` ("Hunter's Mark" is `hunters-mark`)
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` ([Situational fields](../../../docs/content-model.md#situational-fields)).
 - Don't add `image`. Art is the Images track's work (#316), not this skill's.
 
-### SRD entries
+#### SRD entries
 
 For an SRD request, transcribe each entry faithfully from SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries))
 instead of following the guideline's tone, naming, and balance targets.
@@ -178,7 +195,7 @@ against it before pushing.
   ([Templates](../../../docs/site.md#templates)).
 - Set `source` to `"SRD 5.2"` and `author` to `"publisher"` (step 4).
 
-### Import batches
+#### Import batches
 
 For an import batch, the import script writes the entries; don't write their
 stats by hand. For each issue, in order:
@@ -210,6 +227,77 @@ can't be fixed without changing what the work says is deleted and added to
 its issue's skip list, not rewritten.
 
 Never modify, rename, or move an existing entry. This skill only adds files.
+
+### Procedure: Characters
+
+A character is a preset: one legal build at one level, written as the
+choices that make it ([Characters](../../../docs/rulesets.md#characters)).
+The ruleset derives everything else, and the consistency checks reject a
+build that isn't legal ([Consistency checks](../../../docs/rulesets.md#consistency-checks)).
+
+- **By request only.** Characters have no gap buckets, so a gap bucket
+  never names one. An issue or an inline request does.
+- **Always custom.** The SRD prints no pregenerated characters, so an SRD
+  request for characters can't be fulfilled as written: ask (Inputs). A
+  preset is a custom entry, with the request's `author` (step 4).
+- **No dependencies.** Every ref names an entry already in the library
+  (`site/public/library.json`): the species, background, classes,
+  subclasses, feats, class options, spells, and what's equipped. A brief
+  that needs an entry the library lacks can't be fulfilled as written: ask,
+  suggesting a request for that entry first.
+
+For each character:
+
+1. **Read the build's entries.** Besides the type's schema and guideline
+   (step 1), read the species with its traits, the background, each class
+   with its features, its `spellcasting`, `multiclass`, `grants`, and
+   `training`, each subclass with its features, and each feat it takes,
+   from `content/<ruleset>/<type>/<id>.json`. Read
+   [Grants](../../../docs/rulesets.md#grants) for what each one gives.
+2. **Choose the build.** From the brief, choose the species, the
+   background, and the classes in the order taken, each with its `level`
+   (20 or less in all, no class twice) and its `subclass` exactly when its
+   level reaches the class's first subclass level. With more than one
+   class, plan the scores so every class's primary ability is 13 or more.
+   Leave out an entry whose picks have no grant form yet (the end of
+   [Grants](../../../docs/rulesets.md#grants)): a build that takes one fails
+   validation.
+3. **Buy the scores.** Write the six `base` scores, each 8 to 15, spending
+   the 27 points of point buy (`pointBuy` in `rulesets/<ruleset>/tables.json`).
+   Place the background's increases as +2/+1 or +1/+1/+1 among its three
+   abilities, no score above 20.
+4. **Fill what the build gives, exactly.** Each grant is filled to its
+   count, from its list, under the `source` that gives it (the guideline's
+   "Prose style"):
+   - `feats`: the background's origin feat, one per `feat` grant of a trait
+     or of a feature at its class level, each of a category the grant
+     allows and with its `requires` met; a feat's `note` is the choice it's
+     taken with, and its `abilities` the increases it places.
+   - `choices`: the starting class's skills, a later class's `multiclass`
+     picks, the background's tool and two languages, and each trait's,
+     feature's, and feat's skill, Expertise, tool, and language picks. No
+     skill twice, the background's included; Expertise only in a proficient
+     skill.
+   - `options`: each class's option lists, to the count its `options`
+     grants give at the class's level.
+   - `spells`: each casting class's cantrips and prepared spells, to its
+     counts at its level, from its list at a spell level its slots cast;
+     each feat's `spells` picks; and the always-prepared spells the profile
+     should show.
+   - `equipped`: armor, a shield, and weapons the classes' training covers,
+     and items; at most three attuned, each one that requires attunement.
+5. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json`
+   with its envelope keys in the order the Entries procedure gives, and
+   `stats` holding only these inputs. Never write a value the ruleset derives: the
+   level, scores, modifiers, saves, skill bonuses, Hit Points, Armor Class,
+   attacks, and spellcasting. `summary` and `description` follow the
+   guideline. Names follow step 2 and the guideline's "Naming".
+6. **Fix by choices.** When `npm run validate` reports a character error
+   (step 5), change the build's choices to meet it. Never edit another
+   entry to make a build pass.
+
+In the PR's Entries table, a character's summary field is "—": the type has
+no `summaryField`.
 
 ## Step 4: Source, author, and meta
 

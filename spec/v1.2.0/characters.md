@@ -34,7 +34,9 @@ adds owners and editing, not a second type.
   entry gives a character to pick, and the checks that read them.
 - [Creatures](../../docs/rulesets.md#creatures): the stat block type, which
   stays apart.
-- [The generate skill](../../docs/generation.md#the-generate-skill).
+- [The generate skill](../../docs/generation.md#the-generate-skill) and its
+  [Procedures](../../docs/generation.md#procedures), with the character
+  procedure.
 
 ## Design
 
@@ -43,17 +45,6 @@ adds owners and editing, not a second type.
 Only legal builds under `dnd-5e-2024` validate, with the checks in
 [Consistency checks](../../docs/rulesets.md#consistency-checks) and the
 grants they read ([Grants](../../docs/rulesets.md#grants)).
-
-### Generation
-
-`generate` becomes an **umbrella**: the shared steps (inputs, collisions,
-validation, the PR) stay in the skill, which routes each type to a
-**procedure**. Today's types keep the one procedure they have. Characters
-get the first new one: choose the build's refs, buy the scores, and fill the
-choices the build allows, writing choices only. Encounters and modules add
-theirs ([`encounters.md`](encounters.md), [`modules.md`](modules.md)).
-Characters come only by request, with no gap buckets, and every preset is
-custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entries)).
 
 ## Cases
 
@@ -73,8 +64,7 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
 - The `character` type validates, derives, and renders its profile, with
   the checks above, against the cases.
 - The Library filters characters by class, background, species, and level.
-- `generate` routes by type, and makes a preset from an inline request.
-- The docs describe the type, its derivations, and the umbrella skill.
+- The docs describe the type and its derivations.
 
 ## Open questions
 
