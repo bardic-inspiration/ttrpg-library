@@ -646,13 +646,13 @@ hold only inputs:
   picked, each group under the `source` that offers it: the species or one
   of its traits, the background, a class, a subclass, a class feature
   (Scholar's Expertise), or a feat.
-- **`equipped`:** the armor, shield, and weapons worn and wielded, and the
-  rings and wondrous items worn or carried for their effect, each SRD
-  equipment or an item. An item whose base item could be several pieces of
+- **`equipped`:** what the character wears, wields, or attunes to: SRD
+  equipment, or any item that can be equipped or attuned to, such as
+  armor, weapons, rings, rods, staffs, wands, and wondrous items. An item whose base item could be several pieces of
   equipment names the one it is in `base` (`item/armor-1-2-or-3` with
   `equipment/chain-mail`), and an item with variants names its `variant`
-  (`"+1"`). An item the character is attuned to has `attuned`, on at most
-  three items. There is no inventory.
+  (`"+1"`). An item the character is attuned to has `attuned`. There is no
+  inventory.
 - **`spells`:** spell refs, the cantrips and prepared spells.
 
 A character's refs to class features, species traits, and class options are

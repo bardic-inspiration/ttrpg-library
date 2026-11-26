@@ -53,6 +53,7 @@ Only legal builds under `dnd-5e-2024` validate. New consistency checks
 | One feat from the background, which is its origin feat, and one origin feat from a species trait that grants one (Human's Versatile); each other feat comes from a class level that grants one, meets its prerequisite, and only a repeatable feat repeats |
 | Options and choices fill exactly the counts their sources allow at the character's levels |
 | Each spell is on a list of one of its classes, at a level its slots can cast, and cantrips and prepared spells are within each class's counts |
+| No more than three equipped items are attuned, and only an item that requires attunement is |
 | Equipped armor and weapons the character lacks proficiency with (warning) |
 | Any `adjust` (warning), as on creatures |
 
@@ -77,7 +78,7 @@ slots, inventory).
   slots; and the spell list by level, each spell linked.
 - **Features:** the class, subclass, species, and feat features by name,
   each linked to its section.
-- **Equipment:** what's equipped, linked.
+- **Equipment:** every equipped item, linked, marking the attuned ones.
 - **Description:** the character's lore.
 
 It's built from the shared components ([`ui.md`](ui.md)) and laid out at

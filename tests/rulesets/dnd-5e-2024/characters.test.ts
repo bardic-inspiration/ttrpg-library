@@ -472,14 +472,12 @@ describe('item modifiers (docs/rulesets.md#item-modifiers)', () => {
 });
 
 describe('item modifier schema', { timeout: VALIDATION_TIMEOUT }, () => {
-  it("rejects a feature's kind on an item, and more than three attuned items", async () => {
+  it("rejects a feature's kind on an item, and passes a worn item with a variant and attunement", async () => {
     const result = await validate((entries) => {
       entries.find((e) => e.id === 'cloak-of-protection')!.stats.modifiers = [{ kind: 'skill-floor', proficiency: 'half' }];
-      entries.find((e) => e.id === 'sister-maelis')!.stats.equipped.push(
-        ...['cloak-of-protection', 'ring-of-protection', 'amulet-of-health', 'headband-of-intellect'].map((id) => ({ ref: `item/${id}`, attuned: true })),
-      );
+      entries.find((e) => e.id === 'sister-maelis')!.stats.equipped.push({ ref: 'item/belt-of-giant-strength', variant: 'hill', attuned: true });
     });
     expect(result.errors.some((m) => m.includes('cloak-of-protection.json') && m.includes('modifiers'))).toBe(true);
-    expect(result.errors.some((m) => m.includes('sister-maelis') && m.includes('equipped'))).toBe(true);
+    expect(result.errors.some((m) => m.includes('sister-maelis'))).toBe(false);
   });
 });
