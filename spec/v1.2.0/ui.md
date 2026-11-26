@@ -50,11 +50,6 @@ shared components).
 
 ### Entry and long pages
 
-- **Reference lists are collapsible**, with the shared disclosure (`Details`).
-- **A ref listed under a specific label** ("Cast by", "Casts") isn't listed
-  again under the generic "Referenced by".
-- **No GitHub references on the site** except the Contribute link: the
-  provenance line drops its source issue links ("From #134").
 - **Rules pages render as text**, each section under a lower-order
   subheading, not as collapsible headings. The contents list stays.
 - **A structured summary section** opens pages with several sections
@@ -70,7 +65,6 @@ shared components).
 
 - `class/barbarian`: the structured summary in place of 30 "Level N: …"
   links, and a Features table that fits.
-- `spell/acid-arrow`: its two dragons listed once, under "Cast by".
 - `spell/fireball` and `creature/mage`: a chip for the spell's level on its
   card, and a card that opens its entry anywhere on it.
 - `item/ring-of-protection`: added to the cart from its page, and still in
@@ -100,6 +94,11 @@ shared components).
   results into 1296 with no visible change to the box. One answer is a mixed
   state while only some of its entries show. Until this is decided, the
   Library keeps the Ruleset node and its groups.
+
+- **The About page's source link (#425):** the site is to have no GitHub
+  references but Contribute, and entry pages now have none. The About page's
+  link to `ATTRIBUTION.md` on GitHub stays, as licensing credit. Open: whether
+  "The source is on GitHub", which duplicates Contribute, goes.
 
 - **The Rulesets page redesign:** a full redesign of today's bare list of
   each ruleset's rules pages, through a design process of its own. Not built

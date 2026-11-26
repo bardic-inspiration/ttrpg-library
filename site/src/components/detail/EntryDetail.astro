@@ -1,7 +1,8 @@
 ---
 // The body of a detail page (docs/site.md#detail-page): art when the entry has it, name,
 // type, and summary; the type template; the description as lore; forward refs and
-// back-refs, an official page's links to homebrew in a Homebrew section after them; and provenance.
+// back-refs, each label's list a disclosure, an official page's links to homebrew in a Homebrew
+// section after them; and provenance.
 // The page passes its export controls (an island) in the `export` slot.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
@@ -15,6 +16,7 @@ import { libraryQuery } from '../../lib/gallery/library-url';
 import type { Registry } from '../../lib/gallery/config';
 import registry from '@library/config/types.json';
 import ArtFrame from '../templates/parts/ArtFrame.astro';
+import Details from '../shared/Disclosure.astro';
 import EntryTemplate from '../templates/EntryTemplate.astro';
 
 interface Props {
@@ -74,31 +76,24 @@ const nameParts = entry.name.split('/');
   ].map(({ id, heading, groups }) => groups.length > 0 && (
     <section aria-labelledby={id}>
       <h2 id={id}>{heading}</h2>
-      <dl class="entry-detail__links">
+      <div class="entry-detail__links">
         {groups.map((group) => (
-          <>
-            <dt>{group.label}</dt>
-            <dd>
+          <Details class="entry-detail__refs" summaryClass="entry-detail__refs-label" open>
+            <Fragment slot="summary">{group.label}</Fragment>
+            <p class="entry-detail__refs-list">
               {group.targets.map((target, i) => (
                 <>{i > 0 && ', '}<a href={url(target.path)}>{target.name}</a></>
               ))}
-            </dd>
-          </>
+            </p>
+          </Details>
         ))}
-      </dl>
+      </div>
     </section>
   ))}
 
   <p class="entry-detail__provenance">
     <small>
       Added {source.createdAt}{present(source.updatedAt) && `, revised ${source.updatedAt}`}.
-      {source.issues.length > 0 && (
-        <>
-          {' '}From {source.issues.map((issue, i) => (
-            <>{i > 0 && ', '}<a href={issue.url}>#{issue.number}</a></>
-          ))}.
-        </>
-      )}
       {source.credit && (
         <>
           {' '}Adapted from <a href={source.credit.source}>a work by {source.credit.author}</a>, licensed under{' '}
@@ -159,12 +154,17 @@ const nameParts = entry.name.split('/');
 
     .entry-detail__links {
       display: grid;
-      grid-template-columns: max-content 1fr;
-      column-gap: var(--space-2xs);
+      gap: var(--space-2xs);
+    }
 
-      & dt {
-        font-weight: var(--font-weight-strong);
-      }
+    /* The disclosure is rendered by the shared component, outside this file's scope. */
+    .entry-detail__links :global(.entry-detail__refs-label) {
+      font-weight: var(--font-weight-strong);
+    }
+
+    /* Under the label's text, past the chevron. */
+    .entry-detail__refs-list {
+      padding-inline-start: calc(var(--disclosure-chevron) + var(--disclosure-gap));
     }
 
     .entry-detail__provenance {

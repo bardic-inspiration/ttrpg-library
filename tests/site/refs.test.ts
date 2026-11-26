@@ -14,7 +14,7 @@ describe('dnd-5e-2024 ref labels (docs/content-model.md#references)', () => {
     expect(labels('item', 'stats.spells[0].spell')).toEqual({ forward: 'Casts', back: 'Cast by' });
     expect(labels('creature', 'stats.spellcasting.perDay.1[0]')).toEqual({ forward: 'Casts', back: 'Cast by' });
     expect(labels('creature', 'stats.gear[2]')).toEqual({ forward: 'Gear', back: 'Carried by' });
-    expect(labels('spell', 'stats.somethingElse')).toEqual({ forward: 'References', back: 'Referenced by' });
+    expect(labels('spell', 'stats.somethingElse')).toEqual({ forward: 'References', back: 'Referenced by', generic: true });
   });
 });
 
@@ -37,6 +37,34 @@ describe('groupRefs (docs/site.md#detail-page)', () => {
     );
     expect(back.back).toEqual([
       { label: 'Cast by', targets: [targets.get('creature/cinder-witch'), targets.get('item/wand-of-frost-lances')] },
+    ]);
+  });
+
+  // #425: Acid Arrow's dragons cast it and name it in their text, so they showed twice.
+  it('lists a target under a specific label only, not again under the generic one', () => {
+    const { forward, back } = groupRefs(
+      'creature',
+      [
+        { path: 'stats.spellcasting.atWill[0]', key: 'spell/frost-lance' },
+        { path: 'stats.actions[0].text', key: 'spell/frost-lance' },
+        { path: 'stats.actions[1].text', key: 'item/wand-of-frost-lances' },
+      ],
+      [
+        { path: 'stats.actions[0].text', key: 'creature/cinder-witch' },
+        { path: 'stats.spellcasting.atWill[0]', key: 'creature/cinder-witch' },
+        { path: 'stats.traits[0].text', key: 'item/wand-of-frost-lances' },
+      ],
+      targets,
+      labels,
+    );
+    expect(forward).toEqual([
+      { label: 'Casts', targets: [targets.get('spell/frost-lance')] },
+      { label: 'References', targets: [targets.get('item/wand-of-frost-lances')] },
+    ]);
+    // Groups keep their first-seen order; the generic one keeps only the wand.
+    expect(back).toEqual([
+      { label: 'Referenced by', targets: [targets.get('item/wand-of-frost-lances')] },
+      { label: 'Cast by', targets: [targets.get('creature/cinder-witch')] },
     ]);
   });
 
