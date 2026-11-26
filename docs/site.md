@@ -16,7 +16,7 @@ Validation reads it only to confirm a ruleset and type are registered, and it
 never decides whether a field displays; the schema does
 ([content-model.md](content-model.md#situational-fields)).
 
-Per ruleset: a `label`, its display name in the Library's ruleset filter,
+Per ruleset: a `label`, its display name in its Library's heading and title,
 on the Rulesets page, and in the redirects from its old pages. Per type:
 
 | Key | Purpose |
@@ -150,10 +150,11 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 
 | Route | Content |
 |---|---|
-| `/` | The Library: every entry in one gallery ([Gallery](#gallery)) |
-| `/<ruleset>/`, `/<ruleset>/<type>/` | Redirects to the Library with the matching filter ([Redirects](#redirects)) |
+| `/` | Redirects to the home ruleset's Library ([Redirects](#redirects)) |
+| `/<ruleset>/` | The ruleset's Library: its entries in one gallery ([Gallery](#gallery)) |
+| `/<ruleset>/<type>/` | Redirects to the ruleset's Library with the type checked ([Redirects](#redirects)) |
 | `/<ruleset>/<type>/<id>/` | Detail page |
-| `/rulesets/` | Each ruleset's rules pages and its Extensions page |
+| `/rulesets/` | Each ruleset, linked to its Library, with its rules pages and its Extensions page |
 | `/<ruleset>/rules/<page>/` | A rules page ([Rules pages](#rules-pages)) |
 | `/<ruleset>/rules/extensions/` | The ruleset's Extensions page |
 | `/print/` | Print view for one or many entries ([export.md](export.md#print)) |
@@ -164,9 +165,12 @@ The top bar reads **Library | Rulesets | About | Contribute**
 (`site/src/components/SiteNav.astro`), then the print cart's count ("Cart: 3";
 [Gallery](#gallery) "Cart and set actions"), shown once its script runs.
 Search and the set export follow it in the header ([Page header](#page-header)).
-Contribute links to the repository. The
-current page's link is marked `aria-current="page"`, and Rulesets is marked
-current on every rules page too. The
+Library, and the site name before the top bar, open the home ruleset's Library,
+the registry's first ruleset (`homeRuleset` in
+`site/src/lib/gallery/library-url.ts`): `dnd-5e-2024`'s, the library's only
+one. Contribute links to the repository. The current page's link is marked
+`aria-current="page"`; Library is marked current (`aria-current="true"`) on
+every other ruleset's Library, and Rulesets on every rules page. The
 footer carries the SRD 5.2 attribution statement on every page. The site is
 served under the base `/ttrpg-library/`
 ([architecture.md](architecture.md#technology)); a preview build's pages
@@ -271,25 +275,30 @@ script that sends the reader on with their own query added after the target's,
 so a parameter they brought wins, and the fragment kept
 (`redirectScript` in `site/src/lib/redirects.ts`).
 
-**Old galleries.** The per-ruleset and per-type galleries are gone; their URLs
-redirect to the Library with the matching filter set
-(`site/src/lib/gallery/library-url.ts`):
+**The home URL.** `/` is a redirect page to the home ruleset's Library
+([Pages and navigation](#pages-and-navigation)). Its script (`homeScript` in
+`site/src/lib/gallery/library-url.ts`) reads an old Library link's
+`f.ruleset`: when its first value is a registered ruleset, the reader goes to
+that ruleset's Library instead. The query and fragment come along, so
+`/?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/spell` opens
+`/dnd-5e-2024/?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/spell`, showing the
+whole ruleset, homebrew included, as it did.
 
-- `/<ruleset>/` to `/?f.ruleset=<ruleset>`, which puts the whole ruleset,
-  homebrew included, in the ruleset set (see "Filters" under
-  [Gallery](#gallery)).
-- `/<ruleset>/<type>/` to `/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<ruleset>/<type>`,
-  so the view opens as the type's gallery did: its registry `defaultSort`
-  (left out when it is `name:asc`), and its `defaultFilters` open because the
-  page opens with the type checked. A detail page's type link goes to the same view.
+**Old type galleries.** The per-type galleries are gone;
+`/<ruleset>/<type>/` redirects to
+`/<ruleset>/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<ruleset>/<type>`
+(`typeLibrary` in `site/src/lib/gallery/library-url.ts`), so the view opens as
+the type's gallery did: the whole ruleset, its registry `defaultSort` (left out
+when it is `name:asc`), and its `defaultFilters` open because the page opens
+with the type checked. A detail page's type link goes to the same view.
 
 **Renamed types.** The registry lists a type's earlier keys under `formerly`,
 such as `item`'s `["magic-item"]`, and from them:
 
 - **The old pages** are built as redirect pages:
   `/<ruleset>/<old>/<id>/` sends the reader to the same page under the
-  current key, and `/<ruleset>/<old>/` to the Library filtered to the current
-  type.
+  current key, and `/<ruleset>/<old>/` to the ruleset's Library filtered to the
+  current type.
 - **Print and gallery queries** read an old key as the current one: an
   `ids` key such as `magic-item/wand-of-wonder`, and an old value of the
   `type` filter, bare or with its ruleset (`f.type=magic-item`,
@@ -307,13 +316,16 @@ one Preact island in `layouts/Base.astro`). On narrow screens they wrap below
 the top bar.
 
 - **Search** is a form, labeled "Search", whose field (placeholder "Name")
-  opens the Library with the query, `/?q=<query>`, so it works without
-  JavaScript. The query reads as the Library's search ([Gallery](#gallery)
-  "Search") under the default filters. On the Library it searches the gallery
-  as the reader types instead, keeping the other filters and the sort, and
-  shows the query the Library's URL holds.
+  opens a ruleset's Library with the query, `/<ruleset>/?q=<query>`, so it
+  works without JavaScript: on a ruleset's Library, or one of its entries' or
+  rules pages, that ruleset's; on every other page, the home ruleset's
+  (`pageRuleset` in `site/src/lib/gallery/library-url.ts`). The query reads as
+  the Library's search ([Gallery](#gallery) "Search") under the default
+  filters. On a Library it searches the gallery as the reader types instead,
+  keeping the other filters and the sort, and shows the query the Library's
+  URL holds.
 - **The set export** is Print and Download ([Controls](export.md#controls)).
-  On the Library, they act on the cart when it holds anything, and on the
+  On a Library, they act on the cart when it holds anything, and on the
   filtered results otherwise ([Gallery](#gallery) "Cart and set actions"). On
   every other page, they act on the cart: Print and Download first load
   `library.json`, so the cart's entries drop out when the library no longer
@@ -327,11 +339,20 @@ the top bar.
 
 ### Gallery
 
-**Loading.** The Library at `/` is one Preact island
-(`site/src/components/gallery/`, logic in `site/src/lib/gallery/`). It fetches
-`library.json` once per page load, revalidated ([Fresh data](#fresh-data)), and
-filters it in memory. Without JavaScript, the page shows a plain list of every
-entry by name, linked to its detail page.
+**One Library per ruleset.** Each ruleset's Library, at `/<ruleset>/`, is one
+Preact island (`site/src/components/gallery/`, logic in
+`site/src/lib/gallery/`) over that ruleset's entries alone, so types and
+content never mix between rulesets: its filters, sorts, and types are the
+ruleset's part of the registry (`rulesetRegistry` in
+`site/src/lib/gallery/library-url.ts`). The ruleset stays part of the view's
+filter state (`f.ruleset`, see "Filters"), set by the page and old links
+rather than in the menu. The cart is one across rulesets
+([Cart and set actions](#gallery)).
+
+**Loading.** The island fetches `library.json` once per page load, revalidated
+([Fresh data](#fresh-data)), and filters it in memory; the cart reads every
+ruleset's records from it. Without JavaScript, the page shows a plain list of
+each of the ruleset's entries by name, linked to its detail page.
 
 **Layout.** Search and the set export sit in the page header
 ([Page header](#page-header)). On desktop, from a viewport
@@ -381,53 +402,47 @@ line and its value ("Level" and "2"). One column on phones, up
 to four on wide screens.
 
 **Filters** are a nested accordion checkbox tree built from the registry
-(`site/src/lib/gallery/tree.ts`). The Ruleset node is its only top-level
-node. It holds each ruleset, and in
-each ruleset two groups: **Source and author**, what the ruleset's entries
-are and where they come from, then **Types**, its types, each holding its
-fields, then any subfield, then values, such as Ruleset › D&D 5e › Types ›
-Creature › Immunities › Conditions › Poisoned. The rulesets, sources, and
-authors are the **ruleset set**, which is additive: it chooses which entries
-are in the results at all. The types and their facets narrow those entries.
+(`site/src/lib/gallery/tree.ts`), in two sections, **Sources**, then
+**Types**, each a top-level node open at the start. Nothing in it groups by
+ruleset, since a Library holds one. Types hold their fields, then any
+subfield, then values, such as Types › Creature › Immunities › Conditions ›
+Poisoned. Sources, with the ruleset filter the page and old links set, are the
+**ruleset set**, which is additive: it chooses which entries are in the
+results at all. The types and their facets narrow those entries. Every filter
+checkbox behaves the same way: it reads checked when its filter holds its
+value, and a click adds or removes that value.
 
-- **Ruleset node.** Always present and open at the start, even when the library
-  holds one ruleset. Inside it, each ruleset the library has entries of, that
-  is checked, or that holds a checked type, is a checkbox for the ruleset
-  filter (`f.ruleset`) with a disclosure holding its two groups. Each ruleset,
-  and its Types group, start open, so every type shows when the tree first
-  does.
-- **Source and author.** A ruleset's **Source** and **Author** filters
-  (`f.source`, `f.author`) over its own entries
-  ([Source and author](content-model.md#source-and-author)). An author of
-  `"publisher"` reads as the ruleset's publisher, from `ruleset.json`
-  (`rulesetPublishers` in `site/src/lib/rules.ts`), such as Wizards of the
-  Coast. Source and author list their values like a facet (below), with a
-  ruleset in place of a type, except that a ruleset's official sources, those
-  official content carries, are pinned above its other sources, each part
-  keeping its order: SRD 5.2 comes before a homebrew collection whatever its
-  name.
+- **Sources** ([Source and author](content-model.md#source-and-author)):
+  - **Official** is a checkbox for the author filter's `"publisher"`
+    (`f.author=publisher`): the ruleset's own material, such as the SRD for
+    `dnd-5e-2024`. It has nothing under it and always shows.
+  - **Homebrew** is a group, not a checkbox, holding the **Source** and
+    **Author** filters (`f.source`, `f.author`) over the ruleset's other
+    entries. Each lists its values like a facet (below), with no official
+    source and no `"publisher"`. Homebrew shows when either has a value, and
+    opens around an active filter.
 - **The ruleset set.**
   - **Additive.** An entry is in the results when it matches any checked
-    ruleset, source, or author (`SCOPE_PATHS` in
+    box in Sources, or the ruleset filter (`SCOPE_PATHS` in
     `site/src/lib/gallery/config.ts`, `applyFilters` in `view.ts`): checking
-    Bardic's Compendium of Test Fixtures beside Wizards of the Coast adds the
+    Bardic's Compendium of Test Fixtures beside Official adds the
     collection's entries to the official ones. With nothing in the set
     checked, no entry is.
-  - **Default.** A fresh Library has the author `"publisher"` checked, so it
-    shows only official content: each ruleset's own material, such as the SRD
-    for `dnd-5e-2024`. Clear filters clears the other filters and returns the
+  - **The ruleset filter** (`f.ruleset`) holds the page's ruleset when a link
+    asks for the whole ruleset, homebrew included, as old links and the
+    redirects from type galleries do ([Redirects](#redirects)). It has no box,
+    so Official reads unchecked while it alone shows the official entries.
+  - **Default.** A fresh Library has Official checked, so it shows only
+    official content. Clear filters clears the other filters and returns the
     set to this default; it shows while either differs from a fresh Library.
-  - **Counts.** A ruleset, source, or author counts what checking it adds:
+  - **Counts.** Official, a source, or an author counts what checking it adds:
     its entries under the search and the other filters, whatever else in the
     set is checked.
-- **Types.** A ruleset's Types group holds its types, each a checkbox for the
-  type filter (`f.type`) under its key, `<ruleset>/<type>`, with its
-  ruleset's label, its count, the entries of it among the results (so
-  checking one type leaves the others at 0), and a disclosure holding its
-  facets. A type shows when the library has entries of it, or it's checked,
-  whether or not the ruleset set holds its ruleset: out of the set, it counts
-  0. Two rulesets' types of the same label, such as two rulesets' Creature,
-  each sit under their own ruleset.
+- **Types** holds the ruleset's types, each a checkbox for the type filter
+  (`f.type`) under its key, `<ruleset>/<type>`, with its label, its count, the
+  entries of it among the results (so checking one type leaves the others at
+  0), and a disclosure holding its facets. A type shows when the Library has
+  entries of it, or it's checked.
 - **Fields.** A type's facets follow in registry order. Facets whose paths
   share a field below `stats` or `derived` sit in a node named for it by the
   wording layer's `label`: `stats.immunities.damage` and
@@ -508,7 +523,7 @@ URL-encoded, so a comma inside a value is `%2C` and a bare comma separates
 values; a `/` stays as is. Enum values are case-folded. The type filter is
 `f.type`, and its values are `<ruleset>/<type>`, as the data nests a type in
 its ruleset (`f.type=dnd-5e-2024/spell`). A bare type id reads as that type
-in every ruleset, so `?f.type=spell` shows official spells of any ruleset, and
+in the Library's ruleset, so `?f.type=spell` shows its official spells, and
 the gallery writes it back qualified. Unknown
 parameters, filters on paths the Library doesn't have (such as an old
 `f.tags.theme`), a sort the filters
@@ -588,7 +603,7 @@ thousand entries. Past about 2,000, revisit the index size.
   spell list. A label with links on both sides shows in both sections, and
   a page without homebrew links has no Homebrew section. A homebrew page's
   links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`).
-- The type, linked to the Library filtered to it ([Redirects](#redirects)).
+- The type, linked to its ruleset's Library filtered to it ([Redirects](#redirects)).
 - A provenance line: created and updated dates. It doesn't name the entry's
   source issues: an entry page links nothing on GitHub but the nav's Contribute
   link. An imported entry's line adds "Adapted from a work by <author>",

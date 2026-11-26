@@ -12,7 +12,7 @@ const ATTRIBUTION =
 
 const PAGES = join(import.meta.dirname, '../../site/src/pages');
 
-async function renderBase(props: Record<string, unknown>): Promise<string> {
+async function renderBase(props: Record<string, unknown>, path = '/ttrpg-library/about/'): Promise<string> {
   const container = await AstroContainer.create();
   // The layout's icons are Preact components rendered statically; the Preact
   // integration's own server renderer needs the site's Vite plugins.
@@ -24,7 +24,7 @@ async function renderBase(props: Record<string, unknown>): Promise<string> {
       renderToStaticMarkup: async (Component, props) => ({ html: renderToString(h(Component as any, props as any)) }),
     },
   });
-  return container.renderToString(Base, { props, request: new Request('https://bardic-inspiration.github.io/ttrpg-library/about/') });
+  return container.renderToString(Base, { props, request: new Request(`https://bardic-inspiration.github.io${path}`) });
 }
 
 describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', () => {
@@ -52,7 +52,7 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
     const links = [...nav.matchAll(/<a href="([^"]*)"[^>]*>([^<]*)<\/a>/g)].map((m) => [m[2], m[1]]);
     expect(links).toEqual([
-      ['Library', '/'],
+      ['Library', '/dnd-5e-2024/'],
       ['Rulesets', '/rulesets/'],
       ['About', '/about/'],
       ['Contribute', 'https://github.com/bardic-inspiration/ttrpg-library'],
@@ -65,11 +65,24 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     expect(nav).toMatch(/<\/ul>\s*<p class="site-nav__cart[^"]*" data-cart-count hidden[^>]*>Cart: <span[^>]*>0<\/span><\/p>/);
   });
 
-  it('puts search in the page header after the top bar, opening the Library with the query (docs/site.md#page-header)', async () => {
+  it('puts search in the page header after the top bar, opening the home ruleset’s Library with the query (docs/site.md#page-header)', async () => {
     const html = await renderBase({ title: 'Test' });
     const header = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
-    expect(header).toMatch(/<\/nav>[\s\S]*<form class="header-search" role="search" action="\/" method="get">/);
+    expect(header).toMatch(/<\/nav>[\s\S]*<form class="header-search" role="search" action="\/dnd-5e-2024\/" method="get">/);
     expect(header).toContain('name="q"');
+  });
+
+  it('marks the Library current on a ruleset’s Library, whose gallery search follows there', async () => {
+    const html = await renderBase({ title: 'Test' }, '/dnd-5e-2024/');
+    const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
+    expect(nav).toMatch(/<a href="\/dnd-5e-2024\/" aria-current="page"[^>]*>Library<\/a>/);
+    expect(html).toContain('action="/dnd-5e-2024/"');
+  });
+
+  it('opens the page’s own ruleset’s Library from search on its entries’ pages', async () => {
+    const html = await renderBase({ title: 'Test' }, '/dnd-5e-2024/spell/fireball/');
+    expect(html).toContain('action="/dnd-5e-2024/"');
+    expect(html.slice(html.indexOf('<nav'), html.indexOf('</nav>'))).not.toMatch(/aria-current="page"[^>]*>Library/);
   });
 
   it('writes Open Graph tags when a page gives them', async () => {

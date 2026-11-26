@@ -63,11 +63,11 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(html).toMatch(/<img class="art-frame art-frame--image[^"]*" src="[^"]*cinder-hound\.webp" alt="Cinder Hound"/);
   });
 
-  it('links the type to the Library filtered by it, and has no tag links', async () => {
+  it('links the type to its ruleset’s Library filtered by it, and has no tag links', async () => {
     const html = await render('cinder-hound');
     expect(html).not.toContain('f.tags.');
     expect(html).not.toMatch(/>Tags</);
-    expect(html).toContain('class="entry-detail__type" href="/?sort=stats.cr:asc&amp;f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature"');
+    expect(html).toContain('class="entry-detail__type" href="/dnd-5e-2024/?sort=stats.cr:asc&amp;f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature"');
   });
 
   // The Contribute link in the site nav is the site's only GitHub link (docs/site.md#detail-page).

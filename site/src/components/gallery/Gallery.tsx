@@ -1,5 +1,5 @@
-// The Library's gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery). It loads
-// library.json once, then filters, searches, and sorts in memory, keeping the view in the query
+// A ruleset's Library gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery). It
+// loads library.json once, then filters, searches, and sorts the ruleset's entries in memory, keeping the view in the query
 // string. Its search box and set export sit in the page header (docs/site.md#page-header): the
 // gallery publishes its view there and takes the header's query. The logic lives in lib/gallery/;
 // this file is the view.
@@ -10,6 +10,7 @@ import { defaultScope, galleryConfig, isScopePath, sortChoices, validSort, type 
 import { isActive, isDefaultScope, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
 import { filterTree } from '../../lib/gallery/tree.ts';
 import { computeView } from '../../lib/gallery/view.ts';
+import { rulesetRegistry } from '../../lib/gallery/library-url.ts';
 import FilterIcon from '../../icons/Filter.tsx';
 import SortIcon from '../../icons/Sort.tsx';
 import { cartKey, pruneCart, setInCart, writeCart } from '../../lib/cart.ts';
@@ -32,15 +33,20 @@ export interface GalleryProps {
   initialQuery?: string;
   /** Ref targets' names and grouped types' groups, from the build (docs/site.md#gallery "Filters"). */
   facetData?: FacetData;
+  /** The ruleset whose Library this is; every ruleset's entries when it's left out, as in the style guide. */
+  ruleset?: string;
 }
 
 const registry = registryJson as unknown as Registry;
 
 const resultText = (n: number) => (n === 0 ? 'No entries match.' : n === 1 ? '1 entry' : `${n} entries`);
 
-export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData }: GalleryProps) {
-  const config = useMemo(() => galleryConfig(registry, facetData), [facetData]);
-  const [records, setRecords] = useState<LibraryRecord[] | undefined>(given);
+export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData, ruleset }: GalleryProps) {
+  const own = useMemo(() => rulesetRegistry(registry, ruleset), [ruleset]);
+  const config = useMemo(() => galleryConfig(own, facetData), [own, facetData]);
+  // Every ruleset's records, which the cart reads; the gallery shows only its ruleset's.
+  const [all, setRecords] = useState<LibraryRecord[] | undefined>(given);
+  const records = useMemo(() => all?.filter((r) => Object.hasOwn(own, r.ruleset)), [all, own]);
   const [failed, setFailed] = useState(false);
   const [state, setState] = useState<GalleryState>(() =>
     parseQuery(initialQuery ?? (typeof window === 'undefined' ? '' : window.location.search), config),
@@ -59,8 +65,8 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
 
   // An entry the library no longer has drops out of the cart once the library loads.
   useEffect(() => {
-    if (records && !given) pruneCart(new Set(records.map(cartKey)));
-  }, [records, given]);
+    if (all && !given) pruneCart(new Set(all.map(cartKey)));
+  }, [all, given]);
 
   // Keep the URL in step with the view, without adding a history entry per keystroke.
   useEffect(() => {
@@ -78,8 +84,8 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     [],
   );
   useEffect(() => {
-    publishView({ q: state.q, ...(records && { records, results: view.results }) });
-  }, [state.q, records, view.results]);
+    publishView({ q: state.q, ...(all && { records: all, results: view.results }) });
+  }, [state.q, all, view.results]);
 
   if (failed) return <p class="gallery__status">The library couldn’t be loaded. Try reloading the page.</p>;
   if (!records) return <p class="gallery__status">Loading the library…</p>;

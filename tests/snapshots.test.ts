@@ -11,14 +11,14 @@ const record = (ruleset: string, type: string, id: string) => ({
 });
 
 describe('snapshotPages (docs/styling.md#refinement-workflow)', () => {
-  it('captures home, the style guide, and the first detail page of each type', () => {
+  it('captures home (the first entry’s ruleset’s Library), the style guide, and the first detail page of each type', () => {
     const pages = snapshotPages([
       record('dnd-5e-2024', 'creature', 'cinder-hound'),
       record('dnd-5e-2024', 'creature', 'ash-wolf'),
       record('dnd-5e-2024', 'spell', 'frost-lance'),
     ]);
     expect(pages).toEqual([
-      { file: 'home', path: '' },
+      { file: 'home', path: 'dnd-5e-2024/' },
       { file: 'styleguide', path: 'styleguide/' },
       { file: 'dnd-5e-2024-creature', path: 'dnd-5e-2024/creature/cinder-hound/' },
       { file: 'dnd-5e-2024-spell', path: 'dnd-5e-2024/spell/frost-lance/' },

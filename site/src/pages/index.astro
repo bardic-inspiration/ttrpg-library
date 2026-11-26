@@ -1,10 +1,15 @@
 ---
-// The Library (docs/site.md#pages-and-navigation): one gallery of every entry, whose filters do
-// the navigating.
+// The home URL (docs/site.md#redirects): it opens the home ruleset's Library, or the Library of
+// the ruleset an old Library link's `f.ruleset` names, with the link's query.
 import Base from '../layouts/Base.astro';
-import GalleryIsland from '../components/gallery/GalleryIsland.astro';
+import { homeRuleset, homeScript, libraryPath } from '../lib/gallery/library-url';
+import type { Registry } from '../lib/gallery/config';
+import { url } from '../lib/url';
+import registryJson from '@library/config/types.json';
+
+const registry = registryJson as unknown as Registry;
+const moved = url(libraryPath(homeRuleset(registry)));
 ---
-<Base title="Library · TTRPG Content Library">
-  <h1>Library</h1>
-  <GalleryIsland />
+<Base title="Library · TTRPG Content Library" redirect={moved} redirectWith={homeScript(url(), registry)}>
+  <p>The Library is at <a href={moved}>{registry[homeRuleset(registry)]?.label} Library</a>.</p>
 </Base>

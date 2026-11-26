@@ -12,26 +12,27 @@ const record = (type: string, id: string, facets: Record<string, unknown>) => ({
 });
 
 describe('a11yPages (docs/styling.md#accessibility)', () => {
-  it('checks the Library, the Rulesets and About pages, the Library filtered to a type, one detail page per type with entries, and the print view', () => {
+  it('checks each ruleset’s Library, the Rulesets and About pages, a Library filtered to a type, one detail page per type with entries, and the print view', () => {
     const pages = a11yPages([
       record('creature', 'cinder-hound', { 'stats.cr': 2, 'stats.size': ['medium'] }),
       record('creature', 'ash-wolf', { 'stats.cr': 1 }),
       record('spell', 'frost-lance', { 'stats.level': 1 }),
     ]);
     expect(pages.map((p) => p.path)).toEqual([
-      '',
+      'dnd-5e-2024/',
       'rulesets/',
       'about/',
-      '?f.type=creature&f.stats.cr=2..2',
+      'dnd-5e-2024/?f.type=creature&f.stats.cr=2..2',
       'dnd-5e-2024/creature/cinder-hound/',
       'dnd-5e-2024/spell/frost-lance/',
       'print/?ids=creature/cinder-hound,spell/frost-lance',
     ]);
     expect(pages.at(-1)).toMatchObject({ label: 'print view: cinder-hound, frost-lance', ready: '.print-entry' });
+    expect(pages[0]).toEqual({ label: 'Library: dnd-5e-2024', path: 'dnd-5e-2024/' });
   });
 
   it('filters by an enum facet value when the first facet is one', () => {
-    expect(a11yPages([record('item', 'wand', { 'stats.rarity': 'very-rare' })])[3]!.path).toBe('?f.type=item&f.stats.rarity=very-rare');
+    expect(a11yPages([record('item', 'wand', { 'stats.rarity': 'very-rare' })])[3]!.path).toBe('dnd-5e-2024/?f.type=item&f.stats.rarity=very-rare');
   });
 
   it('checks each rules page, then the Extensions page of a ruleset that has one', () => {
@@ -40,7 +41,8 @@ describe('a11yPages (docs/styling.md#accessibility)', () => {
       { ruleset: 'dnd-5e-2024', id: 'weapons', title: 'Weapons', extensions: true },
       { ruleset: 'fixture-rules', id: 'terms', title: 'Terms', extensions: false },
     ]);
-    expect(pages.slice(3)).toEqual([
+    expect(pages.slice(0, 2).map((p) => p.path)).toEqual(['dnd-5e-2024/', 'fixture-rules/']);
+    expect(pages.slice(4)).toEqual([
       { label: 'rules page: Glossary', path: 'dnd-5e-2024/rules/glossary/' },
       { label: 'rules page: Weapons', path: 'dnd-5e-2024/rules/weapons/' },
       { label: 'rules page: Extensions', path: 'dnd-5e-2024/rules/extensions/' },
