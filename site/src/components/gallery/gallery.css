@@ -40,7 +40,11 @@
     min-inline-size: 0;
   }
 
-  .gallery__filters-toggle {
+  /*
+   * The toggle is a shared disclosure, whose rule sets display in this layer too; nesting it under
+   * the menu outranks that rule whatever order the bundled stylesheets land in.
+   */
+  .gallery__menu > .gallery__filters-toggle {
     display: var(--filters-toggle-display);
     justify-self: start;
     align-items: center;
