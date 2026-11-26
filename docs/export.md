@@ -93,8 +93,8 @@ the cart is empty ([Gallery](site.md#gallery) "Cart and set actions").
   section open.
 - **A rules page** isn't an entry, so it has no print fragment. Its Print button
   (`components/export/PagePrint.astro`, a small script with no Preact) opens the
-  browser's print dialog for the page, and the accordion opens every section
-  before it prints ([Accordion pages](site.md#accordion-pages)).
+  browser's print dialog for the page, which is text with nothing to open
+  ([Rules pages](site.md#rules-pages)).
 - **The export report.** After a download that left something out, the status
   line says "Downloaded Open5e. 12 things didn't carry over." and a closed
   disclosure, "What didn't carry over" (`components/export/ExportReport.tsx`),

@@ -206,9 +206,8 @@ Each page in a ruleset's `rules/pages.json` builds at
 - **Its extensions**, at the bottom: the extensions whose primitives would
   sit on this page, by type or by group, in a list with a search box that
   narrows it as you type, each linked to its card.
-- **A Print button** after its title, which prints the page with every
-  section open, and no Download ([Controls](export.md#controls)). The
-  Extensions page has none.
+- **A Print button** after its title, which prints the page, and no Download
+  ([Controls](export.md#controls)). The Extensions page has none.
 
 A ruleset with a rules type that takes extensions also builds an Extensions
 page at `/<ruleset>/rules/extensions/`: one searchable list per such type.
@@ -219,22 +218,26 @@ A link to a primitive or group, from any entry or rules page, renders as its
 name linked to its anchor; refs carry the anchors' paths alongside the names
 (`refPaths` in `site/src/lib/library.ts`).
 
-Each rules page is an accordion page ([Accordion pages](#accordion-pages)):
-its untitled opening prose, then its table of contents (`pageContents` in
+Each rules page renders as text, with nothing to open: its untitled opening
+prose, then its structured summary, the "Contents" list
+([Accordion pages](#accordion-pages); `pageContents` in
 `site/src/lib/rules.ts`), then its sections. Each titled prose section, each
-primitive, and the Extensions list is a section; a prose section's own
-subsections show inside it. A group stays open, its heading, note, text, and
-links over its members' sections and the groups nested in it. A cross-listed
-primitive is a line among the sections, not a section. The contents list each
-titled prose section, each primitive (not a cross-listed one), each group with
-its subgroups nested under it, and Extensions.
+primitive, and the Extensions list is a plain section under its own heading,
+a level below the page's or its group's (`TextSection`), with its body
+under it; a prose section's own subsections show inside it, a level down. A
+group's heading, note, text, and links sit over its members' sections and
+the groups nested in it. A cross-listed primitive is a heading among the
+sections, not a section. Titled top-level prose sections are anchored at
+`section-<slug>` ([Accordion pages](#accordion-pages)). The contents list
+each titled prose section, each primitive (not a cross-listed one), each group
+with its subgroups nested under it, and Extensions.
 
 ### Accordion pages
 
-Rules pages and page types (classes, subclasses, species, and any page type
-whose components render after its template) are long pages laid out as
-accordion sections with a jump-to table of contents
-(`site/src/components/templates/parts/`):
+Page types (classes, subclasses, species, and any page type whose components
+render after its template) are long pages laid out as accordion sections
+(`site/src/components/templates/parts/`). They and rules pages open with a
+structured summary of their sections:
 
 - **A section** (`Accordion`) is the shared disclosure
   ([Shared components](styling.md#shared-components)), a `<details>` that
@@ -242,30 +245,44 @@ accordion sections with a jump-to table of contents
   `<type>-<id>` for a primitive, group, or component, and `section-<slug>` for
   any other titled section (`sectionId` in `site/src/lib/accordion.ts`), such
   as "Core Barbarian Traits" at `#section-core-barbarian-traits`.
-- **The table of contents** (`TableOfContents`) is a `nav` labeled
-  "Contents" after the page's opening, a list of links to the sections in
-  page order, with nested sections listed under their heading, in as many
-  columns as fit.
+- **The structured summary** (`TableOfContents`) is a `nav` labeled
+  "Contents" after the page's opening: the page's sections in page order,
+  grouped as the page groups them, in as many columns as fit. A section whose
+  own sections nest nothing reads as one line, its label then a run of links
+  to them: a class's option list ("Metamagic Options: Careful Spell, Distant
+  Spell, …") or a rules page's group over its subgroups. A deeper one lists
+  its lines under its label. A class's and a subclass's features are listed by
+  level, one "Level 1" line per level holding a link to each feature by name
+  ("Level 1: Rage, Unarmored Defense, Weapon Mastery"; `featuresByLevel` in
+  `site/src/lib/class.ts`); the level is a label, linked nowhere. An item
+  with no id (`TocItem` in `site/src/lib/accordion.ts`) is such a label.
 - **A link to a section**, or to anything inside one, opens it and every
   section around it, then scrolls to it: on load, on a new hash, and on a
   click on a link to the hash already showing. This includes every link to a
-  primitive, group, or component, from any page. Without JavaScript, a
+  component, from any page. Without JavaScript, a
   section still opens from its heading.
 - **Printing the page** from the browser opens every section first and closes
   the ones that were closed afterwards.
-- **What stays open.** A page's untitled opening prose, a class's Features
-  table, a species' lines and opening sentence, and a heading that holds
-  sections (a group, a class's Class Features, an option list) with its
-  intro.
+- **What stays open.** A class's Features table, a subclass's intro, a
+  species' lines and opening sentence, and a heading that holds sections (a
+  class's Class Features, an option list) with its intro.
 - **Page types.** A class page's sections are its Core Traits, "Becoming a
-  …", each feature, each option, its spell list, and its subclasses; Class
-  Features and each option list are open headings over theirs, and nest
-  their features or options in the contents. A subclass page's sections are
-  its features, and a species page's its traits. Components that render after
-  a template are one section each.
+  <Class> as a Level 1 or Multiclass Character", each feature, each option,
+  its spell list, and its subclasses; Class Features and each option list are
+  open headings over theirs, and group their features by level or list their
+  options in the summary. A subclass page's sections are its features, by
+  level in the summary, and a species page's its traits. Components that
+  render after a template are one section each.
+- **Class page width.** On screen a class page is as wide as its Features
+  table needs, so the table's links don't wrap: never narrower than the
+  detail page's column, and past the column's measure up to the main column
+  (the main column is a size container, `.site-main__inner` in
+  `layout.css`). Only the table sizes it; its other parts fill that width. On
+  a narrower screen the table scrolls sideways in its own box, as every
+  table does ([Templates](#templates)).
 - **Print and PNG capture** use the same components with `mode` `print` or
   `capture`: each section renders as a plain section with its heading, and
-  there is no table of contents.
+  there is no summary.
 
 ### Redirects
 

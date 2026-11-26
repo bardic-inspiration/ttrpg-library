@@ -132,7 +132,7 @@ shows.
   |---|---|
   | `--flow-line` | A label and its value, a heading and the list under it |
   | `--flow-text` | Paragraphs and list items of one text |
-  | `--flow-block` | Blocks of one section: a stat block and its notes, accordion sections, the main column's children |
+  | `--flow-block` | Blocks of one section: a stat block and its notes, accordion sections, a rules group's members, the main column's children |
   | `--flow-section` | A page's sections: a detail page's parts, a rules page's sections |
 
   Inside a component (a card, a stat block, a control), its own gaps read

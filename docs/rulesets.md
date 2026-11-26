@@ -568,7 +568,8 @@ Its page (`class-page`) prints, in the SRD's order:
   3 skills (see “Playing the Game”)"), Weapon Proficiencies, Tool
   Proficiencies when present, Armor Training, and Starting Equipment
   ([Starting equipment](#starting-equipment)).
-- **Becoming a <Class> …:** the "As a Level 1 Character" bullets every class
+- **Becoming a <Class> as a Level 1 or Multiclass Character:** the "As a
+  Level 1 Character" bullets every class
   shares, from the phrase book, then "As a Multiclass Character" and the
   class's `multiclass` text.
 - **The <Class> Features table:** Level, Proficiency Bonus, Class Features

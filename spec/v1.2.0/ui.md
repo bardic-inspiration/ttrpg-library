@@ -28,8 +28,9 @@ shared components).
   the print cart and set actions.
 - [Detail page](../../docs/site.md#detail-page) and
   [Accordion pages](../../docs/site.md#accordion-pages): sections, the
-  contents list, and links.
-- [Rules pages](../../docs/site.md#rules-pages) and
+  structured summary, with a class's features by level, the class page's
+  width, and links.
+- [Rules pages](../../docs/site.md#rules-pages), as text, and
   [Equipment](../../docs/rulesets.md#equipment): SRD equipment and conditions
   as sections of rules pages, and as Library cards that open those sections
   ([Index build](../../docs/site.md#index-build)).
@@ -43,36 +44,17 @@ shared components).
 
 ## Design
 
-### Entry and long pages
+### The Rulesets page
 
-- **Rules pages render as text**, each section under a lower-order
-  subheading, not as collapsible headings. The contents list stays.
-- **A structured summary section** opens pages with several sections
-  (classes, subclasses, species, rules pages) in place of today's contents
-  list on page types: the page's sections grouped as the page groups them,
-  with a class's features by level rather than as one link per "Level N:"
-  heading. The class page's "Becoming a Barbarian …" heading is written out
-  in full.
-- **Class page width:** the Features table gets the room it needs, so its
-  links don't wrap.
-
-## Cases
-
-- `class/barbarian`: the structured summary in place of 30 "Level N: …"
-  links, and a Features table that fits.
-- `spell/fireball` and `creature/mage`: a chip for the spell's level on its
-  card, and a card that opens its entry anywhere on it.
-- `item/ring-of-protection`: added to the cart from its page, and still in
-  the cart on the Library after a reload.
-- `condition/fading`: a custom condition's card beside the SRD conditions'
-  cards, which open their sections on the Conditions page.
+- **A full redesign** of the Rulesets page, beyond today's list of each
+  ruleset linked to its Library, with its rules pages and its Extensions
+  page. Its design is open ("Open questions"), and nothing here is built until
+  it's designed.
 
 ## Done when
 
-- Each ruleset has its own Library page with the Sources and Types filters,
-  and the Library has the cart and cards for SRD equipment and conditions.
-- The page revisions above are built, with screenshots at 390, 820, and
-  1440px, and the milestone's accessibility review filed.
+- The Rulesets page is redesigned and built, with screenshots at 390, 820,
+  and 1440px.
 
 ## Open questions
 

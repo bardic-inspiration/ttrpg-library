@@ -56,6 +56,11 @@
     gap: var(--space-xs);
   }
 
+  /* A part may grow past its page's measure, up to the main column (`cqi`), as a class page does. */
+  .site-main__inner {
+    container-type: inline-size;
+  }
+
   .site-main__inner > * + * {
     margin-block-start: var(--flow-block);
   }
