@@ -40,6 +40,9 @@
     /* Accordion pages: the table of contents' column width. */
     --toc-column-width: var(--size-card-min);
 
+    /* A character profile's skill list: its column width. */
+    --skill-column-width: var(--size-card-min);
+
     /* A detail page's summary line, under its title. */
     --entry-summary-size: var(--text-h4);
 

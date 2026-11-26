@@ -26,6 +26,7 @@ import type {
   Proficiency,
   SpeciesStats,
   SpeciesTraitStats,
+  SpellStats,
   SubclassStats,
   Tables,
 } from './types.ts';
@@ -330,6 +331,10 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     casters.filter((c) => c.stats.spellcasting!.progression === 'full').reduce((total, c) => total + c.level, 0) +
     casters.filter((c) => c.stats.spellcasting!.progression === 'half').reduce((total, c) => total + Math.ceil(c.level / 2), 0);
   const pact = casters.find((c) => c.stats.spellcasting!.progression === 'pact');
+  const spellLevels = (stats.spells ?? []).map(({ ref }) => ({ ref, level: need<SpellStats>(library, ref).stats.level }));
+  const spells = [...new Set(spellLevels.map((s) => s.level))]
+    .sort((a, b) => a - b)
+    .map((at) => ({ level: at, spells: spellLevels.filter((s) => s.level === at).map((s) => s.ref) }));
 
   const speed = species.stats.speed + sum(ofKind('speed-bonus'));
   const modes = [...new Set(ofKind('speed-mode').filter((c) => holds(c.modifier)).flatMap((c) => c.modifier.modes))];
@@ -366,6 +371,7 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     spellcasting,
     ...(casterLevel > 0 && { spellSlots: [...tables.multiclassSpellSlots[Math.min(casterLevel, 20) - 1]!] }),
     ...(pact && { pactSlots: { ...tables.pactMagic[pact.level - 1]! } }),
+    spells,
     features: features.map(({ source, features: list }) => ({ source, features: list })),
     proficiencies,
   };

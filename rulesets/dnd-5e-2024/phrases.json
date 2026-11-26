@@ -82,7 +82,18 @@
     "classOption.prerequisite": "Prerequisite: {prerequisite}",
     "classOption.cost": "Cost: {cost}",
     "classOption.repeatable": "Repeatable",
-    "subclass.heading": "{class} Subclass: {name}"
+    "subclass.heading": "{class} Subclass: {name}",
+    "character.classLevel": "{class} {level}",
+    "character.classLevelSubclass": "{class} {level} ({subclass})",
+    "character.feet": "{feet} ft.",
+    "character.attack": "{bonus} to hit, {damage}",
+    "character.versatile": "{damage}, or {twoHanded} two-handed",
+    "character.mastery": "Mastery: {mastery}",
+    "character.spellcasting": "{ability}, spell save DC {dc}, {bonus} to hit with spell attacks",
+    "character.spellCounts": "{cantrips} and {prepared} prepared",
+    "character.slots": "{slots} at level {level}",
+    "character.multiclass": "As a Multiclass {class}",
+    "character.attuned": "attuned"
   },
   "vocabulary": {
     "ability": {

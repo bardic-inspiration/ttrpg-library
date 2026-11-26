@@ -95,6 +95,33 @@ describe('library.json records', () => {
     });
   });
 
+  it('read a path through an array of objects as each item’s value at the rest of it (docs/site.md#type-registry)', async () => {
+    const facets = [
+      { path: 'stats.actions.name', label: 'Action', kind: 'enum' },
+      { path: 'stats.actions.damage.type', label: 'Damage', kind: 'enum' },
+      { path: 'stats.traits.recharge', label: 'Recharge', kind: 'enum' },
+    ] as const;
+    const { records } = await buildIndex(valid, {
+      registry: {
+        'dnd-5e-2024': {
+          label: 'x',
+          types: {
+            creature: { label: 'C', plural: 'Cs', template: 't', facets: [...facets] },
+            'item': { label: 'M', plural: 'Ms', template: 't', facets: [] },
+            spell: { label: 'S', plural: 'Ss', template: 't', facets: [] },
+            class: { label: 'Cl', plural: 'Cls', template: 't', facets: [] },
+          },
+        },
+      },
+    });
+    // Nested arrays flatten, each value once in first-seen order, and an item without the value adds
+    // nothing; with no item having it, the facet is left out.
+    expect(records.find((r) => r.id === 'cinder-hound')?.facets).toEqual({
+      'stats.actions.name': ['Bite', 'Ember Breath'],
+      'stats.actions.damage.type': ['piercing', 'fire'],
+    });
+  });
+
   it('read an omitted optional flag as false and keep a present one', async () => {
     const cursed = await wandOfFrostLances();
     Object.assign(cursed, { id: 'cursed-wand', name: 'Cursed Wand' });

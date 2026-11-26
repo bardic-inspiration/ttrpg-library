@@ -691,12 +691,52 @@ with the modifiers of the features, feats, and traits it has
   its cantrips and prepared spells at its level; spell slots from the
   Multiclass Spellcaster table at the full caster levels plus half the half
   caster levels, rounded up; and a pact caster's Pact Magic slots apart;
+- its `spells` by spell level, cantrips first, each level's in the order
+  the build lists them, leaving out a level with none;
 - the features each class and subclass gives up to the class's level, each
   with the level it's gained at, and the species' traits;
 - the proficiencies by source: the starting class's saving throws, the
   skills and Expertise, weapon and armor training as each class prints it
   (the starting class's Core Traits, a later class's "As a Multiclass
   Character" text), the tools, and the languages.
+
+A character's page is a **profile** (`character-profile`), not a play
+sheet: what a DM needs to run the character, or a player needs to copy a
+preset onto their own sheet. It has no fill-in boxes and nothing tracked at
+the table (current HP, spent slots, inventory). Every value is a derived
+one, in this order:
+
+- **Identity:** its class levels with subclasses under its name ("Fighter 3
+  (Champion) / Wizard 2"), then its species and background, linked.
+- **Combat:** Armor Class, Hit Points, Initiative, Speed (with any Climb,
+  Swim, or Fly Speed), Proficiency Bonus, and Passive Perception.
+- **Abilities:** each score, modifier, and saving throw, as the creature
+  stat block's table.
+- **Skills:** every skill with its bonus, alphabetized, in columns, each
+  proficiency marked "(Proficient)" or "(Expertise)".
+- **Proficiencies:** its saving throws; Armor, Weapons, and any Tools text
+  as the starting class prints them; its tool picks, linked; its languages;
+  and each later class's "As a Multiclass <Class>" text.
+- **Attacks:** a paragraph per equipped weapon, led by its linked name:
+  "***Longsword.*** +6 to hit, 1d8 + 3 Slashing damage, or 1d10 + 3
+  two-handed; Versatile; Mastery: Sap", with a ranged weapon's range.
+- **Spellcasting:** per casting class, its ability, spell save DC, attack
+  bonus, and cantrip and prepared counts; its spell slots and Pact Magic
+  slots; and its spells by level ("Cantrips", "Level 1", …), linked.
+- **Features:** each class's, subclass's, and the species' features by
+  source, each linked to its section on its parent's page; its feats, with
+  the choice each is taken with and where it came from ("Defense (Fighter
+  1)"); and its class options.
+- **Equipment:** each equipped item, linked, with its base item, variant,
+  and attunement noted ("Armor, +1, +2, or +3 (Chain Mail, +1)").
+- **Description:** in print and PNG capture, its lore last. On screen the
+  detail page shows it, as for every type.
+
+In the Library, a character's facets are its classes (`stats.classes.class`,
+a ref facet through the array), its total level (`derived.level`), its
+species, and its background; its card shows the four with its summary. It
+exports as any card entry does, to Print, PNG, and JSON; no translator takes
+characters.
 
 Characters come only by request; they have no gap buckets.
 
