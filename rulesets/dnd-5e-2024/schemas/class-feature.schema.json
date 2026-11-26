@@ -30,6 +30,7 @@
       "description": "The feature as printed: its titled paragraphs and tables, with tokens.",
       "$ref": "common.schema.json#/$defs/Text"
     },
-    "modifiers": { "description": "Its effects on a character's derived values (docs/rulesets.md#modifiers).", "$ref": "common.schema.json#/$defs/Modifiers" }
+    "modifiers": { "description": "Its effects on a character's derived values (docs/rulesets.md#modifiers).", "$ref": "common.schema.json#/$defs/Modifiers" },
+    "grants": { "description": "The feats, picks, options, and spells it gives a character (docs/rulesets.md#grants).", "$ref": "common.schema.json#/$defs/Grants" }
   }
 }

@@ -74,6 +74,21 @@
     "modifiers": {
       "description": "Its effects on a character's derived values (docs/rulesets.md#modifiers).",
       "$ref": "common.schema.json#/$defs/Modifiers"
+    },
+    "grants": {
+      "description": "The feats, picks, options, and spells it gives a character (docs/rulesets.md#grants).",
+      "$ref": "common.schema.json#/$defs/Grants"
+    },
+    "requires": {
+      "description": "Its ability prerequisite as data, beside the printed `prerequisite`: any one of `abilities` at `min` or more, or all of them with `join` \"and\".",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["abilities", "min"],
+      "properties": {
+        "abilities": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "common.schema.json#/$defs/Ability" } },
+        "min": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "join": { "enum": ["and", "or"] }
+      }
     }
   }
 }

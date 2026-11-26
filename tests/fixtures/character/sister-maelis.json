@@ -20,7 +20,8 @@
     ],
     "choices": [
       { "source": { "ref": "class/cleric" }, "skills": ["medicine", "persuasion"] },
-      { "source": { "ref": "species-trait/human-skillful" }, "skills": ["perception"] }
+      { "source": { "ref": "species-trait/human-skillful" }, "skills": ["perception"] },
+      { "source": { "ref": "background/acolyte" }, "languages": ["Elvish", "Halfling"] }
     ],
     "equipped": [{ "ref": "equipment/scale-mail" }, { "ref": "equipment/shield" }, { "ref": "equipment/mace" }],
     "spells": [{ "ref": "spell/cure-wounds" }]

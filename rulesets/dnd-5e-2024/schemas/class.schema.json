@@ -101,6 +101,26 @@
         }
       }
     },
+    "grants": {
+      "description": "The picks the class gives as data (docs/rulesets.md#grants): `start` as the starting class, beside its `skills`, and `multiclass` as a later class.",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "start": { "$ref": "common.schema.json#/$defs/Grants" },
+        "multiclass": { "$ref": "common.schema.json#/$defs/Grants" }
+      }
+    },
+    "training": {
+      "description": "Its weapon proficiencies and armor training as data (docs/rulesets.md#grants): `start` as the starting class, as `weapons` and `armor` print it, and `multiclass` as a later class, as `multiclass` prints it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start"],
+      "properties": {
+        "start": { "$ref": "common.schema.json#/$defs/Training" },
+        "multiclass": { "$ref": "common.schema.json#/$defs/Training" }
+      }
+    },
     "spells": {
       "description": "Existing spells that join its spell list, beside every spell whose `classes` names it. Only on a custom class.",
       "type": "array",

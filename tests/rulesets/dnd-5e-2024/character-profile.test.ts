@@ -63,7 +63,7 @@ describe('the profile of a multiclass build', async () => {
   it('lists its proficiencies, with a later class’s multiclass text', () => {
     expect(text).toContain('Saving Throws Strength and Constitution Armor Light, Medium, and Heavy armor and Shields Weapons Simple and Martial weapons');
     expect(html).toContain('<dt>Tools</dt><dd><a class="ref-link" href="/dnd-5e-2024/rules/tools/#equipment-gaming-set">Gaming Set</a> (dice)</dd>');
-    expect(html).not.toContain('<dt>Languages</dt>');
+    expect(html).toContain('<dt>Languages</dt><dd>Dwarvish, Giant</dd>');
     expect(html).toContain('<p><em><strong>As a Multiclass Wizard.</strong></em></p>');
   });
 

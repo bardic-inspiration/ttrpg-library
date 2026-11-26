@@ -30,7 +30,8 @@ adds owners and editing, not a second type.
   [Equipment](../../docs/rulesets.md#equipment).
 - [Characters](../../docs/rulesets.md#characters): the type, its inputs,
   and its derivations from the entries it names, on the shared
-  `deriveLinked` path.
+  `deriveLinked` path; [Grants](../../docs/rulesets.md#grants), what an
+  entry gives a character to pick, and the checks that read them.
 - [Creatures](../../docs/rulesets.md#creatures): the stat block type, which
   stays apart.
 - [The generate skill](../../docs/generation.md#the-generate-skill).
@@ -39,49 +40,15 @@ adds owners and editing, not a second type.
 
 ### Validation
 
-Only legal builds under `dnd-5e-2024` validate. The checks the entries'
-data already supports are built
-([Consistency checks](../../docs/rulesets.md#consistency-checks)). The rest
-need data the entries hold only as text: which feature grants a feat or a
-pick, how many, and the training and prerequisites a class or feat prints.
-They come with **grants**, declared on the entry as `modifiers` are
-([Modifiers](../../docs/rulesets.md#modifiers)).
-
-| Check (errors unless noted) |
-|---|
-| A species feat comes from a species trait that grants an origin feat (Human's Versatile); a class feat from a class or subclass feature that grants a feat at that class level, of a category it allows; and each feat meets its ability prerequisite |
-| Options and choices fill exactly the counts their sources allow at the character's levels: a feature's or trait's skills, Expertise, tools, and languages; a later class's multiclass picks; and each option list's count |
-| Spells a feat or a subclass's always-prepared list gives are the character's too, outside its classes' counts |
-| Equipped armor and weapons the character lacks training or proficiency with (warning) |
+Only legal builds under `dnd-5e-2024` validate, with the checks in
+[Consistency checks](../../docs/rulesets.md#consistency-checks) and the
+grants they read ([Grants](../../docs/rulesets.md#grants)).
 
 #### Grants
 
-`class-feature`, `species-trait`, and `feat` stats take an optional
-`grants` array, each grant with a `kind` from a closed vocabulary in
-`common.schema.json`, as `modifiers` do. A feature's grant is given at each
-of its levels up to its class's level.
-
-| Kind | Example | Allows |
-|---|---|---|
-| `feat` | Ability Score Improvement: the categories its text allows ("another feat of your choice for which you qualify"); Fighting Style: `["fighting-style"]`; Epic Boon: `["epic-boon"]`; Versatile: `["origin"]` | One feat of those categories, with this source |
-| `skills` | Skillful: `"count": 1`; Keen Senses: `"count": 1, "from": ["insight", "perception", "survival"]` | Skill picks under the entry |
-| `expertise` | Expertise: `"count": 2` at each of its levels; Scholar: `"count": 1, "from": [...]` | Expertise picks |
-| `tools` | `"count": 3, "from": ["musical-instrument"]` | Tool picks |
-| `languages` | `"count": 2` | Language picks |
-| `options` | Eldritch Invocations: `"list": "Eldritch Invocation Options", "column": "Eldritch Invocations"`; Metamagic: `"byLevel": { "2": 2, "10": 4, "17": 6 }` | Options from the class's list of that name: the column's value, or `byLevel`, at the class's level |
-| `spells` | Magic Initiate: `"cantrips": 2, "level1": 1`, from the list its `note` names; an always-prepared subclass list, by class level | Spells outside the classes' counts |
-
-A class adds `multiclass` grants for what a later class gives (Bard,
-Ranger, and Rogue: `skills` 1), and structured `training` (weapon groups,
-with a property filter such as the Monk's Light, and armor categories), for
-the starting class and as a later class, which the proficiency warning
-reads. A feat adds `requires`, its ability prerequisite
-(`"abilities": ["str", "dex"], "min": 13`, any one by default), next to
-its printed `prerequisite`. The library's entries get them in a migration
-after the build, as `modifiers` did.
-
-A character has no `adjust`: every value is a modeled effect or stays text,
-so there is nothing to warn about.
+The library's entries get `grants`, a class's `grants` and `training`, and a
+feat's `requires` in a migration (#488), as `modifiers` did, which also
+settles the feat categories Ability Score Improvement and Epic Boon allow.
 
 ### Generation
 

@@ -1,11 +1,32 @@
 // Consistency checks a JSON schema can't express (docs/rulesets.md#consistency-checks). They run
 // after the schema stage, so `stats` already has the shape in types.ts.
 
-import { deriveCharacter, deriveCharacterLinked } from './characters.ts';
-import { deriveClass } from './classes.ts';
+import { atLevel, deriveCharacter, deriveCharacterLinked, equipmentOf } from './characters.ts';
+import { deriveClass, levelOf } from './classes.ts';
 import { attackBonus, deriveCreature, saveDc } from './derive.ts';
 import { findTokens, renderToken } from './tokens.ts';
-import type { Ability, Action, BackgroundStats, CharacterStats, ClassStats, CreatureStats, DerivedAction, DerivedCreature, FeatStats, ItemStats, LinkedCharacter, Modifier, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
+import type {
+  Ability,
+  Action,
+  BackgroundStats,
+  CharacterStats,
+  ClassFeatureStats,
+  ClassStats,
+  CreatureStats,
+  DerivedAction,
+  DerivedCreature,
+  FeatStats,
+  Grant,
+  ItemStats,
+  LinkedCharacter,
+  Modifier,
+  SpeciesStats,
+  SpeciesTraitStats,
+  SpellStats,
+  SubclassStats,
+  Tables,
+} from './types.ts';
+import equipmentGroups from './rules/equipment-groups.json' with { type: 'json' };
 import { ACTION_LISTS } from './types.ts';
 import type { Issue, LinkedEntry, LinkTarget, NameLookup } from '../module.ts';
 
@@ -308,14 +329,8 @@ export function checkCharacter(stats: CharacterStats, tables: Tables): Issue[] {
   return issues;
 }
 
-/** One casting class's limits, for matching a character's spells to the classes that can prepare them. */
-interface Caster {
-  ref: string;
-  /** The highest spell level its slots cast at its level. */
-  maxLevel: number;
-  cantrips: number;
-  prepared: number;
-}
+/** The languages every character picks beside Common at its origin, under its background (SRD 5.2 "Character Creation"). */
+const ORIGIN_LANGUAGES = 2;
 
 /** The highest spell level a class's own slots cast at its level, as a single-class caster's. */
 function maxSpellLevel(stats: ClassStats, level: number, tables: Tables): number {
@@ -325,38 +340,64 @@ function maxSpellLevel(stats: ClassStats, level: number, tables: Tables): number
 }
 
 /**
- * Whether each spell can be someone's: each to a different seat of a class it can go to, a cantrip
- * seat or a prepared one (bipartite matching by augmenting paths). Returns the spells left out.
+ * Seats each item in a different seat it fits (bipartite matching by augmenting paths), for spells
+ * in their classes' and feats' counts and feats in the grants that give them. Returns the items
+ * left out and, for each seat, the item it holds.
  */
-function unseated(spells: { index: number; cantrip: boolean; classes: string[] }[], casters: Caster[]): number[] {
-  const seats = casters.flatMap((c) => [
-    ...Array.from({ length: c.cantrips }, () => ({ ref: c.ref, cantrip: true })),
-    ...Array.from({ length: c.prepared }, () => ({ ref: c.ref, cantrip: false })),
-  ]);
-  const holder: (number | undefined)[] = seats.map(() => undefined);
-  const fits = (s: (typeof spells)[number], seat: (typeof seats)[number]) => seat.cantrip === s.cantrip && s.classes.includes(seat.ref);
-  const place = (si: number, visited: Set<number>): boolean => {
-    for (let k = 0; k < seats.length; k++) {
-      if (visited.has(k) || !fits(spells[si]!, seats[k]!)) continue;
+function seat(items: number, seats: number, fits: (item: number, seat: number) => boolean): { unseated: number[]; holder: (number | undefined)[] } {
+  const holder: (number | undefined)[] = Array.from({ length: seats }, () => undefined);
+  const place = (item: number, visited: Set<number>): boolean => {
+    for (let k = 0; k < seats; k++) {
+      if (visited.has(k) || !fits(item, k)) continue;
       visited.add(k);
       if (holder[k] === undefined || place(holder[k]!, visited)) {
-        holder[k] = si;
+        holder[k] = item;
         return true;
       }
     }
     return false;
   };
-  return spells.flatMap((s, si) => (place(si, new Set()) ? [] : [s.index]));
+  const unseated = Array.from({ length: items }, (_, i) => i).filter((i) => !place(i, new Set()));
+  return { unseated, holder };
 }
+
+/** The pick kinds a choice holds, and how a message names them. */
+const PICKS = {
+  skills: ['skill', 'skills'],
+  expertise: ['Expertise pick', 'Expertise picks'],
+  tools: ['tool', 'tools'],
+  languages: ['language', 'languages'],
+} as const;
+type PickKind = keyof typeof PICKS;
+const article = (word: string): string => (/^[aeiou]/.test(word) ? 'an' : 'a');
+const counted = (n: number, [one, many]: readonly [string, string]) => `${n} ${n === 1 ? one : many}`;
+const picked = (n: number) => `${n} ${n === 1 ? 'is' : 'are'} picked`;
+
+/** A class's column value at a level, as a count: "3" is 3, and "—" is none. */
+const columnCount = (stats: ClassStats, name: string, level: number): number => {
+  const value = stats.columns?.find((c) => c.name === name)?.values[level - 1];
+  const n = Number.parseInt(value ?? '', 10);
+  return Number.isNaN(n) ? 0 : n;
+};
+
+/** The equipment groups, for the weapon groups a weapon sits under. */
+const GROUP_PARENT = new Map((equipmentGroups as { id: string; parent?: string }[]).map((g) => [g.id, g.parent]));
+const groupsOf = (group: string): string[] => {
+  const all: string[] = [];
+  for (let at: string | undefined = group; at !== undefined; at = GROUP_PARENT.get(at)) all.push(at);
+  return all;
+};
 
 /**
  * A character's checks that read the entries it names (docs/rulesets.md#consistency-checks): its
- * background's increases, the final scores, multiclass prerequisites, subclasses, feats, choices,
- * options, spells, and attunement.
+ * background's increases, the final scores, multiclass prerequisites, subclasses, feats and the
+ * grants that give them, choices and options at the counts their sources give (docs/rulesets.md#grants),
+ * spells, attunement, and training with equipped gear.
  */
 export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, tables: Tables): Issue[] {
   const issues: Issue[] = [];
   const error = (path: string, message: string) => issues.push({ level: 'error', path, message });
+  const warning = (path: string, message: string) => issues.push({ level: 'warning', path, message });
   const statsOf = <T>(key: string, type: string): T | undefined => {
     const found = target(key);
     return found?.type === type ? (found.stats as T) : undefined;
@@ -364,7 +405,23 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
   const level = stats.classes.reduce((sum, c) => sum + c.level, 0);
   const background = statsOf<BackgroundStats>(stats.background.ref, 'background');
   const species = statsOf<SpeciesStats>(stats.species.ref, 'species');
-  const classes = stats.classes.map((c) => ({ ...c, stats: statsOf<ClassStats>(c.class.ref, 'class') }));
+  const classes = stats.classes.map((c) => ({
+    ...c,
+    stats: statsOf<ClassStats>(c.class.ref, 'class'),
+    subclassStats: c.subclass ? statsOf<SubclassStats>(c.subclass.ref, 'subclass') : undefined,
+  }));
+  const traits = (species?.traits ?? []).map((t) => ({ ref: t.ref, stats: statsOf<SpeciesTraitStats>(t.ref, 'species-trait') }));
+  const feats = stats.feats ?? [];
+  const featStats = feats.map((f) => statsOf<FeatStats>(f.ref, 'feat'));
+
+  /** Each class's and subclass's features, with their levels up to the class's level; a feature with none isn't had. */
+  const featuresOf = (c: (typeof classes)[number]) =>
+    [...(c.stats?.features ?? []), ...(c.subclass && c.subclassStats?.class.ref === c.class.ref ? c.subclassStats.features : [])].flatMap(({ ref }) => {
+      const feature = statsOf<ClassFeatureStats>(ref, 'class-feature');
+      const levels = (feature?.levels ?? []).map(levelOf).filter((l) => l <= c.level);
+      return feature && levels.length > 0 ? [{ ref, levels, grants: feature.grants ?? [] }] : [];
+    });
+  const classFeatures = classes.map((c) => ({ class: c, features: featuresOf(c) }));
 
   // The background's increases: +2 and +1, or +1 to each of three, among its three abilities.
   const increases = Object.entries(stats.abilities.background) as [Ability, number][];
@@ -378,8 +435,8 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
   const scores = { ...stats.abilities.base };
   for (const [a, by] of increases) scores[a] += by;
   for (const [a, score] of Object.entries(scores)) if (score > SCORE_MAX) error(`stats.abilities.background.${a}`, `${a} is ${score} after the background; a score can't go above ${SCORE_MAX}`);
-  (stats.feats ?? []).forEach((f, i) => {
-    const feat = statsOf<FeatStats>(f.ref, 'feat');
+  feats.forEach((f, i) => {
+    const feat = featStats[i];
     const placed = Object.entries(f.abilities ?? {}) as [Ability, number][];
     const bonus = feat?.modifiers?.find((m): m is Extract<Modifier, { kind: 'ability-bonus' }> => m.kind === 'ability-bonus' && m.total !== undefined);
     const max = bonus?.max ?? SCORE_MAX;
@@ -397,14 +454,15 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
   });
 
   // What the character derives from the entries, for the checks that read final scores, proficiencies,
-  // and spellcasting. A target that failed its schema has its own error, so these checks wait for it.
+  // spellcasting, and equipment. A target that failed its schema has its own error, so these checks wait for it.
+  const resolve = (key: string): LinkedEntry | undefined => {
+    const found = target(key);
+    return found && { type: found.type, id: key.slice(key.indexOf('/') + 1), name: key, stats: found.stats };
+  };
+  const library = { entries: [], resolve };
   let derived: LinkedCharacter | undefined;
   try {
-    const resolve = (key: string): LinkedEntry | undefined => {
-      const found = target(key);
-      return found && { type: found.type, id: key.slice(key.indexOf('/') + 1), name: key, stats: found.stats };
-    };
-    derived = deriveCharacterLinked(stats, { entries: [], resolve }, tables);
+    derived = deriveCharacterLinked(stats, library, tables);
   } catch {
     derived = undefined;
   }
@@ -428,73 +486,134 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
     if (!c.stats) return;
     const at = c.stats.subclassLevels[0];
     if (c.subclass) {
-      const subclass = statsOf<SubclassStats>(c.subclass.ref, 'subclass');
-      if (subclass && subclass.class.ref !== c.class.ref) error(`stats.classes[${i}].subclass`, `${c.subclass.ref} is a subclass of ${subclass.class.ref}, not ${c.class.ref}`);
+      if (c.subclassStats && c.subclassStats.class.ref !== c.class.ref) error(`stats.classes[${i}].subclass`, `${c.subclass.ref} is a subclass of ${c.subclassStats.class.ref}, not ${c.class.ref}`);
       if (at === undefined || c.level < at) error(`stats.classes[${i}].subclass`, `${c.class.ref} gains its subclass at level ${at ?? '—'}; this is level ${c.level}`);
     } else if (at !== undefined && c.level >= at) {
       error(`stats.classes[${i}]`, `${c.class.ref} has its subclass from level ${at}; name it`);
     }
   });
 
-  // Feats: the background's origin feat, once; an origin feat from the species; a class's from one of
-  // the character's classes at a level it has, meeting the feat's level; only a repeatable feat twice.
-  const feats = stats.feats ?? [];
+  // Feats: the background's origin feat, once; from the species or a class, one per feat grant of a
+  // trait or of a feature at that class level, of a category it allows; each feat's level and ability
+  // prerequisite; only a repeatable feat twice.
   const fromBackground = feats.filter((f) => f.source.ref === stats.background.ref);
   if (background && (fromBackground.length !== 1 || fromBackground[0]!.ref !== background.feat.ref)) {
     error('stats.feats', `${stats.background.ref} grants one feat, ${background.feat.ref}`);
   }
   const classLevels = new Map(stats.classes.map((c) => [c.class.ref, c.level]));
+  /** The feats taken from a species or class that names a real source, to seat in its grants. */
+  const granted: number[] = [];
   feats.forEach((f, i) => {
-    const feat = statsOf<FeatStats>(f.ref, 'feat');
+    const feat = featStats[i];
     const { ref, level: at } = f.source;
     if (ref.startsWith('background/') && ref !== stats.background.ref) error(`stats.feats[${i}].source`, `${ref} isn't the character's background`);
     if (ref.startsWith('species/')) {
       if (ref !== stats.species.ref) error(`stats.feats[${i}].source`, `${ref} isn't the character's species`);
-      else if (feat && feat.category !== 'origin') error(`stats.feats[${i}]`, `a species grants an origin feat; ${f.ref} is a ${feat.category} feat`);
+      else if (feat) granted.push(i);
     }
     if (ref.startsWith('class/')) {
       const has = classLevels.get(ref);
       if (has === undefined) error(`stats.feats[${i}].source`, `${ref} isn't one of the character's classes`);
       else if (at !== undefined && at > has) error(`stats.feats[${i}].source.level`, `${ref} is level ${has}; it hasn't reached level ${at}`);
+      else if (feat) granted.push(i);
     }
     if (feat?.level !== undefined && feat.level > level) error(`stats.feats[${i}]`, `${f.ref} needs level ${feat.level}; the character is level ${level}`);
     if (feat && feat.repeatable === undefined && feats.findIndex((g) => g.ref === f.ref) < i) error(`stats.feats[${i}]`, `${f.ref} isn't repeatable; it's taken once`);
+    if (feat?.requires && derived) {
+      const { abilities, min, join } = feat.requires;
+      const meets = (a: Ability) => derived.scores[a] >= min;
+      if (!(join === 'and' ? abilities.every(meets) : abilities.some(meets))) {
+        const needs = abilities.join(join === 'and' ? ' and ' : ' or ');
+        error(`stats.feats[${i}]`, `${f.ref} needs ${needs} ${min} or more; the final scores are ${abilities.map((a) => `${a} ${derived.scores[a]}`).join(', ')}`);
+      }
+    }
   });
-  if (feats.filter((f) => f.source.ref.startsWith('species/')).length > 1) error('stats.feats', 'a species grants one origin feat');
+  const featSeats = [
+    ...traits.flatMap((t) =>
+      (t.stats?.grants ?? []).flatMap((g) => (g.kind === 'feat' ? [{ source: stats.species.ref, level: undefined as number | undefined, from: t.ref, categories: g.categories }] : [])),
+    ),
+    ...classFeatures.flatMap(({ class: c, features }) =>
+      features.flatMap((feature) =>
+        feature.grants.flatMap((g) => (g.kind === 'feat' ? feature.levels.map((l) => ({ source: c.class.ref, level: l as number | undefined, from: feature.ref, categories: g.categories })) : [])),
+      ),
+    ),
+  ];
+  const featSeating = seat(granted.length, featSeats.length, (item, k) => {
+    const f = feats[granted[item]!]!;
+    const s = featSeats[k]!;
+    return s.source === f.source.ref && s.level === f.source.level && s.categories.includes(featStats[granted[item]!]!.category);
+  });
+  for (const item of featSeating.unseated) {
+    const i = granted[item]!;
+    const f = feats[i]!;
+    const where = f.source.level === undefined ? `${f.source.ref}'s traits` : `${f.source.ref} level ${f.source.level}`;
+    error(`stats.feats[${i}]`, `no feature of ${where} grants ${article(featStats[i]!.category)} ${featStats[i]!.category} feat that isn't already taken`);
+  }
+  featSeating.holder.forEach((held, k) => {
+    if (held !== undefined) return;
+    const s = featSeats[k]!;
+    error('stats.feats', `${s.from} grants a feat${s.level === undefined ? '' : ` at ${s.source} level ${s.level}`} (${s.categories.join(', ')}); take one`);
+  });
 
-  // Choices: each under a source the character has; the starting class's skills, exactly its count
-  // from its list; the background's tool, when it offers a choice; no skill picked twice; Expertise
-  // only in a proficient skill.
+  // Choices: each under a source the character has, filling exactly the picks it gives.
   const has = new Set<string>([
     stats.species.ref,
     stats.background.ref,
-    ...(species?.traits.map((t) => t.ref) ?? []),
+    ...traits.map((t) => t.ref),
     ...stats.classes.flatMap((c) => [c.class.ref, ...(c.subclass ? [c.subclass.ref] : [])]),
-    ...(derived?.features.flatMap((g) => g.features.map((f) => f.ref)) ?? []),
+    ...classFeatures.flatMap(({ features }) => features.map((f) => f.ref)),
     ...feats.map((f) => f.ref),
   ]);
   const choices = stats.choices ?? [];
   choices.forEach((c, i) => {
     if (!has.has(c.source.ref)) error(`stats.choices[${i}].source`, `${c.source.ref} isn't something the character has`);
   });
-  const starting = classes[0]!;
-  if (starting.stats) {
-    const picked = choices.filter((c) => c.source.ref === starting.class.ref).flatMap((c) => c.skills ?? []);
-    const { choose, from } = starting.stats.skills;
-    if (picked.length !== choose) error('stats.choices', `${starting.class.ref} gives ${choose} skills; ${picked.length} are picked`);
-    for (const skill of picked) if (from && !from.includes(skill)) error('stats.choices', `${skill} isn't on ${starting.class.ref}'s skill list`);
-  }
-  if (background) {
-    choices.forEach((c, i) => {
-      if (c.source.ref !== stats.background.ref) return;
-      if (c.skills) error(`stats.choices[${i}].skills`, `${stats.background.ref}'s skills are fixed; none are picked`);
-    });
-    const tools = choices.filter((c) => c.source.ref === stats.background.ref).flatMap((c) => c.tools ?? []);
-    if (background.tool.choose) {
-      if (tools.length !== 1 || tools[0]!.ref !== background.tool.ref) error('stats.choices', `${stats.background.ref} gives one ${background.tool.ref} of the character's choice; pick it`);
-    } else if (tools.length > 0) {
-      error('stats.choices', `${stats.background.ref}'s tool is fixed; none is picked`);
+  // What each source gives to pick: the starting class its skills and its `start` grants; a later
+  // class its `multiclass` grants; the background its tool, when it offers a choice, and the origin
+  // languages; a trait, a feat each time it's taken, and a feature at each of its levels, their grants.
+  const offers = new Map<string, Grant[]>();
+  const offer = (source: string, grants: Grant[]) => offers.set(source, [...(offers.get(source) ?? []), ...grants]);
+  classes.forEach((c, i) => {
+    if (!c.stats) return;
+    if (i === 0) offer(c.class.ref, [{ kind: 'skills', count: c.stats.skills.choose, ...(c.stats.skills.from && { from: c.stats.skills.from }) }, ...(c.stats.grants?.start ?? [])]);
+    else offer(c.class.ref, c.stats.grants?.multiclass ?? []);
+  });
+  if (background) offer(stats.background.ref, [...(background.tool.choose ? [{ kind: 'tools' as const, count: 1, from: [{ ref: background.tool.ref }] }] : []), { kind: 'languages', count: ORIGIN_LANGUAGES }]);
+  for (const t of traits) offer(t.ref, t.stats?.grants ?? []);
+  feats.forEach((f, i) => offer(f.ref, featStats[i]?.grants ?? []));
+  for (const { features } of classFeatures) for (const f of features) for (const _ of f.levels) offer(f.ref, f.grants);
+  const sources = [...new Set([...offers.keys(), ...choices.map((c) => c.source.ref)])].filter((s) => has.has(s));
+  for (const source of sources) {
+    const grants = offers.get(source) ?? [];
+    const groups = choices.filter((c) => c.source.ref === source);
+    const chosen = {
+      skills: groups.flatMap((c) => c.skills ?? []),
+      expertise: groups.flatMap((c) => c.expertise ?? []),
+      tools: groups.flatMap((c) => c.tools ?? []),
+      languages: groups.flatMap((c) => c.languages ?? []),
+    };
+    const picks = (kind: PickKind): unknown[] => chosen[kind];
+    const count = (kind: PickKind) => grants.reduce((n, g) => n + (g.kind === kind && 'count' in g ? g.count : 0), 0);
+    const pooled = grants.some((g) => g.kind === 'skills' && g.withTools);
+    for (const kind of Object.keys(PICKS) as PickKind[]) {
+      if (pooled && kind === 'tools') continue;
+      const n = picks(kind).length + (pooled && kind === 'skills' ? picks('tools').length : 0);
+      const allowed = count(kind) + (pooled && kind === 'skills' ? count('tools') : 0);
+      const noun = pooled && kind === 'skills' ? (['skill or tool', 'skills or tools'] as const) : PICKS[kind];
+      if (n !== allowed) error('stats.choices', `${source} gives ${counted(allowed, noun)}; ${picked(n)}`);
     }
+    // Picks from the lists the grants name, when every grant of the kind names one.
+    const listed = (kind: 'skills' | 'expertise' | 'tools') => {
+      const of = grants.filter((g): g is Extract<Grant, { kind: typeof kind }> => g.kind === kind);
+      if (of.length === 0 || of.some((g) => g.from === undefined)) return undefined;
+      return new Set(of.flatMap((g) => (g.from ?? []).map((x) => (typeof x === 'string' ? x : x.ref))));
+    };
+    for (const kind of ['skills', 'expertise'] as const) {
+      const from = listed(kind);
+      if (from) for (const skill of chosen[kind]) if (!from.has(skill)) error('stats.choices', `${skill} isn't one of the ${PICKS[kind][1]} ${source} offers`);
+    }
+    const tools = listed('tools');
+    if (tools && !pooled) for (const tool of chosen.tools) if (!tools.has(tool.ref)) error('stats.choices', `${tool.ref} isn't one of the tools ${source} offers`);
   }
   const skillPicks = [...(background?.skills ?? []), ...choices.flatMap((c) => c.skills ?? [])];
   skillPicks.forEach((skill, i) => {
@@ -506,32 +625,83 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
     if (derived && !derived.proficiencies.skills.some((s) => s.skill === skill)) error('stats.choices', `Expertise in ${skill} needs proficiency in it`);
   });
 
-  // Options: each from an option list of one of the character's classes.
+  // Options: each from an option list of one of the character's classes, and each list filled to the
+  // count its features' grants give at the class's level.
   const lists = new Set(classes.flatMap((c) => (c.stats?.optionLists ?? []).flatMap((l) => l.options.map((o) => o.ref))));
-  (stats.options ?? []).forEach((o, i) => {
+  const options = stats.options ?? [];
+  options.forEach((o, i) => {
     if (!lists.has(o.ref)) error(`stats.options[${i}]`, `${o.ref} isn't on an option list of the character's classes`);
   });
+  for (const { class: c, features } of classFeatures) {
+    for (const list of c.stats?.optionLists ?? []) {
+      const allowed = features.reduce((n, f) => {
+        for (const g of f.grants) {
+          if (g.kind !== 'options' || g.list !== list.name) continue;
+          n += g.column !== undefined ? columnCount(c.stats!, g.column, c.level) : (atLevel(g.byLevel ?? {}, c.level) ?? 0);
+        }
+        return n;
+      }, 0);
+      const taken = options.filter((o) => list.options.some((l) => l.ref === o.ref)).length;
+      if (taken !== allowed) error('stats.options', `${c.class.ref} ${c.level} gives ${allowed} of its ${list.name}; ${taken} ${taken === 1 ? 'is' : 'are'} taken`);
+    }
+  }
 
-  // Spells: each on the list of a casting class whose slots cast its level, and within each class's
-  // cantrips and prepared spells.
-  const casters: Caster[] = classes.flatMap((c) => {
-    const casting = c.stats?.spellcasting;
-    if (!casting) return [];
-    return [{ ref: c.class.ref, maxLevel: maxSpellLevel(c.stats!, c.level, tables), cantrips: casting.cantrips?.[c.level - 1] ?? 0, prepared: casting.prepared[c.level - 1]! }];
-  });
-  const spells = (stats.spells ?? []).flatMap((s, index) => {
+  // Spells: each the character's from an always-prepared list it has, or seated in a casting class's
+  // cantrips or prepared spells (on its list, at a level its slots cast) or a feat's spell picks.
+  const prepared = new Set<string>();
+  const alwaysPrepared = (grants: Grant[], at: number) => {
+    for (const g of grants) if (g.kind === 'spells' && g.byLevel) for (const [key, refs] of Object.entries(g.byLevel)) if (Number(key) <= at) for (const r of refs) prepared.add(r.ref);
+  };
+  for (const { class: c, features } of classFeatures) for (const f of features) alwaysPrepared(f.grants, c.level);
+  for (const t of traits) alwaysPrepared(t.stats?.grants ?? [], level);
+  feats.forEach((f, i) => alwaysPrepared(featStats[i]?.grants ?? [], f.source.level === undefined ? level : (classLevels.get(f.source.ref) ?? level)));
+  const onList = (spell: SpellStats, spellRef: string, classRef: string) =>
+    spell.classes.some((k) => k.ref === classRef) || (statsOf<ClassStats>(classRef, 'class')?.spells ?? []).some((k) => k.ref === spellRef);
+  type SpellSeat = { list: string; cantrip: boolean; maxLevel: number; exact?: number };
+  const spellSeats: SpellSeat[] = [
+    ...classes.flatMap((c) => {
+      const casting = c.stats?.spellcasting;
+      if (!casting) return [];
+      const maxLevel = maxSpellLevel(c.stats!, c.level, tables);
+      return [
+        ...Array.from({ length: casting.cantrips?.[c.level - 1] ?? 0 }, () => ({ list: c.class.ref, cantrip: true, maxLevel: 0 })),
+        ...Array.from({ length: casting.prepared[c.level - 1]! }, () => ({ list: c.class.ref, cantrip: false, maxLevel })),
+      ];
+    }),
+    ...feats.flatMap((f, i) =>
+      (featStats[i]?.grants ?? []).flatMap((g) => {
+        if (g.kind !== 'spells' || g.byLevel) return [];
+        const list = f.note === undefined ? undefined : `class/${f.note.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+        if (list === undefined || !statsOf<ClassStats>(list, 'class')) {
+          error(`stats.feats[${i}].note`, `${f.ref} gives spells from the class list its note names; ${f.note === undefined ? 'it has no note' : `"${f.note}" names no class`}`);
+          return [];
+        }
+        if (g.from && !g.from.some((k) => k.ref === list)) {
+          error(`stats.feats[${i}].note`, `${f.ref} gives spells from the ${g.from.map((k) => k.ref).join(', ')} list; the note names ${list}`);
+          return [];
+        }
+        return [
+          ...Array.from({ length: g.cantrips ?? 0 }, () => ({ list, cantrip: true, maxLevel: 0 })),
+          ...Array.from({ length: g.level1 ?? 0 }, () => ({ list, cantrip: false, maxLevel: 1, exact: 1 })),
+        ];
+      }),
+    ),
+  ];
+  const fitsSeat = (spell: SpellStats, ref: string, s: SpellSeat) =>
+    s.cantrip === (spell.level === 0) && spell.level <= s.maxLevel && (s.exact === undefined || spell.level === s.exact) && onList(spell, ref, s.list);
+  const toSeat = (stats.spells ?? []).flatMap((s, index) => {
+    if (prepared.has(s.ref)) return [];
     const spell = statsOf<SpellStats>(s.ref, 'spell');
     if (!spell) return [];
-    const onList = (c: Caster) => spell.classes.some((k) => k.ref === c.ref) || (statsOf<ClassStats>(c.ref, 'class')?.spells ?? []).some((k) => k.ref === s.ref);
-    const eligible = casters.filter((c) => onList(c) && spell.level <= c.maxLevel).map((c) => c.ref);
-    if (eligible.length === 0) {
-      error(`stats.spells[${index}]`, `${s.ref} (level ${spell.level}) isn't on the spell list of a class whose slots cast it`);
+    if (!spellSeats.some((k) => fitsSeat(spell, s.ref, k))) {
+      error(`stats.spells[${index}]`, `${s.ref} (level ${spell.level}) isn't on the spell list of a class whose slots cast it, or one a feat gives it from`);
       return [];
     }
-    return [{ index, cantrip: spell.level === 0, classes: eligible }];
+    return [{ index, ref: s.ref, spell }];
   });
-  for (const index of unseated(spells, casters)) {
-    error(`stats.spells[${index}]`, `${stats.spells![index]!.ref} is past the ${spells.find((s) => s.index === index)!.cantrip ? 'cantrips' : 'prepared spells'} its classes allow at their levels`);
+  for (const item of seat(toSeat.length, spellSeats.length, (i, k) => fitsSeat(toSeat[i]!.spell, toSeat[i]!.ref, spellSeats[k]!)).unseated) {
+    const { index, ref, spell } = toSeat[item]!;
+    error(`stats.spells[${index}]`, `${ref} is past the ${spell.level === 0 ? 'cantrips' : 'prepared spells'} its classes and feats allow at their levels`);
   }
 
   // Attunement: at most three items, and only one that requires it.
@@ -543,6 +713,25 @@ export function checkCharacterLinks(stats: CharacterStats, target: LinkTarget, t
     const item = e.ref.startsWith('item/') ? statsOf<ItemStats>(e.ref, 'item') : undefined;
     if (e.ref.startsWith('equipment/') || (item && !item.attunement.required)) error(`stats.equipped[${i}].attuned`, `${e.ref} doesn't require attunement`);
   });
+
+  // Training: equipped armor and weapons the starting class's training, or a later class's, covers.
+  // A class without `training` leaves the character's unknown, so the warning waits for every class's.
+  if (derived && classes.every((c) => c.stats?.training)) {
+    const training = classes.map((c, i) => (i === 0 ? c.stats!.training!.start : c.stats!.training!.multiclass)).filter((t) => t !== undefined);
+    const armor = new Set(training.flatMap((t) => t.armor ?? []));
+    const weapons = training.flatMap((t) => t.weapons ?? []);
+    equipped.forEach((e, i) => {
+      const gear = equipmentOf(library, e);
+      if (!gear) return;
+      if (gear.stats.armor && !armor.has(gear.stats.group as never)) warning(`stats.equipped[${i}]`, `the character has no training with ${gear.key} (${gear.stats.group})`);
+      if (gear.stats.weapon) {
+        const groups = groupsOf(gear.stats.group);
+        const properties = (gear.stats.weapon.properties ?? []).map((p) => p.ref);
+        const proficient = weapons.some((w) => groups.includes(w.group) && (!w.properties || w.properties.some((p) => properties.includes(p.ref))));
+        if (!proficient) warning(`stats.equipped[${i}]`, `the character has no proficiency with ${gear.key} (${gear.stats.group})`);
+      }
+    });
+  }
 
   return issues;
 }
