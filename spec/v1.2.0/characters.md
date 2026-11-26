@@ -105,6 +105,38 @@ too ([`encounters.md`](encounters.md)).
 The point costs and the XP budgets aren't in `tables.json` yet; this area
 adds the point costs, from SRD 5.2's "Character Creation".
 
+### Modifiers
+
+A feature that changes a derived value declares its effect as data, so a
+character needs no `adjust` for it. `class-feature`, `feat`, and
+`species-trait` stats get an optional **`modifiers`** array. Each modifier
+has a `kind` from a closed vocabulary that the schema validates. The
+character's derivations collect the modifiers of every entry it references
+at its levels (class and subclass features up to each class's level, its
+feats, and its species' traits) and apply them:
+
+| Kind | Example | Derives |
+|---|---|---|
+| `ac-formula` | Unarmored Defense: `{ "kind": "ac-formula", "base": 10, "abilities": ["dex", "con"], "armor": false, "shield": true }` | AC: the highest formula that applies wins, the equipped armor's included |
+| `ac-bonus` | Defense: `{ "kind": "ac-bonus", "value": 1, "whileArmored": true }` | AC |
+| `skill-floor` | Jack of All Trades: `{ "kind": "skill-floor", "proficiency": "half" }` | Skills, Passive Perception, and Initiative (a Dexterity check) |
+| `speed-bonus` | Unarmored Movement, by the feature's table: `{ "kind": "speed-bonus", "byLevel": { … }, "armor": false }` | Speed |
+| `hp-per-level` | Dwarven Toughness: `{ "kind": "hp-per-level", "value": 1 }` | Hit Points |
+| `attack-bonus` | Archery: `{ "kind": "attack-bonus", "value": 2, "weapon": "ranged" }` | Attacks |
+| `damage-bonus` | Dueling: `{ "kind": "damage-bonus", "value": 2, "weapon": "one-handed-melee" }` | Attacks |
+
+Abilities use the three-letter keys. `armor` and `shield` say whether the
+modifier applies while armor or a shield is equipped.
+
+**Not modeled:** effects that depend on the situation or on a choice made in
+play, such as Great Weapon Fighting's rerolls, Rage, and Two-Weapon
+Fighting. They stay as text only, and a character that wants a number from
+one uses `adjust` (warning), as now. A new kind is an amendment to this
+spec.
+
+**Migration:** the pilot adds `modifiers` to the SRD class features, feats,
+and species traits that have one of these effects, as part of its PR.
+
 ### Validation
 
 Only legal builds under `dnd-5e-2024` validate. New consistency checks
@@ -191,13 +223,6 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
 - The Library filters characters by class, background, species, and level.
 - `generate` routes by type, and makes a preset from an inline request.
 - The docs describe the type, its derivations, and the umbrella skill.
-
-## Open questions
-
-- **Features that change derived values,** such as Unarmored Defense,
-  Fighting Style feats, and Jack of All Trades: which ones the derivations
-  model, and how a feature declares its effect, rather than an `adjust` on
-  each character.
 
 ## Out of scope
 
