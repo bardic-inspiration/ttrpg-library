@@ -16,10 +16,15 @@ import type {
   ClassStats,
   DerivedCharacter,
   EquipmentStats,
+  FeatStats,
   ItemStats,
   LinkedCharacter,
+  Modifier,
+  ModifierWeapon,
+  ModifierWhile,
   Proficiency,
   SpeciesStats,
+  SpeciesTraitStats,
   SubclassStats,
   Tables,
 } from './types.ts';
@@ -59,10 +64,36 @@ function equipmentOf(library: LinkedLibrary, equipped: { ref: string; base?: { r
 const hasProperty = (stats: EquipmentStats, property: string): boolean =>
   (stats.weapon?.properties ?? []).some((p) => p.ref === `weapon-property/${property}`);
 
+/** One modifier, with the entry that declares it and the level of the class it belongs to, if any. */
+interface Collected {
+  modifier: Modifier;
+  source: string;
+  classLevel?: number;
+}
+
+/** The value a `byLevel` table gives at a level: the one from the highest key at or below it. */
+function atLevel<T>(table: Record<string, T>, level: number): T | undefined {
+  const key = Object.keys(table)
+    .map(Number)
+    .filter((k) => k <= level)
+    .sort((a, b) => b - a)[0];
+  return key === undefined ? undefined : table[String(key)];
+}
+
+/** The larger of two dice by average roll, the first on a tie. */
+const largerDie = (a: string, b: string): string => {
+  const total = (dice: string) => {
+    const [count, sides] = dice.split('d').map(Number);
+    return count! * (sides! + 1);
+  };
+  return total(b) > total(a) ? b : a;
+};
+
 /**
  * What a character derives from the entries it names (docs/rulesets.md#characters): its final
  * scores, saves, skills, Passive Perception, Hit Points, Initiative, Speed, Armor Class, attacks,
- * spellcasting and slots, and its features and proficiencies by source.
+ * spellcasting and slots, and its features and proficiencies by source, each with the modifiers of
+ * the features, feats, and traits it has (docs/rulesets.md#modifiers).
  */
 export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibrary, tables: Tables): LinkedCharacter {
   const level = totalLevel(stats);
@@ -75,39 +106,51 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     subclassStats: c.subclass ? need<SubclassStats>(library, c.subclass.ref).stats : undefined,
   }));
   const starting = classes[0]!;
+  const levelOfClass = new Map(classes.map((c) => [c.class.ref, c.level]));
 
-  // Scores: the base, the background's increases, and the increases each feat places.
+  // Features: each class's and subclass's up to the class's level, then the species' traits.
+  const upTo = (refs: { ref: string }[], at: number) =>
+    refs.flatMap(({ ref }) => {
+      const first = levelOf(need<ClassFeatureStats>(library, ref).stats.levels[0]!);
+      return first <= at ? [{ ref, level: first }] : [];
+    });
+  const features = [
+    ...classes.flatMap((c) => [
+      { source: c.class.ref, classLevel: c.level, features: upTo(c.stats.features, c.level) },
+      ...(c.subclass && c.subclassStats ? [{ source: c.subclass.ref, classLevel: c.level, features: upTo(c.subclassStats.features, c.level) }] : []),
+    ]),
+    { source: stats.species.ref, classLevel: undefined, features: species.stats.traits.map(({ ref }) => ({ ref })) },
+  ];
+
+  // Modifiers: from the features above, the species' traits, and the feats.
+  const feats = (stats.feats ?? []).map((f) => ({ ...f, stats: need<FeatStats>(library, f.ref).stats }));
+  const collected: Collected[] = [
+    ...features.flatMap((group) =>
+      group.features.flatMap(({ ref }) =>
+        (need<ClassFeatureStats | SpeciesTraitStats>(library, ref).stats.modifiers ?? []).map((modifier) => ({ modifier, source: ref, classLevel: group.classLevel })),
+      ),
+    ),
+    ...feats.flatMap((f) =>
+      (f.stats.modifiers ?? []).map((modifier) => ({ modifier, source: f.ref, classLevel: f.source.level === undefined ? undefined : levelOfClass.get(f.source.ref) })),
+    ),
+  ];
+  const ofKind = <K extends Modifier['kind']>(kind: K) => collected.filter((c): c is Collected & { modifier: Extract<Modifier, { kind: K }> } => c.modifier.kind === kind);
+
+  // Scores: the base, the background's increases, each feat's placed increases up to its maximum,
+  // then fixed increases (Primal Champion) up to theirs.
   const scores = { ...stats.abilities.base };
-  for (const increases of [stats.abilities.background, ...(stats.feats ?? []).map((f) => f.abilities ?? {})]) {
-    for (const [ability, by] of Object.entries(increases) as [Ability, number][]) scores[ability] += by;
+  const raise = (ability: Ability, by: number, max = Infinity) => {
+    scores[ability] = Math.max(scores[ability], Math.min(max, scores[ability] + by));
+  };
+  for (const [ability, by] of Object.entries(stats.abilities.background) as [Ability, number][]) raise(ability, by);
+  for (const f of feats) {
+    const max = f.stats.modifiers?.find((m): m is Extract<Modifier, { kind: 'ability-bonus' }> => m.kind === 'ability-bonus' && m.total !== undefined)?.max;
+    for (const [ability, by] of Object.entries(f.abilities ?? {}) as [Ability, number][]) raise(ability, by, max);
   }
+  for (const { modifier } of ofKind('ability-bonus')) for (const ability of modifier.abilities ?? []) raise(ability, modifier.value ?? 0, modifier.max);
   const mods = Object.fromEntries(tables.abilities.map((a) => [a, abilityMod(scores[a])])) as Record<Ability, number>;
 
-  const savingThrows = new Set(starting.stats.savingThrows);
-  const saves = Object.fromEntries(tables.abilities.map((a) => [a, mods[a] + (savingThrows.has(a) ? pb : 0)])) as Record<Ability, number>;
-
-  // Skills: the background's two, then each pick, with Expertise doubling the bonus.
-  const chosen = stats.choices ?? [];
-  const skillSources = [
-    ...background.stats.skills.map((skill) => ({ skill, source: stats.background.ref })),
-    ...chosen.flatMap((c) => (c.skills ?? []).map((skill) => ({ skill, source: c.source.ref }))),
-  ];
-  const expertise = chosen.flatMap((c) => (c.expertise ?? []).map((skill) => ({ skill, source: c.source.ref })));
-  const proficient = new Set(skillSources.map((s) => s.skill));
-  const expert = new Set(expertise.map((s) => s.skill));
-  const skills = Object.fromEntries(
-    Object.entries(tables.skills).map(([skill, ability]) => {
-      const proficiency: Proficiency | undefined = expert.has(skill) ? 'expertise' : proficient.has(skill) ? 'proficient' : undefined;
-      const bonus = mods[ability] + (proficiency === 'expertise' ? 2 * pb : proficiency ? pb : 0);
-      return [skill, proficiency ? { bonus, proficiency } : { bonus }];
-    }),
-  );
-
-  // Hit Points: the starting class's die at its maximum for level 1, then the fixed value per level.
-  const dice = classes.flatMap((c) => Array.from({ length: c.level }, () => dieSize(c.stats.hitDie)));
-  const hp = dice.reduce((sum, die, i) => sum + (i === 0 ? die : fixedHp(die)), 0) + mods.con * level;
-
-  // Armor Class: the equipped armor's formula with its Dexterity rule, or 10 + Dexterity, then a shield.
+  // What's equipped, for Armor Class, attacks, and each modifier's `while`.
   const tree = library.rules?.groups.get('equipment');
   const gear = (stats.equipped ?? []).flatMap((e) => {
     const equipment = equipmentOf(library, e);
@@ -115,39 +158,119 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
   });
   const armor = gear.find((g) => g.stats.armor && g.stats.group !== 'shields');
   const shield = gear.find((g) => g.stats.armor && g.stats.group === 'shields');
+  const weapons = gear.filter((g) => g.stats.weapon);
+  const condition: Record<ModifierWhile, boolean> = {
+    unarmored: !armor,
+    armored: armor !== undefined,
+    'no-heavy-armor': armor?.stats.group !== 'heavy-armor',
+    'no-shield': !shield,
+  };
+  const holds = (m: { while?: ModifierWhile[] }) => (m.while ?? []).every((w) => condition[w]);
+  const valueOf = (c: Collected & { modifier: { value?: number | string; byLevel?: Record<string, number>; min?: number } }): number => {
+    const m = c.modifier;
+    const raw = m.byLevel ? (atLevel(m.byLevel, c.classLevel ?? level) ?? 0) : m.value === 'proficiency' ? pb : typeof m.value === 'string' ? mods[m.value as Ability] : (m.value ?? 0);
+    return Math.max(raw, m.min ?? -Infinity);
+  };
+  const sum = (list: (Collected & { modifier: { while?: ModifierWhile[]; value?: number | string; byLevel?: Record<string, number>; min?: number } })[]) =>
+    list.filter((c) => holds(c.modifier)).reduce((total, c) => total + valueOf(c), 0);
+
+  const savingThrows = new Set<Ability>(starting.stats.savingThrows);
+  for (const { modifier } of ofKind('save-proficiency')) for (const a of modifier.abilities === 'all' ? tables.abilities : modifier.abilities) savingThrows.add(a);
+  const saveBonus = sum(ofKind('save-bonus'));
+  const saves = Object.fromEntries(tables.abilities.map((a) => [a, mods[a] + (savingThrows.has(a) ? pb : 0) + saveBonus])) as Record<Ability, number>;
+
+  // Skills: the background's two, each pick, and each skill a modifier names, with Expertise doubling
+  // the bonus; a skill floor adds half the proficiency bonus to the rest.
+  const chosen = stats.choices ?? [];
+  const named = ofKind('skill-proficiency');
+  const skillSources = [
+    ...background.stats.skills.map((skill) => ({ skill, source: stats.background.ref })),
+    ...chosen.flatMap((c) => (c.skills ?? []).map((skill) => ({ skill, source: c.source.ref }))),
+    ...named.filter((c) => !c.modifier.expertise).flatMap((c) => c.modifier.skills.map((skill) => ({ skill, source: c.source }))),
+  ];
+  const expertise = [
+    ...chosen.flatMap((c) => (c.expertise ?? []).map((skill) => ({ skill, source: c.source.ref }))),
+    ...named.filter((c) => c.modifier.expertise).flatMap((c) => c.modifier.skills.map((skill) => ({ skill, source: c.source }))),
+  ];
+  const proficient = new Set(skillSources.map((s) => s.skill));
+  const expert = new Set(expertise.map((s) => s.skill));
+  const floor = ofKind('skill-floor').length > 0 ? Math.floor(pb / 2) : 0;
+  const skills = Object.fromEntries(
+    Object.entries(tables.skills).map(([skill, ability]) => {
+      const proficiency: Proficiency | undefined = expert.has(skill) ? 'expertise' : proficient.has(skill) ? 'proficient' : undefined;
+      const bonus = mods[ability] + (proficiency === 'expertise' ? 2 * pb : proficiency ? pb : floor);
+      return [skill, proficiency ? { bonus, proficiency } : { bonus }];
+    }),
+  );
+
+  // Hit Points: the starting class's die at its maximum for level 1, then the fixed value per level,
+  // plus Constitution and any per-level bonus for each level, or each level of the feature's class.
+  const dice = classes.flatMap((c) => Array.from({ length: c.level }, () => dieSize(c.stats.hitDie)));
+  const perLevel = ofKind('hp-per-level')
+    .filter((c) => holds(c.modifier))
+    .reduce((total, c) => total + valueOf(c) * (c.modifier.per === 'class' ? (c.classLevel ?? level) : level), 0);
+  const hp = dice.reduce((total, die, i) => total + (i === 0 ? die : fixedHp(die)), 0) + mods.con * level + perLevel;
+
+  // Armor Class: the highest formula that applies (the equipped armor's with its Dexterity rule, or
+  // 10 + Dexterity, or a modifier's), then the shield and each bonus.
   const dexToAc = (a: NonNullable<EquipmentStats['armor']>) => (a.dex ? Math.min(mods.dex, a.dexMax ?? Infinity) : 0);
+  const formulas = [
+    armor ? armor.stats.armor!.ac + dexToAc(armor.stats.armor!) : 10 + mods.dex,
+    ...ofKind('ac-formula').filter((c) => holds(c.modifier)).map((c) => c.modifier.base + (c.modifier.abilities ?? []).reduce((t, a) => t + mods[a], 0)),
+  ];
   const ac = {
-    value: (armor ? armor.stats.armor!.ac + dexToAc(armor.stats.armor!) : 10 + mods.dex) + (shield?.stats.armor!.ac ?? 0),
+    value: Math.max(...formulas) + (shield?.stats.armor!.ac ?? 0) + sum(ofKind('ac-bonus')),
     ...(armor && { armor: armor.ref }),
     ...(shield && { shield: shield.ref }),
   };
 
-  // Attacks: Strength for a melee weapon, Dexterity for a ranged one, the higher for Finesse.
-  const attacks = gear.flatMap((g): CharacterAttack[] => {
-    const weapon = g.stats.weapon;
-    if (!weapon) return [];
+  // Attacks: Strength for a melee weapon, Dexterity for a ranged one, the higher for Finesse or
+  // where a modifier allows another ability, then the bonuses and dice of the modifiers that apply.
+  const isA = (g: (typeof gear)[number], filter: ModifierWeapon, twoHanded: boolean): boolean => {
     const ranged = tree?.contains('ranged-weapons', { stats: g.stats }) ?? false;
-    const ability: Ability = hasProperty(g.stats, 'finesse') ? (mods.dex > mods.str ? 'dex' : 'str') : ranged ? 'dex' : 'str';
-    const modifier = mods[ability];
-    const { dice, flat, type } = weapon.damage;
-    return [
-      {
-        ref: g.ref,
-        weapon: g.key,
-        ability,
-        attackBonus: attackBonus(pb, modifier),
-        damage: {
-          ...(dice !== undefined ? { dice } : { flat }),
-          modifier,
-          type,
-          display: dice !== undefined ? withModifier(dice, modifier) : String(Math.max(1, flat! + modifier)),
-        },
-        ...(weapon.versatile && { versatile: { dice: weapon.versatile, display: withModifier(weapon.versatile, modifier) } }),
-        ...(weapon.range && { range: weapon.range }),
-        properties: weapon.properties ?? [],
-        mastery: weapon.mastery,
-      },
+    const melee = tree?.contains('melee-weapons', { stats: g.stats }) ?? false;
+    if (filter === 'ranged') return ranged;
+    if (filter === 'melee') return melee;
+    if (filter === 'one-handed-melee') return melee && !twoHanded && !hasProperty(g.stats, 'two-handed') && weapons.length === 1;
+    return g.stats.group === 'simple-melee-weapons' || (g.stats.group === 'martial-melee-weapons' && hasProperty(g.stats, 'light'));
+  };
+  const attacks = weapons.map((g): CharacterAttack => {
+    const weapon = g.stats.weapon!;
+    const ranged = tree?.contains('ranged-weapons', { stats: g.stats }) ?? false;
+    const applies = (c: { modifier: { weapon: ModifierWeapon; while?: ModifierWhile[] } }, twoHanded = false) => isA(g, c.modifier.weapon, twoHanded) && holds(c.modifier);
+    const candidates: Ability[] = [
+      ...(hasProperty(g.stats, 'finesse') ? (['str', 'dex'] as Ability[]) : [(ranged ? 'dex' : 'str') as Ability]),
+      ...ofKind('attack-ability').filter((c) => applies(c)).flatMap((c) => c.modifier.abilities),
     ];
+    const ability = candidates.reduce((best, a) => (mods[a] > mods[best] ? a : best), candidates[0]!);
+    const damageBonus = (twoHanded: boolean) =>
+      ofKind('damage-bonus').filter((c) => applies(c, twoHanded)).reduce((t, c) => t + valueOf(c), 0);
+    const modifier = mods[ability] + damageBonus(false);
+    const dieFor = (base: string, twoHanded: boolean) =>
+      ofKind('damage-die')
+        .filter((c) => applies(c, twoHanded))
+        .map((c) => c.modifier.die ?? atLevel(c.modifier.byLevel!, c.classLevel ?? level))
+        .reduce<string>((d, other) => (other === undefined ? d : largerDie(d, other)), base);
+    const { flat, type } = weapon.damage;
+    const dice = weapon.damage.dice === undefined ? undefined : dieFor(weapon.damage.dice, false);
+    const versatileModifier = mods[ability] + damageBonus(true);
+    const versatileDice = weapon.versatile && dieFor(weapon.versatile, true);
+    return {
+      ref: g.ref,
+      weapon: g.key,
+      ability,
+      attackBonus: attackBonus(pb, mods[ability]) + ofKind('attack-bonus').filter((c) => applies(c)).reduce((t, c) => t + valueOf(c), 0),
+      damage: {
+        ...(dice !== undefined ? { dice } : { flat }),
+        modifier,
+        type,
+        display: dice !== undefined ? withModifier(dice, modifier) : String(Math.max(1, flat! + modifier)),
+      },
+      ...(versatileDice && { versatile: { dice: versatileDice, display: withModifier(versatileDice, versatileModifier) } }),
+      ...(weapon.range && { range: weapon.range }),
+      properties: weapon.properties ?? [],
+      mastery: weapon.mastery,
+    };
   });
 
   // Spellcasting: each casting class's DC and attack; slots from the Multiclass Spellcaster table at
@@ -165,23 +288,12 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     };
   });
   const casterLevel =
-    casters.filter((c) => c.stats.spellcasting!.progression === 'full').reduce((sum, c) => sum + c.level, 0) +
-    casters.filter((c) => c.stats.spellcasting!.progression === 'half').reduce((sum, c) => sum + Math.ceil(c.level / 2), 0);
+    casters.filter((c) => c.stats.spellcasting!.progression === 'full').reduce((total, c) => total + c.level, 0) +
+    casters.filter((c) => c.stats.spellcasting!.progression === 'half').reduce((total, c) => total + Math.ceil(c.level / 2), 0);
   const pact = casters.find((c) => c.stats.spellcasting!.progression === 'pact');
 
-  // Features: each class's and subclass's up to the class's level, then the species' traits.
-  const upTo = (refs: { ref: string }[], at: number) =>
-    refs.flatMap(({ ref }) => {
-      const first = levelOf(need<ClassFeatureStats>(library, ref).stats.levels[0]!);
-      return first <= at ? [{ ref, level: first }] : [];
-    });
-  const features = [
-    ...classes.flatMap((c) => [
-      { source: c.class.ref, features: upTo(c.stats.features, c.level) },
-      ...(c.subclass && c.subclassStats ? [{ source: c.subclass.ref, features: upTo(c.subclassStats.features, c.level) }] : []),
-    ]),
-    { source: stats.species.ref, features: species.stats.traits.map(({ ref }) => ({ ref })) },
-  ];
+  const speed = species.stats.speed + sum(ofKind('speed-bonus'));
+  const modes = [...new Set(ofKind('speed-mode').filter((c) => holds(c.modifier)).flatMap((c) => c.modifier.modes))];
 
   const backgroundTool = background.stats.tool.choose ? [] : [{ source: stats.background.ref, ref: background.stats.tool.ref }];
   const proficiencies: CharacterProficiencies = {
@@ -207,14 +319,15 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     skills,
     passivePerception: 10 + skills.perception!.bonus,
     hp,
-    initiative: mods.dex,
-    speed: species.stats.speed,
+    initiative: mods.dex + sum(ofKind('initiative-bonus')),
+    speed,
+    ...(modes.length > 0 && { speeds: Object.fromEntries(modes.map((m) => [m, speed])) }),
     ac,
     attacks,
     spellcasting,
     ...(casterLevel > 0 && { spellSlots: [...tables.multiclassSpellSlots[Math.min(casterLevel, 20) - 1]!] }),
     ...(pact && { pactSlots: { ...tables.pactMagic[pact.level - 1]! } }),
-    features,
+    features: features.map(({ source, features: list }) => ({ source, features: list })),
     proficiencies,
   };
 }

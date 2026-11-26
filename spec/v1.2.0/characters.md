@@ -37,66 +37,6 @@ adds owners and editing, not a second type.
 
 ## Design
 
-### Modifiers
-
-A feature that changes a derived value declares its effect as data, so a
-character needs no `adjust` for it. `class-feature`, `feat`, and
-`species-trait` stats get an optional **`modifiers`** array. Each modifier
-has a `kind` from a closed vocabulary that the schema validates. The
-character's derivations collect the modifiers of every entry it references
-at its levels (class and subclass features up to each class's level, its
-feats, and its species' traits) and apply them.
-
-A modifier's fields share these forms:
-
-- **`value`:** a number, `"proficiency"` (the Proficiency Bonus), or an
-  ability key for that ability's modifier, with an optional `min`.
-- **`byLevel`:** in place of `value`, a value by the level of the class the
-  feature belongs to, from the feature's table.
-- **`while`:** the conditions it applies under, all of which must hold:
-  `unarmored` (no armor equipped), `armored` (Light, Medium, or Heavy armor
-  equipped), `no-heavy-armor`, and `no-shield`. Omitted, it always applies.
-- **`weapon`:** which equipped weapons it applies to: `ranged`, `melee`,
-  `one-handed-melee` (a melee weapon wielded in one hand and no other
-  weapon), or `monk` (Simple Melee weapons and Martial Melee weapons with
-  the Light property).
-- Abilities and skills use the keys `common.schema.json` defines (`dex`,
-  `history`); speed modes are `climb`, `swim`, and `fly`.
-
-The kinds:
-
-| Kind | Example | Derives |
-|---|---|---|
-| `ability-bonus` | Primal Champion: `{ "kind": "ability-bonus", "abilities": ["str", "con"], "value": 4, "max": 25 }`. A chosen increase gives `total` points in place of `abilities` and `value`, with an optional `from`, and the character's feat choice places them: Ability Score Improvement `{ "kind": "ability-bonus", "total": 2, "max": 20 }`, Boon of Irresistible Offense `{ "kind": "ability-bonus", "total": 1, "max": 30, "from": ["str", "dex"] }` | Final ability scores |
-| `ac-formula` | Unarmored Defense: `{ "kind": "ac-formula", "base": 10, "abilities": ["dex", "con"], "while": ["unarmored"] }` | AC: the highest formula that applies wins, the equipped armor's included |
-| `ac-bonus` | Defense: `{ "kind": "ac-bonus", "value": 1, "while": ["armored"] }` | AC |
-| `save-proficiency` | Slippery Mind: `{ "kind": "save-proficiency", "abilities": ["wis", "cha"] }`; Disciplined Survivor: `"abilities": "all"` | Saving throws |
-| `save-bonus` | Aura of Protection: `{ "kind": "save-bonus", "value": "cha", "min": 1 }` | Saving throws |
-| `skill-proficiency` | A feature that names its skill: `{ "kind": "skill-proficiency", "skills": ["history"], "expertise": true }` | Skills and Passive Perception |
-| `skill-floor` | Jack of All Trades: `{ "kind": "skill-floor", "proficiency": "half" }` | Skills, Passive Perception, and Initiative (a Dexterity check) |
-| `initiative-bonus` | Alert: `{ "kind": "initiative-bonus", "value": "proficiency" }` | Initiative |
-| `speed-bonus` | Fast Movement: `{ "kind": "speed-bonus", "value": 10, "while": ["no-heavy-armor"] }`; Unarmored Movement: `"byLevel"` and `"while": ["unarmored", "no-shield"]` | Speed |
-| `speed-mode` | Roving: `{ "kind": "speed-mode", "modes": ["climb", "swim"] }`, each equal to the Speed | Other speeds |
-| `hp-per-level` | Dwarven Toughness: `{ "kind": "hp-per-level", "value": 1 }`; Draconic Resilience: `"per": "class"`, for each level of its class rather than each character level | Hit Points |
-| `attack-ability` | Martial Arts: `{ "kind": "attack-ability", "abilities": ["dex"], "weapon": "monk", "while": ["unarmored", "no-shield"] }`, usable in place of Strength when higher | Attacks |
-| `attack-bonus` | Archery: `{ "kind": "attack-bonus", "value": 2, "weapon": "ranged" }` | Attacks |
-| `damage-bonus` | Dueling: `{ "kind": "damage-bonus", "value": 2, "weapon": "one-handed-melee" }` | Attacks |
-| `damage-die` | Martial Arts: `{ "kind": "damage-die", "byLevel": { … }, "weapon": "monk", "while": ["unarmored", "no-shield"] }`, used when larger than the weapon's | Attacks |
-
-A choice a feature offers, such as a skill or Expertise of the character's
-choosing, is a pick in `choices`, not a modifier.
-
-**Not modeled:** effects that depend on the situation, a choice made in
-play, or something the profile doesn't derive, such as Great Weapon
-Fighting's rerolls, Rage and what it enables, Advantage on Initiative,
-Two-Weapon Fighting, the Pact of the Blade weapon, and spell damage
-(Agonizing Blast). They stay as text only, and a character that wants a
-number from one uses `adjust` (warning), as now. A new kind is an amendment
-to this spec.
-
-**Migration:** the pilot adds `modifiers` to the SRD class features, feats,
-and species traits that have one of these effects, as part of its PR.
-
 ### Validation
 
 Only legal builds under `dnd-5e-2024` validate. New consistency checks
@@ -175,6 +115,24 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
   `spell/cure-wounds`, on `species/human` with `background/acolyte`: the
   simplest profile.
 
+## Migration
+
+No library entry carries [modifiers](../../docs/rulesets.md#modifiers) yet.
+#476 adds them, as a dev PR with the `migration` label:
+
+- **Features, feats, and traits** with an always-on effect: Barbarian and
+  Monk Unarmored Defense, Unarmored Movement, Fast Movement, Roving,
+  Draconic Resilience (its Armor Class formula and its Hit Points per
+  Sorcerer level), Jack of All Trades, Defense, Archery, Dwarven Toughness,
+  and the custom Swift Foot. No entry's `text` changes.
+- **Items:** `item` stats get `modifiers` too, applying only while the item
+  is equipped, and attuned when it requires attunement; on armor or a
+  weapon, a modifier applies to that item itself. `byVariant` gives a value
+  per variant (+1/+2/+3 Armor and Weapon). It adds the kinds `check-bonus`
+  and `ability-set` (a score raised to a value unless it's already higher:
+  Gauntlets of Ogre Power, Amulet of Health, Headband of Intellect, Belt of
+  Giant Strength).
+
 ## Done when
 
 - The `character` type validates, derives, and renders its profile, with
@@ -185,14 +143,10 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
 
 ## Open questions
 
-- **Modifiers: which design (#429).** "Modifiers" above and the design
-  recorded in #476 differ: who migrates the SRD entries (the pilot, or #476
-  after it), whether items carry `modifiers` (with `byVariant`,
-  attunement, `check-bonus`, and `ability-set`), the armor condition's form
-  (`while` keys, or a list of allowed armor types), Unarmored Movement's
-  speed (`byLevel`, or the class table's column), and whether Jack of All
-  Trades reaches Initiative (the SRD text says only skill checks). The
-  character's derivations apply no modifiers until it's decided.
+- **Worn items (#476).** Whether `equipped` takes wondrous items and rings,
+  with an `attuned` flag and a limit of three attuned items. Until it does,
+  only armor, shields, and weapons apply, so cloaks, rings, and amulets
+  can't.
 
 ## Out of scope
 

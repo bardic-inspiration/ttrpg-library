@@ -70,6 +70,10 @@
     "repeatable": {
       "description": "The \"Repeatable\" paragraph's text, printed last: \"You can take this feat more than once.\"",
       "$ref": "common.schema.json#/$defs/Text"
+    },
+    "modifiers": {
+      "description": "Its effects on a character's derived values (docs/rulesets.md#modifiers).",
+      "$ref": "common.schema.json#/$defs/Modifiers"
     }
   }
 }
