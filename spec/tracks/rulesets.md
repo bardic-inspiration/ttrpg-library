@@ -37,4 +37,6 @@ are answered.
   partly a ruleset variant, so whether rule additions reach the whole
   library or only the sourcebook's own entries may be settled here.
 - **Ruleset-neutral maps:** one map populated by encounters from two
-  rulesets, once maps have their spatial schema.
+  rulesets, once maps have their spatial schema. Such a map shows in the
+  Library of every ruleset it's compatible with, since each ruleset has its
+  own Library.
