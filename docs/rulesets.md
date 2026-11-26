@@ -875,6 +875,18 @@ warnings below on an SRD entry.
 | Class feature | `levels` ascend | error |
 | Subclass | `features` are in level order, by each feature's first level | error |
 | Subclass | Each feature's levels are its class's subclass levels, and each subclass level has a feature | error |
+| Character | Each base score is 8 to 15, and the point costs total 27 or less | error |
+| Character | Class levels total 20 or less, and no class is taken twice | error |
+| Character | The background's increases are +2/+1 or +1/+1/+1, only among its three abilities | error |
+| Character | No placed increase takes a score above 20, or above its feat's `max`; a feat with an Ability Score Improvement's `total` places exactly that many points, among its `from` abilities, and a feat with fixed increases places none | error |
+| Character | With more than one class, each class's primary ability is 13 or more in the final scores (all of them for an "and", one for an "or"), the starting class's included | error |
+| Character | A subclass belongs to its class, and is present exactly when the class's level reaches its first subclass level | error |
+| Character | One feat from the background, its origin feat; at most one from the species, an origin feat; a class's feat from one of the character's classes at a level it has; each feat's `level` at most the character's; only a repeatable feat twice | error |
+| Character | Each choice's source is something the character has: its species or a trait of it, its background, a class or subclass, a feature it has at its levels, or a feat | error |
+| Character | The starting class's skills are exactly its count, from its list; the background's tool is picked exactly when it offers a choice, and its skills never are; no skill is picked twice, the background's included; Expertise only in a skill the character is proficient in | error |
+| Character | Each option is on an option list of one of the character's classes | error |
+| Character | Each spell is on the list of one of its casting classes (the spell's `classes`, or the class's `spells`) at a level that class's own slots cast, and the spells fit the classes' cantrips and prepared spells at their levels | error |
+| Character | No more than three equipped items are attuned, and only an item that requires attunement is | error |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

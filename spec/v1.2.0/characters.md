@@ -39,25 +39,49 @@ adds owners and editing, not a second type.
 
 ### Validation
 
-Only legal builds under `dnd-5e-2024` validate. New consistency checks
-(errors unless noted):
+Only legal builds under `dnd-5e-2024` validate. The checks the entries'
+data already supports are built
+([Consistency checks](../../docs/rulesets.md#consistency-checks)). The rest
+need data the entries hold only as text: which feature grants a feat or a
+pick, how many, and the training and prerequisites a class or feat prints.
+They come with **grants**, declared on the entry as `modifiers` are
+([Modifiers](../../docs/rulesets.md#modifiers)).
 
-| Check |
+| Check (errors unless noted) |
 |---|
-| Each base score is 8 to 15, and the point costs total 27 or less |
-| The background's increases are +2/+1 or +1/+1/+1, only among its three abilities |
-| No final score above 20 |
-| Class levels total 1 to 20; no class repeats |
-| With more than one class, each class's multiclass prerequisite is met by the final scores, the starting class's included |
-| A subclass belongs to its class and is present exactly when the class's level reaches its subclass level |
-| One feat from the background, which is its origin feat, and one origin feat from a species trait that grants one (Human's Versatile); each other feat comes from a class level that grants one, meets its prerequisite, and only a repeatable feat repeats |
-| Options and choices fill exactly the counts their sources allow at the character's levels |
-| Each spell is on a list of one of its classes, at a level its slots can cast, and cantrips and prepared spells are within each class's counts |
-| No more than three equipped items are attuned, and only an item that requires attunement is |
-| Equipped armor and weapons the character lacks proficiency with (warning) |
-| Any `adjust` (warning), as on creatures |
+| A species feat comes from a species trait that grants an origin feat (Human's Versatile); a class feat from a class or subclass feature that grants a feat at that class level, of a category it allows; and each feat meets its ability prerequisite |
+| Options and choices fill exactly the counts their sources allow at the character's levels: a feature's or trait's skills, Expertise, tools, and languages; a later class's multiclass picks; and each option list's count |
+| Spells a feat or a subclass's always-prepared list gives are the character's too, outside its classes' counts |
+| Equipped armor and weapons the character lacks training or proficiency with (warning) |
 
-`adjust` covers a deliberate deviation, as elsewhere.
+#### Grants
+
+`class-feature`, `species-trait`, and `feat` stats take an optional
+`grants` array, each grant with a `kind` from a closed vocabulary in
+`common.schema.json`, as `modifiers` do. A feature's grant is given at each
+of its levels up to its class's level.
+
+| Kind | Example | Allows |
+|---|---|---|
+| `feat` | Ability Score Improvement: the categories its text allows ("another feat of your choice for which you qualify"); Fighting Style: `["fighting-style"]`; Epic Boon: `["epic-boon"]`; Versatile: `["origin"]` | One feat of those categories, with this source |
+| `skills` | Skillful: `"count": 1`; Keen Senses: `"count": 1, "from": ["insight", "perception", "survival"]` | Skill picks under the entry |
+| `expertise` | Expertise: `"count": 2` at each of its levels; Scholar: `"count": 1, "from": [...]` | Expertise picks |
+| `tools` | `"count": 3, "from": ["musical-instrument"]` | Tool picks |
+| `languages` | `"count": 2` | Language picks |
+| `options` | Eldritch Invocations: `"list": "Eldritch Invocation Options", "column": "Eldritch Invocations"`; Metamagic: `"byLevel": { "2": 2, "10": 4, "17": 6 }` | Options from the class's list of that name: the column's value, or `byLevel`, at the class's level |
+| `spells` | Magic Initiate: `"cantrips": 2, "level1": 1`, from the list its `note` names; an always-prepared subclass list, by class level | Spells outside the classes' counts |
+
+A class adds `multiclass` grants for what a later class gives (Bard,
+Ranger, and Rogue: `skills` 1), and structured `training` (weapon groups,
+with a property filter such as the Monk's Light, and armor categories), for
+the starting class and as a later class, which the proficiency warning
+reads. A feat adds `requires`, its ability prerequisite
+(`"abilities": ["str", "dex"], "min": 13`, any one by default), next to
+its printed `prerequisite`. The library's entries get them in a migration
+after the build, as `modifiers` did.
+
+A character has no `adjust`: every value is a modeled effect or stays text,
+so there is nothing to warn about.
 
 ### The profile
 
