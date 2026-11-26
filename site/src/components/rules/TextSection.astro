@@ -1,0 +1,31 @@
+---
+// One section of a rules page (docs/site.md#rules-pages): a plain section under its heading, a
+// level below the section it sits in, with nothing to open. Its id is the section's anchor.
+import Heading from '../templates/parts/Heading.astro';
+
+interface Props {
+  id?: string;
+  level: number;
+  /** A primitive's type, for its accent. */
+  type?: string;
+  class?: string;
+}
+
+const { id, level, type, class: className } = Astro.props;
+---
+<section class:list={['text-section', className]} id={id} data-type={type}>
+  <Heading level={level}><slot name="title" /></Heading>
+  <div class="text-section__body"><slot /></div>
+</section>
+
+<style>
+  @layer components {
+    /* One column as wide as the section: an `auto` track would grow to a wide table's width. */
+    .text-section__body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--flow-text);
+      margin-block-start: var(--flow-line);
+    }
+  }
+</style>

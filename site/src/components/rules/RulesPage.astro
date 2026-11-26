@@ -1,13 +1,11 @@
 ---
-// A rules page (docs/site.md#rules-pages), laid out as an accordion page
-// (docs/site.md#accordion-pages): its title, its untitled opening prose, its table of contents,
-// then its blocks in order (prose, a rules type's primitives, with any cross-listed type's
-// primitives among them as links, or a group's tree), each primitive and group in an anchored
-// section, and the extensions it lists at the bottom. Its Print button prints the page with every
-// section open (docs/export.md#controls).
+// A rules page (docs/site.md#rules-pages), as text: its title, its untitled opening prose, its
+// structured summary (docs/site.md#accordion-pages), then its blocks in order (prose, a rules
+// type's primitives, with any cross-listed type's primitives among them as links, or a group's
+// tree), each primitive and group in an anchored section under its own heading, and the
+// extensions it lists at the bottom. Its Print button prints the page (docs/export.md#controls).
 import { entryPath } from '../../lib/library';
 import { EXTENSIONS_SECTION, blockPrimitives, pageContents, pageExtensions, type RulesContext } from '../../lib/rules';
-import Accordion from '../templates/parts/Accordion.astro';
 import TableOfContents from '../templates/parts/TableOfContents.astro';
 import type { RulesPage } from '../../../../lib/rules';
 import CrossListed from './CrossListed.astro';
@@ -16,6 +14,7 @@ import PrimitiveSection from './PrimitiveSection.astro';
 import ProseSection from './ProseSection.astro';
 import PagePrint from '../export/PagePrint.astro';
 import SearchableList from './SearchableList.astro';
+import TextSection from './TextSection.astro';
 
 interface Props {
   ctx: RulesContext;
@@ -46,10 +45,10 @@ const extensions = pageExtensions(ctx, page.id).map(({ entry }) => ({ name: entr
     return tree && <GroupSection ctx={ctx} tree={tree} id={block.group.slice(slash + 1)} level={2} />;
   })}
   {extensions.length > 0 && (
-    <Accordion class="rules-page__extensions" id={EXTENSIONS_SECTION} level={2}>
+    <TextSection class="rules-page__extensions" id={EXTENSIONS_SECTION} level={2}>
       <Fragment slot="title">Extensions</Fragment>
       <SearchableList label="Search extensions" items={extensions} />
-    </Accordion>
+    </TextSection>
   )}
 </article>
 
@@ -62,11 +61,6 @@ const extensions = pageExtensions(ctx, page.id).map(({ entry }) => ({ name: entr
         margin-block-start: var(--flow-section);
       }
 
-      /* Accordion sections, and the cross-listed links among them, stack as one list (the
-         accordion's script sits after the first). */
-      & > :global(:is(.accordion, .rule--cross, script) + :is(.accordion, .rule--cross)) {
-        margin-block-start: 0;
-      }
     }
   }
 </style>
