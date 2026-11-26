@@ -455,7 +455,7 @@ export interface ClassStats {
   spells?: Ref[];
   /** Picks as the starting class, beside `skills`, and as a later class. */
   grants?: { start?: Grant[]; multiclass?: Grant[] };
-  training?: { start: Training; multiclass?: Training };
+  training: { start: Training; multiclass?: Training };
 }
 
 /** A class's derived values from its own stats (docs/rulesets.md#classes), one per level 1–20. */
