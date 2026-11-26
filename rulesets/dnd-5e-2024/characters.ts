@@ -83,7 +83,7 @@ export function chosenGrants(grants: Grant[], option: string | undefined): Grant
 }
 
 /** The modifiers the option a character names of an entry's choice, or of its feat grant's `or`, adds. */
-export function chosenModifiers(grants: Grant[], option: string | undefined): Modifier[] {
+function chosenModifiers(grants: Grant[], option: string | undefined): Modifier[] {
   if (option === undefined) return [];
   return grants.flatMap((g) => {
     const taken = g.kind === 'choice' ? g.options.find((o) => o.name === option) : g.kind === 'feat' && g.or?.name === option ? g.or : undefined;
@@ -344,7 +344,7 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
   });
 
   // Spellcasting: each casting class's DC and attack; slots from the Multiclass Spellcaster table at
-  // the full caster levels plus half the half caster levels, rounded up, and Pact Magic apart.
+  // the full caster levels plus half of each half caster class's levels, rounded up, and Pact Magic apart.
   const casters = classes.filter((c) => c.stats.spellcasting);
   const spellcasting = casters.map((c): CharacterSpellcasting => {
     const casting = c.stats.spellcasting!;
@@ -371,7 +371,10 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
 
   const backgroundTool = background.stats.tool.choose ? [] : [{ source: stats.background.ref, ref: background.stats.tool.ref }];
   const proficiencies: CharacterProficiencies = {
-    saves: { source: starting.class.ref, abilities: starting.stats.savingThrows },
+    saves: [
+      { source: starting.class.ref, abilities: starting.stats.savingThrows },
+      ...ofKind('save-proficiency').map((c) => ({ source: c.source, abilities: c.modifier.abilities === 'all' ? tables.abilities : c.modifier.abilities })),
+    ],
     skills: skillSources,
     expertise,
     training: classes.map((c, i) =>

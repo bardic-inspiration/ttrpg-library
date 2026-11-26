@@ -35,7 +35,7 @@
       }
     },
     "feats": {
-      "description": "Each feat, with where it came from: the background's origin feat, an origin feat a species trait grants, or a class level whose feature grants a feat. A feat's `note` is the choice it's taken with, \"Magic Initiate (Cleric)\".",
+      "description": "Each feat, with where it came from: the background's origin feat, an origin feat a species trait grants, or a class level whose feature grants a feat. A feat's `note` is the choice it's taken with, \"Cleric\" for Magic Initiate (Cleric).",
       "type": "array",
       "minItems": 1,
       "items": {

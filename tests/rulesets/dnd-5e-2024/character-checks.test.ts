@@ -75,7 +75,7 @@ describe('character consistency checks', () => {
   });
 
   it("need each class's multiclass prerequisite from the final scores, the starting class's included", () => {
-    // The spec's case: Intelligence 12 fails the Wizard's.
+    // Intelligence 12 fails the Wizard's.
     expect(messages(issuesOf('brannoc-ashguard', (s) => (s.abilities.base.int = 12)))).toEqual([expect.stringMatching(/^stats\.classes\[1\]\.class: .*class\/wizard needs int 13.*int 12/)]);
     // The Fighter's is Strength or Dexterity; the starting class needs it too.
     const weak = (s: Record<string, any>) => {

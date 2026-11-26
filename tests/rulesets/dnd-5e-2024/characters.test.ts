@@ -120,7 +120,7 @@ describe('the multiclass case: Fighter 3 (Champion) / Wizard 2, a dwarf soldier'
 
   it("takes the starting class's saving throws only", () => {
     expect(d.saves).toEqual({ str: 6, dex: 0, con: 5, int: 1, wis: 1, cha: -1 });
-    expect(d.proficiencies.saves).toEqual({ source: 'class/fighter', abilities: ['str', 'con'] });
+    expect(d.proficiencies.saves).toEqual([{ source: 'class/fighter', abilities: ['str', 'con'] }]);
   });
 
   it('derives skills from the background and the picks, Expertise doubling, and Passive Perception', () => {
@@ -353,6 +353,10 @@ describe('modifiers (docs/rulesets.md#modifiers)', () => {
       'species-trait/human-resourceful': [{ kind: 'skill-proficiency', skills: ['arcana'] }, { kind: 'skill-proficiency', skills: ['medicine'], expertise: true }],
     });
     expect(d.saves.int).toBe(-1 + 2);
+    expect(d.proficiencies.saves).toEqual([
+      { source: 'class/cleric', abilities: ['wis', 'cha'] },
+      { source: 'class-feature/cleric-divine-order', abilities: ['str', 'dex', 'con', 'int', 'wis', 'cha'] },
+    ]);
     expect(d.skills.arcana).toEqual({ bonus: -1 + 2, proficiency: 'proficient' });
     expect(d.skills.medicine).toEqual({ bonus: 3 + 4, proficiency: 'expertise' });
     expect(d.proficiencies.skills).toContainEqual({ skill: 'arcana', source: 'species-trait/human-resourceful' });
