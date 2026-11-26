@@ -12,7 +12,14 @@
     "attunement": {
       "required": true
     },
-    "effect": "Your Constitution is 19 while you wear this amulet. It has no effect on you if your Constitution is 19 or higher without it."
+    "effect": "Your Constitution is 19 while you wear this amulet. It has no effect on you if your Constitution is 19 or higher without it.",
+    "modifiers": [
+      {
+        "kind": "ability-set",
+        "ability": "con",
+        "value": 19
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-04",

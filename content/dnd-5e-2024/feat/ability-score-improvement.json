@@ -10,7 +10,14 @@
     "category": "general",
     "level": 4,
     "text": "Increase one ability score of your choice by 2, or increase two ability scores of your choice by 1. This feat can't increase an ability score above 20.",
-    "repeatable": "You can take this feat more than once."
+    "repeatable": "You can take this feat more than once.",
+    "modifiers": [
+      {
+        "kind": "ability-bonus",
+        "total": 2,
+        "max": 20
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

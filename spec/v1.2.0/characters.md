@@ -106,7 +106,7 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
 
 - A fighter-wizard multiclass: `class/fighter` 3 with `subclass/champion`
   and `class/wizard` 2, `species/dwarf`, `background/soldier` with its
-  origin feat `feat/savage-attacker`, wearing `item/armor-1-2-or-3`, with
+  origin feat `feat/savage-attacker`, wearing `item/armor-1-2-or-3` (+1), with
   `spell/shield` and `spell/magic-missile` prepared.
 - The same build with Intelligence 12: fails the Wizard's multiclass
   prerequisite.
@@ -115,24 +115,6 @@ custom ([SRD and custom entries](../../docs/content-model.md#srd-and-custom-entr
   `spell/cure-wounds`, on `species/human` with `background/acolyte`: the
   simplest profile.
 
-## Migration
-
-No library entry carries [modifiers](../../docs/rulesets.md#modifiers) yet.
-#476 adds them, as a dev PR with the `migration` label:
-
-- **Features, feats, and traits** with an always-on effect: Barbarian and
-  Monk Unarmored Defense, Unarmored Movement, Fast Movement, Roving,
-  Draconic Resilience (its Armor Class formula and its Hit Points per
-  Sorcerer level), Jack of All Trades, Defense, Archery, Dwarven Toughness,
-  and the custom Swift Foot. No entry's `text` changes.
-- **Items:** `item` stats get `modifiers` too, applying only while the item
-  is equipped, and attuned when it requires attunement; on armor or a
-  weapon, a modifier applies to that item itself. `byVariant` gives a value
-  per variant (+1/+2/+3 Armor and Weapon). It adds the kinds `check-bonus`
-  and `ability-set` (a score raised to a value unless it's already higher:
-  Gauntlets of Ogre Power, Amulet of Health, Headband of Intellect, Belt of
-  Giant Strength).
-
 ## Done when
 
 - The `character` type validates, derives, and renders its profile, with
@@ -140,13 +122,6 @@ No library entry carries [modifiers](../../docs/rulesets.md#modifiers) yet.
 - The Library filters characters by class, background, species, and level.
 - `generate` routes by type, and makes a preset from an inline request.
 - The docs describe the type, its derivations, and the umbrella skill.
-
-## Open questions
-
-- **Worn items (#476).** Whether `equipped` takes wondrous items and rings,
-  with an `attuned` flag and a limit of three attuned items. Until it does,
-  only armor, shields, and weapons apply, so cloaks, rings, and amulets
-  can't.
 
 ## Out of scope
 

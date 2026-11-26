@@ -12,7 +12,14 @@
     "attunement": {
       "required": true
     },
-    "effect": "Your Strength is 19 while you wear these gauntlets. They have no effect on you if your Strength is 19 or higher without them."
+    "effect": "Your Strength is 19 while you wear these gauntlets. They have no effect on you if your Strength is 19 or higher without them.",
+    "modifiers": [
+      {
+        "kind": "ability-set",
+        "ability": "str",
+        "value": 19
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-04",

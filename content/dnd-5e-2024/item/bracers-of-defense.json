@@ -12,7 +12,17 @@
     "attunement": {
       "required": true
     },
-    "effect": "While wearing these bracers, you gain a +2 bonus to {ref:glossary/armor-class} if you are wearing no armor and using no {ref:equipment/shield}."
+    "effect": "While wearing these bracers, you gain a +2 bonus to {ref:glossary/armor-class} if you are wearing no armor and using no {ref:equipment/shield}.",
+    "modifiers": [
+      {
+        "kind": "ac-bonus",
+        "value": 2,
+        "while": [
+          "unarmored",
+          "no-shield"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-04",

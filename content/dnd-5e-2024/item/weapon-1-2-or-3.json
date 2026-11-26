@@ -36,7 +36,25 @@
     "attunement": {
       "required": false
     },
-    "effect": "You have a bonus to attack rolls and damage rolls made with this magic weapon. The bonus is determined by the weapon's rarity."
+    "effect": "You have a bonus to attack rolls and damage rolls made with this magic weapon. The bonus is determined by the weapon's rarity.",
+    "modifiers": [
+      {
+        "kind": "attack-bonus",
+        "byVariant": {
+          "+1": 1,
+          "+2": 2,
+          "+3": 3
+        }
+      },
+      {
+        "kind": "damage-bonus",
+        "byVariant": {
+          "+1": 1,
+          "+2": 2,
+          "+3": 3
+        }
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-04",

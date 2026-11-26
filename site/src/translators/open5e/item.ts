@@ -21,6 +21,7 @@ export function exportItem(item: TranslatorItem, skips: Skips): Record5e {
     ['spells', 'Open5e has no field for the spells an item casts.'],
     ['cursed', 'Open5e has no field for a curse.'],
     ['statBlocks', 'Open5e has no field for an embedded stat block.'],
+    ['modifiers', 'Open5e has no field for an item\'s modifiers.'],
   ];
   for (const [key, reason] of dropped) if (s[key] !== undefined) skips.add(`stats.${key}`, reason);
   const requirement = s.attunement.requirement;

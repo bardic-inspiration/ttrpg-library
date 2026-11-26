@@ -9,7 +9,21 @@
     "levels": [
       1
     ],
-    "text": "While you aren't wearing armor or wielding a {ref:equipment/shield}, your base {ref:glossary/armor-class} equals 10 plus your Dexterity and Wisdom modifiers."
+    "text": "While you aren't wearing armor or wielding a {ref:equipment/shield}, your base {ref:glossary/armor-class} equals 10 plus your Dexterity and Wisdom modifiers.",
+    "modifiers": [
+      {
+        "kind": "ac-formula",
+        "base": 10,
+        "abilities": [
+          "dex",
+          "wis"
+        ],
+        "while": [
+          "unarmored",
+          "no-shield"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

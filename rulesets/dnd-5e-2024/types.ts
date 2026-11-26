@@ -192,6 +192,7 @@ export interface ItemStats {
   cursed?: true;
   effect: string;
   statBlocks?: StatBlock[];
+  modifiers?: ItemModifier[];
 }
 
 export interface ChallengeRatingRow {
@@ -323,6 +324,18 @@ export type Modifier =
   | ({ kind: 'attack-bonus'; weapon: ModifierWeapon } & Valued)
   | ({ kind: 'damage-bonus'; weapon: ModifierWeapon } & Valued)
   | { kind: 'damage-die'; die?: string; byLevel?: Record<string, string>; weapon: ModifierWeapon; while?: ModifierWhile[] };
+
+/** A value, or one per variant of the item (docs/rulesets.md#item-modifiers). */
+interface ByVariant {
+  value?: number;
+  byVariant?: Record<string, number>;
+}
+
+/** One effect of an equipped item, as data (common.schema.json `ItemModifier`). With no `weapon`, an attack or damage bonus is the weapon item's own. */
+export type ItemModifier =
+  | ({ kind: 'ac-bonus' | 'save-bonus' | 'check-bonus'; while?: ModifierWhile[] } & ByVariant)
+  | ({ kind: 'ability-set'; ability: Ability } & ByVariant)
+  | ({ kind: 'attack-bonus' | 'damage-bonus'; weapon?: ModifierWeapon; while?: ModifierWhile[] } & ByVariant);
 
 export type FeatCategory = 'origin' | 'general' | 'fighting-style' | 'epic-boon';
 
@@ -467,7 +480,7 @@ export interface CharacterStats {
   feats?: { ref: string; note?: string; source: { ref: string; level?: number }; abilities?: Increases }[];
   options?: Ref[];
   choices?: { source: Ref; skills?: string[]; expertise?: string[]; tools?: Ref[]; languages?: string[] }[];
-  equipped?: { ref: string; base?: Ref }[];
+  equipped?: { ref: string; base?: Ref; variant?: string; attuned?: true }[];
   spells?: Ref[];
 }
 

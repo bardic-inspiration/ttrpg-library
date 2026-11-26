@@ -646,10 +646,13 @@ hold only inputs:
   picked, each group under the `source` that offers it: the species or one
   of its traits, the background, a class, a subclass, a class feature
   (Scholar's Expertise), or a feat.
-- **`equipped`:** the armor, shield, and weapons worn and wielded, each SRD
+- **`equipped`:** the armor, shield, and weapons worn and wielded, and the
+  rings and wondrous items worn or carried for their effect, each SRD
   equipment or an item. An item whose base item could be several pieces of
   equipment names the one it is in `base` (`item/armor-1-2-or-3` with
-  `equipment/chain-mail`). There is no inventory.
+  `equipment/chain-mail`), and an item with variants names its `variant`
+  (`"+1"`). An item the character is attuned to has `attuned`, on at most
+  three items. There is no inventory.
 - **`spells`:** spell refs, the cantrips and prepared spells.
 
 A character's refs to class features, species traits, and class options are
@@ -664,7 +667,8 @@ up to 15 costing 9), omitted when a score is outside the table.
 
 From the library (`deriveLinked`, with the entries its refs name), each
 with the modifiers of the features, feats, and traits it has
-([Modifiers](#modifiers)):
+([Modifiers](#modifiers)) and of its equipped items
+([Item modifiers](#item-modifiers)):
 
 - the final `scores` (the base, the background's increases, and each
   feat's) and their modifiers;
@@ -745,6 +749,47 @@ of the character's choosing, is a pick in `choices`, not a modifier. An
 effect that depends on the situation or a choice made in play, such as
 Great Weapon Fighting, Rage, or Advantage on Initiative, isn't modeled and
 stays text only.
+
+An entry carries `modifiers` when it has an always-on effect the vocabulary
+models; its `text` stays as printed. In the library these are Barbarian
+and Monk Unarmored Defense, Unarmored Movement, Martial Arts (its attack
+ability and die), Fast Movement, Primal Champion, Roving, Draconic
+Resilience, Jack of All Trades, Slippery Mind, Aura of Protection, and the
+custom Swift Foot; the feats Defense, Archery, Alert, and Ability Score
+Improvement; and the species trait Dwarven Toughness. A new entry with such
+an effect carries them too.
+
+### Item modifiers
+
+`item` stats take an optional `modifiers` array too (`ItemModifier` in
+`common.schema.json`), with the kinds an item has: `ac-bonus`, `save-bonus`,
+`check-bonus`, `ability-set`, `attack-bonus`, and `damage-bonus`. An item's
+modifiers apply while it's in the character's `equipped`, and, when it
+requires attunement, only while it's `attuned`.
+
+- **`value`:** a number. **`byVariant`** in its place gives one per variant,
+  keyed as the item names its variants, and the `equipped` entry's
+  `variant` picks it; with no variant named, or another, it gives nothing.
+- **`while`:** the same conditions as a feature's (Bracers of Defense: no
+  armor and no shield).
+- **On armor or a weapon,** a modifier applies to that item itself: an
+  `ac-bonus` while it's worn, and an `attack-bonus` or `damage-bonus` with
+  no `weapon` to that weapon's attack only, its Versatile damage included.
+
+| Kind | Example | Derives |
+|---|---|---|
+| `ac-bonus` | +1, +2, or +3 Armor: `"byVariant": { "+1": 1, "+2": 2, "+3": 3 }`; Cloak of Protection: `"value": 1` | Armor Class, after the shield |
+| `save-bonus` | Ring of Protection: `"value": 1` | Every saving throw |
+| `check-bonus` | Stone of Good Luck: `"value": 1` | Every skill, Passive Perception, and Initiative, which is a Dexterity check |
+| `ability-set` | Gauntlets of Ogre Power: `"ability": "str", "value": 19`; Belt of Giant Strength by variant (`"hill": 21` … `"storm": 29`) | A final score, raised to the value unless it's already higher, after every other increase |
+| `attack-bonus` | +1, +2, or +3 Weapon, by variant | The weapon's attack bonus |
+| `damage-bonus` | +1, +2, or +3 Weapon, by variant | The weapon's damage |
+
+In the library these are +1, +2, or +3 Armor and Weapon, Dwarven Plate,
+Cloak and Ring of Protection, Bracers of Defense, Stone of Good Luck,
+Gauntlets of Ogre Power, Amulet of Health, Headband of Intellect, and Belt
+of Giant Strength. An effect used in play, or one that needs a condition the
+character's stats don't hold (Boots of Speed, a potion), stays text only.
 
 ### Starting equipment
 

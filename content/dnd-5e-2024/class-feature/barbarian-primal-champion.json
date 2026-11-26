@@ -9,7 +9,18 @@
     "levels": [
       20
     ],
-    "text": "You embody primal power. Your Strength and Constitution scores increase by 4, to a maximum of 25."
+    "text": "You embody primal power. Your Strength and Constitution scores increase by 4, to a maximum of 25.",
+    "modifiers": [
+      {
+        "kind": "ability-bonus",
+        "abilities": [
+          "str",
+          "con"
+        ],
+        "value": 4,
+        "max": 25
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

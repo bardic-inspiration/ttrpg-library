@@ -17,6 +17,7 @@ import type {
   DerivedCharacter,
   EquipmentStats,
   FeatStats,
+  ItemModifier,
   ItemStats,
   LinkedCharacter,
   Modifier,
@@ -71,6 +72,30 @@ interface Collected {
   classLevel?: number;
 }
 
+/** One equipped item's modifier, with the index of its `equipped` entry and the variant it names. */
+interface ItemEffect {
+  modifier: ItemModifier;
+  index: number;
+  variant?: string;
+}
+
+/**
+ * The modifiers of the equipped items (docs/rulesets.md#item-modifiers): each item's, when it's
+ * attuned or doesn't require attunement.
+ */
+function itemEffects(library: LinkedLibrary, stats: CharacterStats): ItemEffect[] {
+  return (stats.equipped ?? []).flatMap((e, index) => {
+    if (!e.ref.startsWith('item/')) return [];
+    const item = need<ItemStats>(library, e.ref).stats;
+    if (item.attunement.required && !e.attuned) return [];
+    return (item.modifiers ?? []).map((modifier) => ({ modifier, index, ...(e.variant !== undefined && { variant: e.variant }) }));
+  });
+}
+
+/** An item modifier's value: its number, or the one for the variant equipped (none for another). */
+const itemValue = ({ modifier, variant }: ItemEffect): number =>
+  modifier.byVariant ? (variant === undefined ? 0 : (modifier.byVariant[variant] ?? 0)) : (modifier.value ?? 0);
+
 /** The value a `byLevel` table gives at a level: the one from the highest key at or below it. */
 function atLevel<T>(table: Record<string, T>, level: number): T | undefined {
   const key = Object.keys(table)
@@ -93,7 +118,8 @@ const largerDie = (a: string, b: string): string => {
  * What a character derives from the entries it names (docs/rulesets.md#characters): its final
  * scores, saves, skills, Passive Perception, Hit Points, Initiative, Speed, Armor Class, attacks,
  * spellcasting and slots, and its features and proficiencies by source, each with the modifiers of
- * the features, feats, and traits it has (docs/rulesets.md#modifiers).
+ * the features, feats, and traits it has (docs/rulesets.md#modifiers) and of its equipped items
+ * (docs/rulesets.md#item-modifiers).
  */
 export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibrary, tables: Tables): LinkedCharacter {
   const level = totalLevel(stats);
@@ -135,6 +161,9 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     ),
   ];
   const ofKind = <K extends Modifier['kind']>(kind: K) => collected.filter((c): c is Collected & { modifier: Extract<Modifier, { kind: K }> } => c.modifier.kind === kind);
+  const items = itemEffects(library, stats);
+  const ofItemKind = <K extends ItemModifier['kind']>(kind: K) =>
+    items.filter((c): c is ItemEffect & { modifier: Extract<ItemModifier, { kind: K }> } => c.modifier.kind === kind);
 
   // Scores: the base, the background's increases, each feat's placed increases up to its maximum,
   // then fixed increases (Primal Champion) up to theirs.
@@ -148,13 +177,15 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     for (const [ability, by] of Object.entries(f.abilities ?? {}) as [Ability, number][]) raise(ability, by, max);
   }
   for (const { modifier } of ofKind('ability-bonus')) for (const ability of modifier.abilities ?? []) raise(ability, modifier.value ?? 0, modifier.max);
+  // Then each item that sets a score, unless the score is already higher.
+  for (const effect of ofItemKind('ability-set')) scores[effect.modifier.ability] = Math.max(scores[effect.modifier.ability], itemValue(effect));
   const mods = Object.fromEntries(tables.abilities.map((a) => [a, abilityMod(scores[a])])) as Record<Ability, number>;
 
   // What's equipped, for Armor Class, attacks, and each modifier's `while`.
   const tree = library.rules?.groups.get('equipment');
-  const gear = (stats.equipped ?? []).flatMap((e) => {
+  const gear = (stats.equipped ?? []).flatMap((e, index) => {
     const equipment = equipmentOf(library, e);
-    return equipment ? [{ ref: e.ref, ...equipment, category: categoryOf(tree, equipment.stats.group) }] : [];
+    return equipment ? [{ ref: e.ref, index, ...equipment, category: categoryOf(tree, equipment.stats.group) }] : [];
   });
   const armor = gear.find((g) => g.stats.armor && g.stats.group !== 'shields');
   const shield = gear.find((g) => g.stats.armor && g.stats.group === 'shields');
@@ -171,12 +202,15 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     const raw = m.byLevel ? (atLevel(m.byLevel, c.classLevel ?? level) ?? 0) : m.value === 'proficiency' ? pb : typeof m.value === 'string' ? mods[m.value as Ability] : (m.value ?? 0);
     return Math.max(raw, m.min ?? -Infinity);
   };
+  const sumItems = (list: (ItemEffect & { modifier: { while?: ModifierWhile[] } })[]) =>
+    list.filter((c) => holds(c.modifier)).reduce((total, c) => total + itemValue(c), 0);
   const sum = (list: (Collected & { modifier: { while?: ModifierWhile[]; value?: number | string; byLevel?: Record<string, number>; min?: number } })[]) =>
     list.filter((c) => holds(c.modifier)).reduce((total, c) => total + valueOf(c), 0);
 
   const savingThrows = new Set<Ability>(starting.stats.savingThrows);
   for (const { modifier } of ofKind('save-proficiency')) for (const a of modifier.abilities === 'all' ? tables.abilities : modifier.abilities) savingThrows.add(a);
-  const saveBonus = sum(ofKind('save-bonus'));
+  const saveBonus = sum(ofKind('save-bonus')) + sumItems(ofItemKind('save-bonus'));
+  const checkBonus = sumItems(ofItemKind('check-bonus'));
   const saves = Object.fromEntries(tables.abilities.map((a) => [a, mods[a] + (savingThrows.has(a) ? pb : 0) + saveBonus])) as Record<Ability, number>;
 
   // Skills: the background's two, each pick, and each skill a modifier names, with Expertise doubling
@@ -198,7 +232,7 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
   const skills = Object.fromEntries(
     Object.entries(tables.skills).map(([skill, ability]) => {
       const proficiency: Proficiency | undefined = expert.has(skill) ? 'expertise' : proficient.has(skill) ? 'proficient' : undefined;
-      const bonus = mods[ability] + (proficiency === 'expertise' ? 2 * pb : proficiency ? pb : floor);
+      const bonus = mods[ability] + (proficiency === 'expertise' ? 2 * pb : proficiency ? pb : floor) + checkBonus;
       return [skill, proficiency ? { bonus, proficiency } : { bonus }];
     }),
   );
@@ -219,7 +253,7 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     ...ofKind('ac-formula').filter((c) => holds(c.modifier)).map((c) => c.modifier.base + (c.modifier.abilities ?? []).reduce((t, a) => t + mods[a], 0)),
   ];
   const ac = {
-    value: Math.max(...formulas) + (shield?.stats.armor!.ac ?? 0) + sum(ofKind('ac-bonus')),
+    value: Math.max(...formulas) + (shield?.stats.armor!.ac ?? 0) + sum(ofKind('ac-bonus')) + sumItems(ofItemKind('ac-bonus')),
     ...(armor && { armor: armor.ref }),
     ...(shield && { shield: shield.ref }),
   };
@@ -238,13 +272,18 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     const weapon = g.stats.weapon!;
     const ranged = tree?.contains('ranged-weapons', { stats: g.stats }) ?? false;
     const applies = (c: { modifier: { weapon: ModifierWeapon; while?: ModifierWhile[] } }, twoHanded = false) => isA(g, c.modifier.weapon, twoHanded) && holds(c.modifier);
+    // An item's bonus with no `weapon` is the weapon item's own.
+    const itemBonus = (kind: 'attack-bonus' | 'damage-bonus', twoHanded = false) =>
+      ofItemKind(kind)
+        .filter((c) => (c.modifier.weapon === undefined ? c.index === g.index : isA(g, c.modifier.weapon, twoHanded)) && holds(c.modifier))
+        .reduce((t, c) => t + itemValue(c), 0);
     const candidates: Ability[] = [
       ...(hasProperty(g.stats, 'finesse') ? (['str', 'dex'] as Ability[]) : [(ranged ? 'dex' : 'str') as Ability]),
       ...ofKind('attack-ability').filter((c) => applies(c)).flatMap((c) => c.modifier.abilities),
     ];
     const ability = candidates.reduce((best, a) => (mods[a] > mods[best] ? a : best), candidates[0]!);
     const damageBonus = (twoHanded: boolean) =>
-      ofKind('damage-bonus').filter((c) => applies(c, twoHanded)).reduce((t, c) => t + valueOf(c), 0);
+      ofKind('damage-bonus').filter((c) => applies(c, twoHanded)).reduce((t, c) => t + valueOf(c), 0) + itemBonus('damage-bonus', twoHanded);
     const modifier = mods[ability] + damageBonus(false);
     const dieFor = (base: string, twoHanded: boolean) =>
       ofKind('damage-die')
@@ -259,7 +298,7 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
       ref: g.ref,
       weapon: g.key,
       ability,
-      attackBonus: attackBonus(pb, mods[ability]) + ofKind('attack-bonus').filter((c) => applies(c)).reduce((t, c) => t + valueOf(c), 0),
+      attackBonus: attackBonus(pb, mods[ability]) + ofKind('attack-bonus').filter((c) => applies(c)).reduce((t, c) => t + valueOf(c), 0) + itemBonus('attack-bonus'),
       damage: {
         ...(dice !== undefined ? { dice } : { flat }),
         modifier,
@@ -319,7 +358,7 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
     skills,
     passivePerception: 10 + skills.perception!.bonus,
     hp,
-    initiative: mods.dex + sum(ofKind('initiative-bonus')),
+    initiative: mods.dex + sum(ofKind('initiative-bonus')) + checkBonus,
     speed,
     ...(modes.length > 0 && { speeds: Object.fromEntries(modes.map((m) => [m, speed])) }),
     ac,
