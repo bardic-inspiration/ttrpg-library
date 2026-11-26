@@ -1,6 +1,6 @@
 ---
 issue: 374
-depends: [maps, characters]
+depends: [maps]
 ---
 
 # Encounters
