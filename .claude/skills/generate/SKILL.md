@@ -114,6 +114,7 @@ per request.
 | [Characters](#procedure-characters) | `character` |
 | [Maps](#procedure-maps) | `map` |
 | [Encounters](#procedure-encounters) | `encounter` |
+| [Modules](#procedure-modules) | `module` |
 
 Every type in `config/types.json` is in exactly one row. A type in none
 can't be generated: ask, as for a type not in the registry (Inputs).
@@ -458,6 +459,12 @@ was designed for and the difficulty its roster, or each spawn table row,
 reads ("4 × level 3: Moderate", or "4 × level 1: Low, Moderate, High"),
 since the type has no `summaryField`; review then needs no arithmetic. Its
 Warnings list E with its note, the validator's warning for it.
+
+### Procedure: Modules
+
+A module is an arrangement that contains encounters and other modules
+([Modules](../../../docs/rulesets.md#modules)). Its steps aren't written
+yet, so a request for modules can't be fulfilled as written: ask (Inputs).
 
 ## Step 4: Source, author, and meta
 

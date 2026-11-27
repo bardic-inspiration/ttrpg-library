@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "overflow-escape",
+  "name": "The Overflow",
+  "summary": "A crocodile has made the overflow channel its den, between the party and the way out.",
+  "stats": {
+    "setIn": {
+      "ref": "map/sunken-cistern",
+      "zone": "overflow"
+    },
+    "parts": [
+      {
+        "part": "description",
+        "text": "The channel drops into a wide, slow pool. Daylight shows through a grate at its far end, and bones are piled on its bank."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/crocodile",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        443
+      ]
+    }
+  }
+}

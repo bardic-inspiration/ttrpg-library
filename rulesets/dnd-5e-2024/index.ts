@@ -7,6 +7,7 @@ import { checkClass, checkClassFeature, checkClassLinks, checkSubclassLinks, der
 import { deriveCharacter, deriveCharacterLinked } from './characters.ts';
 import { checkMap, checkMapLinks } from './maps.ts';
 import { checkEncounter, deriveEncounterLinked } from './encounters.ts';
+import { checkModule, checkModuleLinks } from './modules.ts';
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
 import { refLabels } from './refs.ts';
@@ -14,7 +15,7 @@ import { renderTokens } from './tokens.ts';
 import definition from './ruleset.json' with { type: 'json' };
 import phrasesJson from './phrases.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
-import type { BackgroundStats, CharacterStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EncounterStats, EquipmentStats, FeatStats, ItemStats, MapStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
+import type { BackgroundStats, CharacterStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EncounterStats, EquipmentStats, FeatStats, ItemStats, MapStats, ModuleStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
 
 export const tables = tablesJson as Tables;
 export const phrases = phrasesJson as unknown as PhraseBook;
@@ -48,6 +49,7 @@ export const ruleset: RulesetModule = {
     if (type === 'character') return checkCharacter(stats as CharacterStats, tables);
     if (type === 'map') return checkMap(stats as MapStats);
     if (type === 'encounter') return checkEncounter(stats as EncounterStats);
+    if (type === 'module') return checkModule(stats as ModuleStats);
     return [];
   },
   checkLinks(type, stats, target, named, key) {
@@ -57,6 +59,7 @@ export const ruleset: RulesetModule = {
     if (type === 'subclass') return checkSubclassLinks(stats as SubclassStats, target);
     if (type === 'character') return checkCharacterLinks(stats as CharacterStats, target, tables);
     if (type === 'map') return checkMapLinks(key, stats as MapStats, target);
+    if (type === 'module') return checkModuleLinks(key, stats as ModuleStats, target);
     return [];
   },
   deriveLinked(type, key, stats, library) {

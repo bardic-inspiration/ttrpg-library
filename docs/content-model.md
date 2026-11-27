@@ -337,7 +337,8 @@ features and a species' traits are components.
 
 Content is organized by type. An **arrangement** is an entry that puts typed
 entries together for play, rather than a new kind of content: an encounter
-([Encounters](rulesets.md#encounters)) is one. Content never lives
+([Encounters](rulesets.md#encounters)) and a module
+([Modules](rulesets.md#modules)) are arrangements. Content never lives
 inside an arrangement; every piece is a standalone entry that a DM may lift
 out and adapt.
 
@@ -345,7 +346,7 @@ out and adapt.
 |---|---|---|
 | **Ruleset** | How things work: derivations, rules data, rules pages | n/a |
 | **Content** | Typed entries: creatures, items, spells, characters… | Rules: "casts", "grants", "requires" |
-| **Arrangements** | Encounters | Inventory: what's included, where it is, how it shows |
+| **Arrangements** | Encounters, modules | Inventory: what's included, where it is, how it shows |
 
 - **The kit.** An arrangement's `stats.parts` is an ordered list of kit
   parts, each `{ "part": "<kind>", … }`, rendered in order, so every
@@ -364,7 +365,8 @@ out and adapt.
   a dependency strength, needs no migration.
 - **Containment is listed by the container only.** An arrangement that
   holds another lists it; the one held doesn't name its container, and its
-  page shows the container as a back-reference.
+  page shows the container as a back-reference, "Part of" for a module's
+  ([Modules](rulesets.md#modules)).
 
 ### Situational fields
 
