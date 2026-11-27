@@ -683,7 +683,6 @@ export type EncounterPart =
   | { part: 'spawn-table'; roll?: string; rows: Partial<Record<Difficulty, SpawnRow>> }
   | { part: 'loot'; rows: Partial<Record<Difficulty, LootRow>> };
 
-/** A module's parts: the shared ones, and its hooks and the arrangements it contains. */
 /** An entry a hook brings in: any library entry, with who or what it is to the hook. */
 export interface HookRef {
   ref: string;
@@ -691,6 +690,7 @@ export interface HookRef {
   show?: Show;
 }
 
+/** A module's parts: the shared ones, and its hooks and the arrangements it contains. */
 export type ModulePart =
   | SharedPart
   | { part: 'hook'; text: string; refs?: HookRef[] }
