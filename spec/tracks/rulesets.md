@@ -11,7 +11,8 @@ A second published ruleset in the library beside `dnd-5e-2024`, from a
 publisher whose license allows it. It proves the ruleset module contract
 on real published content, not only the fixture rulesets. It serves P4
 (adding a ruleset is adding a folder), P5, and P9 (official content only
-where it's licensed).
+where it's licensed). The track also holds the redesign of the Rulesets page,
+where every ruleset is listed (P6, templates own presentation).
 
 ## Current
 
@@ -22,13 +23,32 @@ where it's licensed).
 - [Source and author](../../docs/content-model.md#source-and-author):
   official content and each ruleset's publisher.
 - [Licenses](../../docs/licensing.md#licenses).
+- [Pages and navigation](../../docs/site.md#pages-and-navigation): the
+  Rulesets page, a list of each ruleset linked to its Library, with its
+  rules pages and its Extensions page.
 
 ## Design
 
-Nothing is designed yet. The track holds the item until its open questions
-are answered.
+Nothing is designed yet. The track holds its items until their open
+questions are answered.
+
+### The Rulesets page
+
+- **A full redesign** of the Rulesets page, beyond today's list of each
+  ruleset linked to its Library, with its rules pages and its Extensions
+  page. Its design is open ("Open questions"), and nothing here is built until
+  it's designed.
+
+## Done when
+
+- The Rulesets page is redesigned and built, with screenshots at 390, 820,
+  and 1440px.
 
 ## Open questions
+
+- **The Rulesets page redesign (#427):** a full redesign of the page beyond
+  its list of rulesets, each linked to its Library, through a design process
+  of its own. Not built until it's designed.
 
 - **Which ruleset,** and under which license.
 - **How it's imported:** a stage-by-stage SRD import like `dnd-5e-2024`'s, or
