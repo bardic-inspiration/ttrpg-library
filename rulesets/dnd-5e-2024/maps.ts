@@ -16,19 +16,15 @@ export function checkMap(stats: MapStats): Issue[] {
 }
 
 /**
- * `within` names a zone its parent map has, and no map is within itself, directly or through
- * others. The ref itself resolves by the ref check, so an unresolved parent adds nothing here.
+ * No map is within itself, directly or through others. `within` and its zone resolve by the ref
+ * check (docs/content-model.md#references), so an unresolved parent adds nothing here.
  */
 export function checkMapLinks(key: string, stats: MapStats, target: LinkTarget): Issue[] {
   if (!stats.within) return [];
-  const { ref, zone } = stats.within;
+  const { ref } = stats.within;
   const parent = target(ref);
   if (!parent || parent.type !== 'map') return [];
   const issues: Issue[] = [];
-  const parentStats = parent.stats as MapStats;
-  if (!parentStats.zones.some((z) => z.id === zone)) {
-    issues.push({ level: 'error', path: 'stats.within.zone', message: `${ref} has no zone "${zone}"; name one of its zones (${parentStats.zones.map((z) => z.id).join(', ')})` });
-  }
   // Walk up the parents; reaching this map again is a cycle. A map already seen ends the walk,
   // for a cycle above this map that doesn't pass through it is reported by its own maps.
   const chain = [key];

@@ -141,7 +141,7 @@ The encounter page holds a calculator, a Preact island:
 
 An encounter may be set in a map, or in a zone of one, with
 `stats.setIn`, a map ref with an optional zone
-([Pointing into a map](maps.md#pointing-into-a-map)). The map's page then
+([References](../../docs/content-model.md#references) "A map's zones"). The map's page then
 lists it under the zone. A `map` part shows the map on the page; `setIn`
 alone doesn't.
 

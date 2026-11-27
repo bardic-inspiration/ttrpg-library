@@ -3,7 +3,7 @@
 // presence alone (docs/content-model.md#situational-fields): an omitted key has no line, and a present one
 // always does, even at 0 or false.
 
-import { isRef } from '../../../scripts/validate/refs.ts';
+import { isRef, refObjectKey } from '../../../scripts/validate/refs.ts';
 import { escapeMarkdown } from './markdown.ts';
 import { refOrTextName } from './refs.ts';
 import type { PropertyLine } from './template.ts';
@@ -18,13 +18,14 @@ const humanize = label;
 
 /**
  * One value as markdown: text is escaped, and a ref is a `{ref:…}` token, so it
- * renders as its target's name linked to its page or rules anchor, with its
- * note in parentheses. A list joins its items.
+ * renders as its target's name linked to its page or rules anchor, or a map zone ref as
+ * "Map › Zone" linked to the zone, with its note in parentheses. A list joins its items.
  */
 function text(value: unknown, names: Map<string, string>, tokens: Tokens): string {
   if (isRef(value)) {
-    if (!names.has(value.ref)) return escapeMarkdown(refOrTextName(value, names));
-    return value.note === undefined ? `{ref:${value.ref}}` : `{ref:${value.ref}} (${escapeMarkdown(value.note)})`;
+    const key = refObjectKey(value);
+    if (!names.has(key)) return escapeMarkdown(refOrTextName(value, names));
+    return value.note === undefined ? `{ref:${key}}` : `{ref:${key}} (${escapeMarkdown(value.note)})`;
   }
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
   if (Array.isArray(value)) return value.map((item) => text(item, names, tokens)).join(', ');

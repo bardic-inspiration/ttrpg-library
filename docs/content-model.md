@@ -214,10 +214,21 @@ never changes and is unique within its type:
   gear, which may add a `count`). It may add a `note`, a qualifier
   printed in parentheses after the name wherever the ref renders:
   `{ "ref": "spell/fireball", "note": "level 5 version" }` reads "Fireball
-  (level 5 version)". A map's `within` is a ref object that adds a `zone`,
-  the id of one of the parent map's zones ([Maps](rulesets.md#maps)).
+  (level 5 version)".
 - **A text token**, `{ref:<type>/<id>}`, valid in any markdown-subset field in
   every ruleset and type. It is the one way text links to another entry.
+
+**A map's zones.** A ref may point into a map ([Maps](rulesets.md#maps)) by
+naming one of its zones: a ref object adds a `zone`,
+`{ "ref": "map/<id>", "zone": "<zone-id>" }`, where its field takes a
+`MapZoneRef` (a map's `within`), and a token adds `#` and the zone id,
+`{ref:map/<id>#<zone-id>}`. Either renders "Map › Zone", "Sunken Cistern ›
+Drowned Shrine", linked to the zone's anchor, `#zone-<id>`, on the map's page.
+A zone the map doesn't have fails like a missing ref, as does a zone named on
+a target that isn't a map:
+`ref "map/sunken-cistern#gatehouse" does not resolve: map/sunken-cistern has no zone "gatehouse"; name one of its zones (…)`.
+Population points into a map, never out of it: a map holds its diagram and
+zones only, and what's set in a zone references it.
 
 The site shows the target's current name, so a rename updates every link. A
 token may instead carry display text after a space, `{ref:<type>/<id> <text>}`,
@@ -262,8 +273,10 @@ error, as is a malformed one such as `{ref:zombie}`.
 - The validator and the build compute back-references. Each entry's `refs`
   (forward) and `refBy` (back) are lists of `{ path, key }`: `path` is where
   the ref sits in the referring entry (`stats.spells[0].spell`, or
-  `stats.effect` for a token), and `key` is the other end. Only resolved refs
-  are listed, in document order.
+  `stats.effect` for a token), and `key` is the other end. A link that names a
+  map's zone adds its `zone` on both lists, so a map's back-references group
+  by zone, in the map's zone order. Only resolved refs are listed, in document
+  order.
 - Detail pages show forward links ("Casts: Frost Lance") and back-links ("Cast
   by: Cinder Witch"), each target once per label. The ruleset names each
   relation from the field the ref sits in

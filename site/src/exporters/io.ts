@@ -3,6 +3,7 @@
 // source (loaded only when a capture runs).
 import { fetchFresh } from '../lib/fetch-fresh.ts';
 import type { EntryKey, ExportFile, ExportIO, ExportItem, ExportOptions, ExportReport, Exporter } from './types.ts';
+import { zoneKey } from '../../../scripts/validate/refs.ts';
 
 export function downloadFile(file: ExportFile): void {
   const blob = typeof file.data === 'string' ? new Blob([file.data], { type: file.type }) : file.data;
@@ -70,6 +71,11 @@ export async function runSetExport(exporter: Exporter, entries: EntryKey[], opti
   return exporter.run(await loadExportItems(options.base, entries, resolveIO(options).fetch), options);
 }
 
-/** The names of the entries and rules `refs` link to, by `<type>/<id>`, as an export bundle carries them. */
-export const linkNames = (refs: { key: string }[], names: Map<string, string>): Record<string, string> =>
-  Object.fromEntries(refs.flatMap(({ key }) => (names.has(key) ? [[key, names.get(key)!]] : [])));
+/**
+ * The names of the entries and rules `refs` link to, by `<type>/<id>`, as an export bundle carries
+ * them, and of a map zone a ref names, by `<type>/<id>#<zone-id>`.
+ */
+export const linkNames = (refs: { key: string; zone?: string }[], names: Map<string, string>): Record<string, string> =>
+  Object.fromEntries(
+    refs.flatMap(({ key, zone }) => [key, ...(zone === undefined ? [] : [zoneKey(key, zone)])]).flatMap((key) => (names.has(key) ? [[key, names.get(key)!]] : [])),
+  );
