@@ -32,6 +32,8 @@ export interface FilterDef {
   groups?: GroupInfo[];
   /** Its schema reads it as a chip (docs/content-model.md#display): the value alone on cards, chips in the filters. */
   display?: 'chip';
+  /** A card field only: no filter or sort offers it (docs/site.md#type-registry). */
+  cardOnly?: boolean;
 }
 
 /** One group a groups facet offers (docs/rulesets.md#rules-groups). */
@@ -149,9 +151,11 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
     rulesetLabels[rulesetId] = ruleset.label;
     for (const [typeId, type] of Object.entries(ruleset.types)) {
       typeLabels[typeKey(rulesetId, typeId)] = type.label;
-      const facets = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data, books));
+      // A card-only facet is a card field, never a filter or a sort (docs/site.md#type-registry).
+      const defs = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data, books));
+      const facets = defs.filter((def) => !def.cardOnly);
       const cardFields = ((type.cardFields as string[] | undefined) ?? [])
-        .map((path) => facets.find((facet) => facet.path === path))
+        .map((path) => defs.find((facet) => facet.path === path))
         .filter((facet): facet is FilterDef => facet !== undefined);
       types.set(typeKey(rulesetId, typeId), {
         ruleset: rulesetId,

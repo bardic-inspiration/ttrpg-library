@@ -684,9 +684,16 @@ export type EncounterPart =
   | { part: 'loot'; rows: Partial<Record<Difficulty, LootRow>> };
 
 /** A module's parts: the shared ones, and its hooks and the arrangements it contains. */
+/** An entry a hook brings in: any library entry, with who or what it is to the hook. */
+export interface HookRef {
+  ref: string;
+  note?: string;
+  show?: Show;
+}
+
 export type ModulePart =
   | SharedPart
-  | { part: 'hook'; text: string; refs?: { ref: string; note?: string; show?: Show }[] }
+  | { part: 'hook'; text: string; refs?: HookRef[] }
   | { part: 'arrangement'; arrangement: { ref: string; show?: Show } };
 
 /** Any kit part. */
@@ -736,4 +743,17 @@ export interface ModuleStats {
   length: ModuleLength;
   /** The party levels it's written for, authored. */
   levels: { min: number; max: number };
+}
+
+/** One arrangement a module contains, in story order: a contained module lists its own. */
+export interface ModuleContent {
+  ref: string;
+  contains?: ModuleContent[];
+}
+
+/** A module's derived contents: what it contains, and its distinct encounters and maps, through its contained arrangements. */
+export interface DerivedModule {
+  encounters: number;
+  maps: number;
+  contents: ModuleContent[];
 }

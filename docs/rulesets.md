@@ -1166,8 +1166,14 @@ a contact as a link; there's no NPC part.
 Modules come only by request; they have no gap buckets. A module's batch
 may add any content entry it needs as an ordinary library entry, never a
 rule addition ([module guideline](../rulesets/dnd-5e-2024/guidelines/module.md)).
-Its page is the generic template, and its card shows its name and
-summary.
+From the library (`deriveLinked`), a module derives its `contents`, the
+arrangements it contains in story order, each contained module with its own
+(`{ "ref": "module/<id>", "contains": [ … ] }`); and `encounters` and
+`maps`, the counts of the distinct encounters it contains and the distinct
+maps its `map` parts show, its own and its contained arrangements', through
+nested modules. Its page is the `module-page` template, and its card shows
+its name, length, levels, and summary
+([Kit parts](site.md#kit-parts)).
 
 ### Embedded stat blocks
 

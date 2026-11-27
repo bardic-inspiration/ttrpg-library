@@ -24,7 +24,7 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `label`, `plural` | Display names |
 | `template` | Card and print component; a missing template falls back to the generic layout |
 | `guideline` | The type's guideline file ([generation.md](generation.md#guidelines)) |
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts; a facet with `"cardOnly": true` is lifted for its card alone, offered as neither |
 | `cardFields` | Facets shown on gallery cards; whether one reads as a chip is its schema's ([Display](content-model.md#display)) |
 | `defaultSort` | `<path>:<asc|desc>`: the sort the Library opens on from the type's old gallery URL and its detail page's type link ([Redirects](#redirects)) |
 | `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet stays in the tree, closed |
@@ -38,7 +38,8 @@ may be a **span**, stored as `{ "min": …, "max": … }`, for an entry whose
 value runs between two bounds: it matches a range filter it overlaps, sorts
 by its minimum, widens the filter's bounds to its own, and reads as its
 bounds, "75–675", or one number when they're equal. Any type may use one; an
-encounter's `derived.xp` is one ([Encounter difficulty](rulesets.md#encounter-difficulty)). A path through an
+encounter's `derived.xp` ([Encounter difficulty](rulesets.md#encounter-difficulty)) and a
+module's `stats.levels` ([Modules](rulesets.md#modules)) are spans. A path through an
 array of objects reads the rest of the path in each item: a character's
 `stats.classes.class` is every class it has, nested arrays flatten, each
 value is kept once in first-seen order, and the facet is left out when no
@@ -273,7 +274,9 @@ structured summary of their sections:
   level, one "Level 1" line per level holding a link to each feature by name
   ("Level 1: Rage, Unarmored Defense, Weapon Mastery"; `featuresByLevel` in
   `site/src/lib/class.ts`); the level is a label, linked nowhere. An item
-  with no id (`TocItem` in `site/src/lib/accordion.ts`) is such a label.
+  with no id (`TocItem` in `site/src/lib/accordion.ts`) is such a label, and
+  one with an `href` links to another page, as a module's contained
+  arrangements do ([Kit parts](#kit-parts)).
 - **A link to a section**, or to anything inside one, opens it and every
   section around it, then scrolls to it: on load, on a new hash, and on a
   click on a link to the hash already showing. This includes every link to a
@@ -402,7 +405,9 @@ the menu and results don't shift sideways as filtering makes the page shorter
 or longer than the window.
 
 **Cards.** Each card shows art (only when the entry has it), name, type badge,
-`cardFields`, summary, and source. A map's card shows its diagram in the art's
+`cardFields`, summary, and source. A module's card fields are its length and
+levels, card-only facets ([Type registry](#type-registry)), so the Library
+filters and sorts modules by neither. A map's card shows its diagram in the art's
 place, as a thumbnail from its record's `diagram`: the shapes colored as on
 its page, without the labels, which are too small to read, and hidden from
 assistive technology, since the card's name says what it is. The whole card opens its entry, and its
@@ -657,7 +662,8 @@ thousand entries. Past about 2,000, revisit the index size.
   message in a polite status region.
 - An encounter's page renders its kit parts ([Kit parts](#kit-parts)), then
   adds a **Difficulty** section after its template
-  ([Difficulty calculator](#difficulty-calculator)).
+  ([Difficulty calculator](#difficulty-calculator)). A module's page opens
+  with its structured summary, then renders its kit parts.
 - `<title>` and Open Graph tags (name, summary, and art when present).
 
 ### Difficulty calculator
@@ -701,7 +707,7 @@ through the ruleset's `difficulty.ts`.
 
 - One component per type template, `background-card`, `character-profile`, `class-page`,
   `condition-card`, `creature-stat-block`, `encounter-page`, `equipment-card`, `feat-card`,
-  `item-card`, `map-page`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
+  `item-card`, `map-page`, `module-page`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
   `stats` and then the ruleset's derived values as one definition list. A derived value is labeled as a stored one is, from its key, and
   listed in the order the ruleset's module returns it. Each text in `stats`
   renders the ruleset's text tokens through its module's `renderTokens`
@@ -763,11 +769,13 @@ An arrangement's page renders its kit parts
 `stats.parts` lists them, each by its shared component in
 `site/src/components/kit/`, so every arrangement reads alike. The
 `encounter-page` template is the encounter's name and summary, then its
-parts (`KitParts`). Each part is a section under its heading, one level below
-the entry's name: Description, Running the Encounter (`dm-guide`),
-Creatures (a roster or spawn table), Sequence, Loot, and Map; a `prose` part
-under its `title`, or none; a `table` under none, since its title is its
-caption. Headings and other composed text come from the phrase book's `kit.`
+parts (`KitParts`). The `module-page` template is the module's name and
+summary, its lines, its structured summary, then its parts (below). Each
+part is a section under its heading, one level below the entry's name:
+Description, Running the Encounter or Running the Module (`dm-guide`),
+Creatures (a roster or spawn table), Sequence, Loot, Map, and Hook; a `prose`
+part under its `title`, or none; a `table` under none, since its title is
+its caption; and an `arrangement` under its contained entry's name. Headings and other composed text come from the phrase book's `kit.`
 sentences and its `coin` vocabulary, through `site/src/lib/kit.ts`.
 
 - **Refs.** Each ref object reads as a line: its count and its name linked
@@ -798,10 +806,34 @@ sentences and its `coin` vocabulary, through `site/src/lib/kit.ts`.
   zone's anchor, with its thumbnail or its card as its `show` says. `setIn`
   alone shows nothing in the template; the detail page lists it under "Set
   in".
+- **Hook:** its text, then each entry it brings in as a line, its name
+  linked and its note after it in parentheses ("Guard Captain (the party's
+  contact)"); then its cards.
+- **Arrangement:** a contained encounter or module. Shown as a link, its
+  heading is its name linked to its page, after its art as a thumbnail when
+  `show` is `thumbnail` and it has art; shown as a card, it embeds the
+  target's type template, the name at the part's heading level, with the
+  target's own parts and cards below it.
+- **The module page** (`ModulePage.astro`, `site/src/lib/module.ts`):
+  - **Lines:** Length (the phrase book's `moduleLength` vocabulary), Levels
+    ("2–4", or "3" for one level), and the counts it derives, Encounters and
+    Maps ([Modules](rulesets.md#modules)).
+  - **The structured summary** (`TableOfContents`,
+    [Accordion pages](#accordion-pages)) lists its parts in order, each
+    linked to its section: by its heading, a table by its title, and an
+    arrangement by its contained entry's name; a `prose` part without a
+    title isn't listed. Each listed part's section is anchored at
+    `section-<slug>` of its label, `-2`, `-3`… after a label used before
+    (`#section-hook-2`). Under a contained module, the arrangements it
+    contains are listed in story order, through its own, each linked to its
+    page.
+  - **Embedded** as a card in another module, it shows no summary and
+    carries no anchors, which are the outer page's.
 - **Print and capture** follow the page: a card prints as the target's card,
   in the same mode, and a link reads as its name, in the text's color with no
   underline. The entry's description, which the detail page shows as lore,
-  follows the parts.
+  follows the parts. A module prints no summary, as an accordion page
+  doesn't, and no anchors.
 
 ### Wording
 

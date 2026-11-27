@@ -8,6 +8,8 @@
  */
 export interface TocItem {
   id?: string;
+  /** A link to another page, for a line that isn't a section here (a module's contained arrangements). */
+  href?: string;
   label: string;
   children?: TocItem[];
 }

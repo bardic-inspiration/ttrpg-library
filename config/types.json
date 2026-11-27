@@ -184,10 +184,13 @@
       "module": {
         "label": "Module",
         "plural": "Modules",
-        "template": "generic",
+        "template": "module-page",
         "guideline": "rulesets/dnd-5e-2024/guidelines/module.md",
-        "facets": [],
-        "cardFields": [],
+        "facets": [
+          { "path": "stats.length", "label": "Length", "kind": "enum", "vocabulary": "moduleLength", "order": ["one-shot", "delve", "multi-session"], "cardOnly": true },
+          { "path": "stats.levels", "label": "Levels", "kind": "range", "cardOnly": true }
+        ],
+        "cardFields": ["stats.length", "stats.levels"],
         "defaultSort": "name:asc",
         "defaultFilters": []
       },

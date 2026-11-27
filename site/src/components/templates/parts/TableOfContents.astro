@@ -2,7 +2,8 @@
 // A page's structured summary (docs/site.md#accordion-pages): a `nav` labeled "Contents" that
 // lists the page's sections grouped as the page groups them. A line whose sections nest nothing
 // reads as its label, then a run of links to them ("Level 1: Rage, Unarmored Defense"); a deeper
-// one lists its lines under its label. A label without an id groups lines and links nowhere.
+// one lists its lines under its label. A label without an id groups lines and links nowhere; one
+// with an `href` links to that page.
 // Shown on screen only.
 import { isRun, type TocItem } from '../../../lib/accordion';
 
@@ -17,12 +18,13 @@ const { items, nested = false } = Astro.props;
 {nested ? (
   <ul>
     {items.map((item) => {
-      const label = item.id ? <a href={`#${item.id}`}>{item.label}</a> : <span class="toc__label">{item.label}</span>;
+      const href = (i: TocItem) => i.href ?? (i.id ? `#${i.id}` : undefined);
+      const label = href(item) ? <a href={href(item)}>{item.label}</a> : <span class="toc__label">{item.label}</span>;
       if (isRun(item)) {
         return (
           <li class="toc__run">
             {label}: {item.children!.map((child, i) => (
-              <>{i > 0 && ', '}{child.id ? <a href={`#${child.id}`}>{child.label}</a> : child.label}</>
+              <>{i > 0 && ', '}{href(child) ? <a href={href(child)}>{child.label}</a> : child.label}</>
             ))}
           </li>
         );

@@ -1,0 +1,52 @@
+---
+// An `arrangement` part (docs/site.md#kit-parts): a contained encounter or module, headed by its
+// name. Shown as a link, the heading is its name linked, after its art as a thumbnail when it has
+// some; shown as a card, it embeds the target's type template at the part's heading level.
+import { renderInlineMarkdown } from '../../lib/markdown';
+import { refView, type KitContext } from '../../lib/kit';
+import type { Show } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import EntryTemplate from '../templates/EntryTemplate.astro';
+import Heading from '../templates/parts/Heading.astro';
+import KitThumbnail from './KitThumbnail.astro';
+
+interface Props {
+  arrangement: { ref: string; show?: Show };
+  kit: KitContext;
+}
+
+const { arrangement, kit } = Astro.props;
+const view = refView(arrangement);
+const target = kit.shown.get(view.entry);
+---
+{view.show === 'card' && target ? (
+  <div class="kit-card">
+    <EntryTemplate
+      entry={target.entry}
+      derived={target.derived}
+      names={kit.refs.names}
+      paths={kit.refs.paths}
+      components={target.components}
+      refBy={target.refBy}
+      shown={target.shown}
+      diagrams={kit.diagrams}
+      mode={kit.mode}
+      level={kit.level}
+      embedded
+    />
+  </div>
+) : (
+  <>
+    {view.show === 'thumbnail' && target && <KitThumbnail loaded={target} kit={kit} />}
+    <Heading level={kit.level} class="statblock-heading"><span set:html={renderInlineMarkdown(view.line, kit.refs)} /></Heading>
+  </>
+)}
+
+<style>
+  @layer components {
+    /* A contained arrangement's card is its own stat block, framed apart from the module around it. */
+    .kit-card :global(.statblock) {
+      max-inline-size: none;
+      border-inline: var(--border-width) solid var(--statblock-rule-color);
+    }
+  }
+</style>

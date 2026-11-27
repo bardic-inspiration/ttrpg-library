@@ -215,13 +215,13 @@ describe('every facet of every type', () => {
       }),
     );
 
-  it('appears in the tree under its type', () => {
+  it('appears in the tree under its type, but a card-only facet, which is a card field alone', () => {
     const home = galleryConfig(reg, data);
     const nodes = tree(full(), home);
     for (const [type, config] of Object.entries(reg['dnd-5e-2024']!.types)) {
       const node = types(nodes).find((n) => n.kind === 'type' && n.id === `dnd-5e-2024/${type}`);
       expect(node, type).toBeDefined();
-      expect(paths(node?.kind === 'type' ? node.children : []), type).toEqual(config.facets.map((f) => f.path));
+      expect(paths(node?.kind === 'type' ? node.children : []), type).toEqual(config.facets.filter((f) => !f.cardOnly).map((f) => f.path));
     }
     // Sources and Types are the only top-level nodes, and an old tag filter adds none.
     expect(nodes.map((n) => n.id)).toEqual(['sources', 'types']);

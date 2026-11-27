@@ -1,9 +1,12 @@
 ---
 // An arrangement's kit parts (docs/site.md#kit-parts, docs/content-model.md#arrangements), each in
-// order by its shared component, under its heading, so every arrangement reads alike.
+// order by its shared component, under its heading, so every arrangement reads alike. A page that
+// lists its parts in a summary passes each part's anchor.
 import { partHeading, type KitContext } from '../../lib/kit';
-import type { EncounterPart } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import type { Part } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import Heading from '../templates/parts/Heading.astro';
+import KitArrangement from './KitArrangement.astro';
+import KitHook from './KitHook.astro';
 import KitLoot from './KitLoot.astro';
 import KitMap from './KitMap.astro';
 import KitRoster from './KitRoster.astro';
@@ -13,16 +16,18 @@ import KitTable from './KitTable.astro';
 import KitText from './KitText.astro';
 
 interface Props {
-  parts: EncounterPart[];
+  parts: Part[];
   kit: KitContext;
+  /** Each part's anchor, by index; a part without one has none. */
+  ids?: (string | undefined)[];
 }
 
-const { parts, kit } = Astro.props;
+const { parts, kit, ids = [] } = Astro.props;
 ---
-{parts.map((part) => {
-  const heading = partHeading(part);
+{parts.map((part, index) => {
+  const heading = partHeading(part, kit.arrangement);
   return (
-    <section class="kit-part" data-part={part.part}>
+    <section class="kit-part" data-part={part.part} id={ids[index]}>
       {heading !== undefined && <Heading level={kit.level} class="statblock-heading">{heading}</Heading>}
       {part.part === 'prose' || part.part === 'dm-guide' ? (
         <KitText text={part.text} kit={kit} />
@@ -38,6 +43,10 @@ const { parts, kit } = Astro.props;
         <KitTable title={part.title} text={part.text} kit={kit} />
       ) : part.part === 'loot' ? (
         <KitLoot rows={part.rows} kit={kit} />
+      ) : part.part === 'hook' ? (
+        <KitHook text={part.text} refs={part.refs} kit={kit} />
+      ) : part.part === 'arrangement' ? (
+        <KitArrangement arrangement={part.arrangement} kit={kit} />
       ) : (
         <KitMap map={part.map} kit={kit} />
       )}

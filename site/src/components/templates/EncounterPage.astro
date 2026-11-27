@@ -28,6 +28,7 @@ const kit: KitContext = {
   mode,
   level: sub,
   diagram: (key) => diagrams?.get(key) ?? diagramSource(byKey.get(key)!.entry),
+  ...(diagrams && { diagrams }),
 };
 ---
 <StatBlock name={entry.name} type="encounter" mode={mode}>

@@ -29,6 +29,8 @@ export interface Facet {
   ref?: boolean;
   /** Its values are the type's leaf groups (docs/rulesets.md#rules-groups), offered nested and matched by group. */
   groups?: boolean;
+  /** Shown on the type's cards only: the Library offers no filter or sort for it (docs/site.md#type-registry). */
+  cardOnly?: boolean;
 }
 
 export interface TypeConfig {

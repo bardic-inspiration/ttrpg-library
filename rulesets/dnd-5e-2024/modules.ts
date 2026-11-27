@@ -2,9 +2,9 @@
 // The kit parts' shapes are the schema's (docs/content-model.md#arrangements); refs resolve by the ref
 // check (docs/content-model.md#references), so an unresolved arrangement adds nothing here.
 
-import type { Issue, LinkTarget } from '../module.ts';
+import type { Issue, LinkedLibrary, LinkTarget } from '../module.ts';
 import { checkTableParts } from './encounters.ts';
-import type { ModuleStats } from './types.ts';
+import type { DerivedModule, ModuleContent, ModuleStats, Part } from './types.ts';
 
 /** The modules a module's `arrangement` parts contain, with each part's index. */
 const containedModules = (stats: ModuleStats): { index: number; ref: string }[] =>
@@ -46,4 +46,35 @@ function pathBack(from: string, to: string, target: LinkTarget, seen: Set<string
     if (rest) return [from, ...rest];
   }
   return undefined;
+}
+
+/**
+ * A module's contents (docs/rulesets.md#modules): the arrangements it contains, in story order, each
+ * contained module with its own; and the counts of the distinct encounters and maps in it, through
+ * its contained modules and encounters. A map counts when a `map` part shows it, the module's own or
+ * a contained arrangement's.
+ */
+export function deriveModuleLinked(stats: ModuleStats, library: LinkedLibrary): DerivedModule {
+  const encounters = new Set<string>();
+  const maps = new Set<string>();
+  const walk = (parts: Part[], seen: Set<string>): ModuleContent[] => {
+    const contents: ModuleContent[] = [];
+    for (const part of parts) {
+      if (part.part === 'map') maps.add(part.map.ref);
+      if (part.part !== 'arrangement') continue;
+      const { ref } = part.arrangement;
+      const found = library.resolve(ref);
+      // Validation guarantees no cycle; a module already on the path isn't walked again.
+      if (!found || seen.has(ref)) {
+        contents.push({ ref });
+        continue;
+      }
+      if (found.type === 'encounter') encounters.add(ref);
+      const inner = walk((found.stats as { parts: Part[] }).parts, new Set([...seen, ref]));
+      contents.push(found.type === 'module' ? { ref, contains: inner } : { ref });
+    }
+    return contents;
+  };
+  const contents = walk(stats.parts, new Set());
+  return { encounters: encounters.size, maps: maps.size, contents };
 }
