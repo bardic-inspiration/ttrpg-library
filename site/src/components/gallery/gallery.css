@@ -194,6 +194,23 @@
     object-fit: cover;
   }
 
+  /* A map's diagram in the art's frame, colored as on its page (styles/diagram.css). */
+  .card__thumbnail {
+    display: grid;
+    aspect-ratio: var(--art-aspect);
+    padding: var(--space-2xs);
+    background: var(--map-wall-fill);
+
+    & .card__diagram {
+      block-size: 100%;
+    }
+
+    /* Too small to read on a card; the page labels the zones. */
+    & .diagram .label {
+      display: none;
+    }
+  }
+
   .card__body {
     display: grid;
     align-content: start;

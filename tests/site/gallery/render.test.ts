@@ -48,6 +48,16 @@ describe('Gallery', () => {
     expect(html).not.toContain('Art placeholder');
   });
 
+  it("shows a map's diagram as its card's thumbnail, with its scale", () => {
+    const diagram = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" class="diagram card__diagram" aria-hidden="true" focusable="false"><rect class="zone" x="0" y="0" width="5" height="5" /></svg>';
+    const cistern = record({ id: 'sunken-cistern', type: 'map', name: 'Sunken Cistern', diagram, facets: { 'stats.scale': 'dungeon' } });
+    const html = render({ records: [...records, cistern], initialQuery: '?f.type=map' });
+    expect(html.match(/<article class="card linked-card"/g)).toHaveLength(1);
+    expect(html).toContain(`<div class="card__thumbnail">${diagram}</div>`);
+    expect(html).toContain('<dt>Scale</dt><dd>Dungeon</dd>');
+    expect(html).not.toContain('card__art');
+  });
+
   it('reads the repo’s chip fields from its schemas (docs/content-model.md#display)', () => {
     expect(chipFacets(registry as never, loadSchemas())).toEqual({
       'dnd-5e-2024/class': ['stats.hitDie'],

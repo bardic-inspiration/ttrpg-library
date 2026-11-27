@@ -1,11 +1,12 @@
 ---
 // The body of a detail page (docs/site.md#detail-page): art when the entry has it, name,
 // type, and summary; the type template; the description as lore; forward refs and
-// back-refs, each label's list a disclosure, an official page's links to homebrew in a Homebrew
+// back-refs (but those into a map's zones, which its template lists), each label's list a disclosure, an official page's links to homebrew in a Homebrew
 // section after them; and provenance.
 // The page passes its export controls (an island) in the `export` slot.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
+import { outsideZones } from '../../lib/map';
 import { groupPageRefs, groupRefs, splitHomebrew, type RefTarget } from '../../lib/refs';
 import { isOfficial } from '../../../../rulesets/module';
 import { provenance } from '../../lib/detail';
@@ -35,10 +36,11 @@ const typeLabel =
   (registry as Record<string, { types: Record<string, { label: string }> }>)[entry.ruleset]?.types[entry.type]?.label ?? entry.type;
 const module = rulesetModule(entry.ruleset);
 const labelFor = (type: string, path: string) => module.refLabels(type, path);
-// A page type's links are its own and its components' (docs/content-model.md#components).
+// A page type's links are its own and its components' (docs/content-model.md#components). A
+// back-link into one of a map's zones is listed under its zone by the map's template, not again here.
 const links = loaded.components
   ? groupPageRefs(loaded, loaded.components, targets, labelFor)
-  : groupRefs(entry.type, loaded.refs, loaded.refBy, targets, labelFor);
+  : groupRefs(entry.type, loaded.refs, outsideZones(loaded.refBy), targets, labelFor);
 // An SRD page lists its links to homebrew in a Homebrew section of their own, after its SRD links.
 const allGroups = [...links.forward, ...links.back];
 const { official: linkGroups, homebrew: homebrewGroups } = isOfficial(entry) ? splitHomebrew(allGroups) : { official: allGroups, homebrew: [] };
@@ -61,7 +63,7 @@ const nameParts = entry.name.split('/');
     </div>
   </header>
 
-  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} mode="screen" level={2} />
+  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} refBy={loaded.refBy} mode="screen" level={2} />
 
   {present(entry.description) && (
     <section class="entry-detail__lore" aria-labelledby="lore-heading">

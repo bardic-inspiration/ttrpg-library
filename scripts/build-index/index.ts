@@ -5,9 +5,12 @@
 
 import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
+import { thumbnailDiagram } from '../../lib/diagram.ts';
 import { SITE_BASE } from '../../lib/site.ts';
 import { validateLibrary, type ValidationError, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
-import type { Link } from '../validate/refs.ts';
+import { diagramPath } from '../validate/diagram.ts';
+import { MAP_TYPE } from '../validate/library.ts';
+import { entryZones, type Link } from '../validate/refs.ts';
 import { loadRegistry, loadRuleset, RULESETS_ROOT } from '../validate/schema.ts';
 import { cardedPrimitives, ruleKey, rulePaths, ruleNames, type Primitive } from '../../lib/rules.ts';
 import { isFlag, type Schema, type SchemaSet } from './schema-walk.ts';
@@ -53,6 +56,8 @@ export interface LibraryRecord {
   /** The detail page, or a primitive's section on its rules page, under the site base. */
   url: string;
   image: string | null;
+  /** A map's diagram as its card's thumbnail (docs/site.md#gallery "Cards"), checked and rewritten; null for any other type. */
+  diagram: string | null;
   facets: Record<string, unknown>;
   /** Null for a ruleset primitive, which has no `meta`. */
   createdAt: string | null;
@@ -155,6 +160,16 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
   if (errors.length > 0) return { errors, warnings, records: [], files: [], bundles: [] };
   const registry = options.registry ?? (await loadRegistry());
   const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
+  const assetsRoot = options.assetsRoot ?? dirname(resolve(root));
+  // A map's card shows its diagram, which validation has checked (docs/content-model.md#map-diagrams).
+  const diagramOf = async (entry: ValidEntry['entry']): Promise<string | null> =>
+    entry.type === MAP_TYPE
+      ? thumbnailDiagram(
+          await readFile(join(assetsRoot, diagramPath(entry)), 'utf8'),
+          (entryZones(entry.stats) ?? []).map((zone) => zone.id),
+          `${entry.type}/${entry.id}`,
+        )
+      : null;
 
   // The names of the entries and rules an entry links to, for its export bundle.
   const nameOf = new Map([
@@ -185,6 +200,7 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
         summary: entry.summary,
         url: `${SITE_BASE}${entry.ruleset}/${entry.type}/${entry.id}/`,
         image: typeof entry.image === 'string' ? entry.image : null,
+        diagram: await diagramOf(entry),
         facets: facetValues({ stats: entry.stats, derived: item.derived }, config?.facets ?? [], await schemasFor(entry.ruleset, entry.type)),
         createdAt: meta.createdAt,
         refs: item.refs,
@@ -217,6 +233,7 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
           summary: '',
           url: `${SITE_BASE}${paths.get(key)}`,
           image: null,
+          diagram: null,
           facets: facetValues({ stats: primitive.stats, derived }, config!.types[primitive.type]!.facets, await schemasFor(data.ruleset, primitive.type)),
           createdAt: null,
           refs: links.refs,

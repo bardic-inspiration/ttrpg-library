@@ -1,8 +1,10 @@
 // dnd-5e-2024 maps (docs/rulesets.md#maps) and their diagrams (docs/content-model.md#map-diagrams):
-// the spec's dungeon and town cases validate, and a broken diagram fails on each of its faults.
+// the spec's dungeon and town cases validate, and a broken diagram fails on each of its faults. The
+// index gives a map's card its diagram and scale (docs/site.md#gallery "Cards").
 import { copyFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { validateLibrary } from '../../../scripts/validate/index.ts';
 import { checkDiagram } from '../../../scripts/validate/diagram.ts';
 import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
@@ -27,8 +29,8 @@ afterEach(async () => {
 /** Validating the whole library takes a few seconds; Vitest's 5 s default is too tight. */
 const VALIDATION_TIMEOUT = 30_000;
 
-/** Validates the library with the map fixtures and their diagrams, after `change` edits the entries; `skip` leaves diagrams out. */
-async function validate(change: (entries: Record<string, any>[]) => void = () => {}, skip: string[] = []) {
+/** Validates the library with the map fixtures and their diagrams, after `change` edits the entries; `skip` leaves diagrams out, and `index` builds its records too. */
+async function validate(change: (entries: Record<string, any>[]) => void = () => {}, skip: string[] = [], index = false) {
   const entries = await all();
   change(entries);
   const lib = await tempLibrary(entries);
@@ -37,6 +39,7 @@ async function validate(change: (entries: Record<string, any>[]) => void = () =>
   await mkdir(images, { recursive: true });
   for (const svg of (await readdir(MAPS)).filter((f) => f.endsWith('.svg') && !skip.includes(f))) await copyFile(join(MAPS, svg), join(images, svg));
   const result = await validateLibrary(lib.content, { assetsRoot: lib.repo });
+  if (index) return { records: (await buildIndex(lib.content, { assetsRoot: lib.repo })).records, errors: [], mapErrors: [], mapWarnings: [], result };
   const ofMaps = (issues: { file: string; message: string }[]) => issues.filter((i) => i.file.includes('/map/')).map((i) => `${i.file}: ${i.message}`);
   return { errors: result.errors.map((e) => `${e.file}: ${e.message}`), mapErrors: ofMaps(result.errors), mapWarnings: ofMaps(result.warnings), result };
 }
@@ -52,6 +55,15 @@ describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
     // `within` is a zone ref: the child links to its parent's zone, and the parent's back-refs name the child and the zone.
     const parent = result.entries.find((e) => e.entry.type === 'map' && e.entry.id === 'sunken-cistern')!;
     expect(parent.refBy).toEqual([{ path: 'stats.within', key: 'map/drowned-shrine', zone: 'drowned-shrine' }]);
+  });
+
+  it("gives a map's record its diagram as a thumbnail and its scale, and no other type a diagram", async () => {
+    const { records = [] } = await validate(withoutBroken, [], true);
+    const cistern = records.find((r) => r.type === 'map' && r.id === 'sunken-cistern')!;
+    expect(cistern.facets).toEqual({ 'stats.scale': 'dungeon' });
+    expect(cistern.diagram).toMatch(/^<svg xmlns="http:\/\/www.w3.org\/2000\/svg" viewBox="0 0 400 240" class="diagram card__diagram" aria-hidden="true" focusable="false">/);
+    expect(cistern.diagram).not.toMatch(/ id=|<title>|<a /);
+    expect(records.filter((r) => r.diagram !== null).map((r) => r.id).sort()).toEqual(['drowned-shrine', 'harrowfield', 'sunken-cistern']);
   });
 
   it('fails the broken diagram on each of its faults', async () => {

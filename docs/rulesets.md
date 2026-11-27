@@ -994,8 +994,35 @@ map's `stats` hold:
 The diagram is at a path derived from the id,
 `assets/images/dnd-5e-2024/map/<id>.svg`, never stored, and every map has
 one ([Map diagrams](content-model.md#map-diagrams)). A map derives nothing.
-Its page uses the `generic` template, and it has no facets. Maps come only by
-request; they have no gap buckets.
+Maps come only by request; they have no gap buckets. In the Library, a map's
+card shows its diagram as a thumbnail, with its name and scale
+([Gallery](site.md#gallery) "Cards"); `scale` is its one facet.
+
+A map's page is a **map page** (`map-page`, `site/src/lib/map.ts`):
+
+- **Its scale** under its name ("Dungeon map"), then, for a child map, its
+  parent's zone, "Within", linked ("Sunken Cistern › Drowned Shrine").
+- **The diagram,** inline at the page's width, colored by the site
+  ([Map diagrams](content-model.md#map-diagrams)). Each zone's shape is a
+  link to the zone's entry below, named by the zone's name
+  (`pageDiagram` in `lib/diagram.ts`).
+- **The zones,** in `stats.zones` order, each anchored at `#zone-<id>`,
+  where a zone ref links ([References](content-model.md#references)): its
+  name, its note, and what points into it, by label (`zoneRefs` in
+  `site/src/lib/refs.ts`): what's set there under its referrer's label, and
+  the child maps that detail it under "Child maps". The anchor is the zone's
+  entry, not its shape, so a link lands on what the zone holds; the entry is
+  highlighted (`:target`), and so is its shape in the diagram, by a small
+  script on load and on each new hash. A shape under the pointer or focused
+  is highlighted too.
+- **In print and PNG capture,** the diagram spans the page's columns, then
+  the zones follow, then the description, which the detail page shows as
+  lore. Only the page's own copy carries the anchors, since the capture's
+  copy sits on the same page and a print view may hold two maps sharing a
+  zone id.
+
+The detail page's Links list its parent ("Within") and the back-links to the
+map as a whole; those into a zone are listed under the zone instead.
 
 ### Embedded stat blocks
 

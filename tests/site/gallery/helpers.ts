@@ -28,6 +28,7 @@ export function record(overrides: Partial<LibraryRecord> & { id: string }): Libr
     summary: 'A filler summary for tests.',
     url: `/ttrpg-library/dnd-5e-2024/${overrides.type ?? 'creature'}/${overrides.id}/`,
     image: null,
+    diagram: null,
     facets: {},
     createdAt: '2026-01-01',
     refs: [],

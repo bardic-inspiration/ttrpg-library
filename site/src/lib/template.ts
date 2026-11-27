@@ -2,6 +2,7 @@
 // render modes, and which component the registry's `template` name selects.
 
 import type { RulesetModule } from '../../../rulesets/module.ts';
+import type { Link } from '../../../scripts/validate/refs.ts';
 import type { Entry } from './library.ts';
 
 /** `screen` for gallery detail, `capture` for PNG, `print` for the print view. */
@@ -31,6 +32,10 @@ export interface TemplateProps {
   module?: Pick<RulesetModule, 'renderTokens'>;
   /** A page type's components, shown after its template (docs/content-model.md#components). */
   components?: { entry: { type: string; id: string; name: string; stats: unknown } }[];
+  /** Refs into the entry, for a template that lists them itself: a map's, by zone (`map-page`). */
+  refBy?: Link[];
+  /** A map's diagram source, when the page has it to hand (the style guide's fixtures); else read from the library. */
+  diagram?: string;
 }
 
 /** Template names (`config/types.json` `template`) that have their own component; others use `generic`. */
@@ -43,6 +48,7 @@ export const TEMPLATES = [
   'equipment-card',
   'feat-card',
   'item-card',
+  'map-page',
   'species-page',
   'spell-card',
   'subclass-page',

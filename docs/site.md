@@ -89,7 +89,12 @@ Two flags change what a facet's values are:
 
 Each `library.json` record holds the entry's `id`, `ruleset`, `source` (or
 `null`), `author`, `type`, `name`, `summary`, `url` (the detail page under the site base), `image` (the stored
-path, or `null`), `facets`, `createdAt`, `refs`, and `refBy`. `facets` holds
+path, or `null`), `diagram`, `facets`, `createdAt`, `refs`, and `refBy`. `diagram`
+is a map's diagram as its card's thumbnail, or `null` for any other type
+(`thumbnailDiagram` in `lib/diagram.ts`): the build reads it from its derived
+path, checks it ([Map diagrams](content-model.md#map-diagrams)), and leaves out
+its `<title>`, ids, comments, and declaration, so the card can place it
+inline, where the site's CSS colors it. `facets` holds
 the registry's facet paths in registry order, read from `stats` and the
 derived values. A facet whose optional value is omitted is left out, except
 an optional flag, which reads as `false`.
@@ -389,7 +394,10 @@ the menu and results don't shift sideways as filtering makes the page shorter
 or longer than the window.
 
 **Cards.** Each card shows art (only when the entry has it), name, type badge,
-`cardFields`, summary, and source. The whole card opens its entry, and its
+`cardFields`, summary, and source. A map's card shows its diagram in the art's
+place, as a thumbnail from its record's `diagram`: the shapes colored as on
+its page, without the labels, which are too small to read, and hidden from
+assistive technology, since the card's name says what it is. The whole card opens its entry, and its
 cart control sits above that link ([Cart and set actions](#gallery))
 ([Shared components](styling.md#shared-components)).
 
@@ -612,7 +620,10 @@ thousand entries. Past about 2,000, revisit the index size.
 - `description` as lore, visually distinct from rules text.
 - Forward refs and back-refs as links
   ([content-model.md](content-model.md#references)); a page type's include
-  its components' ([content-model.md](content-model.md#components)). Each
+  its components' ([content-model.md](content-model.md#components)). A
+  back-link into one of a map's zones is listed under that zone by the map's
+  template ([Maps](rulesets.md#maps)), not again here (`outsideZones` in
+  `site/src/lib/map.ts`). Each
   label's links are a shared disclosure (`Details`,
   [Shared components](styling.md#shared-components)) that starts open, with
   the label as its toggle. A target listed under a specific label isn't
@@ -642,7 +653,7 @@ thousand entries. Past about 2,000, revisit the index size.
 
 - One component per type template, `background-card`, `character-profile`, `class-page`,
   `condition-card`, `creature-stat-block`, `equipment-card`, `feat-card`,
-  `item-card`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
+  `item-card`, `map-page`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
   `stats` and then the ruleset's derived values as one definition list. A derived value is labeled as a stored one is, from its key, and
   listed in the order the ruleset's module returns it. Each text in `stats`
   renders the ruleset's text tokens through its module's `renderTokens`
@@ -663,7 +674,9 @@ thousand entries. Past about 2,000, revisit the index size.
   chooses (2 by default; the detail page's own `h1` sits above it), with
   sections one level below.
 - Templates receive the entry and its derived values and render tokens through
-  the ruleset's `tokens.ts`; they never compute rules values.
+  the ruleset's `tokens.ts`; they never compute rules values. A template that
+  lists the entry's back-links itself gets them as `refBy`, as `map-page` does
+  by zone; the detail page, print, and PNG capture pass them.
 - Every template shows a `stats` field by the situational-field rule, through
   one helper (`present` and `whenPresent` in `site/src/lib/display.ts`).
 - Rules text and `description` render through one sanitizing markdown helper

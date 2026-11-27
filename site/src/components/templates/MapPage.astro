@@ -1,0 +1,147 @@
+---
+// A map's page (registry template `map-page`, docs/site.md#templates, docs/rulesets.md#maps): its scale
+// and parent, its diagram inline at the page's width with each zone a link, then its zones in order,
+// each at `#zone-<id>` with its note and what points into it: what's set there and the child maps that
+// detail it. A link to a zone lands on its entry and highlights its shape. In print and capture, the
+// diagram spans the page, then the zones, then the description, which the detail page shows itself.
+import type { MapStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { pageDiagram } from '../../../../lib/diagram';
+import { present } from '../../lib/display';
+import { formatTitle } from '../../lib/format';
+import { rulesetModule } from '../../lib/library';
+import { diagramSource, mapZones } from '../../lib/map';
+import { renderMarkdown } from '../../lib/markdown';
+import type { PropertyLine, TemplateProps } from '../../lib/template';
+import { url } from '../../lib/url';
+import Heading from './parts/Heading.astro';
+import PropertyList from './parts/PropertyList.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, paths, refBy = [], mode = 'screen', level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+const s = entry.stats as MapStats;
+const module = rulesetModule(entry.ruleset);
+const zones = mapZones(entry, refBy, names, paths, (type, path) => module.refLabels(type, path));
+const diagram = pageDiagram(Astro.props.diagram ?? diagramSource(entry), s.zones, entry.name);
+const lines: PropertyLine[] = s.within ? [{ label: 'Within', value: `{ref:${s.within.ref}#${s.within.zone}}`, markdown: true }] : [];
+const sub = level + 1;
+// Only the page's own copy carries the anchors: the PNG capture's copy sits on the same page, and a
+// print view may hold two maps that share a zone id.
+const anchors = mode === 'screen';
+---
+<StatBlock name={`${entry.name} map`} type="map" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={`${formatTitle(s.scale)} map`} level={level} />
+  <PropertyList lines={lines} refs={refs} />
+  <figure class="map-diagram" set:html={diagram} />
+  <section class="map-zones">
+    <Heading level={sub} class="statblock-heading">Zones</Heading>
+    <ol class="map-zones__list">
+      {zones.map((zone) => (
+        <li class="map-zone" id={anchors ? `zone-${zone.id}` : undefined}>
+          <Heading level={sub + 1} class="statblock-heading statblock-heading--nested">{zone.name}</Heading>
+          {present(zone.note) && <div class="map-zone__note" set:html={renderMarkdown(zone.note!, refs)} />}
+          {zone.groups.map((group) => (
+            <p class="map-zone__refs">
+              <span class="map-zone__label">{group.label}:</span>{' '}
+              {group.targets.map((target, i) => (
+                <>{i > 0 && ', '}<a class="ref-link" href={url(target.path)}>{target.name}</a></>
+              ))}
+            </p>
+          ))}
+        </li>
+      ))}
+    </ol>
+  </section>
+  {mode !== 'screen' && present(entry.description) && (
+    <section class="map-zones">
+      <Heading level={sub} class="statblock-heading">Description</Heading>
+      <div class="map-lore" set:html={renderMarkdown(entry.description!, refs)} />
+    </section>
+  )}
+</StatBlock>
+
+<script>
+  // The zone a link lands on is highlighted in the zone list by :target, and in the diagram here:
+  // its shape is marked on load and on every new hash.
+  const mark = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    for (const shape of document.querySelectorAll('.map-diagram [data-zone]')) shape.removeAttribute('data-target');
+    if (!id.startsWith('zone-')) return;
+    const zone = id.slice('zone-'.length);
+    for (const shape of document.querySelectorAll('.map-diagram [data-zone]')) {
+      if (shape.getAttribute('data-zone') === zone) shape.setAttribute('data-target', '');
+    }
+  };
+  mark();
+  addEventListener('hashchange', mark);
+</script>
+
+<style>
+  @layer components {
+    .map-diagram {
+      margin: 0;
+
+      /* A zone's shape under the pointer, focused, or the zone a link landed on. */
+      & :global(.map-diagram__zone:is(:hover, :focus-visible) > [data-zone]),
+      & :global([data-zone][data-target]) {
+        fill: var(--map-zone-target-fill);
+      }
+
+      & :global(.map-diagram__zone:focus-visible) {
+        outline: var(--focus-ring);
+      }
+    }
+
+    .map-zones__list {
+      display: grid;
+      gap: var(--space-xs);
+      padding: 0;
+      list-style: none;
+    }
+
+    .map-zones > :global(* + *) {
+      margin-block-start: var(--space-2xs);
+    }
+
+    .map-zone {
+      padding: var(--space-3xs) var(--space-2xs);
+      border-inline-start: var(--border-width-strong) solid transparent;
+      scroll-margin-block-start: var(--space-m);
+
+      &:target {
+        background: var(--map-zone-target-bg);
+        border-inline-start-color: var(--accent);
+      }
+
+      & > :global(* + *) {
+        margin-block-start: var(--space-3xs);
+      }
+    }
+
+    .map-zone__label {
+      font-family: var(--statblock-label-font);
+      font-weight: var(--font-weight-strong);
+    }
+
+    .map-lore {
+      font-style: italic;
+      color: var(--color-text-muted);
+    }
+
+    /*
+     * In print and capture, the name, the parent, and the diagram span the page's columns, then the
+     * zones and the description take them.
+     */
+    :global(.statblock[data-type='map']:is([data-mode='print'], [data-mode='capture']) > :not(.map-zones)) {
+      column-span: all;
+      break-inside: avoid;
+    }
+
+    .map-zone {
+      break-inside: avoid;
+    }
+  }
+</style>
