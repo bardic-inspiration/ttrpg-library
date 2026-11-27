@@ -22,55 +22,22 @@ is checked, not trusted), and P6 (the site styles the diagram).
   tokens, and back-references.
 - [Work lanes](../../docs/workflow.md#work-lanes): `assets/images/` is in the
   content lane.
+- [Maps](../../docs/rulesets.md#maps): the `map` type, its `scale`,
+  `zones`, and `within`, with its checks.
+- [Map diagrams](../../docs/content-model.md#map-diagrams): the diagram at
+  its derived path, and the checks it passes.
 
 ## Design
-
-### Diagrams, not art
-
-A map's picture is a generated SVG diagram, made with the entry by the
-`generate` skill. It's an original diagram, not art, so the Images track's
-rule against generated art doesn't apply to it, and it needs no
-`ATTRIBUTION.md` credit. Art stays under the Images track's rules.
-
-### The map type
-
-`map` is a content type in `dnd-5e-2024` for this version, at
-`content/dnd-5e-2024/map/<id>.json`. Maps become ruleset-neutral data with
-the spatial schema.
-
-- **The diagram** is at a path derived from the id,
-  `assets/images/dnd-5e-2024/map/<id>.svg`, never stored. Every map has one
-  (error otherwise), with the image size warning and limit.
-- **`scale`:** a label for organizing the hierarchy, one of `room`,
-  `dungeon`, `zone`, `region`, or `world`. It isn't a type.
-- **`zones`:** the map's anchors, each an `id` (a slug, unique within the
-  map) and a `name`, with an optional `note`.
-- **`within`:** for a child map, the zone of its parent it details: a ref to
-  the parent map and a zone id. A map is within at most one parent, and no
-  map is within itself, directly or through others (error).
-
-### The diagram file
-
-- **Allowed:** shapes, paths, text, groups, and `<title>`. Zones are elements
-  with `id="zone-<id>"`, one per zone in `stats.zones`, and no other ids
-  start `zone-` (error both ways).
-- **Rejected (error):** `<script>`, event handler attributes, `<foreignObject>`,
-  `<image>`, any `href` or `url(…)` outside the file, and inline `style` or
-  color attributes.
-- **Styled by the site:** elements carry classes from a fixed set (`zone`,
-  `wall`, `door`, `feature`, `label`), and the site's CSS colors them from the
-  palette ([Palette](../../docs/styling.md#palette)). A class outside the set
-  fails.
-- **A `viewBox`** is required, so the diagram scales to any width.
 
 ### Pointing into a map
 
 Population points into the map, never out of it. A map holds its diagram and
 zones only; entries that use it reference it:
 
-- **A ref object** may name a zone: `{ "ref": "map/<id>", "zone": "<zone-id>" }`.
-  It renders "Map › Zone", linked to the zone on the map's page. A zone that
-  isn't on the map fails like a missing ref.
+- **A ref object** may name a zone: `{ "ref": "map/<id>", "zone": "<zone-id>" }`,
+  as a map's `within` already does (`MapZoneRef`). It renders "Map › Zone",
+  linked to the zone on the map's page. A zone that isn't on the map fails
+  like a missing ref.
 - **A token** may too: `{ref:map/<id>#<zone-id>}`.
 - **Back-references** on the map's page are grouped by zone: what's set in
   each zone (an encounter), and which child map details it.
@@ -100,24 +67,23 @@ name.
 
 ## Cases
 
-Map names are stand-ins.
+Map names are stand-ins. The fixtures in `tests/fixtures/map/` hold the
+dungeon, its room map, the town, and a broken diagram; the cases below use
+them.
 
 - **A dungeon map** with five zones, one per room, and a single-room map
-  within its third zone, for a boss fight.
-- **A town map** with no parent, whose zones are districts.
-- **A broken diagram:** a zone in `stats.zones` with no element in the SVG,
-  an element `zone-9` with no zone, and an `<image>` linking outside the
-  file. Each fails.
+  within its third zone, for a boss fight: a ref naming that zone links to
+  it, and both maps' pages show the link.
+- **A town map** with no parent, whose zones are districts, on its page and
+  in print.
 
 ## Done when
 
-- The `map` type validates its entry and diagram with the checks above.
 - Map refs and tokens with a zone resolve, render, and fail on a missing
   zone.
 - The map page shows the diagram with linked zones and back-references by
   zone, on screen and in print.
-- The docs describe the type, the diagram rules, and zone refs, and the
-  Images track's out-of-scope line names maps as diagrams.
+- The docs describe zone refs.
 
 ## Out of scope
 

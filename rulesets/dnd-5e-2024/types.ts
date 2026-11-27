@@ -611,3 +611,18 @@ export interface LinkedCharacter {
   features: { source: string; features: { ref: string; level?: number }[] }[];
   proficiencies: CharacterProficiencies;
 }
+
+/** A link to one zone of a map (`MapZoneRef` in common.schema.json). */
+export interface MapZoneRef {
+  ref: string;
+  /** The id of one of the map's zones. */
+  zone: string;
+}
+
+/** A map's stats (schemas/map.schema.json, docs/rulesets.md#maps). */
+export interface MapStats {
+  scale: 'room' | 'dungeon' | 'zone' | 'region' | 'world';
+  zones: { id: string; name: string; note?: string }[];
+  /** For a child map, the zone of its parent it details. */
+  within?: MapZoneRef;
+}

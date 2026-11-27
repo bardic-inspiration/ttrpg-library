@@ -1,0 +1,31 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "broken-weir",
+  "name": "Broken Weir",
+  "summary": "A collapsed weir, with a diagram that fails its checks.",
+  "description": "The weir broke in a spring flood and was never mended.",
+  "stats": {
+    "scale": "room",
+    "zones": [
+      {
+        "id": "spillway",
+        "name": "Spillway"
+      },
+      {
+        "id": "footbridge",
+        "name": "Footbridge"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        433
+      ]
+    }
+  }
+}

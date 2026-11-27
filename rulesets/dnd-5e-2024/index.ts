@@ -5,6 +5,7 @@ import type { PhraseBook } from '../../lib/wording/book.ts';
 import { checkBackground, checkBackgroundLinks, checkCharacter, checkCharacterLinks, checkCreature, checkCreatureLinks, checkFeat, checkItem, checkSpecies, checkSpell } from './checks.ts';
 import { checkClass, checkClassFeature, checkClassLinks, checkSubclassLinks, deriveClass, deriveClassLinked } from './classes.ts';
 import { deriveCharacter, deriveCharacterLinked } from './characters.ts';
+import { checkMap, checkMapLinks } from './maps.ts';
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
 import { refLabels } from './refs.ts';
@@ -12,7 +13,7 @@ import { renderTokens } from './tokens.ts';
 import definition from './ruleset.json' with { type: 'json' };
 import phrasesJson from './phrases.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
-import type { BackgroundStats, CharacterStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EquipmentStats, FeatStats, ItemStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
+import type { BackgroundStats, CharacterStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EquipmentStats, FeatStats, ItemStats, MapStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
 
 export const tables = tablesJson as Tables;
 export const phrases = phrasesJson as unknown as PhraseBook;
@@ -44,14 +45,16 @@ export const ruleset: RulesetModule = {
     if (type === 'class') return checkClass(stats as ClassStats, context?.official ?? false);
     if (type === 'class-feature') return checkClassFeature(stats as ClassFeatureStats);
     if (type === 'character') return checkCharacter(stats as CharacterStats, tables);
+    if (type === 'map') return checkMap(stats as MapStats);
     return [];
   },
-  checkLinks(type, stats, target, named) {
+  checkLinks(type, stats, target, named, key) {
     if (type === 'creature') return checkCreatureLinks(stats as CreatureStats, named);
     if (type === 'background') return checkBackgroundLinks(stats as BackgroundStats, target);
     if (type === 'class') return checkClassLinks(stats as ClassStats, target);
     if (type === 'subclass') return checkSubclassLinks(stats as SubclassStats, target);
     if (type === 'character') return checkCharacterLinks(stats as CharacterStats, target, tables);
+    if (type === 'map') return checkMapLinks(key, stats as MapStats, target);
     return [];
   },
   deriveLinked(type, key, stats, library) {

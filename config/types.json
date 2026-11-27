@@ -156,6 +156,16 @@
         "summaryField": "stats.rarity",
         "gapBuckets": [{ "path": "stats.rarity", "enum": ["common", "uncommon", "rare", "very-rare", "legendary"] }]
       },
+      "map": {
+        "label": "Map",
+        "plural": "Maps",
+        "template": "generic",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/map.md",
+        "facets": [],
+        "cardFields": [],
+        "defaultSort": "name:asc",
+        "defaultFilters": []
+      },
       "species": {
         "label": "Species",
         "plural": "Species",

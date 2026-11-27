@@ -26,7 +26,7 @@ const fixtures = Object.fromEntries((await dir(join(FIXTURES, 'character'))).map
 function issuesOf(id: 'brannoc-ashguard' | 'sister-maelis', change: (s: Record<string, any>) => void = () => {}): Issue[] {
   const s = structuredClone(fixtures[id]);
   change(s);
-  return [...ruleset.check('character', s), ...ruleset.checkLinks!('character', s, (key) => stats.get(key), () => undefined)];
+  return [...ruleset.check('character', s), ...ruleset.checkLinks!('character', s, (key) => stats.get(key), () => undefined, 'character/test')];
 }
 const messages = (issues: Issue[]) => issues.map((i) => `${i.path}: ${i.message}`);
 

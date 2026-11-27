@@ -112,6 +112,7 @@ per request.
 |---|---|
 | [Entries](#procedure-entries) | `background`, `class`, `condition`, `creature`, `equipment`, `feat`, `item`, `species`, `spell`, `subclass` |
 | [Characters](#procedure-characters) | `character` |
+| [Maps](#procedure-maps) | `map` |
 
 Every type in `config/types.json` is in exactly one row. A type in none
 can't be generated: ask, as for a type not in the registry (Inputs).
@@ -297,6 +298,13 @@ For each character:
 
 In the PR's Entries table, a character's summary field is "—": the type has
 no `summaryField`.
+
+### Procedure: Maps
+
+A map is written together with its diagram, an SVG the validator checks
+([Map diagrams](../../../docs/content-model.md#map-diagrams)). This procedure
+has no steps yet, so a request for maps can't be fulfilled as written: ask
+(Inputs).
 
 ## Step 4: Source, author, and meta
 

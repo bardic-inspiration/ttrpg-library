@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/map.schema.json",
+  "title": "dnd-5e-2024 map stats (docs/rulesets.md#maps)",
+  "description": "A placeholder map: its zones and the parent zone it details. Its diagram is at the derived path assets/images/dnd-5e-2024/map/<id>.svg, never stored. Cross-field and cross-entry rules are checks in maps.ts (docs/rulesets.md#consistency-checks); the diagram's are the validator's (docs/content-model.md#map-diagrams).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scale", "zones"],
+  "properties": {
+    "scale": {
+      "description": "A label for organizing the hierarchy of maps, from one room to the world. It isn't a type, and a child map's scale needn't be smaller than its parent's.",
+      "enum": ["room", "dungeon", "zone", "region", "world"]
+    },
+    "zones": {
+      "description": "The map's anchors, in the order its page lists them. Each has one element with id=\"zone-<id>\" in the diagram.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "description": "A slug, unique within the map: \"great-hall\".", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "name": { "description": "The zone's name, as its page and links show it: \"Great Hall\".", "type": "string", "minLength": 1 },
+          "note": { "description": "What the zone is, in a sentence or two.", "$ref": "common.schema.json#/$defs/Text" }
+        }
+      }
+    },
+    "within": {
+      "description": "For a child map, the zone of its parent map that it details. A map is within at most one parent, and never within itself, directly or through others.",
+      "$ref": "common.schema.json#/$defs/MapZoneRef"
+    }
+  }
+}

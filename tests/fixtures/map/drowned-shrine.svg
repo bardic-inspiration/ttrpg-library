@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The shrine, for the boss fight. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <title>Drowned Shrine</title>
+  <circle id="zone-pool" class="zone" cx="100" cy="100" r="95" />
+  <ellipse id="zone-altar" class="zone feature" cx="100" cy="100" rx="30" ry="20" />
+  <text class="label" x="100" y="105">Altar <tspan>Island</tspan></text>
+</svg>

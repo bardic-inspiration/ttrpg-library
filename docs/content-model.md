@@ -165,6 +165,44 @@ plain text.
   placeholder; the layout closes up.
 - Committed art must be something we have the rights to publish, credited in
   `ATTRIBUTION.md`.
+- A map's diagram isn't art and isn't `image` ([Map diagrams](#map-diagrams)).
+
+### Map diagrams
+
+A map ([Maps](rulesets.md#maps)) has a diagram: a simple SVG with named
+zones, made with the entry by the `generate` skill. It's an original
+diagram, not art, so the rule against generated art doesn't apply to it,
+and it needs no `ATTRIBUTION.md` credit. Its path is derived from the id,
+`assets/images/<ruleset>/map/<id>.svg`, and never stored. The validator reads
+it as data and checks it, so nothing in it is trusted; every check is an
+error but the size warning.
+
+- **Required:** every map has its diagram, with the image size warning above
+  500 KB and limit of 2 MB.
+- **An `<svg>` root with a `viewBox`,** so the diagram scales to any width.
+- **Allowed elements:** shapes (`<rect>`, `<circle>`, `<ellipse>`,
+  `<line>`, `<polyline>`, `<polygon>`), `<path>`, `<text>` and `<tspan>`,
+  groups (`<g>`), and `<title>`. Any other element fails, `<style>` and
+  `<use>` included.
+- **Rejected:** `<script>`, `<foreignObject>`, `<image>`, event handler
+  attributes (`on…`), an `href` or `url(…)` that points outside the file (a
+  fragment, `#id`, stays inside it), and inline `style` or color attributes
+  (`fill`, `stroke`, `color`, `stop-color`, `flood-color`, `lighting-color`).
+- **Styled by the site:** an element's classes come from a fixed set,
+  `zone`, `wall`, `door`, `feature`, and `label`, and the site's CSS colors
+  them from the palette ([Palette](styling.md#palette)). A class outside the
+  set fails.
+- **Zones:** each zone in `stats.zones` has exactly one element with
+  `id="zone-<id>"`, and no other id starts `zone-`. No id is on two elements.
+- **Readable:** the file is plain XML: elements with quoted attributes, text,
+  comments, an optional `<?xml …?>` declaration, and the five predefined
+  entities and character references. A doctype, CDATA section, processing
+  instruction, or anything else the validator can't read fails, so nothing
+  it skips can reach the page.
+
+The checks are ruleset-independent, in `scripts/validate/diagram.ts`, and run
+for every entry of type `map` once its `stats` pass their schema, since they
+read its zones.
 
 ### References
 
@@ -176,7 +214,8 @@ never changes and is unique within its type:
   gear, which may add a `count`). It may add a `note`, a qualifier
   printed in parentheses after the name wherever the ref renders:
   `{ "ref": "spell/fireball", "note": "level 5 version" }` reads "Fireball
-  (level 5 version)".
+  (level 5 version)". A map's `within` is a ref object that adds a `zone`,
+  the id of one of the parent map's zones ([Maps](rulesets.md#maps)).
 - **A text token**, `{ref:<type>/<id>}`, valid in any markdown-subset field in
   every ruleset and type. It is the one way text links to another entry.
 
@@ -499,6 +538,7 @@ Checks for every type and ruleset:
 | Blocklist match in any text-bearing field ([licensing.md](licensing.md#blocklist)) | error |
 | Placeholder text in any text-bearing field: `TODO`, `TBD`, `FIXME`, or `XXX` as a whole word in capitals, or "lorem ipsum" in any case | error |
 | `image` path valid and file exists; size limits | error / warning |
+| A map's diagram exists within the size limits and passes the [Map diagrams](#map-diagrams) checks | error / warning |
 | A schema's `display` is `chip`, on a string, number, boolean, or string-array field ([Display](#display)) | error |
 
 Each ruleset adds its own checks ([rulesets.md](rulesets.md#consistency-checks)).
