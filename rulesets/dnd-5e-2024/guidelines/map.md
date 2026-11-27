@@ -41,7 +41,8 @@ Its diagram is an original placeholder, not art, so it needs no
 
 ## Dependencies and SRD references
 
-- **A child map's parent** must be in the library: `within` names the
-  parent map by ref and one of its zones by id.
+- **A child map's parent** is in the library or written by the same
+  request, before the child: `within` names the parent map by ref and one
+  of its zones by id.
 - A map references nothing else. Entries set in a zone reference the map,
   never the other way.

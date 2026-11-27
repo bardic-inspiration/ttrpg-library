@@ -301,10 +301,75 @@ no `summaryField`.
 
 ### Procedure: Maps
 
-A map is written together with its diagram, an SVG the validator checks
-([Map diagrams](../../../docs/content-model.md#map-diagrams)). This procedure
-has no steps yet, so a request for maps can't be fulfilled as written: ask
-(Inputs).
+A map is a placeholder place with named zones, written together with its
+diagram, an SVG the validator checks
+([Maps](../../../docs/rulesets.md#maps),
+[Map diagrams](../../../docs/content-model.md#map-diagrams)). The diagram is
+an original placeholder, not art, so it needs no `ATTRIBUTION.md` credit.
+
+- **By request only.** Maps have no gap buckets, so a gap bucket never names
+  one. An issue or an inline request does.
+- **Always custom.** The SRD prints no maps, so an SRD request for maps
+  can't be fulfilled as written: ask (Inputs). A map is a custom entry, with
+  the request's `author` (step 4).
+- **No dependencies but a parent.** A map references nothing but its
+  parent, by `within`. A child map's parent is a map in the library
+  (`site/public/library.json`) or one the same request writes; a brief that
+  sets a map inside a place the library lacks, and doesn't ask for that
+  place too, can't be fulfilled as written: ask.
+
+For each map, parents before their children:
+
+1. **Lay out the zones.** From the brief and the guideline's "Balance
+   targets", choose the `scale` and the zones: a room map a fight's few
+   zones, a dungeon map one per room, a town map one per district. Give
+   each zone its `name`, what the table calls it, and its `id`, the name's
+   slug, unique within the map. Sketch where each sits and which ones
+   connect, so every zone is reachable from the way in.
+2. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json` with
+   its envelope keys in the order the Entries procedure gives. `stats`
+   holds `scale`, the `zones` in the order the page lists them (the way in
+   first, then as a visitor meets them), each with a `note` where the
+   guideline's "Prose style" has one to say, and, for a child map, `within`:
+   `{ "ref": "map/<parent-id>", "zone": "<zone-id>" }`, naming the parent's
+   zone it details. `summary` and `description` follow the guideline. Don't
+   add `image`: the diagram's path is derived, never stored.
+3. **Draw the diagram.** Write it to `assets/images/<ruleset>/map/<id>.svg`,
+   named by the entry's `id` exactly. The file is plain XML, indented two
+   spaces, as `tests/fixtures/map/sunken-cistern.svg` is:
+   - The root is `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 W H">`,
+     with no `width`, `height`, or other attribute. Use whole numbers, a
+     width of 300 to 800, and a height no more than the width, so the
+     site's 11-unit labels stay legible at the page's width.
+   - First a `<title>` holding the map's name, then a `wall` shape for the
+     outline: a `<rect>` the size of the `viewBox` for a building, a
+     `<polygon>` or `<path>` for a cave or a town's edge.
+   - Each zone in `stats.zones` is exactly one element with
+     `id="zone-<id>"` and `class="zone"`: a `<g>` holding the zone's shape
+     (`<rect>`, `<circle>`, `<ellipse>`, `<polygon>`, or `<path>`) and its
+     label, or the shape alone. Zones don't overlap; leave a gap of a few
+     units between them for walls. No other element has an id starting
+     `zone-`, and no id is on two elements.
+   - A zone's label is a `<text class="label">` holding the zone's name at
+     its shape's center: `x` is the center, since a label is centered on
+     it, and `y` about 4 units below the center, since `y` is its baseline.
+     A name too wide for its shape, at about 6 units a character, is split
+     into `<tspan>` lines, or the zone is drawn larger.
+   - A `door` is a `<line>` across each gap where two zones, or a zone and
+     the outside, connect. A `feature` is a small shape for something a
+     zone's note names, such as a pillar, a well, or an altar.
+   - Only these elements: `<rect>`, `<circle>`, `<ellipse>`, `<line>`,
+     `<polyline>`, `<polygon>`, `<path>`, `<text>`, `<tspan>`, `<g>`, and
+     `<title>`. An element's class, if it has one, is `zone`, `wall`,
+     `door`, `feature`, or `label`. No `style` or color attribute (`fill`,
+     `stroke`, and the like), `href`, `url(…)`, event handler, doctype,
+     CDATA, or `<style>`: the site colors the diagram by its classes.
+4. **Fix by drawing.** When `npm run validate` reports a diagram error
+   (step 5), fix the diagram, or the zones it names, to meet it, keeping
+   the entry's zones and the diagram's `zone-<id>` ids one to one.
+
+In the PR's Entries table, a map's summary field is "—": the type has no
+`summaryField`.
 
 ## Step 4: Source, author, and meta
 
@@ -333,7 +398,7 @@ again, up to `defaults.validateRetries` retries after the first run.
 If it still fails:
 
 - Comment the remaining errors on each issue in the batch, remove
-  `in-progress` from each, delete the batch's entry files, and stop. Don't
+  `in-progress` from each, delete the batch's entry files and diagrams, and stop. Don't
   push and don't open a PR.
 - For a gap-fill run or an inline request there is no issue: report the
   errors in the run's output and stop.
@@ -356,8 +421,8 @@ the dev issue the list describes and leave that item unticked.
    - inline request: `gen/inline-<type>-<YYYYMMDD>`;
    - SRD import stage: `gen/srd-<stage>-<type>-<YYYYMMDD>`, adding `-2`,
      `-3` for more PRs the same day.
-2. Stage only the new files under `content/`, and for an import batch,
-   `ATTRIBUTION.md`. A content PR that changes anything else fails the `lane`
+2. Stage only the new files under `content/`, each map's diagram under
+   `assets/images/`, and for an import batch, `ATTRIBUTION.md`. A content PR that changes anything else fails the `lane`
    check ([Lane rules](../../../docs/workflow.md#lane-rules)).
 3. Commit with the message `Add <n> <type> entries` (a mixed-type batch:
    `Add <n> entries`), where `<n>` counts every new entry, dependencies
