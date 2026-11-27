@@ -14,11 +14,12 @@ interface Props {
 }
 
 const { items, nested = false } = Astro.props;
+/** Where a line links: its own page, or its section here, or nowhere. */
+const href = (item: TocItem): string | undefined => item.href ?? (item.id ? `#${item.id}` : undefined);
 ---
 {nested ? (
   <ul>
     {items.map((item) => {
-      const href = (i: TocItem) => i.href ?? (i.id ? `#${i.id}` : undefined);
       const label = href(item) ? <a href={href(item)}>{item.label}</a> : <span class="toc__label">{item.label}</span>;
       if (isRun(item)) {
         return (
