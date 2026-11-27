@@ -74,6 +74,22 @@ describe(SKILL, () => {
     expect(section).toContain('`environment`');
     expect(section).toContain('Dependencies before the encounter');
   });
+
+  // docs/generation.md#procedures "Modules": the procedure has steps, writes its dependencies first, each by its
+  // own procedure, adds no rule additions, and never contains a module it's part of.
+  it('gives the module procedure its steps', () => {
+    const section = /^### Procedure: Modules\n([\s\S]*?)\n## /m.exec(skill)?.[1] ?? '';
+    expect(section).not.toMatch(/aren't written yet/);
+    expect(section).toMatch(/^\d+\. \*\*/m);
+    expect(section).toContain('Dependencies before the module');
+    const prose = section.replace(/\s+/g, ' ');
+    for (const procedure of ['Entries', 'Characters', 'Maps', 'Encounters']) expect(prose).toContain(`${procedure} procedure`);
+    expect(prose).toContain('rule addition');
+    expect(section).toContain('`arrangement`');
+    expect(section).toContain('`levels`');
+    expect(section).toContain('`length`');
+    expect(section).toContain('never XP');
+  });
 });
 
 describe('.github/PULL_REQUEST_TEMPLATE/content.md', () => {

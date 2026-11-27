@@ -25,7 +25,6 @@ that its front matter names.
 | Order | Area | Design issue | Builds |
 |---|---|---|---|
 | 3 | [`ui.md`](ui.md) | #402 | The style guide, shared components, and the Library and page revisions |
-| 7 | [`modules.md`](modules.md) | #374 | The `module` type, containment, and its kit parts |
 
 Each area becomes a build milestone, in this order. Each milestone starts with
 a pilot on the area's hardest cases.

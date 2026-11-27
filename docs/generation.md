@@ -203,9 +203,28 @@ be generated, and the run asks, as for an unknown type.
   is asked about. In the PR's Entries table, its summary field is the
   party it was designed for and the difficulty each roster or row reads,
   and E is under Warnings.
-- **Modules:** `module` ([Modules](rulesets.md#modules)). The procedure's
-  steps aren't written yet: a request for modules can't be fulfilled, and
-  the run asks, as for an unknown type.
+- **Modules:** `module` ([Modules](rulesets.md#modules)), by the module
+  guideline. Set the `length` and `levels` (the brief's span, or the level
+  it implies, or level 1); outline the module in story order, its hooks,
+  maps, encounters and contained modules, characters, and cross-cutting
+  tables, finding a library entry for each where one fits; write the rest
+  in the same request, before the module, each by its own procedure:
+  content entries by the Entries procedure, characters by the Characters
+  procedure, maps by the Maps procedure, encounters by the Encounters
+  procedure (designed for the party at its level within `levels`, and set
+  in their maps' zones), and contained modules by this one, innermost
+  first. Then write the parts: prose, hooks with their refs, a DM guide,
+  `map` parts, one `arrangement` part per contained encounter or module
+  in story order, and tables. Refs, `length`, and `levels` only, never
+  XP or the derived contents and counts; an error is fixed by changing
+  the choices or refs of the entry it names. Modules come only by request
+  (they have no gap buckets), every module is custom (the SRD prints
+  none, so an SRD request for one is asked about), a module's request
+  never writes a rule addition (a brief that needs one the library lacks
+  is asked about), and no module names one it's part of. An entry the
+  request wrote earlier counts as in the library for the ones after it.
+  In the PR's Entries table, its summary field is its length and levels,
+  and each entry it adds has its own row.
 
 A test checks that the table names every registered type once, that each
 procedure has its section, and that a type routed to the character, map,

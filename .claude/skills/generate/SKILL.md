@@ -462,9 +462,97 @@ Warnings list E with its note, the validator's warning for it.
 
 ### Procedure: Modules
 
-A module is an arrangement that contains encounters and other modules
-([Modules](../../../docs/rulesets.md#modules)). Its steps aren't written
-yet, so a request for modules can't be fulfilled as written: ask (Inputs).
+A module is an adventure a DM runs across one or more sessions, an
+arrangement of other entries: its parts in story order, its `arrangement`
+parts the encounters and modules it contains
+([Modules](../../../docs/rulesets.md#modules)). It's built from the
+library and from the entries its own request adds, each written by its
+type's procedure. The ruleset derives its contents and counts, and each
+encounter's difficulty; this procedure writes refs, `length`, and
+`levels`, never XP or a count.
+
+- **By request only.** Modules have no gap buckets, so a gap bucket never
+  names one. An issue or an inline request does.
+- **Always custom.** The SRD prints no modules, so an SRD request for
+  modules can't be fulfilled as written: ask (Inputs). A module is a custom
+  entry, with the request's `author` (step 4), as is every entry its
+  request adds. The creatures and items it uses may be SRD entries.
+- **Dependencies before the module.** Every entry the module names is in
+  the library (`site/public/library.json`) or written by the same request,
+  before the module and before the entries that name it. Prefer an
+  existing entry where one fits the brief. Write the new ones in this
+  order, each by its own type's guideline: content entries (a creature,
+  item, equipment, spell, or any other content type, even a class or a
+  species) by the Entries procedure; characters by the Characters
+  procedure, whose refs name entries already in the library; maps by the
+  Maps procedure, parents first; encounters by the Encounters procedure;
+  then contained modules by this one, innermost first. An entry written
+  earlier in the request counts as in the library for the ones after it,
+  so an encounter may name a character the request wrote.
+- **No rule additions.** A module's request never writes a rule addition:
+  a condition, a variant rule, or a type. A brief that needs one the
+  library lacks can't be fulfilled as written: ask, suggesting a sourcebook
+  request for it.
+- **No cycles.** A module never names a module it's part of: the
+  container lists the contained module, never the other way, and no module
+  contains itself, directly or through others.
+
+For each module, innermost first:
+
+1. **Set the frame.** From the brief, choose the `length` (`one-shot` for a
+   single session, `delve` for a short dungeon, `multi-session` for
+   longer) and the `levels` (`{ "min": <n>, "max": <n> }`): the brief's
+   span, or the level it implies, or level 1, `min` equal to `max` for a
+   one-shot or a delve without a span. A contained module's `levels` fall
+   within its container's.
+2. **Outline it.** In story order, list what the module holds: the hooks
+   that draw the party in, the places as maps, the scenes as encounters or
+   contained modules, the characters the party meets or plays, and any
+   table used across scenes, by the guideline's "Prose style". A five-room
+   dungeon is a dungeon map with one zone per room and five encounters,
+   each set in its zone; a multi-session module adds hooks, a town map,
+   and contained modules as chapters. For each item, find a library entry
+   that fits (Step 2's search), or mark it to write.
+3. **Write the dependencies.** Write each entry the outline marks, in the
+   order and by the procedures above. Design each encounter for the brief's
+   party, or four characters at the level the party is at when it plays,
+   within `levels`: `levels.min` for a one-shot or a delve, rising through
+   the span for a longer module. Set each encounter in its map and zone
+   with `setIn`, so the map's page lists it there.
+4. **Write the parts.** By the guideline's "Prose style", in the order the
+   page should read, and only the parts the outline calls for: `prose`
+   (with a `title`, such as "Background"), a `description`
+   (player-facing), `hook` parts (each a `text` and the `refs` it brings
+   in, each a ref object with an optional `note` and `show`: pregenerated
+   characters as `"show": "card"`, a contact as a link), a `dm-guide` (how
+   to run the whole), a `map` part to show each map (`{ "ref": "map/<id>" }`
+   with an optional `zone` and `show`), one `arrangement` part per
+   contained encounter or module (`{ "ref": "encounter/<id>" }` or
+   `{ "ref": "module/<id>" }`, with an optional `show`), in story order,
+   a `table` (a `title` and one pipe table) for a cross-cutting random
+   table, and a `sequence` where the whole module runs in stages. No
+   roster, spawn table, or loot: those are its encounters'. Every text is
+   markdown-subset text with `{ref:…}` tokens (**Text** in the Entries
+   procedure); a character or creature is a token in a part's text or a
+   hook's ref, never a part of its own. Add `show` only where the page
+   should show a ref otherwise than its default
+   ([Arrangements](../../../docs/content-model.md#arrangements)).
+5. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json`
+   with its envelope keys in the order the Entries procedure gives.
+   `stats` holds `parts`, `length`, and `levels`. `summary` follows the
+   guideline; `description` is left out, since the parts hold the text.
+   Never write the contents, encounter or map counts, or any XP: the
+   ruleset derives them.
+6. **Fix by choices.** When `npm run validate` reports an error on the
+   module or an entry it adds (step 5), change that entry's choices or
+   refs to meet it, by its own procedure's fix step; a cycle error is fixed
+   by removing the `arrangement` part that leads back. Never edit an
+   existing entry to make a module pass.
+
+In the PR's Entries table, a module's summary field is its length and
+levels ("delve, levels 2–3"), since the type has no `summaryField`; every
+entry its request adds has its own row, by its own procedure's rule. The
+commit is a mixed-type batch's (step 6), counting every new entry.
 
 ## Step 4: Source, author, and meta
 

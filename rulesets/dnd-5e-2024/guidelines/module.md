@@ -35,6 +35,16 @@ Every module is custom: the SRD prints none
 
 ## Prose style
 
+- A good module reads in story order: how the party is drawn in (a
+  `prose` background, `hook` parts), the place (a `map` part before the
+  encounters set in it), the scenes (its `arrangement` parts, each an
+  encounter or a contained module as a chapter), and a `dm-guide` for the
+  whole. A five-room dungeon is a dungeon map of five zones and five
+  encounters, one set in each, rising to a climax in the last or the one
+  before it. A longer module adds hooks, a town map, its characters, and
+  its chapters as contained modules.
+- A `table` part holds what's used across scenes, such as a random
+  encounter or rumor table; a scene's own table belongs to its encounter.
 - A `description` part is player-facing: what the party sees and hears.
 - A `hook` part is one way to draw the party in, in two or three sentences.
   The entries it brings in, such as pregenerated characters or a contact,
