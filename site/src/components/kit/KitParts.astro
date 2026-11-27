@@ -2,7 +2,7 @@
 // An arrangement's kit parts (docs/site.md#kit-parts, docs/content-model.md#arrangements), each in
 // order by its shared component, under its heading, so every arrangement reads alike.
 import { partHeading, type KitContext } from '../../lib/kit';
-import type { Part } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import type { EncounterPart } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import Heading from '../templates/parts/Heading.astro';
 import KitLoot from './KitLoot.astro';
 import KitMap from './KitMap.astro';
@@ -13,7 +13,7 @@ import KitTable from './KitTable.astro';
 import KitText from './KitText.astro';
 
 interface Props {
-  parts: Part[];
+  parts: EncounterPart[];
   kit: KitContext;
 }
 

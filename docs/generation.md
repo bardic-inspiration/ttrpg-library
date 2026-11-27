@@ -150,7 +150,7 @@ The skill's "Procedures" table routes every type in `config/types.json` to
 exactly one procedure, each a section of the skill. A type in no row can't
 be generated, and the run asks, as for an unknown type.
 
-- **Entries:** every type but `character`, `map`, and `encounter`. Write entries, with any new
+- **Entries:** every type but `character`, `map`, `encounter`, and `module`. Write entries, with any new
   dependencies the brief implies. Prefer refs to library entries over plain
   text. Write inputs only, use tokens for derived values in prose, and use
   `adjust` only for a deliberate deviation, explained in the PR body. For an
@@ -203,10 +203,13 @@ be generated, and the run asks, as for an unknown type.
   is asked about. In the PR's Entries table, its summary field is the
   party it was designed for and the difficulty each roster or row reads,
   and E is under Warnings.
+- **Modules:** `module` ([Modules](rulesets.md#modules)). The procedure's
+  steps aren't written yet: a request for modules can't be fulfilled, and
+  the run asks, as for an unknown type.
 
 A test checks that the table names every registered type once, that each
 procedure has its section, and that a type routed to the character, map,
-or encounter procedure has no `gapBuckets`.
+encounter, or module procedure has no `gapBuckets`.
 
 ### Self-review
 
@@ -326,7 +329,7 @@ on-demand prompts are the full-run prompt with inputs added.
 Gap fill never adds a rules extension, so a rules type that takes extensions,
 such as `condition` or `equipment`, has no `gapBuckets`; its entries come only from requests.
 A content type that comes only by request, `background`, `character`,
-`encounter`, `map`, `species`, `class`, or `subclass`, has no `gapBuckets` either.
+`encounter`, `map`, `module`, `species`, `class`, or `subclass`, has no `gapBuckets` either.
 A type's `gapBuckets` in `config/types.json` says how gap fill partitions it: a
 list of axes, each partitioning one of the type's facets. The buckets are every
 combination of one value per axis, so one axis partitions the type and two

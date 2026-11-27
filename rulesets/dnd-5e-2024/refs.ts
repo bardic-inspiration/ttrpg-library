@@ -17,6 +17,7 @@ const SUBCLASS: RefLabels = { forward: 'Subclass of', back: 'Subclasses' };
 const WITHIN: RefLabels = { forward: 'Within', back: 'Child maps' };
 const INCLUDES: RefLabels = { forward: 'Includes', back: 'Appears in' };
 const SET_IN: RefLabels = { forward: 'Set in', back: 'Set here' };
+const CONTAINS: RefLabels = { forward: 'Contains', back: 'Part of' };
 const OTHER: RefLabels = { forward: 'References', back: 'Referenced by', generic: true };
 
 /**
@@ -24,8 +25,9 @@ const OTHER: RefLabels = { forward: 'References', back: 'Referenced by', generic
  * "Base item", a weapon's properties and mastery "Properties" and "Mastery", a background's feat "Grants", its tool
  * "Tool proficiency", and its equipment "Starting equipment", as a class's is; a class's own spells
  * are "Spells", as a spell's classes are "Classes", a subclass's class "Subclass of", and a map's parent "Within". An encounter's parts are inventory
- * (docs/content-model.md#arrangements), "Includes" and "Appears in", apart from rules refs, and its map is "Set in"; any
- * other field gets a generic label.
+ * (docs/content-model.md#arrangements), "Includes" and "Appears in", apart from rules refs, and its map is "Set in"; a
+ * module's parts are inventory too, but the arrangements it contains are "Contains" and "Part of"
+ * (docs/rulesets.md#modules). Any other field gets a generic label.
  */
 export function refLabels(type: string, path: string): RefLabels {
   if (type === 'creature' && path.startsWith('stats.spellcasting.')) return CASTS;
@@ -45,5 +47,7 @@ export function refLabels(type: string, path: string): RefLabels {
   if (type === 'map' && path === 'stats.within') return WITHIN;
   if (type === 'encounter' && path.startsWith('stats.parts[')) return INCLUDES;
   if (type === 'encounter' && path === 'stats.setIn') return SET_IN;
+  if (type === 'module' && /^stats\.parts\[\d+\]\.arrangement$/.test(path)) return CONTAINS;
+  if (type === 'module' && path.startsWith('stats.parts[')) return INCLUDES;
   return OTHER;
 }

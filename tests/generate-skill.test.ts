@@ -48,13 +48,14 @@ describe(SKILL, () => {
     for (const procedure of new Set(map.values())) expect(skill).toMatch(new RegExp(`^### Procedure: ${procedure}$`, 'm'));
   });
 
-  // The character, map, and encounter procedures take requests only, so no type they generate has gap buckets.
-  const BY_REQUEST = ['Characters', 'Maps', 'Encounters'];
+  // The character, map, encounter, and module procedures take requests only, so no type they generate has gap buckets.
+  const BY_REQUEST = ['Characters', 'Maps', 'Encounters', 'Modules'];
 
   it('routes to the by-request procedures only types without gap buckets', () => {
     const map = routes();
     expect(map.get('character')).toBe('Characters');
     expect(map.get('encounter')).toBe('Encounters');
+    expect(map.get('module')).toBe('Modules');
     for (const { types } of Object.values(repo.registry)) {
       for (const [type, entry] of Object.entries(types as Record<string, TypeEntry>)) {
         if (BY_REQUEST.includes(map.get(type) ?? '')) expect(entry.gapBuckets, type).toBeUndefined();

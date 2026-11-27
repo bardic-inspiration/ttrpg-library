@@ -629,8 +629,9 @@ export interface MapStats {
   within?: MapZoneRef;
 }
 
-// Encounters (docs/rulesets.md#encounters) and the kit parts they're built of (docs/content-model.md#arrangements),
-// mirroring schemas/encounter.schema.json and the `Part…` definitions in common.schema.json.
+// Encounters (docs/rulesets.md#encounters), modules (docs/rulesets.md#modules), and the kit parts they're built of
+// (docs/content-model.md#arrangements), mirroring schemas/encounter.schema.json, schemas/module.schema.json, and the
+// `Part…` definitions in common.schema.json. Each type's schema allows its own subset of `Part`.
 
 /** How a ref in a part shows: linked by name (the default), as the target's card, or as a thumbnail. */
 export type Show = 'link' | 'card' | 'thumbnail';
@@ -666,16 +667,30 @@ export interface LootRow {
   items?: { ref: string; count?: number; show?: Show }[];
 }
 
-export type Part =
+/** The parts every arrangement type allows. */
+export type SharedPart =
   | { part: 'prose'; title?: string; text: string }
   | { part: 'description'; text: string }
   | { part: 'dm-guide'; text: string }
-  | { part: 'roster'; creatures: RosterLine[] }
-  | { part: 'spawn-table'; roll?: string; rows: Partial<Record<Difficulty, SpawnRow>> }
   | { part: 'sequence'; trigger?: string; stages?: { name: string; loop: string; transition?: string }[]; victory?: string; example?: string }
   | { part: 'table'; title: string; text: string }
-  | { part: 'loot'; rows: Partial<Record<Difficulty, LootRow>> }
   | { part: 'map'; map: MapRef & { show?: Show } };
+
+/** An encounter's parts: the shared ones, and its roster or spawn table and loot. */
+export type EncounterPart =
+  | SharedPart
+  | { part: 'roster'; creatures: RosterLine[] }
+  | { part: 'spawn-table'; roll?: string; rows: Partial<Record<Difficulty, SpawnRow>> }
+  | { part: 'loot'; rows: Partial<Record<Difficulty, LootRow>> };
+
+/** A module's parts: the shared ones, and its hooks and the arrangements it contains. */
+export type ModulePart =
+  | SharedPart
+  | { part: 'hook'; text: string; refs?: { ref: string; note?: string; show?: Show }[] }
+  | { part: 'arrangement'; arrangement: { ref: string; show?: Show } };
+
+/** Any kit part. */
+export type Part = EncounterPart | ModulePart;
 
 /** E, the environment multiplier: above 0, not 1, and why. */
 export interface Environment {
@@ -684,7 +699,7 @@ export interface Environment {
 }
 
 export interface EncounterStats {
-  parts: Part[];
+  parts: EncounterPart[];
   setIn?: MapRef;
   environment?: Environment;
 }
@@ -712,4 +727,13 @@ export interface DerivedEncounter {
   rows?: Partial<Record<Difficulty, XpSpan>>;
   /** Its creatures' types, each once, in roster order (a spawn table's rows in difficulty order). */
   creatureTypes: string[];
+}
+
+export type ModuleLength = 'one-shot' | 'delve' | 'multi-session';
+
+export interface ModuleStats {
+  parts: ModulePart[];
+  length: ModuleLength;
+  /** The party levels it's written for, authored. */
+  levels: { min: number; max: number };
 }

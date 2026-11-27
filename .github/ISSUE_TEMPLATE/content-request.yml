@@ -24,6 +24,7 @@ body:
         - feat
         - item
         - map
+        - module
         - species
         - spell
         - subclass

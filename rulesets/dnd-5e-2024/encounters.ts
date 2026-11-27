@@ -7,7 +7,7 @@ import { Lexer } from 'marked';
 import type { Issue, LinkedLibrary } from '../module.ts';
 import { deriveCreature } from './derive.ts';
 import { DIFFICULTIES } from './difficulty.ts';
-import type { CreatureStats, DerivedEncounter, Difficulty, EncounterStats, SpawnRow, Tables, XpSpan } from './types.ts';
+import type { CreatureStats, DerivedEncounter, Difficulty, EncounterStats, Part, SpawnRow, Tables, XpSpan } from './types.ts';
 
 /** A count's lowest, average, and highest roll; a fixed count is all three. */
 export function countSpan(count: number | string): XpSpan {
@@ -86,13 +86,19 @@ export function checkEncounter(stats: EncounterStats): Issue[] {
     }
   }
   stats.parts.forEach((part, i) => {
-    const at = `stats.parts[${i}]`;
-    if (part.part === 'spawn-table') issues.push(...checkSpawnTable(at, part.roll, part.rows));
-    if (part.part === 'table' && !isOneTable(part.text)) {
-      issues.push({ level: 'error', path: `${at}.text`, message: 'a table part holds one pipe table and nothing else; its title is `title`' });
-    }
+    if (part.part === 'spawn-table') issues.push(...checkSpawnTable(`stats.parts[${i}]`, part.roll, part.rows));
   });
+  issues.push(...checkTableParts(stats.parts));
   return issues;
+}
+
+/** Each `table` part holds one pipe table and nothing else, in any arrangement's parts. */
+export function checkTableParts(parts: Part[]): Issue[] {
+  return parts.flatMap((part, i) =>
+    part.part === 'table' && !isOneTable(part.text)
+      ? [{ level: 'error' as const, path: `stats.parts[${i}].text`, message: 'a table part holds one pipe table and nothing else; its title is `title`' }]
+      : [],
+  );
 }
 
 function checkSpawnTable(at: string, roll: string | undefined, rows: Partial<Record<Difficulty, SpawnRow>>): Issue[] {

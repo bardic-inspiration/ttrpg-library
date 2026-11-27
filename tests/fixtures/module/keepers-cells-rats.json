@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "keepers-cells-rats",
+  "name": "The Keeper's Cells",
+  "summary": "Rats swarm the old cells where the cistern's keepers once slept.",
+  "stats": {
+    "setIn": {
+      "ref": "map/sunken-cistern",
+      "zone": "keepers-cells"
+    },
+    "parts": [
+      {
+        "part": "description",
+        "text": "Bunks rot in narrow cells along the passage. The straw in them is moving."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/swarm-of-rats",
+            "count": 2
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        443
+      ]
+    }
+  }
+}

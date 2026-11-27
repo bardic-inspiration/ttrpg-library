@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "sluice-gate-watch",
+  "name": "Sluice Gate Watch",
+  "summary": "Two goblins keep a lazy watch over the cistern's only way in.",
+  "stats": {
+    "setIn": {
+      "ref": "map/sunken-cistern",
+      "zone": "sluice-gate"
+    },
+    "parts": [
+      {
+        "part": "description",
+        "text": "Water roars through a rusted gate. On the catwalk above it, two goblins argue over a game of knucklebones."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/goblin-warrior",
+            "count": 2
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        443
+      ]
+    }
+  }
+}

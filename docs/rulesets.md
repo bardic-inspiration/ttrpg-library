@@ -1039,9 +1039,9 @@ kit's parts are `Part…` definitions in `schemas/common.schema.json`. Its
 
 - **`parts`:** the kit parts, in the order the page renders them, each
   `{ "part": "<kind>", … }`. An encounter takes every kit
-  part: `prose`, `description`, `dm-guide`, `roster`, `spawn-table`,
-  `sequence`, `table`, `loot`, and `map`. Exactly one part is a roster or a
-  spawn table (error).
+  part but a module's own ([Modules](#modules)): `prose`, `description`,
+  `dm-guide`, `roster`, `spawn-table`, `sequence`, `table`, `loot`, and
+  `map`. Exactly one part is a roster or a spawn table (error).
 - **`setIn`:** the map it's set in, or a zone of it, a `MapRef`:
   `{ "ref": "map/<id>", "zone": "<zone-id>" }`, the zone optional. The
   map's page lists the encounter under the zone
@@ -1122,6 +1122,52 @@ derives both sides, and no XP is ever written.
   `beyond-high`. For the SRD's examples, a lone bugbear warrior (200 XP) is
   Low for four level 1 characters, and two druids and nine stirges
   (1,125 XP) are Moderate for five level 3 characters.
+
+### Modules
+
+A module is an adventure a DM runs across one or more sessions: story order,
+hooks, maps, encounters, characters, and cross-cutting tables. It's an
+arrangement ([Arrangements](content-model.md#arrangements)), a content type
+in `dnd-5e-2024` at `content/dnd-5e-2024/module/<id>.json`, and every module
+is custom. `schemas/module.schema.json` describes it. There's no tier
+between an encounter and a module: a dungeon is a module that uses fewer
+parts. Its `stats` hold:
+
+- **`parts`:** the kit parts, in story order. A module takes the shared
+  parts `prose`, `description`, `dm-guide`, `sequence`, `table`, and `map`
+  ([Encounters](#encounters)), and two of its own, below; rosters, spawn
+  tables, and loot are its encounters'.
+- **`length`:** `one-shot`, `delve`, or `multi-session`.
+- **`levels`:** the party levels it's written for, `{ "min": 2, "max": 4 }`,
+  each 1–20, `min` at most `max` (error). They're authored, since nothing
+  derives them.
+
+| Part | Holds |
+|---|---|
+| `hook` | `text`: a way to draw the party in; and optional `refs`, the entries it brings in, each a ref object to any library entry with an optional `note` and `show` |
+| `arrangement` | `arrangement`: an `encounter/<id>` or `module/<id>` ref, with an optional `show` |
+
+Characters and creatures appear as `{ref:…}` tokens in any part's text, or
+as a hook's refs, such as pregenerated characters with `"show": "card"` and
+a contact as a link; there's no NPC part.
+
+- **Containment.** A module contains encounters and other modules through
+  its `arrangement` parts, in story order, so a five-room dungeon is a small
+  module and can be one chapter of a larger one. An arrangement may be in
+  several modules; none owns it.
+- **No cycles.** A module can't contain itself, directly or through others
+  (error, on each `arrangement` part that leads back, naming the chain:
+  `a module can't contain itself: module/a › module/b › module/a`).
+- **Labels.** A contained arrangement's link is "Contains", and its
+  back-reference on the contained entry's page is "Part of". Every other
+  ref in a module's parts is inventory, "Includes" and "Appears in", as an
+  encounter's are.
+
+Modules come only by request; they have no gap buckets. A module's batch
+may add any content entry it needs as an ordinary library entry, never a
+rule addition ([module guideline](../rulesets/dnd-5e-2024/guidelines/module.md)).
+Its page is the generic template, and its card shows its name and
+summary.
 
 ### Embedded stat blocks
 
@@ -1211,6 +1257,9 @@ warnings below on an SRD entry.
 | Encounter | A `table` part's text is one pipe table and nothing else | error |
 | Encounter | `environment.multiplier` isn't 1 | error |
 | Encounter | Any `environment` multiplier | warning |
+| Module | A `table` part's text is one pipe table and nothing else | error |
+| Module | `levels.min` is at most `levels.max` | error |
+| Module | No module contains itself, directly or through others; that each `arrangement` resolves is the ref check's ([References](content-model.md#references)) | error |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

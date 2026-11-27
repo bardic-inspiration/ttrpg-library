@@ -1,0 +1,81 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "module",
+  "id": "the-stilled-mill",
+  "name": "The Stilled Mill",
+  "summary": "A river town's mill falls silent, and the trouble runs deeper than its wheel.",
+  "stats": {
+    "length": "multi-session",
+    "levels": {
+      "min": 2,
+      "max": 4
+    },
+    "parts": [
+      {
+        "part": "description",
+        "text": "Harrowfield's mill has stood still for a week. The miller is gone, the water is rising, and something is taking the town's bread."
+      },
+      {
+        "part": "hook",
+        "text": "The guard captain hires two newcomers to find the miller before the river floods the Millside.",
+        "refs": [
+          {
+            "ref": "character/brannoc-ashguard",
+            "show": "card"
+          },
+          {
+            "ref": "character/sister-maelis",
+            "show": "card"
+          },
+          {
+            "ref": "creature/guard-captain",
+            "note": "the party's contact"
+          }
+        ]
+      },
+      {
+        "part": "hook",
+        "text": "A road warden pays for news of the bandits who have been stopping grain carts on their way to the mill."
+      },
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/harrowfield",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "table",
+        "title": "Town Rumors",
+        "text": "| d4 | Rumor |\n|---|---|\n| 1 | The miller owed money to the wrong people. |\n| 2 | Green lights move under the mill at night. |\n| 3 | The bandits on the road sell the grain back to the town. |\n| 4 | The cistern was sealed for a reason. |"
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/bandit-ambush"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "module/sunken-cistern-delve",
+          "show": "card"
+        }
+      },
+      {
+        "part": "dm-guide",
+        "text": "Run the road first if the party took the warden's hook, or go straight to the cistern if the guard captain hired them."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        443
+      ]
+    }
+  }
+}
