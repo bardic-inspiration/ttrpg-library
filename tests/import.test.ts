@@ -54,6 +54,10 @@ describe('import script (docs/generation.md#imports)', () => {
     const repo = await mkdtemp(join(tmpdir(), 'ttrpg-import-'));
     temps.push(repo);
     await cp(join(PROJECT_ROOT, 'content'), join(repo, 'content'), { recursive: true });
+    // The library's maps name diagrams beside the content (docs/content-model.md#map-diagrams).
+    await cp(join(PROJECT_ROOT, 'assets'), join(repo, 'assets'), { recursive: true }).catch((e: NodeJS.ErrnoException) => {
+      if (e.code !== 'ENOENT') throw e;
+    });
     for (const entry of entries) {
       const dir = join(repo, 'content', entry.ruleset, entry.type);
       await mkdir(dir, { recursive: true });

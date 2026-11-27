@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { validateLibrary } from '../../../scripts/validate/index.ts';
 import { refLabels } from '../../../rulesets/dnd-5e-2024/refs.ts';
-import { FIXTURES, tempLibrary } from '../../helpers.ts';
+import { FIXTURES, libraryWithout, tempLibrary } from '../../helpers.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const CONTENT = join(ROOT, 'content/dnd-5e-2024');
@@ -20,17 +20,14 @@ const jsonIn = async (path: string) => Promise.all((await readdir(path)).filter(
 
 /**
  * The module fixtures (with the encounters the five-room dungeon adds), the encounter, character, and
- * valid map fixtures they ref, and the whole library; the library has no modules, encounters,
- * characters, or maps of its own to stand in for.
+ * valid map fixtures they ref, and the library minus its modules, encounters, characters, and maps,
+ * and the entries that link to them.
  */
 const STOOD_IN = new Set(['module', 'encounter', 'character', 'map']);
-const loadAll = async () => [
-  ...(await jsonIn(MODULES)),
-  ...(await jsonIn(ENCOUNTERS)),
-  ...(await jsonIn(CHARACTERS)),
-  ...(await jsonIn(MAPS)).filter((m) => m.id !== 'broken-weir'),
-  ...(await Promise.all((await readdir(CONTENT)).filter((t) => !STOOD_IN.has(t)).map((t) => jsonIn(join(CONTENT, t))))).flat(),
-];
+const loadAll = async () => {
+  const fixtures = [...(await jsonIn(MODULES)), ...(await jsonIn(ENCOUNTERS)), ...(await jsonIn(CHARACTERS)), ...(await jsonIn(MAPS)).filter((m) => m.id !== 'broken-weir')];
+  return [...fixtures, ...(await libraryWithout([...STOOD_IN], fixtures))];
+};
 let library: ReturnType<typeof loadAll> | undefined;
 const all = async () => structuredClone(await (library ??= loadAll()));
 
