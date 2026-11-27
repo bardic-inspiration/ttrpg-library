@@ -793,3 +793,18 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | At close-out, `spec/v1.2.0/` is removed, and nothing outside this record cites it. `AGENTS.md`, `docs/README.md`, and the feature request template describe a version spec as `spec/v<version>/` while one is open; `tests/stage-spec.test.ts` and the link check keep their support for any version folder. | The version is built when only its README is left; the next version's spec needs no test or tooling change | #446 |
 | The Rulesets page redesign, `ui.md`'s last unbuilt part, moves to the Rulesets track (#403), and its design task (#427) becomes the track's sub-issue. | It needs the owner's own design process and no version boundary; the track is about rulesets and already ongoing, so the redesign stays in the dev queue rather than waiting for v2.0.0 | #427, #446 |
 | `ui.md`'s open question on the About page's "The source is on GitHub" link (#425), and its "not yet discussed" UI items (a phone filter sheet, a way back to results, a compact list view, a two-column stat block, pin, compare, recently viewed, a dark palette, and a keyboard and screen-reader pass), go to v2.0.0's considerations (#370). | Each needs the owner and none fits a track; earmarking them keeps them from being lost with the folder | #370, #446 |
+
+## After v1.2.0
+
+Decisions made after the v1.2.0 release, in the development tracks.
+
+### Integrations
+
+| Decision | Why | Source |
+|---|---|---|
+| The Foundry translator covers creatures, spells, feats, equipment, and magic items, in dnd5e's 2024 model; conditions (status effects, not documents) and the types that need Foundry's Advancement model aren't covered. | Never guess a mapping; a background or species without its grants isn't usable in Foundry | #248 |
+| A Foundry set exports as a zip of one document per entry; an entry exports as one document. Each `_id` is derived from `<type>/<id>`, and a `ttrpg-library` flag carries the id back on import. | Foundry's Import Data reads one document, not a list; an exported entry round-trips as itself, and IDs never change | #248 |
+| Foundry export writes inputs and lets Foundry derive totals; prose tokens render as numbers. Links in text become plain names, except a condition, which becomes `&Reference[…]`. | P3: the ruleset and Foundry each derive their own; no table from library ids to dnd5e compendium ids exists, so a `@UUID` link would be a guess | #248 |
+| A creature's Spellcasting spells embed as full spell Items, each the spell's own export, rather than name-only stubs. | P3: one spell mapper; a stub spell isn't castable in Foundry | #248 |
+| Foundry's field-name fixtures are documents from dnd5e's own SRD 5.2 pack sources, converted to JSON; with no published schema, the schema test doesn't apply. | The done-when asks for a schema only where one exists; the packs are CC-BY-4.0 SRD content | #248 |
+| The owner's open questions on #248, unanswered for ten days, were settled by the session following the dev queue, taking each recommendation in the draft on the issue, with full spell embedding in place of its name-only stubs. | The routine's prompt asks it to decide where the spec doesn't, and to record the choice; the owner can amend the track file | #248 |
