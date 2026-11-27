@@ -15,7 +15,8 @@ import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
 import { computeView } from '../../../site/src/lib/gallery/view.ts';
 import registryJson from '../../../config/types.json' with { type: 'json' };
 import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
-import { countSpan, difficultyOf, lowestCount, partyBudget } from '../../../rulesets/dnd-5e-2024/encounters.ts';
+import { countSpan, lowestCount } from '../../../rulesets/dnd-5e-2024/encounters.ts';
+import { difficultyOf, partyBudget } from '../../../rulesets/dnd-5e-2024/difficulty.ts';
 import { linkedLibrary, type LinkedEntry } from '../../../rulesets/module.ts';
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
 

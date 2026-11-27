@@ -1109,7 +1109,7 @@ derives both sides, and no XP is ever written.
   ([Inputs and derived values](#inputs-and-derived-values)).
 - **The party's side,** g(Party), is `partyBudget` in `difficulty.ts`, which
   imports only types, so the site's calculator uses it without the ruleset's
-  tables or checks (`encounters.ts` re-exports it and `difficultyOf`): the sum of each
+  tables or checks: the sum of each
   character's Low, Moderate, and High budgets for their level, from
   `tables.json`'s `xpBudgetPerCharacter` (SRD 5.2's XP Budget per Character
   table, levels 1–20). For a party at one level it's the SRD's budget times
