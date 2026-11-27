@@ -26,27 +26,18 @@ is checked, not trusted), and P6 (the site styles the diagram).
   `zones`, and `within`, with its checks.
 - [Map diagrams](../../docs/content-model.md#map-diagrams): the diagram at
   its derived path, and the checks it passes.
+- [References](../../docs/content-model.md#references) "A map's zones": zone
+  refs and tokens, their check, and back-references with their zone.
 
 ## Design
-
-### Pointing into a map
-
-Population points into the map, never out of it. A map holds its diagram and
-zones only; entries that use it reference it:
-
-- **A ref object** may name a zone: `{ "ref": "map/<id>", "zone": "<zone-id>" }`,
-  as a map's `within` already does (`MapZoneRef`). It renders "Map › Zone",
-  linked to the zone on the map's page. A zone that isn't on the map fails
-  like a missing ref.
-- **A token** may too: `{ref:map/<id>#<zone-id>}`.
-- **Back-references** on the map's page are grouped by zone: what's set in
-  each zone (an encounter), and which child map details it.
 
 ### The map page
 
 - The diagram inline, at the page's width, each zone an anchor at
   `#zone-<id>`. A link to a zone scrolls to it and highlights it.
-- The zones in order, each with its name, note, and what's in it.
+- The zones in order, each with its name, note, and what's in it: its
+  back-references grouped by zone (`zoneRefs` in `site/src/lib/refs.ts`),
+  what's set there (an encounter) and which child map details it.
 - Its parent, linked, and its child maps.
 - Print: the diagram at full width, then the zones.
 
@@ -72,18 +63,15 @@ dungeon, its room map, the town, and a broken diagram; the cases below use
 them.
 
 - **A dungeon map** with five zones, one per room, and a single-room map
-  within its third zone, for a boss fight: a ref naming that zone links to
-  it, and both maps' pages show the link.
+  within its third zone, for a boss fight: both maps' pages show the link.
 - **A town map** with no parent, whose zones are districts, on its page and
   in print.
 
 ## Done when
 
-- Map refs and tokens with a zone resolve, render, and fail on a missing
-  zone.
 - The map page shows the diagram with linked zones and back-references by
   zone, on screen and in print.
-- The docs describe zone refs.
+- The docs describe the map page.
 
 ## Out of scope
 

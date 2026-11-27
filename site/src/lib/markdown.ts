@@ -7,12 +7,13 @@
 // scrolls on its own when the table is wider than the text column; a bold
 // line directly above a table is its title, rendered as the caption. A
 // `{ref:<type>/<id>}` token renders as the target's current name, linked to
-// its detail page, or a primitive's or group's anchor on its rules page
-// (docs/content-model.md#references): the only link text can carry.
+// its detail page, or a primitive's or group's anchor on its rules page, and
+// `{ref:map/<id>#<zone-id>}` as "Map › Zone", linked to the zone's anchor on
+// the map's page (docs/content-model.md#references): the only link text can carry.
 
 import { Marked, type Token, type TokenizerAndRendererExtension, type Tokens } from 'marked';
 import { tableTitleAt } from '../../../lib/table-title.ts';
-import { leadingRefToken } from '../../../scripts/validate/refs.ts';
+import { leadingRefToken, splitZone } from '../../../scripts/validate/refs.ts';
 import { url } from './url.ts';
 
 const escapeHtml = (text: string): string =>
@@ -58,7 +59,8 @@ const refExtension: TokenizerAndRendererExtension = {
     const ref = token as unknown as RefToken;
     const name = escapeHtml(refName(ref));
     if (!current?.names.has(ref.key)) return name;
-    const path = current.paths?.get(ref.key) ?? `${current.ruleset}/${ref.key}/`;
+    const { key, zone } = splitZone(ref.key);
+    const path = current.paths?.get(ref.key) ?? `${current.ruleset}/${key}/${zone === undefined ? '' : `#zone-${zone}`}`;
     return `<a class="ref-link" href="${escapeHtml(url(path))}">${name}</a>`;
   },
 };

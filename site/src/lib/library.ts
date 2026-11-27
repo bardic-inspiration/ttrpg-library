@@ -4,7 +4,7 @@
 
 import { isOfficial, linkedLibrary, type RulesetModule } from '../../../rulesets/module.ts';
 import type { RefTarget } from './refs.ts';
-import { entryKey, linkEntries, objectRefs, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
+import { entryKey, entryZones, linkEntries, objectRefs, zoneKey, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
 import { anchorId, ruleKey, rulePaths, typedGroups, type RulesData } from '../../../lib/rules.ts';
 
 export interface Entry {
@@ -138,7 +138,13 @@ export const componentPath = (component: LoadedComponent): string =>
 
 export const entryPath = (entry: Pick<Entry, 'ruleset' | 'type' | 'id'>): string => `${entry.ruleset}/${entry.type}/${entry.id}/`;
 
-/** `<type>/<id>` → name of an entry, primitive, or group, for rendering refs as names. */
+/** A map's zones as link ends (docs/content-model.md#references): `map/<id>#<zone-id>` → "Map › Zone", at `#zone-<id>` on its page. */
+export const zoneTargets = (all: LoadedEntry[]): { key: string; name: string; path: string; entry: Entry }[] =>
+  all.flatMap(({ entry }) =>
+    (entryZones(entry.stats) ?? []).map((zone) => ({ key: zoneKey(entryKey(entry), zone.id), name: `${entry.name} › ${zone.name}`, path: `${entryPath(entry)}#zone-${zone.id}`, entry })),
+  );
+
+/** `<type>/<id>` → name of an entry, primitive, group, or map zone, for rendering refs as names. */
 export const entryNames = (all: LoadedEntry[], rules: RulesData[] = []): Map<string, string> =>
   new Map([
     ...rules.flatMap((data) => [
@@ -146,6 +152,7 @@ export const entryNames = (all: LoadedEntry[], rules: RulesData[] = []): Map<str
       ...typedGroups(data).map((g) => [ruleKey(g), g.name] as [string, string]),
     ]),
     ...[...all, ...allComponents(all)].map(({ entry }) => [entryKey(entry), entry.name] as [string, string]),
+    ...zoneTargets(all).map(({ key, name }) => [key, name] as [string, string]),
   ]);
 
 /**
@@ -171,5 +178,7 @@ export function refTargets(all: LoadedEntry[], rules: RulesData[] = []): Map<str
       (c) =>
         [entryKey(c.entry), { type: c.entry.type, name: `${c.parent.name} › ${c.entry.name}`, path: componentPath(c), official: isOfficial(c.entry) }] as [string, RefTarget],
     ),
+    // A link to a map's zone reads "Map › Zone", to the zone's anchor on the map's page.
+    ...zoneTargets(all).map(({ key, name, path, entry }) => [key, { type: entry.type, name, path, official: isOfficial(entry) }] as [string, RefTarget]),
   ]);
 }

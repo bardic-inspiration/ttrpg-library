@@ -985,9 +985,11 @@ map's `stats` hold:
   optional `note` in the markdown subset.
 - **`within`:** for a child map, the zone of its parent that it details, a
   `MapZoneRef`: `{ "ref": "map/<id>", "zone": "<zone-id>" }`. The zone is
-  one of the parent's, a map is within at most one parent, and no map is
-  within itself, directly or through others (errors). Its detail page labels
-  the link "Within", and the parent's "Child maps".
+  one of the parent's, which the ref check enforces for every zone ref
+  ([References](content-model.md#references)); a map is within at most one
+  parent, and no map is within itself, directly or through others (errors).
+  Its detail page labels the link "Within", to "Parent › Zone", and the
+  parent's "Child maps".
 
 The diagram is at a path derived from the id,
 `assets/images/dnd-5e-2024/map/<id>.svg`, never stored, and every map has
@@ -1076,7 +1078,7 @@ warnings below on an SRD entry.
 | Character | No more than three equipped items are attuned, and only an item that requires attunement is | error |
 | Character | Equipped armor without training, or a weapon without proficiency, from the starting class's `training` or a later class's `multiclass` training, when every class has `training` | warning |
 | Map | Zone ids are unique within the map | error |
-| Map | `within` names a zone of its parent map, and no map is within itself, directly or through others | error |
+| Map | No map is within itself, directly or through others; that `within` names a zone of its parent is the ref check's ([References](content-model.md#references)) | error |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

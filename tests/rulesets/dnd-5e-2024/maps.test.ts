@@ -49,9 +49,9 @@ describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
     const { errors, mapWarnings, result } = await validate(withoutBroken);
     expect(errors).toEqual([]);
     expect(mapWarnings).toEqual([]);
-    // `within` is a ref: the child links to its parent, and the parent's back-refs name the child.
+    // `within` is a zone ref: the child links to its parent's zone, and the parent's back-refs name the child and the zone.
     const parent = result.entries.find((e) => e.entry.type === 'map' && e.entry.id === 'sunken-cistern')!;
-    expect(parent.refBy).toEqual([{ path: 'stats.within', key: 'map/drowned-shrine' }]);
+    expect(parent.refBy).toEqual([{ path: 'stats.within', key: 'map/drowned-shrine', zone: 'drowned-shrine' }]);
   });
 
   it('fails the broken diagram on each of its faults', async () => {
@@ -78,7 +78,9 @@ describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
       withoutBroken(entries);
       map(entries, 'drowned-shrine').stats.within.zone = 'gatehouse';
     });
-    expect(missing.mapErrors).toEqual([expect.stringMatching(/drowned-shrine\.json: stats\.within\.zone: map\/sunken-cistern has no zone "gatehouse"/)]);
+    expect(missing.mapErrors).toEqual([
+      'content/dnd-5e-2024/map/drowned-shrine.json: stats.within: ref "map/sunken-cistern#gatehouse" does not resolve: map/sunken-cistern has no zone "gatehouse"; name one of its zones (sluice-gate, flooded-hall, drowned-shrine, keepers-cells, overflow)',
+    ]);
     const unknown = await validate((entries) => {
       withoutBroken(entries);
       map(entries, 'drowned-shrine').stats.within.ref = 'map/nowhere';
@@ -89,6 +91,21 @@ describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
       map(entries, 'drowned-shrine').stats.within.ref = 'spell/fireball';
     });
     expect(spell.mapErrors).toEqual([expect.stringMatching(/drowned-shrine\.json: stats\.within\.ref/)]);
+  });
+
+  it('links a zone token both ways, and fails one naming a zone the map lacks', async () => {
+    const linked = await validate((entries) => {
+      withoutBroken(entries);
+      map(entries, 'harrowfield').description = 'Children dare each other down to the {ref:map/sunken-cistern#overflow}.';
+    });
+    expect(linked.errors).toEqual([]);
+    const town = linked.result.entries.find((e) => e.entry.id === 'harrowfield')!;
+    expect(town.refs).toEqual([{ path: 'description', key: 'map/sunken-cistern', zone: 'overflow' }]);
+    const missing = await validate((entries) => {
+      withoutBroken(entries);
+      map(entries, 'harrowfield').description = 'Down in the {ref:map/sunken-cistern#boiler-room}.';
+    });
+    expect(missing.mapErrors).toEqual([expect.stringMatching(/harrowfield\.json: description: ref "map\/sunken-cistern#boiler-room" does not resolve: map\/sunken-cistern has no zone "boiler-room"/)]);
   });
 
   it('fails a map within itself, directly or through others', async () => {
