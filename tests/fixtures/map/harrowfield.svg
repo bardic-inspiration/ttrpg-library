@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
+  <title>Harrowfield</title>
+  <polygon id="zone-market-ward" class="zone" points="0,0 150,0 150,120 0,120" />
+  <polygon id="zone-millside" class="zone" points="150,0 300,0 300,120 150,120" />
+  <rect id="zone-riverbank" class="zone" x="0" y="120" width="300" height="80" />
+  <polyline class="feature" points="0,160 100,150 200,170 300,160" />
+</svg>

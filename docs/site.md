@@ -28,7 +28,7 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `cardFields` | Facets shown on gallery cards; whether one reads as a chip is its schema's ([Display](content-model.md#display)) |
 | `defaultSort` | `<path>:<asc|desc>`: the sort the Library opens on from the type's old gallery URL and its detail page's type link ([Redirects](#redirects)) |
 | `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet stays in the tree, closed |
-| `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, character, species, class, subclass), which have none |
+| `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, character, map, species, class, subclass), which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
 

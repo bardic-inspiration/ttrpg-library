@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240">
+  <title>Sunken Cistern</title>
+  <rect class="wall" x="0" y="0" width="400" height="240" />
+  <g id="zone-sluice-gate" class="zone">
+    <rect x="10" y="90" width="60" height="60" />
+    <text class="label" x="40" y="125">Sluice Gate</text>
+  </g>
+  <g id="zone-flooded-hall" class="zone">
+    <rect x="80" y="60" width="120" height="120" />
+    <text class="label" x="140" y="125">Flooded Hall</text>
+  </g>
+  <rect id="zone-drowned-shrine" class="zone" x="210" y="80" width="80" height="80" />
+  <circle class="feature" cx="250" cy="120" r="10" />
+  <polygon id="zone-keepers-cells" class="zone" points="300,20 390,20 390,110 300,110" />
+  <path id="zone-overflow" class="zone" d="M300 130 L390 130 L390 220 L300 220 Z" />
+  <line class="door" x1="70" y1="120" x2="80" y2="120" />
+</svg>

@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "harrowfield",
+  "name": "Harrowfield",
+  "summary": "A river town of three districts, the cistern's mill at its edge.",
+  "description": "Harrowfield grew where the river slows. Its mill still turns, though no one draws water from below it.",
+  "stats": {
+    "scale": "zone",
+    "zones": [
+      {
+        "id": "market-ward",
+        "name": "Market Ward"
+      },
+      {
+        "id": "millside",
+        "name": "Millside",
+        "note": "The mill and the cistern under it."
+      },
+      {
+        "id": "riverbank",
+        "name": "Riverbank"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        433
+      ]
+    }
+  }
+}

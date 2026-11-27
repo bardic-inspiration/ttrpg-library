@@ -1,0 +1,46 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "sunken-cistern",
+  "name": "Sunken Cistern",
+  "summary": "A flooded cistern of five rooms under an old mill.",
+  "description": "The mill's cistern flooded when its sluice rusted shut. Something has nested in the shrine at its heart.",
+  "stats": {
+    "scale": "dungeon",
+    "zones": [
+      {
+        "id": "sluice-gate",
+        "name": "Sluice Gate",
+        "note": "The way in, down a ladder beside the rusted gate."
+      },
+      {
+        "id": "flooded-hall",
+        "name": "Flooded Hall",
+        "note": "Knee-deep water hides the broken floor."
+      },
+      {
+        "id": "drowned-shrine",
+        "name": "Drowned Shrine"
+      },
+      {
+        "id": "keepers-cells",
+        "name": "Keeper's Cells"
+      },
+      {
+        "id": "overflow",
+        "name": "Overflow",
+        "note": "A narrow tunnel back to the river."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        433
+      ]
+    }
+  }
+}

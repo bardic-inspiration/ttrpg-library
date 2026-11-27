@@ -99,9 +99,10 @@ export interface RulesetModule {
   /**
    * Checks that read what an entry's refs point to (docs/rulesets.md#consistency-checks), such as a
    * background's feat being an origin feat. They run after every ref resolves; `target` gives a
-   * resolved target's type and stats, or undefined for one whose stats failed their schema. Optional.
+   * resolved target's type and stats, or undefined for one whose stats failed their schema, and `key`
+   * is the entry's own `<type>/<id>`, for a check that walks refs back to it. Optional.
    */
-  checkLinks?(type: string, stats: unknown, target: LinkTarget, named: NameLookup): Issue[];
+  checkLinks?(type: string, stats: unknown, target: LinkTarget, named: NameLookup, key: string): Issue[];
   /**
    * Derived values that read other entries: the entries an entry's refs name, such as a character's
    * classes and species, or the entries that name it, such as a class's spell list. `key` is the
