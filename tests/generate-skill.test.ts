@@ -48,14 +48,30 @@ describe(SKILL, () => {
     for (const procedure of new Set(map.values())) expect(skill).toMatch(new RegExp(`^### Procedure: ${procedure}$`, 'm'));
   });
 
-  it('routes to the character procedure only types without gap buckets', () => {
+  // The character, map, and encounter procedures take requests only, so no type they generate has gap buckets.
+  const BY_REQUEST = ['Characters', 'Maps', 'Encounters'];
+
+  it('routes to the by-request procedures only types without gap buckets', () => {
     const map = routes();
     expect(map.get('character')).toBe('Characters');
+    expect(map.get('encounter')).toBe('Encounters');
     for (const { types } of Object.values(repo.registry)) {
       for (const [type, entry] of Object.entries(types as Record<string, TypeEntry>)) {
-        if (map.get(type) === 'Characters') expect(entry.gapBuckets, type).toBeUndefined();
+        if (BY_REQUEST.includes(map.get(type) ?? '')) expect(entry.gapBuckets, type).toBeUndefined();
       }
     }
+  });
+
+  // docs/generation.md#procedures "Encounters": the procedure has steps, writes counts, dice, and E, and
+  // writes dependencies before the encounter.
+  it('gives the encounter procedure its steps', () => {
+    const section = /^### Procedure: Encounters\n([\s\S]*?)\n## /m.exec(skill)?.[1] ?? '';
+    expect(section).not.toMatch(/no steps yet/);
+    expect(section).toMatch(/^\d+\. \*\*/m);
+    expect(section).toContain('never XP');
+    expect(section).toContain('xpBudgetPerCharacter');
+    expect(section).toContain('`environment`');
+    expect(section).toContain('Dependencies before the encounter');
   });
 });
 
