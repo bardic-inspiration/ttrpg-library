@@ -1,12 +1,14 @@
 // dnd-5e-2024 maps (docs/rulesets.md#maps) and their diagrams (docs/content-model.md#map-diagrams):
 // the spec's dungeon and town cases validate, and a broken diagram fails on each of its faults. The
 // index gives a map's card its diagram and scale (docs/site.md#gallery "Cards").
-import { copyFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
+import { copyFile, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { validateLibrary } from '../../../scripts/validate/index.ts';
 import { checkDiagram } from '../../../scripts/validate/diagram.ts';
+import { checkMapDiagram } from '../../../scripts/validate/library.ts';
 import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
 
@@ -83,6 +85,21 @@ describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
   it('fails a map without its diagram', async () => {
     const { mapErrors } = await validate(withoutBroken, ['harrowfield.svg']);
     expect(mapErrors).toEqual(['content/dnd-5e-2024/map/harrowfield.json: diagram assets/images/dnd-5e-2024/map/harrowfield.svg does not exist']);
+  });
+
+  it('warns on a diagram above 500 KB and fails one above 2 MB, without reading it', async () => {
+    const repo = await mkdtemp(join(tmpdir(), 'ttrpg-map-'));
+    temps.push(repo);
+    const dir = join(repo, 'assets/images/dnd-5e-2024/map');
+    await mkdir(dir, { recursive: true });
+    const head = { file: 'content/dnd-5e-2024/map/harrowfield.json', ruleset: 'dnd-5e-2024', type: 'map', id: 'harrowfield', name: 'Harrowfield' };
+    const padded = async (kb: number) => {
+      const svg = await readFile(join(MAPS, 'harrowfield.svg'), 'utf8');
+      await writeFile(join(dir, 'harrowfield.svg'), svg.replace('</svg>', `<!--${'x'.repeat(kb * 1024)}--></svg>`));
+      return checkMapDiagram(head, ['market-ward', 'millside', 'riverbank'], repo);
+    };
+    expect(await padded(600)).toEqual([{ level: 'warning', file: head.file, message: expect.stringMatching(/^diagram is \d+ KB, above 500 KB$/) }]);
+    expect(await padded(2100)).toEqual([{ level: 'error', file: head.file, message: expect.stringMatching(/^diagram is \d+ KB, above the 2 MB limit$/) }]);
   });
 
   it('fails a parent zone the parent lacks, and a parent that is not a map', async () => {

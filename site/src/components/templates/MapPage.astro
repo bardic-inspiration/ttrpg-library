@@ -11,6 +11,7 @@ import { formatTitle } from '../../lib/format';
 import { rulesetModule } from '../../lib/library';
 import { diagramSource, mapZones } from '../../lib/map';
 import { renderMarkdown } from '../../lib/markdown';
+import { refObjectKey } from '../../../../scripts/validate/refs';
 import type { PropertyLine, TemplateProps } from '../../lib/template';
 import { url } from '../../lib/url';
 import Heading from './parts/Heading.astro';
@@ -26,7 +27,7 @@ const s = entry.stats as MapStats;
 const module = rulesetModule(entry.ruleset);
 const zones = mapZones(entry, refBy, names, paths, (type, path) => module.refLabels(type, path));
 const diagram = pageDiagram(Astro.props.diagram ?? diagramSource(entry), s.zones, entry.name);
-const lines: PropertyLine[] = s.within ? [{ label: 'Within', value: `{ref:${s.within.ref}#${s.within.zone}}`, markdown: true }] : [];
+const lines: PropertyLine[] = s.within ? [{ label: 'Within', value: `{ref:${refObjectKey(s.within)}}`, markdown: true }] : [];
 const sub = level + 1;
 // Only the page's own copy carries the anchors: the PNG capture's copy sits on the same page, and a
 // print view may hold two maps that share a zone id.

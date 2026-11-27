@@ -219,7 +219,7 @@ export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; i
       ...collectRefs(entry.stats, entry.statsPath ?? 'stats', malformed),
     ];
     for (const { path, raw } of malformed) {
-      issues.push({ file: entry.file, message: `${path}: ref token ${raw} is malformed; write {ref:<type>/<id>} or {ref:<type>/<id> <text>}, such as {ref:spell/fireball}` });
+      issues.push({ file: entry.file, message: `${path}: ref token ${raw} is malformed; write {ref:<type>/<id>} or {ref:<type>/<id> <text>}, such as {ref:spell/fireball}, and add #<zone-id> to name a map's zone` });
     }
     for (const { path, ref, zone } of found) {
       const slash = ref.indexOf('/');

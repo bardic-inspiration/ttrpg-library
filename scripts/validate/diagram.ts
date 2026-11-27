@@ -19,8 +19,9 @@ const REJECTED_ELEMENTS = new Set(['script', 'foreignObject', 'image']);
 /** Attributes that set a color or a style inline; the site's CSS sets both. */
 const COLOR_ATTRIBUTES = new Set(['style', 'fill', 'stroke', 'color', 'stop-color', 'flood-color', 'lighting-color']);
 
-const NAME = '[A-Za-z_][\\w.:-]*';
-const ATTRIBUTE = new RegExp(`\\s+(${NAME})\\s*=\\s*(?:"([^"<]*)"|'([^'<]*)')`, 'y');
+/** An XML name, as an element or attribute is named; the site's rewriter reads tags by it too. */
+export const XML_NAME = '[A-Za-z_][\\w.:-]*';
+const ATTRIBUTE = new RegExp(`\\s+(${XML_NAME})\\s*=\\s*(?:"([^"<]*)"|'([^'<]*)')`, 'y');
 const ENTITY = /&(?:#\d+|#x[0-9a-fA-F]+|lt|gt|amp|quot|apos);/g;
 
 interface Element {
@@ -53,7 +54,7 @@ export function readSvg(source: string): { elements: Element[] } | { error: stri
     }
     if (text.startsWith('<!', at) || text.startsWith('<?', at)) return fail('a doctype, CDATA section, or processing instruction, which a diagram never needs');
     if (text.startsWith('</', at)) {
-      const close = new RegExp(`</(${NAME})\\s*>`, 'y');
+      const close = new RegExp(`</(${XML_NAME})\\s*>`, 'y');
       close.lastIndex = at;
       const m = close.exec(text);
       if (!m) return fail('a malformed closing tag');
@@ -61,7 +62,7 @@ export function readSvg(source: string): { elements: Element[] } | { error: stri
       at = close.lastIndex;
       continue;
     }
-    const tag = new RegExp(`<(${NAME})`, 'y');
+    const tag = new RegExp(`<(${XML_NAME})`, 'y');
     tag.lastIndex = at;
     const m = tag.exec(text);
     if (!m) return fail('a malformed tag');

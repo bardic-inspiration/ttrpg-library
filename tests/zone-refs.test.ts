@@ -57,6 +57,13 @@ describe('zone refs in the validator', () => {
     expect(links.get('map/harrowfield')!.refs).toEqual([]);
   });
 
+  it('names the zone form when a token with a zone is malformed', () => {
+    const town = entry('map', 'harrowfield', { scale: 'zone', zones: [{ id: 'millside', name: 'Millside' }] }, 'The {ref:map/sunken-cistern#Gate}.');
+    expect(linkEntries([cistern, town]).issues.map((i) => i.message)).toEqual([
+      'description: ref token {ref:map/sunken-cistern#Gate} is malformed; write {ref:<type>/<id>} or {ref:<type>/<id> <text>}, such as {ref:spell/fireball}, and add #<zone-id> to name a map\'s zone',
+    ]);
+  });
+
   it('fails a zone of a missing map as a missing ref', () => {
     const { issues } = linkEntries([entry('spell', 'frost-lance', { effect: 'See {ref:map/nowhere#gate}.' })]);
     expect(issues.map((i) => i.message)).toEqual(['stats.effect: ref "map/nowhere#gate" does not resolve: no map has id "nowhere"']);

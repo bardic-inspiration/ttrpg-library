@@ -34,7 +34,7 @@ export interface TemplateProps {
   components?: { entry: { type: string; id: string; name: string; stats: unknown } }[];
   /** Refs into the entry, for a template that lists them itself: a map's, by zone (`map-page`). */
   refBy?: Link[];
-  /** A map's diagram source, when the page has it to hand (the style guide's fixtures); else read from the library. */
+  /** A map's diagram source, when the caller has it to hand, as a test rendering a fixture does; else read from the library. */
   diagram?: string;
 }
 
