@@ -5,6 +5,59 @@ Notable changes to the library, newest first. The format follows
 take [Semantic Versioning](https://semver.org/)'s form as
 [Releases](docs/workflow.md#releases) reads it.
 
+## [1.2.0] - 2026-11-27
+
+### Added
+
+- Characters: a character profile page and card, built from a class, species,
+  background, and feats, with checks for a legal build, and Library facets
+  (#477, #482, #487). Features, traits, feats, and items declare the modifiers
+  and grants they give a character, and the SRD's do (#478, #480, #489, #491,
+  #493).
+- Maps: a map page with its zone diagram, and a card; entries can point to a
+  map's zones (#496, #497, #498).
+- Encounters: an encounter type built from a shared kit, with a page, a card,
+  Library facets for XP span and creature type, and a difficulty calculator
+  with budgets and an environment multiplier (#502, #504, #505, #506, #507).
+- Modules: a structured document that contains encounters and other modules,
+  with a page, a card, and a structured summary; contained entries show the
+  modules they're part of (#511, #512).
+- Content requests for characters, maps, encounters, and modules, which the
+  routines fulfil with the new entries they need in one batch (#492, #499,
+  #508, #513).
+- A print cart that collects entries from the Library for printing or
+  downloading together (#465).
+- Shared interaction components and a style guide for text roles, spacing,
+  and underlines (#455, #458).
+- A preview site built from `main`, with a notice saying it isn't the
+  release (#447, #449).
+
+### Changed
+
+- The Library is one page per ruleset, with Sources and Types filters (#471).
+- Search filters the Library by name (#453).
+- Search and the set export sit in the page header (#466).
+- Cards show filter chips from each type's fields, chips name their field,
+  range filters keep their inputs, and a card's source sits on its own line
+  below its summary (#462, #463, #464).
+- SRD equipment and conditions show as Library cards (#468).
+- Rules pages read as text with a structured summary, and the class page
+  fits its Features table (#473).
+- Reference lists collapse, list each reference once, and entry pages no
+  longer link to issues (#469).
+- Production deploys from the latest release tag instead of `main` (#449).
+
+### Removed
+
+- Tags, including the `source: SRD` tag; the Sources filter replaces it
+  (#452, #471).
+
+### Fixed
+
+- Stat block section headings and the current navigation link's underline
+  (#461), and heading sizes in print (#460).
+- The Filters toggle stays hidden on desktop (#474).
+
 ## [1.1.0] - 2026-11-22
 
 ### Added
@@ -67,5 +120,6 @@ take [Semantic Versioning](https://semver.org/)'s form as
 - Content requests and revisions through GitHub issues, fulfilled by
   scheduled routines as reviewed pull requests.
 
+[1.2.0]: https://github.com/bardic-inspiration/ttrpg-library/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/bardic-inspiration/ttrpg-library/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/bardic-inspiration/ttrpg-library/releases/tag/v1.0.0
