@@ -346,6 +346,10 @@ describe('in the Library (docs/site.md#type-registry)', { timeout: VALIDATION_TI
     expect(await view('f.derived.creatureTypes=humanoid&f.derived.xp=1000..')).toEqual(['druids-and-stirges']);
   });
 
+  it('opens the XP and creature type filters when the Library opens with encounters checked, as a creature opens CR and type', () => {
+    expect(config.types.get('dnd-5e-2024/encounter')!.defaultFilters).toEqual(['derived.xp', 'derived.creatureTypes']);
+  });
+
   it('sorts by XP, a span by its minimum', async () => {
     expect(await view('sort=derived.xp:desc')).toEqual(['warren-kings-court', 'druids-and-stirges', 'bugbear-warrior-alone', 'bandit-ambush']);
   });

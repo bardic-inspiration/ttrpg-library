@@ -105,7 +105,7 @@
         ],
         "cardFields": ["derived.xp", "derived.creatureTypes"],
         "defaultSort": "name:asc",
-        "defaultFilters": []
+        "defaultFilters": ["derived.xp", "derived.creatureTypes"]
       },
       "equipment": {
         "label": "Equipment",
