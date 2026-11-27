@@ -793,6 +793,10 @@ the SRD import to hold printed forms, following the nearest-field rule.
 | The Rulesets page redesign, `ui.md`'s last unbuilt part, moves to the Rulesets track (#403), and its design task (#427) becomes the track's sub-issue. | It needs the owner's own design process and no version boundary; the track is about rulesets and already ongoing, so the redesign stays in the dev queue rather than waiting for v2.0.0 | #427, #446 |
 | `ui.md`'s open question on the About page's "The source is on GitHub" link (#425), and its "not yet discussed" UI items (a phone filter sheet, a way back to results, a compact list view, a two-column stat block, pin, compare, recently viewed, a dark palette, and a keyboard and screen-reader pass), go to v2.0.0's considerations (#370). | Each needs the owner and none fits a track; earmarking them keeps them from being lost with the folder | #370, #446 |
 
+## After v1.2.0
+
+Decisions made after the v1.2.0 release, in the development tracks.
+
 ### Integrations
 
 | Decision | Why | Source |
