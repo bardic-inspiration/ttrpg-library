@@ -647,7 +647,44 @@ thousand entries. Past about 2,000, revisit the index size.
   ([Cart and set actions](#gallery)). A Preact island renders them once
   hydrated, since every export needs JavaScript; a failed export shows a
   message in a polite status region.
+- An encounter's page adds a **Difficulty** section after its template
+  ([Difficulty calculator](#difficulty-calculator)).
 - `<title>` and Open Graph tags (name, summary, and art when present).
+
+### Difficulty calculator
+
+An encounter's page has a Difficulty section after its template
+(`EncounterDifficulty.astro` in `site/src/components/encounter/`, passed in
+the detail page's default slot), comparing the reader's party against the
+encounter ([Encounter difficulty](rulesets.md#encounter-difficulty)). It
+formats the derived values; it computes none of them but the party's budgets,
+through the ruleset's `difficulty.ts`.
+
+- **Without JavaScript,** it shows the encounter's XP ("1,875 XP", or a spawn
+  table's span, "75 to 675 XP") and E ("×1.25 (note)", or "×1" without an
+  `environment`), composed in `site/src/lib/encounter.ts`.
+- **The calculator** (`DifficultyCalculator.tsx`) is a Preact island that
+  renders once it hydrates:
+  - **Your party:** one line per character, "Character N" labeling a level
+    select (1–20) and a Remove button. Add character adds one at the last
+    character's level. The party keeps at least one character, so Remove is
+    disabled on the last. After an add or a remove, focus moves to the new
+    or the next character's level.
+  - **Budgets:** the party's Low, Moderate, and High budgets, g(Party).
+  - **For your party,** in a polite live region: a roster's XP and what it
+    reads ("1,125 XP: Moderate"), or a spawn table's rows, low to high, as a
+    table with each row's minimum, average, and maximum XP and what each
+    reads.
+- **XP shows whole,** rounded, with thousands separators; it's compared
+  unrounded, so 112.5 XP reads above a Low budget of 112. Difficulties show
+  by the phrase book's `difficulty` vocabulary: Low, Moderate, High, and
+  Beyond High.
+- **The party** (`site/src/lib/party.ts`) is kept in local storage under
+  `ttrpg-library:party` as a list of levels, wrapped as the cart is
+  ([Gallery](#gallery) "Cart and set actions"): with storage blocked it lasts
+  only for the page, and an unreadable or empty party, or a stored value
+  that isn't a level, falls back to four characters of level 1. It carries
+  to the next encounter, and follows a change made in another tab.
 
 ### Templates
 

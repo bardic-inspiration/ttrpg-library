@@ -1,15 +1,15 @@
 // Encounter checks a JSON schema can't express (docs/rulesets.md#encounters, docs/rulesets.md#consistency-checks).
 // The kit parts' shapes are the schema's (docs/content-model.md#arrangements); refs, zones included,
 // resolve by the ref check (docs/content-model.md#references). Difficulty (docs/rulesets.md#encounter-difficulty)
-// is derived here: the encounter's XP from its creatures, and a party's budgets from tables.json.
+// is derived here: the encounter's XP from its creatures; a party's budgets are `difficulty.ts`'s.
 
 import { Lexer } from 'marked';
 import type { Issue, LinkedLibrary } from '../module.ts';
 import { deriveCreature } from './derive.ts';
-import type { Budget, CreatureStats, DerivedEncounter, Difficulty, DifficultyResult, EncounterStats, SpawnRow, Tables, XpSpan } from './types.ts';
+import { DIFFICULTIES } from './difficulty.ts';
+import type { CreatureStats, DerivedEncounter, Difficulty, EncounterStats, SpawnRow, Tables, XpSpan } from './types.ts';
 
-/** The rows of a table keyed by difficulty, in the order they read. */
-export const DIFFICULTIES: readonly Difficulty[] = ['low', 'moderate', 'high'];
+export { DIFFICULTIES, difficultyOf, partyBudget } from './difficulty.ts';
 
 /** The lowest a dice count can roll: one per die, plus its modifier. */
 export function lowestCount(count: number | string): number {
@@ -68,22 +68,6 @@ export function deriveEncounterLinked(stats: EncounterStats, library: LinkedLibr
   const spans = Object.values(rows);
   const xp = spans.length === 0 ? { min: 0, max: 0 } : { min: Math.min(...spans.map((s) => s.min)), max: Math.max(...spans.map((s) => s.max)) };
   return { multiplier, xp, rows };
-}
-
-/** g(Party): the sum of each character's XP budget for their level, for each difficulty. */
-export function partyBudget(levels: readonly number[], tables: Tables): Budget {
-  const budget: Budget = { low: 0, moderate: 0, high: 0 };
-  for (const level of levels) {
-    const row = tables.xpBudgetPerCharacter[level - 1];
-    if (!row) throw new Error(`encounter: no XP budget for level ${level}`);
-    for (const d of DIFFICULTIES) budget[d] += row[d];
-  }
-  return budget;
-}
-
-/** What XP reads against a party's budgets: Low at or under Low, then Moderate, High, or Beyond High. */
-export function difficultyOf(xp: number, budget: Budget): DifficultyResult {
-  return DIFFICULTIES.find((d) => xp <= budget[d]) ?? 'beyond-high';
 }
 
 /** An encounter has one roster or spawn table, a spawn table's ranges fit its roll, dice counts roll at least 1, a table part holds one table, and E isn't 1 (a warning otherwise). */
