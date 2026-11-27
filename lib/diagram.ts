@@ -56,17 +56,23 @@ export function pageDiagram(source: string, zones: readonly DiagramZone[], label
   });
 }
 
-/** The diagram as a card's thumbnail: hidden from assistive technology, with no `<title>`, ids, or links. */
-export function thumbnailDiagram(source: string, zones: readonly string[], label: string): string {
+/**
+ * The diagram as a card's or a kit part's thumbnail: hidden from assistive technology, with no
+ * `<title>`, ids, or links. A `marked` zone's element is marked `data-target`, so the thumbnail
+ * shows which zone it means.
+ */
+export function thumbnailDiagram(source: string, zones: readonly string[], label: string, marked?: string): string {
   const svg = checked(source, zones, label).replace(/<title(?:\s[^>]*)?>[\s\S]*?<\/title>/g, '');
   let root = true;
   return svg.replace(TAG, (tag, closing: string, name: string, attributes: string, selfClosing: string) => {
     if (closing) return tag;
+    const zone = ZONE_ID.exec(attributes);
     let rewritten = attributes.replace(ID, '');
     if (root) {
       root = false;
       rewritten = rewritten.replace(CLASS, '') + ' class="diagram card__diagram" aria-hidden="true" focusable="false"';
     }
+    if (marked !== undefined && zone && (zone[1] ?? zone[2]) === marked) rewritten += ' data-target=""';
     return `<${name}${rewritten}${selfClosing ? ' /' : ''}>`;
   });
 }

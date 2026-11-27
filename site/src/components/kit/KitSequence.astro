@@ -1,0 +1,56 @@
+---
+// A `sequence` part (docs/site.md#kit-parts): structured, its trigger, then each stage's name, turn
+// loop, and transition, then its victory condition; or its example, as one prose text. Every node
+// is markdown-subset text with its refs linked.
+import type { KitContext } from '../../lib/kit';
+import type { Part } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { sayText } from '../../lib/wording';
+import Heading from '../templates/parts/Heading.astro';
+import RulesText from '../templates/parts/RulesText.astro';
+
+interface Props {
+  sequence: Extract<Part, { part: 'sequence' }>;
+  kit: KitContext;
+}
+
+const { sequence, kit } = Astro.props;
+const { trigger, stages = [], victory, example } = sequence;
+---
+{example !== undefined ? (
+  <RulesText text={example} refs={kit.refs} />
+) : (
+  <>
+    {trigger !== undefined && <RulesText label={sayText('kit.trigger')} text={trigger} refs={kit.refs} />}
+    <ol class="kit-stages">
+      {stages.map((stage) => (
+        <li class="kit-stage">
+          <Heading level={kit.level + 1} class="statblock-heading statblock-heading--nested">{stage.name}</Heading>
+          <RulesText text={stage.loop} refs={kit.refs} />
+          {stage.transition !== undefined && <RulesText label={sayText('kit.transition')} text={stage.transition} refs={kit.refs} />}
+        </li>
+      ))}
+    </ol>
+    {victory !== undefined && <RulesText label={sayText('kit.victory')} text={victory} refs={kit.refs} />}
+  </>
+)}
+
+<style>
+  @layer components {
+    .kit-stages {
+      display: grid;
+      gap: var(--space-xs);
+      padding: 0;
+      list-style: none;
+    }
+
+    .kit-stage {
+      padding-inline-start: var(--space-s);
+      border-inline-start: var(--border-width-strong) solid var(--color-border);
+      break-inside: avoid;
+
+      & > :global(* + *) {
+        margin-block-start: var(--space-3xs);
+      }
+    }
+  }
+</style>

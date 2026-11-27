@@ -22,7 +22,7 @@ const { loaded, names, paths, level = 2 } = Astro.props;
 const { entry, derived } = loaded;
 ---
 <article class="print-entry" data-id={entry.id} data-name={entry.name} data-type={entry.type}>
-  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} refBy={loaded.refBy} mode="print" level={level} />
+  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} refBy={loaded.refBy} shown={loaded.shown} mode="print" level={level} />
 </article>
 
 <style>
@@ -53,6 +53,11 @@ const { entry, derived } = loaded;
         max-inline-size: none;
         columns: var(--print-columns);
         column-gap: var(--statblock-column-gap);
+      }
+
+      /* A card embedded in an arrangement flows in its columns rather than making its own. */
+      & :global(.statblock .statblock) {
+        columns: auto;
       }
 
       & :global(.statblock-header),

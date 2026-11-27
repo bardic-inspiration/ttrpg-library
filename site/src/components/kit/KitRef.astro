@@ -1,0 +1,30 @@
+---
+// One ref object in a kit part (docs/site.md#kit-parts): its line, the count and the name linked,
+// after the target's small form when it shows as a thumbnail. A card shows after the part (KitCards).
+import { renderInlineMarkdown } from '../../lib/markdown';
+import type { KitContext, KitRefView } from '../../lib/kit';
+import KitThumbnail from './KitThumbnail.astro';
+
+interface Props {
+  view: KitRefView;
+  kit: KitContext;
+}
+
+const { view, kit } = Astro.props;
+const target = view.show === 'thumbnail' ? kit.shown.get(view.entry) : undefined;
+---
+<span class="kit-ref">
+  {target && <KitThumbnail loaded={target} zone={view.zone} kit={kit} />}
+  <span set:html={renderInlineMarkdown(view.line, kit.refs)} />
+</span>
+
+<style>
+  @layer components {
+    .kit-ref {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: var(--space-2xs);
+      align-items: center;
+    }
+  }
+</style>

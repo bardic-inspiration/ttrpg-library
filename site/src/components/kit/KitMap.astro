@@ -1,0 +1,17 @@
+---
+// A `map` part (docs/site.md#kit-parts): the map, or its zone, as its `show` says: its name linked,
+// with its diagram as a thumbnail, its zone marked, or its map's card after it.
+import { refView, type KitContext } from '../../lib/kit';
+import type { MapRef, Show } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import KitCards from './KitCards.astro';
+import KitRef from './KitRef.astro';
+
+interface Props {
+  map: MapRef & { show?: Show };
+  kit: KitContext;
+}
+
+const { map, kit } = Astro.props;
+---
+<p class="kit-map"><KitRef view={refView(map)} kit={kit} /></p>
+<KitCards part={{ part: 'map', map }} kit={kit} />

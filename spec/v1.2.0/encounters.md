@@ -36,40 +36,11 @@ choices, not arithmetic).
 - [Difficulty calculator](../../docs/site.md#difficulty-calculator): the
   encounter page's party, budgets, and result, and its XP and E without
   JavaScript.
+- [Kit parts](../../docs/site.md#kit-parts): the encounter page's parts in
+  order, each ref as its `show` says, the sequence, loot, tables, and the
+  `map` part, on screen and in print.
 
 ## Design
-
-### Parts on the page
-
-The kit's parts and their data are built
-([Arrangements](../../docs/content-model.md#arrangements),
-[Encounters](../../docs/rulesets.md#encounters)); the encounter page is the
-generic detail page until these are:
-
-- **Each part renders in order** by its shared component, so every
-  arrangement reads alike, and each ref object as its `show` says: `link`
-  prints its name linked, `card` embeds the target's card, and `thumbnail`
-  a small form (a map's diagram, an entry's art).
-
-### Sequence
-
-- **Structured:** the trigger, then each stage's name, turn loop, and
-  transition, then the victory condition, in order.
-- **Or the example,** as one prose text.
-- Every node is markdown-subset text with `{ref:…}` tokens, rendered as
-  links. Event string formats wait for the v2.0.0 builder (#370).
-
-### Loot
-
-- **`loot`:** its rows in difficulty order, low to high, each with its coins
-  (`4d6 × 10 GP`) and its items with counts.
-- **`table`:** under its title, as a table in text renders.
-
-### Setting
-
-A `map` part shows the map, or its zone, on the page as its `show` says.
-`setIn` alone doesn't; the map's page already lists the encounter under the
-zone, labeled "Set here".
 
 ### In the Library
 
@@ -78,8 +49,6 @@ zone, labeled "Set here".
   filter it overlaps), and creature type (the roster's creatures' types).
   A range facet over a span is new, and serves any type.
 - **Card:** name, XP, creature types, and summary.
-- **Print** follows the page: parts shown as cards print as cards, and
-  links print as names.
 
 ### Generation
 

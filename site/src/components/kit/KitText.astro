@@ -1,0 +1,27 @@
+---
+// A kit part that is one text (docs/site.md#kit-parts): `prose`, `description`, which reads aloud
+// and so is set off as boxed text, or `dm-guide`.
+import type { KitContext } from '../../lib/kit';
+import RulesText from '../templates/parts/RulesText.astro';
+
+interface Props {
+  text: string;
+  /** Player-facing text, read aloud or paraphrased. */
+  readAloud?: boolean;
+  kit: KitContext;
+}
+
+const { text, readAloud = false, kit } = Astro.props;
+---
+<RulesText class={readAloud ? 'kit-text kit-text--read-aloud' : 'kit-text'} text={text} refs={kit.refs} />
+
+<style>
+  @layer components {
+    :global(.kit-text--read-aloud) {
+      padding: var(--space-2xs) var(--space-s);
+      background: var(--kit-read-aloud-bg);
+      border-inline-start: var(--border-width-strong) solid var(--accent);
+      break-inside: avoid;
+    }
+  }
+</style>
