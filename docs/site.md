@@ -775,7 +775,8 @@ part is a section under its heading, one level below the entry's name:
 Description, Running the Encounter or Running the Module (`dm-guide`),
 Creatures (a roster or spawn table), Sequence, Loot, Map, and Hook; a `prose`
 part under its `title`, or none; a `table` under none, since its title is
-its caption; and an `arrangement` under its contained entry's name. Headings and other composed text come from the phrase book's `kit.`
+its caption; and an `arrangement` under its contained entry's name.
+Headings and other composed text come from the phrase book's `kit.`
 sentences and its `coin` vocabulary, through `site/src/lib/kit.ts`.
 
 - **Refs.** Each ref object reads as a line: its count and its name linked
