@@ -185,13 +185,28 @@ be generated, and the run asks, as for an unknown type.
   parent, in the library or written by the same request; a brief that
   needs a parent neither has is asked about. In the PR's Entries table,
   its summary field is "—".
-- **Encounters:** `encounter` ([Encounters](rulesets.md#encounters)). The
-  procedure has no steps yet: a request for encounters can't be fulfilled,
-  and the run asks, as for an unknown type.
+- **Encounters:** `encounter` ([Encounters](rulesets.md#encounters)), by
+  the encounter guideline. Choose the party (the brief's, or four
+  characters at the level it implies, or level 1) and its summed budgets;
+  pick the creatures and items, writing any the library lacks before the
+  encounter, by the Entries procedure (a map by the Maps procedure); then
+  assemble one roster, with whole counts that read as the difficulty asked
+  for, or one spawn table, a row per difficulty with dice counts and, when
+  rolled, a die and each row's faces. Add `environment` only when the
+  setting changes the fight, and write the other parts the brief calls for
+  and `setIn`. Counts, dice, and E only, never XP
+  ([Encounter difficulty](rulesets.md#encounter-difficulty)); an error is
+  fixed by changing them. Encounters come only by request (they have no gap
+  buckets), every encounter is custom (the SRD prints none, so an SRD
+  request for one is asked about), and a character in the scene is a ref in
+  its text that the library already has; a brief that needs one it lacks
+  is asked about. In the PR's Entries table, its summary field is the
+  party it was designed for and the difficulty each roster or row reads,
+  and E is under Warnings.
 
 A test checks that the table names every registered type once, that each
-procedure has its section, and that a type routed to the character
-procedure has no `gapBuckets`.
+procedure has its section, and that a type routed to the character, map,
+or encounter procedure has no `gapBuckets`.
 
 ### Self-review
 

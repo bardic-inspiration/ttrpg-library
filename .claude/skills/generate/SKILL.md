@@ -374,10 +374,90 @@ In the PR's Entries table, a map's summary field is "—": the type has no
 
 ### Procedure: Encounters
 
-An encounter is an arrangement of other entries
-([Encounters](../../../docs/rulesets.md#encounters)). This procedure has no
-steps yet, so a request for encounters can't be fulfilled as written: ask
-(Inputs).
+An encounter is an arrangement of other entries: its parts, in the order
+the page reads, with one roster or spawn table
+([Encounters](../../../docs/rulesets.md#encounters)). The ruleset derives
+its XP from the creatures and counts; this procedure writes the counts,
+dice, and E, never XP
+([Encounter difficulty](../../../docs/rulesets.md#encounter-difficulty)).
+
+- **By request only.** Encounters have no gap buckets, so a gap bucket never
+  names one. An issue or an inline request does.
+- **Always custom.** The SRD prints no encounters, so an SRD request for
+  encounters can't be fulfilled as written: ask (Inputs). An encounter is a
+  custom entry, with the request's `author` (step 4). The creatures and
+  items it uses may be SRD entries.
+- **Dependencies before the encounter.** Every creature, item, equipment,
+  and map the encounter names is in the library
+  (`site/public/library.json`) or written by the same request, before the
+  encounter: a creature, item, or equipment by the Entries procedure, by
+  its own type's guideline, and a map by the Maps procedure. Prefer an
+  existing entry where one fits the brief. A character in the scene is a
+  `{ref:character/<id>}` in a part's text, never a roster line, and must be
+  in the library: a brief that needs a character the library lacks can't
+  be fulfilled as written: ask, suggesting a request for it first.
+
+For each encounter:
+
+1. **Choose the party.** Design for the party the brief names, its size
+   and levels. Without one, use four characters at the level the brief
+   implies, or at level 1, the calculator's default. Its budgets are each
+   character's Low, Moderate, and High XP for their level, summed, from
+   `xpBudgetPerCharacter` in `rulesets/<ruleset>/tables.json`.
+2. **Pick the creatures.** From the brief, choose the creatures and any
+   items, and write the new ones the library lacks (the dependency rule
+   above). A library creature's XP is its `derived.xp` facet in
+   `site/public/library.json`; a new creature's is the `xp` of its `cr` in
+   the rules tables' `challengeRatings` (`xpWithDamage` at CR 0 when it
+   deals damage).
+3. **Assemble the roster or spawn table.** Exactly one part is either:
+   - a **roster**, for a fixed fight: each creature's ref with a whole
+     `count` of 1 or more, chosen so the sum of XP times count, times E,
+     falls in the band the brief asks for (Moderate if it names none):
+     at or under Low reads Low, up to Moderate reads Moderate, up to High
+     reads High;
+   - or a **spawn table**, for a variable one: one row per difficulty the
+     brief asks for (`low`, `moderate`, and `high` if it names none), each
+     a roster whose counts may be dice: one kind of d4, d6, d8, d10, d12,
+     d20, or d100, with an optional modifier (`"1d4+1"`), the lowest roll at
+     least 1. Choose each row's counts so its average XP, times E, reads as the
+     row's name for the party, and its lowest and highest rolls stay near
+     that band. For a table the DM rolls on, add `roll`, one die
+     (`"1d6"`), and give each row a `range` of its faces, covering every
+     face once, the lowest row first.
+4. **Set E, only when the setting changes the fight.** Add `environment`
+   with a `multiplier` other than 1 and a `note` naming what does it
+   ("difficult terrain and a collapsing floor"), by the guideline's
+   "Balance targets". Leave it out for a neutral setting. Every multiplier
+   is a warning for the PR body (step 6).
+5. **Write the other parts.** By the guideline's "Prose style", and only
+   the parts the brief calls for, in the order the page should read: a
+   `description` (player-facing), a `dm-guide` (how to run it), the roster
+   or spawn table, a `sequence` (a structured `trigger`, `stages` each with
+   its `name`, `loop`, and `transition` but the last, and `victory`; or one
+   prose `example`, not both), `loot` (rows keyed by difficulty as the
+   spawn table's are, each with `coins`, `items`, or both), a `table` (a
+   `title` and one pipe table), `prose`, and a `map` part to show a map on
+   the page. Every text is markdown-subset text with `{ref:…}` tokens
+   (**Text** in the Entries procedure). Add `show` to a ref object only
+   where the page should show it otherwise than its default
+   ([Arrangements](../../../docs/content-model.md#arrangements)).
+6. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json`
+   with its envelope keys in the order the Entries procedure gives.
+   `stats` holds `parts`, `setIn` when the encounter is set in a map
+   (`{ "ref": "map/<id>", "zone": "<zone-id>" }`, the zone optional), and
+   `environment` when step 4 set it. `summary` follows the guideline;
+   `description` is left out, since the parts hold the text. Never write
+   XP, a row's XP, or the creature types: the ruleset derives them.
+7. **Fix by choices.** When `npm run validate` reports an encounter error
+   (step 5), change the parts' counts, dice, ranges, or refs to meet it.
+   Never edit an existing entry to make an encounter pass.
+
+In the PR's Entries table, an encounter's summary field is the party it
+was designed for and the difficulty its roster, or each spawn table row,
+reads ("4 × level 3: Moderate", or "4 × level 1: Low, Moderate, High"),
+since the type has no `summaryField`; review then needs no arithmetic. Its
+Warnings list E with its note, the validator's warning for it.
 
 ## Step 4: Source, author, and meta
 
