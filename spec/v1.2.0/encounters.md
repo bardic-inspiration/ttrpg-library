@@ -39,16 +39,11 @@ choices, not arithmetic).
 - [Kit parts](../../docs/site.md#kit-parts): the encounter page's parts in
   order, each ref as its `show` says, the sequence, loot, tables, and the
   `map` part, on screen and in print.
+- [Type registry](../../docs/site.md#type-registry): a range facet over a
+  span, and [Encounters](../../docs/rulesets.md#encounters): the XP and
+  creature type facets and the card.
 
 ## Design
-
-### In the Library
-
-- **Facets:** XP (a range of the encounter's f(Roster) × E; a spawn table's
-  value is the span of its rows, minimum to maximum, and matches a range
-  filter it overlaps), and creature type (the roster's creatures' types).
-  A range facet over a span is new, and serves any type.
-- **Card:** name, XP, creature types, and summary.
 
 ### Generation
 

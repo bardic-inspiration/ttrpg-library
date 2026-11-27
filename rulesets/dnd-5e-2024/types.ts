@@ -710,4 +710,6 @@ export interface DerivedEncounter {
   xp: { min: number; max: number };
   /** A spawn table's XP by row. */
   rows?: Partial<Record<Difficulty, XpSpan>>;
+  /** Its creatures' types, each once, in roster order (a spawn table's rows in difficulty order). */
+  creatureTypes: string[];
 }

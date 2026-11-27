@@ -154,6 +154,18 @@ describe('the gallery', () => {
     expect(await view(`?f.ruleset=starships-and-galaxies&f.stats.orbits=celestial-body/pale-sun`)).toEqual(['harrow', 'grinder', 'veil']);
   });
 
+  it('lifts a span as its minimum and maximum, filters a span by overlap, and sorts it by its minimum', async () => {
+    expect((await setup()).records.find((r) => r.id === 'grinder')!.facets['derived.damage']).toEqual({ min: 1, max: 4 });
+    const bodies = 'f.ruleset=starships-and-galaxies&f.type=starships-and-galaxies/celestial-body';
+    // Grinder's hazards deal 1 to 4, so it overlaps 3..3 and 4..; Pale Sun deals 2 and Veil 3.
+    expect(await view(`?${bodies}&f.derived.damage=3..3`)).toEqual(['grinder', 'veil']);
+    expect(await view(`?${bodies}&f.derived.damage=4..`)).toEqual(['grinder']);
+    expect(await view(`?${bodies}&f.derived.damage=..1`)).toEqual(['grinder']);
+    // Harrow's hazard and Shard deal no damage, so they have no span and sort last either way.
+    expect(await view(`?${bodies}&sort=derived.damage:asc`)).toEqual(['grinder', 'pale-sun', 'veil', 'harrow', 'shard']);
+    expect(await view(`?${bodies}&sort=derived.damage:desc`)).toEqual(['veil', 'pale-sun', 'grinder', 'harrow', 'shard']);
+  });
+
   it('sorts by a derived number and by an ordered enum', async () => {
     expect(await view('?f.ruleset=elementals&f.type=creature&sort=derived.totalCost:desc')).toEqual([
       'magma-wyrm',

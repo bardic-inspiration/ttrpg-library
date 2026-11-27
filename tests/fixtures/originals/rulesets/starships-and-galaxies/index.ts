@@ -27,11 +27,16 @@ export const deriveShip = (stats: ShipStats) => ({
 /** What a trade good or upgrade sells back for: half its value, rounded down to the credit step. */
 export const resale = (stats: ItemStats): number => Math.floor((stats.value * tables.resaleRate) / tables.creditStep) * tables.creditStep;
 
-/** Whether a ship can dock, and the worst hazard on the way in. */
-export function deriveBody(stats: CelestialBodyStats): { dockable: boolean; danger?: string } {
+/** Whether a ship can dock, the worst hazard on the way in, and the span of damage its hazards deal. */
+export function deriveBody(stats: CelestialBodyStats): { dockable: boolean; danger?: string; damage?: { min: number; max: number } } {
   const order = tables.difficultyOrder;
   const worst = (stats.hazards ?? []).map((h) => order.indexOf(h.difficulty)).reduce((a, b) => Math.max(a, b), -1);
-  return { dockable: (stats.services ?? []).length > 0, ...(worst >= 0 ? { danger: order[worst] } : {}) };
+  const damage = (stats.hazards ?? []).flatMap((h) => (h.damage === undefined ? [] : [h.damage]));
+  return {
+    dockable: (stats.services ?? []).length > 0,
+    ...(worst >= 0 ? { danger: order[worst] } : {}),
+    ...(damage.length > 0 ? { damage: { min: Math.min(...damage), max: Math.max(...damage) } } : {}),
+  };
 }
 
 function checkShip(stats: ShipStats): Issue[] {

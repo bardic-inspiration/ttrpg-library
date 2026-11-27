@@ -53,7 +53,8 @@
           { "path": "stats.services", "label": "Services", "kind": "enum", "vocabulary": "service" },
           { "path": "stats.orbits", "label": "Orbits", "kind": "enum", "ref": true },
           { "path": "derived.dockable", "label": "Dockable", "kind": "enum" },
-          { "path": "derived.danger", "label": "Danger", "kind": "enum", "vocabulary": "difficulty", "order": ["routine", "hard", "severe", "extreme"] }
+          { "path": "derived.danger", "label": "Danger", "kind": "enum", "vocabulary": "difficulty", "order": ["routine", "hard", "severe", "extreme"] },
+          { "path": "derived.damage", "label": "Hazard damage", "kind": "range" }
         ],
         "cardFields": ["stats.kind", "derived.danger"],
         "defaultSort": "name:asc",

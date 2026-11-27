@@ -1080,8 +1080,13 @@ add `show` ([Arrangements](content-model.md#arrangements)).
 An encounter derives its side of difficulty (below). Encounters come only by
 request; they have no gap buckets. Its page renders its parts in order
 (`encounter-page`, [Kit parts](site.md#kit-parts)), then a Difficulty
-section ([Difficulty calculator](site.md#difficulty-calculator)), and its
-card shows its name and summary.
+section ([Difficulty calculator](site.md#difficulty-calculator)). In the
+Library its facets are XP, `derived.xp`, a span
+([Type registry](site.md#type-registry)) that matches a range filter it
+overlaps, and creature type, `derived.creatureTypes`, read by the
+`creatureType` vocabulary. XP shares its path with a creature's, so one XP
+filter or sort covers both. Its card shows its name, XP, creature types, and
+summary.
 
 ### Encounter difficulty
 
@@ -1095,7 +1100,9 @@ derives both sides, and no XP is ever written.
   `{ min, max }`, equal for a roster. A spawn table derives `rows`, each row
   `{ min, average, max }` from its dice counts' lowest, average, and highest
   rolls, and `xp` spans the rows, the lowest minimum to the highest maximum.
-  The values aren't rounded.
+  The values aren't rounded. It also derives `creatureTypes`: its
+  creatures' types, each once, in roster order, or a spawn table's rows in
+  difficulty order.
 - **E** is `stats.environment.multiplier`, or 1. A multiplier of 1 is an
   error, since it changes nothing; any other is a warning in the job summary
   for the reviewer to confirm, as an `adjust` is
@@ -1238,7 +1245,8 @@ tests/fixtures/originals/
   - `celestial-body`: a star, planet, moon, or asteroid field, with what it
     orbits, its services (trade, refuel, discovery), and its hazards, each
     environmental (testing a station) or a hostile ship. Derived: whether a
-    ship can dock, and the worst hazard. Checks: a star has no services or
+    ship can dock, the worst hazard, and the span of damage its hazards
+    deal (a span facet, [Type registry](site.md#type-registry)). Checks: a star has no services or
     orbit, anything else orbits, and a moon orbits a planet, anything else a
     star (a link check).
 - **Elementals** (`elementals`): a card game whose colors are fire, water,

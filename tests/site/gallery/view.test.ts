@@ -2,7 +2,8 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { galleryConfig, sortChoices, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
-import { chips, computeView, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
+import { bounds, chips, computeView, hasValues, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
+import { displayValue } from '../../../site/src/lib/gallery/values.ts';
 import { fixtureRecords, record, registry, whole } from './helpers.ts';
 
 let reg: Registry;
@@ -86,6 +87,43 @@ describe('filter logic', () => {
 
   it('ignores a blank query', () => {
     expect(view(fixtures, library, '?q=%20%20')).toEqual(view(fixtures, library, ''));
+  });
+});
+
+describe('a range facet over a span (docs/site.md#type-registry)', () => {
+  // Encounters' XP: a roster's span has equal bounds, a spawn table's spans its rows. A creature's XP shares the path.
+  const records = [
+    record({ id: 'ambush', type: 'encounter', facets: { 'derived.xp': { min: 75, max: 675 } } }),
+    record({ id: 'bugbear', type: 'encounter', facets: { 'derived.xp': { min: 200, max: 200 } } }),
+    record({ id: 'court', type: 'encounter', facets: { 'derived.xp': { min: 1875, max: 1875 } } }),
+    record({ id: 'captain', facets: { 'derived.xp': 450 } }),
+    record({ id: 'blank', type: 'encounter' }),
+  ];
+
+  it('matches a range filter the span overlaps, and a number in it', () => {
+    expect(view(records, library, '?f.derived.xp=500..700&sort=name:asc')).toEqual(['ambush']);
+    expect(view(records, library, '?f.derived.xp=400..500&sort=name:asc')).toEqual(['ambush', 'captain']);
+    expect(view(records, library, '?f.derived.xp=..75&sort=name:asc')).toEqual(['ambush']);
+    expect(view(records, library, '?f.derived.xp=675..&sort=name:asc')).toEqual(['ambush', 'court']);
+    expect(view(records, library, '?f.derived.xp=676..1874')).toEqual([]);
+  });
+
+  it('sorts a span by its minimum, with a missing value last either way', () => {
+    expect(view(records, library, '?sort=derived.xp:asc')).toEqual(['ambush', 'bugbear', 'captain', 'court', 'blank']);
+    expect(view(records, library, '?sort=derived.xp:desc')).toEqual(['court', 'captain', 'bugbear', 'ambush', 'blank']);
+  });
+
+  it('bounds the range by the lowest minimum and the highest maximum, and counts a span as a value', () => {
+    expect(bounds('derived.xp', records)).toEqual({ min: 75, max: 1875 });
+    expect(hasValues('derived.xp', records.slice(0, 1))).toBe(true);
+    expect(hasValues('derived.xp', records.slice(4))).toBe(false);
+  });
+
+  it('reads a span as its bounds, or one number when they are equal', () => {
+    const xp = { path: 'derived.xp', label: 'XP', kind: 'range' } as const;
+    expect(displayValue(xp, { min: 75, max: 675 })).toBe('75–675');
+    expect(displayValue(xp, { min: 200, max: 200 })).toBe('200');
+    expect(displayValue({ ...xp, format: 'cr' }, { min: 0.125, max: 2 })).toBe('1/8–2');
   });
 });
 
