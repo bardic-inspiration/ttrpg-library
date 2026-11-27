@@ -170,10 +170,21 @@ be generated, and the run asks, as for an unknown type.
   about), and a preset creates no dependency: each ref names an entry
   already in the library, and a brief that needs one the library lacks is
   asked about. In the PR's Entries table, its summary field is "—".
-- **Maps:** `map` ([Maps](rulesets.md#maps)). The procedure has no steps
-  yet, since a map is written with its diagram
-  ([Map diagrams](content-model.md#map-diagrams)): a request for maps can't
-  be fulfilled, and the run asks, as for an unknown type.
+- **Maps:** `map` ([Maps](rulesets.md#maps)), by the map guideline. Each
+  map is written with its diagram
+  ([Map diagrams](content-model.md#map-diagrams)), parents before children:
+  lay out the zones for the map's scale, each with its name and its id,
+  the name's slug; write the entry; then draw the diagram at
+  `assets/images/<ruleset>/map/<id>.svg` with a `viewBox`, a `wall`
+  outline, one `zone` element per zone with its `zone-<id>` id and a
+  centered `label`, `door` lines where zones connect, and `feature`
+  shapes, using only the allowed elements and classes and no colors. A
+  diagram error is fixed by redrawing. Maps come only by request (they
+  have no gap buckets), every map is custom (the SRD prints none, so an
+  SRD request for one is asked about), and a map's one dependency is its
+  parent, in the library or written by the same request; a brief that
+  needs a parent neither has is asked about. In the PR's Entries table,
+  its summary field is "—".
 
 A test checks that the table names every registered type once, that each
 procedure has its section, and that a type routed to the character
@@ -209,9 +220,10 @@ validation passes.
    SRD proper noun, and no text field holds a blocklisted term
    ([SRD and custom entries](content-model.md#srd-and-custom-entries),
    [Blocklist](licensing.md#blocklist)). An SRD entry matches the SRD PDF.
-8. **Scope.** The PR changes only the batch's files under `content/` (and
-   `ATTRIBUTION.md` for an import), and the Entries table lists every new or
-   revised entry, dependencies included, matching the count in the title.
+8. **Scope.** The PR changes only the batch's files under `content/`, its
+   maps' diagrams under `assets/images/`, and `ATTRIBUTION.md` for an
+   import, and the Entries table lists every new or revised entry,
+   dependencies included, matching the count in the title.
 
 A test checks that the content PR template has the Self-review section with
 one item per entry above, and that both skills cite this section.

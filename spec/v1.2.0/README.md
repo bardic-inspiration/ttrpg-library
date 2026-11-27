@@ -25,7 +25,6 @@ that its front matter names.
 | Order | Area | Design issue | Builds |
 |---|---|---|---|
 | 3 | [`ui.md`](ui.md) | #402 | The style guide, shared components, and the Library and page revisions |
-| 5 | [`maps.md`](maps.md) | #374 | Placeholder maps: SVG diagrams with zones |
 | 6 | [`encounters.md`](encounters.md) | #374 | The `encounter` type, the kit, and the difficulty calculator |
 | 7 | [`modules.md`](modules.md) | #374 | The `module` type, containment, and its kit parts |
 
