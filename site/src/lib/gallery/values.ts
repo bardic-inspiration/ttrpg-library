@@ -26,15 +26,31 @@ export function enumValues(value: unknown): { key: string; stored: string | numb
     .map((item) => ({ key: String(item).toLowerCase(), stored: item }));
 }
 
-/** A range filter's number, or undefined when the record has none. */
-export const numberAt = (record: LibraryRecord, path: string): number | undefined => {
+/** A span: a range facet's value stored as a minimum and a maximum (docs/site.md#type-registry). */
+export interface Span {
+  min: number;
+  max: number;
+}
+
+/** Whether a stored value is a span, `{ min, max }`. */
+export const isSpan = (value: unknown): value is Span =>
+  typeof value === 'object' && value !== null && typeof (value as Span).min === 'number' && typeof (value as Span).max === 'number';
+
+/** A range filter's value as a span: a number spans itself. Undefined when the record has none. */
+export const spanAt = (record: LibraryRecord, path: string): Span | undefined => {
   const value = valueAt(record, path);
-  return typeof value === 'number' ? value : undefined;
+  if (typeof value === 'number') return { min: value, max: value };
+  return isSpan(value) ? { min: value.min, max: value.max } : undefined;
 };
 
-/** How one stored value of a filter reads. */
-export const displayValue = (def: FilterDef, stored: unknown): string =>
-  (typeof stored === 'string' && def.labels?.[stored]) || formatValue(stored, def.format);
+/** How one stored value of a filter reads: a span as its bounds, "75–675", or one number when they're equal. */
+export const displayValue = (def: FilterDef, stored: unknown): string => {
+  if (isSpan(stored)) {
+    const [min, max] = [formatValue(stored.min, def.format), formatValue(stored.max, def.format)];
+    return min === max ? min : `${min}–${max}`;
+  }
+  return (typeof stored === 'string' && def.labels?.[stored]) || formatValue(stored, def.format);
+};
 
 /**
  * Parses a range bound typed by a reader or read from the URL. Fractions such

@@ -3,7 +3,7 @@
 
 import { NAME, isScopePath, recordDef, typeKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
-import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
+import { displayValue, enumValues, isSpan, spanAt, valueAt } from './values.ts';
 
 /**
  * A filter as matched: its values, and for a groups facet the leaf groups each type's groups
@@ -11,11 +11,14 @@ import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
  */
 export type MatchedValue = FilterValue | { kind: 'enum'; values: string[]; byType: Map<string, string[]> };
 
-/** Whether one record passes one filter. A record missing the value never matches. */
+/**
+ * Whether one record passes one filter. A record missing the value never matches. A range filter
+ * matches a number in it, or a span that overlaps it.
+ */
 export function matches(record: LibraryRecord, path: string, value: MatchedValue): boolean {
   if (value.kind === 'range') {
-    const n = numberAt(record, path);
-    return n !== undefined && (value.min === undefined || n >= value.min) && (value.max === undefined || n <= value.max);
+    const span = spanAt(record, path);
+    return span !== undefined && (value.min === undefined || span.max >= value.min) && (value.max === undefined || span.min <= value.max);
   }
   const keys = new Set(enumValues(valueAt(record, path)).map((v) => v.key));
   const values = ('byType' in value && value.byType.get(typeKey(record.ruleset, record.type))) || value.values;
@@ -85,12 +88,13 @@ const compareIdentity = (a: LibraryRecord, b: LibraryRecord) =>
   compareCode(a.ruleset, b.ruleset) || compareCode(a.type, b.type) || compareCode(a.id, b.id);
 
 /**
- * The value a record sorts by: the first item of an array, an ordered enum by its declared
- * position, a ref by its target's name.
+ * The value a record sorts by: the first item of an array, a span by its minimum, an ordered enum
+ * by its declared position, a ref by its target's name.
  */
 function sortValue(record: LibraryRecord, key: SortKey, def: FilterDef | undefined): string | number | boolean | undefined {
   let value = valueAt(record, key.path);
   if (Array.isArray(value)) value = value[0];
+  if (isSpan(value)) return value.min;
   if (typeof value === 'string' && def?.ref) return displayValue(def, value);
   if (typeof value === 'string' && def?.order) {
     const i = def.order.indexOf(value);
@@ -152,15 +156,15 @@ export function chips(def: FilterDef, scoped: LibraryRecord[], others: LibraryRe
     });
 }
 
-/** The lowest and highest value of a range filter among the records. */
+/** The lowest and highest value of a range filter among the records, a span's minimum and maximum included. */
 export function bounds(path: string, scoped: LibraryRecord[]): { min: number; max: number } | undefined {
-  const values = scoped.map((r) => numberAt(r, path)).filter((n): n is number => n !== undefined);
-  return values.length > 0 ? { min: Math.min(...values), max: Math.max(...values) } : undefined;
+  const spans = scoped.map((r) => spanAt(r, path)).filter((s) => s !== undefined);
+  return spans.length > 0 ? { min: Math.min(...spans.map((s) => s.min)), max: Math.max(...spans.map((s) => s.max)) } : undefined;
 }
 
-/** Whether any record has a value at this path. */
+/** Whether any record has a value at this path, a span included. */
 export const hasValues = (path: string, records: LibraryRecord[]): boolean =>
-  records.some((r) => enumValues(valueAt(r, path)).length > 0);
+  records.some((r) => isSpan(valueAt(r, path)) || enumValues(valueAt(r, path)).length > 0);
 
 export interface GalleryView {
   results: LibraryRecord[];

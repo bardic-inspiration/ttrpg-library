@@ -14,7 +14,7 @@ import { entryZones, type Link } from '../validate/refs.ts';
 import { loadRegistry, loadRuleset, RULESETS_ROOT } from '../validate/schema.ts';
 import { cardedPrimitives, ruleKey, rulePaths, ruleNames, type Primitive } from '../../lib/rules.ts';
 import { isFlag, type Schema, type SchemaSet } from './schema-walk.ts';
-import { PUBLISHER } from '../../rulesets/module.ts';
+import { linkedLibrary, PUBLISHER, type LinkedLibrary, type RulesetModule } from '../../rulesets/module.ts';
 
 /** One facet in config/types.json (docs/site.md#type-registry). */
 export interface Facet {
@@ -184,9 +184,27 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
   };
   const namesOf = (refs: Link[]) => Object.fromEntries(refs.flatMap(({ key }) => (nameOf.has(key) ? [[key, nameOf.get(key)!]] : [])));
 
+  // Facets read the values a derivation that reads other entries adds too (docs/site.md#index-build), such as
+  // an encounter's XP from its creatures, from each ruleset's linked library, made once, as the site makes it.
+  const libraries = new Map<string, LinkedLibrary>();
+  const modules = new Map<string, Promise<RulesetModule | undefined>>();
+  const linkedOf = async (entry: ValidEntry['entry']): Promise<Record<string, unknown>> => {
+    let loading = modules.get(entry.ruleset);
+    if (!loading) modules.set(entry.ruleset, (loading = loadRuleset(entry.ruleset, rulesetsRoot).then((r) => r?.module)));
+    const module = await loading;
+    if (!module?.deriveLinked) return {};
+    let library = libraries.get(entry.ruleset);
+    if (!library) {
+      const own = [...entries, ...components].map((e) => e.entry).filter((e) => e.ruleset === entry.ruleset);
+      libraries.set(entry.ruleset, (library = linkedLibrary(own, rules.find((r) => r.ruleset === entry.ruleset))));
+    }
+    return module.deriveLinked(entry.type, `${entry.type}/${entry.id}`, entry.stats, library);
+  };
+
   const rows: { record: LibraryRecord; file: string; bundle: ExportBundle }[] = [];
   for (const item of entries) {
     const { entry } = item;
+    const derived = { ...item.derived, ...(await linkedOf(entry)) };
     const config = registry[entry.ruleset]?.types[entry.type];
     const meta = entry.meta as { createdAt: string };
     rows.push({
@@ -201,7 +219,7 @@ export async function buildIndex(root: string, options: BuildOptions = {}): Prom
         url: `${SITE_BASE}${entry.ruleset}/${entry.type}/${entry.id}/`,
         image: typeof entry.image === 'string' ? entry.image : null,
         diagram: await diagramOf(entry),
-        facets: facetValues({ stats: entry.stats, derived: item.derived }, config?.facets ?? [], await schemasFor(entry.ruleset, entry.type)),
+        facets: facetValues({ stats: entry.stats, derived }, config?.facets ?? [], await schemasFor(entry.ruleset, entry.type)),
         createdAt: meta.createdAt,
         refs: item.refs,
         refBy: item.refBy,

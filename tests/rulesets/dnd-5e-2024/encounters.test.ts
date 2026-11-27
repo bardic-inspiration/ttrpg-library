@@ -5,7 +5,15 @@
 import { copyFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import { h } from 'preact';
+import { renderToString } from 'preact-render-to-string';
+import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { validateLibrary } from '../../../scripts/validate/index.ts';
+import Gallery from '../../../site/src/components/gallery/Gallery.tsx';
+import { galleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
+import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
+import { computeView } from '../../../site/src/lib/gallery/view.ts';
+import registryJson from '../../../config/types.json' with { type: 'json' };
 import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { countSpan, difficultyOf, lowestCount, partyBudget } from '../../../rulesets/dnd-5e-2024/encounters.ts';
 import { linkedLibrary, type LinkedEntry } from '../../../rulesets/module.ts';
@@ -38,15 +46,21 @@ afterEach(async () => {
 /** Validating the whole library takes a few seconds; Vitest's 5 s default is too tight. */
 const VALIDATION_TIMEOUT = 30_000;
 
-/** Validates the library with the fixtures, after `change` edits the entries. */
-async function validate(change: (entries: Record<string, any>[]) => void = () => {}) {
-  const entries = await all();
-  change(entries);
+/** The library with the fixtures in a temporary repo, the map fixtures' diagrams beside it. */
+async function fixtureLibrary(entries: Record<string, any>[]) {
   const lib = await tempLibrary(entries);
   temps.push(lib.repo);
   const images = join(lib.repo, 'assets/images/dnd-5e-2024/map');
   await mkdir(images, { recursive: true });
   for (const svg of (await readdir(MAPS)).filter((f) => f.endsWith('.svg') && f !== 'broken-weir.svg')) await copyFile(join(MAPS, svg), join(images, svg));
+  return lib;
+}
+
+/** Validates the library with the fixtures, after `change` edits the entries. */
+async function validate(change: (entries: Record<string, any>[]) => void = () => {}) {
+  const entries = await all();
+  change(entries);
+  const lib = await fixtureLibrary(entries);
   const result = await validateLibrary(lib.content, { assetsRoot: lib.repo });
   const ofEncounters = (issues: { file: string; message: string }[]) => issues.filter((i) => i.file.includes('/encounter/')).map((i) => `${i.file.replace(/^.*\/encounter\//, '')}: ${i.message}`);
   return { errors: result.errors.map((e) => `${e.file}: ${e.message}`), encounterErrors: ofEncounters(result.errors), result };
@@ -245,18 +259,19 @@ describe('difficulty', () => {
 
   it('gives the SRD budget examples: 200 XP is Low for four level 1 characters, 1,125 XP Moderate for five level 3', async () => {
     const bugbear = await derived('bugbear-warrior-alone');
-    expect(bugbear).toEqual({ multiplier: 1, xp: { min: 200, max: 200 } });
+    expect(bugbear).toEqual({ multiplier: 1, xp: { min: 200, max: 200 }, creatureTypes: ['fey'] });
     expect(partyBudget([1, 1, 1, 1], tables)).toEqual({ low: 200, moderate: 300, high: 400 });
     expect(difficultyOf(200, partyBudget([1, 1, 1, 1], tables))).toBe('low');
 
     const grove = await derived('druids-and-stirges');
     expect(grove.xp).toEqual({ min: 1125, max: 1125 });
+    expect(grove.creatureTypes).toEqual(['humanoid', 'monstrosity']);
     expect(difficultyOf(1125, partyBudget([3, 3, 3, 3, 3], tables))).toBe('moderate');
   }, VALIDATION_TIMEOUT);
 
   it("multiplies the boss fight's XP by its E", async () => {
     // The Warren King (CR 4, 1,100 XP), a hexer and a boss (CR 1, 200 XP each), times 1.25.
-    expect(await derived('warren-kings-court')).toEqual({ multiplier: 1.25, xp: { min: 1875, max: 1875 } });
+    expect(await derived('warren-kings-court')).toEqual({ multiplier: 1.25, xp: { min: 1875, max: 1875 }, creatureTypes: ['fey'] });
   }, VALIDATION_TIMEOUT);
 
   it("gives a spawn table each row's minimum, average, and maximum, and the span of its rows", async () => {
@@ -269,6 +284,7 @@ describe('difficulty', () => {
         moderate: { min: 75, average: 150, max: 225 },
         high: { min: 550, average: 612.5, max: 675 },
       },
+      creatureTypes: ['humanoid'],
     });
   }, VALIDATION_TIMEOUT);
 
@@ -296,5 +312,56 @@ describe('difficulty', () => {
       expect(row.low < row.moderate && row.moderate < row.high, `level ${i + 1}`).toBe(true);
       if (i > 0) expect(row.low > tables.xpBudgetPerCharacter[i - 1]!.low, `level ${i + 1}`).toBe(true);
     }
+  });
+});
+
+describe('in the Library (docs/site.md#type-registry)', { timeout: VALIDATION_TIMEOUT }, () => {
+  let indexed: Promise<LibraryRecord[]> | undefined;
+  /** The index's encounter records, built from the library with the fixtures. */
+  const encounters = () =>
+    (indexed ??= (async () => {
+      const lib = await fixtureLibrary(await all());
+      const { errors, records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
+      if (errors.length > 0) throw new Error(errors.map((e) => e.message).join('\n'));
+      return records.filter((r) => r.type === 'encounter') as LibraryRecord[];
+    })());
+  const config = galleryConfig(registryJson as unknown as Registry);
+  const view = async (query: string) =>
+    computeView(await encounters(), config, parseQuery(`?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/encounter&${query}`, config)).results.map((r) => r.id);
+
+  it("lifts XP as a span, a spawn table's across its rows, and the roster's creature types", async () => {
+    const facets = Object.fromEntries((await encounters()).map((r) => [r.id, r.facets]));
+    expect(facets['bandit-ambush']).toEqual({ 'derived.xp': { min: 75, max: 675 }, 'derived.creatureTypes': ['humanoid'] });
+    expect(facets['bugbear-warrior-alone']).toEqual({ 'derived.xp': { min: 200, max: 200 }, 'derived.creatureTypes': ['fey'] });
+    expect(facets['druids-and-stirges']).toEqual({ 'derived.xp': { min: 1125, max: 1125 }, 'derived.creatureTypes': ['humanoid', 'monstrosity'] });
+    expect(facets['warren-kings-court']).toEqual({ 'derived.xp': { min: 1875, max: 1875 }, 'derived.creatureTypes': ['fey'] });
+  });
+
+  it('filters the cases by XP, a spawn table matching a range its span overlaps, and by creature type', async () => {
+    expect(await view('f.derived.xp=500..700')).toEqual(['bandit-ambush']);
+    expect(await view('f.derived.xp=..200&sort=derived.xp:asc')).toEqual(['bandit-ambush', 'bugbear-warrior-alone']);
+    expect(await view('f.derived.xp=1000..')).toEqual(['druids-and-stirges', 'warren-kings-court']);
+    expect(await view('f.derived.creatureTypes=fey')).toEqual(['bugbear-warrior-alone', 'warren-kings-court']);
+    expect(await view('f.derived.creatureTypes=humanoid&f.derived.xp=1000..')).toEqual(['druids-and-stirges']);
+  });
+
+  it('sorts by XP, a span by its minimum', async () => {
+    expect(await view('sort=derived.xp:desc')).toEqual(['warren-kings-court', 'druids-and-stirges', 'bugbear-warrior-alone', 'bandit-ambush']);
+  });
+
+  it('shows name, XP, creature types, and summary on the card', async () => {
+    const records = await encounters();
+    const html = renderToString(
+      h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records, initialQuery: '?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/encounter' }),
+    );
+    const ambush = records.find((r) => r.id === 'bandit-ambush')!;
+    const card = html.slice(html.indexOf(`id="card-encounter-bandit-ambush-name"`));
+    expect(card).toContain(ambush.name);
+    expect(card).toContain('<dt>XP</dt><dd>75–675</dd>');
+    expect(card).toContain('<dt>Creature type</dt><dd>Humanoid</dd>');
+    expect(card).toContain(ambush.summary);
+    const grove = html.slice(html.indexOf(`id="card-encounter-druids-and-stirges-name"`));
+    expect(grove).toContain('<dt>XP</dt><dd>1125</dd>');
+    expect(grove).toContain('<dt>Creature type</dt><dd>Humanoid, Monstrosity</dd>');
   });
 });

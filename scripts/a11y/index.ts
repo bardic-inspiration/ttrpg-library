@@ -28,6 +28,8 @@ function filterFor(record: IndexRecord): string | undefined {
   for (const [path, value] of Object.entries(record.facets)) {
     const first = Array.isArray(value) ? value[0] : value;
     if (typeof first === 'number') return `f.${path}=${first}..${first}`;
+    const span = first as { min?: unknown; max?: unknown } | null;
+    if (typeof span?.min === 'number' && typeof span.max === 'number') return `f.${path}=${span.min}..${span.max}`;
     if (typeof first === 'string') return `f.${path}=${encodeURIComponent(first)}`;
   }
   return undefined;

@@ -33,7 +33,12 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
 
 A facet's `kind` is `range` (numbers) or `enum` (strings, string arrays,
-booleans); an omitted optional flag reads as `false`. A path through an
+booleans); an omitted optional flag reads as `false`. A range facet's value
+may be a **span**, stored as `{ "min": …, "max": … }`, for an entry whose
+value runs between two bounds: it matches a range filter it overlaps, sorts
+by its minimum, widens the filter's bounds to its own, and reads as its
+bounds, "75–675", or one number when they're equal. Any type may use one; an
+encounter's `derived.xp` is one ([Encounter difficulty](rulesets.md#encounter-difficulty)). A path through an
 array of objects reads the rest of the path in each item: a character's
 `stats.classes.class` is every class it has, nested arrays flatten, each
 value is kept once in first-seen order, and the facet is left out when no
@@ -96,7 +101,10 @@ path, checks it ([Map diagrams](content-model.md#map-diagrams)), and leaves out
 its `<title>`, ids, comments, and declaration, so the card can place it
 inline, where the site's CSS colors it. `facets` holds
 the registry's facet paths in registry order, read from `stats` and the
-derived values. A facet whose optional value is omitted is left out, except
+derived values, the ones a derivation that reads other entries adds
+(`deriveLinked`, [The ruleset module](rulesets.md#the-ruleset-module))
+included: the build makes each ruleset's linked library once, as the site
+does. The export bundle's `derived` is the entry's own. A facet whose optional value is omitted is left out, except
 an optional flag, which reads as `false`.
 
 A component ([content-model.md](content-model.md#components)) has no record,
@@ -528,7 +536,7 @@ author is checked, since those add entries from any ruleset. A path two checked 
 choice, labeled as the first of them in registry order labels it. When a
 filter change leaves the chosen sort off the menu, the sort returns to
 `name:asc`. Ordered enums sort by declared order, an array
-facet (size) by its first item. Ties break by name, then ruleset, type, and id,
+facet (size) by its first item, a span by its minimum. Ties break by name, then ruleset, type, and id,
 so the order never depends on `library.json` order. Entries missing the sort
 value go last in either direction. The Library starts on `name:asc`.
 

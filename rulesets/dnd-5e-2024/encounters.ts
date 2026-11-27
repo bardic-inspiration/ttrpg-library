@@ -44,19 +44,23 @@ function rosterXp(lines: { ref: string; count: number | string }[], multiplier: 
 
 /**
  * The encounter's side of difficulty: E, and f(Roster) × E for its roster, or for each spawn table row
- * with the span of the rows. A creature's XP is the one its own derivation gives for its CR.
+ * with the span of the rows. A creature's XP is the one its own derivation gives for its CR. Its creature
+ * types are its creatures', each once, in roster order (a spawn table's rows in difficulty order), for the
+ * Library's facet (docs/site.md#type-registry).
  */
 export function deriveEncounterLinked(stats: EncounterStats, library: LinkedLibrary, tables: Tables): DerivedEncounter {
   const multiplier = stats.environment?.multiplier ?? 1;
-  const xpOf = (ref: string) => {
+  const creature = (ref: string) => {
     const found = library.resolve(ref);
     if (!found) throw new Error(`encounter: ${ref} doesn't resolve`);
-    return deriveCreature(found.stats as CreatureStats, tables).xp;
+    return found.stats as CreatureStats;
   };
+  const xpOf = (ref: string) => deriveCreature(creature(ref), tables).xp;
+  const typesOf = (lines: { ref: string }[]) => [...new Set(lines.map((line) => creature(line.ref).creatureType))];
   const arranged = stats.parts.find((p) => p.part === 'roster' || p.part === 'spawn-table');
   if (arranged?.part === 'roster') {
     const { min, max } = rosterXp(arranged.creatures, multiplier, xpOf);
-    return { multiplier, xp: { min, max } };
+    return { multiplier, xp: { min, max }, creatureTypes: typesOf(arranged.creatures) };
   }
   const rows: Partial<Record<Difficulty, XpSpan>> = {};
   if (arranged?.part === 'spawn-table') {
@@ -67,7 +71,8 @@ export function deriveEncounterLinked(stats: EncounterStats, library: LinkedLibr
   }
   const spans = Object.values(rows);
   const xp = spans.length === 0 ? { min: 0, max: 0 } : { min: Math.min(...spans.map((s) => s.min)), max: Math.max(...spans.map((s) => s.max)) };
-  return { multiplier, xp, rows };
+  const lines = arranged?.part === 'spawn-table' ? DIFFICULTIES.flatMap((d) => arranged.rows[d]?.creatures ?? []) : [];
+  return { multiplier, xp, rows, creatureTypes: typesOf(lines) };
 }
 
 /** An encounter has one roster or spawn table, a spawn table's ranges fit its roll, dice counts roll at least 1, a table part holds one table, and E isn't 1 (a warning otherwise). */

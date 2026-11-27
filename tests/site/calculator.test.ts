@@ -13,9 +13,9 @@ import { DEFAULT_PARTY, PARTY_STORAGE_KEY, readParty, resetPageParty, writeParty
 import type { DerivedEncounter, EncounterStats } from '../../rulesets/dnd-5e-2024/types.ts';
 
 // The encounters' derived values, as tests/rulesets/dnd-5e-2024/encounters.test.ts derives them.
-const BUGBEAR: DerivedEncounter = { multiplier: 1, xp: { min: 200, max: 200 } };
-const GROVE: DerivedEncounter = { multiplier: 1, xp: { min: 1125, max: 1125 } };
-const COURT: DerivedEncounter = { multiplier: 1.25, xp: { min: 1875, max: 1875 } };
+const BUGBEAR: DerivedEncounter = { multiplier: 1, xp: { min: 200, max: 200 }, creatureTypes: ['fey'] };
+const GROVE: DerivedEncounter = { multiplier: 1, xp: { min: 1125, max: 1125 }, creatureTypes: ['humanoid', 'monstrosity'] };
+const COURT: DerivedEncounter = { multiplier: 1.25, xp: { min: 1875, max: 1875 }, creatureTypes: ['fey'] };
 const AMBUSH: DerivedEncounter = {
   multiplier: 1,
   xp: { min: 75, max: 675 },
@@ -24,6 +24,7 @@ const AMBUSH: DerivedEncounter = {
     moderate: { min: 75, average: 150, max: 225 },
     high: { min: 550, average: 612.5, max: 675 },
   },
+  creatureTypes: ['humanoid'],
 };
 const NO_ENVIRONMENT: EncounterStats = { parts: [] };
 const COURT_STATS: EncounterStats = { parts: [], environment: { multiplier: 1.25, note: 'Waist-deep water' } };
