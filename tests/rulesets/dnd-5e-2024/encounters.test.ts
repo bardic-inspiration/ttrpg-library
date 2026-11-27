@@ -18,7 +18,7 @@ import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { countSpan, lowestCount } from '../../../rulesets/dnd-5e-2024/encounters.ts';
 import { difficultyOf, partyBudget } from '../../../rulesets/dnd-5e-2024/difficulty.ts';
 import { linkedLibrary, type LinkedEntry } from '../../../rulesets/module.ts';
-import { FIXTURES, tempLibrary } from '../../helpers.ts';
+import { FIXTURES, libraryWithout, tempLibrary } from '../../helpers.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const CONTENT = join(ROOT, 'content/dnd-5e-2024');
@@ -29,13 +29,12 @@ const jsonIn = async (path: string) => Promise.all((await readdir(path)).filter(
 
 /**
  * The encounter fixtures (with the custom creature the bandit attack adds), the valid map fixtures,
- * and the whole library; the library has no encounters or maps of its own to stand in for.
+ * and the library minus its encounters and maps, and the entries that link to them.
  */
-const loadAll = async () => [
-  ...(await jsonIn(ENCOUNTERS)),
-  ...(await jsonIn(MAPS)).filter((m) => m.id !== 'broken-weir'),
-  ...(await Promise.all((await readdir(CONTENT)).filter((t) => t !== 'encounter' && t !== 'map').map((t) => jsonIn(join(CONTENT, t))))).flat(),
-];
+const loadAll = async () => {
+  const fixtures = [...(await jsonIn(ENCOUNTERS)), ...(await jsonIn(MAPS)).filter((m) => m.id !== 'broken-weir')];
+  return [...fixtures, ...(await libraryWithout(['encounter', 'map'], fixtures))];
+};
 let library: ReturnType<typeof loadAll> | undefined;
 const all = async () => structuredClone(await (library ??= loadAll()));
 

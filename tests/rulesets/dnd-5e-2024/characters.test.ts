@@ -14,7 +14,7 @@ import { rulesData } from '../../../site/src/lib/rules.ts';
 import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { DerivedCharacter, LinkedCharacter } from '../../../rulesets/dnd-5e-2024/types.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
-import { FIXTURES, tempLibrary } from '../../helpers.ts';
+import { FIXTURES, libraryWithout, tempLibrary } from '../../helpers.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const CONTENT = join(ROOT, 'content/dnd-5e-2024');
@@ -22,11 +22,11 @@ const readJson = async (path: string) => JSON.parse(await readFile(path, 'utf8')
 const dir = async (path: string) =>
   Promise.all((await readdir(path)).sort().map((f) => readJson(join(path, f)) as Promise<Entry & Record<string, any>>));
 
-/** The fixtures and the whole library, which they name; the library has no characters of its own to stand in for. */
-const loadAll = async () => [
-  ...(await dir(join(FIXTURES, 'character'))),
-  ...(await Promise.all((await readdir(CONTENT)).filter((type) => type !== 'character').map((type) => dir(join(CONTENT, type))))).flat(),
-];
+/** The fixtures and the library minus its characters, and the entries that link to them. */
+const loadAll = async () => {
+  const fixtures = await dir(join(FIXTURES, 'character'));
+  return [...fixtures, ...(await libraryWithout<Entry & Record<string, any>>(['character'], fixtures))];
+};
 let library: ReturnType<typeof loadAll> | undefined;
 const all = async () => structuredClone(await (library ??= loadAll()));
 

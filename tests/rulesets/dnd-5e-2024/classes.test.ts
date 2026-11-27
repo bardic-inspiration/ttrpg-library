@@ -16,7 +16,7 @@ import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { ClassStats, DerivedClass, LinkedClass, SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
 import { linkedLibrary } from '../../../rulesets/module.ts';
-import { FIXTURES, tempLibrary } from '../../helpers.ts';
+import { FIXTURES, libraryWithout, tempLibrary } from '../../helpers.ts';
 import { withoutContents } from '../../site/library-fixtures.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
@@ -33,13 +33,13 @@ const fixtures = async () => [
 /**
  * The fixtures and the rest of the library: its SRD spells, which the features name and the spell
  * list derives from, and every other entry they or their links reach. The library's own classes and
- * their components stay out, since the fixtures stand in for the Sorcerer and Draconic Sorcery.
+ * their components stay out, and so do the entries that link to them (characters name classes), since the fixtures stand in for the Sorcerer and Draconic Sorcery.
  */
 const FIXTURE_TYPES = new Set(['class', 'class-feature', 'class-option', 'subclass']);
-const loadWithSpells = async () => [
-  ...(await fixtures()),
-  ...(await Promise.all((await readdir(CONTENT)).filter((type) => !FIXTURE_TYPES.has(type)).map((type) => dir(join(CONTENT, type))))).flat(),
-];
+const loadWithSpells = async () => {
+  const own = await fixtures();
+  return [...own, ...(await libraryWithout<Entry & Record<string, any>>([...FIXTURE_TYPES], own))];
+};
 /** Read once per file; each caller gets its own copy, so a test's changes stay its own. */
 let library: ReturnType<typeof loadWithSpells> | undefined;
 const withSpells = async () => structuredClone(await (library ??= loadWithSpells()));
