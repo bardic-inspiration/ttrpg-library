@@ -50,4 +50,4 @@ Every encounter is custom: the SRD prints none
   written by the same request, before the encounter. A roster names its
   creatures by ref; a character in the scene is a `{ref:…}` in its text, not
   a roster line.
-- An encounter doesn't name the module it's part of: the module lists it.
+- An encounter doesn't name an arrangement it's part of: the container lists it.
