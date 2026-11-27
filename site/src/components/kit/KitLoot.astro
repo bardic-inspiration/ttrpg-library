@@ -1,0 +1,54 @@
+---
+// A `loot` part (docs/site.md#kit-parts): its rows, low to high, each its difficulty and then its
+// coins ("4d6 × 10 GP") and its items with their counts; then the cards it shows.
+import { byDifficulty, coinsText, difficultyName, refView, type KitContext } from '../../lib/kit';
+import type { Difficulty, LootRow } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import KitCards from './KitCards.astro';
+import KitRef from './KitRef.astro';
+
+interface Props {
+  rows: Partial<Record<Difficulty, LootRow>>;
+  kit: KitContext;
+}
+
+const { rows, kit } = Astro.props;
+---
+<dl class="kit-loot">
+  {byDifficulty(rows).map(({ difficulty, row }) => (
+    <div class="kit-loot__row">
+      <dt>{difficultyName(difficulty)}</dt>
+      <dd>
+        {row.coins && coinsText(row.coins)}
+        {(row.items ?? []).map((item, i) => (
+          <>{(i > 0 || row.coins) && ', '}<KitRef view={refView(item)} kit={kit} /></>
+        ))}
+      </dd>
+    </div>
+  ))}
+</dl>
+<KitCards part={{ part: 'loot', rows }} kit={kit} />
+
+<style>
+  @layer components {
+    .kit-loot {
+      display: grid;
+      gap: var(--space-3xs);
+    }
+
+    .kit-loot__row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 var(--space-2xs);
+      break-inside: avoid;
+
+      & dt {
+        font-family: var(--statblock-label-font);
+        font-weight: var(--font-weight-strong);
+
+        &::after {
+          content: ':';
+        }
+      }
+    }
+  }
+</style>

@@ -61,6 +61,10 @@
     --map-zone-target-fill: color-mix(in srgb, var(--accent) 25%, var(--color-surface));
     --map-zone-target-bg: color-mix(in srgb, var(--accent) 10%, var(--color-surface));
 
+    /* An arrangement's kit parts (docs/site.md#kit-parts): a ref's thumbnail, and boxed read-aloud text. */
+    --kit-thumbnail-size: 4rem;
+    --kit-read-aloud-bg: color-mix(in srgb, var(--accent) 8%, var(--color-surface));
+
     /* A detail page's summary line, under its title. */
     --entry-summary-size: var(--text-h4);
 

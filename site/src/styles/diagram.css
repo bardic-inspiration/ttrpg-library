@@ -38,5 +38,10 @@
       font-size: var(--map-label-size);
       text-anchor: middle;
     }
+
+    /* The zone a thumbnail means (a kit part's map of one zone). */
+    & [data-target] {
+      fill: var(--map-zone-target-fill);
+    }
   }
 }

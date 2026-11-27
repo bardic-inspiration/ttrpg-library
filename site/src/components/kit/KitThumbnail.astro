@@ -1,0 +1,53 @@
+---
+// A ref's small form in a kit part (docs/site.md#kit-parts): a map's diagram, its zone marked when
+// the ref names one, or an entry's art. A target with neither shows only its line. It's decoration
+// beside the name, so it's hidden from assistive technology.
+import { thumbnailDiagram } from '../../../../lib/diagram';
+import { entryKey } from '../../../../scripts/validate/refs';
+import type { KitContext } from '../../lib/kit';
+import type { LoadedEntry } from '../../lib/library';
+import { url } from '../../lib/url';
+
+interface Props {
+  loaded: LoadedEntry;
+  zone?: string;
+  kit: KitContext;
+}
+
+const { loaded, zone, kit } = Astro.props;
+const { entry } = loaded;
+const zones = (entry.stats as { zones?: { id: string }[] }).zones;
+const diagram = zones ? thumbnailDiagram(kit.diagram(entryKey(entry)), zones.map((z) => z.id), entry.name, zone) : undefined;
+---
+{diagram ? (
+  <span class="kit-thumbnail kit-thumbnail--map" set:html={diagram} />
+) : entry.image ? (
+  <img class="kit-thumbnail" src={url(entry.image)} alt="" />
+) : null}
+
+<style>
+  @layer components {
+    .kit-thumbnail {
+      display: block;
+      inline-size: var(--kit-thumbnail-size);
+      aspect-ratio: var(--art-aspect);
+      object-fit: cover;
+      border-radius: var(--card-radius);
+    }
+
+    .kit-thumbnail--map {
+      display: grid;
+      padding: var(--space-3xs);
+      background: var(--map-wall-fill);
+
+      & :global(.card__diagram) {
+        block-size: 100%;
+      }
+
+      /* Too small to read; the map's page labels the zones. */
+      & :global(.diagram .label) {
+        display: none;
+      }
+    }
+  }
+</style>

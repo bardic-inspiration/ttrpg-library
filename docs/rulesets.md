@@ -1078,9 +1078,10 @@ add `show` ([Arrangements](content-model.md#arrangements)).
   `{ref:…}` in its text, since characters have no XP.
 
 An encounter derives its side of difficulty (below). Encounters come only by
-request; they have no gap buckets. Its page is the generic detail page with
-a Difficulty section ([Difficulty calculator](site.md#difficulty-calculator)),
-and its card shows its name and summary.
+request; they have no gap buckets. Its page renders its parts in order
+(`encounter-page`, [Kit parts](site.md#kit-parts)), then a Difficulty
+section ([Difficulty calculator](site.md#difficulty-calculator)), and its
+card shows its name and summary.
 
 ### Encounter difficulty
 

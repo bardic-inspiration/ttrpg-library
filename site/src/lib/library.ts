@@ -37,6 +37,8 @@ export interface LoadedEntry {
   refBy: Link[];
   /** A page type's components, in the order its stats list them (docs/content-model.md#components). */
   components?: LoadedComponent[];
+  /** The entries an arrangement's parts embed as cards or thumbnails, loaded (docs/content-model.md#arrangements). */
+  shown?: LoadedEntry[];
 }
 
 /** A component, loaded with its parent and shown only on the parent's page. */
@@ -117,7 +119,7 @@ export function loadLibrary(
   // Only an entry of a type that may list a component lists it; any other entry's ref to it is a link.
   const parentsOf = (entry: Entry) => (moduleFor(entry.ruleset).definition.components ?? []).find((c) => c.type === entry.type)?.parents;
   const components = new Map(entries.filter((entry) => parentsOf(entry)).map((entry) => [entryKey(entry), entry]));
-  return entries
+  const loaded: LoadedEntry[] = entries
     .filter((entry) => !components.has(entryKey(entry)))
     .map((entry) => {
       const listed = [...new Set(objectRefs(entry.stats).map((r) => r.ref))].flatMap((key) => {
@@ -127,6 +129,30 @@ export function loadLibrary(
       return listed.length > 0 ? { ...load(entry), components: listed } : load(entry);
     })
     .sort((a, b) => a.entry.name.localeCompare(b.entry.name));
+  // An arrangement loads the entries its parts show as cards or thumbnails, in its own ruleset.
+  const byKey = new Map(loaded.map((l) => [`${l.entry.ruleset}:${entryKey(l.entry)}`, l]));
+  for (const l of loaded) {
+    const shown = shownKeys(l.entry.stats).flatMap((key) => byKey.get(`${l.entry.ruleset}:${key}`) ?? []);
+    if (shown.length > 0) l.shown = shown;
+  }
+  return loaded;
+}
+
+/**
+ * The keys of the entries an arrangement's parts embed (docs/content-model.md#arrangements): each
+ * ref object in `stats.parts` whose `show` is `card` or `thumbnail`, once each.
+ */
+export function shownKeys(stats: unknown): string[] {
+  const found = new Set<string>();
+  const walk = (value: unknown): void => {
+    if (Array.isArray(value)) return value.forEach(walk);
+    if (typeof value !== 'object' || value === null) return;
+    const object = value as Record<string, unknown>;
+    if (typeof object.ref === 'string' && (object.show === 'card' || object.show === 'thumbnail')) found.add(object.ref);
+    Object.values(object).forEach(walk);
+  };
+  walk((stats as { parts?: unknown } | null)?.parts);
+  return [...found];
 }
 
 /** Every component in a loaded library, with its parent. */

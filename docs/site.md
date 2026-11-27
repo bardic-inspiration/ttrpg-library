@@ -647,7 +647,8 @@ thousand entries. Past about 2,000, revisit the index size.
   ([Cart and set actions](#gallery)). A Preact island renders them once
   hydrated, since every export needs JavaScript; a failed export shows a
   message in a polite status region.
-- An encounter's page adds a **Difficulty** section after its template
+- An encounter's page renders its kit parts ([Kit parts](#kit-parts)), then
+  adds a **Difficulty** section after its template
   ([Difficulty calculator](#difficulty-calculator)).
 - `<title>` and Open Graph tags (name, summary, and art when present).
 
@@ -689,7 +690,7 @@ through the ruleset's `difficulty.ts`.
 ### Templates
 
 - One component per type template, `background-card`, `character-profile`, `class-page`,
-  `condition-card`, `creature-stat-block`, `equipment-card`, `feat-card`,
+  `condition-card`, `creature-stat-block`, `encounter-page`, `equipment-card`, `feat-card`,
   `item-card`, `map-page`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
   `stats` and then the ruleset's derived values as one definition list. A derived value is labeled as a stored one is, from its key, and
   listed in the order the ruleset's module returns it. Each text in `stats`
@@ -744,6 +745,53 @@ through the ruleset's `difficulty.ts`.
   Actions, Bonus Actions, and Reactions. Lines display as written; the ability
   table's modifiers and saves come from the derived values.
 - Template tests render components with Astro's container API.
+
+### Kit parts
+
+An arrangement's page renders its kit parts
+([Arrangements](content-model.md#arrangements)) in the order its
+`stats.parts` lists them, each by its shared component in
+`site/src/components/kit/`, so every arrangement reads alike. The
+`encounter-page` template is the encounter's name and summary, then its
+parts (`KitParts`). Each part is a section under its heading, one level below
+the entry's name: Description, Running the Encounter (`dm-guide`),
+Creatures (a roster or spawn table), Sequence, Loot, and Map; a `prose` part
+under its `title`, or none; a `table` under none, since its title is its
+caption. Headings and other composed text come from the phrase book's `kit.`
+sentences and its `coin` vocabulary, through `site/src/lib/kit.ts`.
+
+- **Refs.** Each ref object reads as a line: its count and its name linked
+  (`2 × Bandit`, `1d4+1 × Bandit`), or its name alone when it has no count.
+  As its `show` says, `link` is the line alone; `thumbnail` puts the target's
+  small form before the line, a map's diagram (`thumbnailDiagram`, with a
+  named zone's shape marked `data-target`) or an entry's art, or nothing for
+  a target with neither; and `card` embeds the target's type template after
+  the part, one heading level below its heading, once per target in the order
+  the part first lists it. The detail page, print, and PNG capture load the
+  entries an arrangement shows with it (`shown` on a loaded entry, from
+  `shownKeys` in `site/src/lib/library.ts`).
+- **Text parts** (`prose`, `description`, `dm-guide`) render as rules text;
+  a description, read aloud, is set off as boxed text.
+- **Roster:** its lines, then its cards.
+- **Spawn table:** a table of its rows, low to high, with the roll's die as
+  the first column's header and each row's range on it ("1–2", or "6"), then
+  the difficulty and the row's creature lines; then its cards.
+- **Sequence:** structured, the trigger, then each stage (its name as a
+  heading, its turn loop, and its transition), then the victory condition,
+  each label an inline heading ("***Trigger.***"); or its example, as one
+  prose text. Every node renders its `{ref:…}` tokens as links.
+- **Table:** its text as a table in text renders, with its `title` as the
+  caption ([Templates](#templates)).
+- **Loot:** its rows, low to high, each its difficulty, then its coins
+  ("3d6 SP", "4d6 × 10 GP") and its item lines; then its cards.
+- **Map:** the map, or its zone, as a line linked to the map's page or the
+  zone's anchor, with its thumbnail or its card as its `show` says. `setIn`
+  alone shows nothing in the template; the detail page lists it under "Set
+  in".
+- **Print and capture** follow the page: a card prints as the target's card,
+  in the same mode, and a link reads as its name, in the text's color with no
+  underline. The entry's description, which the detail page shows as lore,
+  follows the parts.
 
 ### Wording
 
