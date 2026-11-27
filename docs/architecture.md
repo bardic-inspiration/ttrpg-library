@@ -95,7 +95,6 @@ tests/                                   Vitest suites and fixtures
 .claude/                                 session settings, hooks, skills, and archived skills
 .github/                                 workflows, labeler, issue and PR templates, Dependabot
 docs/                                    these docs (README.md is the index)
-spec/v1.2.0/                             the version spec: v1.2.0's design not yet built
 spec/tracks/                             development tracks' specs: ongoing design not yet built
 AGENTS.md, CLAUDE.md, README.md          working guide and repo intro
 CHANGELOG.md                             what each release changed (workflow.md "Releases")

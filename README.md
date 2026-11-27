@@ -28,15 +28,15 @@ far:
 - **A redesigned interface** for fast lookup and one-button export.
 - **Import and export with Open5e.**
 
-v1.2.0 is in design ([`spec/v1.2.0/`](spec/v1.2.0/README.md)): characters,
-maps, encounters, and modules, and a revised interface.
+Built on `main` for the next release, v1.2.0: characters, maps, encounters,
+and modules, and a revised interface.
 
 Three development tracks carry on ([`spec/tracks/`](spec/tracks/README.md)):
 
 - **Integrations:** import and export for more open TTRPG formats, for VTTs
   and other sites.
 - **Images:** public domain and openly licensed art on entries.
-- **Rulesets:** a second published ruleset.
+- **Rulesets:** a second published ruleset, and a redesigned Rulesets page.
 
 ## Contributing
 

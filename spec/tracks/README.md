@@ -12,7 +12,7 @@ skill, guideline, or routine prompt cites it.
 |---|---|---|---|
 | Integrations | #315 | [`integrations.md`](integrations.md) | The translators area (#116) and the rest of Milestone 8 (#220) |
 | Images | #316 | [`images.md`](images.md) | The art area (#117) and Milestone 9's art tasks (#221) |
-| Rulesets | #403 | [`rulesets.md`](rulesets.md) | The "second published ruleset" item in #118 |
+| Rulesets | #403 | [`rulesets.md`](rulesets.md) | The "second published ruleset" item in #118, and the Rulesets page redesign (#427) from v1.2.0's UI area |
 
 ## Track files
 

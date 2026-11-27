@@ -2,9 +2,8 @@
 
 How work is done in this repo, by agents or humans. [`docs/`](docs/README.md)
 describes *what is built*, including CI, lanes, labels, and repository
-settings. The v1.2.0 spec, [`spec/v1.2.0/`](spec/v1.2.0/README.md), and the
-development tracks' specs, [`spec/tracks/`](spec/tracks/README.md), hold the
-design that isn't built yet. This file covers *how to work*, and defers to them wherever they
+settings. The development tracks' specs, [`spec/tracks/`](spec/tracks/README.md),
+and a version spec while one is open, hold the design that isn't built yet. This file covers *how to work*, and defers to them wherever they
 overlap.
 
 Sessions start with no memory of earlier ones. Decisions, follow-ups, and
@@ -37,7 +36,7 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
     PR's "Decisions" section. The owner's merge confirms it.
   - If it would, stop that item and ask (the user, or on the issue). For
     version or track design, the question goes into the area's or track's
-    "Open questions" in [`spec/v1.2.0/`](spec/v1.2.0/README.md) or
+    "Open questions" in the version spec or
     [`spec/tracks/`](spec/tracks/README.md) through a small PR, before any
     code that depends on it. Carry on with the items that are clear.
 - **Record decisions where they're made.** A PR that makes a decision lists
@@ -158,11 +157,13 @@ deletes the part it builds, and an open question there stops that part.
 
 ### Version spec
 
-A version's unbuilt design is a folder, [`spec/v1.2.0/`](spec/v1.2.0/README.md),
-with one file per area in build order. Each area becomes a build milestone,
-in that order. It works as a track's file does: an approved design is
-amended by a small PR, a task deletes the part it builds, and an open
-question stops that part.
+A version's unbuilt design is a folder, `spec/v<version>/`, with a README and
+one file per area in build order. Each area becomes a build milestone, in that
+order. It works as a track's file does: an approved design is amended by a
+small PR, a task deletes the part it builds, and an open question stops that
+part. When only its README is left, the version's close-out removes the
+folder, and design still open moves to a track or to the next version's
+"Spec Considerations" issue. No version spec is open now.
 
 ### Testing backlog
 
@@ -191,7 +192,7 @@ Milestone issues, in milestone order (or, when no milestone is open, the
 [`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
 sub-issues (GitHub's order) are one queue. Work earmarked for a future version goes in that version's
 "Spec Considerations" issue (#370 for v2.0.0), outside the queue; work for
-v1.2.0 is an amendment to its spec.
+a version being built is an amendment to its spec.
 
 - **The active queue** is the one open tracking issue labeled `queue`: the
   current milestone, or the "Spot Fixes" issue. It is tied to a version;
