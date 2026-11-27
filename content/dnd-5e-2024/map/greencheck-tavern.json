@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "greencheck-tavern",
+  "name": "Greencheck Tavern",
+  "summary": "A busy roadside tavern of five rooms, with stairs up to guest rooms and down to the cellars.",
+  "description": "The Greencheck has served the crossroads for three generations, and its green-painted shutters are the first thing a traveler sees. Everyone who passes through stops here, which is why the cult is listening.",
+  "stats": {
+    "scale": "dungeon",
+    "zones": [
+      {
+        "id": "front-porch",
+        "name": "Front Porch",
+        "note": "The way in, under a hanging sign painted with a green tick."
+      },
+      {
+        "id": "common-room",
+        "name": "Common Room",
+        "note": "Long tables, a big hearth, and a notice board crowded with work for hire."
+      },
+      {
+        "id": "bar",
+        "name": "Bar",
+        "note": "A scarred oak counter; the keeper hears every rumor first."
+      },
+      {
+        "id": "kitchen",
+        "name": "Kitchen"
+      },
+      {
+        "id": "stairwell",
+        "name": "Stairwell",
+        "note": "Stairs climb to the guest rooms and drop to the cellars."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

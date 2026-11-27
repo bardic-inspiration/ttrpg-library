@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <title>Greencheck Tavern</title>
+  <rect class="wall" x="0" y="0" width="600" height="300" />
+  <g id="zone-front-porch" class="zone">
+    <rect x="10" y="110" width="80" height="80" />
+    <text class="label" x="50" y="154">Front Porch</text>
+  </g>
+  <g id="zone-common-room" class="zone">
+    <rect x="100" y="10" width="240" height="280" />
+    <text class="label" x="220" y="154">Common Room</text>
+  </g>
+  <g id="zone-bar" class="zone">
+    <rect x="350" y="10" width="120" height="130" />
+    <text class="label" x="410" y="79">Bar</text>
+  </g>
+  <g id="zone-kitchen" class="zone">
+    <rect x="480" y="10" width="110" height="130" />
+    <text class="label" x="535" y="79">Kitchen</text>
+  </g>
+  <g id="zone-stairwell" class="zone">
+    <rect x="350" y="150" width="240" height="140" />
+    <text class="label" x="470" y="224">Stairwell</text>
+  </g>
+  <circle class="feature" cx="130" cy="150" r="12" />
+  <line class="door" x1="90" y1="140" x2="100" y2="140" />
+  <line class="door" x1="340" y1="70" x2="350" y2="70" />
+  <line class="door" x1="470" y1="70" x2="480" y2="70" />
+  <line class="door" x1="340" y1="220" x2="350" y2="220" />
+  <line class="door" x1="0" y1="150" x2="10" y2="150" />
+</svg>

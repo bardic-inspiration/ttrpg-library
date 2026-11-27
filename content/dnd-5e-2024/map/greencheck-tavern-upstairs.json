@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "greencheck-tavern-upstairs",
+  "name": "Greencheck Tavern Upstairs",
+  "summary": "The tavern's upper floor: guest rooms, the keeper's room, and a cluttered loft.",
+  "description": "A narrow upper floor under a sloping roof. The floorboards creak in a way every regular knows by heart.",
+  "stats": {
+    "scale": "dungeon",
+    "zones": [
+      {
+        "id": "landing",
+        "name": "Landing",
+        "note": "The top of the stairs, with a window over the road."
+      },
+      {
+        "id": "guest-rooms",
+        "name": "Guest Rooms",
+        "note": "A row of small rooms with straw beds and bolted doors."
+      },
+      {
+        "id": "keepers-room",
+        "name": "Keeper's Room"
+      },
+      {
+        "id": "storage-loft",
+        "name": "Storage Loft",
+        "note": "Crates, spare tables, and a hatch onto the roof."
+      }
+    ],
+    "within": {
+      "ref": "map/greencheck-tavern",
+      "zone": "stairwell"
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

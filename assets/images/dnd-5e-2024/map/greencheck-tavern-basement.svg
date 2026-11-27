@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 260">
+  <title>Greencheck Tavern Basement</title>
+  <rect class="wall" x="0" y="0" width="500" height="260" />
+  <g id="zone-cellar-stairs" class="zone">
+    <rect x="10" y="90" width="110" height="80" />
+    <text class="label" x="65" y="134">Cellar Stairs</text>
+  </g>
+  <g id="zone-ale-cellar" class="zone">
+    <rect x="130" y="10" width="200" height="240" />
+    <text class="label" x="230" y="134">Ale Cellar</text>
+  </g>
+  <g id="zone-root-cellar" class="zone">
+    <rect x="340" y="10" width="150" height="110" />
+    <text class="label" x="415" y="69">Root Cellar</text>
+  </g>
+  <g id="zone-smugglers-nook" class="zone">
+    <rect x="340" y="130" width="150" height="120" />
+    <text class="label" x="415" y="194">Smuggler's Nook</text>
+  </g>
+  <circle class="feature" cx="230" cy="200" r="8" />
+  <line class="door" x1="120" y1="130" x2="130" y2="130" />
+  <line class="door" x1="330" y1="60" x2="340" y2="60" />
+  <line class="door" x1="330" y1="190" x2="340" y2="190" />
+</svg>

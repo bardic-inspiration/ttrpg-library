@@ -1,0 +1,71 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "testmore-vault",
+  "name": "Testmore Vault",
+  "summary": "The cult's strongroom, guarded by two swarms of bone and holding its treasure and its secrets.",
+  "stats": {
+    "setIn": {
+      "ref": "map/testmore-keep",
+      "zone": "vault"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/testmore-keep",
+          "zone": "vault",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "The strongroom smells of old paper. Shelves of sealed ledgers climb every wall, and the bones heaped in the corner start to twitch."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/knucklebone-swarm}s attack anyone who isn't wearing the cult's holy symbol. The ledgers name every cultist in the region, including a regular at the Greencheck Tavern, a hook for whatever comes next."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/knucklebone-swarm",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "low": {
+            "coins": {
+              "dice": "6d6",
+              "times": 10,
+              "unit": "gp"
+            },
+            "items": [
+              {
+                "ref": "item/compass-of-the-hollow-road"
+              },
+              {
+                "ref": "item/salve-of-swift-healing"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

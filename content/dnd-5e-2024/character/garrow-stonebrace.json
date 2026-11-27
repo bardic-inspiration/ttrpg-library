@@ -1,0 +1,104 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "garrow-stonebrace",
+  "name": "Garrow Stonebrace",
+  "summary": "A dwarf soldier and Bulwark Fighter who holds the front line with shield and longsword.",
+  "description": "Garrow stood watch on a border wall until the wall was abandoned and he was not. He took to the roads looking for someone, anyone, worth guarding.",
+  "stats": {
+    "species": {
+      "ref": "species/dwarf"
+    },
+    "background": {
+      "ref": "background/soldier"
+    },
+    "classes": [
+      {
+        "class": {
+          "ref": "class/fighter"
+        },
+        "level": 3,
+        "subclass": {
+          "ref": "subclass/bulwark"
+        }
+      }
+    ],
+    "abilities": {
+      "base": {
+        "str": 15,
+        "dex": 13,
+        "con": 14,
+        "int": 8,
+        "wis": 12,
+        "cha": 10
+      },
+      "background": {
+        "str": 2,
+        "con": 1
+      }
+    },
+    "feats": [
+      {
+        "ref": "feat/savage-attacker",
+        "source": {
+          "ref": "background/soldier"
+        }
+      },
+      {
+        "ref": "feat/defense",
+        "source": {
+          "ref": "class/fighter",
+          "level": 1
+        }
+      }
+    ],
+    "choices": [
+      {
+        "source": {
+          "ref": "class/fighter"
+        },
+        "skills": [
+          "perception",
+          "survival"
+        ]
+      },
+      {
+        "source": {
+          "ref": "background/soldier"
+        },
+        "tools": [
+          {
+            "ref": "equipment/gaming-set",
+            "note": "dice"
+          }
+        ],
+        "languages": [
+          "Dwarvish",
+          "Giant"
+        ]
+      }
+    ],
+    "equipped": [
+      {
+        "ref": "equipment/chain-mail"
+      },
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/longsword"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

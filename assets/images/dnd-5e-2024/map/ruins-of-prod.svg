@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <title>Ruins of Prod</title>
+  <polygon class="wall" points="0,30 30,0 570,0 600,30 600,400 0,400" />
+  <g id="zone-hive-hollow" class="zone">
+    <rect x="190" y="10" width="200" height="130" />
+    <text class="label" x="290" y="79">Hive Hollow</text>
+  </g>
+  <g id="zone-market-square" class="zone">
+    <rect x="190" y="150" width="200" height="130" />
+    <text class="label" x="290" y="219">Market Square</text>
+  </g>
+  <g id="zone-collapsed-chapel" class="zone">
+    <rect x="400" y="150" width="170" height="60" />
+    <text class="label" x="485" y="184">Collapsed Chapel</text>
+  </g>
+  <g id="zone-graveyard" class="zone">
+    <rect x="400" y="220" width="170" height="60" />
+    <text class="label" x="485" y="254">Graveyard</text>
+  </g>
+  <g id="zone-hill-path" class="zone">
+    <rect x="190" y="290" width="200" height="90" />
+    <text class="label" x="290" y="339">Hill Path</text>
+  </g>
+  <circle class="feature" cx="290" cy="215" r="10" />
+  <line class="door" x1="290" y1="280" x2="290" y2="290" />
+  <line class="door" x1="290" y1="140" x2="290" y2="150" />
+  <line class="door" x1="390" y1="180" x2="400" y2="180" />
+  <line class="door" x1="390" y1="250" x2="400" y2="250" />
+  <line class="door" x1="290" y1="380" x2="290" y2="390" />
+</svg>

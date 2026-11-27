@@ -1,0 +1,56 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "gatehouse-watch",
+  "name": "Gatehouse Watch",
+  "summary": "A deathbound zealot and four cultists guard the gate of Testmore Keep.",
+  "stats": {
+    "setIn": {
+      "ref": "map/testmore-keep",
+      "zone": "gatehouse"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/testmore-keep",
+          "zone": "gatehouse",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "A guttering brazier lights the space under the half-raised portcullis. A scarred figure in a stained tabard stands perfectly still in the middle of it, while hooded cultists dice on an upturned shield."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/deathbound-zealot} fights to the death and never retreats past the portcullis. The {ref:creature/cultist}s shout a warning toward the Ritual Chamber on the first round, then flee once the zealot falls."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/deathbound-zealot",
+            "count": 1,
+            "show": "card"
+          },
+          {
+            "ref": "creature/cultist",
+            "count": 4
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}
