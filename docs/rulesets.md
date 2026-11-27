@@ -96,8 +96,9 @@ creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
 `properties` and `mastery` are "Properties" / "Weapons" and "Mastery" /
 "Weapons"; a map's `within` is "Within" / "Child maps"; an encounter's
 parts, a `{ref:…}` token in them included, are "Includes" / "Appears in",
-and its `setIn` "Set in" / "Set here"; any other field, including a
-`{ref:…}` token in text, is
+and its `setIn` "Set in" / "Set here"; a module's contained arrangements
+are "Contains" / "Part of", and its parts' other refs "Includes" / "Appears
+in"; any other field, including a `{ref:…}` token in text, is
 "References" / "Referenced by". These are the ruleset's generic labels
 (`generic` in `RefLabels`): a target listed under a specific label isn't
 listed again under them, so Acid Arrow lists the dragons that cast it, and
