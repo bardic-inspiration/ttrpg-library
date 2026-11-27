@@ -7,7 +7,7 @@ import { checkClass, checkClassFeature, checkClassLinks, checkSubclassLinks, der
 import { deriveCharacter, deriveCharacterLinked } from './characters.ts';
 import { checkMap, checkMapLinks } from './maps.ts';
 import { checkEncounter, deriveEncounterLinked } from './encounters.ts';
-import { checkModule, checkModuleLinks } from './modules.ts';
+import { checkModule, checkModuleLinks, deriveModuleLinked } from './modules.ts';
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
 import { refLabels } from './refs.ts';
@@ -66,6 +66,7 @@ export const ruleset: RulesetModule = {
     if (type === 'class') return { ...deriveClassLinked(key.slice('class/'.length), stats as ClassStats, library) };
     if (type === 'character') return { ...deriveCharacterLinked(stats as CharacterStats, library, tables) };
     if (type === 'encounter') return { ...deriveEncounterLinked(stats as EncounterStats, library, tables) };
+    if (type === 'module') return { ...deriveModuleLinked(stats as ModuleStats, library) };
     return {};
   },
   renderTokens(type, text, derived) {

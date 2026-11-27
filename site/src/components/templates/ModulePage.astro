@@ -1,0 +1,72 @@
+---
+// A module's page (registry template `module-page`, docs/site.md#templates, docs/site.md#kit-parts):
+// its name and summary, its length, levels, and the encounters and maps it contains, then on screen
+// the structured summary of its parts, then its kit parts in order, each ref as its `show` says. In
+// print and capture there's no summary, links read as names, and the description, which the detail
+// page shows itself as lore, follows the parts. A module embedded as a card has no summary or
+// anchors of its own.
+import type { DerivedModule, ModuleStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { present } from '../../lib/display';
+import type { KitContext } from '../../lib/kit';
+import { diagramSource } from '../../lib/map';
+import { renderMarkdown } from '../../lib/markdown';
+import { moduleLines, moduleSummary, partIds, partLabel } from '../../lib/module';
+import type { TemplateProps } from '../../lib/template';
+import { entryKey } from '../../../../scripts/validate/refs';
+import KitParts from '../kit/KitParts.astro';
+import Heading from './parts/Heading.astro';
+import PropertyList from './parts/PropertyList.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+import TableOfContents from './parts/TableOfContents.astro';
+
+type Props = TemplateProps;
+
+const { entry, derived, names, paths, shown = [], diagrams, mode = 'screen', level = 2, embedded = false } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+const s = entry.stats as ModuleStats;
+const d = derived as Partial<DerivedModule>;
+const sub = level + 1;
+const byKey = new Map(shown.map((loaded) => [entryKey(loaded.entry), loaded]));
+const kit: KitContext = {
+  refs,
+  shown: byKey,
+  mode,
+  level: sub,
+  diagram: (key) => diagrams?.get(key) ?? diagramSource(byKey.get(key)!.entry),
+  ...(diagrams && { diagrams }),
+  arrangement: 'module',
+};
+// Only the page's own copy carries the summary and the anchors it links to.
+const anchored = mode === 'screen' && !embedded;
+const labels = s.parts.map((part) => partLabel(part, names));
+const ids = anchored ? partIds(labels) : [];
+const summary = anchored ? moduleSummary(s.parts, d.contents ?? [], ids, labels, entry.ruleset, names) : [];
+---
+<StatBlock name={entry.name} type="module" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={entry.summary} level={level} />
+  <PropertyList lines={moduleLines(s, d)} />
+  <TableOfContents items={summary} />
+  <KitParts parts={s.parts} kit={kit} ids={ids} />
+  {mode !== 'screen' && present(entry.description) && (
+    <section class="kit-part">
+      <Heading level={sub} class="statblock-heading">Lore</Heading>
+      <div class="module-lore" set:html={renderMarkdown(entry.description!, refs)} />
+    </section>
+  )}
+</StatBlock>
+
+<style>
+  @layer components {
+    .module-lore {
+      font-style: italic;
+      color: var(--color-text-muted);
+    }
+
+    /* On paper and in a PNG, a link reads as its name (docs/site.md#kit-parts). */
+    :global(.statblock[data-type='module']:is([data-mode='print'], [data-mode='capture']) a) {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+</style>

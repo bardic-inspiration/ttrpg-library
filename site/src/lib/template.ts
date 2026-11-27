@@ -30,6 +30,8 @@ export interface TemplateProps {
   level?: number;
   /** The entry's ruleset module, for its text tokens; the library's module for `entry.ruleset` by default. */
   module?: Pick<RulesetModule, 'renderTokens'>;
+  /** Embedded in another entry's page as a card: the page's own summary and anchors are the outer page's. */
+  embedded?: boolean;
   /** A page type's components, shown after its template (docs/content-model.md#components). */
   components?: { entry: { type: string; id: string; name: string; stats: unknown } }[];
   /** Refs into the entry, for a template that lists them itself: a map's, by zone (`map-page`). */
@@ -54,6 +56,7 @@ export const TEMPLATES = [
   'feat-card',
   'item-card',
   'map-page',
+  'module-page',
   'species-page',
   'spell-card',
   'subclass-page',

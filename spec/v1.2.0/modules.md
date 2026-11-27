@@ -27,23 +27,6 @@ spell, character, even a class or species) as an ordinary library entry,
 referenced from the module. It never adds rule additions (conditions,
 variant rules, types); those belong to sourcebooks.
 
-### The module page
-
-- **The structured summary** ([`ui.md`](ui.md)) opens the page: its parts
-  in order, with each contained arrangement listed under it.
-- **Each part** renders by its shared component, and each ref as its `show`
-  says: a contained encounter or map shown as a card embeds it; one shown as
-  a link is its name.
-- **Derived lines:** the counts of encounters and maps it contains,
-  through nested modules too.
-- **Print** follows the page: what's embedded prints, and links print as
-  names.
-
-### In the Library
-
-- **Card:** name, length, levels, and summary.
-- **Facets:** none yet. They're judged once modules exist.
-
 ### Generation
 
 `generate`'s module procedure outlines the module, then fills its parts:
@@ -65,8 +48,6 @@ Names are stand-ins.
 
 ## Done when
 
-- The module page renders every part, the structured summary, and each
-  ref's `show`, on screen and in print.
 - `generate` makes a module and its new entries in one batch.
 - The docs describe modules and containment.
 

@@ -44,7 +44,8 @@
     "encounter.multiplier": "×{multiplier}",
     "encounter.multiplierWithNote": "×{multiplier} ({note})",
     "kit.heading.description": "Description",
-    "kit.heading.dm-guide": "Running the Encounter",
+    "kit.heading.dm-guide": "Running the {arrangement}",
+    "kit.heading.hook": "Hook",
     "kit.heading.roster": "Creatures",
     "kit.heading.spawn-table": "Creatures",
     "kit.heading.sequence": "Sequence",
@@ -188,6 +189,15 @@
       "radiant": "Radiant",
       "slashing": "Slashing",
       "thunder": "Thunder"
+    },
+    "arrangement": {
+      "encounter": "Encounter",
+      "module": "Module"
+    },
+    "moduleLength": {
+      "one-shot": "One-shot",
+      "delve": "Delve",
+      "multi-session": "Multi-session"
     },
     "difficulty": {
       "low": "Low",

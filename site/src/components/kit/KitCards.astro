@@ -24,6 +24,9 @@ const cards = partCards(part).flatMap((view) => kit.shown.get(view.entry) ?? [])
           paths={kit.refs.paths}
           components={loaded.components}
           refBy={loaded.refBy}
+          shown={loaded.shown}
+          diagrams={kit.diagrams}
+          embedded
           mode={kit.mode}
           level={kit.level + 1}
           diagram={loaded.entry.type === 'map' ? kit.diagram(`${loaded.entry.type}/${loaded.entry.id}`) : undefined}

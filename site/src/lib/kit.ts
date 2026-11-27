@@ -9,13 +9,15 @@ import { refObjectKey } from '../../../scripts/validate/refs.ts';
 import type { LoadedEntry } from './library.ts';
 import type { TextRefs } from './markdown.ts';
 import type { TemplateMode } from './template.ts';
-import { link, name, sayMarkdown, sayText, toMarkdown } from './wording.ts';
+import { link, name, say, sayText, toMarkdown, withNote } from './wording.ts';
 
 /** A ref object in a part: its target, an optional zone, count, and how it shows. */
 export interface KitRef {
   ref: string;
   zone?: string;
   count?: number | string;
+  /** A hook's ref: who or what it is to the hook ("the party's contact"). */
+  note?: string;
   show?: Show;
 }
 
@@ -31,21 +33,29 @@ export interface KitRefView {
   show: Show;
 }
 
-/** A ref object as its line: its count, when it has one, then its name linked. */
+/** A ref object as its line: its count, when it has one, then its name linked, then its note, when it has one. */
 export function refView(value: KitRef): KitRefView {
   const key = refObjectKey(value);
   const target = link(key);
-  const line = value.count === undefined ? toMarkdown(target) : sayMarkdown('kit.count', { count: String(value.count), target });
+  const counted = value.count === undefined ? target : say('kit.count', { count: String(value.count), target });
+  const line = toMarkdown(withNote(counted, value.note));
   return { key, entry: value.ref, ...(value.zone !== undefined && { zone: value.zone }), line, show: value.show ?? 'link' };
 }
 
-/** A part's heading, or none: a prose part without a title, and a table, whose title is its caption. */
-export function partHeading(part: Part): string | undefined {
+/**
+ * A part's heading, or none: a prose part without a title, a table, whose title is its caption, and
+ * an arrangement, which its contained entry's name heads. A DM guide names its arrangement's type:
+ * "Running the Encounter", "Running the Module".
+ */
+export function partHeading(part: Part, arrangement = 'encounter'): string | undefined {
   switch (part.part) {
     case 'prose':
       return part.title;
     case 'table':
+    case 'arrangement':
       return undefined;
+    case 'dm-guide':
+      return sayText('kit.heading.dm-guide', { arrangement: name('arrangement', arrangement) });
     default:
       return sayText(`kit.heading.${part.part}`);
   }
@@ -74,7 +84,10 @@ export function coinsText(coins: NonNullable<LootRow['coins']>): string {
 export const lootLine = (row: LootRow): string =>
   [...(row.coins ? [coinsText(row.coins)] : []), ...(row.items ?? []).map((item) => refView(item).line)].join(', ');
 
-/** Every ref object in a part, in order: a roster's or spawn table's creatures, loot's items, a map part's map. */
+/**
+ * Every ref object in a part, in order: a roster's or spawn table's creatures, loot's items, a map
+ * part's map, a hook's refs, and an arrangement part's arrangement.
+ */
 export function partRefs(part: Part): KitRef[] {
   switch (part.part) {
     case 'roster':
@@ -85,6 +98,10 @@ export function partRefs(part: Part): KitRef[] {
       return byDifficulty(part.rows).flatMap(({ row }) => row.items ?? []);
     case 'map':
       return [part.map];
+    case 'hook':
+      return part.refs ?? [];
+    case 'arrangement':
+      return [part.arrangement];
     default:
       return [];
   }
@@ -111,4 +128,8 @@ export interface KitContext {
   level: number;
   /** A map's diagram source, by its key. */
   diagram: (key: string) => string;
+  /** Diagram sources the caller has to hand, by map key, passed on to the cards a part embeds. */
+  diagrams?: Map<string, string>;
+  /** The arrangement's type, for the headings that name it ("Running the Module"). Default `encounter`. */
+  arrangement?: string;
 }
