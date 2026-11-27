@@ -1,0 +1,63 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "fallen-armory",
+  "name": "Fallen Armory",
+  "summary": "Bursting corpses and a bone-spitting skeleton lurk under the rubble of the keep's armory.",
+  "stats": {
+    "setIn": {
+      "ref": "map/testmore-keep",
+      "zone": "fallen-armory"
+    },
+    "environment": {
+      "multiplier": 1.25,
+      "note": "Rubble makes the room difficult terrain, and a loud noise drops more of the ceiling."
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/testmore-keep",
+          "zone": "fallen-armory",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Half the ceiling lies across the weapon racks. Something under the rubble is breathing, though nothing down there should be."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/bloatrot-carrier}s and {ref:creature/zombie}s are buried under loose stone and rise when the party is halfway across. The {ref:creature/marrow-slinger} stays on top of the rubble pile and shoots. A loud noise brings more of the ceiling down."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/marrow-slinger",
+            "count": 1
+          },
+          {
+            "ref": "creature/bloatrot-carrier",
+            "count": 2
+          },
+          {
+            "ref": "creature/zombie",
+            "count": 4
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

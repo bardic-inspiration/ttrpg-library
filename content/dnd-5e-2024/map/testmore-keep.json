@@ -1,0 +1,49 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "testmore-keep",
+  "name": "Testmore Keep",
+  "summary": "A ruined hill keep of five rooms, now the cult's hidden temple.",
+  "description": "Testmore Keep was abandoned after its lord failed every trial the crown set him. The cult chose it for the joke, and stayed for the cellars.",
+  "stats": {
+    "scale": "dungeon",
+    "zones": [
+      {
+        "id": "gatehouse",
+        "name": "Gatehouse",
+        "note": "The way in, through a portcullis rusted half open."
+      },
+      {
+        "id": "shrine-of-seals",
+        "name": "Shrine of Seals",
+        "note": "Five stone seals set in the floor, each carved with a different sigil."
+      },
+      {
+        "id": "fallen-armory",
+        "name": "Fallen Armory",
+        "note": "Half the ceiling lies on the weapon racks."
+      },
+      {
+        "id": "ritual-chamber",
+        "name": "Ritual Chamber",
+        "note": "A ring of candles around a lectern holding an enormous ledger."
+      },
+      {
+        "id": "vault",
+        "name": "Vault",
+        "note": "A locked strongroom behind the lectern."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

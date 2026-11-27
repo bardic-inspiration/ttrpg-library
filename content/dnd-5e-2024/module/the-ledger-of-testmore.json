@@ -1,0 +1,130 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "module",
+  "id": "the-ledger-of-testmore",
+  "name": "The Ledger of Testmore",
+  "summary": "A cult is writing down everyone who crosses it; four heroes follow the trail from a crossroads tavern to its hilltop keep.",
+  "stats": {
+    "length": "multi-session",
+    "levels": {
+      "min": 3,
+      "max": 3
+    },
+    "parts": [
+      {
+        "part": "prose",
+        "title": "Background",
+        "text": "A cult has made its temple in Testmore Keep, a ruin on a hill a few days from the Greencheck Tavern. Its leader, {ref:creature/dreddit}, keeps a ledger of everyone who has doubted the cult, and its spies are filling the pages."
+      },
+      {
+        "part": "description",
+        "text": "Rain drums on the shutters of the Greencheck Tavern. Four strangers share a table by the hearth, and a notice on the board offers good coin to anyone who can say why travelers on the east road keep vanishing."
+      },
+      {
+        "part": "hook",
+        "text": "The four heroes meet at the Greencheck, each with their own reason to ask about the east road.",
+        "refs": [
+          {
+            "ref": "character/garrow-stonebrace",
+            "show": "card"
+          },
+          {
+            "ref": "character/tamsin-hollowell",
+            "show": "card"
+          },
+          {
+            "ref": "character/wren-ashdown",
+            "show": "card"
+          },
+          {
+            "ref": "character/odda-fenwick",
+            "show": "card"
+          }
+        ]
+      },
+      {
+        "part": "dm-guide",
+        "text": "The module runs in three acts. In the tavern, the party finds the cult's spy and learns the keep's name. On the road, they cross the Ruins of Prod, where the cult has left the dead to stop them. At the keep, they work through its five rooms to the rite. Run it for four characters of level 3; each act is about one session."
+      },
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/greencheck-tavern",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/spy-in-the-cellar"
+        }
+      },
+      {
+        "part": "prose",
+        "title": "The East Road",
+        "text": "The road to Testmore Keep is three days over open hills. On the second day it climbs through the Ruins of Prod, the only shelter for miles."
+      },
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/ruins-of-prod",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/graveyard-ambush"
+        }
+      },
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/testmore-keep",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/gatehouse-watch"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/shrine-of-seals"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/fallen-armory"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/dreddits-rite"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/testmore-vault"
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

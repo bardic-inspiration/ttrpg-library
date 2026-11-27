@@ -1,0 +1,138 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "odda-fenwick",
+  "name": "Odda Fenwick",
+  "summary": "A gnome sage and Evoker Wizard who answers trouble with fire and force.",
+  "description": "Odda catalogued a dead scholar's library and found the margins full of warnings about a keep on a hill. She meant to write a footnote; she is writing a field report instead.",
+  "stats": {
+    "species": {
+      "ref": "species/gnome"
+    },
+    "background": {
+      "ref": "background/sage"
+    },
+    "classes": [
+      {
+        "class": {
+          "ref": "class/wizard"
+        },
+        "level": 3,
+        "subclass": {
+          "ref": "subclass/evoker"
+        }
+      }
+    ],
+    "abilities": {
+      "base": {
+        "str": 8,
+        "dex": 13,
+        "con": 14,
+        "int": 15,
+        "wis": 12,
+        "cha": 10
+      },
+      "background": {
+        "int": 2,
+        "con": 1
+      }
+    },
+    "feats": [
+      {
+        "ref": "feat/magic-initiate",
+        "note": "Wizard",
+        "source": {
+          "ref": "background/sage"
+        }
+      }
+    ],
+    "choices": [
+      {
+        "source": {
+          "ref": "class/wizard"
+        },
+        "skills": [
+          "investigation",
+          "religion"
+        ]
+      },
+      {
+        "source": {
+          "ref": "species-trait/gnome-gnomish-lineage"
+        },
+        "option": "Rock Gnome"
+      },
+      {
+        "source": {
+          "ref": "class-feature/wizard-scholar"
+        },
+        "expertise": [
+          "arcana"
+        ]
+      },
+      {
+        "source": {
+          "ref": "background/sage"
+        },
+        "languages": [
+          "Gnomish",
+          "Draconic"
+        ]
+      }
+    ],
+    "equipped": [
+      {
+        "ref": "equipment/quarterstaff"
+      }
+    ],
+    "spells": [
+      {
+        "ref": "spell/fire-bolt"
+      },
+      {
+        "ref": "spell/mage-hand"
+      },
+      {
+        "ref": "spell/ray-of-frost"
+      },
+      {
+        "ref": "spell/minor-illusion"
+      },
+      {
+        "ref": "spell/shocking-grasp"
+      },
+      {
+        "ref": "spell/magic-missile"
+      },
+      {
+        "ref": "spell/shield"
+      },
+      {
+        "ref": "spell/mage-armor"
+      },
+      {
+        "ref": "spell/burning-hands"
+      },
+      {
+        "ref": "spell/scorching-ray"
+      },
+      {
+        "ref": "spell/misty-step"
+      },
+      {
+        "ref": "spell/detect-magic"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}
