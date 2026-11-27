@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
 import { checkComponents, checkImage, checkMapDiagram, checkPath, MAP_TYPE, checkUniqueness, type ComponentListing, type EntryHead, type FileIssue } from './library.ts';
-import { entryKey, linkEntries, objectRefs, REF_TOKEN, type Link, type Links, type RefEntry } from './refs.ts';
+import { entryKey, entryZones, linkEntries, objectRefs, REF_TOKEN, type Link, type Links, type RefEntry } from './refs.ts';
 import {
   PROJECT_ROOT,
   RULESETS_ROOT,
@@ -236,8 +236,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     }
     // A map's diagram is checked against its zones, so only once its stats pass (docs/content-model.md#map-diagrams).
     if (entry.type === MAP_TYPE) {
-      const listed = (entry.stats as { zones?: unknown }).zones;
-      const zones = Array.isArray(listed) ? listed.map((z: { id?: unknown }) => String(z.id)) : [];
+      const zones = (entryZones(entry.stats) ?? []).map((zone) => zone.id);
       issues.push(...(await checkMapDiagram({ ...entry, file }, zones, assetsRoot)));
     }
     if (rulesType) {

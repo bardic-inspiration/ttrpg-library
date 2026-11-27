@@ -3,9 +3,7 @@
 // link to its entry in the zone list, or for a card's thumbnail, with no ids or links. A diagram
 // that fails its checks is never rewritten, so nothing unchecked reaches a page.
 
-import { checkDiagram } from '../scripts/validate/diagram.ts';
-
-const NAME = '[A-Za-z_][\\w.:-]*';
+import { checkDiagram, XML_NAME as NAME } from '../scripts/validate/diagram.ts';
 const ATTRIBUTES = `(?:\\s+${NAME}\\s*=\\s*(?:"[^"]*"|'[^']*'))*`;
 /** One tag of a checked diagram: a closing tag, or an opening one with its attributes and its `/`. */
 const TAG = new RegExp(`<(/?)(${NAME})(${ATTRIBUTES})\\s*(/?)>`, 'g');
