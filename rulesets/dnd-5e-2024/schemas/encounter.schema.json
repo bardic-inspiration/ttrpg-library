@@ -30,7 +30,7 @@
   },
   "$defs": {
     "Part": {
-      "description": "One kit part, by its `part`. An encounter allows every part but a module's own.",
+      "description": "One kit part, by its `part`. An encounter allows every kit part.",
       "type": "object",
       "required": ["part"],
       "properties": {

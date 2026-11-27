@@ -6,6 +6,7 @@ import tables from '../../../rulesets/dnd-5e-2024/tables.json' with { type: 'jso
 import { DIFFICULTIES } from '../../../rulesets/dnd-5e-2024/difficulty.ts';
 import type { Budget, DerivedEncounter, DifficultyResult, EncounterStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 import type { DifficultyCalculatorProps, EncounterXp } from '../components/encounter/DifficultyCalculator.tsx';
+import { byDifficulty } from './kit.ts';
 import type { PropertyLine } from './template.ts';
 import { name, sayText } from './wording.ts';
 
@@ -33,7 +34,7 @@ export function difficultyLines(stats: EncounterStats, derived: DerivedEncounter
 /** The calculator's props: the budget table, the encounter's side, and the difficulties' names. */
 export function calculatorProps(derived: DerivedEncounter): Omit<DifficultyCalculatorProps, 'level' | 'ready'> {
   const encounter: EncounterXp = derived.rows
-    ? { kind: 'spawn-table', rows: DIFFICULTIES.flatMap((difficulty) => (derived.rows?.[difficulty] ? [{ difficulty, xp: derived.rows[difficulty] }] : [])) }
+    ? { kind: 'spawn-table', rows: byDifficulty(derived.rows).map(({ difficulty, row }) => ({ difficulty, xp: row })) }
     : { kind: 'roster', xp: derived.xp.min };
   const labels = Object.fromEntries(RESULTS.map((r) => [r, name('difficulty', r)])) as Record<DifficultyResult, string>;
   return { budgets: tables.xpBudgetPerCharacter as Budget[], encounter, labels };

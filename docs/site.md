@@ -678,7 +678,8 @@ through the ruleset's `difficulty.ts`.
     select (1–20) and a Remove button. Add character adds one at the last
     character's level. The party keeps at least one character, so Remove is
     disabled on the last. After an add or a remove, focus moves to the new
-    or the next character's level.
+    or the next character's level, or the previous one's when the last
+    character is removed.
   - **Budgets:** the party's Low, Moderate, and High budgets, g(Party).
   - **For your party,** in a polite live region: a roster's XP and what it
     reads ("1,125 XP: Moderate"), or a spawn table's rows, low to high, as a
@@ -691,8 +692,9 @@ through the ruleset's `difficulty.ts`.
 - **The party** (`site/src/lib/party.ts`) is kept in local storage under
   `ttrpg-library:party` as a list of levels, wrapped as the cart is
   ([Gallery](#gallery) "Cart and set actions"): with storage blocked it lasts
-  only for the page, and an unreadable or empty party, or a stored value
-  that isn't a level, falls back to four characters of level 1. It carries
+  only for the page. A stored value that isn't a level is dropped, a party
+  with none left falls back to four characters of level 1, and an
+  unreadable one keeps the page's copy. It carries
   to the next encounter, and follows a change made in another tab.
 
 ### Templates
@@ -781,9 +783,9 @@ sentences and its `coin` vocabulary, through `site/src/lib/kit.ts`.
 - **Text parts** (`prose`, `description`, `dm-guide`) render as rules text;
   a description, read aloud, is set off as boxed text.
 - **Roster:** its lines, then its cards.
-- **Spawn table:** a table of its rows, low to high, with the roll's die as
-  the first column's header and each row's range on it ("1–2", or "6"), then
-  the difficulty and the row's creature lines; then its cards.
+- **Spawn table:** a table of its rows, low to high: when it has a `roll`,
+  the die as the first column's header and each row's range on it ("1–2",
+  or "6"); then the difficulty and the row's creature lines; then its cards.
 - **Sequence:** structured, the trigger, then each stage (its name as a
   heading, its turn loop, and its transition), then the victory condition,
   each label an inline heading ("***Trigger.***"); or its example, as one

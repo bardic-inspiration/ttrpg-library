@@ -15,7 +15,8 @@ import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
 import { computeView } from '../../../site/src/lib/gallery/view.ts';
 import registryJson from '../../../config/types.json' with { type: 'json' };
 import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
-import { countSpan, difficultyOf, lowestCount, partyBudget } from '../../../rulesets/dnd-5e-2024/encounters.ts';
+import { countSpan, lowestCount } from '../../../rulesets/dnd-5e-2024/encounters.ts';
+import { difficultyOf, partyBudget } from '../../../rulesets/dnd-5e-2024/difficulty.ts';
 import { linkedLibrary, type LinkedEntry } from '../../../rulesets/module.ts';
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
 
@@ -343,6 +344,10 @@ describe('in the Library (docs/site.md#type-registry)', { timeout: VALIDATION_TI
     expect(await view('f.derived.xp=1000..')).toEqual(['druids-and-stirges', 'warren-kings-court']);
     expect(await view('f.derived.creatureTypes=fey')).toEqual(['bugbear-warrior-alone', 'warren-kings-court']);
     expect(await view('f.derived.creatureTypes=humanoid&f.derived.xp=1000..')).toEqual(['druids-and-stirges']);
+  });
+
+  it('opens the XP and creature type filters when the Library opens with encounters checked, as a creature opens CR and type', () => {
+    expect(config.types.get('dnd-5e-2024/encounter')!.defaultFilters).toEqual(['derived.xp', 'derived.creatureTypes']);
   });
 
   it('sorts by XP, a span by its minimum', async () => {

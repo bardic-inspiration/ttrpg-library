@@ -337,7 +337,7 @@ features and a species' traits are components.
 
 Content is organized by type. An **arrangement** is an entry that puts typed
 entries together for play, rather than a new kind of content: an encounter
-([Encounters](rulesets.md#encounters)) is the first. Content never lives
+([Encounters](rulesets.md#encounters)) is one. Content never lives
 inside an arrangement; every piece is a standalone entry that a DM may lift
 out and adapt.
 
@@ -361,7 +361,7 @@ out and adapt.
   assembled is the entry's design choice. `show` is a ref key, as `count`
   and `zone` are, allowed only where a part's schema puts it.
 - **Room to grow.** A ref in a part is an object, so a further key, such as
-  a dependency strength, can be added later with no migration.
+  a dependency strength, needs no migration.
 - **Containment is listed by the container only.** An arrangement that
   holds another lists it; the one held doesn't name its container, and its
   page shows the container as a back-reference.

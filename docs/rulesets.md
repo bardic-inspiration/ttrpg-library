@@ -94,7 +94,10 @@ is; a class's `spells` are "Spells" / "Classes", and a spell's `classes`
 "Carried by"; a creature's condition immunities are "Immune to" / "Immune
 creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
 `properties` and `mastery` are "Properties" / "Weapons" and "Mastery" /
-"Weapons"; any other field, including a `{ref:…}` token in text, is
+"Weapons"; a map's `within` is "Within" / "Child maps"; an encounter's
+parts, a `{ref:…}` token in them included, are "Includes" / "Appears in",
+and its `setIn` "Set in" / "Set here"; any other field, including a
+`{ref:…}` token in text, is
 "References" / "Referenced by". These are the ruleset's generic labels
 (`generic` in `RefLabels`): a target listed under a specific label isn't
 listed again under them, so Acid Arrow lists the dragons that cast it, and
@@ -1035,8 +1038,8 @@ kit's parts are `Part…` definitions in `schemas/common.schema.json`. Its
 `stats` hold:
 
 - **`parts`:** the kit parts, in the order the page renders them, each
-  `{ "part": "<kind>", … }`. An encounter takes every part but a module's
-  own: `prose`, `description`, `dm-guide`, `roster`, `spawn-table`,
+  `{ "part": "<kind>", … }`. An encounter takes every kit
+  part: `prose`, `description`, `dm-guide`, `roster`, `spawn-table`,
   `sequence`, `table`, `loot`, and `map`. Exactly one part is a roster or a
   spawn table (error).
 - **`setIn`:** the map it's set in, or a zone of it, a `MapRef`:
@@ -1109,7 +1112,7 @@ derives both sides, and no XP is ever written.
   ([Inputs and derived values](#inputs-and-derived-values)).
 - **The party's side,** g(Party), is `partyBudget` in `difficulty.ts`, which
   imports only types, so the site's calculator uses it without the ruleset's
-  tables or checks (`encounters.ts` re-exports it and `difficultyOf`): the sum of each
+  tables or checks: the sum of each
   character's Low, Moderate, and High budgets for their level, from
   `tables.json`'s `xpBudgetPerCharacter` (SRD 5.2's XP Budget per Character
   table, levels 1–20). For a party at one level it's the SRD's budget times

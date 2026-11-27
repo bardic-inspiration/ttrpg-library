@@ -9,15 +9,6 @@ import { deriveCreature } from './derive.ts';
 import { DIFFICULTIES } from './difficulty.ts';
 import type { CreatureStats, DerivedEncounter, Difficulty, EncounterStats, SpawnRow, Tables, XpSpan } from './types.ts';
 
-export { DIFFICULTIES, difficultyOf, partyBudget } from './difficulty.ts';
-
-/** The lowest a dice count can roll: one per die, plus its modifier. */
-export function lowestCount(count: number | string): number {
-  if (typeof count === 'number') return count;
-  const match = /^(\d+)d\d+([+-]\d+)?$/.exec(count);
-  return match ? Number(match[1]) + Number(match[2] ?? 0) : Number.NaN;
-}
-
 /** A count's lowest, average, and highest roll; a fixed count is all three. */
 export function countSpan(count: number | string): XpSpan {
   if (typeof count === 'number') return { min: count, average: count, max: count };
@@ -28,6 +19,9 @@ export function countSpan(count: number | string): XpSpan {
   const modifier = Number(match[3] ?? 0);
   return { min: dice + modifier, average: (dice * (faces + 1)) / 2 + modifier, max: dice * faces + modifier };
 }
+
+/** The lowest a dice count can roll: one per die, plus its modifier. */
+export const lowestCount = (count: number | string): number => countSpan(count).min;
 
 /** f(Roster) × E: each creature's XP by its CR times its count, summed, times the multiplier, as a span. */
 function rosterXp(lines: { ref: string; count: number | string }[], multiplier: number, xpOf: (ref: string) => number): XpSpan {
