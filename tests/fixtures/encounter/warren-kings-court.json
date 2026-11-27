@@ -10,6 +10,10 @@
       "ref": "map/sunken-cistern",
       "zone": "drowned-shrine"
     },
+    "environment": {
+      "multiplier": 1.25,
+      "note": "Waist-deep water slows anyone who wades in, and the shrine's rotten floor gives way under heavy feet."
+    },
     "parts": [
       {
         "part": "map",

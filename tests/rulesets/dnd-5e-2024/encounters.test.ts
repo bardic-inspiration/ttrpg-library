@@ -1,12 +1,14 @@
 // dnd-5e-2024 encounters (docs/rulesets.md#encounters), built of the kit's parts
 // (docs/content-model.md#arrangements): the spec's bandit attack, boss fight, and SRD budget rosters validate,
 // and a malformed part, roster, or spawn table fails. Refs in parts are inventory, labeled apart from rules refs.
+// Difficulty (docs/rulesets.md#encounter-difficulty) gives the spec's budget examples and mixed party.
 import { copyFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { validateLibrary } from '../../../scripts/validate/index.ts';
-import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
-import { lowestCount } from '../../../rulesets/dnd-5e-2024/encounters.ts';
+import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
+import { countSpan, difficultyOf, lowestCount, partyBudget } from '../../../rulesets/dnd-5e-2024/encounters.ts';
+import { linkedLibrary, type LinkedEntry } from '../../../rulesets/module.ts';
 import { FIXTURES, tempLibrary } from '../../helpers.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
@@ -214,5 +216,85 @@ describe('ref labels', () => {
     expect(ruleset.refLabels('encounter', 'stats.parts[1].text')).toEqual({ forward: 'Includes', back: 'Appears in' });
     expect(ruleset.refLabels('encounter', 'stats.setIn')).toEqual({ forward: 'Set in', back: 'Set here' });
     expect(ruleset.refLabels('creature', 'stats.gear[0]').back).not.toBe('Appears in');
+  });
+});
+
+describe('environment', { timeout: VALIDATION_TIMEOUT }, () => {
+  it('warns on any E, for the reviewer, and fails a multiplier of 1, 0, or one without a note', async () => {
+    const { result } = await validate();
+    const warnings = result.warnings.filter((w) => w.file.includes('/encounter/')).map((w) => `${w.file.replace(/^.*\/encounter\//, '')}: ${w.message}`);
+    expect(warnings).toEqual(["warren-kings-court.json: stats.environment.multiplier: the environment multiplies the encounter's XP by 1.25; confirm the deviation"]);
+
+    const { encounterErrors } = await validate((entries) => {
+      encounter(entries, 'warren-kings-court').stats.environment.multiplier = 1;
+      encounter(entries, 'druids-and-stirges').stats.environment = { multiplier: 0, note: 'Nothing.' };
+      encounter(entries, 'bugbear-warrior-alone').stats.environment = { multiplier: 1.5 };
+    });
+    expect(encounterErrors.find((e) => e.startsWith('warren-kings-court.json'))).toMatch(/a multiplier of 1 changes nothing/);
+    expect(encounterErrors.find((e) => e.startsWith('druids-and-stirges.json'))).toMatch(/multiplier/);
+    expect(encounterErrors.find((e) => e.startsWith('bugbear-warrior-alone.json'))).toMatch(/note/);
+  });
+});
+
+describe('difficulty', () => {
+  const derived = async (id: string) => {
+    const entries = (await all()).filter((e) => e.ruleset === 'dnd-5e-2024') as unknown as LinkedEntry[];
+    const found = entries.find((e) => e.type === 'encounter' && e.id === id)!;
+    return ruleset.deriveLinked!('encounter', `encounter/${id}`, found.stats, linkedLibrary(entries));
+  };
+
+  it('gives the SRD budget examples: 200 XP is Low for four level 1 characters, 1,125 XP Moderate for five level 3', async () => {
+    const bugbear = await derived('bugbear-warrior-alone');
+    expect(bugbear).toEqual({ multiplier: 1, xp: { min: 200, max: 200 } });
+    expect(partyBudget([1, 1, 1, 1], tables)).toEqual({ low: 200, moderate: 300, high: 400 });
+    expect(difficultyOf(200, partyBudget([1, 1, 1, 1], tables))).toBe('low');
+
+    const grove = await derived('druids-and-stirges');
+    expect(grove.xp).toEqual({ min: 1125, max: 1125 });
+    expect(difficultyOf(1125, partyBudget([3, 3, 3, 3, 3], tables))).toBe('moderate');
+  }, VALIDATION_TIMEOUT);
+
+  it("multiplies the boss fight's XP by its E", async () => {
+    // The Warren King (CR 4, 1,100 XP), a hexer and a boss (CR 1, 200 XP each), times 1.25.
+    expect(await derived('warren-kings-court')).toEqual({ multiplier: 1.25, xp: { min: 1875, max: 1875 } });
+  }, VALIDATION_TIMEOUT);
+
+  it("gives a spawn table each row's minimum, average, and maximum, and the span of its rows", async () => {
+    // A lookout and bandits are 25 XP each; the captain is 450.
+    expect(await derived('bandit-ambush')).toEqual({
+      multiplier: 1,
+      xp: { min: 75, max: 675 },
+      rows: {
+        low: { min: 75, average: 112.5, max: 150 },
+        moderate: { min: 75, average: 150, max: 225 },
+        high: { min: 550, average: 612.5, max: 675 },
+      },
+    });
+  }, VALIDATION_TIMEOUT);
+
+  it("sums a mixed party's budgets per character, and equals the SRD's budget times the size at one level", () => {
+    expect(partyBudget([2, 3, 5], tables)).toEqual({ low: 750, moderate: 1125, high: 1700 });
+    expect(partyBudget([5, 5, 5, 5], tables)).toEqual({ low: 2000, moderate: 3000, high: 4400 });
+    expect(partyBudget([], tables)).toEqual({ low: 0, moderate: 0, high: 0 });
+    expect(() => partyBudget([21], tables)).toThrow(/level 21/);
+  });
+
+  it('reads Low at or under the Low budget, then Moderate, High, and Beyond High', () => {
+    const budget = partyBudget([2, 3, 5], tables);
+    expect([0, 750, 751, 1125, 1126, 1700, 1701].map((xp) => difficultyOf(xp, budget))).toEqual(['low', 'low', 'moderate', 'moderate', 'high', 'high', 'beyond-high']);
+  });
+
+  it("spans a count's dice: lowest, average, and highest roll", () => {
+    expect(countSpan(3)).toEqual({ min: 3, average: 3, max: 3 });
+    expect(countSpan('1d4+1')).toEqual({ min: 2, average: 3.5, max: 5 });
+    expect(countSpan('3d8-2')).toEqual({ min: 1, average: 11.5, max: 22 });
+  });
+
+  it('has a budget for every level, 1 to 20, rising with level', () => {
+    expect(tables.xpBudgetPerCharacter).toHaveLength(20);
+    for (const [i, row] of tables.xpBudgetPerCharacter.entries()) {
+      expect(row.low < row.moderate && row.moderate < row.high, `level ${i + 1}`).toBe(true);
+      if (i > 0) expect(row.low > tables.xpBudgetPerCharacter[i - 1]!.low, `level ${i + 1}`).toBe(true);
+    }
   });
 });

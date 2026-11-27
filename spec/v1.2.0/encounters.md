@@ -30,26 +30,11 @@ choices, not arithmetic).
   kit, inventory refs and `show`, and containment.
 - [Encounters](../../docs/rulesets.md#encounters): the `encounter` type, its
   parts, rosters and spawn tables, and `setIn`.
+- [Encounter difficulty](../../docs/rulesets.md#encounter-difficulty):
+  f(Roster) × E per roster and spawn table row, E's warning, the XP budgets,
+  and the result.
 
 ## Design
-
-### Difficulty
-
-Difficulty compares the party against the encounter:
-
-- **The encounter's side,** derived: f(Roster) × E. f(Roster) is the sum of
-  each creature's XP by its CR times its count. For a spawn table, each row
-  has its own, with a minimum, average, and maximum from its dice.
-- **E,** the environment multiplier: an authored input,
-  `stats.environment`, with `multiplier` (above 0, not 1) and a `note` saying
-  why ("difficult terrain and a collapsing floor"). Without it, E is 1. Any
-  E is a warning for the reviewer, as `adjust` is.
-- **The party's side,** g(Party): the sum of each character's XP budget for
-  their level, from SRD 5.2's XP Budget per Character table, for each of Low,
-  Moderate, and High. For a party at one level it equals the SRD's budget
-  times the party's size. This area adds the table to `tables.json`.
-- **The result:** an encounter whose XP is at or under the Low budget reads
-  Low; up to Moderate, Moderate; up to High, High; above it, Beyond High.
 
 ### The calculator
 
