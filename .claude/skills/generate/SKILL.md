@@ -113,6 +113,7 @@ per request.
 | [Entries](#procedure-entries) | `background`, `class`, `condition`, `creature`, `equipment`, `feat`, `item`, `species`, `spell`, `subclass` |
 | [Characters](#procedure-characters) | `character` |
 | [Maps](#procedure-maps) | `map` |
+| [Encounters](#procedure-encounters) | `encounter` |
 
 Every type in `config/types.json` is in exactly one row. A type in none
 can't be generated: ask, as for a type not in the registry (Inputs).
@@ -370,6 +371,13 @@ For each map, parents before their children:
 
 In the PR's Entries table, a map's summary field is "—": the type has no
 `summaryField`.
+
+### Procedure: Encounters
+
+An encounter is an arrangement of other entries
+([Encounters](../../../docs/rulesets.md#encounters)). This procedure has no
+steps yet, so a request for encounters can't be fulfilled as written: ask
+(Inputs).
 
 ## Step 4: Source, author, and meta
 

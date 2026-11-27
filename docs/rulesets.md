@@ -1024,6 +1024,59 @@ A map's page is a **map page** (`map-page`, `site/src/lib/map.ts`):
 The detail page's Links list its parent ("Within") and the back-links to the
 map as a whole; those into a zone are listed under the zone instead.
 
+### Encounters
+
+An encounter is a runnable scene a DM picks up for prep: who's in it, how it
+plays, and what it yields. It's an arrangement
+([Arrangements](content-model.md#arrangements)), a content type in
+`dnd-5e-2024` at `content/dnd-5e-2024/encounter/<id>.json`, and every
+encounter is custom. `schemas/encounter.schema.json` describes it, and the
+kit's parts are `Part…` definitions in `schemas/common.schema.json`. Its
+`stats` hold:
+
+- **`parts`:** the kit parts, in the order the page renders them, each
+  `{ "part": "<kind>", … }`. An encounter takes every part but a module's
+  own: `prose`, `description`, `dm-guide`, `roster`, `spawn-table`,
+  `sequence`, `table`, `loot`, and `map`. Exactly one part is a roster or a
+  spawn table (error).
+- **`setIn`:** the map it's set in, or a zone of it, a `MapRef`:
+  `{ "ref": "map/<id>", "zone": "<zone-id>" }`, the zone optional. The
+  map's page lists the encounter under the zone
+  ([Maps](#maps)); the encounter's page labels the link "Set in", and the
+  map's "Set here". A `map` part shows the map on the page; `setIn` alone
+  doesn't.
+
+The parts:
+
+| Part | Holds |
+|---|---|
+| `prose` | `text`, with an optional `title` |
+| `description` | `text`: player-facing, read aloud or paraphrased |
+| `dm-guide` | `text`: how to run it |
+| `roster` | `creatures`: creature refs, each with a `count` of 1 or more |
+| `spawn-table` | `rows` keyed by difficulty, `low`, `moderate`, or `high`, each at most once: a roster whose counts may be dice (`"1d6+2"`), and, when the table has a `roll`, a `range` on it |
+| `sequence` | Structured: a `trigger`, `stages` (each a `name`, a turn `loop` saying how the DM runs the creatures, and a `transition` to the next, which the last may leave out), and a `victory` condition. Or an `example`: one prose text showing how it might play. Not both |
+| `table` | A `title` and `text` holding one pipe table: a random table, a loot table, or any other |
+| `loot` | `rows` keyed by difficulty, as a spawn table's are, each with `coins` (`dice`, an optional `times`, and a `unit`: `4d6 × 10 GP`), `items` (item or equipment refs, each with an optional `count` of 2 or more), or both |
+| `map` | `map`: a map ref, with an optional `zone` |
+
+Every text in a part is markdown-subset text with `{ref:…}` tokens. Each ref
+object in a part (a roster's creatures, loot's items, a map part's map) may
+add `show` ([Arrangements](content-model.md#arrangements)).
+
+- **Rosters and spawn tables.** A roster's counts are fixed. A spawn table's
+  rows are designed by the author, one per difficulty; the DM chooses one,
+  or rolls for it when the table has a `roll`, one die (`"1d6"`), and each
+  row a `range` of its faces (`{ "min": 1, "max": 2 }`): 1–2 low, 3–5
+  moderate, 6 high. The ranges cover every face once, and a dice count's
+  lowest roll is at least 1 (errors).
+- **Characters aren't roster lines.** A character in an encounter is a
+  `{ref:…}` in its text, since characters have no XP.
+
+An encounter derives nothing yet. Encounters come only by request; they have
+no gap buckets. Its page is the generic detail page, and its card shows its
+name and summary.
+
 ### Embedded stat blocks
 
 Some spells and items print a creature's stat block. One that also exists in
@@ -1106,6 +1159,10 @@ warnings below on an SRD entry.
 | Character | Equipped armor without training, or a weapon without proficiency, from the starting class's `training` or a later class's `multiclass` training, when every class has `training` | warning |
 | Map | Zone ids are unique within the map | error |
 | Map | No map is within itself, directly or through others; that `within` names a zone of its parent is the ref check's ([References](content-model.md#references)) | error |
+| Encounter | Exactly one part is a `roster` or a `spawn-table` | error |
+| Encounter | A spawn table with a `roll` gives every row a range on its die, and the ranges cover each face once; without one, no row has a range | error |
+| Encounter | A spawn table's dice count can't roll below 1 | error |
+| Encounter | A `table` part's text is one pipe table and nothing else | error |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

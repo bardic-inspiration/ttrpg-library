@@ -26,69 +26,12 @@ choices, not arithmetic).
   `adjust` and its warning.
 - [Creatures](../../docs/rulesets.md#creatures): `cr`, and XP by CR in
   `tables.json`.
+- [Arrangements](../../docs/content-model.md#arrangements): layers, the
+  kit, inventory refs and `show`, and containment.
+- [Encounters](../../docs/rulesets.md#encounters): the `encounter` type, its
+  parts, rosters and spawn tables, and `setIn`.
 
 ## Design
-
-### Layers
-
-| Layer | Holds | Refs mean |
-|---|---|---|
-| **Ruleset** | How things work: derivations, rules data, rules pages | n/a |
-| **Content** | Typed entries: creatures, items, spells, characters… | Rules: "casts", "grants", "requires" |
-| **Arrangements** | Encounters, modules, (later) sourcebooks | Inventory: what's included, where it is, how it shows |
-
-The library stays organized by type. Arrangements put typed entries together;
-content never lives inside them. Every piece is a standalone entry that a DM
-may lift out and adapt.
-
-### The kit
-
-An arrangement's `stats.parts` is an ordered list of kit parts, each
-`{ "part": "<kind>", … }`. The page renders them in order, each by the
-part's shared component, so every arrangement reads alike. Each arrangement
-type's schema allows its own subset.
-
-| Part | Holds | Encounter | Module |
-|---|---|---|---|
-| `prose` | A titled or untitled text section | ✓ | ✓ |
-| `description` | Player-facing text, read aloud or paraphrased | ✓ | ✓ |
-| `dm-guide` | Instructions for running it | ✓ | ✓ |
-| `roster` | Creature refs with counts | ✓ | |
-| `spawn-table` | Rosters by difficulty | ✓ | |
-| `sequence` | How it plays out | ✓ | ✓ |
-| `table` | A titled pipe table (random, loot, cross-cutting) | ✓ | ✓ |
-| `loot` | Coins and items by difficulty | ✓ | |
-| `map` | A map, or a zone of one | ✓ | ✓ |
-
-The module parts are in [`modules.md`](modules.md).
-
-### Refs in arrangements
-
-- **Inventory, not rules.** A ref in a part says what's included and how it
-  shows. Its back-reference reads "Appears in", or "Part of" for a module's
-  contents, apart from rules refs.
-- **Each ref says how it shows:** `"show": "link"` (the default) prints its
-  name linked; `"card"` embeds the target's card; `"thumbnail"` embeds a
-  small form (a map's diagram, an entry's art). How the parts are assembled
-  is the entry's design choice.
-- **Room to grow.** A ref in a part is an object, so a dependency strength
-  (#374's first open question) can be added as a key later with no migration.
-- **Containment is listed by the container only.** A module lists the
-  encounters in it; an encounter doesn't name its module, and its page shows
-  "Part of" as a back-reference (P3).
-
-### Rosters and spawn tables
-
-An encounter has exactly one `roster` or one `spawn-table` (error otherwise).
-
-- **`roster`:** creature refs, each with a `count` (1 or more) and `show`.
-  A character in an encounter is a ref in its text, not a roster line, since
-  characters have no XP.
-- **`spawn-table`:** rows keyed by difficulty, `low`, `moderate`, or
-  `high`, each at most once, each a roster whose counts may be dice
-  (`1d6+2`). The author designs each row; the DM chooses one, or rolls for it
-  when the table gives each row a range on a die (`1d6`: 1–2 low, 3–5
-  moderate, 6 high).
 
 ### Difficulty
 
@@ -121,29 +64,37 @@ The encounter page holds a calculator, a Preact island:
   row's minimum, average, and maximum.
 - **Without JavaScript,** the page shows the encounter's XP and E.
 
+### Parts on the page
+
+The kit's parts and their data are built
+([Arrangements](../../docs/content-model.md#arrangements),
+[Encounters](../../docs/rulesets.md#encounters)); the encounter page is the
+generic detail page until these are:
+
+- **Each part renders in order** by its shared component, so every
+  arrangement reads alike, and each ref object as its `show` says: `link`
+  prints its name linked, `card` embeds the target's card, and `thumbnail`
+  a small form (a map's diagram, an entry's art).
+
 ### Sequence
 
-- **Structured:** a `trigger`, then `stages`, each with a name, a turn loop
-  saying how the DM runs the creatures, and a transition to the next, then
-  a `victory` condition.
-- **Or an example:** one prose text showing how it might play.
-- Every node is markdown-subset text with `{ref:…}` tokens. Event string
-  formats wait for the v2.0.0 builder (#370).
+- **Structured:** the trigger, then each stage's name, turn loop, and
+  transition, then the victory condition, in order.
+- **Or the example,** as one prose text.
+- Every node is markdown-subset text with `{ref:…}` tokens, rendered as
+  links. Event string formats wait for the v2.0.0 builder (#370).
 
 ### Loot
 
-- **`loot`:** rows keyed by difficulty, as a spawn table's are, each with
-  coins (a dice expression and a unit, `4d6 × 10 GP`) and item refs with
-  counts.
-- **`table`:** any other table, such as a random loot table.
+- **`loot`:** its rows in difficulty order, low to high, each with its coins
+  (`4d6 × 10 GP`) and its items with counts.
+- **`table`:** under its title, as a table in text renders.
 
 ### Setting
 
-An encounter may be set in a map, or in a zone of one, with
-`stats.setIn`, a map ref with an optional zone
-([References](../../docs/content-model.md#references) "A map's zones"). The map's page then
-lists it under the zone. A `map` part shows the map on the page; `setIn`
-alone doesn't.
+A `map` part shows the map, or its zone, on the page as its `show` says.
+`setIn` alone doesn't; the map's page already lists the encounter under the
+zone, labeled "Set here".
 
 ### In the Library
 

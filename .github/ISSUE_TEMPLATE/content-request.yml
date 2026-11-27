@@ -19,6 +19,7 @@ body:
         - class
         - condition
         - creature
+        - encounter
         - equipment
         - feat
         - item

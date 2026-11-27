@@ -217,7 +217,8 @@ never changes and is unique within its type:
   gear, which may add a `count`). It may add a `note`, a qualifier
   printed in parentheses after the name wherever the ref renders:
   `{ "ref": "spell/fireball", "note": "level 5 version" }` reads "Fireball
-  (level 5 version)".
+  (level 5 version)". A ref in an arrangement's part may add `show`
+  ([Arrangements](#arrangements)).
 - **A text token**, `{ref:<type>/<id>}`, valid in any markdown-subset field in
   every ruleset and type. It is the one way text links to another entry.
 
@@ -331,6 +332,39 @@ features and a species' traits are components.
 - **Its links are its parent page's.** A page's Links list its own links and
   its components', except the links among the page's own parts: the parent's
   list of its components, and a component's link to its parent or a sibling.
+
+### Arrangements
+
+Content is organized by type. An **arrangement** is an entry that puts typed
+entries together for play, rather than a new kind of content: an encounter
+([Encounters](rulesets.md#encounters)) is the first. Content never lives
+inside an arrangement; every piece is a standalone entry that a DM may lift
+out and adapt.
+
+| Layer | Holds | Refs mean |
+|---|---|---|
+| **Ruleset** | How things work: derivations, rules data, rules pages | n/a |
+| **Content** | Typed entries: creatures, items, spells, characters… | Rules: "casts", "grants", "requires" |
+| **Arrangements** | Encounters | Inventory: what's included, where it is, how it shows |
+
+- **The kit.** An arrangement's `stats.parts` is an ordered list of kit
+  parts, each `{ "part": "<kind>", … }`, rendered in order, so every
+  arrangement reads alike. The parts are a ruleset's shared definitions,
+  and each arrangement type's schema allows its own subset.
+- **Inventory, not rules.** A ref in a part, a ref object or a `{ref:…}`
+  token in its text, says what's included. Its detail-page label is
+  "Includes", and the target's back-reference reads "Appears in", apart
+  from rules refs.
+- **Each ref object says how it shows:** `"show": "link"` (the default)
+  prints its name linked; `"card"` embeds the target's card; `"thumbnail"`
+  embeds a small form (a map's diagram, an entry's art). How the parts are
+  assembled is the entry's design choice. `show` is a ref key, as `count`
+  and `zone` are, allowed only where a part's schema puts it.
+- **Room to grow.** A ref in a part is an object, so a further key, such as
+  a dependency strength, can be added later with no migration.
+- **Containment is listed by the container only.** An arrangement that
+  holds another lists it; the one held doesn't name its container, and its
+  page shows the container as a back-reference.
 
 ### Situational fields
 

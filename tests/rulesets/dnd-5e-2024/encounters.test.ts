@@ -1,0 +1,218 @@
+// dnd-5e-2024 encounters (docs/rulesets.md#encounters), built of the kit's parts
+// (docs/content-model.md#arrangements): the spec's bandit attack, boss fight, and SRD budget rosters validate,
+// and a malformed part, roster, or spawn table fails. Refs in parts are inventory, labeled apart from rules refs.
+import { copyFile, mkdir, readFile, readdir, rm } from 'node:fs/promises';
+import { join } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
+import { validateLibrary } from '../../../scripts/validate/index.ts';
+import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
+import { lowestCount } from '../../../rulesets/dnd-5e-2024/encounters.ts';
+import { FIXTURES, tempLibrary } from '../../helpers.ts';
+
+const ROOT = join(import.meta.dirname, '../../..');
+const CONTENT = join(ROOT, 'content/dnd-5e-2024');
+const ENCOUNTERS = join(FIXTURES, 'encounter');
+const MAPS = join(FIXTURES, 'map');
+const readJson = async (path: string) => JSON.parse(await readFile(path, 'utf8')) as Record<string, any>;
+const jsonIn = async (path: string) => Promise.all((await readdir(path)).filter((f) => f.endsWith('.json')).sort().map((f) => readJson(join(path, f))));
+
+/**
+ * The encounter fixtures (with the custom creature the bandit attack adds), the valid map fixtures,
+ * and the whole library; the library has no encounters or maps of its own to stand in for.
+ */
+const loadAll = async () => [
+  ...(await jsonIn(ENCOUNTERS)),
+  ...(await jsonIn(MAPS)).filter((m) => m.id !== 'broken-weir'),
+  ...(await Promise.all((await readdir(CONTENT)).filter((t) => t !== 'encounter' && t !== 'map').map((t) => jsonIn(join(CONTENT, t))))).flat(),
+];
+let library: ReturnType<typeof loadAll> | undefined;
+const all = async () => structuredClone(await (library ??= loadAll()));
+
+const temps: string[] = [];
+afterEach(async () => {
+  await Promise.all(temps.splice(0).map((d) => rm(d, { recursive: true, force: true })));
+});
+
+/** Validating the whole library takes a few seconds; Vitest's 5 s default is too tight. */
+const VALIDATION_TIMEOUT = 30_000;
+
+/** Validates the library with the fixtures, after `change` edits the entries. */
+async function validate(change: (entries: Record<string, any>[]) => void = () => {}) {
+  const entries = await all();
+  change(entries);
+  const lib = await tempLibrary(entries);
+  temps.push(lib.repo);
+  const images = join(lib.repo, 'assets/images/dnd-5e-2024/map');
+  await mkdir(images, { recursive: true });
+  for (const svg of (await readdir(MAPS)).filter((f) => f.endsWith('.svg') && f !== 'broken-weir.svg')) await copyFile(join(MAPS, svg), join(images, svg));
+  const result = await validateLibrary(lib.content, { assetsRoot: lib.repo });
+  const ofEncounters = (issues: { file: string; message: string }[]) => issues.filter((i) => i.file.includes('/encounter/')).map((i) => `${i.file.replace(/^.*\/encounter\//, '')}: ${i.message}`);
+  return { errors: result.errors.map((e) => `${e.file}: ${e.message}`), encounterErrors: ofEncounters(result.errors), result };
+}
+
+const encounter = (entries: Record<string, any>[], id: string) => entries.find((e) => e.type === 'encounter' && e.id === id)!;
+const part = (entries: Record<string, any>[], id: string, kind: string) => encounter(entries, id).stats.parts.find((p: { part: string }) => p.part === kind);
+
+describe('validation', { timeout: VALIDATION_TIMEOUT }, () => {
+  it('passes the bandit attack, the boss fight in a zone of a dungeon, and the SRD budget rosters', async () => {
+    const { errors, result } = await validate();
+    expect(errors).toEqual([]);
+    const ids = result.entries.filter((e) => e.entry.type === 'encounter').map((e) => e.entry.id).sort();
+    expect(ids).toEqual(['bandit-ambush', 'bugbear-warrior-alone', 'druids-and-stirges', 'warren-kings-court']);
+  });
+
+  it("links a part's refs and text tokens, and setIn names the map's zone on both ends", async () => {
+    const { result } = await validate();
+    const court = result.entries.find((e) => e.entry.type === 'encounter' && e.entry.id === 'warren-kings-court')!;
+    expect(court.refs).toEqual(
+      expect.arrayContaining([
+        { path: 'stats.setIn', key: 'map/sunken-cistern', zone: 'drowned-shrine' },
+        { path: 'stats.parts[0].map', key: 'map/sunken-cistern', zone: 'drowned-shrine' },
+        { path: 'stats.parts[2].creatures[0]', key: 'creature/goblin-warren-king' },
+        { path: 'stats.parts[4].text', key: 'item/potion-of-climbing' },
+      ]),
+    );
+    const cistern = result.entries.find((e) => e.entry.type === 'map' && e.entry.id === 'sunken-cistern')!;
+    expect(cistern.refBy).toEqual(expect.arrayContaining([{ path: 'stats.setIn', key: 'encounter/warren-kings-court', zone: 'drowned-shrine' }]));
+    const ambush = result.entries.find((e) => e.entry.type === 'encounter' && e.entry.id === 'bandit-ambush')!;
+    expect(ambush.refs).toEqual(
+      expect.arrayContaining([
+        { path: 'stats.parts[2].rows.high.creatures[0]', key: 'creature/bandit-captain' },
+        { path: 'stats.parts[4].rows.high.items[1]', key: 'item/potion-of-climbing' },
+        { path: 'stats.parts[4].rows.moderate.items[0]', key: 'equipment/manacles' },
+      ]),
+    );
+  });
+
+  it('fails an encounter with no roster or spawn table, or with two', async () => {
+    const { encounterErrors } = await validate((entries) => {
+      const ambush = encounter(entries, 'bandit-ambush');
+      ambush.stats.parts = ambush.stats.parts.filter((p: { part: string }) => p.part !== 'spawn-table');
+      const court = encounter(entries, 'warren-kings-court');
+      court.stats.parts.push({ part: 'roster', creatures: [{ ref: 'creature/goblin-boss', count: 2 }] });
+    });
+    expect(encounterErrors).toEqual(
+      expect.arrayContaining([
+        'bandit-ambush.json: stats.parts: an encounter has exactly one roster or spawn-table part; found none',
+        'warren-kings-court.json: stats.parts: an encounter has exactly one roster or spawn-table part; found 2, at stats.parts[2], stats.parts[5]',
+      ]),
+    );
+  });
+
+  it('fails a malformed part: an unknown kind, a missing or unknown key, and a module part', async () => {
+    const { encounterErrors } = await validate((entries) => {
+      const parts = encounter(entries, 'warren-kings-court').stats.parts;
+      parts.push({ part: 'epilogue', text: 'And then?' });
+      parts.push({ part: 'prose', title: 'Aftermath' });
+      parts.push({ part: 'dm-guide', text: 'Run it.', title: 'How' });
+      parts.push({ part: 'sequence', trigger: 'Go.', example: 'Both forms.' });
+      parts.push({ part: 'map', map: { ref: 'creature/goblin-boss' } });
+      parts.push({ part: 'loot', rows: { deadly: { coins: { dice: '2d6', unit: 'gp' } } } });
+      parts.push({ part: 'loot', rows: { low: {} } });
+      parts.push({ part: 'sequence', victory: 'Win.' });
+    });
+    const at = (i: number) => `warren-kings-court.json: stats.parts[${i}]`;
+    expect(encounterErrors).toEqual(
+      expect.arrayContaining([
+        `${at(5)}.part: must be one of "prose", "description", "dm-guide", "roster", "spawn-table", "sequence", "table", "loot", "map"`,
+        `${at(6)}: missing required key "text"`,
+        `${at(7)}.title: unknown key`,
+        `${at(8)}.trigger: not allowed here`,
+        `${at(9)}.map.ref: must match pattern "^map/[a-z0-9]+(-[a-z0-9]+)*$"`,
+        `${at(10)}.rows.deadly: unknown key`,
+        `${at(11)}.rows.low: must match a schema in anyOf`,
+        `${at(12)}: must match exactly one schema in oneOf`,
+      ]),
+    );
+  });
+
+  it('fails a table part that holds more than a table', async () => {
+    const { encounterErrors } = await validate((entries) => {
+      part(entries, 'warren-kings-court', 'table').text = 'The king keeps it all in a crate.\n\n| d4 | Treasure |\n|---|---|\n| 1 | A sack of 300 CP |';
+    });
+    expect(encounterErrors).toEqual(['warren-kings-court.json: stats.parts[4].text: a table part holds one pipe table and nothing else; its title is `title`']);
+  });
+
+  it("fails a malformed roster: no count, a count of 0, dice, a creature that isn't, and one not in the library", async () => {
+    const { encounterErrors } = await validate((entries) => {
+      const creatures = part(entries, 'warren-kings-court', 'roster').creatures;
+      delete creatures[0].count;
+      creatures[1].count = 0;
+      creatures[2].count = '1d4';
+      creatures.push({ ref: 'item/potion-of-climbing', count: 1 }, { ref: 'creature/goblin-emperor', count: 1 }, { ref: 'creature/goblin-boss', count: 1, show: 'portrait' });
+    });
+    const at = 'warren-kings-court.json: stats.parts[2].creatures';
+    expect(encounterErrors).toEqual(
+      expect.arrayContaining([
+        `${at}[0]: missing required key "count"`,
+        `${at}[1].count: must be >= 1`,
+        `${at}[2].count: must be integer`,
+        `${at}[3].ref: must match pattern "^creature/[a-z0-9]+(-[a-z0-9]+)*$"`,
+        `${at}[5].show: must be one of "link", "card", "thumbnail"`,
+      ]),
+    );
+    const { encounterErrors: unresolved } = await validate((entries) => {
+      part(entries, 'warren-kings-court', 'roster').creatures.push({ ref: 'creature/goblin-emperor', count: 1 });
+    });
+    expect(unresolved.join('\n')).toMatch(/warren-kings-court\.json: .*creature\/goblin-emperor.* does not resolve/);
+  });
+
+  it('fails a malformed spawn table: a count that can roll 0, ranges that overlap or miss a face, and a range with no roll', async () => {
+    const { encounterErrors } = await validate((entries) => {
+      const rows = part(entries, 'bandit-ambush', 'spawn-table').rows;
+      rows.low.creatures[1].count = '1d4-1';
+      rows.moderate.range = { min: 2, max: 4 };
+    });
+    const at = 'bandit-ambush.json: stats.parts[2]';
+    expect(encounterErrors).toEqual([`${at}.rows.low.creatures[1].count: 1d4-1 can roll 0; a count is at least 1`, `${at}.rows.moderate.range: 2 on 1d6 already picks the low row`]);
+    const { encounterErrors: gaps } = await validate((entries) => {
+      part(entries, 'bandit-ambush', 'spawn-table').rows.high.range = { min: 6, max: 7 };
+    });
+    expect(gaps).toEqual([`${at}.rows.high.range: 6–7 isn't a range of faces on 1d6 (1–6)`]);
+    const { encounterErrors: missing } = await validate((entries) => {
+      const table = part(entries, 'bandit-ambush', 'spawn-table');
+      delete table.rows.high;
+    });
+    expect(missing).toEqual([`${at}.rows: no row's range covers 6 on 1d6; the ranges cover every face`]);
+    const { encounterErrors: unrolled } = await validate((entries) => {
+      const table = part(entries, 'bandit-ambush', 'spawn-table');
+      delete table.roll;
+      delete table.rows.low.range;
+      delete table.rows.moderate.range;
+    });
+    expect(unrolled).toEqual([`${at}.rows.high.range: a range needs the table's \`roll\`, the die it's on`]);
+    const { encounterErrors: unranged } = await validate((entries) => {
+      delete part(entries, 'bandit-ambush', 'spawn-table').rows.low.range;
+    });
+    expect(unranged).toEqual([`${at}.rows.low: the table rolls 1d6, so every row has a range on it`]);
+    const { encounterErrors: empty } = await validate((entries) => {
+      part(entries, 'bandit-ambush', 'spawn-table').rows = {};
+    });
+    expect(empty).toEqual([`${at}.rows: must NOT have fewer than 1 properties`]);
+  });
+
+  it("fails a setIn or map part naming a zone the map doesn't have", async () => {
+    const { encounterErrors } = await validate((entries) => {
+      const court = encounter(entries, 'warren-kings-court');
+      court.stats.setIn.zone = 'throne-room';
+      court.stats.parts[0].map.zone = 'throne-room';
+    });
+    expect(encounterErrors).toHaveLength(2);
+    for (const message of encounterErrors) expect(message).toMatch(/map\/sunken-cistern has no zone "throne-room"/);
+  });
+});
+
+describe('lowestCount', () => {
+  it('is a number itself, and a dice count its dice plus its modifier', () => {
+    expect([3, '1d6', '2d4', '1d6+2', '3d8-2'].map(lowestCount)).toEqual([3, 1, 2, 3, 1]);
+  });
+});
+
+describe('ref labels', () => {
+  it("labels a part's refs as inventory, apart from rules refs, and setIn as the setting", () => {
+    expect(ruleset.refLabels('encounter', 'stats.parts[2].creatures[0]')).toEqual({ forward: 'Includes', back: 'Appears in' });
+    expect(ruleset.refLabels('encounter', 'stats.parts[1].text')).toEqual({ forward: 'Includes', back: 'Appears in' });
+    expect(ruleset.refLabels('encounter', 'stats.setIn')).toEqual({ forward: 'Set in', back: 'Set here' });
+    expect(ruleset.refLabels('creature', 'stats.gear[0]').back).not.toBe('Appears in');
+  });
+});

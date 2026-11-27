@@ -94,6 +94,16 @@
         "summaryField": "stats.cr",
         "gapBuckets": [{ "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }]
       },
+      "encounter": {
+        "label": "Encounter",
+        "plural": "Encounters",
+        "template": "generic",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/encounter.md",
+        "facets": [],
+        "cardFields": [],
+        "defaultSort": "name:asc",
+        "defaultFilters": []
+      },
       "equipment": {
         "label": "Equipment",
         "plural": "Equipment",
