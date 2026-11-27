@@ -190,8 +190,9 @@ error but the size warning.
   (`fill`, `stroke`, `color`, `stop-color`, `flood-color`, `lighting-color`).
 - **Styled by the site:** an element's classes come from a fixed set,
   `zone`, `wall`, `door`, `feature`, and `label`, and the site's CSS colors
-  them from the palette ([Palette](styling.md#palette)). A class outside the
-  set fails.
+  them from the palette ([Palette](styling.md#palette)), with the `--map-*`
+  tokens (`site/src/styles/diagram.css`), on the map's page and its card. A
+  `label` is centered on its `x`, with its baseline at its `y`. A class outside the set fails.
 - **Zones:** each zone in `stats.zones` has exactly one element with
   `id="zone-<id>"`, and no other id starts `zone-`. No id is on two elements.
 - **Readable:** the file is plain XML: elements with quoted attributes, text,
@@ -202,7 +203,9 @@ error but the size warning.
 
 The checks are ruleset-independent, in `scripts/validate/diagram.ts`, and run
 for every entry of type `map` once its `stats` pass their schema, since they
-read its zones.
+read its zones. The site checks a diagram again before it shows it, on the
+map's page and its card (`lib/diagram.ts`), and the build fails on one that
+doesn't pass.
 
 ### References
 

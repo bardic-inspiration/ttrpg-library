@@ -159,12 +159,14 @@
       "map": {
         "label": "Map",
         "plural": "Maps",
-        "template": "generic",
+        "template": "map-page",
         "guideline": "rulesets/dnd-5e-2024/guidelines/map.md",
-        "facets": [],
-        "cardFields": [],
+        "facets": [
+          { "path": "stats.scale", "label": "Scale", "kind": "enum", "format": "title", "order": ["room", "dungeon", "zone", "region", "world"] }
+        ],
+        "cardFields": ["stats.scale"],
         "defaultSort": "name:asc",
-        "defaultFilters": []
+        "defaultFilters": ["stats.scale"]
       },
       "species": {
         "label": "Species",

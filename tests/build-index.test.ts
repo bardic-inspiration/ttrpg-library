@@ -43,7 +43,7 @@ describe('library.json records', () => {
     expect(records.length).toBeGreaterThan(5);
     for (const record of records) {
       expect(Object.keys(record)).toEqual([
-        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'facets', 'createdAt', 'refs', 'refBy',
+        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'diagram', 'facets', 'createdAt', 'refs', 'refBy',
       ]);
     }
   });
@@ -59,6 +59,7 @@ describe('library.json records', () => {
       name: 'Cinder Hound',
       url: '/ttrpg-library/dnd-5e-2024/creature/cinder-hound/',
       image: null,
+      diagram: null,
       refs: [],
       refBy: [],
     });
@@ -195,6 +196,7 @@ describe('ruleset primitives (docs/site.md#index-build)', () => {
       summary: '',
       url: '/ttrpg-library/dnd-5e-2024/rules/conditions/#condition-blinded',
       image: null,
+      diagram: null,
       facets: {},
       createdAt: null,
       refs: expect.any(Array),

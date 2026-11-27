@@ -28,27 +28,11 @@ is checked, not trusted), and P6 (the site styles the diagram).
   its derived path, and the checks it passes.
 - [References](../../docs/content-model.md#references) "A map's zones": zone
   refs and tokens, their check, and back-references with their zone.
+- [Maps](../../docs/rulesets.md#maps) "map page": the diagram with linked
+  zones, the zones with what's in each, the parent and child maps, print,
+  and the Library card with its scale.
 
 ## Design
-
-### The map page
-
-- The diagram inline, at the page's width, each zone an anchor at
-  `#zone-<id>`. A link to a zone scrolls to it and highlights it.
-- The zones in order, each with its name, note, and what's in it: its
-  back-references grouped by zone (`zoneRefs` in `site/src/lib/refs.ts`),
-  what's set there (an encounter) and which child map details it.
-- Its parent, linked, and its child maps.
-- Print: the diagram at full width, then the zones.
-
-### In the Library
-
-- **Card:** the diagram as a thumbnail, name, and scale.
-- **Facets:** none yet. They're judged once maps exist.
-- **Where:** in `dnd-5e-2024`'s Library, the ruleset a map belongs to in
-  this version, since each ruleset's Library shows its own entries
-  ([Gallery](../../docs/site.md#gallery)). A map that serves several rulesets
-  shows in each of their Libraries, once one can (Out of scope).
 
 ### Generation
 
@@ -56,22 +40,10 @@ is checked, not trusted), and P6 (the site styles the diagram).
 out the zones, draw them with the allowed classes, and give each its id and
 name.
 
-## Cases
-
-Map names are stand-ins. The fixtures in `tests/fixtures/map/` hold the
-dungeon, its room map, the town, and a broken diagram; the cases below use
-them.
-
-- **A dungeon map** with five zones, one per room, and a single-room map
-  within its third zone, for a boss fight: both maps' pages show the link.
-- **A town map** with no parent, whose zones are districts, on its page and
-  in print.
-
 ## Done when
 
-- The map page shows the diagram with linked zones and back-references by
-  zone, on screen and in print.
-- The docs describe the map page.
+- `generate` makes a valid map and diagram from an inline request.
+- `docs/generation.md` describes the map procedure.
 
 ## Out of scope
 

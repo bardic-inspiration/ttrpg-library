@@ -1,4 +1,4 @@
-// One gallery card (docs/site.md#gallery "Cards"): art when the entry has it,
+// One gallery card (docs/site.md#gallery "Cards"): art when the entry has it, or a map's diagram as a thumbnail,
 // name with a star slot, the type badge, the type's card fields, the summary (a primitive has none), and
 // the source on a smaller line below it, with the cart control. The whole card opens its entry, through the shared card link,
 // and the cart control sits above that link (docs/styling.md#shared-components "Click targets"). Accents come from data-type (and data-rarity),
@@ -59,6 +59,8 @@ export default function Card({ record, typeLabel, cardFields, imageSrc, inCart, 
   return (
     <article class={`card ${linkedCard}`} data-type={record.type} aria-labelledby={`${id}-name`}>
       {imageSrc && <img class="card__art" src={imageSrc} alt={record.name} loading="lazy" />}
+      {/* The build checked and rewrote the diagram (lib/diagram.ts), so it holds only shapes and text. */}
+      {!imageSrc && record.diagram && <div class="card__thumbnail" dangerouslySetInnerHTML={{ __html: record.diagram }} />}
       <div class="card__body">
         {/* The star's slot is on every card, so the name wraps the same with or without it. */}
         <div class="card__head">

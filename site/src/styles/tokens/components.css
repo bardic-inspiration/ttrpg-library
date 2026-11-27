@@ -43,6 +43,24 @@
     /* A character profile's skill list: its column width. */
     --skill-column-width: var(--size-card-min);
 
+    /*
+     * A map's diagram (docs/content-model.md#map-diagrams): its classes' colors, in the diagram's
+     * own units, so a stroke or a label scales with it. The zone a link lands on, or under the
+     * pointer, is tinted with the accent, and its entry in the zone list too.
+     */
+    --map-wall-fill: var(--parchment-400);
+    --map-wall-stroke: var(--ink-600);
+    --map-zone-fill: var(--color-surface);
+    --map-zone-stroke: var(--ink-600);
+    --map-stroke-width: 1.5px;
+    --map-door-stroke: var(--color-accent);
+    --map-door-width: 4px;
+    --map-feature-fill: var(--ink-400);
+    --map-label-fill: var(--color-text);
+    --map-label-size: 11px;
+    --map-zone-target-fill: color-mix(in srgb, var(--accent) 25%, var(--color-surface));
+    --map-zone-target-bg: color-mix(in srgb, var(--accent) 10%, var(--color-surface));
+
     /* A detail page's summary line, under its title. */
     --entry-summary-size: var(--text-h4);
 
