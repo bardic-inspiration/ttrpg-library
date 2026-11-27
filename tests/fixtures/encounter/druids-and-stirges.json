@@ -1,0 +1,34 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "druids-and-stirges",
+  "name": "Druids and Stirges",
+  "summary": "Two druids and their swarm of stirges guard a grove.",
+  "stats": {
+    "parts": [
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/druid",
+            "count": 2
+          },
+          {
+            "ref": "creature/stirge",
+            "count": 9
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        437
+      ]
+    }
+  }
+}

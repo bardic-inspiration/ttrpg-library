@@ -6,6 +6,7 @@ import { checkBackground, checkBackgroundLinks, checkCharacter, checkCharacterLi
 import { checkClass, checkClassFeature, checkClassLinks, checkSubclassLinks, deriveClass, deriveClassLinked } from './classes.ts';
 import { deriveCharacter, deriveCharacterLinked } from './characters.ts';
 import { checkMap, checkMapLinks } from './maps.ts';
+import { checkEncounter } from './encounters.ts';
 import { deriveCreature, deriveStatBlocks } from './derive.ts';
 import { checkBaseItem, checkEquipment, deriveEquipment } from './equipment.ts';
 import { refLabels } from './refs.ts';
@@ -13,7 +14,7 @@ import { renderTokens } from './tokens.ts';
 import definition from './ruleset.json' with { type: 'json' };
 import phrasesJson from './phrases.json' with { type: 'json' };
 import tablesJson from './tables.json' with { type: 'json' };
-import type { BackgroundStats, CharacterStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EquipmentStats, FeatStats, ItemStats, MapStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
+import type { BackgroundStats, CharacterStats, ClassFeatureStats, ClassStats, CreatureStats, DerivedCreature, EncounterStats, EquipmentStats, FeatStats, ItemStats, MapStats, SpeciesStats, SpellStats, SubclassStats, Tables } from './types.ts';
 
 export const tables = tablesJson as Tables;
 export const phrases = phrasesJson as unknown as PhraseBook;
@@ -46,6 +47,7 @@ export const ruleset: RulesetModule = {
     if (type === 'class-feature') return checkClassFeature(stats as ClassFeatureStats);
     if (type === 'character') return checkCharacter(stats as CharacterStats, tables);
     if (type === 'map') return checkMap(stats as MapStats);
+    if (type === 'encounter') return checkEncounter(stats as EncounterStats);
     return [];
   },
   checkLinks(type, stats, target, named, key) {

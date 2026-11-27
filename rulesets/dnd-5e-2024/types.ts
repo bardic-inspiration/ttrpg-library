@@ -626,3 +626,56 @@ export interface MapStats {
   /** For a child map, the zone of its parent it details. */
   within?: MapZoneRef;
 }
+
+// Encounters (docs/rulesets.md#encounters) and the kit parts they're built of (docs/content-model.md#arrangements),
+// mirroring schemas/encounter.schema.json and the `Part…` definitions in common.schema.json.
+
+/** How a ref in a part shows: linked by name (the default), as the target's card, or as a thumbnail. */
+export type Show = 'link' | 'card' | 'thumbnail';
+
+export type Difficulty = 'low' | 'moderate' | 'high';
+
+/** A map, or a zone of one (`MapRef`). */
+export interface MapRef {
+  ref: string;
+  zone?: string;
+}
+
+export interface RosterLine {
+  ref: string;
+  count: number;
+  show?: Show;
+}
+
+/** A spawn table line, whose count may be dice ("1d6+2"). */
+export interface SpawnLine {
+  ref: string;
+  count: number | string;
+  show?: Show;
+}
+
+export interface SpawnRow {
+  range?: { min: number; max: number };
+  creatures: SpawnLine[];
+}
+
+export interface LootRow {
+  coins?: { dice: string; times?: number; unit: 'cp' | 'sp' | 'ep' | 'gp' | 'pp' };
+  items?: { ref: string; count?: number; show?: Show }[];
+}
+
+export type Part =
+  | { part: 'prose'; title?: string; text: string }
+  | { part: 'description'; text: string }
+  | { part: 'dm-guide'; text: string }
+  | { part: 'roster'; creatures: RosterLine[] }
+  | { part: 'spawn-table'; roll?: string; rows: Partial<Record<Difficulty, SpawnRow>> }
+  | { part: 'sequence'; trigger?: string; stages?: { name: string; loop: string; transition?: string }[]; victory?: string; example?: string }
+  | { part: 'table'; title: string; text: string }
+  | { part: 'loot'; rows: Partial<Record<Difficulty, LootRow>> }
+  | { part: 'map'; map: MapRef & { show?: Show } };
+
+export interface EncounterStats {
+  parts: Part[];
+  setIn?: MapRef;
+}

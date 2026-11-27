@@ -51,6 +51,485 @@
         "zone": { "description": "The id of one of the map's zones.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }
       }
     },
+    "MapRef": {
+      "description": "A link to a map, or to one of its zones (docs/content-model.md#references \"A map's zones\"). A typed ref: it allows only map keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/MapZoneRef/properties/ref"
+        },
+        "zone": {
+          "$ref": "#/$defs/MapZoneRef/properties/zone"
+        }
+      }
+    },
+    "Show": {
+      "description": "How the ref shows in its part (docs/content-model.md#arrangements): \"link\" (the default) prints its name linked, \"card\" embeds the target's card, and \"thumbnail\" a small form of it, such as a map's diagram.",
+      "enum": [
+        "link",
+        "card",
+        "thumbnail"
+      ]
+    },
+    "RosterLine": {
+      "description": "One line of a roster: a creature and how many (docs/rulesets.md#encounters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "count"
+      ],
+      "properties": {
+        "ref": {
+          "description": "The creature, as creature/<id>.",
+          "type": "string",
+          "pattern": "^creature/[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "count": {
+          "description": "How many, 1 or more.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "SpawnLine": {
+      "description": "One line of a spawn table row: a creature and how many, as a number or dice (docs/rulesets.md#encounters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "count"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/RosterLine/properties/ref"
+        },
+        "count": {
+          "description": "How many: 1 or more, or dice with an optional modifier (\"1d6+2\") whose lowest roll is at least 1.",
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "$ref": "#/$defs/DiceCount"
+            }
+          ]
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "DiceCount": {
+      "description": "Dice with an optional flat modifier, such as \"1d6+2\" or \"2d4\".",
+      "type": "string",
+      "pattern": "^[1-9]\\d*d(4|6|8|10|12|20|100)([+-][1-9]\\d*)?$"
+    },
+    "SpawnRow": {
+      "description": "One row of a spawn table: its roster, and its range on the table's die when the table has a `roll`.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creatures"
+      ],
+      "properties": {
+        "range": {
+          "description": "The faces of the table's die that pick this row, from `min` to `max`: { \"min\": 1, \"max\": 2 }.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max"
+          ],
+          "properties": {
+            "min": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "creatures": {
+          "description": "The row's roster.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/SpawnLine"
+          }
+        }
+      }
+    },
+    "LootLine": {
+      "description": "One item of loot and how many.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ],
+      "properties": {
+        "ref": {
+          "description": "The item, as item/<id>, or equipment, as equipment/<id>.",
+          "type": "string",
+          "pattern": "^(item|equipment)/[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "count": {
+          "description": "How many, 2 or more; 1 when omitted.",
+          "type": "integer",
+          "minimum": 2
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "LootRow": {
+      "description": "The loot for one difficulty: coins, items, or both.",
+      "type": "object",
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "coins"
+          ]
+        },
+        {
+          "required": [
+            "items"
+          ]
+        }
+      ],
+      "properties": {
+        "coins": {
+          "description": "Coins: dice, an optional multiplier, and a unit. { \"dice\": \"4d6\", \"times\": 10, \"unit\": \"gp\" } reads \"4d6 × 10 GP\".",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dice",
+            "unit"
+          ],
+          "properties": {
+            "dice": {
+              "$ref": "#/$defs/Dice"
+            },
+            "times": {
+              "description": "A multiplier, 2 or more.",
+              "type": "integer",
+              "minimum": 2
+            },
+            "unit": {
+              "description": "The coin.",
+              "enum": [
+                "cp",
+                "sp",
+                "ep",
+                "gp",
+                "pp"
+              ]
+            }
+          }
+        },
+        "items": {
+          "description": "Items, in the order they're listed.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/LootLine"
+          }
+        }
+      }
+    },
+    "Stage": {
+      "description": "One stage of a structured sequence.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "loop"
+      ],
+      "properties": {
+        "name": {
+          "description": "The stage's name: \"The Ambush\".",
+          "type": "string",
+          "minLength": 1
+        },
+        "loop": {
+          "description": "The turn loop: how the DM runs the creatures each round of the stage.",
+          "$ref": "#/$defs/Text"
+        },
+        "transition": {
+          "description": "What moves play to the next stage. The last stage may leave it out, since victory follows.",
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartProse": {
+      "description": "A text section, titled or not.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "prose"
+        },
+        "title": {
+          "description": "The section's heading.",
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartDescription": {
+      "description": "Player-facing text, read aloud or paraphrased.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "description"
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartDmGuide": {
+      "description": "Instructions for running it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "dm-guide"
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartRoster": {
+      "description": "Creatures with fixed counts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "creatures"
+      ],
+      "properties": {
+        "part": {
+          "const": "roster"
+        },
+        "creatures": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/RosterLine"
+          }
+        }
+      }
+    },
+    "PartSpawnTable": {
+      "description": "Rosters by difficulty, whose counts may be dice. With `roll`, each row has a range on that die, and the ranges cover its faces once each.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "rows"
+      ],
+      "properties": {
+        "part": {
+          "const": "spawn-table"
+        },
+        "roll": {
+          "description": "One die the DM may roll to pick a row: \"1d6\".",
+          "type": "string",
+          "pattern": "^1d(4|6|8|10|12|20|100)$"
+        },
+        "rows": {
+          "description": "The rows, keyed by difficulty: \"low\", \"moderate\", or \"high\", each at most once. The page lists them in that order.",
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "low": {
+              "$ref": "#/$defs/SpawnRow"
+            },
+            "moderate": {
+              "$ref": "#/$defs/SpawnRow"
+            },
+            "high": {
+              "$ref": "#/$defs/SpawnRow"
+            }
+          }
+        }
+      }
+    },
+    "PartSequence": {
+      "description": "How it plays out: structured (a trigger, stages, and a victory condition), or one prose example.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "trigger",
+            "stages",
+            "victory"
+          ]
+        },
+        {
+          "required": [
+            "example"
+          ]
+        }
+      ],
+      "dependentSchemas": {
+        "example": {
+          "properties": {
+            "trigger": false,
+            "stages": false,
+            "victory": false
+          }
+        }
+      },
+      "properties": {
+        "part": {
+          "const": "sequence"
+        },
+        "trigger": {
+          "description": "What starts it.",
+          "$ref": "#/$defs/Text"
+        },
+        "stages": {
+          "description": "The stages, in order.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Stage"
+          }
+        },
+        "victory": {
+          "description": "How it ends in the party's favor.",
+          "$ref": "#/$defs/Text"
+        },
+        "example": {
+          "description": "How it might play, as one prose text, in place of the structured form.",
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartTable": {
+      "description": "A titled pipe table: a random table, a loot table, or any other.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "title",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "table"
+        },
+        "title": {
+          "description": "The table's title.",
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "description": "One pipe table and nothing else (docs/content-model.md#tables-in-text).",
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartLoot": {
+      "description": "Coins and items by difficulty.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "rows"
+      ],
+      "properties": {
+        "part": {
+          "const": "loot"
+        },
+        "rows": {
+          "description": "The loot, keyed by difficulty: \"low\", \"moderate\", or \"high\", each at most once. The page lists them in that order.",
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "low": {
+              "$ref": "#/$defs/LootRow"
+            },
+            "moderate": {
+              "$ref": "#/$defs/LootRow"
+            },
+            "high": {
+              "$ref": "#/$defs/LootRow"
+            }
+          }
+        }
+      }
+    },
+    "PartMap": {
+      "description": "A map, or a zone of one, shown on the page.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "map"
+      ],
+      "properties": {
+        "part": {
+          "const": "map"
+        },
+        "map": {
+          "description": "The map or zone, and how it shows.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref"
+          ],
+          "properties": {
+            "ref": {
+              "$ref": "#/$defs/MapZoneRef/properties/ref"
+            },
+            "zone": {
+              "$ref": "#/$defs/MapZoneRef/properties/zone"
+            },
+            "show": {
+              "$ref": "#/$defs/Show"
+            }
+          }
+        }
+      }
+    },
     "ConditionRef": {
       "description": "A link to a condition, an SRD primitive or a custom extension (docs/rulesets.md#rules-data). A typed ref: it allows only condition keys. A `note` prints in parentheses after the name: \"Charmed (with Mind Blank)\".",
       "type": "object",

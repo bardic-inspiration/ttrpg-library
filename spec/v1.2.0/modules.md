@@ -9,7 +9,8 @@ depends: [encounters]
 
 A **module** is an adventure a DM runs across one or more sessions: story
 order, hooks, maps, encounters, characters, and cross-cutting tables. It's a
-**structured document** built from the kit ([`encounters.md`](encounters.md)),
+**structured document** built from the kit
+([Arrangements](../../docs/content-model.md#arrangements)),
 not open-ended markdown or HTML, so every module reads with the site's
 standard look while holding a range of content. It serves P6 (the kit owns
 presentation) and P3 (each piece is one standalone entry, included by ref).
@@ -31,8 +32,9 @@ that uses fewer parts.
 
 ### Module parts
 
-A module allows the shared parts marked for it in the kit (`prose`,
-`description`, `dm-guide`, `sequence`, `table`, `map`) and two of its own:
+A module allows the shared parts `prose`, `description`, `dm-guide`,
+`sequence`, `table`, and `map`
+([Encounters](../../docs/rulesets.md#encounters)), and two of its own:
 
 | Part | Holds |
 |---|---|

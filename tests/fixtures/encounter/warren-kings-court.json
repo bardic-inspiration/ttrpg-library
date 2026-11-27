@@ -1,0 +1,82 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "warren-kings-court",
+  "name": "The Warren King's Court",
+  "summary": "A goblin king holds court in a drowned shrine, guarded by his hexer and his boss.",
+  "stats": {
+    "setIn": {
+      "ref": "map/sunken-cistern",
+      "zone": "drowned-shrine"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/sunken-cistern",
+          "zone": "drowned-shrine",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Candles float on the black water around a dais of stacked crates. On it, a goblin in a crown of bent spoons bangs a ladle for silence."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/goblin-warren-king",
+            "count": 1,
+            "show": "card"
+          },
+          {
+            "ref": "creature/goblin-hexer",
+            "count": 1,
+            "show": "card"
+          },
+          {
+            "ref": "creature/goblin-boss",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "part": "sequence",
+        "trigger": "The party steps into the shrine, or attacks from the Flooded Hall.",
+        "stages": [
+          {
+            "name": "The Audience",
+            "loop": "The king demands tribute while the hexer circles behind the party. Nobody attacks until a goblin is hurt or the tribute is refused.",
+            "transition": "Steel is drawn, or the hexer finishes her circle."
+          },
+          {
+            "name": "The Brawl",
+            "loop": "The boss holds the dais stairs; the hexer curses whoever hurts the king; the king throws whatever is to hand.",
+            "transition": "The boss falls, or the king drops below half his Hit Points."
+          },
+          {
+            "name": "The Flight",
+            "loop": "The king dives for the Overflow tunnel while the hexer covers his escape."
+          }
+        ],
+        "victory": "The king is caught or slain before he reaches the Overflow."
+      },
+      {
+        "part": "table",
+        "title": "The King's Hoard",
+        "text": "| d4 | Treasure |\n|---|---|\n| 1 | A sack of 300 CP |\n| 2 | A tin crown set with river glass |\n| 3 | A {ref:item/potion-of-climbing} |\n| 4 | All of the above |"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        437
+      ]
+    }
+  }
+}
