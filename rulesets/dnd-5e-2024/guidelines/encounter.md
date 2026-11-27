@@ -30,6 +30,10 @@ Every encounter is custom: the SRD prints none
 - Difficulty is derived from the roster's creatures and counts; never
   write XP. A spawn table's rows are designed one per difficulty, each
   reading as its name says.
+- `environment` is for a setting that makes the fight harder or easier than
+  its creatures: a multiplier (1.25 for a room's hazards) and a note naming
+  what does it. Leave it out when the setting is neutral; the reviewer
+  confirms every one.
 
 ## Prose style
 

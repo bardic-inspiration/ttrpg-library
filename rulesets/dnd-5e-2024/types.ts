@@ -218,6 +218,8 @@ export interface Tables {
   multiclassSpellSlots: number[][];
   /** The Pact Magic slots and their level, levels 1–20, from the Warlock Features table. */
   pactMagic: { slots: number; slotLevel: number }[];
+  /** The XP Budget per Character table: each difficulty's budget, levels 1–20. */
+  xpBudgetPerCharacter: Budget[];
 }
 
 export interface DerivedDamage {
@@ -675,7 +677,37 @@ export type Part =
   | { part: 'loot'; rows: Partial<Record<Difficulty, LootRow>> }
   | { part: 'map'; map: MapRef & { show?: Show } };
 
+/** E, the environment multiplier: above 0, not 1, and why. */
+export interface Environment {
+  multiplier: number;
+  note: string;
+}
+
 export interface EncounterStats {
   parts: Part[];
   setIn?: MapRef;
+  environment?: Environment;
+}
+
+/** XP budgets, a character's or a party's, by difficulty. */
+export type Budget = Record<Difficulty, number>;
+
+/** What an encounter reads for a party: a difficulty, or above the High budget. */
+export type DifficultyResult = Difficulty | 'beyond-high';
+
+/** A span of XP: a roster's, whose bounds and average are equal, or a spawn table row's from its dice. */
+export interface XpSpan {
+  min: number;
+  average: number;
+  max: number;
+}
+
+/** An encounter's derived difficulty side: f(Roster) × E, for its roster or each spawn table row. */
+export interface DerivedEncounter {
+  /** E; 1 without an authored `environment`. */
+  multiplier: number;
+  /** The roster's XP (`min` and `max` equal), or the span of the spawn table's rows, lowest minimum to highest maximum. */
+  xp: { min: number; max: number };
+  /** A spawn table's XP by row. */
+  rows?: Partial<Record<Difficulty, XpSpan>>;
 }

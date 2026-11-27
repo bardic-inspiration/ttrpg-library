@@ -1,10 +1,12 @@
 // Encounter checks a JSON schema can't express (docs/rulesets.md#encounters, docs/rulesets.md#consistency-checks).
 // The kit parts' shapes are the schema's (docs/content-model.md#arrangements); refs, zones included,
-// resolve by the ref check (docs/content-model.md#references).
+// resolve by the ref check (docs/content-model.md#references). Difficulty (docs/rulesets.md#encounter-difficulty)
+// is derived here: the encounter's XP from its creatures, and a party's budgets from tables.json.
 
 import { Lexer } from 'marked';
-import type { Issue } from '../module.ts';
-import type { Difficulty, EncounterStats, SpawnRow } from './types.ts';
+import type { Issue, LinkedLibrary } from '../module.ts';
+import { deriveCreature } from './derive.ts';
+import type { Budget, CreatureStats, DerivedEncounter, Difficulty, DifficultyResult, EncounterStats, SpawnRow, Tables, XpSpan } from './types.ts';
 
 /** The rows of a table keyed by difficulty, in the order they read. */
 export const DIFFICULTIES: readonly Difficulty[] = ['low', 'moderate', 'high'];
@@ -16,13 +18,89 @@ export function lowestCount(count: number | string): number {
   return match ? Number(match[1]) + Number(match[2] ?? 0) : Number.NaN;
 }
 
-/** An encounter has one roster or spawn table, a spawn table's ranges fit its roll, dice counts roll at least 1, and a table part holds one table. */
+/** A count's lowest, average, and highest roll; a fixed count is all three. */
+export function countSpan(count: number | string): XpSpan {
+  if (typeof count === 'number') return { min: count, average: count, max: count };
+  const match = /^(\d+)d(\d+)([+-]\d+)?$/.exec(count);
+  if (!match) throw new Error(`encounter: ${count} isn't a dice count`);
+  const dice = Number(match[1]);
+  const faces = Number(match[2]);
+  const modifier = Number(match[3] ?? 0);
+  return { min: dice + modifier, average: (dice * (faces + 1)) / 2 + modifier, max: dice * faces + modifier };
+}
+
+/** f(Roster) × E: each creature's XP by its CR times its count, summed, times the multiplier, as a span. */
+function rosterXp(lines: { ref: string; count: number | string }[], multiplier: number, xpOf: (ref: string) => number): XpSpan {
+  const sum = { min: 0, average: 0, max: 0 };
+  for (const line of lines) {
+    const xp = xpOf(line.ref);
+    const span = countSpan(line.count);
+    sum.min += xp * span.min;
+    sum.average += xp * span.average;
+    sum.max += xp * span.max;
+  }
+  return { min: sum.min * multiplier, average: sum.average * multiplier, max: sum.max * multiplier };
+}
+
+/**
+ * The encounter's side of difficulty: E, and f(Roster) × E for its roster, or for each spawn table row
+ * with the span of the rows. A creature's XP is the one its own derivation gives for its CR.
+ */
+export function deriveEncounterLinked(stats: EncounterStats, library: LinkedLibrary, tables: Tables): DerivedEncounter {
+  const multiplier = stats.environment?.multiplier ?? 1;
+  const xpOf = (ref: string) => {
+    const found = library.resolve(ref);
+    if (!found) throw new Error(`encounter: ${ref} doesn't resolve`);
+    return deriveCreature(found.stats as CreatureStats, tables).xp;
+  };
+  const arranged = stats.parts.find((p) => p.part === 'roster' || p.part === 'spawn-table');
+  if (arranged?.part === 'roster') {
+    const { min, max } = rosterXp(arranged.creatures, multiplier, xpOf);
+    return { multiplier, xp: { min, max } };
+  }
+  const rows: Partial<Record<Difficulty, XpSpan>> = {};
+  if (arranged?.part === 'spawn-table') {
+    for (const d of DIFFICULTIES) {
+      const row = arranged.rows[d];
+      if (row) rows[d] = rosterXp(row.creatures, multiplier, xpOf);
+    }
+  }
+  const spans = Object.values(rows);
+  const xp = spans.length === 0 ? { min: 0, max: 0 } : { min: Math.min(...spans.map((s) => s.min)), max: Math.max(...spans.map((s) => s.max)) };
+  return { multiplier, xp, rows };
+}
+
+/** g(Party): the sum of each character's XP budget for their level, for each difficulty. */
+export function partyBudget(levels: readonly number[], tables: Tables): Budget {
+  const budget: Budget = { low: 0, moderate: 0, high: 0 };
+  for (const level of levels) {
+    const row = tables.xpBudgetPerCharacter[level - 1];
+    if (!row) throw new Error(`encounter: no XP budget for level ${level}`);
+    for (const d of DIFFICULTIES) budget[d] += row[d];
+  }
+  return budget;
+}
+
+/** What XP reads against a party's budgets: Low at or under Low, then Moderate, High, or Beyond High. */
+export function difficultyOf(xp: number, budget: Budget): DifficultyResult {
+  return DIFFICULTIES.find((d) => xp <= budget[d]) ?? 'beyond-high';
+}
+
+/** An encounter has one roster or spawn table, a spawn table's ranges fit its roll, dice counts roll at least 1, a table part holds one table, and E isn't 1 (a warning otherwise). */
 export function checkEncounter(stats: EncounterStats): Issue[] {
   const issues: Issue[] = [];
   const arranged = stats.parts.flatMap((p, i) => (p.part === 'roster' || p.part === 'spawn-table' ? [i] : []));
   if (arranged.length !== 1) {
     const found = arranged.length === 0 ? 'none' : `${arranged.length}, at ${arranged.map((i) => `stats.parts[${i}]`).join(', ')}`;
     issues.push({ level: 'error', path: 'stats.parts', message: `an encounter has exactly one roster or spawn-table part; found ${found}` });
+  }
+  if (stats.environment) {
+    const { multiplier } = stats.environment;
+    if (multiplier === 1) {
+      issues.push({ level: 'error', path: 'stats.environment.multiplier', message: 'a multiplier of 1 changes nothing; leave `environment` out' });
+    } else {
+      issues.push({ level: 'warning', path: 'stats.environment.multiplier', message: `the environment multiplies the encounter's XP by ${multiplier}; confirm the deviation` });
+    }
   }
   stats.parts.forEach((part, i) => {
     const at = `stats.parts[${i}]`;

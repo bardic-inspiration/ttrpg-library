@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/encounter.schema.json",
   "title": "dnd-5e-2024 encounter stats (docs/rulesets.md#encounters)",
-  "description": "An arrangement (docs/content-model.md#arrangements): kit parts in page order, and the map it's set in. Its one roster or spawn table, a spawn table's ranges, dice counts, and a table part's table are checks in encounters.ts (docs/rulesets.md#consistency-checks).",
+  "description": "An arrangement (docs/content-model.md#arrangements): kit parts in page order, and the map it's set in. Its one roster or spawn table, a spawn table's ranges, dice counts, and a table part's table, and E are checks in encounters.ts (docs/rulesets.md#consistency-checks).",
   "type": "object",
   "additionalProperties": false,
   "required": ["parts"],
@@ -16,6 +16,16 @@
     "setIn": {
       "description": "The map the encounter is set in, or a zone of it. The map's page lists the encounter there; a map part shows the map on this page.",
       "$ref": "common.schema.json#/$defs/MapRef"
+    },
+    "environment": {
+      "description": "E, the environment multiplier on the encounter's XP, and why. Without it, E is 1; a multiplier of 1 is an error and any other a review warning, checks in encounters.ts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["multiplier", "note"],
+      "properties": {
+        "multiplier": { "type": "number", "exclusiveMinimum": 0 },
+        "note": { "description": "Why the setting makes it harder or easier, such as \"difficult terrain and a collapsing floor\".", "type": "string", "minLength": 1 }
+      }
     }
   },
   "$defs": {

@@ -43,7 +43,7 @@ adding a ruleset is adding a folder:
 | File | Purpose |
 |---|---|
 | `ruleset.json` | ID, `publisher` ([Source and author](content-model.md#source-and-author)), list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
-| `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability, point-buy costs) and the enums the schemas share |
+| `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability, point-buy costs, XP budgets by level) and the enums the schemas share |
 | `phrases.json` | The phrase book: the fixed sentences templates fill, the display name of each enum value, and irregular plurals and articles ([Wording](site.md#wording)) |
 | `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`, classes' in `classes.ts`, characters' in `characters.ts`) |
 | `tokens.ts` | Text tokens that render derived values inside prose |
@@ -1045,6 +1045,10 @@ kit's parts are `Part…` definitions in `schemas/common.schema.json`. Its
   ([Maps](#maps)); the encounter's page labels the link "Set in", and the
   map's "Set here". A `map` part shows the map on the page; `setIn` alone
   doesn't.
+- **`environment`:** E, the environment multiplier, an authored input:
+  `{ "multiplier": 1.25, "note": "…" }`, the multiplier above 0, and the
+  note saying why ("difficult terrain and a collapsing floor"). Without it,
+  E is 1 ([Encounter difficulty](#encounter-difficulty)).
 
 The parts:
 
@@ -1073,9 +1077,37 @@ add `show` ([Arrangements](content-model.md#arrangements)).
 - **Characters aren't roster lines.** A character in an encounter is a
   `{ref:…}` in its text, since characters have no XP.
 
-An encounter derives nothing yet. Encounters come only by request; they have
-no gap buckets. Its page is the generic detail page, and its card shows its
-name and summary.
+An encounter derives its side of difficulty (below). Encounters come only by
+request; they have no gap buckets. Its page is the generic detail page, and
+its card shows its name and summary.
+
+### Encounter difficulty
+
+Difficulty compares the party against the encounter. `encounters.ts`
+derives both sides, and no XP is ever written.
+
+- **The encounter's side** is f(Roster) × E: the sum of each creature's XP
+  by its CR ([Creatures](#creatures)) times its count, times E. It reads
+  other entries, so it's a linked derivation
+  ([The ruleset module](#the-ruleset-module)): `multiplier`, E; and `xp`,
+  `{ min, max }`, equal for a roster. A spawn table derives `rows`, each row
+  `{ min, average, max }` from its dice counts' lowest, average, and highest
+  rolls, and `xp` spans the rows, the lowest minimum to the highest maximum.
+  The values aren't rounded.
+- **E** is `stats.environment.multiplier`, or 1. A multiplier of 1 is an
+  error, since it changes nothing; any other is a warning in the job summary
+  for the reviewer to confirm, as an `adjust` is
+  ([Inputs and derived values](#inputs-and-derived-values)).
+- **The party's side,** g(Party), is `partyBudget`: the sum of each
+  character's Low, Moderate, and High budgets for their level, from
+  `tables.json`'s `xpBudgetPerCharacter` (SRD 5.2's XP Budget per Character
+  table, levels 1–20). For a party at one level it's the SRD's budget times
+  the party's size.
+- **The result** is `difficultyOf`: XP at or under the Low budget reads
+  `low`; up to Moderate, `moderate`; up to High, `high`; above it,
+  `beyond-high`. For the SRD's examples, a lone bugbear warrior (200 XP) is
+  Low for four level 1 characters, and two druids and nine stirges
+  (1,125 XP) are Moderate for five level 3 characters.
 
 ### Embedded stat blocks
 
@@ -1163,6 +1195,8 @@ warnings below on an SRD entry.
 | Encounter | A spawn table with a `roll` gives every row a range on its die, and the ranges cover each face once; without one, no row has a range | error |
 | Encounter | A spawn table's dice count can't roll below 1 | error |
 | Encounter | A `table` part's text is one pipe table and nothing else | error |
+| Encounter | `environment.multiplier` isn't 1 | error |
+| Encounter | Any `environment` multiplier | warning |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

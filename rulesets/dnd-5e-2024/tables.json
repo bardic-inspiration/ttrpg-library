@@ -1,5 +1,5 @@
 {
-  "source": "SRD 5.2, \"Monsters\": Challenge Rating table (Experience Points by Challenge Rating, Proficiency Bonus by Challenge Rating); \"Creature Size\" table; \"Skills\" table. \"Character Creation\": Ability Score Point Costs table (the point-buy budget and costs), Character Advancement table (Proficiency Bonus by level), Multiclass Spellcaster table (spell slots per spell level). \"Warlock\": Warlock Features table (Spell Slots and Slot Level columns).",
+  "source": "SRD 5.2, \"Monsters\": Challenge Rating table (Experience Points by Challenge Rating, Proficiency Bonus by Challenge Rating); \"Creature Size\" table; \"Skills\" table. \"Character Creation\": Ability Score Point Costs table (the point-buy budget and costs), Character Advancement table (Proficiency Bonus by level), Multiclass Spellcaster table (spell slots per spell level). \"Warlock\": Warlock Features table (Spell Slots and Slot Level columns). \"Gameplay Toolbox\": XP Budget per Character table (Low, Moderate, and High budgets by level).",
   "challengeRatings": [
     {
       "cr": 0,
@@ -297,5 +297,27 @@
     {"slots": 4, "slotLevel": 5},
     {"slots": 4, "slotLevel": 5},
     {"slots": 4, "slotLevel": 5}
+  ],
+  "xpBudgetPerCharacter": [
+    {"low": 50, "moderate": 75, "high": 100},
+    {"low": 100, "moderate": 150, "high": 200},
+    {"low": 150, "moderate": 225, "high": 400},
+    {"low": 250, "moderate": 375, "high": 500},
+    {"low": 500, "moderate": 750, "high": 1100},
+    {"low": 600, "moderate": 1000, "high": 1400},
+    {"low": 750, "moderate": 1300, "high": 1700},
+    {"low": 1000, "moderate": 1700, "high": 2100},
+    {"low": 1300, "moderate": 2000, "high": 2600},
+    {"low": 1600, "moderate": 2300, "high": 3100},
+    {"low": 1900, "moderate": 2900, "high": 4100},
+    {"low": 2200, "moderate": 3700, "high": 4700},
+    {"low": 2600, "moderate": 4200, "high": 5400},
+    {"low": 2900, "moderate": 4900, "high": 6200},
+    {"low": 3300, "moderate": 5400, "high": 7800},
+    {"low": 3800, "moderate": 6100, "high": 9800},
+    {"low": 4500, "moderate": 7200, "high": 11700},
+    {"low": 5000, "moderate": 8700, "high": 14200},
+    {"low": 5500, "moderate": 10700, "high": 17200},
+    {"low": 6400, "moderate": 13200, "high": 22000}
   ]
 }
