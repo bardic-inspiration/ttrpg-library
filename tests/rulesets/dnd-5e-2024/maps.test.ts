@@ -10,7 +10,7 @@ import { validateLibrary } from '../../../scripts/validate/index.ts';
 import { checkDiagram } from '../../../scripts/validate/diagram.ts';
 import { checkMapDiagram } from '../../../scripts/validate/library.ts';
 import { ruleset } from '../../../rulesets/dnd-5e-2024/index.ts';
-import { FIXTURES, tempLibrary } from '../../helpers.ts';
+import { FIXTURES, libraryWithout, tempLibrary } from '../../helpers.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
 const CONTENT = join(ROOT, 'content/dnd-5e-2024');
@@ -18,8 +18,11 @@ const MAPS = join(FIXTURES, 'map');
 const readJson = async (path: string) => JSON.parse(await readFile(path, 'utf8')) as Record<string, any>;
 const jsonIn = async (path: string) => Promise.all((await readdir(path)).filter((f) => f.endsWith('.json')).sort().map((f) => readJson(join(path, f))));
 
-/** The map fixtures and the whole library; the library has no maps of its own to stand in for. */
-const loadAll = async () => [...(await jsonIn(MAPS)), ...(await Promise.all((await readdir(CONTENT)).filter((t) => t !== 'map').map((t) => jsonIn(join(CONTENT, t))))).flat()];
+/** The map fixtures and the library minus its maps, and the entries that link to them. */
+const loadAll = async () => {
+  const fixtures = await jsonIn(MAPS);
+  return [...fixtures, ...(await libraryWithout(['map'], fixtures))];
+};
 let library: ReturnType<typeof loadAll> | undefined;
 const all = async () => structuredClone(await (library ??= loadAll()));
 
