@@ -33,21 +33,11 @@ choices, not arithmetic).
 - [Encounter difficulty](../../docs/rulesets.md#encounter-difficulty):
   f(Roster) × E per roster and spawn table row, E's warning, the XP budgets,
   and the result.
+- [Difficulty calculator](../../docs/site.md#difficulty-calculator): the
+  encounter page's party, budgets, and result, and its XP and E without
+  JavaScript.
 
 ## Design
-
-### The calculator
-
-The encounter page holds a calculator, a Preact island:
-
-- **The reader enters the party:** each character's level, added and
-  removed. It starts at four characters of level 1, and the party is kept in
-  local storage, wrapped as the cart is ([`ui.md`](ui.md)), so it carries to
-  the next encounter.
-- **It shows** the party's three budgets, the encounter's XP, and the
-  result: one line for a roster, one per row for a spawn table, with each
-  row's minimum, average, and maximum.
-- **Without JavaScript,** the page shows the encounter's XP and E.
 
 ### Parts on the page
 

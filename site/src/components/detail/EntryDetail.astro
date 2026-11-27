@@ -3,7 +3,8 @@
 // type, and summary; the type template; the description as lore; forward refs and
 // back-refs (but those into a map's zones, which its template lists), each label's list a disclosure, an official page's links to homebrew in a Homebrew
 // section after them; and provenance.
-// The page passes its export controls (an island) in the `export` slot.
+// The page passes its export controls (an island) in the `export` slot, and any section of its own,
+// such as an encounter's Difficulty, in the default slot, after the template.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
 import { outsideZones } from '../../lib/map';
@@ -64,6 +65,8 @@ const nameParts = entry.name.split('/');
   </header>
 
   <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} refBy={loaded.refBy} mode="screen" level={2} />
+
+  <slot />
 
   {present(entry.description) && (
     <section class="entry-detail__lore" aria-labelledby="lore-heading">

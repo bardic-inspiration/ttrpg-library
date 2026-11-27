@@ -39,6 +39,10 @@
     "creature.passivePerception": "Passive Perception {score}",
     "creature.xp": "XP {xp}",
     "creature.xpInLair": "XP {xp}, or {lair} in lair",
+    "encounter.xp": "{xp} XP",
+    "encounter.xpSpan": "{min} to {max} XP",
+    "encounter.multiplier": "×{multiplier}",
+    "encounter.multiplierWithNote": "×{multiplier} ({note})",
     "creature.saveLabel": "{ability} Saving Throw:",
     "creature.reach": "reach {feet} ft.",
     "creature.range": "range {range} ft.",
@@ -162,6 +166,12 @@
       "radiant": "Radiant",
       "slashing": "Slashing",
       "thunder": "Thunder"
+    },
+    "difficulty": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "beyond-high": "Beyond High"
     },
     "school": {
       "abjuration": "Abjuration",

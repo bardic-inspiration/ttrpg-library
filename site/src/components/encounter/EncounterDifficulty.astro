@@ -1,0 +1,29 @@
+---
+// The encounter page's Difficulty section (docs/site.md#difficulty-calculator): the encounter's XP and
+// E, which show without JavaScript, then the calculator island, which renders once it hydrates.
+import type { DerivedEncounter, EncounterStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { calculatorProps, difficultyLines } from '../../lib/encounter';
+import PropertyList from '../templates/parts/PropertyList.astro';
+import DifficultyCalculator from './DifficultyCalculator.tsx';
+
+interface Props {
+  stats: EncounterStats;
+  derived: DerivedEncounter;
+}
+
+const { stats, derived } = Astro.props;
+---
+<section class="encounter-difficulty" aria-labelledby="difficulty-heading">
+  <h2 id="difficulty-heading">Difficulty</h2>
+  <PropertyList lines={difficultyLines(stats, derived)} />
+  <DifficultyCalculator client:load {...calculatorProps(derived)} />
+</section>
+
+<style>
+  @layer components {
+    .encounter-difficulty {
+      display: grid;
+      gap: var(--space-s);
+    }
+  }
+</style>

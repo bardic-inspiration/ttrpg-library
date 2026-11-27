@@ -1,0 +1,61 @@
+/* The difficulty calculator (docs/site.md#difficulty-calculator). */
+@layer components {
+  .calculator {
+    display: grid;
+    gap: var(--space-m);
+  }
+
+  .calculator > section {
+    display: grid;
+    gap: var(--space-2xs);
+    justify-items: start;
+  }
+
+  /* Each character's label, level, and Remove line up in columns. */
+  .calculator__characters {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    gap: var(--space-2xs) var(--space-xs);
+    padding: 0;
+    list-style: none;
+  }
+
+  .calculator__character {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+  }
+
+  .calculator__character > label {
+    font-weight: var(--font-weight-strong);
+  }
+
+  .calculator__budgets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-m);
+    margin: 0;
+
+    & > div {
+      display: flex;
+      gap: var(--space-3xs);
+    }
+
+    & dt {
+      font-weight: var(--font-weight-strong);
+    }
+
+    & dt::after {
+      content: ":";
+    }
+
+    & dd {
+      margin: 0;
+    }
+  }
+
+  .calculator > section > div {
+    justify-self: stretch;
+  }
+}

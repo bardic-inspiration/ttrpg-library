@@ -1078,8 +1078,9 @@ add `show` ([Arrangements](content-model.md#arrangements)).
   `{ref:…}` in its text, since characters have no XP.
 
 An encounter derives its side of difficulty (below). Encounters come only by
-request; they have no gap buckets. Its page is the generic detail page, and
-its card shows its name and summary.
+request; they have no gap buckets. Its page is the generic detail page with
+a Difficulty section ([Difficulty calculator](site.md#difficulty-calculator)),
+and its card shows its name and summary.
 
 ### Encounter difficulty
 
@@ -1098,7 +1099,9 @@ derives both sides, and no XP is ever written.
   error, since it changes nothing; any other is a warning in the job summary
   for the reviewer to confirm, as an `adjust` is
   ([Inputs and derived values](#inputs-and-derived-values)).
-- **The party's side,** g(Party), is `partyBudget`: the sum of each
+- **The party's side,** g(Party), is `partyBudget` in `difficulty.ts`, which
+  imports only types, so the site's calculator uses it without the ruleset's
+  tables or checks (`encounters.ts` re-exports it and `difficultyOf`): the sum of each
   character's Low, Moderate, and High budgets for their level, from
   `tables.json`'s `xpBudgetPerCharacter` (SRD 5.2's XP Budget per Character
   table, levels 1–20). For a party at one level it's the SRD's budget times
