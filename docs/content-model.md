@@ -214,7 +214,9 @@ never changes and is unique within its type:
 
 - **A ref object**, `{ "ref": "<type>/<id>" }`, valid only inside `stats` at
   fields the schema declares as `RefOrText` (or `CountedRefOrText`, creature
-  gear, which may add a `count`). It may add a `note`, a qualifier
+  gear, which may add a `count`), or at a typed ref field such as a kit
+  part's, which may add a `count` and a `show`
+  ([Refs in arrangements](#refs-in-arrangements)). It may add a `note`, a qualifier
   printed in parentheses after the name wherever the ref renders:
   `{ "ref": "spell/fireball", "note": "level 5 version" }` reads "Fireball
   (level 5 version)".
@@ -224,7 +226,8 @@ never changes and is unique within its type:
 **A map's zones.** A ref may point into a map ([Maps](rulesets.md#maps)) by
 naming one of its zones: a ref object adds a `zone`,
 `{ "ref": "map/<id>", "zone": "<zone-id>" }`, where its field takes a
-`MapZoneRef` (a map's `within`), and a token adds `#` and the zone id,
+`MapZoneRef` (a map's `within`) or a `MapPlaceRef`, whose zone is optional
+(an encounter's `setIn`, and a `map` part's map, which adds a `show`), and a token adds `#` and the zone id,
 `{ref:map/<id>#<zone-id>}`. Either renders "Map › Zone", "Sunken Cistern ›
 Drowned Shrine", linked to the zone's anchor, `#zone-<id>`, on the map's page.
 A zone the map doesn't have fails like a missing ref, as does a zone named on
@@ -331,6 +334,60 @@ features and a species' traits are components.
 - **Its links are its parent page's.** A page's Links list its own links and
   its components', except the links among the page's own parts: the parent's
   list of its components, and a component's link to its parent or a sibling.
+
+### Arrangements
+
+The library is organized by type in three layers:
+
+| Layer | Holds | Refs mean |
+|---|---|---|
+| **Ruleset** | How things work: derivations, rules data, rules pages | n/a |
+| **Content** | Typed entries: creatures, items, spells, characters… | Rules: "casts", "grants", "requires" |
+| **Arrangements** | Entries that put typed content together for play: `encounter` | Inventory: what's included, where it is, how it shows |
+
+An **arrangement** puts typed entries together; content never lives inside
+it. Every piece it names is a standalone entry a DM may lift out and adapt.
+An encounter is the one arrangement ([Encounters](rulesets.md#encounters)).
+
+### The kit
+
+An arrangement's `stats.parts` is an ordered list of kit parts, each
+`{ "part": "<kind>", … }`. Every arrangement draws its parts from one kit,
+and each arrangement type's schema allows its own subset; a part is checked
+against its own kind's definition only, so a malformed part fails on its
+own fields.
+
+| Part | Holds | Encounter |
+|---|---|---|
+| `prose` | A text section, with an optional `title` | ✓ |
+| `description` | Player-facing `text`, read aloud or paraphrased | ✓ |
+| `dm-guide` | Instructions for running it, as `text` | ✓ |
+| `roster` | Creature refs with counts | ✓ |
+| `spawn-table` | Rosters by difficulty | ✓ |
+| `sequence` | How it plays out: structured, or one example | ✓ |
+| `table` | A `title` and one pipe `table` (random, loot, cross-cutting) | ✓ |
+| `loot` | Coins and items by difficulty | ✓ |
+| `map` | A map, or a zone of one | ✓ |
+
+Each part's text is markdown-subset text with `{ref:…}` tokens
+([References](#references)). The encounter's parts are described under
+[Encounters](rulesets.md#encounters).
+
+### Refs in arrangements
+
+- **Inventory, not rules.** A ref in a part, object or token, says what's
+  included and how it shows. Its relation is labeled apart from rules refs:
+  an encounter's page lists it under "Includes", and its target's page
+  under "Appears in" ([The ruleset module](rulesets.md#the-ruleset-module)).
+- **Each ref object says how it shows,** with `show`: `link` (the default)
+  prints its name linked, `card` embeds the target's card, and `thumbnail`
+  embeds a small form (a map's diagram, an entry's art). How the parts are
+  assembled is the entry's design choice.
+- **Room to grow.** A ref in a part is an object, so a key such as a
+  dependency strength can be added later with no migration.
+- **Containment is listed by the container only.** An arrangement names
+  what's in it; what's in it never names the arrangement, and shows it as a
+  back-reference.
 
 ### Situational fields
 

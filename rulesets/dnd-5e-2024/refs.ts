@@ -15,14 +15,17 @@ const SPELLS: RefLabels = { forward: 'Spells', back: 'Classes' };
 const CLASSES: RefLabels = { forward: 'Classes', back: 'Spells' };
 const SUBCLASS: RefLabels = { forward: 'Subclass of', back: 'Subclasses' };
 const WITHIN: RefLabels = { forward: 'Within', back: 'Child maps' };
+const INCLUDES: RefLabels = { forward: 'Includes', back: 'Appears in' };
+const SET_IN: RefLabels = { forward: 'Set in', back: 'Encounters' };
 const OTHER: RefLabels = { forward: 'References', back: 'Referenced by', generic: true };
 
 /**
  * Spell lists are "Casts", creature gear is "Gear", condition immunities "Immune to", an item's base
  * "Base item", a weapon's properties and mastery "Properties" and "Mastery", a background's feat "Grants", its tool
  * "Tool proficiency", and its equipment "Starting equipment", as a class's is; a class's own spells
- * are "Spells", as a spell's classes are "Classes", a subclass's class "Subclass of", and a map's parent "Within"; any other
- * field gets a generic label.
+ * are "Spells", as a spell's classes are "Classes", a subclass's class "Subclass of", and a map's parent "Within". An arrangement's refs are inventory,
+ * labeled apart from rules refs: a ref in an encounter's parts, object or token, is "Includes" and
+ * "Appears in", and its map "Set in" and "Encounters"; any other field gets a generic label.
  */
 export function refLabels(type: string, path: string): RefLabels {
   if (type === 'creature' && path.startsWith('stats.spellcasting.')) return CASTS;
@@ -40,5 +43,7 @@ export function refLabels(type: string, path: string): RefLabels {
   if (type === 'subclass' && path === 'stats.class') return SUBCLASS;
   if (type === 'spell' && path.startsWith('stats.classes[')) return CLASSES;
   if (type === 'map' && path === 'stats.within') return WITHIN;
+  if (type === 'encounter' && path.startsWith('stats.parts[')) return INCLUDES;
+  if (type === 'encounter' && path === 'stats.setIn') return SET_IN;
   return OTHER;
 }

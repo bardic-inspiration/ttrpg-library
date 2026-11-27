@@ -1,0 +1,68 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "warren-throne",
+  "name": "Warren Throne",
+  "summary": "A goblin king holds court in a flooded shrine, guarded by his hexer and his boss.",
+  "stats": {
+    "parts": [
+      {
+        "part": "description",
+        "text": "Water laps at the shrine's steps. On the altar sits a goblin in a crown of bent spoons, flanked by a hooded hexer and a scarred brute."
+      },
+      {
+        "part": "map",
+        "map": { "ref": "map/sunken-cistern", "zone": "drowned-shrine", "show": "thumbnail" }
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          { "ref": "creature/goblin-warren-king", "count": 1, "show": "card" },
+          { "ref": "creature/goblin-hexer", "count": 1 },
+          { "ref": "creature/goblin-boss", "count": 1 }
+        ]
+      },
+      {
+        "part": "sequence",
+        "trigger": "The party steps onto the shrine's steps, or attacks from the water.",
+        "stages": [
+          {
+            "name": "Court",
+            "turns": "The king stays on the altar and shouts orders. The hexer curses the nearest caster; the boss holds the steps.",
+            "transition": "When the boss falls or the king is hit, the king leaves the altar."
+          },
+          {
+            "name": "Rage",
+            "turns": "The king wades into melee beside the hexer, who stays behind him.",
+            "transition": "When the king is below half his Hit Points, the hexer flees for the Overflow."
+          },
+          {
+            "name": "Last Stand",
+            "turns": "The king fights alone and never retreats."
+          }
+        ],
+        "victory": "The king falls, or yields his crown."
+      },
+      {
+        "part": "table",
+        "title": "The King's Hoard",
+        "table": "| d4 | Treasure |\n|---|---|\n| 1 | A sack of 150 GP in tarnished coins |\n| 2 | A {ref:equipment/potion-of-healing} in a cracked vial |\n| 3 | A silver chalice worth 75 GP |\n| 4 | The crown of bent spoons, worth 1 CP |"
+      }
+    ],
+    "environment": {
+      "multiplier": 1.25,
+      "note": "Knee-deep water slows the party, and the altar gives the king cover."
+    },
+    "setIn": { "ref": "map/sunken-cistern", "zone": "drowned-shrine" }
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        437
+      ]
+    }
+  }
+}

@@ -26,69 +26,15 @@ choices, not arithmetic).
   `adjust` and its warning.
 - [Creatures](../../docs/rulesets.md#creatures): `cr`, and XP by CR in
   `tables.json`.
+- [Arrangements](../../docs/content-model.md#arrangements),
+  [The kit](../../docs/content-model.md#the-kit), and
+  [Refs in arrangements](../../docs/content-model.md#refs-in-arrangements):
+  the layers, `stats.parts`, inventory refs and `show`, and containment.
+- [Encounters](../../docs/rulesets.md#encounters): the `encounter` type, its
+  parts' data (roster, spawn table, sequence, loot, map), `environment`,
+  and `setIn`, and their checks.
 
 ## Design
-
-### Layers
-
-| Layer | Holds | Refs mean |
-|---|---|---|
-| **Ruleset** | How things work: derivations, rules data, rules pages | n/a |
-| **Content** | Typed entries: creatures, items, spells, characters… | Rules: "casts", "grants", "requires" |
-| **Arrangements** | Encounters, modules, (later) sourcebooks | Inventory: what's included, where it is, how it shows |
-
-The library stays organized by type. Arrangements put typed entries together;
-content never lives inside them. Every piece is a standalone entry that a DM
-may lift out and adapt.
-
-### The kit
-
-An arrangement's `stats.parts` is an ordered list of kit parts, each
-`{ "part": "<kind>", … }`. The page renders them in order, each by the
-part's shared component, so every arrangement reads alike. Each arrangement
-type's schema allows its own subset.
-
-| Part | Holds | Encounter | Module |
-|---|---|---|---|
-| `prose` | A titled or untitled text section | ✓ | ✓ |
-| `description` | Player-facing text, read aloud or paraphrased | ✓ | ✓ |
-| `dm-guide` | Instructions for running it | ✓ | ✓ |
-| `roster` | Creature refs with counts | ✓ | |
-| `spawn-table` | Rosters by difficulty | ✓ | |
-| `sequence` | How it plays out | ✓ | ✓ |
-| `table` | A titled pipe table (random, loot, cross-cutting) | ✓ | ✓ |
-| `loot` | Coins and items by difficulty | ✓ | |
-| `map` | A map, or a zone of one | ✓ | ✓ |
-
-The module parts are in [`modules.md`](modules.md).
-
-### Refs in arrangements
-
-- **Inventory, not rules.** A ref in a part says what's included and how it
-  shows. Its back-reference reads "Appears in", or "Part of" for a module's
-  contents, apart from rules refs.
-- **Each ref says how it shows:** `"show": "link"` (the default) prints its
-  name linked; `"card"` embeds the target's card; `"thumbnail"` embeds a
-  small form (a map's diagram, an entry's art). How the parts are assembled
-  is the entry's design choice.
-- **Room to grow.** A ref in a part is an object, so a dependency strength
-  (#374's first open question) can be added as a key later with no migration.
-- **Containment is listed by the container only.** A module lists the
-  encounters in it; an encounter doesn't name its module, and its page shows
-  "Part of" as a back-reference (P3).
-
-### Rosters and spawn tables
-
-An encounter has exactly one `roster` or one `spawn-table` (error otherwise).
-
-- **`roster`:** creature refs, each with a `count` (1 or more) and `show`.
-  A character in an encounter is a ref in its text, not a roster line, since
-  characters have no XP.
-- **`spawn-table`:** rows keyed by difficulty, `low`, `moderate`, or
-  `high`, each at most once, each a roster whose counts may be dice
-  (`1d6+2`). The author designs each row; the DM chooses one, or rolls for it
-  when the table gives each row a range on a die (`1d6`: 1–2 low, 3–5
-  moderate, 6 high).
 
 ### Difficulty
 
@@ -97,10 +43,9 @@ Difficulty compares the party against the encounter:
 - **The encounter's side,** derived: f(Roster) × E. f(Roster) is the sum of
   each creature's XP by its CR times its count. For a spawn table, each row
   has its own, with a minimum, average, and maximum from its dice.
-- **E,** the environment multiplier: an authored input,
-  `stats.environment`, with `multiplier` (above 0, not 1) and a `note` saying
-  why ("difficult terrain and a collapsing floor"). Without it, E is 1. Any
-  E is a warning for the reviewer, as `adjust` is.
+- **E,** the environment multiplier (`stats.environment`,
+  [Encounters](../../docs/rulesets.md#encounters)). Any E is a warning for
+  the reviewer, as `adjust` is.
 - **The party's side,** g(Party): the sum of each character's XP budget for
   their level, from SRD 5.2's XP Budget per Character table, for each of Low,
   Moderate, and High. For a party at one level it equals the SRD's budget
@@ -121,29 +66,17 @@ The encounter page holds a calculator, a Preact island:
   row's minimum, average, and maximum.
 - **Without JavaScript,** the page shows the encounter's XP and E.
 
-### Sequence
+### Parts on the page
 
-- **Structured:** a `trigger`, then `stages`, each with a name, a turn loop
-  saying how the DM runs the creatures, and a transition to the next, then
-  a `victory` condition.
-- **Or an example:** one prose text showing how it might play.
-- Every node is markdown-subset text with `{ref:…}` tokens. Event string
-  formats wait for the v2.0.0 builder (#370).
+The parts' data is built ([Encounters](../../docs/rulesets.md#encounters));
+the page renders each by its shared component:
 
-### Loot
-
-- **`loot`:** rows keyed by difficulty, as a spawn table's are, each with
-  coins (a dice expression and a unit, `4d6 × 10 GP`) and item refs with
-  counts.
-- **`table`:** any other table, such as a random loot table.
-
-### Setting
-
-An encounter may be set in a map, or in a zone of one, with
-`stats.setIn`, a map ref with an optional zone
-([References](../../docs/content-model.md#references) "A map's zones"). The map's page then
-lists it under the zone. A `map` part shows the map on the page; `setIn`
-alone doesn't.
+- **Sequence:** a structured one as its trigger, its stages in order (name,
+  turn loop, transition), and its victory condition; an example as prose.
+  Event string formats wait for the v2.0.0 builder (#370).
+- **Loot:** each row's coins (`4d6 × 10 GP`) and items with their counts.
+- **Setting:** a `map` part shows the map on the page; `setIn` alone
+  doesn't. The map's page lists the encounter under its zone.
 
 ### In the Library
 

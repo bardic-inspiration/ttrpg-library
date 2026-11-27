@@ -1,0 +1,613 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/encounter.schema.json",
+  "title": "dnd-5e-2024 encounter stats (docs/rulesets.md#encounters)",
+  "description": "An arrangement (docs/content-model.md#arrangements): a runnable scene, as an ordered list of kit parts, with its environment and the map it's set in. Every ref in a part is inventory, with a `show`. Cross-field rules, such as exactly one roster or spawn table, are checks in encounters.ts (docs/rulesets.md#consistency-checks).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "parts"
+  ],
+  "properties": {
+    "parts": {
+      "description": "The encounter's kit parts, in the order its page renders them. Exactly one is a `roster` or a `spawn-table`.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Part"
+      }
+    },
+    "environment": {
+      "description": "The environment multiplier E, an input: what the place does to the fight's difficulty, and why. Without it, E is 1. Any E is a warning for the reviewer, as `adjust` is.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "multiplier",
+        "note"
+      ],
+      "properties": {
+        "multiplier": {
+          "description": "Above 0, and not 1 (a check): 1.25 for a room that favors the creatures, 0.75 for one that favors the party.",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "note": {
+          "description": "Why: \"difficult terrain and a collapsing floor\".",
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    },
+    "setIn": {
+      "description": "The map the encounter is set in, or one zone of it. The map's page lists the encounter under the zone; a `map` part, not this, shows the map on the encounter's page.",
+      "$ref": "common.schema.json#/$defs/MapPlaceRef"
+    }
+  },
+  "$defs": {
+    "Show": {
+      "description": "How a ref in a part shows: its name linked (the default), the target's card, or a small form (a map's diagram, an entry's art).",
+      "enum": [
+        "link",
+        "card",
+        "thumbnail"
+      ]
+    },
+    "Difficulty": {
+      "description": "The difficulty a spawn table or loot row is for.",
+      "enum": [
+        "low",
+        "moderate",
+        "high"
+      ]
+    },
+    "DiceCount": {
+      "description": "A count rolled when the row is chosen: dice with an optional modifier, \"1d6+2\". Its minimum is at least 1.",
+      "type": "string",
+      "pattern": "^[1-9]\\d*d(4|6|8|10|12|20|100)([+-][1-9]\\d*)?$"
+    },
+    "RosterCreature": {
+      "description": "A creature in the roster, how many, and how it shows.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "count"
+      ],
+      "properties": {
+        "ref": {
+          "description": "The creature, as creature/<id>. A character in an encounter is a ref in its text, not a roster line.",
+          "type": "string",
+          "pattern": "^creature/[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "note": {
+          "$ref": "common.schema.json#/$defs/Ref/properties/note"
+        },
+        "count": {
+          "description": "How many, 1 or more.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "SpawnCreature": {
+      "description": "A creature in a spawn table's row: as a roster's, but its count may be dice.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "count"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/RosterCreature/properties/ref"
+        },
+        "note": {
+          "$ref": "common.schema.json#/$defs/Ref/properties/note"
+        },
+        "count": {
+          "description": "How many: 1 or more, or dice (\"1d6+2\").",
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "$ref": "#/$defs/DiceCount"
+            }
+          ]
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "LootItem": {
+      "description": "An item in a loot row: a magic item or equipment, how many, and how it shows.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "count"
+      ],
+      "properties": {
+        "ref": {
+          "description": "The item, as item/<id> or equipment/<id>.",
+          "type": "string",
+          "pattern": "^(item|equipment)/[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "note": {
+          "$ref": "common.schema.json#/$defs/Ref/properties/note"
+        },
+        "count": {
+          "description": "How many, 1 or more.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "Range": {
+      "description": "The results on the table's die that choose a row: one (\"6\") or an inclusive span (\"1-2\").",
+      "type": "string",
+      "pattern": "^[1-9]\\d*(-[1-9]\\d*)?$"
+    },
+    "ProsePart": {
+      "description": "A text section, with an optional title.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "prose"
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/Line"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    },
+    "DescriptionPart": {
+      "description": "Player-facing text, read aloud or paraphrased.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "description"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    },
+    "DmGuidePart": {
+      "description": "Instructions for running the encounter.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "dm-guide"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    },
+    "RosterPart": {
+      "description": "The creatures, with their counts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "creatures"
+      ],
+      "properties": {
+        "part": {
+          "const": "roster"
+        },
+        "creatures": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/RosterCreature"
+          }
+        }
+      }
+    },
+    "SpawnTablePart": {
+      "description": "Rosters by difficulty, each difficulty at most once. The DM chooses a row, or rolls `roll` when each row gives its `range` on it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "rows"
+      ],
+      "properties": {
+        "part": {
+          "const": "spawn-table"
+        },
+        "roll": {
+          "description": "The die rolled for a row, such as \"1d6\". With it, every row has a `range`, and the ranges cover every result once.",
+          "$ref": "common.schema.json#/$defs/Dice"
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "difficulty",
+              "creatures"
+            ],
+            "properties": {
+              "difficulty": {
+                "$ref": "#/$defs/Difficulty"
+              },
+              "range": {
+                "$ref": "#/$defs/Range"
+              },
+              "creatures": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/SpawnCreature"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "SequencePart": {
+      "description": "How the encounter plays out: structured, as a trigger, stages, and a victory condition, or one prose example.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part"
+      ],
+      "properties": {
+        "part": {
+          "const": "sequence"
+        },
+        "trigger": {
+          "description": "What starts it.",
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "stages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "turns"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "common.schema.json#/$defs/Line"
+              },
+              "turns": {
+                "description": "The turn loop: how the DM runs the creatures in this stage.",
+                "$ref": "common.schema.json#/$defs/Text"
+              },
+              "transition": {
+                "description": "What moves it to the next stage. The last stage may omit it, since `victory` ends the sequence.",
+                "$ref": "common.schema.json#/$defs/Text"
+              }
+            }
+          }
+        },
+        "victory": {
+          "description": "How the encounter ends.",
+          "$ref": "common.schema.json#/$defs/Text"
+        },
+        "example": {
+          "description": "One prose text showing how it might play.",
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      },
+      "if": {
+        "required": [
+          "example"
+        ]
+      },
+      "then": {
+        "properties": {
+          "trigger": false,
+          "stages": false,
+          "victory": false
+        }
+      },
+      "else": {
+        "required": [
+          "trigger",
+          "stages",
+          "victory"
+        ]
+      }
+    },
+    "TablePart": {
+      "description": "A titled pipe table: a random table, a loot table, or any other.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "title",
+        "table"
+      ],
+      "properties": {
+        "part": {
+          "const": "table"
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/Line"
+        },
+        "table": {
+          "description": "One pipe table (docs/content-model.md#tables-in-text), with tokens where it names entries.",
+          "$ref": "common.schema.json#/$defs/Text"
+        }
+      }
+    },
+    "LootPart": {
+      "description": "Coins and items by difficulty, each difficulty at most once.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "rows"
+      ],
+      "properties": {
+        "part": {
+          "const": "loot"
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "difficulty"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "coins"
+                ]
+              },
+              {
+                "required": [
+                  "items"
+                ]
+              }
+            ],
+            "properties": {
+              "difficulty": {
+                "$ref": "#/$defs/Difficulty"
+              },
+              "coins": {
+                "description": "A roll of coins: `4d6` × 10 GP is { \"roll\": \"4d6\", \"times\": 10, \"unit\": \"gp\" }.",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "roll",
+                  "unit"
+                ],
+                "properties": {
+                  "roll": {
+                    "$ref": "common.schema.json#/$defs/Dice"
+                  },
+                  "times": {
+                    "description": "A multiplier on the roll, 2 or more.",
+                    "type": "integer",
+                    "minimum": 2
+                  },
+                  "unit": {
+                    "enum": [
+                      "cp",
+                      "sp",
+                      "ep",
+                      "gp",
+                      "pp"
+                    ]
+                  }
+                }
+              },
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/LootItem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "MapPart": {
+      "description": "A map, or a zone of one, shown on the page.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "map"
+      ],
+      "properties": {
+        "part": {
+          "const": "map"
+        },
+        "map": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref"
+          ],
+          "properties": {
+            "ref": {
+              "$ref": "common.schema.json#/$defs/MapPlaceRef/properties/ref"
+            },
+            "zone": {
+              "$ref": "common.schema.json#/$defs/MapPlaceRef/properties/zone"
+            },
+            "show": {
+              "$ref": "#/$defs/Show"
+            }
+          }
+        }
+      }
+    },
+    "Part": {
+      "description": "One kit part (docs/content-model.md#the-kit), by its `part`: each kind is checked against its own definition only.",
+      "type": "object",
+      "required": [
+        "part"
+      ],
+      "properties": {
+        "part": {
+          "enum": [
+            "prose",
+            "description",
+            "dm-guide",
+            "roster",
+            "spawn-table",
+            "sequence",
+            "table",
+            "loot",
+            "map"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "prose"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/ProsePart"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "description"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/DescriptionPart"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "dm-guide"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/DmGuidePart"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "roster"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/RosterPart"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "spawn-table"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/SpawnTablePart"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "sequence"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/SequencePart"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "table"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/TablePart"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "loot"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/LootPart"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "part": {
+                "const": "map"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/MapPart"
+          }
+        }
+      ]
+    }
+  }
+}

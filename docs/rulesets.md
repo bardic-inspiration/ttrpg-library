@@ -94,7 +94,9 @@ is; a class's `spells` are "Spells" / "Classes", and a spell's `classes`
 "Carried by"; a creature's condition immunities are "Immune to" / "Immune
 creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
 `properties` and `mastery` are "Properties" / "Weapons" and "Mastery" /
-"Weapons"; any other field, including a `{ref:…}` token in text, is
+"Weapons"; a ref in an encounter's `parts`, object or token, is inventory,
+"Includes" / "Appears in", and its `setIn` "Set in" / "Encounters"
+([Refs in arrangements](content-model.md#refs-in-arrangements)); any other field, including a `{ref:…}` token in text, is
 "References" / "Referenced by". These are the ruleset's generic labels
 (`generic` in `RefLabels`): a target listed under a specific label isn't
 listed again under them, so Acid Arrow lists the dragons that cast it, and
@@ -1024,6 +1026,56 @@ A map's page is a **map page** (`map-page`, `site/src/lib/map.ts`):
 The detail page's Links list its parent ("Within") and the back-links to the
 map as a whole; those into a zone are listed under the zone instead.
 
+### Encounters
+
+An encounter is a runnable scene a DM picks up for prep: who's in it, how it
+plays, and what it yields. It's an arrangement
+([Arrangements](content-model.md#arrangements)), a content type in
+`dnd-5e-2024` at `content/dnd-5e-2024/encounter/<id>.json`, and every
+encounter is custom. `schemas/encounter.schema.json` describes each field.
+An encounter's `stats` hold:
+
+- **`parts`:** its kit parts, in page order
+  ([The kit](content-model.md#the-kit)), exactly one of them a `roster` or
+  a `spawn-table` (error otherwise). An encounter may use every part of the
+  kit.
+- **`environment`:** the environment multiplier E, an input: a
+  `multiplier` above 0 and not 1, and a `note` saying why ("difficult
+  terrain and a collapsing floor"). Without it, E is 1.
+- **`setIn`:** the map it's set in, or a zone of one, a `MapPlaceRef`:
+  `{ "ref": "map/<id>", "zone": "<zone-id>" }`, the zone optional. It
+  places the encounter; a `map` part, not `setIn`, shows the map on the
+  page. An encounter never names a module it's in.
+
+The parts that hold creatures and loot:
+
+- **`roster`:** `creatures`, each a creature ref with a `count` (1 or more)
+  and an optional `show`. A character in an encounter is a `{ref:…}` token
+  in its text, not a roster line, since characters have no XP.
+- **`spawn-table`:** `rows`, each a `difficulty` (`low`, `moderate`, or
+  `high`, each at most once) and its `creatures`, whose counts may be dice
+  with an optional modifier (`"1d6+2"`), never rolling below 1. The author
+  designs each row; the DM chooses one, or rolls the table's `roll` (a die,
+  `"1d6"`) when it has one: then every row has a `range` on it, one result
+  (`"6"`) or a span (`"1-2"`), and the ranges cover each result of the
+  roll exactly once. A table without a `roll` has no ranges.
+- **`loot`:** `rows` keyed by difficulty as a spawn table's are, each with
+  `coins`, a roll with an optional multiplier and a unit (`{ "roll": "4d6",
+  "times": 10, "unit": "gp" }`, 4d6 × 10 GP), and `items`, refs to items or
+  equipment with a `count` and an optional `show`, or both. Any other
+  table, such as a random loot table, is a `table` part.
+- **`sequence`:** how it plays out, either structured, a `trigger`, then
+  `stages` (each a `name`, `turns` saying how the DM runs the creatures,
+  and a `transition` to the next, which the last may omit), then a
+  `victory` condition, or an `example`, one prose text showing how it might
+  play. Every node is markdown-subset text with `{ref:…}` tokens.
+- **`map`:** a `map`, `{ "ref": "map/<id>", "zone": "<zone-id>", "show":
+  "thumbnail" }`, the zone and `show` optional.
+
+Encounters come only by request; they have no gap buckets. The detail page
+shows an encounter by the generic template for now, and its `parts` as
+lines.
+
 ### Embedded stat blocks
 
 Some spells and items print a creature's stat block. One that also exists in
@@ -1106,6 +1158,11 @@ warnings below on an SRD entry.
 | Character | Equipped armor without training, or a weapon without proficiency, from the starting class's `training` or a later class's `multiclass` training, when every class has `training` | warning |
 | Map | Zone ids are unique within the map | error |
 | Map | No map is within itself, directly or through others; that `within` names a zone of its parent is the ref check's ([References](content-model.md#references)) | error |
+| Encounter | Exactly one part is a `roster` or a `spawn-table` | error |
+| Encounter | Each difficulty is a row of a spawn table or loot part at most once | error |
+| Encounter | A spawn table's dice count never rolls below 1 | error |
+| Encounter | With a `roll`, every spawn table row has a `range` within the roll's results, low to high, and the ranges cover each result once; without one, no row has a range | error |
+| Encounter | The environment `multiplier` isn't 1 | error |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).

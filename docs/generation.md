@@ -150,7 +150,7 @@ The skill's "Procedures" table routes every type in `config/types.json` to
 exactly one procedure, each a section of the skill. A type in no row can't
 be generated, and the run asks, as for an unknown type.
 
-- **Entries:** every type but `character` and `map`. Write entries, with any new
+- **Entries:** every type but `character`, `map`, and `encounter`. Write entries, with any new
   dependencies the brief implies. Prefer refs to library entries over plain
   text. Write inputs only, use tokens for derived values in prose, and use
   `adjust` only for a deliberate deviation, explained in the PR body. For an
@@ -185,6 +185,9 @@ be generated, and the run asks, as for an unknown type.
   parent, in the library or written by the same request; a brief that
   needs a parent neither has is asked about. In the PR's Entries table,
   its summary field is "—".
+- **Encounters:** `encounter` ([Encounters](rulesets.md#encounters)). The
+  procedure has no steps yet: a request for encounters can't be fulfilled,
+  and the run asks, as for an unknown type.
 
 A test checks that the table names every registered type once, that each
 procedure has its section, and that a type routed to the character
@@ -308,7 +311,7 @@ on-demand prompts are the full-run prompt with inputs added.
 Gap fill never adds a rules extension, so a rules type that takes extensions,
 such as `condition` or `equipment`, has no `gapBuckets`; its entries come only from requests.
 A content type that comes only by request, `background`, `character`,
-`map`, `species`, `class`, or `subclass`, has no `gapBuckets` either.
+`encounter`, `map`, `species`, `class`, or `subclass`, has no `gapBuckets` either.
 A type's `gapBuckets` in `config/types.json` says how gap fill partitions it: a
 list of axes, each partitioning one of the type's facets. The buckets are every
 combination of one value per axis, so one axis partitions the type and two

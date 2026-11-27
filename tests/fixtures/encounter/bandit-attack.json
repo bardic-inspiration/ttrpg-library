@@ -1,0 +1,86 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "bandit-attack",
+  "name": "Bandit Attack",
+  "summary": "Outlaws spring an ambush on a lonely stretch of road.",
+  "stats": {
+    "parts": [
+      {
+        "part": "description",
+        "text": "The road narrows between two banks of gorse. A felled tree lies across it, fresh sap still running from the cut."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The bandits want coin, not blood. A {ref:creature/bandit-lookout} on each bank opens with arrows while the rest close in, and they flee once half of them fall."
+      },
+      {
+        "part": "spawn-table",
+        "roll": "1d6",
+        "rows": [
+          {
+            "difficulty": "low",
+            "range": "1-2",
+            "creatures": [
+              { "ref": "creature/bandit", "count": "1d4+1" },
+              { "ref": "creature/bandit-lookout", "count": 1 }
+            ]
+          },
+          {
+            "difficulty": "moderate",
+            "range": "3-5",
+            "creatures": [
+              { "ref": "creature/bandit", "count": "1d6+2" },
+              { "ref": "creature/bandit-lookout", "count": 2 }
+            ]
+          },
+          {
+            "difficulty": "high",
+            "range": "6",
+            "creatures": [
+              { "ref": "creature/bandit-captain", "count": 1, "show": "card" },
+              { "ref": "creature/bandit", "count": "2d4+2" },
+              { "ref": "creature/bandit-lookout", "count": 2 }
+            ]
+          }
+        ]
+      },
+      {
+        "part": "sequence",
+        "example": "The lookouts loose a volley from the gorse as the party reaches the tree. The bandits step out, demand a toll, and charge when it isn't paid. When the second bandit drops, the rest scatter into the brush."
+      },
+      {
+        "part": "loot",
+        "rows": [
+          {
+            "difficulty": "low",
+            "coins": { "roll": "3d6", "unit": "sp" }
+          },
+          {
+            "difficulty": "moderate",
+            "coins": { "roll": "2d6", "times": 10, "unit": "sp" },
+            "items": [{ "ref": "equipment/potion-of-healing", "count": 1 }]
+          },
+          {
+            "difficulty": "high",
+            "coins": { "roll": "4d6", "times": 10, "unit": "gp" },
+            "items": [
+              { "ref": "equipment/potion-of-healing", "count": 2 },
+              { "ref": "item/cloak-of-elvenkind", "count": 1, "show": "card" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        437
+      ]
+    }
+  }
+}

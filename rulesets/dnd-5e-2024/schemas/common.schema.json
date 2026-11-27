@@ -51,6 +51,16 @@
         "zone": { "description": "The id of one of the map's zones.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }
       }
     },
+    "MapPlaceRef": {
+      "description": "A link to a map, or to one zone of it (docs/rulesets.md#encounters `setIn`). A typed ref: it allows only map keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/MapZoneRef/properties/ref" },
+        "zone": { "$ref": "#/$defs/MapZoneRef/properties/zone" }
+      }
+    },
     "ConditionRef": {
       "description": "A link to a condition, an SRD primitive or a custom extension (docs/rulesets.md#rules-data). A typed ref: it allows only condition keys. A `note` prints in parentheses after the name: \"Charmed (with Mind Blank)\".",
       "type": "object",

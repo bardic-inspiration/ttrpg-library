@@ -626,3 +626,38 @@ export interface MapStats {
   /** For a child map, the zone of its parent it details. */
   within?: MapZoneRef;
 }
+
+/** How a ref in a kit part shows (docs/content-model.md#the-kit). */
+export type Show = 'link' | 'card' | 'thumbnail';
+
+/** A spawn table's or loot row's difficulty. */
+export type Difficulty = 'low' | 'moderate' | 'high';
+
+/** A ref in a kit part: inventory, with a count where the part takes one. */
+export interface PartRef {
+  ref: string;
+  note?: string;
+  /** A whole number, or dice in a spawn table's row ("1d6+2"). */
+  count: number | string;
+  show?: Show;
+}
+
+/** One kit part, by its `part` (schemas/encounter.schema.json). */
+export type EncounterPart =
+  | { part: 'prose'; title?: string; text: string }
+  | { part: 'description' | 'dm-guide'; text: string }
+  | { part: 'roster'; creatures: PartRef[] }
+  | { part: 'spawn-table'; roll?: string; rows: { difficulty: Difficulty; range?: string; creatures: PartRef[] }[] }
+  | { part: 'sequence'; trigger?: string; stages?: { name: string; turns: string; transition?: string }[]; victory?: string; example?: string }
+  | { part: 'table'; title: string; table: string }
+  | { part: 'loot'; rows: { difficulty: Difficulty; coins?: { roll: string; times?: number; unit: string }; items?: PartRef[] }[] }
+  | { part: 'map'; map: { ref: string; zone?: string; show?: Show } };
+
+/** An encounter's stats (schemas/encounter.schema.json, docs/rulesets.md#encounters). */
+export interface EncounterStats {
+  parts: EncounterPart[];
+  /** The environment multiplier E, with why. */
+  environment?: { multiplier: number; note: string };
+  /** The map, or a zone of one, it's set in. */
+  setIn?: { ref: string; zone?: string };
+}
