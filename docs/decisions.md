@@ -808,3 +808,10 @@ Decisions made after the v1.2.0 release, in the development tracks.
 | A creature's Spellcasting spells embed as full spell Items, each the spell's own export, rather than name-only stubs. | P3: one spell mapper; a stub spell isn't castable in Foundry | #248 |
 | Foundry's field-name fixtures are documents from dnd5e's own SRD 5.2 pack sources, converted to JSON; with no published schema, the schema test doesn't apply. | The done-when asks for a schema only where one exists; the packs are CC-BY-4.0 SRD content | #248 |
 | The owner's open questions on #248, unanswered for ten days, were settled by the session following the dev queue, taking each recommendation in the draft on the issue, with full spell embedding in place of its name-only stubs. | The routine's prompt asks it to decide where the spec doesn't, and to record the choice; the owner can amend the track file | #248 |
+
+### Fixes
+
+| Decision | Why | Source |
+|---|---|---|
+| A character's derived languages start with Common, sourced to its background, and a pick of Common isn't listed again. | SRD 5.2 "Character Creation": every character knows Common plus two languages; the origin's two picks are already under the background, and a preset copied to a sheet shouldn't lose Common | #525 |
+| PNG capture writes each diagram shape's computed colors and label font onto the clone before `html-to-image` runs, rather than changing the diagrams or the library. | `html-to-image` clones an `<svg>` whole and copies only its root's computed style, so the class rules that color a diagram never reach the image; the clone is thrown away after capture | #525 |

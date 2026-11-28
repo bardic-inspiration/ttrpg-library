@@ -3,7 +3,7 @@
 // from its stats and derived values through the phrase book. Every number arrives from the derived
 // values; nothing here computes a rules value.
 
-import { signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
+import { printMinus, signed } from '../../../rulesets/dnd-5e-2024/derive.ts';
 import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { CharacterAttack, CharacterStats, DerivedCharacter, LinkedCharacter } from '../../../rulesets/dnd-5e-2024/types.ts';
 import { escapeMarkdown } from './markdown.ts';
@@ -91,11 +91,13 @@ export const multiclassTraining = (d: Character, names: Map<string, string>): st
 
 /**
  * One equipped weapon's attack as markdown, led by its linked name as an inline heading:
- * "***Longsword.*** +6 to hit, 1d8 + 3 Slashing damage, or 1d10 + 3 two-handed; Versatile; Mastery: Sap".
+ * "***Longsword.*** +6 to hit, 1d8 + 3 Slashing damage, or 1d10 + 3 two-handed; Versatile; Mastery: Sap",
+ * each minus printed as U+2212 (docs/rulesets.md#creature-display-forms).
  */
 export function attackText(a: CharacterAttack): string {
-  const damage = say('creature.damage', { amount: a.damage.display, type: name('damageType', a.damage.type) });
-  const hit = say('character.attack', { bonus: signed(a.attackBonus), damage: a.versatile ? say('character.versatile', { damage, twoHanded: a.versatile.display }) : damage });
+  const damage = say('creature.damage', { amount: printMinus(a.damage.display), type: name('damageType', a.damage.type) });
+  const twoHanded = a.versatile && printMinus(a.versatile.display);
+  const hit = say('character.attack', { bonus: signed(a.attackBonus), damage: twoHanded ? say('character.versatile', { damage, twoHanded }) : damage });
   const parts: Phrase[] = [
     hit,
     ...(a.range ? [say('creature.range', { range: `${a.range.normal}/${a.range.long}` })] : []),
