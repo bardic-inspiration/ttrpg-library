@@ -816,3 +816,9 @@ Decisions made after the v1.2.0 release, in the development tracks.
 | A character's derived languages start with Common, sourced to its background, and a pick of Common isn't listed again. | SRD 5.2 "Character Creation": every character knows Common plus two languages; the origin's two picks are already under the background, and a preset copied to a sheet shouldn't lose Common | #525 |
 | PNG capture writes each diagram shape's computed colors and label font onto the clone before `html-to-image` runs, rather than changing the diagrams or the library. | `html-to-image` clones an `<svg>` whole and copies only its root's computed style, so the class rules that color a diagram never reach the image; the clone is thrown away after capture | #525 |
 | A detail page shows the entry's source, author, and "Official" or "Homebrew" as neutral chips after the type chip. An author of `"publisher"` shows as the ruleset's publisher. | The card's source badge reads the same way, and where an entry comes from and whether it is official is what a reader of the page needs to know | #528 |
+
+### Rulesets
+
+| Decision | Why | Source |
+|---|---|---|
+| The Rulesets page is gone: each ruleset's Library lists its rules pages and Extensions page under a "Rules" subheading, directly below the filter menu, as a plain list of links in the menu's text style, always showing. The top bar drops Rulesets, and Library is marked current on rules pages. `/rulesets/` redirects to the home ruleset's Library. | The owner's design: rules sit beside the filters that navigate the Library, one place per ruleset; P9 keeps the old URL working | #427 |
