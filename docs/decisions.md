@@ -814,3 +814,4 @@ Decisions made after the v1.2.0 release, in the development tracks.
 | Decision | Why | Source |
 |---|---|---|
 | A character's derived languages start with Common, sourced to its background, and a pick of Common isn't listed again. | SRD 5.2 "Character Creation": every character knows Common plus two languages; the origin's two picks are already under the background, and a preset copied to a sheet shouldn't lose Common | #525 |
+| PNG capture writes each diagram shape's computed colors and label font onto the clone before `html-to-image` runs, rather than changing the diagrams or the library. | `html-to-image` clones an `<svg>` whole and copies only its root's computed style, so the class rules that color a diagram never reach the image; the clone is thrown away after capture | #525 |
