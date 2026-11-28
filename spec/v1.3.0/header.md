@@ -35,7 +35,8 @@ stable URLs) and P6.
 
 ### The header
 
-One row on every page:
+One row on every page from `64rem`; below it, the same controls stack into
+the phone bar ([layout.md](layout.md)):
 
 - **Left:** "TTRPG Library", linking to the home ruleset's Library.
 - **Middle:** search, off a Library, as now
@@ -49,14 +50,16 @@ The top bar (`SiteNav.astro`) and its links are removed.
 One button, **Export**, replaces Print and Download. It's the shared menu
 button ([Controls](../../docs/export.md#controls)): its menu lists **Print**
 first, then the `download` exporters that offer the scope, in config order.
-Choosing one closes the menu and runs it. Its scope and accessible name
-follow today's set export: the cart when it holds anything ("Export 3 in
-cart"), otherwise on the Library the filtered results ("Export 12 entries"),
-and it's disabled when it would target nothing.
+Choosing one closes the menu and runs it.
 
-Detail pages and rules pages lose their own Print and Download
-(`ExportButtons` there, `PagePrint.astro`). A detail page keeps its "In cart"
-checkbox.
+Export acts on the cart, and only the cart, on every page: its accessible name
+is "Export 3 in cart", and it's disabled while the cart is empty. The Library's
+filtered results are no longer a scope; a reader adds entries to the cart to
+export them, and a single entry is exported the same way.
+
+Detail pages lose their own Print and Download (`ExportButtons` there), and
+keep their "In cart" checkbox. Rules pages lose their Print
+(`PagePrint.astro`) and have no export: they're for reference on the web.
 
 ### The cart
 
@@ -66,7 +69,8 @@ whose menu lists the cart's entries in the order added, each by name and
 type, with:
 
 - a **Remove** control per entry;
-- **Clear**, which removes every entry.
+- **Clear**, which removes every entry;
+- **Close**, which closes the menu, as Escape and moving focus out of it do.
 
 A removed entry stays in the list, marked removed, until the menu closes; then
 the cart's contents refresh, and every "In cart" checkbox and the count follow
@@ -75,31 +79,37 @@ menu replaces.
 
 ### The footer
 
-The footer holds two small links, **Attribution** and **GitHub**. The full
-SRD statement moves off the footer to the attribution target. Printed pages
-and PNG captures keep their own statements
+The footer holds two small links, **Attribution** and **GitHub**.
+Attribution links to an Attribution section in the repository's `README.md`
+on GitHub, and GitHub to the repository. The full SRD statement moves off the
+footer to that section. Printed pages keep their own statement
 ([SRD attribution](../../docs/licensing.md#srd-attribution)).
 
 ### The About page
 
-`/about/` is removed and redirects
-([Redirects](../../docs/site.md#redirects)) to the attribution target, so old
-links keep working. Its licenses list moves there too.
+`/about/` is removed, and its content (what the library is, the SRD
+statement, and the licenses) moves into the README's Attribution section,
+which links `ATTRIBUTION.md` for the full credits. `/about/` redirects
+([Redirects](../../docs/site.md#redirects)) to that section, so old links
+keep working.
 
 ## Cases
 
 - `creature/lich`'s page: the header shows the cart and Export; the page has
-  no Print or Download of its own; Export acts on the cart.
+  no Print or Download of its own; Export acts on the cart, and is disabled
+  while it's empty.
 - `spell/fireball` and `spell/bless` in the cart: removing Fireball in the
   cart menu marks it removed but keeps it listed; closing the menu drops it,
   and its card's "In cart" unchecks.
-- An empty cart on the Library: Export reads "Export N entries" for the
-  filtered results.
+- An empty cart on the Library: Export is disabled, whatever the filters
+  show.
+- A rules page: no Print, and the header's Export acts on the cart.
 
 ## Migration
 
 - Removes `SiteNav.astro`, `about.astro`, and `PagePrint.astro`, and the
   detail page's export controls.
+- `README.md` gains the Attribution section.
 - [SRD attribution](../../docs/licensing.md#srd-attribution) and
   [New rulesets](../../docs/licensing.md#new-rulesets) are updated for the
   statement's new places.
@@ -107,11 +117,12 @@ links keep working. Its licenses list moves there too.
 
 ## Done when
 
-- Every page's header is the one row above, with no top bar.
+- Every page's header is the row above, with no top bar.
 - Export is the only export control on any page, with Print and the download
-  formats in its menu; tests cover its scope on the Library, a detail page,
-  and a rules page.
-- The cart menu removes, clears, and refreshes on close as above, with tests.
+  formats in its menu, and acts on the cart alone; tests cover it on the
+  Library, a detail page, and a rules page.
+- The cart menu removes, clears, closes, and refreshes on close as above, with
+  tests.
 - The footer is two links, `/about/` redirects, and the link check passes.
 - Docs: [Pages and navigation](../../docs/site.md#pages-and-navigation),
   [Page header](../../docs/site.md#page-header),
@@ -121,13 +132,7 @@ links keep working. Its licenses list moves there too.
 
 ## Open questions
 
-- **The cart menu's third action.** The brief names three things the cart
-  menu does and lists two: removing an entry and clearing the cart.
-- **Export off the Library with an empty cart.** On a detail page, whether
-  Export acts on that entry, which keeps PNG capture (today only a detail
-  page offers PNG), or is disabled until the entry is in the cart. On a rules
-  page, whether Export offers the browser's print of the page.
-- **The attribution target.** A small on-site page holding the SRD statement
-  and licenses, or `ATTRIBUTION.md` on GitHub. CC BY 4.0 allows attribution
-  through a link to a page that carries it; an on-site page keeps it under the
-  site's own URLs (P9).
+- **PNG capture.** Today only a detail page offers PNG, captured from the
+  entry rendered on that page. With Export acting on the cart, whether PNG is
+  dropped, or offered for the cart, captured from each entry's print
+  fragment, one image per entry.

@@ -40,31 +40,32 @@ scrolls on its own.
 
 ### Phones and tablets
 
-Below `64rem`, the header row is the whole bar: "TTRPG Library", search (on
-a Library, its own search, which moves out of the menu), a **Menu** button
-(`aria-expanded`), the cart, and Export. Menu opens a panel over the results
-holding Type, Sources, the type's filters, and Rules. The results fill the
-rest of the screen.
+Below `64rem`, the header is the whole bar, in three thin rows:
+
+1. "TTRPG Library", then the cart and Export, right-justified.
+2. Search, full width. On a Library it's the Library's own search, moved out
+   of the menu.
+3. On a Library: the Type dropdown, then a **Filters** button and a **Rules**
+   button (each `aria-expanded`). Filters opens a panel over the results
+   holding Sources and the type's filters; Rules opens one holding the Rules
+   list. Off a Library, there's no third row.
+
+The results fill the rest of the screen.
 
 ## Cases
 
 - `creature/bandit` among 475 creatures: scrolled to the end of the results,
   the desktop sidebar and the header are still in view.
-- On a 390px phone, the bar is one row, and the first result shows without
-  scrolling.
+- On a 390px phone, the bar is three rows, and the first result shows
+  without scrolling.
 
 ## Done when
 
 - The results scroll in their own container on a Library; the header, the
   footer's links, and the desktop sidebar stay in view.
-- On phones and tablets the bar is one row, and Menu opens and closes the
-  panel, with focus moving into it and back to Menu on close.
+- On phones and tablets the bar is the three rows above; Filters and Rules
+  each open and close their panel, with focus moving into it and back to its
+  button on close.
 - `npm run a11y` passes, and the reflow check at 320px passes.
 - Docs: [Gallery](../../docs/site.md#gallery) "Layout".
 - Screenshots at 390, 820, and 1440px.
-
-## Open questions
-
-- **The phone row.** Whether the site name, search, Menu, the cart, and
-  Export fit one row at 390px as they are, or something shrinks: a shorter
-  name, icon buttons for Menu and Export, or search behind an icon.

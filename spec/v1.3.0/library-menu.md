@@ -88,7 +88,7 @@ Each type gains `filters`, an ordered list of the filters its menu shows:
   active.
 - `defaultFilters` is removed, since nothing in the menu starts closed.
 - The registry gains a per-ruleset `defaultType`: the type the Library opens
-  on when the URL names none.
+  on when the URL names none. `dnd-5e-2024`'s is `creature`.
 
 Values within a filter still combine as OR, and filters as AND. Counts,
 search, and matching are as in [Gallery](../../docs/site.md#gallery)
@@ -150,7 +150,7 @@ lifted for sort and cards.
 
 - `config/types.json`: each type gains `filters`, from the table above as
   the owner amends it; `defaultFilters` is removed; the ruleset gains
-  `defaultType`. The registry schema and `tests/` fixtures change with it.
+  `defaultType`, `creature`. The registry schema and `tests/` fixtures change with it.
 - No entries change.
 
 ## Done when
@@ -163,7 +163,3 @@ lifted for sort and cards.
   [Type registry](../../docs/site.md#type-registry) describe the new menu and
   keys; `docs/decisions.md` has the build's rows.
 - Screenshots at 390, 820, and 1440px.
-
-## Open questions
-
-- **The default type.** Which type `dnd-5e-2024` opens on.
