@@ -31,23 +31,7 @@ const links: { label: string; href: string; current: Current }[] = [
       <li><a href={link.href} aria-current={link.current}>{link.label}</a></li>
     ))}
   </ul>
-  <p class="site-nav__cart" data-cart-count hidden>Cart: <span>0</span></p>
 </nav>
-
-<script>
-  import { onCartChange, readCart } from '../lib/cart.ts';
-
-  for (const count of document.querySelectorAll<HTMLElement>('[data-cart-count]')) {
-    const show = () => {
-      const n = String(readCart().length);
-      const value = count.querySelector('span');
-      if (value && value.textContent !== n) value.textContent = n;
-    };
-    show();
-    onCartChange(show);
-    count.hidden = false;
-  }
-</script>
 
 <style>
   @layer components {
@@ -57,10 +41,6 @@ const links: { label: string; href: string; current: Current }[] = [
       align-items: baseline;
       gap: var(--space-s);
       font-family: var(--font-ui);
-    }
-
-    .site-nav__cart {
-      color: var(--color-text-muted);
     }
 
     .site-nav__list {

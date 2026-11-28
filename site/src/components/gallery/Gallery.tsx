@@ -17,6 +17,7 @@ import { cartKey, pruneCart, setInCart, writeCart } from '../../lib/cart.ts';
 import { onSearchRequest, publishView } from '../../lib/library-view.ts';
 import { useCart } from '../cart/useCart.ts';
 import Button from '../shared/Button.tsx';
+import { Checkbox } from '../shared/Controls.tsx';
 import { DisclosureButton } from '../shared/Disclosure.tsx';
 import Card from './Card.tsx';
 import { FilterTree } from './Filters.tsx';
@@ -52,6 +53,8 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     parseQuery(initialQuery ?? (typeof window === 'undefined' ? '' : window.location.search), config),
   );
   const cart = useCart();
+  // Whether the library shows only the selected entries; page state, like the selection, so not in the URL.
+  const [onlySelected, setOnlySelected] = useState(false);
   // The filter menu's container on phones and tablets, closed by default; on desktop it's a sidebar and always shows.
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -75,7 +78,12 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     if (query !== window.location.search) window.history.replaceState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
   }, [state, config, initialQuery]);
 
-  const view = useMemo(() => computeView(records ?? [], config, state), [records, config, state]);
+  const shown = useMemo(() => {
+    if (!onlySelected) return records;
+    const chosen = new Set(cart);
+    return records?.filter((r) => chosen.has(cartKey(r)));
+  }, [records, onlySelected, cart]);
+  const view = useMemo(() => computeView(shown ?? [], config, state), [shown, config, state]);
 
   // The header's search drives the query, and the header's set export follows the results.
   useEffect(
@@ -103,7 +111,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
       else next.filters.delete(path);
     });
 
-  const tree = filterTree(config, state, records);
+  const tree = filterTree(config, state, shown ?? records);
   const inCart = new Set(cart);
   const choices = sortChoices(config, state.filters);
 
@@ -129,14 +137,20 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
               onEnum={(path, values) => setFilter(path, { kind: 'enum', values })}
               onRange={(path, min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
             />
-            {(!isDefaultScope(state.filters) || [...state.filters.keys()].some((path) => !isScopePath(path))) && (
+            <div class="gallery__selected">
+              <Checkbox id="gallery-selected" checked={onlySelected} onChange={setOnlySelected}>
+                Selected
+              </Checkbox>
+            </div>
+            {(onlySelected || !isDefaultScope(state.filters) || [...state.filters.keys()].some((path) => !isScopePath(path))) && (
               <Button
                 class="gallery__clear"
-                onClick={() =>
+                onClick={() => {
+                  setOnlySelected(false);
                   update((next) => {
                     next.filters = new Map(defaultScope());
-                  })
-                }
+                  });
+                }}
               >
                 Clear filters
               </Button>
@@ -188,8 +202,8 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
             </p>
             {cart.length > 0 && (
               <p class="gallery__cart">
-                {cart.length} in cart{' '}
-                <Button onClick={() => writeCart([])}>Empty cart</Button>
+                {cart.length} selected{' '}
+                <Button onClick={() => writeCart([])}>Clear selected</Button>
               </p>
             )}
           </div>

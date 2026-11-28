@@ -59,12 +59,6 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     ]);
   });
 
-  it('shows the print cart’s count after the links, hidden until its script runs (docs/site.md#gallery "Cart and set actions")', async () => {
-    const html = await renderBase({ title: 'Test' });
-    const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
-    expect(nav).toMatch(/<\/ul>\s*<p class="site-nav__cart[^"]*" data-cart-count hidden[^>]*>Cart: <span[^>]*>0<\/span><\/p>/);
-  });
-
   it('puts search in the page header after the top bar, opening the home ruleset’s Library with the query (docs/site.md#page-header)', async () => {
     const html = await renderBase({ title: 'Test' });
     const header = html.slice(html.indexOf('<header'), html.indexOf('</header>'));

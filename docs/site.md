@@ -181,8 +181,7 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 | `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)); only the repo's library has it ([Library root](#library-root)) |
 
 The top bar reads **Library | Rulesets | About | Contribute**
-(`site/src/components/SiteNav.astro`), then the print cart's count ("Cart: 3";
-[Gallery](#gallery) "Cart and set actions"), shown once its script runs.
+(`site/src/components/SiteNav.astro`).
 Search and the set export follow it in the header ([Page header](#page-header)).
 Library, and the site name before the top bar, open the home ruleset's Library,
 the registry's first ruleset (`homeRuleset` in
@@ -368,7 +367,7 @@ the top bar.
   every other page, they act on the cart: Print and Download first load
   `library.json`, so the cart's entries drop out when the library no longer
   has them, and are disabled while the cart is empty. Each button's accessible
-  name says what it targets ("Print 3 in cart", "Download 12 entries"). They
+  name says what it targets ("Print 3 selected", "Download 12 entries"). They
   need JavaScript, so they render once the island hydrates. A detail page's
   and a rules page's own export controls stay on the page.
 - The gallery and the header talk through window events
@@ -516,6 +515,11 @@ value, and a click adds or removes that value.
   selected value no entry has shows under each type, so it can be cleared. A
   shared range starts open only under a checked type, or under each type when
   none is checked.
+- **Selected** is a checkbox below the tree, right above Clear filters. Checked,
+  it shows only the entries in the print cart ([Cart and set actions](#gallery)),
+  and the filters' counts follow; unchecked, it filters nothing. It reads the
+  cart, so it isn't a facet and isn't in the URL, and it needs JavaScript like
+  the cart. Clear filters unchecks it, and shows while it's checked.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
   filter's value never matches it. Matching compares strings
   case-insensitively; a value displays in its stored case. A path two types share (`stats.level` on
@@ -579,22 +583,22 @@ author, and type filters, then the facets in registry order, with the default so
 
 - **The print cart** gathers entries to print or download
   (`site/src/lib/cart.ts`). Each card, and each detail page beside its export
-  controls, has the shared checkbox "In cart"
+  controls, has the shared checkbox "Selected"
   (`components/cart/CartToggle.tsx`), named with the entry's name for
   assistive technology. Checking it adds the entry to the end of the cart, and
-  unchecking it removes it. The header shows the cart's count, "Cart: 3",
-  after the top bar's links ([Pages and navigation](#pages-and-navigation)).
+  unchecking it removes it. The Library's Selected filter ([Filters](#gallery))
+  shows only these entries.
 - The cart lives in the browser's local storage under `ttrpg-library:cart`,
   as a list of `<ruleset>/<type>/<id>` keys in the order they were added, so
   it survives page changes and reloads in that browser, and every open tab
   follows it. Every read and write is wrapped: with storage blocked or
   unreadable, the cart lasts only for the page. It isn't in the URL. The
-  cart controls and the count need JavaScript, so they show only once their
+  cart controls need JavaScript, so they show only once their
   island or script runs.
 - When the Library loads `library.json`, or the header's Print or Download
   loads it on another page, entries it no longer has drop out of the cart.
-  A detail page's count can include them until then.
-- The results' summary says "N in cart", with an **Empty cart** button, while
+  A detail page can still count them until then.
+- The results' summary says "N selected", with a **Clear selected** button, while
   the cart holds anything.
 - Print and Download sit in the page header ([Page header](#page-header),
   [Controls](export.md#controls)); Download's menu offers the set-scope
@@ -602,7 +606,7 @@ author, and type filters, then the facets in registry order, with the default so
 - An action targets the cart when it holds anything: its entries in the order
   they were added, whatever the filters show. Otherwise, on the Library, it
   targets the whole filtered set in the gallery's order. Each button's accessible name says
-  which ("Print 3 in cart", "Download 12 entries"), and both are disabled
+  which ("Print 3 selected", "Download 12 entries"), and both are disabled
   when they'd target nothing.
 - An action whose exporter reads entries in full, such as Open5e, first
   fetches the export bundles of its entries. If any fails to load, nothing
@@ -656,7 +660,7 @@ thousand entries. Past about 2,000, revisit the index size.
   linked to the source, "licensed under <license>", linked to its legal code
   ([Meta](content-model.md#meta)).
 - Export controls below the summary: Print and Download, or Print alone on a
-  page type ([Controls](export.md#controls)), and the "In cart" checkbox
+  page type ([Controls](export.md#controls)), and the "Selected" checkbox
   ([Cart and set actions](#gallery)). A Preact island renders them once
   hydrated, since every export needs JavaScript; a failed export shows a
   message in a polite status region.

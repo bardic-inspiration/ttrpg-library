@@ -27,10 +27,10 @@ export function setTarget(all: LibraryRecord[], results: LibraryRecord[], cart: 
   return { records, cart: true };
 }
 
-/** Says what a set action targets: "3 in cart", "1 entry", "12 entries". */
+/** Says what a set action targets: "3 selected", "1 entry", "12 entries". */
 export function targetText({ records, cart }: SetTarget): string {
   const n = records.length;
-  if (cart) return `${n} in cart`;
+  if (cart) return `${n} selected`;
   return n === 1 ? '1 entry' : `${n} entries`;
 }
 

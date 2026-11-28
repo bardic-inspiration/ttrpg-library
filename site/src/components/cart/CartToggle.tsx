@@ -1,4 +1,4 @@
-// The cart control (docs/site.md#gallery "Cart and set actions"): the shared checkbox, "In cart",
+// The cart control (docs/site.md#gallery "Cart and set actions"): the shared checkbox, "Selected",
 // checked while the entry is in the cart. Checking it adds the entry to the end of the cart, and
 // unchecking it removes it. Its accessible name carries the entry's name.
 import { Checkbox } from '../shared/Controls.tsx';
@@ -17,7 +17,7 @@ export default function CartToggle({ id, name, inCart, onChange }: CartTogglePro
   return (
     <span class="cart-toggle">
       <Checkbox id={id} checked={inCart} onChange={onChange}>
-        In cart<span class="visually-hidden">: {name}</span>
+        Selected<span class="visually-hidden">: {name}</span>
       </Checkbox>
     </span>
   );

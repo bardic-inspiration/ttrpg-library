@@ -87,6 +87,12 @@
     list-style: none;
   }
 
+  .gallery__selected {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
   .gallery__clear {
     justify-self: start;
   }

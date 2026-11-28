@@ -96,15 +96,15 @@ describe('the header set export', () => {
     expect(actions()).toContain('Print 1 entry');
     expect(actions()).toContain('Download 1 entry');
     await act(() => void writeCart([key('Cinder Hound'), key('Frost Lance')]));
-    expect(actions()).toContain('Print 2 in cart');
+    expect(actions()).toContain('Print 2 selected');
   });
 
   it('targets the cart on every other page, and is disabled while it’s empty', async () => {
     await act(() => render(h(HeaderActions, { base: BASE }), root));
-    expect(actions()).toContain('Print 0 in cart');
+    expect(actions()).toContain('Print 0 selected');
     expect(button('Print').disabled).toBe(true);
     await act(() => void writeCart([key('Frost Lance')]));
-    expect(actions()).toContain('Print 1 in cart');
+    expect(actions()).toContain('Print 1 selected');
     expect(button('Print').disabled).toBe(false);
   });
 
@@ -118,7 +118,7 @@ describe('the header set export', () => {
     });
     const open = vi.spyOn(window, 'open').mockReturnValue({} as Window);
     await act(() => render(h(HeaderActions, { base: BASE }), root));
-    expect(actions()).toContain('Print 3 in cart');
+    expect(actions()).toContain('Print 3 selected');
     await act(async () => button('Print').click());
     await vi.waitFor(() => expect(open).toHaveBeenCalled());
     expect(fetched).toEqual(['/ttrpg-library/library.json']);

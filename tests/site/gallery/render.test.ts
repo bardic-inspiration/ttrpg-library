@@ -136,7 +136,7 @@ describe('Gallery', () => {
       expect(html).toContain(`for="${id}"`);
       expect(html).toContain(`id="${id}"`);
     }
-    expect(html).toContain('In cart<span class="visually-hidden">: Cinder Hound</span>');
+    expect(html).toContain('Selected<span class="visually-hidden">: Cinder Hound</span>');
   });
 
   it('leaves the set export to the page header (docs/site.md#page-header)', () => {
@@ -194,7 +194,7 @@ describe('Gallery', () => {
       expect(blinded).toContain('aria-label="Official"');
       expect(blinded).not.toContain('card__summary');
       expect(blinded).not.toContain('card__source');
-      expect(blinded).toContain('In cart');
+      expect(blinded).toContain('Selected');
     });
 
     it('sits under its type beside its custom entries, sorted with them', () => {

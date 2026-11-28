@@ -48,7 +48,7 @@ describe('setTarget', () => {
   });
 
   it('says what it targets', () => {
-    expect(targetText(setTarget(all, all, keys(a!, b!, c!)))).toBe('3 in cart');
+    expect(targetText(setTarget(all, all, keys(a!, b!, c!)))).toBe('3 selected');
     expect(targetText(setTarget(all, all, []))).toBe('4 entries');
     expect(targetText(setTarget(all, [a!], []))).toBe('1 entry');
   });
@@ -147,8 +147,8 @@ describe('SetActions', () => {
 
   it('shows Print and Download, each naming its target (docs/export.md#controls)', () => {
     const html = render(setTarget(all, all, keys(a!, b!)));
-    expect(html).toContain('Print<span class="visually-hidden"> 2 in cart</span>');
-    expect(html).toContain('Download<span class="visually-hidden"> 2 in cart</span>');
+    expect(html).toContain('Print<span class="visually-hidden"> 2 selected</span>');
+    expect(html).toContain('Download<span class="visually-hidden"> 2 selected</span>');
     expect(html.match(/<button/g)).toHaveLength(2 + configuredControls('set').downloads.length);
   });
 

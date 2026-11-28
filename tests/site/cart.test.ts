@@ -122,7 +122,7 @@ describe('the cart control', () => {
   /** The Library: the gallery, and the page header's set export beside it (docs/site.md#page-header). */
   const library = (query: string) =>
     h('div', null, h(HeaderActions, { base: BASE, library: true }), h(Gallery, { indexUrl: '', base: BASE, records, initialQuery: query }));
-  const box = (name: string) => [...root.querySelectorAll('label')].find((label) => label.textContent === `In cart: ${name}`);
+  const box = (name: string) => [...root.querySelectorAll('label')].find((label) => label.textContent === `Selected: ${name}`);
   const input = (name: string) => root.querySelector<HTMLInputElement>(`#${box(name)!.htmlFor}`)!;
 
   it('adds an entry from its detail page, and the Library shows it in the cart', async () => {
@@ -139,8 +139,8 @@ describe('the cart control', () => {
     await act(() => render(library('?f.ruleset=dnd-5e-2024'), root));
     expect(input('Frost Lance').checked).toBe(true);
     expect(input('Cinder Hound').checked).toBe(false);
-    expect(root.querySelector('.gallery__cart')?.textContent).toContain('1 in cart');
-    expect(root.querySelector('.set-actions')?.textContent).toContain('Print 1 in cart');
+    expect(root.querySelector('.gallery__cart')?.textContent).toContain('1 selected');
+    expect(root.querySelector('.set-actions')?.textContent).toContain('Print 1 selected');
   });
 
   it('adds and removes entries from cards, and the set actions target the cart in the order they were added', async () => {
@@ -149,12 +149,31 @@ describe('the cart control', () => {
     await act(() => input('Wand of Frost Lances').click());
     await act(() => input('Cinder Hound').click());
     expect(readCart()).toEqual(['Wand of Frost Lances', 'Cinder Hound'].map((name) => cartKey(records.find((r) => r.name === name)!)));
-    expect(root.querySelector('.set-actions')?.textContent).toContain('Print 2 in cart');
+    expect(root.querySelector('.set-actions')?.textContent).toContain('Print 2 selected');
     await act(() => input('Cinder Hound').click());
-    expect(root.querySelector('.set-actions')?.textContent).toContain('Print 1 in cart');
-    const empty = [...root.querySelectorAll('button')].find((button) => button.textContent === 'Empty cart')!;
+    expect(root.querySelector('.set-actions')?.textContent).toContain('Print 1 selected');
+    const empty = [...root.querySelectorAll('button')].find((button) => button.textContent === 'Clear selected')!;
     await act(() => empty.click());
     expect(readCart()).toEqual([]);
     expect(root.querySelector('.gallery__cart')).toBeNull();
+  });
+
+  it('filters the library to the selected entries from the last filter, and Clear filters unchecks it', async () => {
+    writeCart([]);
+    await act(() => render(library('?f.ruleset=dnd-5e-2024'), root));
+    const filter = () => root.querySelector<HTMLInputElement>('#gallery-selected')!;
+    const all = root.querySelectorAll('.gallery__grid > li').length;
+    await act(() => input('Cinder Hound').click());
+    await act(() => filter().click());
+    expect(root.querySelectorAll('.gallery__grid > li')).toHaveLength(1);
+    expect(box('Cinder Hound')).toBeTruthy();
+    expect(box('Frost Lance')).toBeUndefined();
+    // Clear filters comes right after it.
+    expect(filter().closest('.gallery__selected')!.nextElementSibling).toBe(root.querySelector('.gallery__clear'));
+    await act(() => filter().click());
+    expect(root.querySelectorAll('.gallery__grid > li')).toHaveLength(all);
+    await act(() => filter().click());
+    await act(() => (root.querySelector('.gallery__clear') as HTMLElement).click());
+    expect(filter().checked).toBe(false);
   });
 });
