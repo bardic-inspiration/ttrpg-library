@@ -1,0 +1,67 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "the-misfiled",
+  "name": "The Misfiled",
+  "summary": "Doppelgangers pose as under-librarians among the Content Stacks, refiling entries where they please.",
+  "stats": {
+    "setIn": {
+      "ref": "map/the-repository",
+      "zone": "content-stacks"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/the-repository",
+          "zone": "content-stacks",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Aisles of folders stretch away under hanging lamps, each drawer labeled by ruleset, type, and name. Five grey-robed under-librarians are refiling folders, and every one of them looks up at you with the same polite smile."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/doppelganger}s fled the Library's audits long ago and now hide among the folders, shifting entries between drawers to cover their tracks. They answer questions with plausible lies, and attack when a character opens a drawer they have tampered with. A character who compares a drawer's folders against the catalogue and succeeds on a DC 15 Intelligence (Investigation) check finds the folders the doppelgangers moved; every one of them is still correct inside, so the misfiling is theirs, not the Library's."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/doppelganger",
+            "count": 5
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "moderate": {
+            "coins": {
+              "dice": "5d6",
+              "times": 10,
+              "unit": "gp"
+            },
+            "items": [
+              {
+                "ref": "item/hat-of-disguise"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "lines-on-slate",
+  "name": "Lines on Slate",
+  "summary": "Two invisible stalkers hunt the party through the Diagram Gallery, where every map in the Library is drawn.",
+  "stats": {
+    "setIn": {
+      "ref": "map/the-repository",
+      "zone": "diagram-gallery"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/the-repository",
+          "zone": "diagram-gallery",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Slate panels cover every wall, each one a map drawn in plain white lines: rooms, doors, labels. Chalk dust hangs in the air, and as you watch, two clean shapes push through it where nothing stands."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/invisible-stalker}s were bound to keep the gallery's maps from being moved. The chalk dust shows where they are: a creature that spends an action to stir it can see them as outlines until the start of its next turn. The maps themselves are sound. The party can find both floors of the Library here, every zone outlined and named, and confirm that the maps match the building they walked through. Laid beside one of the black engraved plates from the presses, a slate here proves the Blackened Plate isn't the maps' fault; see the Anomaly Ledger."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/invisible-stalker",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "moderate": {
+            "items": [
+              {
+                "ref": "item/eyes-of-minute-seeing"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

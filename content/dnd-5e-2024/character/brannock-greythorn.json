@@ -1,0 +1,147 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "brannock-greythorn",
+  "name": "Brannock Greythorn",
+  "summary": "An orc criminal and Trailblazer Ranger who finds the way through any maze and the arrow for anything in it.",
+  "description": "Brannock smuggled books past the censors of a city that burned them, and learned every back stair and sewer doing it. He came to the Library to deliver one last crate and found the front door had moved.",
+  "stats": {
+    "species": {
+      "ref": "species/orc"
+    },
+    "background": {
+      "ref": "background/criminal"
+    },
+    "classes": [
+      {
+        "class": {
+          "ref": "class/ranger"
+        },
+        "level": 7,
+        "subclass": {
+          "ref": "subclass/trailblazer"
+        }
+      }
+    ],
+    "abilities": {
+      "base": {
+        "str": 12,
+        "dex": 15,
+        "con": 14,
+        "int": 8,
+        "wis": 14,
+        "cha": 8
+      },
+      "background": {
+        "dex": 2,
+        "con": 1
+      }
+    },
+    "feats": [
+      {
+        "ref": "feat/alert",
+        "source": {
+          "ref": "background/criminal"
+        }
+      },
+      {
+        "ref": "feat/archery",
+        "source": {
+          "ref": "class/ranger",
+          "level": 2
+        }
+      },
+      {
+        "ref": "feat/ability-score-improvement",
+        "source": {
+          "ref": "class/ranger",
+          "level": 4
+        },
+        "abilities": {
+          "dex": 1,
+          "wis": 1
+        }
+      }
+    ],
+    "choices": [
+      {
+        "source": {
+          "ref": "class/ranger"
+        },
+        "skills": [
+          "athletics",
+          "perception",
+          "nature"
+        ]
+      },
+      {
+        "source": {
+          "ref": "class-feature/ranger-deft-explorer"
+        },
+        "expertise": [
+          "stealth"
+        ],
+        "languages": [
+          "Elvish",
+          "Giant"
+        ]
+      },
+      {
+        "source": {
+          "ref": "background/criminal"
+        },
+        "languages": [
+          "Orc",
+          "Goblin"
+        ]
+      }
+    ],
+    "equipped": [
+      {
+        "ref": "equipment/studded-leather-armor"
+      },
+      {
+        "ref": "equipment/longbow"
+      },
+      {
+        "ref": "equipment/shortsword"
+      }
+    ],
+    "spells": [
+      {
+        "ref": "spell/hunters-mark"
+      },
+      {
+        "ref": "spell/ensnaring-strike"
+      },
+      {
+        "ref": "spell/cure-wounds"
+      },
+      {
+        "ref": "spell/goodberry"
+      },
+      {
+        "ref": "spell/fog-cloud"
+      },
+      {
+        "ref": "spell/pass-without-trace"
+      },
+      {
+        "ref": "spell/spike-growth"
+      },
+      {
+        "ref": "spell/silence"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

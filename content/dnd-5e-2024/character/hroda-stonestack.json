@@ -1,0 +1,112 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "hroda-stonestack",
+  "name": "Hroda Stonestack",
+  "summary": "A goliath soldier and Path of the Stone Ward Barbarian who carries the heavy end of every fight.",
+  "description": "Hroda hauled crates of unbound pages for the Library's porters until a shelf collapse buried three of them and she dug them out alone. The Maintainer gave her a key to the basement stairs that same night, and she has not put it down since.",
+  "stats": {
+    "species": {
+      "ref": "species/goliath"
+    },
+    "background": {
+      "ref": "background/soldier"
+    },
+    "classes": [
+      {
+        "class": {
+          "ref": "class/barbarian"
+        },
+        "level": 5,
+        "subclass": {
+          "ref": "subclass/path-of-the-stone-ward"
+        }
+      }
+    ],
+    "abilities": {
+      "base": {
+        "str": 15,
+        "dex": 13,
+        "con": 14,
+        "int": 8,
+        "wis": 12,
+        "cha": 10
+      },
+      "background": {
+        "str": 2,
+        "con": 1
+      }
+    },
+    "feats": [
+      {
+        "ref": "feat/savage-attacker",
+        "source": {
+          "ref": "background/soldier"
+        }
+      },
+      {
+        "ref": "feat/ability-score-improvement",
+        "source": {
+          "ref": "class/barbarian",
+          "level": 4
+        },
+        "abilities": {
+          "str": 1,
+          "con": 1
+        }
+      }
+    ],
+    "choices": [
+      {
+        "source": {
+          "ref": "class/barbarian"
+        },
+        "skills": [
+          "perception",
+          "survival"
+        ]
+      },
+      {
+        "source": {
+          "ref": "class-feature/barbarian-primal-knowledge"
+        },
+        "skills": [
+          "animal-handling"
+        ]
+      },
+      {
+        "source": {
+          "ref": "background/soldier"
+        },
+        "tools": [
+          {
+            "ref": "equipment/gaming-set",
+            "note": "dice"
+          }
+        ],
+        "languages": [
+          "Giant",
+          "Dwarvish"
+        ]
+      }
+    ],
+    "equipped": [
+      {
+        "ref": "equipment/greataxe"
+      },
+      {
+        "ref": "equipment/handaxe"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

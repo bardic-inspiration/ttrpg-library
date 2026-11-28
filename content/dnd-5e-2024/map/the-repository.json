@@ -1,0 +1,77 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "the-repository",
+  "name": "The Repository",
+  "summary": "The archive under the Library: a gate, then nine vaults that each keep one part of the Library's organizing system.",
+  "description": "The stair opens onto vaults older than the building above them. Each one hums with its own machinery, and each one keeps a different part of how the Library knows what it holds.",
+  "stats": {
+    "scale": "dungeon",
+    "within": {
+      "ref": "map/library-of-tabletop",
+      "zone": "basement-stair"
+    },
+    "zones": [
+      {
+        "id": "validation-gate",
+        "name": "Validation Gate",
+        "note": "The way in: an iron gate that reads everything carried through it and rings when something does not fit."
+      },
+      {
+        "id": "content-stacks",
+        "name": "Content Stacks",
+        "note": "Endless aisles of entries in their folders, filed by ruleset, then by type, then by name."
+      },
+      {
+        "id": "schema-forge",
+        "name": "Schema Forge",
+        "note": "Racks of iron molds, one for every kind of entry, and an anvil where new entries are pressed into shape."
+      },
+      {
+        "id": "registry-vault",
+        "name": "Registry Vault",
+        "note": "A strongroom of ledgers that list every kind of entry the Library may hold, beside a sealed scroll of forbidden words."
+      },
+      {
+        "id": "ruleset-engine",
+        "name": "Ruleset Engine",
+        "note": "A clockwork of brass gears that reckons every derived number: Hit Points, Armor Class, saves, and challenge."
+      },
+      {
+        "id": "wording-loom",
+        "name": "Wording Loom",
+        "note": "A great loom that weaves each page's composed text from threads of phrase, one thread for every mark of punctuation."
+      },
+      {
+        "id": "diagram-gallery",
+        "name": "Diagram Gallery",
+        "note": "A gallery of maps drawn in bare lines on slate, each zone outlined and labeled."
+      },
+      {
+        "id": "index-hall",
+        "name": "Index Hall",
+        "note": "A domed hall around a single enormous catalogue that names every entry and every link between them."
+      },
+      {
+        "id": "test-chambers",
+        "name": "Test Chambers",
+        "note": "Small proving rooms where entries are tried against what they claim to be."
+      },
+      {
+        "id": "press-hall",
+        "name": "Press Hall",
+        "note": "The presses that print every page the Library shows, and the last stop before anything reaches the shelves above."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

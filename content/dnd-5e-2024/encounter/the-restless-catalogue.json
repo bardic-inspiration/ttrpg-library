@@ -1,0 +1,71 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "the-restless-catalogue",
+  "name": "The Restless Catalogue",
+  "summary": "Animated armor and flying letter openers burst from the Library's card catalogue in the front hall.",
+  "stats": {
+    "setIn": {
+      "ref": "map/library-of-tabletop",
+      "zone": "front-hall"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/library-of-tabletop",
+          "zone": "front-hall",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Every drawer of the card catalogue slides open at once. Cards whirl into the air like startled birds, a display suit of armor by the desk lifts its gauntlets, and a rack of brass letter openers rises point-first toward you."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The catalogue's guardians attack anyone not carrying a reader's card, which the party hasn't been given yet. They fight until destroyed. Once they fall, the cards settle into a drift on the floor: each one is a catalogue card for a library entry, and the party's own visitor cards are among them, written out by the catalogue the moment they walked in. A DC 12 Wisdom (Perception) check spots the first anomaly in them; see the module's Anomaly Ledger."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/animated-armor",
+            "count": 2
+          },
+          {
+            "ref": "creature/animated-flying-sword",
+            "count": 6
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "low": {
+            "coins": {
+              "dice": "3d6",
+              "times": 10,
+              "unit": "gp"
+            },
+            "items": [
+              {
+                "ref": "item/potions-of-healing"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}
