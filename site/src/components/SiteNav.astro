@@ -1,8 +1,8 @@
 ---
-// The top bar (docs/site.md#pages-and-navigation): Library, Rulesets, About, and Contribute,
-// which links to the repository. Library opens the home ruleset's Library. The current section is
-// marked for assistive technology: the Library on every ruleset's Library, Rulesets on its page
-// and every rules page. After the links, the print cart's
+// The top bar (docs/site.md#pages-and-navigation): Library, About, and Contribute, which links to
+// the repository. Library opens the home ruleset's Library. The current section is marked for
+// assistive technology: the Library on every ruleset's Library and every rules page, which a
+// Library lists. After the links, the print cart's
 // count (docs/site.md#gallery "Cart and set actions"), which needs JavaScript, so it stays hidden
 // until the script shows it.
 import { REPO_URL } from '../../../lib/site.ts';
@@ -19,8 +19,7 @@ const libraries = Object.keys(registry).map((ruleset) => url(libraryPath(ruleset
 const home = url(libraryPath(homeRuleset(registry)));
 type Current = 'page' | 'true' | undefined;
 const links: { label: string; href: string; current: Current }[] = [
-  { label: 'Library', href: home, current: here === home ? 'page' : libraries.includes(here) ? 'true' : undefined },
-  { label: 'Rulesets', href: url('rulesets/'), current: here === url('rulesets/') ? 'page' : rulesPage ? 'true' : undefined },
+  { label: 'Library', href: home, current: here === home ? 'page' : libraries.includes(here) || rulesPage ? 'true' : undefined },
   { label: 'About', href: url('about/'), current: here === url('about/') ? 'page' : undefined },
   { label: 'Contribute', href: REPO_URL, current: undefined },
 ];

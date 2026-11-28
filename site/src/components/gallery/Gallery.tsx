@@ -36,13 +36,20 @@ export interface GalleryProps {
   facetData?: FacetData;
   /** The ruleset whose Library this is; every ruleset's entries when it's left out, as in the style guide. */
   ruleset?: string;
+  /** The ruleset's rules pages, listed under the filter menu (docs/site.md#gallery "Layout"). */
+  rules?: RulesLink[];
+}
+
+export interface RulesLink {
+  title: string;
+  href: string;
 }
 
 const registry = registryJson as unknown as Registry;
 
 const resultText = (n: number) => (n === 0 ? 'No entries match.' : n === 1 ? '1 entry' : `${n} entries`);
 
-export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData, ruleset }: GalleryProps) {
+export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData, ruleset, rules = [] }: GalleryProps) {
   const own = useMemo(() => rulesetRegistry(registry, ruleset), [ruleset]);
   const config = useMemo(() => galleryConfig(own, facetData), [own, facetData]);
   // Every ruleset's records, which the cart reads; the gallery shows only its ruleset's.
@@ -153,6 +160,20 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
               </Button>
             )}
           </section>
+          {rules.length > 0 && (
+            <nav class="gallery__rules" aria-labelledby="gallery-rules">
+              <h2 id="gallery-rules" class="gallery__rules-heading">
+                Rules
+              </h2>
+              <ul class="gallery__rules-list">
+                {rules.map((link) => (
+                  <li key={link.href}>
+                    <a href={link.href}>{link.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
         </div>
 
         <section class="gallery__results" aria-label="Results">

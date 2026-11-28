@@ -24,6 +24,20 @@ describe('Gallery', () => {
     expect(render({ records: undefined })).toContain('Loading the library');
   });
 
+  it('lists the ruleset’s rules pages under a Rules heading after the filter menu (docs/site.md#gallery "Layout")', () => {
+    const rules = [
+      { title: 'Glossary', href: '/ttrpg-library/dnd-5e-2024/rules/glossary/' },
+      { title: 'Extensions', href: '/ttrpg-library/dnd-5e-2024/rules/extensions/' },
+    ];
+    const html = render({ rules });
+    const menu = html.slice(html.indexOf('<div class="gallery__menu"'), html.indexOf('<section class="gallery__results"'));
+    expect(menu.indexOf('id="gallery-filters"')).toBeLessThan(menu.indexOf('class="gallery__rules"'));
+    expect(menu).toMatch(/<nav class="gallery__rules" aria-labelledby="gallery-rules"><h2 id="gallery-rules" class="gallery__rules-heading">Rules<\/h2>/);
+    const links = [...menu.matchAll(/<li><a href="([^"]*)">([^<]*)<\/a><\/li>/g)].map((m) => [m[2], m[1]]);
+    expect(links).toEqual(rules.map((r) => [r.title, r.href]));
+    expect(render({})).not.toContain('gallery__rules');
+  });
+
   it('renders a card per result, with the type badge and card fields, and no art when there is none', () => {
     const html = render({});
     // The three example entries, and the two classes Frost Lance names.

@@ -2,7 +2,8 @@
 // Mounts a ruleset's Library gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery).
 // The island fetches library.json once it runs; without JavaScript, a plain list of each of the
 // ruleset's entries links to its detail page instead, and of each primitive with a card to its
-// rules page section.
+// rules page section. Below the filter menu, the ruleset's rules pages, in its rules/pages.json order,
+// then its Extensions page when it has one (docs/site.md#gallery "Layout").
 import Gallery from './Gallery';
 import { entryPath, loadEntries } from '../../lib/library';
 import { libraryFacetData } from '../../lib/gallery/facet-data';
@@ -19,6 +20,13 @@ const rules = loadRules();
 const all = loadEntries(rules);
 // Ref targets' names and the groups a groups facet nests (docs/site.md#gallery "Filters").
 const data = libraryFacetData(rules, all);
+const own = rules.find((data) => data.ruleset === ruleset);
+const rulesLinks = own
+  ? [
+      ...own.pages.map((page) => ({ title: page.title, href: url(`${ruleset}/rules/${page.id}/`) })),
+      ...(own.types.some((t) => t.extensions) ? [{ title: 'Extensions', href: url(`${ruleset}/rules/extensions/`) }] : []),
+    ]
+  : [];
 const entries = [
   ...all.map(({ entry }) => ({ entry, path: entryPath(entry) })),
   ...primitiveCards(rules).map(({ loaded, path }) => ({ entry: loaded.entry, path })),
@@ -26,8 +34,16 @@ const entries = [
   .filter(({ entry }) => entry.ruleset === ruleset)
   .sort((a, b) => a.entry.name.localeCompare(b.entry.name, 'en', { sensitivity: 'base' }));
 ---
-<Gallery client:load indexUrl={url('library.json')} base={url()} facetData={data} ruleset={ruleset} />
+<Gallery client:load indexUrl={url('library.json')} base={url()} facetData={data} ruleset={ruleset} rules={rulesLinks} />
 <noscript>
+  {rulesLinks.length > 0 && (
+    <nav class="gallery__rules" aria-labelledby="gallery-rules-static">
+      <h2 id="gallery-rules-static" class="gallery__rules-heading">Rules</h2>
+      <ul class="gallery__rules-list">
+        {rulesLinks.map((link) => <li><a href={link.href}>{link.title}</a></li>)}
+      </ul>
+    </nav>
+  )}
   {entries.length === 0 ? (
     <p>No entries yet.</p>
   ) : (
