@@ -9,7 +9,13 @@
     "levels": [
       9
     ],
-    "text": "Choose two of your skill proficiencies with which you lack Expertise. You gain Expertise in those skills."
+    "text": "Choose two of your skill proficiencies with which you lack Expertise. You gain Expertise in those skills.",
+    "grants": [
+      {
+        "kind": "expertise",
+        "count": 2
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/encounter.schema.json",
+  "title": "dnd-5e-2024 encounter stats (docs/rulesets.md#encounters)",
+  "description": "An arrangement (docs/content-model.md#arrangements): kit parts in page order, and the map it's set in. Its one roster or spawn table, a spawn table's ranges, dice counts, and a table part's table, and E are checks in encounters.ts (docs/rulesets.md#consistency-checks).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["parts"],
+  "properties": {
+    "parts": {
+      "description": "The kit parts, in the order the page renders them. Exactly one is a roster or a spawn table.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Part" }
+    },
+    "setIn": {
+      "description": "The map the encounter is set in, or a zone of it. The map's page lists the encounter there; a map part shows the map on this page.",
+      "$ref": "common.schema.json#/$defs/MapRef"
+    },
+    "environment": {
+      "description": "E, the environment multiplier on the encounter's XP, and why. Without it, E is 1; a multiplier of 1 is an error and any other a review warning, checks in encounters.ts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["multiplier", "note"],
+      "properties": {
+        "multiplier": { "type": "number", "exclusiveMinimum": 0 },
+        "note": { "description": "Why the setting makes it harder or easier, such as \"difficult terrain and a collapsing floor\".", "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "Part": {
+      "description": "One kit part, by its `part`. An encounter allows every kit part but a module's own, `hook` and `arrangement`.",
+      "type": "object",
+      "required": ["part"],
+      "properties": {
+        "part": { "enum": ["prose", "description", "dm-guide", "roster", "spawn-table", "sequence", "table", "loot", "map"] }
+      },
+      "allOf": [
+        { "if": { "properties": { "part": { "const": "prose" } } }, "then": { "$ref": "common.schema.json#/$defs/PartProse" } },
+        { "if": { "properties": { "part": { "const": "description" } } }, "then": { "$ref": "common.schema.json#/$defs/PartDescription" } },
+        { "if": { "properties": { "part": { "const": "dm-guide" } } }, "then": { "$ref": "common.schema.json#/$defs/PartDmGuide" } },
+        { "if": { "properties": { "part": { "const": "roster" } } }, "then": { "$ref": "common.schema.json#/$defs/PartRoster" } },
+        { "if": { "properties": { "part": { "const": "spawn-table" } } }, "then": { "$ref": "common.schema.json#/$defs/PartSpawnTable" } },
+        { "if": { "properties": { "part": { "const": "sequence" } } }, "then": { "$ref": "common.schema.json#/$defs/PartSequence" } },
+        { "if": { "properties": { "part": { "const": "table" } } }, "then": { "$ref": "common.schema.json#/$defs/PartTable" } },
+        { "if": { "properties": { "part": { "const": "loot" } } }, "then": { "$ref": "common.schema.json#/$defs/PartLoot" } },
+        { "if": { "properties": { "part": { "const": "map" } } }, "then": { "$ref": "common.schema.json#/$defs/PartMap" } }
+      ]
+    }
+  }
+}

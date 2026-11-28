@@ -42,6 +42,28 @@ export interface LinkedEntry {
   author?: string;
 }
 
+/**
+ * The library as a derivation that reads other entries sees it (docs/rulesets.md#the-ruleset-module):
+ * one ruleset's entries and components, with every ref target resolvable by key, and its rules data.
+ * The build makes it once per ruleset, before deriving.
+ */
+export interface LinkedLibrary {
+  /** Every entry and component of the ruleset. */
+  entries: readonly LinkedEntry[];
+  /** The entry, component, or primitive a ref names (`<type>/<id>`), or undefined for none. */
+  resolve(key: string): LinkedEntry | undefined;
+  /** The ruleset's rules data, when it has any. */
+  rules?: RulesData;
+}
+
+/** A ruleset's linked library, from its entries and components and its rules data's primitives. */
+export function linkedLibrary(entries: readonly LinkedEntry[], rules?: RulesData): LinkedLibrary {
+  const byKey = new Map<string, LinkedEntry>();
+  for (const p of rules?.primitives ?? []) byKey.set(`${p.type}/${p.id}`, { type: p.type, id: p.id, name: p.name, stats: p.stats, author: PUBLISHER });
+  for (const e of entries) byKey.set(`${e.type}/${e.id}`, e);
+  return { entries, resolve: (key) => byKey.get(key), ...(rules && { rules }) };
+}
+
 /** The `author` that names the ruleset's publisher (docs/content-model.md#source-and-author). */
 export const PUBLISHER = 'publisher';
 
@@ -55,6 +77,11 @@ export const isOfficial = (entry: object): boolean => (entry as { author?: unkno
 export interface RefLabels {
   forward: string;
   back: string;
+  /**
+   * The labels for any field without labels of its own ("References" / "Referenced by"). A target
+   * listed under a specific label isn't listed again under these (docs/content-model.md#references).
+   */
+  generic?: true;
 }
 
 export interface RulesetModule {
@@ -72,15 +99,24 @@ export interface RulesetModule {
   /**
    * Checks that read what an entry's refs point to (docs/rulesets.md#consistency-checks), such as a
    * background's feat being an origin feat. They run after every ref resolves; `target` gives a
-   * resolved target's type and stats, or undefined for one whose stats failed their schema. Optional.
+   * resolved target's type and stats, or undefined for one whose stats failed their schema, and `key`
+   * is the entry's own `<type>/<id>`, for a check that walks refs back to it. Optional.
    */
-  checkLinks?(type: string, stats: unknown, target: LinkTarget, named: NameLookup): Issue[];
+  checkLinks?(type: string, stats: unknown, target: LinkTarget, named: NameLookup, key: string): Issue[];
   /**
-   * Derived values that read other entries, such as a class's spell list from the spells that name
-   * it. `key` is the entry's `<type>/<id>`, and `entries` every entry and component of its ruleset.
-   * The site merges them into the entry's derived values. Optional.
+   * Derived values that read other entries: the entries an entry's refs name, such as a character's
+   * classes and species, or the entries that name it, such as a class's spell list. `key` is the
+   * entry's `<type>/<id>`, and `library` its ruleset's entries, components, and primitives, resolved
+   * by the build before deriving. The site merges them into the entry's derived values. Optional.
    */
-  deriveLinked?(type: string, key: string, stats: unknown, entries: readonly LinkedEntry[]): Record<string, unknown>;
+  deriveLinked?(type: string, key: string, stats: unknown, library: LinkedLibrary): Record<string, unknown>;
+  /**
+   * Renders the ruleset's text tokens (docs/rulesets.md#text-tokens) in one text of an entry of `type`,
+   * from the entry's derived values, so a token shows only what the module derives. `{ref:…}` is left
+   * as written. Throws on a bad token; `check` reports bad tokens first. Optional: without it, or for a
+   * type with no tokens, text shows as written.
+   */
+  renderTokens?(type: string, text: string, derived: Record<string, unknown>): string;
   /** The ruleset's phrase book (docs/site.md#wording): its fixed sentences and the display names of its enum values. */
   phrases: PhraseBook;
   /** Labels for a ref at `path` (such as `stats.spells[0].spell`) in an entry of `type` (docs/content-model.md#references). */

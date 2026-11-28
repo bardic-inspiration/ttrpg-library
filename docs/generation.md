@@ -5,7 +5,7 @@
 How entries are requested, generated, imported, and revised. Claude routines
 turn GitHub issues into entries and open one PR per batch, then revise the batch from the
 owner's review comments. The human role is request, review, and merge. SRD
-import stages use the same skills in sessions the owner starts.
+entry upkeep uses the same skills in sessions the owner starts.
 
 ## Behavior
 
@@ -18,8 +18,7 @@ every issue starts in a lane.
   ([`.github/ISSUE_TEMPLATE/content-request.yml`](../.github/ISSUE_TEMPLATE/content-request.yml),
   label `request`): type (the form lists every type in `config/types.json`), count (a 1–10 dropdown,
   since issue forms have no number field; a free-form request may ask for
-  more), brief, tags (one `key: value` per line, comma-separated for lists),
-  and ruleset. Blank fields take the values in `config/defaults.json`.
+  more), brief, and ruleset. Blank fields take the values in `config/defaults.json`.
 - **Revise request** (`revise-request.yml`, label `revise`): the entries, one
   per line as `<type>/<id>` (or a bare `id` when only one type has it), and an
   instruction, both required. For changes to merged entries.
@@ -87,7 +86,7 @@ never starved by new work. `docs/routines.md` writes it out for the routine.
    hours is treated as unclaimed.
 
 A manual run may name issues, or pass an inline request (type, count, brief,
-tags) handled as if it were an issue but without one. It still does steps 1–3,
+ruleset) handled as if it were an issue but without one. It still does steps 1–3,
 but steps 4 and 5 take only what it was given: named issues must be open
 `import` or `request` issues without `needs-info`, and any other is reported
 and left alone. An inline request is always a content request. It never
@@ -97,12 +96,10 @@ reports the question instead.
 ### Defaults
 
 `config/defaults.json` holds the ruleset, count, the `author` and optional
-`source` of custom entries, tags, gap-fill settings, and the validation retry
-budget a run uses. Defaults apply only to fields a request leaves out, and
-request tags merge over default tags. A `source:` or `author:` line in a
-request's tags is the entry's field, not a tag, and takes the place of the
-default. The default `author` can't be `"publisher"`, and neither `source` nor
-`author` is a default tag key ([Source and author](content-model.md#source-and-author)). `count` and
+`source` of custom entries, gap-fill settings, and the validation retry
+budget a run uses. Defaults apply only to fields a request leaves out: a
+request that names a `source` or `author` sets the entries' own. The default
+`author` can't be `"publisher"` ([Source and author](content-model.md#source-and-author)). `count` and
 `gapFill.count` are whole numbers of at least 1. A request's count is taken on
 trust, and no batch has a size limit. `scripts/generate/defaults.ts` loads and
 checks the file and applies it to a request.
@@ -112,23 +109,22 @@ checks the file and applies it to a request.
 ### The generate skill
 
 `.claude/skills/generate/SKILL.md` is generic across types and rulesets. Its
-inputs are the ruleset, type, count, brief, tags, and issue numbers, or a gap
-bucket, or an SRD import stage. Its steps:
+inputs are the ruleset, type, count, brief, and issue numbers, or a gap
+bucket, or an SRD import stage. It is an umbrella: steps 1, 2, 4, 5, and 6
+are shared by every type, and step 3 routes each request to its type's
+[procedure](#procedures). A batch that mixes types runs the shared steps
+once. Its steps:
 
 1. Read `config/types.json`, `config/defaults.json`, the ruleset module (the
    type's schema, `tables.json`, tokens, guideline), `config/blocklist.json`,
    and `library.json`.
 2. List existing names and IDs to avoid collisions, and existing entries that
    match the brief's theme to avoid near-duplicate concepts.
-3. Write entries, with any new dependencies the brief implies. Prefer refs to
-   library entries over plain text. Write inputs only, use tokens for derived
-   values in prose, and use `adjust` only for a deliberate deviation, explained
-   in the PR body. For an SRD request, transcribe the SRD entries faithfully
-   instead.
+3. Write each request's entries by its type's procedure.
 4. Set `source` and `author` ([Source and author](content-model.md#source-and-author)):
    `"SRD 5.2"` and `"publisher"` on SRD entries, and the request's on custom
    ones. Set `meta.createdAt`, `meta.source.kind: "routine"`, and
-   `meta.source.issues` (or `meta.source.gapFill`). Apply request and default tags.
+   `meta.source.issues` (or `meta.source.gapFill`).
 5. Run `npm run validate`; fix and retry up to `validateRetries` times. If it
    still fails, comment the errors on the issue, remove `in-progress`, and stop
    without a PR. A gap-fill run or inline request reports the errors in the run
@@ -147,6 +143,92 @@ per fulfilled issue; and the bucket filled, for gap fill.
 
 A test checks that every repo path, npm script, and `config/defaults.json` key
 the skill names exists, and that `content.md` has the body sections above.
+
+### Procedures
+
+The skill's "Procedures" table routes every type in `config/types.json` to
+exactly one procedure, each a section of the skill. A type in no row can't
+be generated, and the run asks, as for an unknown type.
+
+- **Entries:** every type but `character`, `map`, `encounter`, and `module`. Write entries, with any new
+  dependencies the brief implies. Prefer refs to library entries over plain
+  text. Write inputs only, use tokens for derived values in prose, and use
+  `adjust` only for a deliberate deviation, explained in the PR body. For an
+  SRD request, transcribe the SRD entries faithfully instead, and for an
+  import batch, run the import script ([Imports](#imports)).
+- **Characters:** `character` presets
+  ([Characters](rulesets.md#characters)), by the character guideline. Read
+  the build's entries; choose the species, background, and classes in
+  order with their levels and subclasses; buy the base scores with point
+  buy and place the background's increases; then fill exactly what the
+  build gives ([Grants](rulesets.md#grants)): its feats, skill, Expertise,
+  tool, and language picks, class options, spells, and equipped gear.
+  Choices only: the ruleset derives the rest, and the consistency checks
+  reject an illegal build, which is fixed by changing its choices.
+  Characters come only by request (they have no gap buckets), every preset
+  is custom (the SRD prints none, so an SRD request for one is asked
+  about), and a preset creates no dependency: each ref names an entry
+  already in the library, and a brief that needs one the library lacks is
+  asked about. In the PR's Entries table, its summary field is "—".
+- **Maps:** `map` ([Maps](rulesets.md#maps)), by the map guideline. Each
+  map is written with its diagram
+  ([Map diagrams](content-model.md#map-diagrams)), parents before children:
+  lay out the zones for the map's scale, each with its name and its id,
+  the name's slug; write the entry; then draw the diagram at
+  `assets/images/<ruleset>/map/<id>.svg` with a `viewBox`, a `wall`
+  outline, one `zone` element per zone with its `zone-<id>` id and a
+  centered `label`, `door` lines where zones connect, and `feature`
+  shapes, using only the allowed elements and classes and no colors. A
+  diagram error is fixed by redrawing. Maps come only by request (they
+  have no gap buckets), every map is custom (the SRD prints none, so an
+  SRD request for one is asked about), and a map's one dependency is its
+  parent, in the library or written by the same request; a brief that
+  needs a parent neither has is asked about. In the PR's Entries table,
+  its summary field is "—".
+- **Encounters:** `encounter` ([Encounters](rulesets.md#encounters)), by
+  the encounter guideline. Choose the party (the brief's, or four
+  characters at the level it implies, or level 1) and its summed budgets;
+  pick the creatures and items, writing any the library lacks before the
+  encounter, by the Entries procedure (a map by the Maps procedure); then
+  assemble one roster, with whole counts that read as the difficulty asked
+  for, or one spawn table, a row per difficulty with dice counts and, when
+  rolled, a die and each row's faces. Add `environment` only when the
+  setting changes the fight, and write the other parts the brief calls for
+  and `setIn`. Counts, dice, and E only, never XP
+  ([Encounter difficulty](rulesets.md#encounter-difficulty)); an error is
+  fixed by changing them. Encounters come only by request (they have no gap
+  buckets), every encounter is custom (the SRD prints none, so an SRD
+  request for one is asked about), and a character in the scene is a ref in
+  its text that the library already has; a brief that needs one it lacks
+  is asked about. In the PR's Entries table, its summary field is the
+  party it was designed for and the difficulty each roster or row reads,
+  and E is under Warnings.
+- **Modules:** `module` ([Modules](rulesets.md#modules)), by the module
+  guideline. Set the `length` and `levels` (the brief's span, or the level
+  it implies, or level 1); outline the module in story order, its hooks,
+  maps, encounters and contained modules, characters, and cross-cutting
+  tables, finding a library entry for each where one fits; write the rest
+  in the same request, before the module, each by its own procedure:
+  content entries by the Entries procedure, characters by the Characters
+  procedure, maps by the Maps procedure, encounters by the Encounters
+  procedure (designed for the party at its level within `levels`, and set
+  in their maps' zones), and contained modules by this one, innermost
+  first. Then write the parts: prose, hooks with their refs, a DM guide,
+  `map` parts, one `arrangement` part per contained encounter or module
+  in story order, and tables. Refs, `length`, and `levels` only, never
+  XP or the derived contents and counts; an error is fixed by changing
+  the choices or refs of the entry it names. Modules come only by request
+  (they have no gap buckets), every module is custom (the SRD prints
+  none, so an SRD request for one is asked about), a module's request
+  never writes a rule addition (a brief that needs one the library lacks
+  is asked about), and no module names one it's part of. An entry the
+  request wrote earlier counts as in the library for the ones after it.
+  In the PR's Entries table, its summary field is its length and levels,
+  and each entry it adds has its own row.
+
+A test checks that the table names every registered type once, that each
+procedure has its section, and that a type routed to the character, map,
+encounter, or module procedure has no `gapBuckets`.
 
 ### Self-review
 
@@ -178,9 +260,10 @@ validation passes.
    SRD proper noun, and no text field holds a blocklisted term
    ([SRD and custom entries](content-model.md#srd-and-custom-entries),
    [Blocklist](licensing.md#blocklist)). An SRD entry matches the SRD PDF.
-8. **Scope.** The PR changes only the batch's files under `content/` (and
-   `ATTRIBUTION.md` for an import), and the Entries table lists every new or
-   revised entry, dependencies included, matching the count in the title.
+8. **Scope.** The PR changes only the batch's files under `content/`, its
+   maps' diagrams under `assets/images/`, and `ATTRIBUTION.md` for an
+   import, and the Entries table lists every new or revised entry,
+   dependencies included, matching the count in the title.
 
 A test checks that the content PR template has the Self-review section with
 one item per entry above, and that both skills cite this section.
@@ -264,8 +347,8 @@ on-demand prompts are the full-run prompt with inputs added.
 
 Gap fill never adds a rules extension, so a rules type that takes extensions,
 such as `condition` or `equipment`, has no `gapBuckets`; its entries come only from requests.
-A content type that comes only by request, `background`, `species`, `class`,
-or `subclass`, has no `gapBuckets` either.
+A content type that comes only by request, `background`, `character`,
+`encounter`, `map`, `module`, `species`, `class`, or `subclass`, has no `gapBuckets` either.
 A type's `gapBuckets` in `config/types.json` says how gap fill partitions it: a
 list of axes, each partitioning one of the type's facets. The buckets are every
 combination of one value per axis, so one axis partitions the type and two
@@ -304,7 +387,7 @@ every content rule applies to them.
   the work's title as `source` and its author as `author`
   ([Source and author](content-model.md#source-and-author)),
   `meta.source.kind: import`, the issue, and `meta.source.license` (the
-  license id, author, and source URL), `tags` of `defaults.tags`, and a
+  license id, author, and source URL), and a
   drafted `summary` the run rewrites. It appends the work's
   line to `ATTRIBUTION.md` ([Imported works](licensing.md#imported-works)),
   and prints the issue's skip-list section. It exits 2 with the reason when
@@ -330,25 +413,20 @@ every content rule applies to them.
 
 ### SRD import
 
-The full SRD import bypassed requests: each stage was a sub-issue of its
-milestone, without the `request` label, so routines never took it, worked in
-sessions the owner started. Every stage is done. SRD entry upkeep (link
-passes, corrections, review) works the same way, with its issue under the
-current queue (a milestone, a "Spot Fixes" issue, or a track issue) ([Dev Queue](../AGENTS.md#dev-queue)),
-through the `generate` and `revise` skills. A stage session ran the
-`generate` skill on a batch picked from
-`npm run srd-coverage -- --type <type> --tier <tier>`, with no `in-progress`
-claim, on branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs
-that day). The PR used `content.md` and said `Refs #<stage>`; the PR that
-finished the stage used `Closes #<stage>`.
+The library holds the whole SRD 5.2, so `npm run srd-coverage` reports
+nothing missing. SRD entries never come through routines: SRD work (a link
+pass, a transcription fix, a missed entry) is a dev-queue issue without the
+`request` label, under the current queue (a milestone, a "Spot Fixes" issue,
+or a track issue) ([Dev Queue](../AGENTS.md#dev-queue)), worked in a session
+the owner starts through the `generate` and `revise` skills. The `generate`
+skill takes such an issue as an SRD import stage: no `in-progress` claim, the
+branch `gen/srd-<stage>-<type>-<YYYYMMDD>` (`-2`, `-3` for more PRs that
+day), `Refs #<stage>` on each PR, and `Closes #<stage>` on the last. A link
+pass turns plain-text mentions of library entries into links, on a
+`revise/<stage>-<YYYYMMDD>` branch.
 
-The stage sessions followed the `srd-import` skill, archived for the record
-at `.claude/archive/srd-import/SKILL.md`, which wrapped the `generate` and
-`revise` skills: one batch per type, transcription from the PDF's text layer,
-verification against the PDF through the templates, format-fix dev issues for
-gaps (a fix's PR added no entries; they came in the next batch), and a link
-pass once a stage's batches merged (a `revise/<stage>-<YYYYMMDD>` PR turning
-plain-text mentions of library entries into links).
+The full import was worked in stages with the `srd-import` skill, archived
+for the record at `.claude/archive/srd-import/SKILL.md`.
 
 ## Where the rules live
 

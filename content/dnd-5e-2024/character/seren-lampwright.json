@@ -1,0 +1,140 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "seren-lampwright",
+  "name": "Seren Lampwright",
+  "summary": "A dragonborn soldier and Oath of the Lantern Paladin who walks first into the dark and keeps the light up.",
+  "description": "Seren kept the lamps lit along a mountain pass where caravans went missing, and swore an oath the night one did not come back. The Library's lower stacks are darker than any pass, and that is exactly why the Maintainer asked for her.",
+  "stats": {
+    "species": {
+      "ref": "species/dragonborn"
+    },
+    "background": {
+      "ref": "background/soldier"
+    },
+    "classes": [
+      {
+        "class": {
+          "ref": "class/paladin"
+        },
+        "level": 6,
+        "subclass": {
+          "ref": "subclass/oath-of-the-lantern"
+        }
+      }
+    ],
+    "abilities": {
+      "base": {
+        "str": 15,
+        "dex": 8,
+        "con": 14,
+        "int": 8,
+        "wis": 10,
+        "cha": 15
+      },
+      "background": {
+        "str": 2,
+        "con": 1
+      }
+    },
+    "feats": [
+      {
+        "ref": "feat/savage-attacker",
+        "source": {
+          "ref": "background/soldier"
+        }
+      },
+      {
+        "ref": "feat/defense",
+        "source": {
+          "ref": "class/paladin",
+          "level": 2
+        }
+      },
+      {
+        "ref": "feat/ability-score-improvement",
+        "source": {
+          "ref": "class/paladin",
+          "level": 4
+        },
+        "abilities": {
+          "str": 1,
+          "cha": 1
+        }
+      }
+    ],
+    "choices": [
+      {
+        "source": {
+          "ref": "class/paladin"
+        },
+        "skills": [
+          "insight",
+          "persuasion"
+        ]
+      },
+      {
+        "source": {
+          "ref": "background/soldier"
+        },
+        "tools": [
+          {
+            "ref": "equipment/gaming-set",
+            "note": "playing cards"
+          }
+        ],
+        "languages": [
+          "Draconic",
+          "Celestial"
+        ]
+      }
+    ],
+    "equipped": [
+      {
+        "ref": "equipment/chain-mail"
+      },
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/longsword"
+      }
+    ],
+    "spells": [
+      {
+        "ref": "spell/divine-smite"
+      },
+      {
+        "ref": "spell/find-steed"
+      },
+      {
+        "ref": "spell/bless"
+      },
+      {
+        "ref": "spell/cure-wounds"
+      },
+      {
+        "ref": "spell/shield-of-faith"
+      },
+      {
+        "ref": "spell/command"
+      },
+      {
+        "ref": "spell/aid"
+      },
+      {
+        "ref": "spell/lesser-restoration"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

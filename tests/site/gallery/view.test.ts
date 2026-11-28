@@ -2,7 +2,8 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { galleryConfig, sortChoices, type GalleryConfig, type LibraryRecord, type Registry } from '../../../site/src/lib/gallery/config.ts';
 import { parseQuery } from '../../../site/src/lib/gallery/state.ts';
-import { chips, computeView, searchIndex, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
+import { bounds, chips, computeView, hasValues, sortRecords, withoutFilter } from '../../../site/src/lib/gallery/view.ts';
+import { displayValue } from '../../../site/src/lib/gallery/values.ts';
 import { fixtureRecords, record, registry, whole } from './helpers.ts';
 
 let reg: Registry;
@@ -15,21 +16,22 @@ beforeAll(async () => {
 });
 
 const view = (records: LibraryRecord[], config: GalleryConfig, query: string) =>
-  computeView(records, config, parseQuery(whole(query), config), searchIndex(records)).results.map((r) => r.name);
+  computeView(records, config, parseQuery(whole(query), config)).results.map((r) => r.name);
 
 describe('finding the example entries', () => {
-  it('by name, with prefix and light fuzzy matching', () => {
+  it('by a substring of the name, ignoring case', () => {
     expect(view(fixtures, library, '?q=cinder')).toEqual(['Cinder Hound']);
-    expect(view(fixtures, library, '?q=cind')).toEqual(['Cinder Hound']);
-    expect(view(fixtures, library, '?q=cimder')).toEqual(['Cinder Hound']);
+    expect(view(fixtures, library, '?q=CIND')).toEqual(['Cinder Hound']);
+    expect(view(fixtures, library, '?q=hound')).toEqual(['Cinder Hound']);
     expect(view(fixtures, library, '?q=frost')).toHaveLength(2);
   });
 
-  it('by tag, as a filter and through search', () => {
-    const theme = fixtures.find((r) => r.id === 'cinder-hound')!.tags.theme;
-    expect(theme).toBe('fire');
-    expect(view(fixtures, library, '?f.tags.theme=fire')).toEqual(['Cinder Hound']);
-    expect(view(fixtures, library, '?f.tags.theme=FIRE')).toEqual(['Cinder Hound']);
+  it('with no fuzzy matching', () => {
+    expect(view(fixtures, library, '?q=cimder')).toEqual([]);
+  });
+
+  it('ignores an old tag filter, as any filter on a path the Library lacks', () => {
+    expect(view(fixtures, library, '?f.tags.theme=fire')).toEqual(view(fixtures, library, ''));
   });
 
   it('by facet', () => {
@@ -51,8 +53,8 @@ describe('finding the example entries', () => {
 
 describe('filter logic', () => {
   const records = [
-    record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5 }, tags: { theme: 'Fire' } }),
-    record({ id: 'b', facets: { 'stats.creatureType': 'fiend', 'stats.cr': 1 }, tags: { theme: ['ice', 'Storm'] } }),
+    record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5, 'stats.size': 'Huge' } }),
+    record({ id: 'b', facets: { 'stats.creatureType': 'fiend', 'stats.cr': 1, 'stats.size': ['small', 'Medium'] } }),
     record({ id: 'c', facets: { 'stats.creatureType': 'beast', 'stats.cr': 9 } }),
   ];
 
@@ -62,9 +64,9 @@ describe('filter logic', () => {
   });
 
   it('matches string values case-insensitively, inside arrays too, and never matches a missing value', () => {
-    expect(view(records, library, '?f.tags.theme=fire')).toEqual(['a']);
-    expect(view(records, library, '?f.tags.theme=storm')).toEqual(['b']);
-    expect(view(records, library, '?f.tags.theme=fire,ice,storm&sort=name:asc')).toEqual(['a', 'b']);
+    expect(view(records, library, '?f.stats.size=huge')).toEqual(['a']);
+    expect(view(records, library, '?f.stats.size=medium')).toEqual(['b']);
+    expect(view(records, library, '?f.stats.size=huge,small,medium&sort=name:asc')).toEqual(['a', 'b']);
   });
 
   it('search narrows within the active filters', () => {
@@ -72,12 +74,80 @@ describe('filter logic', () => {
     expect(view(named, library, '?q=ember&f.stats.cr=4..')).toEqual(['Ember Drake']);
   });
 
-  it('orders by relevance while searching: a name match beats a text match', () => {
-    const named = [
-      record({ id: 'x', name: 'Glacier Toad', search: 'It spits a frost bolt.' }),
-      record({ id: 'y', name: 'Frost Toad', search: 'It hops.' }),
+  it('matches the name only, not the summary', () => {
+    const named = [record({ id: 'glacier-toad', name: 'Glacier Toad', summary: 'It spits a frost bolt.' }), record({ id: 'frost-toad', name: 'Frost Toad' })];
+    expect(view(named, library, '?q=frost')).toEqual(['Frost Toad']);
+  });
+
+  it('ignores accents in the name and the query', () => {
+    const named = [record({ id: 'naive-golem', name: 'Naïve Golem' }), record({ id: 'stone-golem', name: 'Stone Golem' })];
+    expect(view(named, library, '?q=naive')).toEqual(['Naïve Golem']);
+    expect(view(named, library, '?q=NAÏVE')).toEqual(['Naïve Golem']);
+  });
+
+  it('ignores a blank query', () => {
+    expect(view(fixtures, library, '?q=%20%20')).toEqual(view(fixtures, library, ''));
+  });
+});
+
+describe('a range facet over a span (docs/site.md#type-registry)', () => {
+  // Encounters' XP: a roster's span has equal bounds, a spawn table's spans its rows. A creature's XP shares the path.
+  const records = [
+    record({ id: 'ambush', type: 'encounter', facets: { 'derived.xp': { min: 75, max: 675 } } }),
+    record({ id: 'bugbear', type: 'encounter', facets: { 'derived.xp': { min: 200, max: 200 } } }),
+    record({ id: 'court', type: 'encounter', facets: { 'derived.xp': { min: 1875, max: 1875 } } }),
+    record({ id: 'captain', facets: { 'derived.xp': 450 } }),
+    record({ id: 'blank', type: 'encounter' }),
+  ];
+
+  it('matches a range filter the span overlaps, and a number in it', () => {
+    expect(view(records, library, '?f.derived.xp=500..700&sort=name:asc')).toEqual(['ambush']);
+    expect(view(records, library, '?f.derived.xp=400..500&sort=name:asc')).toEqual(['ambush', 'captain']);
+    expect(view(records, library, '?f.derived.xp=..75&sort=name:asc')).toEqual(['ambush']);
+    expect(view(records, library, '?f.derived.xp=675..&sort=name:asc')).toEqual(['ambush', 'court']);
+    expect(view(records, library, '?f.derived.xp=676..1874')).toEqual([]);
+  });
+
+  it('sorts a span by its minimum, with a missing value last either way', () => {
+    expect(view(records, library, '?sort=derived.xp:asc')).toEqual(['ambush', 'bugbear', 'captain', 'court', 'blank']);
+    expect(view(records, library, '?sort=derived.xp:desc')).toEqual(['court', 'captain', 'bugbear', 'ambush', 'blank']);
+  });
+
+  it('bounds the range by the lowest minimum and the highest maximum, and counts a span as a value', () => {
+    expect(bounds('derived.xp', records)).toEqual({ min: 75, max: 1875 });
+    expect(hasValues('derived.xp', records.slice(0, 1))).toBe(true);
+    expect(hasValues('derived.xp', records.slice(4))).toBe(false);
+  });
+
+  it('reads a span as its bounds, or one number when they are equal', () => {
+    const xp = { path: 'derived.xp', label: 'XP', kind: 'range' } as const;
+    expect(displayValue(xp, { min: 75, max: 675 })).toBe('75–675');
+    expect(displayValue(xp, { min: 200, max: 200 })).toBe('200');
+    expect(displayValue({ ...xp, format: 'cr' }, { min: 0.125, max: 2 })).toBe('1/8–2');
+  });
+});
+
+describe('the spec cases for name search (docs/site.md#gallery "Search")', () => {
+  it('finds the Barbarian by "barb" but not by "rage", a feature it names', () => {
+    const barbarian = [record({ id: 'barbarian', type: 'class', name: 'Barbarian', summary: 'A fierce warrior fueled by Rage.' })];
+    expect(view(barbarian, library, '?q=barb')).toEqual(['Barbarian']);
+    expect(view(barbarian, library, '?q=rage')).toEqual([]);
+  });
+
+  it('finds Acid Arrow by "ACID" and by "arrow"', () => {
+    const spells = [record({ id: 'acid-arrow', type: 'spell', name: 'Acid Arrow' }), record({ id: 'fireball', type: 'spell', name: 'Fireball' })];
+    expect(view(spells, library, '?q=ACID')).toEqual(['Acid Arrow']);
+    expect(view(spells, library, '?q=arrow')).toEqual(['Acid Arrow']);
+  });
+
+  it('keeps the active sort: "bandit" by CR descending lists the captain first', () => {
+    const bandits = [
+      record({ id: 'bandit', name: 'Bandit', facets: { 'stats.cr': 0.125 } }),
+      record({ id: 'bandit-captain', name: 'Bandit Captain', facets: { 'stats.cr': 2 } }),
+      record({ id: 'cultist', name: 'Cultist', facets: { 'stats.cr': 0.125 } }),
     ];
-    expect(view(named, library, '?q=frost')).toEqual(['Frost Toad', 'Glacier Toad']);
+    expect(view(bandits, library, '?q=bandit&sort=stats.cr:desc')).toEqual(['Bandit Captain', 'Bandit']);
+    expect(view(bandits, library, '?q=bandit&sort=stats.cr:asc')).toEqual(['Bandit', 'Bandit Captain']);
   });
 });
 
@@ -145,22 +215,21 @@ describe('the Library’s default sort', () => {
 
 describe('filter values', () => {
   const records = [
-    record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5 }, tags: { theme: 'Fire' } }),
-    record({ id: 'b', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 1 }, tags: { theme: 'fire', world: 'Greyhawk' } }),
+    record({ id: 'a', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 5, 'stats.environment': 'Coast' } }),
+    record({ id: 'b', facets: { 'stats.creatureType': 'dragon', 'stats.cr': 1, 'stats.environment': 'coast' } }),
     record({ id: 'c', facets: { 'stats.creatureType': 'beast', 'stats.cr': 1 } }),
   ];
 
   it('counts each value against the search and every other filter, showing stored case', () => {
     const state = parseQuery(whole('?f.stats.cr=..2&f.stats.creatureType=beast'), library);
-    const index = searchIndex(records);
     const def = library.filters.find((f) => f.path === 'stats.creatureType')!;
-    const result = chips(def, records, withoutFilter(library, records, state, index, def.path), state.filters.get(def.path));
+    const result = chips(def, records, withoutFilter(library, records, state, def.path), state.filters.get(def.path));
     expect(result).toEqual([
       { key: 'beast', stored: 'beast', count: 1 },
       { key: 'dragon', stored: 'dragon', count: 1 },
     ]);
-    const theme = chips({ path: 'tags.theme', label: 'theme', kind: 'enum' }, records, records);
-    expect(theme).toEqual([{ key: 'fire', stored: 'Fire', count: 2 }]);
+    const environment = chips({ path: 'stats.environment', label: 'environment', kind: 'enum' }, records, records);
+    expect(environment).toEqual([{ key: 'coast', stored: 'Coast', count: 2 }]);
   });
 
   it('keeps a selected value no record has, so it can be cleared', () => {
@@ -169,7 +238,7 @@ describe('filter values', () => {
   });
 
   it('sorts ref values, and records by a ref, by the target’s name', () => {
-    const config = galleryConfig(reg, { names: { 'class/bard': 'Bard', 'class/wizard': 'Wizard', 'class/cleric': 'Cleric' }, groups: {}, publishers: {} });
+    const config = galleryConfig(reg, { names: { 'class/bard': 'Bard', 'class/wizard': 'Wizard', 'class/cleric': 'Cleric' }, groups: {}, publishers: {}, chips: {} });
     const defaultSort = config.types.get('dnd-5e-2024/subclass')!.defaultSort;
     const subs = [
       record({ id: 'lore', type: 'subclass', facets: { 'stats.class': 'class/bard' } }),

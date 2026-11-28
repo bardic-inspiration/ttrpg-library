@@ -3,10 +3,14 @@
   "publisher": "Wizards of the Coast",
   "types": [
     "background",
+    "character",
     "class",
     "creature",
+    "encounter",
     "feat",
     "item",
+    "map",
+    "module",
     "species",
     "spell",
     "subclass"

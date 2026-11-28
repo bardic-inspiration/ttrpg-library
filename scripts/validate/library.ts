@@ -1,8 +1,9 @@
 // Ruleset-independent checks across the library (docs/content-model.md#ids-and-names, docs/content-model.md#images, docs/content-model.md#validation "All types").
 
-import { stat } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { foldDiacritics } from '../../lib/text.ts';
+import { checkDiagram, diagramPath } from './diagram.ts';
 
 export interface EntryHead {
   file: string;
@@ -93,16 +94,36 @@ export async function checkImage(entry: EntryHead, assetsRoot: string): Promise<
   if (!pattern.test(entry.image)) {
     return [{ level: 'error', file: entry.file, message: `image must be assets/images/${entry.ruleset}/${entry.type}/${entry.id}.(png|jpg|webp)` }];
   }
+  return checkImageFile(entry.file, 'image', entry.image, assetsRoot);
+}
+
+/** The image file at `path` exists within the size limits; `what` names it in messages. */
+async function checkImageFile(file: string, what: string, path: string, assetsRoot: string): Promise<FileIssue[]> {
   let size: number;
   try {
-    size = (await stat(join(assetsRoot, entry.image))).size;
+    size = (await stat(join(assetsRoot, path))).size;
   } catch {
-    return [{ level: 'error', file: entry.file, message: `image ${entry.image} does not exist` }];
+    return [{ level: 'error', file, message: `${what} ${path} does not exist` }];
   }
   const kb = Math.round(size / 1024);
-  if (size > IMAGE_MAX_BYTES) return [{ level: 'error', file: entry.file, message: `image is ${kb} KB, above the 2 MB limit` }];
-  if (size > IMAGE_WARN_BYTES) return [{ level: 'warning', file: entry.file, message: `image is ${kb} KB, above 500 KB` }];
+  if (size > IMAGE_MAX_BYTES) return [{ level: 'error', file, message: `${what} is ${kb} KB, above the 2 MB limit` }];
+  if (size > IMAGE_WARN_BYTES) return [{ level: 'warning', file, message: `${what} is ${kb} KB, above 500 KB` }];
   return [];
+}
+
+/** The type whose entries each have a diagram (docs/content-model.md#map-diagrams). */
+export const MAP_TYPE = 'map';
+
+/**
+ * A map's diagram, at its derived path, exists within the image size limits and passes the
+ * diagram checks against the map's zones (docs/content-model.md#map-diagrams). Errors, but the size warning.
+ */
+export async function checkMapDiagram(entry: EntryHead, zones: readonly string[], assetsRoot: string): Promise<FileIssue[]> {
+  const path = diagramPath(entry);
+  const found = await checkImageFile(entry.file, 'diagram', path, assetsRoot);
+  if (found.some((i) => i.level === 'error')) return found;
+  const source = await readFile(join(assetsRoot, path), 'utf8');
+  return [...found, ...checkDiagram(source, zones).map((message) => ({ level: 'error' as const, file: entry.file, message: `diagram ${path}: ${message}` }))];
 }
 
 /** A component and the entries whose stats list it, by `{ ref }` object (docs/content-model.md#components). */
@@ -130,10 +151,15 @@ export function checkComponents(components: ComponentListing[]): FileIssue[] {
   const error = (file: string, message: string) => issues.push({ level: 'error', file, message });
   const byParent = new Map<string, ComponentListing[]>();
   for (const c of components) {
-    const parents = [...new Map(c.listedBy.map((p) => [`${p.type}/${p.id}`, p])).values()];
+    // Only an entry of a parent type lists a component; a ref object from any other type is a link to
+    // it, as a character's refs to its class's options are (docs/content-model.md#components).
+    const listings = c.listedBy.filter((p) => c.parents.includes(p.type));
+    const parents = [...new Map(listings.map((p) => [`${p.type}/${p.id}`, p])).values()];
     const key = `${c.type}/${c.id}`;
     if (parents.length === 0) {
-      error(c.file, `${key} is listed by no parent; a ${c.parents.join(' or ')} lists it by ref in its stats`);
+      const others = [...new Set(c.listedBy.map((p) => `${p.type}/${p.id}`))];
+      if (others.length > 0) error(c.file, `${key} is listed by ${others.join(' and ')}, but only a ${c.parents.join(' or ')} may list a ${c.type}`);
+      else error(c.file, `${key} is listed by no parent; a ${c.parents.join(' or ')} lists it by ref in its stats`);
       continue;
     }
     if (parents.length > 1) {
@@ -142,11 +168,7 @@ export function checkComponents(components: ComponentListing[]): FileIssue[] {
     }
     const parent = parents[0]!;
     const parentKey = `${parent.type}/${parent.id}`;
-    if (c.listedBy.length > 1) error(c.file, `${key} is listed more than once by ${parentKey}`);
-    if (!c.parents.includes(parent.type)) {
-      error(c.file, `${key} is listed by ${parentKey}, but only a ${c.parents.join(' or ')} may list a ${c.type}`);
-      continue;
-    }
+    if (listings.length > 1) error(c.file, `${key} is listed more than once by ${parentKey}`);
     if (!c.id.startsWith(`${parent.id}-`)) error(c.file, `id "${c.id}" must start with its parent's id, "${parent.id}-"`);
     for (const field of ['source', 'author'] as const) {
       if (c[field] !== parent[field]) {

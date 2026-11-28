@@ -9,7 +9,19 @@
     "levels": [
       5
     ],
-    "text": "You can call on the aid of an otherworldly steed. You always have the *{ref:spell/find-steed}* spell prepared.\n\nYou can also cast the spell once without expending a spell slot, and you regain the ability to do so when you finish a {ref:glossary/long-rest}."
+    "text": "You can call on the aid of an otherworldly steed. You always have the *{ref:spell/find-steed}* spell prepared.\n\nYou can also cast the spell once without expending a spell slot, and you regain the ability to do so when you finish a {ref:glossary/long-rest}.",
+    "grants": [
+      {
+        "kind": "spells",
+        "byLevel": {
+          "5": [
+            {
+              "ref": "spell/find-steed"
+            }
+          ]
+        }
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

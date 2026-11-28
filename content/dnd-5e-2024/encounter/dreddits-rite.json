@@ -1,0 +1,102 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "dreddits-rite",
+  "name": "Dreddit's Rite",
+  "summary": "The cult leader Dreddit leads a rite in the Ritual Chamber, flanked by a fanatic and two acolytes.",
+  "stats": {
+    "setIn": {
+      "ref": "map/testmore-keep",
+      "zone": "ritual-chamber"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/testmore-keep",
+          "zone": "ritual-chamber",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Candles ring a lectern where a gaunt priest reads names aloud from an enormous ledger. With each name, the hooded figures around the ring answer as one: \"Written down.\""
+      },
+      {
+        "part": "dm-guide",
+        "text": "{ref:creature/dreddit} wants the party alive, to write them in the ledger. It opens with *{ref:spell/hold-person}* on the strongest-looking hero, while the {ref:creature/cultist-fanatic} and the {ref:creature/gravebound-acolyte}s keep the others back. Below half its Hit Points, Dreddit casts *{ref:spell/darkness}* and runs for the Vault."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/dreddit",
+            "count": 1,
+            "show": "card"
+          },
+          {
+            "ref": "creature/cultist-fanatic",
+            "count": 1
+          },
+          {
+            "ref": "creature/gravebound-acolyte",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "part": "sequence",
+        "trigger": "The party enters the Ritual Chamber, or interrupts the rite from the doorway.",
+        "stages": [
+          {
+            "name": "The Reading",
+            "loop": "Dreddit keeps reading and the cultists keep answering, until someone attacks or steps into the ring.",
+            "transition": "A hero attacks, casts a spell, or enters the candle ring."
+          },
+          {
+            "name": "The Rite Breaks",
+            "loop": "The fanatic and acolytes hold the ring while Dreddit casts from behind the lectern.",
+            "transition": "Dreddit drops below half its Hit Points."
+          },
+          {
+            "name": "The Last Page",
+            "loop": "Dreddit casts darkness and flees toward the Vault, tearing pages from the ledger as it goes."
+          }
+        ],
+        "victory": "Dreddit is slain or captured before it bars the Vault door."
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "high": {
+            "coins": {
+              "dice": "4d6",
+              "times": 10,
+              "unit": "gp"
+            },
+            "items": [
+              {
+                "ref": "item/candlewick-dagger",
+                "show": "card"
+              },
+              {
+                "ref": "item/elixir-of-brief-courage"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

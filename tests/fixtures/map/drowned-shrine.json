@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "drowned-shrine",
+  "name": "Drowned Shrine",
+  "summary": "The cistern's flooded shrine, laid out for the fight at its altar.",
+  "description": "A single round chamber, its altar on an island of broken stone.",
+  "stats": {
+    "scale": "room",
+    "zones": [
+      {
+        "id": "altar",
+        "name": "Altar Island"
+      },
+      {
+        "id": "pool",
+        "name": "Deep Pool",
+        "note": "Swimming depth; the nest is under the altar's lip."
+      }
+    ],
+    "within": {
+      "ref": "map/sunken-cistern",
+      "zone": "drowned-shrine"
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        433
+      ]
+    }
+  }
+}

@@ -3,9 +3,14 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { checkAreas, SECTIONS, type AreaFile } from './stage-spec.ts';
 
-// spec/tracks/README.md "Track files" and "Checks"; issues #197 and #255.
+// spec/tracks/README.md "Track files" and "Checks", which a version spec's README follows;
+// issues #197 and #255.
 const ROOT = join(import.meta.dirname, '..');
 const TRACKS = 'spec/tracks';
+/** The version specs: every `spec/v<version>/` folder. Each is checked as the tracks are. */
+const VERSIONS = readdirSync(join(ROOT, 'spec'), { withFileTypes: true })
+  .filter((d) => d.isDirectory() && /^v\d+\.\d+\.\d+$/.test(d.name))
+  .map((d) => `spec/${d.name}`);
 
 const area = (name: string, text: string): AreaFile => ({ name, text });
 const doc = (frontMatter: string, body: string) => `---\n${frontMatter}\n---\n\n${body}`;
@@ -121,5 +126,15 @@ describe(TRACKS, () => {
 
   it('every track file passes the checks', () => {
     expect(checkAreas(areaFiles(TRACKS), entryExists)).toEqual([]);
+  });
+});
+
+describe.each(VERSIONS)('%s', (dir) => {
+  it('has a README', () => {
+    expect(existsSync(join(ROOT, dir, 'README.md'))).toBe(true);
+  });
+
+  it('every area file passes the checks', () => {
+    expect(checkAreas(areaFiles(dir), entryExists)).toEqual([]);
   });
 });

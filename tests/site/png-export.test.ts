@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import config from '../../config/export.json' with { type: 'json' };
 import { captureWidth, isWide, png } from '../../site/src/exporters/png.ts';
+import { DIAGRAM_STYLES, inlineDiagramStyles } from '../../site/src/lib/capture.ts';
 import type { CaptureRequest, ExportFile, ExportItem } from '../../site/src/exporters/types.ts';
 import type { Entry } from '../../site/src/lib/library.ts';
 import { fixtureLibrary } from './library-fixtures.ts';
@@ -126,5 +127,19 @@ describe('PNG capture source (docs/export.md#png, docs/styling.md#styling-system
     const loaded = lib.byId('cinder-hound');
     const html = await render({ ...loaded, entry: withStats(loaded.entry, { actions: actions(7) }) });
     expect(html).toContain('data-wide');
+  });
+});
+
+describe('PNG capture of a map diagram (docs/export.md#png)', () => {
+  it("writes each diagram shape's computed colors and label font onto it, since html-to-image copies only the svg's own", () => {
+    const set: Record<string, Record<string, string>> = {};
+    const shape = (id: string) => ({ id, style: { setProperty: (name: string, value: string) => ((set[id] ??= {})[name] = value) } });
+    const shapes = [shape('wall'), shape('label')];
+    let selector = '';
+    const root = { querySelectorAll: (s: string) => ((selector = s), shapes) } as unknown as ParentNode;
+    inlineDiagramStyles(root, (element) => ({ getPropertyValue: (name: string) => `${(element as unknown as { id: string }).id}:${name}` }));
+    expect(selector).toBe('svg.diagram *');
+    expect(DIAGRAM_STYLES).toEqual(expect.arrayContaining(['fill', 'stroke', 'font-family']));
+    for (const id of ['wall', 'label']) expect(set[id]).toEqual(Object.fromEntries(DIAGRAM_STYLES.map((name) => [name, `${id}:${name}`])));
   });
 });

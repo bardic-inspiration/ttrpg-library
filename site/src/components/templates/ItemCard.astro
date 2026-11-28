@@ -38,7 +38,7 @@ const subtitle = { markdown: subtitleMarkdown(s, baseLookup(loadRules())), refs 
   {present(s.charges?.depletion) && <RulesText text={s.charges.depletion} refs={refs} />}
   {present(spells) && (
     <section class="item-card__spells">
-      <Heading level={level + 1} class="item-card__heading">Spells</Heading>
+      <Heading level={level + 1} class="statblock-heading item-card__heading">Spells</Heading>
       <ul>
         {spells.map((spell) => <li>{spell.name}{present(spell.notes) && ` (${spell.notes})`}</li>)}
       </ul>
@@ -50,10 +50,7 @@ const subtitle = { markdown: subtitleMarkdown(s, baseLookup(loadRules())), refs 
 <style>
   @layer components {
     .item-card__spells :global(.item-card__heading) {
-      font-family: var(--statblock-heading-font);
-      font-size: var(--text-h4);
-      color: var(--accent);
-      margin-block-end: var(--space-3xs);
+      margin-block-end: var(--flow-line);
     }
 
     .item-card__spells ul {

@@ -1,0 +1,71 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "the-reckoning-gears",
+  "name": "The Reckoning Gears",
+  "summary": "Reliquary sentinels tend the clockwork that reckons every derived number, among gears that grind anyone who stands too close.",
+  "stats": {
+    "setIn": {
+      "ref": "map/the-repository",
+      "zone": "ruleset-engine"
+    },
+    "environment": {
+      "multiplier": 1.25,
+      "note": "Turning gears grind anyone who stands next to them, and the catwalks are narrow."
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/the-repository",
+          "zone": "ruleset-engine",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Brass gears the size of cartwheels turn in the dark, meshing and parting with a sound like a slow heartbeat. Four squat guardians of bone and brass walk the catwalks between them, each holding a cracked reliquary open."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/reliquary-sentinel}s keep anyone from touching the gears. A creature that starts its turn next to a turning gear takes the gear's grind, as the environment note says. Once the sentinels fall, the party can read the engine's dials: every hero's {ref:glossary/hit-points}, {ref:glossary/armor-class}, saves, and speeds come out exactly as the Rules Room's tables say they should, including the Anomaly Ledger's red herrings. One gear is wrong: the source of the Forgotten Tongue is here; see the Anomaly Ledger."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/reliquary-sentinel",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "high": {
+            "coins": {
+              "dice": "6d6",
+              "times": 10,
+              "unit": "gp"
+            },
+            "items": [
+              {
+                "ref": "item/stone-of-good-luck-luckstone"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

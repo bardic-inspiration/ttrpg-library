@@ -1,0 +1,71 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "forbidden-words",
+  "name": "Forbidden Words",
+  "summary": "A wraith and its specters guard the Registry Vault and its sealed scroll of words no entry may use.",
+  "stats": {
+    "setIn": {
+      "ref": "map/the-repository",
+      "zone": "registry-vault"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/the-repository",
+          "zone": "registry-vault",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Ledgers line the strongroom from floor to ceiling. In the middle of the floor, a scroll bound in black cord floats upright, and the air around it is cold enough to frost your breath. Pale shapes drift out of the ledgers to meet you."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The scroll lists the names no entry may use. The {ref:creature/wraith} was bound here to keep anyone from reading it aloud, and raises the {ref:creature/specter}s from the ledgers' forgotten entries. Reading the ledgers (a DC 13 Intelligence (History) check) confirms that every kind of entry the Library holds is registered here, characters included, and that the registry is in order."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/wraith",
+            "count": 1
+          },
+          {
+            "ref": "creature/specter",
+            "count": 5
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "moderate": {
+            "coins": {
+              "dice": "4d6",
+              "times": 10,
+              "unit": "gp"
+            },
+            "items": [
+              {
+                "ref": "item/ring-of-mind-shielding"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

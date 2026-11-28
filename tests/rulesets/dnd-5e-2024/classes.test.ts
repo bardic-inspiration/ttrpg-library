@@ -15,7 +15,8 @@ import { deriveClass, deriveClassLinked } from '../../../rulesets/dnd-5e-2024/cl
 import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import type { ClassStats, DerivedClass, LinkedClass, SpellStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
-import { FIXTURES, tempLibrary } from '../../helpers.ts';
+import { linkedLibrary } from '../../../rulesets/module.ts';
+import { FIXTURES, libraryWithout, tempLibrary } from '../../helpers.ts';
 import { withoutContents } from '../../site/library-fixtures.ts';
 
 const ROOT = join(import.meta.dirname, '../../..');
@@ -32,13 +33,13 @@ const fixtures = async () => [
 /**
  * The fixtures and the rest of the library: its SRD spells, which the features name and the spell
  * list derives from, and every other entry they or their links reach. The library's own classes and
- * their components stay out, since the fixtures stand in for the Sorcerer and Draconic Sorcery.
+ * their components stay out, and so do the entries that link to them (characters name classes), since the fixtures stand in for the Sorcerer and Draconic Sorcery.
  */
 const FIXTURE_TYPES = new Set(['class', 'class-feature', 'class-option', 'subclass']);
-const loadWithSpells = async () => [
-  ...(await fixtures()),
-  ...(await Promise.all((await readdir(CONTENT)).filter((type) => !FIXTURE_TYPES.has(type)).map((type) => dir(join(CONTENT, type))))).flat(),
-];
+const loadWithSpells = async () => {
+  const own = await fixtures();
+  return [...own, ...(await libraryWithout<Entry & Record<string, any>>([...FIXTURE_TYPES], own))];
+};
 /** Read once per file; each caller gets its own copy, so a test's changes stay its own. */
 let library: ReturnType<typeof loadWithSpells> | undefined;
 const withSpells = async () => structuredClone(await (library ??= loadWithSpells()));
@@ -214,12 +215,12 @@ describe('derivation', () => {
       subclassLevels: [3, 6, 10, 14],
     };
     const feature = (id: string, levels: unknown[]) => ({ type: 'class-feature', id, name: id, stats: { levels, text: 'x' } });
-    const { featureRows } = deriveClassLinked('warlock', stats, [
+    const { featureRows } = deriveClassLinked('warlock', stats, linkedLibrary([
       feature('warlock-pact-magic', [1]),
       feature('warlock-mystic-arcanum', [{ level: 11, note: 'level 6 spell' }, { level: 13, note: 'level 7 spell' }]),
       feature('warlock-improved-x', [13]),
       feature('warlock-improved-x-17', [17]),
-    ]);
+    ]));
     expect(featureRows[0]).toEqual({ features: [{ ref: 'class-feature/warlock-pact-magic' }], subclass: false });
     expect(featureRows[2]).toEqual({ features: [], subclass: false });
     expect(featureRows[5]).toEqual({ features: [], subclass: true });
@@ -232,7 +233,7 @@ describe('derivation', () => {
 
   it('derives the spell list from the spells whose classes name it, and a custom class’s own spells', async () => {
     const entries = (await withSpells()).map((e) => ({ type: e.type, id: e.id, name: e.name, stats: e.stats, author: e.author }));
-    const { spellList, subclasses } = deriveClassLinked('sorcerer', await sorcerer(), entries);
+    const { spellList, subclasses } = deriveClassLinked('sorcerer', await sorcerer(), linkedLibrary(entries));
     expect(subclasses).toEqual(['subclass/draconic-sorcery']);
     // The SRD's Sorcerer cantrips, in its order.
     expect(spellList[0]!.spells.map((s) => s.ref.slice('spell/'.length))).toEqual([
@@ -243,7 +244,7 @@ describe('derivation', () => {
     const level1 = spellList[1]!.spells;
     expect(level1.find((s) => s.ref === 'spell/detect-magic')).toMatchObject({ concentration: true, ritual: true, material: false });
     expect(level1.find((s) => s.ref === 'spell/chromatic-orb')).toMatchObject({ concentration: false, ritual: false, material: true });
-    const custom = deriveClassLinked('wayfinder', { ...(await sorcerer()), spells: [{ ref: 'spell/cure-wounds' }] }, entries);
+    const custom = deriveClassLinked('wayfinder', { ...(await sorcerer()), spells: [{ ref: 'spell/cure-wounds' }] }, linkedLibrary(entries));
     expect(custom.spellList.flatMap((l) => l.spells.map((s) => s.ref))).toEqual(['spell/cure-wounds']);
   });
 
@@ -255,13 +256,13 @@ describe('derivation', () => {
     const draconic = entries.find((e) => e.type === 'subclass' && e.id === 'draconic-sorcery')!;
     const homebrewSubclass = { ...draconic, id: 'ember-soul', name: 'Ember Soul', author: 'bardic-inspiration' };
     const all = [...entries, homebrewSubclass];
-    const srd = deriveClassLinked('sorcerer', await sorcerer(), all);
+    const srd = deriveClassLinked('sorcerer', await sorcerer(), linkedLibrary(all));
     expect(srd.spellList.flatMap((l) => l.spells.map((s) => s.ref))).not.toContain('spell/rattle');
     expect(srd.subclasses).toEqual(['subclass/draconic-sorcery']);
     // The same class as homebrew: its list takes every spell and subclass that names it.
     const self = all.find((e) => e.type === 'class' && e.id === 'sorcerer')!;
     const custom = all.map((e) => (e === self ? { ...e, author: 'bardic-inspiration' } : e));
-    const homebrew = deriveClassLinked('sorcerer', await sorcerer(), custom);
+    const homebrew = deriveClassLinked('sorcerer', await sorcerer(), linkedLibrary(custom));
     expect(homebrew.spellList.flatMap((l) => l.spells.map((s) => s.ref))).toContain('spell/rattle');
     expect(homebrew.subclasses).toEqual(['subclass/draconic-sorcery', 'subclass/ember-soul']);
   });
@@ -336,18 +337,18 @@ describe('the pages', async () => {
 
   it('prints the class page in the SRD’s order, with each feature and option at its anchor', () => {
     const order = [
-      '<h3>Core Sorcerer Traits</h3>',
-      '<h3>Becoming a Sorcerer …</h3>',
+      '<h3 class="statblock-heading">Core Sorcerer Traits</h3>',
+      '<h3 class="statblock-heading">Becoming a Sorcerer as a Level 1 or Multiclass Character</h3>',
       '<li>Gain all the traits in the Core Sorcerer Traits table.</li>',
       '<caption>Sorcerer Features</caption>',
-      '<h3>Sorcerer Class Features</h3>',
+      '<h3 class="statblock-heading">Sorcerer Class Features</h3>',
       'id="class-feature-sorcerer-spellcasting"',
-      '<h4>Level 4: Ability Score Improvement</h4>',
-      '<h3>Metamagic Options</h3>',
+      '<h4 class="statblock-heading statblock-heading--nested">Level 4: Ability Score Improvement</h4>',
+      '<h3 class="statblock-heading">Metamagic Options</h3>',
       'id="class-option-sorcerer-careful-spell"',
-      '<h3>Sorcerer Spell List</h3>',
+      '<h3 class="statblock-heading">Sorcerer Spell List</h3>',
       '<caption>Cantrips (Level 0 Sorcerer Spells)</caption>',
-      '<h3>Sorcerer Subclasses</h3>',
+      '<h3 class="statblock-heading">Sorcerer Subclasses</h3>',
     ].map((needle) => withoutContents(html).indexOf(needle));
     expect(order.every((i) => i >= 0)).toBe(true);
     expect(order).toEqual([...order].sort((a, b) => a - b));
@@ -356,15 +357,18 @@ describe('the pages', async () => {
     expect(html).not.toContain('page-component');
   });
 
-  it('shows the class page on screen as collapsed sections, with features and options nested in its table of contents', () => {
+  it('shows the class page on screen as collapsed sections, with its features by level and its options in its summary', () => {
     const toc = html.match(/<nav class="toc"[\s\S]*?<\/nav>/)![0];
     expect(toc).toMatch(
-      /href="#section-core-sorcerer-traits">Core Sorcerer Traits<[\s\S]*href="#section-sorcerer-class-features">Sorcerer Class Features<\/a><ul><li><a href="#class-feature-sorcerer-spellcasting">Level 1: Spellcasting<[\s\S]*href="#section-metamagic-options">Metamagic Options<\/a><ul><li><a href="#class-option-sorcerer-careful-spell">Careful Spell<[\s\S]*href="#section-sorcerer-subclasses">/,
+      /href="#section-core-sorcerer-traits">Core Sorcerer Traits<[\s\S]*href="#section-becoming-a-sorcerer-as-a-level-1-or-multiclass-character">Becoming a Sorcerer as a Level 1 or Multiclass Character<[\s\S]*href="#section-sorcerer-class-features">Sorcerer Class Features<\/a><ul><li class="toc__run"><span class="toc__label">Level 1<\/span>: <a href="#class-feature-sorcerer-spellcasting">Spellcasting<\/a>, <a href="#class-feature-sorcerer-innate-sorcery">Innate Sorcery<\/a><\/li>[\s\S]*<li class="toc__run"><a href="#section-metamagic-options">Metamagic Options<\/a>: <a href="#class-option-sorcerer-careful-spell">Careful Spell<[\s\S]*href="#section-sorcerer-subclasses">/,
     );
-    expect(html).toContain('<details class="accordion class-section" id="section-core-sorcerer-traits"><summary class="accordion__summary"><h3>Core Sorcerer Traits</h3></summary>');
-    expect(html).toContain('<details class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><summary class="accordion__summary"><h4>Level 1: Spellcasting</h4></summary>');
+    // One line per level, not one per feature.
+    expect(toc.match(/<span class="toc__label">Level 1<\/span>/g)).toHaveLength(1);
+    expect(toc).not.toContain('Level 1: ');
+    expect(html).toContain('<details class="accordion class-section" id="section-core-sorcerer-traits"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h3 class="statblock-heading">Core Sorcerer Traits</h3></summary>');
+    expect(html).toContain('<details class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h4 class="statblock-heading statblock-heading--nested">Level 1: Spellcasting</h4></summary>');
     // A section holding features keeps its heading and intro open over them.
-    expect(html).toContain('<section class="class-section" id="section-sorcerer-class-features"><h3>Sorcerer Class Features</h3>');
+    expect(html).toContain('<section class="class-section" id="section-sorcerer-class-features"><h3 class="statblock-heading">Sorcerer Class Features</h3>');
     // Every toc link lands on an id on the page.
     for (const [, id] of toc.matchAll(/href="#([^"]+)"/g)) expect(html).toContain(`id="${id}"`);
   });
@@ -373,7 +377,7 @@ describe('the pages', async () => {
     const printed = (await (await AstroContainer.create()).renderToString(EntryTemplate, { props: { ...sorcerer, names, paths, components: sorcerer.components, mode: 'print' } })).replace(/ data-astro-cid-\w+/g, '');
     expect(printed).not.toContain('<details');
     expect(printed).not.toContain('class="toc"');
-    expect(printed).toContain('<section class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><h4>Level 1: Spellcasting</h4>');
+    expect(printed).toContain('<section class="accordion class-feature" id="class-feature-sorcerer-spellcasting" data-type="class-feature"><h4 class="statblock-heading statblock-heading--nested">Level 1: Spellcasting</h4>');
   });
 
   it('links a feature in the Features table to its anchor, and the class to its subclasses', () => {
@@ -386,12 +390,32 @@ describe('the pages', async () => {
     expect(page).toContain('Sorcerer Subclass: Draconic Sorcery</h2>');
     expect(page).toContain('Breathe the Magic of Dragons');
     expect(page).toContain('id="class-feature-draconic-sorcery-dragon-wings"');
-    expect(page).toContain('<h3>Level 14: Dragon Wings</h3>');
+    expect(page).toContain('<h3 class="statblock-heading">Level 14: Dragon Wings</h3>');
     expect(page).toContain('<caption>Draconic Spells</caption>');
     const { forward } = groupPageRefs(loaded, loaded.components!, refTargets(all, [data]), ruleset.refLabels);
     expect(forward[0]).toEqual({ label: 'Subclass of', targets: [{ type: 'class', name: 'Sorcerer', path: 'dnd-5e-2024/class/sorcerer/', official: true }] });
     const back = groupPageRefs(sorcerer, sorcerer.components!, refTargets(all, [data]), ruleset.refLabels).back;
     expect(back.find((g) => g.label === 'Subclasses')?.targets.map((t) => t.name)).toEqual(['Draconic Sorcery']);
+  });
+
+  it('widens the class page on screen to fit its Features table, up to the main column, so its links do not wrap', async () => {
+    expect(html).toContain('data-type="class" data-mode="screen"');
+    const style = await readFile(join(ROOT, 'site/src/components/templates/ClassPage.astro'), 'utf8');
+    const rule = style.match(/:global\(\.statblock\[data-type='class'\]\[data-mode='screen'\]\) \{([\s\S]*?)\n {4}\}/)![1]!;
+    expect(rule).toContain('inline-size: max-content;');
+    expect(rule).toContain('min-inline-size: 100%;');
+    expect(rule).toContain('max-inline-size: 100cqi;');
+    // Only the table sizes the page.
+    expect(rule).toMatch(/> :global\(:not\(\.class-table\)\) \{\s*contain: inline-size;/);
+    expect(await readFile(join(ROOT, 'site/src/styles/layout.css'), 'utf8')).toMatch(/\.site-main__inner \{\s*container-type: inline-size;/);
+  });
+
+  it("lists a subclass's features by level in its summary, two at one level on one line", async () => {
+    const { html: page } = await render('draconic-sorcery');
+    const toc = page.match(/<nav class="toc"[\s\S]*?<\/nav>/)![0];
+    expect(toc).toContain('<li class="toc__run"><span class="toc__label">Level 3</span>: <a href="#class-feature-draconic-sorcery-draconic-resilience">Draconic Resilience</a>, <a href="#class-feature-draconic-sorcery-draconic-spells">Draconic Spells</a></li>');
+    expect(toc).toContain('<li class="toc__run"><span class="toc__label">Level 14</span>: <a href="#class-feature-draconic-sorcery-dragon-wings">Dragon Wings</a></li>');
+    expect(toc.match(/toc__run/g)).toHaveLength(4);
   });
 
   it('names a feature from the other end as "Class › Feature"', () => {

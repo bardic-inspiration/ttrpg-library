@@ -4,7 +4,7 @@ import { NO_FACET_DATA, galleryConfig } from '../../site/src/lib/gallery/config.
 import { parseQuery } from '../../site/src/lib/gallery/state.ts';
 import { selectEntries } from '../../site/src/lib/print-run.ts';
 import { parsePrintQuery } from '../../site/src/lib/print.ts';
-import { libraryQuery } from '../../site/src/lib/gallery/library-url.ts';
+import { homeRuleset, homeScript, libraryQuery, pageRuleset } from '../../site/src/lib/gallery/library-url.ts';
 import { currentKey, formerTypes, redirectScript, typeAliases } from '../../site/src/lib/redirects.ts';
 import { fixtureRecords, registry, whole } from './gallery/helpers.ts';
 
@@ -33,7 +33,7 @@ describe('former type keys', () => {
 
   it('let an old type filter select the renamed type', () => {
     const home = galleryConfig(reg);
-    expect(parseQuery('?f.type=magic-item', home).filters.get('type')).toEqual({ kind: 'enum', values: ['item'] });
+    expect(parseQuery('?f.type=magic-item', home).filters.get('type')).toEqual({ kind: 'enum', values: ['dnd-5e-2024/item'] });
     expect(selectEntries(parsePrintQuery(whole('?f.type=magic-item')), records, reg, NO_FACET_DATA).records.map((r) => r.id)).toEqual([
       'wand-of-frost-lances',
     ]);
@@ -55,15 +55,15 @@ describe('redirect pages', () => {
     expect((wand.props.moved as { to: string }).to).toMatch(/\/dnd-5e-2024\/item\/wand-of-wonder\/$/);
   }, 30_000);
 
-  it('send every old gallery to the Library with its filter: a ruleset, a type, and a former type', async () => {
+  it('give each ruleset its Library page, and send every old type gallery to it with its filter: a type and a former type', async () => {
     const rulesetPaths = await paths(import('../../site/src/pages/[ruleset]/index.astro'));
-    expect(rulesetPaths.map((p) => [p.params.ruleset, p.props.moved])).toEqual([['dnd-5e-2024', '/?f.ruleset=dnd-5e-2024']]);
+    expect(rulesetPaths.map((p) => [p.params.ruleset, p.props.moved])).toEqual([['dnd-5e-2024', undefined]]);
     const typePaths = await paths(import('../../site/src/pages/[ruleset]/[type]/index.astro'));
     const moved = (type: string) => typePaths.find((p) => p.params.type === type)?.props.moved;
-    for (const type of Object.keys(reg['dnd-5e-2024']!.types)) expect(moved(type), type).toBe(`/${libraryQuery(reg, 'dnd-5e-2024', type)}`);
-    expect(moved('creature')).toBe('/?sort=stats.cr:asc&f.ruleset=dnd-5e-2024&f.type=creature');
+    for (const type of Object.keys(reg['dnd-5e-2024']!.types)) expect(moved(type), type).toBe(`/dnd-5e-2024/${libraryQuery(reg, 'dnd-5e-2024', type)}`);
+    expect(moved('creature')).toBe('/dnd-5e-2024/?sort=stats.cr:asc&f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/creature');
     expect(moved('magic-item')).toBe(moved('item'));
-    expect(moved('item')).toMatch(/f\.type=item$/);
+    expect(moved('item')).toMatch(/f\.type=dnd-5e-2024\/item$/);
   });
 
   it('the Library reads a redirect’s query as the old gallery’s view', () => {
@@ -71,8 +71,37 @@ describe('redirect pages', () => {
     expect(state.sort).toEqual({ path: 'stats.cr', dir: 'asc' });
     expect([...state.filters]).toEqual([
       ['ruleset', { kind: 'enum', values: ['dnd-5e-2024'] }],
-      ['type', { kind: 'enum', values: ['creature'] }],
+      ['type', { kind: 'enum', values: ['dnd-5e-2024/creature'] }],
     ]);
+  });
+});
+
+describe('the home URL (docs/site.md#redirects)', () => {
+  const two = { ...reg, other: { ...reg['dnd-5e-2024']!, label: 'Other' } } as typeof reg;
+  const run = (search: string, hash = '') => {
+    let went = '';
+    new Function('location', homeScript('/ttrpg-library/', two))({ search, hash, replace: (next: string) => (went = next) });
+    return went;
+  };
+
+  it('opens the home ruleset’s Library, the registry’s first, with the query and fragment', () => {
+    expect(homeRuleset(reg)).toBe('dnd-5e-2024');
+    expect(run('')).toBe('/ttrpg-library/dnd-5e-2024/');
+    expect(run('?q=frost', '#x')).toBe('/ttrpg-library/dnd-5e-2024/?q=frost#x');
+  });
+
+  it('opens the Library of the ruleset an old link’s f.ruleset names first, when it is registered', () => {
+    expect(run('?f.ruleset=other&f.type=other/spell')).toBe('/ttrpg-library/other/?f.ruleset=other&f.type=other/spell');
+    expect(run('?f.ruleset=Other,dnd-5e-2024')).toBe('/ttrpg-library/other/?f.ruleset=Other,dnd-5e-2024');
+    expect(run('?f.ruleset=gone')).toBe('/ttrpg-library/dnd-5e-2024/?f.ruleset=gone');
+    expect(run('?f.ruleset=')).toBe('/ttrpg-library/dnd-5e-2024/?f.ruleset=');
+  });
+
+  it('knows a page’s ruleset by its first path segment', () => {
+    expect(pageRuleset(reg, 'dnd-5e-2024/spell/fireball/')).toBe('dnd-5e-2024');
+    expect(pageRuleset(reg, 'dnd-5e-2024/')).toBe('dnd-5e-2024');
+    expect(pageRuleset(reg, 'about/')).toBeUndefined();
+    expect(pageRuleset(reg, '')).toBeUndefined();
   });
 });
 

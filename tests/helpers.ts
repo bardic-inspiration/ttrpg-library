@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readFile, readdir, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, mkdtemp, readFile, readdir, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 
@@ -71,5 +71,46 @@ export async function tempLibrary(
     await mkdir(dirname(join(content, path)), { recursive: true });
     await writeFile(join(content, path), JSON.stringify(entry, null, 2));
   }
+  await copyLibraryDiagrams(repo, entries.map((i) => ('path' in i && 'entry' in i ? i.entry : i) as Record<string, any>));
   return { repo, content };
+}
+
+const PROJECT = join(import.meta.dirname, '..');
+
+/**
+ * The library's entries of one ruleset minus the types a test's own fixtures stand in for
+ * (AGENTS.md "Dev workflow" step 3), then `fixtures`. A library entry that links to a library entry
+ * that is removed and that the fixtures don't replace, directly or through another dropped entry, goes too, so the rest still
+ * resolve: encounters and modules link to maps, modules to encounters, characters to classes. A
+ * link to a class `tempLibrary` adds for the spells that name it stays.
+ */
+export async function libraryWithout<T extends Record<string, any>>(standIn: string[], fixtures: Record<string, any>[] = [], ruleset = 'dnd-5e-2024'): Promise<T[]> {
+  const root = join(PROJECT, 'content', ruleset);
+  const types = await readdir(root);
+  const whole = (await Promise.all(types.map((t) => readDir(join(root, t))))).flat() as T[];
+  const kept = whole.filter((e) => !standIn.includes(e.type));
+  const existed = new Set(whole.map((e) => `${e.type}/${e.id}`));
+  const isRef = (v: unknown): v is string => typeof v === 'string' && /^[a-z0-9-]+\/[a-z0-9-]+$/.test(v) && types.includes(v.split('/')[0]!);
+  const refsOf = (v: unknown): string[] => (isRef(v) ? [v] : Array.isArray(v) ? v.flatMap(refsOf) : v && typeof v === 'object' ? Object.values(v).flatMap(refsOf) : []);
+  const present = new Set([...kept, ...fixtures].map((e) => `${e.type}/${e.id}`));
+  for (let dropped = true; dropped; ) {
+    dropped = false;
+    for (let i = kept.length - 1; i >= 0; i--) {
+      if (!refsOf(kept[i]!.stats).some((r) => existed.has(r) && !present.has(r) && !SRD_CASTERS.includes(r))) continue;
+      present.delete(`${kept[i]!.type}/${kept[i]!.id}`);
+      kept.splice(i, 1);
+      dropped = true;
+    }
+  }
+  return kept;
+}
+
+/** Copies the library's diagrams for the map entries in `repo`, beside its content (docs/content-model.md#map-diagrams); a fixture's own diagram overwrites it. */
+export async function copyLibraryDiagrams(repo: string, entries: Record<string, any>[]): Promise<void> {
+  for (const e of entries.filter((x) => x.type === 'map')) {
+    const from = join(PROJECT, 'assets/images', e.ruleset, 'map', `${e.id}.svg`);
+    const to = join(repo, 'assets/images', e.ruleset, 'map', `${e.id}.svg`);
+    await mkdir(dirname(to), { recursive: true });
+    await copyFile(from, to).catch(() => {});
+  }
 }

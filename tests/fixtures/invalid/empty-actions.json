@@ -53,13 +53,6 @@
     ],
     "actions": []
   },
-  "tags": {
-    "theme": "fire",
-    "environment": [
-      "underdark",
-      "mountains"
-    ]
-  },
   "meta": {
     "createdAt": "2026-10-31",
     "source": {

@@ -1,0 +1,132 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "bandit-ambush",
+  "name": "Bandit Ambush",
+  "summary": "Bandits waylay travelers on a forest road, led by their captain.",
+  "stats": {
+    "parts": [
+      {
+        "part": "description",
+        "text": "The road narrows between two fallen oaks. A whistle sounds from the branches, and figures with crossbows step out from the brush ahead."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/bandit-lookout} signals from the trees when the party reaches the oaks. The bandits want coin, not blood: they demand a toll first, and flee once half of them are down or the {ref:creature/bandit-captain} falls."
+      },
+      {
+        "part": "spawn-table",
+        "roll": "1d6",
+        "rows": {
+          "low": {
+            "range": {
+              "min": 1,
+              "max": 2
+            },
+            "creatures": [
+              {
+                "ref": "creature/bandit-lookout",
+                "count": 1
+              },
+              {
+                "ref": "creature/bandit",
+                "count": "1d4+1"
+              }
+            ]
+          },
+          "moderate": {
+            "range": {
+              "min": 3,
+              "max": 5
+            },
+            "creatures": [
+              {
+                "ref": "creature/bandit-lookout",
+                "count": 1
+              },
+              {
+                "ref": "creature/bandit",
+                "count": "2d4"
+              }
+            ]
+          },
+          "high": {
+            "range": {
+              "min": 6,
+              "max": 6
+            },
+            "creatures": [
+              {
+                "ref": "creature/bandit-captain",
+                "count": 1,
+                "show": "card"
+              },
+              {
+                "ref": "creature/bandit-lookout",
+                "count": 1
+              },
+              {
+                "ref": "creature/bandit",
+                "count": "1d6+2"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "part": "sequence",
+        "example": "The lookout whistles, and the bandits demand ten gold a head. If the party refuses, crossbows loose from the brush while the rest close with scimitars. When the captain falls, the others scatter into the trees."
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "low": {
+            "coins": {
+              "dice": "3d6",
+              "unit": "sp"
+            }
+          },
+          "moderate": {
+            "coins": {
+              "dice": "4d6",
+              "times": 10,
+              "unit": "sp"
+            },
+            "items": [
+              {
+                "ref": "equipment/manacles"
+              }
+            ]
+          },
+          "high": {
+            "coins": {
+              "dice": "4d6",
+              "times": 10,
+              "unit": "gp"
+            },
+            "items": [
+              {
+                "ref": "equipment/dagger",
+                "count": 2
+              },
+              {
+                "ref": "item/potion-of-climbing",
+                "show": "card"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        437
+      ]
+    }
+  }
+}

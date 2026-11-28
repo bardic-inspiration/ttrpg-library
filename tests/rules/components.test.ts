@@ -125,13 +125,12 @@ describe('validation', () => {
 });
 
 describe('the index', () => {
-  it('has no record for a component, and finds its text through its parent', async () => {
+  it('has no record for a component', async () => {
     const registry = JSON.parse(await readFile(join(RULES_FIXTURE, 'types.json'), 'utf8'));
     const { errors, records } = await buildIndex(join(RULES_FIXTURE, 'content'), { rulesetsRoot: join(RULES_FIXTURE, 'rulesets'), registry });
     expect(errors).toEqual([]);
     expect(records.map((r) => r.type)).not.toContain('chapter');
-    const handbook = records.find((r) => r.id === 'handbook')!;
-    expect(handbook.search).toBe('Start with Basics . Basics Carry a Hammer . Advanced Read Basics first.');
+    expect(records.map((r) => r.id)).toContain('handbook');
   });
 });
 
@@ -161,9 +160,9 @@ describe('the site', async () => {
 
   it('renders the components after the parent’s template, in order, at their anchors', async () => {
     const names = entryNames(all, [data]);
-    const html = await render(EntryTemplate, { ...handbook, names, paths: refPaths([data], all), components: handbook.components, level: 2 });
-    expect(html).toContain('<details class="accordion page-component" id="chapter-handbook-basics" data-type="chapter"><summary class="accordion__summary"><h3>Basics</h3>');
-    expect(html).toContain('<details class="accordion page-component" id="chapter-handbook-advanced" data-type="chapter"><summary class="accordion__summary"><h3>Advanced</h3>');
+    const html = await render(EntryTemplate, { ...handbook, names, paths: refPaths([data], all), components: handbook.components, level: 2, module });
+    expect(html).toContain('<details class="accordion page-component" id="chapter-handbook-basics" data-type="chapter"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h3>Basics</h3>');
+    expect(html).toContain('<details class="accordion page-component" id="chapter-handbook-advanced" data-type="chapter"><summary class="disclosure accordion__summary"><span class="chevron" aria-hidden="true"></span><h3>Advanced</h3>');
     expect(html.indexOf('id="chapter-handbook-basics"')).toBeLessThan(html.indexOf('id="chapter-handbook-advanced"'));
     expect(html).toContain('<a class="ref-link" href="/fixture-rules/manual/handbook/#chapter-handbook-basics">Basics</a>');
     expect(html).toContain('<dt>Level</dt><dd>2</dd>');

@@ -7,7 +7,8 @@ import { print } from '../../site/src/exporters/print.ts';
 import type { ExportItem } from '../../site/src/exporters/types.ts';
 import { facetData } from '../../site/src/lib/gallery/facet-data.ts';
 import { loadPrintRun, selectEntries } from '../../site/src/lib/print-run.ts';
-import { loadRules } from '../../site/src/lib/rules.ts';
+import { loadRules, primitiveCards } from '../../site/src/lib/rules.ts';
+import { readTokens, tokensIn } from '../../site/src/lib/design-tokens.ts';
 import {
   SHORT_ATTRIBUTION,
   cssString,
@@ -116,7 +117,7 @@ describe('selectEntries', () => {
       record({ id: 'path-of-a', type: 'subclass', name: 'Path of A', facets: { 'stats.class': 'class/aardvark' } }),
       record({ id: 'path-of-z', type: 'subclass', name: 'Path of Z', facets: { 'stats.class': 'class/zebra' } }),
     ];
-    const names = { names: { 'class/aardvark': 'Zealot', 'class/zebra': 'Abjurer' }, groups: {}, publishers: {} };
+    const names = { names: { 'class/aardvark': 'Zealot', 'class/zebra': 'Abjurer' }, groups: {}, publishers: {}, chips: {} };
     const ids = selectEntries(parsePrintQuery(whole('?sort=stats.class:asc')), subclasses, reg, names).records.map((r) => r.id);
     expect(ids).toEqual(['path-of-z', 'path-of-a']);
   });
@@ -192,6 +193,14 @@ describe('loadPrintRun', () => {
     expect(run.ok && run.fragments.map((f) => f.record.id)).toEqual(['longsword-plus']);
   });
 
+  it('prints an SRD primitive from its card like an entry (docs/site.md#gallery "Cards")', async () => {
+    const index = await fixtureRecords({ primitives: true });
+    const { fetch, fetched } = site({}, index);
+    const run = await loadPrintRun('?ids=condition/blinded,spell/frost-lance', BASE, reg, data, fetch);
+    expect(run.ok && run.fragments.map((f) => f.record.id)).toEqual(['blinded', 'frost-lance']);
+    expect(fetched).toContain('/ttrpg-library/print/dnd-5e-2024/condition/blinded/');
+  });
+
   it('fails with a message when an id has no entry', async () => {
     const run = await loadPrintRun('?ids=creature/cinder-hound,creature/nope', BASE, reg, data, site().fetch);
     expect(run).toMatchObject({ ok: false, message: 'No entry matches “creature/nope”.' });
@@ -219,6 +228,20 @@ describe('print fragment (docs/export.md#print)', () => {
     expect(html).toContain('data-mode="print"');
     expect(html).toMatch(/<h2[^>]*>Cinder Hound<\/h2>/);
     expect(html).not.toContain('<html');
+  });
+
+  it('renders a primitive with a card in its type\'s template, as a custom one prints', async () => {
+    const { experimental_AstroContainer: AstroContainer } = await import('astro/container');
+    const { default: PrintEntry } = await import('../../site/src/components/print/PrintEntry.astro');
+    const container = await AstroContainer.create();
+    const cards = primitiveCards(rules);
+    expect(cards.map((c) => c.loaded.entry.type).filter((t, i, a) => a.indexOf(t) === i).sort()).toEqual(['condition', 'equipment']);
+    const blinded = cards.find((c) => c.loaded.entry.id === 'blinded')!;
+    expect(blinded.path).toBe('dnd-5e-2024/rules/conditions/#condition-blinded');
+    const html = await container.renderToString(PrintEntry, { props: { loaded: blinded.loaded, names: lib.names } });
+    expect(html).toMatch(/^\s*<article class="print-entry[^"]*" data-id="blinded" data-name="Blinded" data-type="condition"/);
+    expect(html).toMatch(/<h2[^>]*>Blinded<\/h2>/);
+    expect(html).toMatch(/Can(&#39;|'|’)t See/);
   });
 });
 
@@ -254,5 +277,39 @@ describe('print exporter (docs/export.md#exporter-interface, docs/export.md#prin
     await expect(print.run([], { scope: 'set', base: BASE, io: fake.io })).rejects.toThrow(/at least one/);
     await expect(print.run([item('cinder-hound'), item('frost-lance')], { scope: 'entry', base: BASE, io: fake.io })).rejects.toThrow(/exactly one/);
     expect(fake.urls).toEqual([]);
+  });
+});
+
+// Print uses fixed point sizes (docs/export.md#print-layout). A custom property resolves where
+// it's declared, so a component size token declared on :root as a text role keeps the screen
+// size unless the print entry declares it again.
+describe('print sizes (docs/export.md#print-layout)', async () => {
+  const site = new URL('../../site/src/', import.meta.url).pathname;
+  const printEntry = await readFile(`${site}components/print/PrintEntry.astro`, 'utf8');
+  const style = printEntry.match(/<style>([\s\S]*?)<\/style>/)?.[1] ?? '';
+  const scoped = new Map(readTokens(style).map((d) => [d.name, d.value]));
+  const components = tokensIn(readTokens(await readFile(`${site}styles/tokens/components.css`, 'utf8')), 'base');
+  const textSized = [...components].filter(([, value]) => /^var\(--text-[a-z0-9-]+\)$/.test(value)).map(([name]) => name);
+
+  // Follows var() through the print entry's own declarations to the first value it doesn't set.
+  const resolve = (name: string): string => {
+    const value = scoped.get(name);
+    const ref = value?.match(/^var\((--[a-z0-9-]+)\)$/)?.[1];
+    return ref && scoped.has(ref) ? resolve(ref) : (value ?? '');
+  };
+
+  it('finds the component size tokens built on text roles', () => {
+    expect(textSized).toEqual(expect.arrayContaining(['--statblock-title-size', '--statblock-heading-size', '--card-title-size']));
+  });
+
+  it.each(['--text-body', '--text-small', '--text-h3', '--text-h4', '--text-h5', '--text-h6'])('maps the text role %s to a print size', (name) => {
+    expect(resolve(name)).toMatch(/^var\(--print-[a-z-]+-size\)$/);
+  });
+
+  it('maps every component size token built on a text role to the print size of that role', () => {
+    for (const name of textSized) {
+      const role = components.get(name)!.match(/--text-[a-z0-9-]+/)![0];
+      expect({ name, value: resolve(name) }).toEqual({ name, value: resolve(role) || 'a print size' });
+    }
   });
 });

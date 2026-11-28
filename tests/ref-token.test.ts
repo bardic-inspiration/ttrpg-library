@@ -1,9 +1,8 @@
 // `{ref:<type>/<id>}` links in text (docs/content-model.md#references): validated like any ref,
-// counted in refs and refBy, read as the target's name in search, and
+// counted in refs and refBy, and
 // rendered as the target's name linked to its page.
 import { rm } from 'node:fs/promises';
 import { afterEach, describe, expect, it } from 'vitest';
-import { buildIndex } from '../scripts/build-index/index.ts';
 import { validateLibrary } from '../scripts/validate/index.ts';
 import { renderInlineMarkdown, renderMarkdown } from '../site/src/lib/markdown.ts';
 import { refOrTextName } from '../site/src/lib/refs.ts';
@@ -67,14 +66,6 @@ describe('{ref:…} tokens in text (docs/content-model.md#references)', () => {
       'stats.components.m.text: a {ref:…} token works only in text fields (rules text and description)',
     );
   });
-
-  it('read as the target name in search text', async () => {
-    const content = await library(await examples('The lance summons a {ref:creature/cinder-hound}.'));
-    const { records } = await buildIndex(content);
-    const spell = records.find((r) => r.id === 'frost-lance')!;
-    expect(spell.search).toContain('summons a Cinder Hound');
-    expect(spell.search).not.toContain('{');
-  });
 });
 
 describe('rendering {ref:…} (docs/content-model.md#references, docs/site.md#templates)', () => {
@@ -98,13 +89,11 @@ describe('rendering {ref:…} (docs/content-model.md#references, docs/site.md#te
 });
 
 describe('a {ref:…} token with display text (docs/content-model.md#references)', () => {
-  it('resolves its key, renders and indexes its text, and works in a table cell', async () => {
+  it('resolves its key, renders its text, and works in a table cell', async () => {
     const content = await library(await examples('The lance calls a {ref:creature/cinder-hound fire hound} to you.'));
     const { errors, entries: valid } = await validateLibrary(content);
     expect(errors).toEqual([]);
     expect(valid.find((e) => e.entry.id === 'frost-lance')!.refs.filter((r) => r.path === 'stats.effect')).toEqual([{ path: 'stats.effect', key: 'creature/cinder-hound' }]);
-    const { records } = await buildIndex(content);
-    expect(records.find((r) => r.id === 'frost-lance')!.search).toContain('calls a fire hound to you');
     const refs = { names: new Map([['creature/zombie', 'Zombie']]), ruleset: 'dnd-5e-2024' };
     expect(renderInlineMarkdown('{ref:creature/zombie risen dead}', refs)).toBe('<a class="ref-link" href="/dnd-5e-2024/creature/zombie/">risen dead</a>');
     expect(renderMarkdown('| A | B |\n|---|---|\n| {ref:creature/zombie risen dead} | 1 |', refs)).toContain('>risen dead</a></td>');

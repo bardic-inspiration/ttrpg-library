@@ -1,0 +1,42 @@
+---
+// A `spawn-table` part (docs/site.md#kit-parts): a table of its rows, low to high, each with its
+// range on the roll when the table has one, its difficulty, and its creature lines; then the cards
+// it shows.
+import { byDifficulty, difficultyName, rangeText, refView, type KitContext } from '../../lib/kit';
+import type { Difficulty, SpawnRow } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { sayText } from '../../lib/wording';
+import KitCards from './KitCards.astro';
+import KitRef from './KitRef.astro';
+
+interface Props {
+  roll?: string;
+  rows: Partial<Record<Difficulty, SpawnRow>>;
+  kit: KitContext;
+}
+
+const { roll, rows, kit } = Astro.props;
+const difficulty = sayText('kit.difficulty');
+const creatures = sayText('kit.heading.spawn-table');
+const headers = [...(roll ? [roll] : []), difficulty, creatures];
+---
+<div class="md-table" role="region" tabindex="0" aria-label={`Table: ${headers.join(', ')}`}>
+  <table>
+    <thead>
+      <tr>{headers.map((header) => <th scope="col">{header}</th>)}</tr>
+    </thead>
+    <tbody>
+      {byDifficulty(rows).map(({ difficulty, row }) => (
+        <tr>
+          {roll && <td>{row.range ? rangeText(row.range) : ''}</td>}
+          <td>{difficultyName(difficulty)}</td>
+          <td>
+            <ul class="kit-list">
+              {row.creatures.map((creature) => <li><KitRef view={refView(creature)} kit={kit} /></li>)}
+            </ul>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<KitCards part={{ part: 'spawn-table', roll, rows }} kit={kit} />

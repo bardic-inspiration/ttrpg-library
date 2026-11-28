@@ -1,0 +1,98 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "shrine-of-seals",
+  "name": "Shrine of Seals",
+  "summary": "Five floor seals in the cult's shrine; each wrong one stepped on releases a swarm of bugs.",
+  "stats": {
+    "setIn": {
+      "ref": "map/testmore-keep",
+      "zone": "shrine-of-seals"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/testmore-keep",
+          "zone": "shrine-of-seals",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Five round stone seals are set in the floor, each carved with a different sigil, and each humming faintly. The far door has no handle, only a sixth, empty socket."
+      },
+      {
+        "part": "dm-guide",
+        "text": "Only the seal carved with an open eye is safe; stepping on it opens the door. The answer is written in the cult's ledger in the Ritual Chamber, and the {ref:creature/spy} from the Greencheck knows it. Each time a creature steps on a wrong seal, roll on the table: the seal cracks and the bugs inside pour out."
+      },
+      {
+        "part": "spawn-table",
+        "roll": "1d6",
+        "rows": {
+          "low": {
+            "range": {
+              "min": 1,
+              "max": 2
+            },
+            "creatures": [
+              {
+                "ref": "creature/swarm-of-insects",
+                "count": "1d4+1"
+              }
+            ]
+          },
+          "moderate": {
+            "range": {
+              "min": 3,
+              "max": 5
+            },
+            "creatures": [
+              {
+                "ref": "creature/rockmite-swarm",
+                "count": 1
+              },
+              {
+                "ref": "creature/giant-centipede",
+                "count": "1d4+3"
+              }
+            ]
+          },
+          "high": {
+            "range": {
+              "min": 6,
+              "max": 6
+            },
+            "creatures": [
+              {
+                "ref": "creature/rockmite-swarm",
+                "count": 2,
+                "show": "card"
+              },
+              {
+                "ref": "creature/swarm-of-insects",
+                "count": "1d4+1"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "part": "table",
+        "title": "The Seals",
+        "text": "| Seal | Sigil | Result |\n|---|---|---|\n| 1 | A closed hand | Bugs |\n| 2 | A broken chain | Bugs |\n| 3 | An open eye | The door opens |\n| 4 | A crossed-out line | Bugs |\n| 5 | A candle | Bugs |"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

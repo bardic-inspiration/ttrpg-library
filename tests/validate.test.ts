@@ -45,7 +45,7 @@ describe('validateLibrary', () => {
     const empty = await mkdtemp(join(tmpdir(), 'ttrpg-empty-'));
     temps.push(empty);
     const result = await validateLibrary(empty);
-    expect({ ...result, rules: undefined }).toEqual({ files: [], errors: [], warnings: [], entries: [], components: [], rules: undefined });
+    expect({ ...result, rules: undefined, ruleLinks: undefined }).toEqual({ files: [], errors: [], warnings: [], entries: [], components: [], rules: undefined, ruleLinks: undefined });
     // The ruleset's rules data is validated whether or not any entry uses it (docs/rulesets.md#rules-data).
     expect(result.rules.map((r) => r.ruleset)).toEqual(['dnd-5e-2024']);
   });
@@ -115,8 +115,7 @@ const INVALID: Record<string, RegExp> = {
   'short-summary': /^summary: must NOT have fewer than 10 characters/,
   'bad-date': /^meta\.createdAt: must match format "date"/,
   'bad-source-kind': /^meta\.source\.kind: must be one of "routine", "revise", "manual", "import"/,
-  'nested-tag': /^tags\.theme: must match a schema in anyOf/,
-  'bad-tag-key': /^tags: property name must be valid/,
+  'tags-key': /^tags: unknown key$/,
   'unknown-ruleset': /unknown ruleset "pathfinder-2e"/,
   'unknown-type': /unknown type "vehicle"/,
   'unknown-stats-key': /^stats\.xp: unknown key$/,
@@ -336,10 +335,7 @@ describe('situational fields (docs/content-model.md#situational-fields)', () => 
       expect(await messages(named)).toContainEqual('author: "Wizards of the Coast" is the ruleset\'s publisher; write "publisher" for official content');
     });
 
-    it('rejects source and author as tags, and the retired SRD marker', async () => {
-      const tagged = await cinderHound();
-      tagged.tags = { ...tagged.tags, source: 'SRD', author: 'someone' };
-      expect(await messages(tagged)).toContainEqual(expect.stringMatching(/^tags: property name must be valid/));
+    it('rejects the retired SRD marker', async () => {
       const marked = await cinderHound();
       marked.meta.source.srd = true;
       expect(await messages(marked)).toContainEqual(expect.stringMatching(/^meta\.source\.srd: unknown key/));

@@ -1,0 +1,47 @@
+/*
+ * A map's diagram (docs/content-model.md#map-diagrams), on its page and as a card's thumbnail: the
+ * site colors its classes from the palette, since the diagram carries no colors of its own. A label
+ * is centered on its x, with its baseline at its y.
+ */
+@layer components {
+  .diagram {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+
+    & .wall {
+      fill: var(--map-wall-fill);
+      stroke: var(--map-wall-stroke);
+    }
+
+    & .zone {
+      fill: var(--map-zone-fill);
+      stroke: var(--map-zone-stroke);
+      stroke-width: var(--map-stroke-width);
+    }
+
+    & .door {
+      fill: none;
+      stroke: var(--map-door-stroke);
+      stroke-width: var(--map-door-width);
+    }
+
+    & .feature {
+      fill: var(--map-feature-fill);
+      stroke: none;
+    }
+
+    & .label {
+      fill: var(--map-label-fill);
+      stroke: none;
+      font-family: var(--statblock-label-font);
+      font-size: var(--map-label-size);
+      text-anchor: middle;
+    }
+
+    /* The zone a thumbnail means (a kit part's map of one zone). */
+    & [data-target] {
+      fill: var(--map-zone-target-fill);
+    }
+  }
+}

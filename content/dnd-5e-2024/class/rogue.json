@@ -157,7 +157,55 @@
           "10d6"
         ]
       }
-    ]
+    ],
+    "grants": {
+      "multiclass": [
+        {
+          "kind": "skills",
+          "count": 1,
+          "from": [
+            "acrobatics",
+            "athletics",
+            "deception",
+            "insight",
+            "intimidation",
+            "investigation",
+            "perception",
+            "persuasion",
+            "sleight-of-hand",
+            "stealth"
+          ]
+        }
+      ]
+    },
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          },
+          {
+            "group": "martial-weapons",
+            "properties": [
+              {
+                "ref": "weapon-property/finesse"
+              },
+              {
+                "ref": "weapon-property/light"
+              }
+            ]
+          }
+        ],
+        "armor": [
+          "light-armor"
+        ]
+      },
+      "multiclass": {
+        "armor": [
+          "light-armor"
+        ]
+      }
+    }
   },
   "meta": {
     "createdAt": "2026-11-10",

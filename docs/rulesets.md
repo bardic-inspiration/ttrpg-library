@@ -3,8 +3,9 @@
 ## Purpose
 
 Everything specific to a ruleset: its schemas, rules tables, derived values,
-text tokens, consistency checks, and how its types print. The one ruleset is
-`dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0). Its content, rules, and
+text tokens, consistency checks, and how its types print. The library's one
+ruleset is `dnd-5e-2024`, aligned with SRD 5.2 (CC-BY-4.0); two fixture
+rulesets test the generic code ([Fixture rulesets](#fixture-rulesets)). Its content, rules, and
 component types are listed in
 [`ruleset.json`](../rulesets/dnd-5e-2024/ruleset.json). What every entry
 shares is in [content-model.md](content-model.md).
@@ -42,9 +43,9 @@ adding a ruleset is adding a folder:
 | File | Purpose |
 |---|---|
 | `ruleset.json` | ID, `publisher` ([Source and author](content-model.md#source-and-author)), list of types, the `rules` types ([Rules data](#rules-data)), and the `components` types with their parent types ([Components](content-model.md#components)) |
-| `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability) and the enums the schemas share |
+| `tables.json` | Rules tables (CR to XP and PB, size to hit die, skill to ability, point-buy costs, XP budgets by level) and the enums the schemas share |
 | `phrases.json` | The phrase book: the fixed sentences templates fill, the display name of each enum value, and irregular plurals and articles ([Wording](site.md#wording)) |
-| `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`, classes' in `classes.ts`) |
+| `derive.ts` | Pure functions, one per type, computing derived values from `stats` (equipment's in `equipment.ts`, classes' in `classes.ts`, characters' in `characters.ts`) |
 | `tokens.ts` | Text tokens that render derived values inside prose |
 | `checks.ts` | Consistency checks a schema can't express (equipment's and classes' beside their derivations) |
 | `refs.ts` | `refLabels(type, path)`: how detail pages name a ref from each end |
@@ -66,14 +67,22 @@ folder or registry entry fails as unknown. A type with no formulas derives `{}`.
 checks that read it: equipment's category comes from its group, and an
 item's base item is checked against the equipment groups. An optional
 `checkLinks` runs once every ref resolves, with a lookup of each target's type
-and stats, and a lookup of an entry's key by its type and exact name in the
-same ruleset, for checks that read another entry: a background's feat must be
-an origin feat. `check` also receives whether the entry is official content,
+and stats, a lookup of an entry's key by its type and exact name in the
+same ruleset, and the entry's own key, for checks that read another entry: a
+background's feat must be an origin feat, and a map's parents never lead back
+to it. `check` also receives whether the entry is official content,
 for a rule that depends on it. An optional `deriveLinked` computes values that read
-other entries, given the entry's key and every entry and component of its
-ruleset, each with its `author` so it can tell official content (`isOfficial`); the site merges
-them into the entry's derived values, as a class's spell list is the spells
-that name it ([Classes](#classes)).
+other entries, given the entry's key and its ruleset's linked library
+(`LinkedLibrary` in `rulesets/module.ts`): every entry and component, each
+with its `author` so it can tell official content (`isOfficial`), a lookup
+that resolves any ref to its entry, component, or primitive, and the rules
+data. The build makes it once per ruleset, before deriving, and the site
+merges the values into the entry's derived values. A derivation reads the
+entries its refs name, as a character reads its classes and species
+([Characters](#characters)), or the entries that name it, as a class's spell
+list is the spells that name it ([Classes](#classes)). An optional `renderTokens` renders the
+ruleset's text tokens in one text of an entry, from the entry's derived
+values ([Text tokens](#text-tokens)).
 
 `dnd-5e-2024` ref labels: spell lists (a creature's `spellcasting`, an
 item's `spells[].spell`) are "Casts" / "Cast by"; a background's `feat` is
@@ -85,8 +94,16 @@ is; a class's `spells` are "Spells" / "Classes", and a spell's `classes`
 "Carried by"; a creature's condition immunities are "Immune to" / "Immune
 creatures"; an item's `baseItem` is "Base item" / "Base of"; a weapon's
 `properties` and `mastery` are "Properties" / "Weapons" and "Mastery" /
-"Weapons"; any other field, including a `{ref:…}` token in text, is
-"References" / "Referenced by".
+"Weapons"; a map's `within` is "Within" / "Child maps"; an encounter's
+parts, a `{ref:…}` token in them included, are "Includes" / "Appears in",
+and its `setIn` "Set in" / "Set here"; a module's contained arrangements
+are "Contains" / "Part of", and its parts' other refs "Includes" / "Appears
+in"; any other field, including a `{ref:…}` token in text, is
+"References" / "Referenced by". These are the ruleset's generic labels
+(`generic` in `RefLabels`): a target listed under a specific label isn't
+listed again under them, so Acid Arrow lists the dragons that cast it, and
+name it in their text, once, under "Cast by" (`groupRefs` in
+`site/src/lib/refs.ts`).
 
 ### Rules data
 
@@ -98,7 +115,7 @@ from `types`, with whether it takes extensions:
 - **Primitives** are the SRD's rules, kept with the ruleset: one file per
   primitive at `rules/<type>/<id>.json`, holding `type`, `id`, `name`, and
   `stats` (`schemas/primitive.schema.json`). The path must match, and a
-  primitive has no `summary`, `meta`, `tags`, `description`, or `image`: it
+  primitive has no `summary`, `meta`, `description`, or `image`: it
   is an SRD rule, reproduced faithfully ([SRD and custom entries](content-model.md#srd-and-custom-entries)).
 - **Extensions** are custom rules: ordinary entries under
   `content/<ruleset>/<type>/`, whose `stats` validate against the same type
@@ -173,7 +190,8 @@ bonus. Items derive nothing, except the ability modifiers and saves of an
 embedded stat block ([Embedded stat blocks](#embedded-stat-blocks)); spells
 derive those too.
 Classes derive their proficiency bonus and spell slots by level
-([Classes](#classes)). Feats derive `repeatable`, whether the feat has a
+([Classes](#classes)), and characters their level, scores, saves, skills, Hit
+Points, Armor Class, attacks, and spellcasting ([Characters](#characters)). Feats derive `repeatable`, whether the feat has a
 `repeatable` note, and species derive `sizes`, the list of their sizes'
 names; both feed the Library's facets.
 The formulas are in `derive.ts` and the tables, including the SRD CR table, in
@@ -187,11 +205,22 @@ Spellcasting, text tokens, the checks, and the Open5e importer share.
 abilities, dice, damage, proficiency levels, adjustments, damage types, refs
 (`Ref`, `RefOrText`, `CountedRefOrText`, whose ref may add a `count`, and the
 typed refs, each allowing only its type's keys: `ConditionRef`,
-`EquipmentRef`, `FeatRef`, `SpellRef`, `ClassRef`, and one per component
+`EquipmentRef`, `FeatRef`, `SpellRef`, `ClassRef`, `SubclassRef`, `SpeciesRef`, `BackgroundRef`, and one per component
 type), rules text (`Text`), and the embedded `StatBlock`. Each definition's shape and meaning is in its `description`.
 
 ### Text tokens
 
+A text token shows a derived value inside prose, so the number is never
+written down. Each ruleset defines its own: its module's `renderTokens`
+replaces the tokens in one text of an entry of a given type from the entry's
+derived values, leaving `{ref:…}` alone, and throws on a bad token. Its
+`check` reports bad tokens, so validation catches them before a build. A
+ruleset with no tokens leaves `renderTokens` out, and its text shows as
+written. The generic template renders every text in an entry's `stats`
+through it ([Templates](site.md#templates)); a ruleset's own templates call
+its tokens where they place its prose.
+
+`dnd-5e-2024`'s tokens are in `tokens.ts`, for creatures only.
 Creature prose (`text`, `onHit`, `onFailure`, `onSuccess`, `onFailureOrSuccess`,
 `spellcasting.note`, `legendaryActions.intro`) may show a derived value only
 through a token. `tokens.ts` renders tokens from the same derivations as the
@@ -340,7 +369,8 @@ those that name it, not those that name a group it belongs to).
 The SRD's 180 weapons, armor, tools, pieces of adventuring gear, and mounts
 and vehicles are primitives in `rules/equipment/`; custom equipment is an
 entry under `content/dnd-5e-2024/equipment/`, authored from a request and shown
-as a card. Weapon properties and mastery properties are two primitive-only
+as a card. Each SRD piece of equipment has a Library card too, which opens its
+section ([Gallery](site.md#gallery)). Weapon properties and mastery properties are two primitive-only
 rules types, `weapon-property` and `mastery-property`, with keys of their own
 so the Ammunition property doesn't collide with the Ammunition gear.
 
@@ -414,7 +444,8 @@ lists every term by name, with the conditions cross-listed among them as
 
 `condition` is a rules type that takes extensions
 ([Rules data](#rules-data)). The 15 SRD conditions are primitives in
-`rules/condition/`, shown on the Conditions page (`rules/pages.json`), and
+`rules/condition/`, shown on the Conditions page (`rules/pages.json`), each
+with a Library card that opens its section ([Gallery](site.md#gallery)), and
 there is no condition enum or table. A custom condition is an entry under
 `content/dnd-5e-2024/condition/`, authored from a request like any content,
 shown as a card, and listed on the Conditions page and the Extensions page.
@@ -548,7 +579,8 @@ Its page (`class-page`) prints, in the SRD's order:
   3 skills (see “Playing the Game”)"), Weapon Proficiencies, Tool
   Proficiencies when present, Armor Training, and Starting Equipment
   ([Starting equipment](#starting-equipment)).
-- **Becoming a <Class> …:** the "As a Level 1 Character" bullets every class
+- **Becoming a <Class> as a Level 1 or Multiclass Character:** the "As a
+  Level 1 Character" bullets every class
   shares, from the phrase book, then "As a Multiclass Character" and the
   class's `multiclass` text.
 - **The <Class> Features table:** Level, Proficiency Bonus, Class Features
@@ -591,6 +623,341 @@ table in a feature's text, with spell tokens.
 
 Subclasses come only by request; they have no gap buckets.
 
+### Characters
+
+A character is a ready-made build: a pregenerated character a module
+offers, or one a DM runs. It's one build at one level, its current state
+rather than a record of choices level by level. It is apart from a creature:
+a creature is a stat block whose values are its own fields, and a
+character's values come from refs to library entries plus a few inputs. The
+site stores no PC or NPC role.
+
+`schemas/character.schema.json` describes each field. A character's `stats`
+hold only inputs:
+
+- **`species`** and **`background`:** refs.
+- **`classes`:** in the order taken, each a class ref, its `level`, and its
+  `subclass` ref. The first is the starting class.
+- **`abilities`:** the six `base` scores, bought with point buy, and the
+  `background`'s increases by ability (`{ "str": 2, "con": 1 }`).
+- **`feats`:** each a feat ref with its `source`, where it came from: the
+  background, the species (Human's Versatile grants an origin feat), or a
+  class with the class `level` whose feature grants it. A feat's `note` is
+  the choice it's taken with (`"Cleric"` for Magic Initiate (Cleric)), and
+  `abilities` the increases it places, such as an Ability Score
+  Improvement's.
+- **`options`:** class option refs. Each is a component of one of its
+  classes' option lists, so the list it sits in isn't stored.
+- **`choices`:** the `skills`, `expertise`, `tools`, and `languages`
+  picked, each group under the `source` that offers it: the species or one
+  of its traits, the background, a class, a subclass, a class feature
+  (Scholar's Expertise), or a feat. Each source's picks fill exactly what it
+  gives ([Grants](#grants)). The two languages every character picks beside
+  Common at its origin go under the background. A group's `option` names
+  the option taken of its source's choice ("Wood Elf"), or of its feat
+  grant's `or` ("Blessed Warrior").
+- **`equipped`:** what the character wears, wields, or attunes to: SRD
+  equipment, or any item that can be equipped or attuned to, such as
+  armor, weapons, rings, rods, staffs, wands, and wondrous items. An item whose base item could be several pieces of
+  equipment names the one it is in `base` (`item/armor-1-2-or-3` with
+  `equipment/chain-mail`), and an item with variants names its `variant`
+  (`"+1"`). An item the character is attuned to has `attuned`. There is no
+  inventory.
+- **`spells`:** spell refs, the cantrips and prepared spells.
+
+A character's refs to class features, species traits, and class options are
+links: only a class, subclass, or species lists them as components
+([Components](content-model.md#components)).
+
+A character derives (`characters.ts`), from its own stats: its total
+`level`, its `proficiencyBonus` from the Character Advancement table, and
+`pointCost`, the point-buy cost of its base scores from `tables.json`'s
+`pointBuy` (SRD 5.2 "Character Creation": 27 points, a score of 8 costing 0
+up to 15 costing 9), omitted when a score is outside the table.
+
+From the library (`deriveLinked`, with the entries its refs name), each
+with the modifiers of the features, feats, and traits it has
+([Modifiers](#modifiers)), and of the options it names of their choices
+([Grants](#grants)), and of its equipped items
+([Item modifiers](#item-modifiers)):
+
+- the final `scores` (the base, the background's increases, and each
+  feat's) and their modifiers;
+- `saves`, with the starting class's saving throws proficient;
+- every skill's bonus, with the background's two skills and the picked ones
+  proficient and Expertise doubling the proficiency bonus, and Passive
+  Perception;
+- Hit Points at the fixed value per level: the starting class's Hit Point
+  Die's maximum at level 1, then half the die plus 1 for each later level,
+  plus the Constitution modifier per level;
+- Initiative (the Dexterity modifier) and Speed (the species');
+- Armor Class: the equipped armor's AC with its Dexterity rule (`dex`, up to
+  `dexMax`), or 10 plus the Dexterity modifier with none, then the equipped
+  shield's;
+- an attack per equipped weapon: Strength for a melee weapon, Dexterity for
+  a ranged one, the higher for a Finesse weapon; the attack bonus adds the
+  proficiency bonus, and the damage its dice and modifier, with a Versatile
+  weapon's two-handed dice, its properties, and its mastery;
+- each casting class's spellcasting ability, save DC, and attack bonus, with
+  its cantrips and prepared spells at its level; spell slots from the
+  Multiclass Spellcaster table at the full caster levels plus half of each
+  half caster class's levels, rounded up; and a pact caster's Pact Magic
+  slots apart;
+- its `spells` by spell level, cantrips first, each level's in the order
+  the build lists them, leaving out a level with none;
+- the features each class and subclass gives up to the class's level, each
+  with the level it's gained at, and the species' traits;
+- the proficiencies by source: the starting class's saving throws, the
+  skills and Expertise, weapon and armor training as each class prints it
+  (the starting class's Core Traits, a later class's "As a Multiclass
+  Character" text), the tools, and the languages, each with those an entry
+  gives outright. The languages start with Common, under the background,
+  since every character knows it (SRD 5.2 "Character Creation": Common plus
+  two languages); a pick of Common isn't listed again.
+
+A character's page is a **profile** (`character-profile`), not a play
+sheet: what a DM needs to run the character, or a player needs to copy a
+preset onto their own sheet. It has no fill-in boxes and nothing tracked at
+the table (current HP, spent slots, inventory). Every value is a derived
+one, in this order:
+
+- **Identity:** its class levels with subclasses under its name ("Fighter 3
+  (Champion) / Wizard 2"), then its species and background, linked.
+- **Combat:** Armor Class, Hit Points, Initiative, Speed (with any Climb,
+  Swim, or Fly Speed), Proficiency Bonus, and Passive Perception.
+- **Abilities:** each score, modifier, and saving throw, as the creature
+  stat block's table.
+- **Skills:** every skill with its bonus, alphabetized, in columns, each
+  proficiency marked "(Proficient)" or "(Expertise)".
+- **Proficiencies:** its saving throws; Armor, Weapons, and any Tools text
+  as the starting class prints them; its tool picks, linked; its languages;
+  and each later class's "As a Multiclass <Class>" text.
+- **Attacks:** a paragraph per equipped weapon, led by its linked name:
+  "***Longsword.*** +6 to hit, 1d8 + 3 Slashing damage, or 1d10 + 3
+  two-handed; Versatile; Mastery: Sap", with the weapon's range when it has
+  one (a ranged or thrown weapon). A negative modifier prints the minus
+  sign, U+2212, as a creature's does ([Creature display forms](#creature-display-forms)):
+  "1d6 − 1".
+- **Spellcasting:** per casting class, its ability, spell save DC, attack
+  bonus, and cantrip and prepared counts; its spell slots and Pact Magic
+  slots; and its spells by level ("Cantrips", "Level 1", …), linked.
+- **Features:** each class's, subclass's, and the species' features by
+  source, each linked to its section on its parent's page; its feats, with
+  the choice each is taken with and where it came from ("Defense (Fighter
+  1)"); and its class options.
+- **Equipment:** each equipped item, linked, with its base item, variant,
+  and attunement noted ("Armor, +1, +2, or +3 (Chain Mail, +1)").
+- **Description:** in print and PNG capture, its lore last. On screen the
+  detail page shows it, as for every type.
+
+In the Library, a character's facets are its classes (`stats.classes.class`,
+a ref facet through the array), its total level (`derived.level`), its
+species, and its background; its card shows the four with its summary. It
+exports as any card entry does, to Print, PNG, and JSON; no translator takes
+characters.
+
+Characters come only by request; they have no gap buckets.
+
+### Modifiers
+
+A feature that changes a character's derived value declares the effect as
+data, so a character needs no `adjust` for it. `class-feature`, `feat`, and
+`species-trait` stats take an optional `modifiers` array, each modifier with
+a `kind` from a closed vocabulary (`Modifier` in `common.schema.json`, which
+describes each kind's fields). A character applies the modifiers of the
+class and subclass features up to each class's level, its feats, and its
+species' traits.
+
+Fields the kinds share:
+
+- **`value`:** a number, `"proficiency"` for the proficiency bonus, or an
+  ability key for that ability's modifier, with an optional `min`.
+- **`byLevel`:** in place of `value`, a value from the level each key names
+  (`{ "2": 10, "6": 15 }`), read at the level of the feature's class: the
+  class whose features, or whose subclass's, list it, or the class a feat
+  came from. A species trait's, or a feat's from the background or species,
+  reads the total level.
+- **`while`:** conditions that must all hold: `unarmored` (no armor
+  equipped), `armored`, `no-heavy-armor`, and `no-shield`.
+- **`weapon`:** the equipped weapons it applies to: `ranged`, `melee`,
+  `one-handed-melee` (a melee weapon without Two-Handed, wielded as the only
+  weapon; a Versatile weapon's two-handed damage doesn't take it), or `monk`
+  (Simple Melee weapons, and Martial Melee weapons with Light).
+
+| Kind | Example | Derives |
+|---|---|---|
+| `ability-bonus` | Primal Champion: `"abilities": ["str", "con"], "value": 4, "max": 25`; an Ability Score Improvement's `"total": 2, "max": 20`, which caps the increases the character's feat places | Final scores, each up to `max` |
+| `ac-formula` | Unarmored Defense: `"base": 10, "abilities": ["dex", "con"], "while": ["unarmored"]` | Armor Class: the highest formula that applies, the equipped armor's or 10 + Dexterity included |
+| `ac-bonus` | Defense: `"value": 1, "while": ["armored"]` | Armor Class, after the shield |
+| `save-proficiency` | Slippery Mind: `"abilities": ["wis", "cha"]`; `"all"` | Saving throws |
+| `save-bonus` | Aura of Protection: `"value": "cha", "min": 1` | Every saving throw |
+| `skill-proficiency` | Bonus Proficiencies (College of Echoes): `"skills": ["performance"]`, with `"expertise": true` for Expertise | Skills and Passive Perception |
+| `tool-proficiency` | Hearth Blessing: `"tools": [{ "ref": "equipment/cooks-utensils" }]` | Tool proficiencies |
+| `language` | Druidic: `"languages": ["Druidic"]` | Languages |
+| `skill-floor` | Jack of All Trades: `"proficiency": "half"` | Skills without proficiency, and Passive Perception; not Initiative, which isn't a skill check |
+| `initiative-bonus` | Alert: `"value": "proficiency"` | Initiative |
+| `speed-bonus` | Fast Movement: `"value": 10, "while": ["no-heavy-armor"]` | Speed |
+| `speed-mode` | Roving: `"modes": ["climb", "swim"]` | Other speeds, each equal to the Speed |
+| `hp-per-level` | Dwarven Toughness: `"value": 1`; `"per": "class"` for each level of its class | Hit Points |
+| `attack-ability` | Martial Arts: `"abilities": ["dex"], "weapon": "monk"` | The attack's ability, when higher |
+| `attack-bonus` | Archery: `"value": 2, "weapon": "ranged"` | Attack bonus |
+| `damage-bonus` | Dueling: `"value": 2, "weapon": "one-handed-melee"` | Damage |
+| `damage-die` | Martial Arts: `"byLevel": { "1": "1d6", "5": "1d8" }, "weapon": "monk"`, or a fixed `die` | The damage die, when larger than the weapon's |
+
+Bonuses of a kind add together. A choice a feature offers, such as a skill
+of the character's choosing, is a pick in `choices`, not a modifier; a
+proficiency it gives outright is a modifier, not a grant. An
+effect that depends on the situation or a choice made in play, such as
+Great Weapon Fighting, Rage, or Advantage on Initiative, isn't modeled and
+stays text only.
+
+An entry carries `modifiers` when it has an always-on effect the vocabulary
+models; its `text` stays as printed. In the library these are Barbarian
+and Monk Unarmored Defense, Unarmored Movement, Martial Arts (its attack
+ability and die), Fast Movement, Primal Champion, Roving, Draconic
+Resilience, Jack of All Trades, Slippery Mind, Aura of Protection, and the
+custom Swift Foot; the feats Defense, Archery, Alert, and Ability Score
+Improvement; the species trait Dwarven Toughness, and Elven Lineage's Wood
+Elf option (Speed +5); and the proficiencies given outright: the custom
+College of Echoes' Bonus Proficiencies (Performance), Pathfinder's Eye
+(Survival, with Expertise), and Hearth Blessing (Cook's Utensils), and
+Druidic's and Thieves' Cant's languages. A new entry with such an effect
+carries them too.
+
+### Grants
+
+What an entry gives a character to pick or have is data too, so the checks
+can count a build's feats, picks, options, and spells
+([Consistency checks](#consistency-checks)). `class-feature`,
+`species-trait`, and `feat` stats take an optional `grants` array, each grant
+with a `kind` from a closed vocabulary (`Grant` in `common.schema.json`). A
+feature's grant is given at each of its levels up to its class's level; a
+trait's once; a feat's each time it's taken. A `choice`, `options`, and a
+`spells` grant read the level themselves, so a feature gives them once.
+
+| Kind | Example | Gives |
+|---|---|---|
+| `feat` | Fighting Style: `"categories": ["fighting-style"]`; Versatile: `["origin"]`; Paladin's Fighting Style adds `"or": { "name": "Blessed Warrior", "grants": [...] }` | One feat of those categories, with the class and that level, or the species, as its `source`; or the `or` option's grants in its place, when the build names it |
+| `skills` | Skillful: `"count": 1`; Keen Senses: `"count": 1, "from": ["insight", "perception", "survival"]`; Skilled: `"count": 3, "withTools": true` | Skill picks under the entry; with `withTools`, skill and tool picks count together |
+| `expertise` | Expertise: `"count": 2`; Scholar: `"count": 1, "from": [...]` | Expertise picks |
+| `tools` | `"count": 1, "from": [{ "ref": "equipment/musical-instrument" }]` | Tool picks |
+| `languages` | `"count": 2` | Language picks |
+| `options` | Eldritch Invocations: `"list": "Eldritch Invocation Options", "column": "Eldritch Invocations"`; Metamagic: `"byLevel": { "2": 2, "10": 4, "17": 6 }` | Options from the class's list of that name: the column's value, or `byLevel`, at the class's level |
+| `spells` | Magic Initiate: `"cantrips": 2, "level1": 1, "from": [...]`; Magical Discoveries: `"count": 2`; Spell Mastery: `"levels": { "1": 1, "2": 1 }`; Mystic Arcanum: `"pickByLevel": { "11": 6, "13": 7, "15": 8, "17": 9 }`; an always-prepared list: `"byLevel": { "3": [...], "5": [...] }` | Spells outside the classes' counts |
+| `spell-lists` | Magical Secrets: `"from": [{ "ref": "class/cleric" }, ...]` | More lists the feature's class prepares its spells from, beside its own; not its cantrips |
+| `choice` | Elven Lineage: `"options": [{ "name": "Drow", "grants": [...] }, ...]` | The grants, and the `modifiers`, of the one option the build names |
+
+A `spells` grant's picks are at most its counts, as a class's are:
+`cantrips`, `level1` spells, `count` spells that are each a cantrip or of a
+level the feature's class's own slots cast, `levels` by spell level, and
+`pickByLevel`, one spell of the level each key gives from that class level
+on. A feat's come from the class spell list its `note` names ("Cleric" is
+`class/cleric`), one of `from` when given; a feature's or trait's from any
+list in `from`, by default the feature's class's. An always-prepared list's
+spells, from each key's level on (the class's level for a feature, the
+total level for a trait), are the character's without a seat in any count,
+and the build lists those it wants on its profile.
+
+A `choice`, and a `feat` grant's `or`, hold options, each a `name` with
+`grants`, `modifiers`, or both. The build names the one it takes as its
+`option` in a `choices` group under the entry; the option's grants count as
+the entry's, and its modifiers apply as the entry's own. A choice needs an
+option named; a feat grant with an `or` gives its feat unless the `or` is
+named.
+
+A class adds two fields beside its printed text:
+
+- **`grants`:** `start`, the picks it gives as the starting class beside
+  its `skills` (the Bard's three instruments), and `multiclass`, those it
+  gives as a later class (the Bard's, Ranger's, and Rogue's skill). The
+  starting class's `skills` count as a `skills` grant.
+- **`training`:** `start`, as its Core Traits print weapons and armor, and
+  `multiclass`, as its "As a Multiclass Character" text does: weapon groups
+  (`simple-weapons`, `martial-weapons`), each limited to weapons with any of
+  `properties` (the Monk's Martial weapons with Light), and armor groups
+  (`light-armor`, `medium-armor`, `heavy-armor`, `shields`).
+
+A feat adds `requires`, its ability prerequisite as data beside the printed
+`prerequisite`: `"abilities": ["str", "dex"], "min": 13`, any one by
+default, or all with `"join": "and"`, read from the final scores.
+
+The background gives its tool pick when it offers a choice, and the two
+origin languages (SRD 5.2 "Character Creation": a character's origin is a
+background, a species, and two languages). The species and a subclass give
+nothing themselves; their traits and features do.
+
+Every class has `training` (the schema requires it), and a `multiclass`
+one where its "As a Multiclass Character" text gives training; the Monk,
+Sorcerer, and Wizard give none. Class `grants` are the Bard's three
+instruments and the Monk's Artisan's Tool or instrument at `start`, and the
+Bard's skill and instrument and the Ranger's and Rogue's skill from their
+lists at `multiclass`. A tool the class gives outright, such as the Rogue's
+Thieves' Tools, is no pick. A class missing from the library leaves the
+character's training unknown, so the training warning waits for every
+class's.
+
+In the library, these entries carry grants:
+
+- **Feats:** each class's Ability Score Improvement (`origin` and `general`)
+  and Epic Boon (`epic-boon`, `origin`, and `general`), both printing "or
+  another feat of your choice for which you qualify"; the Fighter's,
+  Paladin's, and Ranger's Fighting Style and the Champion's Additional
+  Fighting Style (`fighting-style`); and Versatile (`origin`). A Fighting
+  Style feat's prerequisite (Fighting Style Feature) isn't data, so
+  Ability Score Improvement and Epic Boon don't allow one.
+- **Skills, Expertise, and languages:** Primal Knowledge, the College of
+  Lore's and the custom College of Echoes' Bonus Proficiencies, Skillful,
+  Keen Senses, and Skilled; the Bard's, Ranger's, and Rogue's Expertise,
+  Scholar, and Deft Explorer; and Thieves' Cant.
+- **Options:** Metamagic and Eldritch Invocations.
+- **Spells:** Magic Initiate; the always-prepared lists: the Life Domain,
+  Oath of Devotion, Draconic, and Fiend spells, Druidic, Paladin's Smite,
+  Faithful Steed, Favored Enemy, Contact Patron, and Words of Creation; the
+  picks of Magical Discoveries, Mystic Arcanum, Spell Mastery, and Signature
+  Spells; and Magical Secrets' lists.
+- **Alternatives and choices:** the Paladin's Blessed Warrior and the
+  Ranger's Druidic Warrior (`or`, two Cleric or Druid cantrips), and the
+  choices of Circle of the Land Spells (by land), Elven Lineage, Gnomish
+  Lineage, and Fiendish Legacy, each option's spells as always-prepared
+  lists; High Elf's cantrip is a Wizard cantrip pick, since the elf can
+  replace Prestidigitation.
+- **Requires:** Grappler (Strength or Dexterity 13).
+
+The rest stays text: a lineage's spellcasting ability, a Drow's Darkvision,
+and a legacy's Resistance aren't derived values a character shows.
+
+### Item modifiers
+
+`item` stats take an optional `modifiers` array too (`ItemModifier` in
+`common.schema.json`), with the kinds an item has: `ac-bonus`, `save-bonus`,
+`check-bonus`, `ability-set`, `attack-bonus`, and `damage-bonus`. An item's
+modifiers apply while it's in the character's `equipped`, and, when it
+requires attunement, only while it's `attuned`.
+
+- **`value`:** a number. **`byVariant`** in its place gives one per variant,
+  keyed as the item names its variants, and the `equipped` entry's
+  `variant` picks it; with no variant named, or another, it gives nothing.
+- **`while`:** the same conditions as a feature's (Bracers of Defense: no
+  armor and no shield).
+- **On armor or a weapon,** a modifier applies to that item itself: an
+  `ac-bonus` while it's worn, and an `attack-bonus` or `damage-bonus` with
+  no `weapon` to that weapon's attack only, its Versatile damage included.
+
+| Kind | Example | Derives |
+|---|---|---|
+| `ac-bonus` | +1, +2, or +3 Armor: `"byVariant": { "+1": 1, "+2": 2, "+3": 3 }`; Cloak of Protection: `"value": 1` | Armor Class, after the shield |
+| `save-bonus` | Ring of Protection: `"value": 1` | Every saving throw |
+| `check-bonus` | Stone of Good Luck: `"value": 1` | Every skill, Passive Perception, and Initiative, which is a Dexterity check |
+| `ability-set` | Gauntlets of Ogre Power: `"ability": "str", "value": 19`; Belt of Giant Strength by variant (`"hill": 21` … `"storm": 29`) | A final score, raised to the value unless it's already higher, after every other increase |
+| `attack-bonus` | +1, +2, or +3 Weapon, by variant | The weapon's attack bonus |
+| `damage-bonus` | +1, +2, or +3 Weapon, by variant | The weapon's damage |
+
+In the library these are +1, +2, or +3 Armor and Weapon, Dwarven Plate,
+Cloak and Ring of Protection, Bracers of Defense, Stone of Good Luck,
+Gauntlets of Ogre Power, Amulet of Health, Headband of Intellect, and Belt
+of Giant Strength. An effect used in play, or one that needs a condition the
+character's stats don't hold (Boots of Speed, a potion), stays text only.
+
 ### Starting equipment
 
 Backgrounds and classes share `StartingEquipment` in
@@ -609,6 +976,209 @@ words the list (`site/src/lib/starting-equipment.ts`):
 - A variant isn't a link target, so "20 Arrows" is text. Equipment whose SRD
   name reads differently in a list is a token with display text in a text
   item: `{ref:equipment/clothes-travelers Traveler's Clothes}`.
+
+### Maps
+
+A map is a placeholder: a simple SVG diagram with named zones, enough for
+the library and page structure that other entries point into. It's a
+content type in `dnd-5e-2024`, at `content/dnd-5e-2024/map/<id>.json`, and
+every map is custom. `schemas/map.schema.json` describes each field. A
+map's `stats` hold:
+
+- **`scale`:** a label for organizing the hierarchy, one of `room`,
+  `dungeon`, `zone`, `region`, or `world`. It isn't a type, and a child's
+  scale needn't be smaller than its parent's.
+- **`zones`:** the map's anchors, at least one, in the order its page lists
+  them: each an `id` (a slug, unique within the map) and a `name`, with an
+  optional `note` in the markdown subset.
+- **`within`:** for a child map, the zone of its parent that it details, a
+  `MapZoneRef`: `{ "ref": "map/<id>", "zone": "<zone-id>" }`. The zone is
+  one of the parent's, which the ref check enforces for every zone ref
+  ([References](content-model.md#references)); a map is within at most one
+  parent, and no map is within itself, directly or through others (errors).
+  Its detail page labels the link "Within", to "Parent › Zone", and the
+  parent's "Child maps".
+
+The diagram is at a path derived from the id,
+`assets/images/dnd-5e-2024/map/<id>.svg`, never stored, and every map has
+one ([Map diagrams](content-model.md#map-diagrams)). A map derives nothing.
+Maps come only by request; they have no gap buckets. In the Library, a map's
+card shows its diagram as a thumbnail, with its name and scale
+([Gallery](site.md#gallery) "Cards"); `scale` is its one facet.
+
+A map's page is a **map page** (`map-page`, `site/src/lib/map.ts`):
+
+- **Its scale** under its name ("Dungeon map"), then, for a child map, its
+  parent's zone, "Within", linked ("Sunken Cistern › Drowned Shrine").
+- **The diagram,** inline at the page's width, colored by the site
+  ([Map diagrams](content-model.md#map-diagrams)). Each zone's shape is a
+  link to the zone's entry below, named by the zone's name
+  (`pageDiagram` in `lib/diagram.ts`).
+- **The zones,** in `stats.zones` order, each anchored at `#zone-<id>`,
+  where a zone ref links ([References](content-model.md#references)): its
+  name, its note, and what points into it, by label (`zoneRefs` in
+  `site/src/lib/refs.ts`): what's set there under its referrer's label, and
+  the child maps that detail it under "Child maps". The anchor is the zone's
+  entry, not its shape, so a link lands on what the zone holds; the entry is
+  highlighted (`:target`), and so is its shape in the diagram, by a small
+  script on load and on each new hash. A shape under the pointer or focused
+  is highlighted too.
+- **In print and PNG capture,** the diagram spans the page's columns, then
+  the zones follow, then the description, which the detail page shows as
+  lore. Only the page's own copy carries the anchors, since the capture's
+  copy sits on the same page and a print view may hold two maps sharing a
+  zone id.
+
+The detail page's Links list its parent ("Within") and the back-links to the
+map as a whole; those into a zone are listed under the zone instead.
+
+### Encounters
+
+An encounter is a runnable scene a DM picks up for prep: who's in it, how it
+plays, and what it yields. It's an arrangement
+([Arrangements](content-model.md#arrangements)), a content type in
+`dnd-5e-2024` at `content/dnd-5e-2024/encounter/<id>.json`, and every
+encounter is custom. `schemas/encounter.schema.json` describes it, and the
+kit's parts are `Part…` definitions in `schemas/common.schema.json`. Its
+`stats` hold:
+
+- **`parts`:** the kit parts, in the order the page renders them, each
+  `{ "part": "<kind>", … }`. An encounter takes every kit
+  part but a module's own ([Modules](#modules)): `prose`, `description`,
+  `dm-guide`, `roster`, `spawn-table`, `sequence`, `table`, `loot`, and
+  `map`. Exactly one part is a roster or a spawn table (error).
+- **`setIn`:** the map it's set in, or a zone of it, a `MapRef`:
+  `{ "ref": "map/<id>", "zone": "<zone-id>" }`, the zone optional. The
+  map's page lists the encounter under the zone
+  ([Maps](#maps)); the encounter's page labels the link "Set in", and the
+  map's "Set here". A `map` part shows the map on the page; `setIn` alone
+  doesn't.
+- **`environment`:** E, the environment multiplier, an authored input:
+  `{ "multiplier": 1.25, "note": "…" }`, the multiplier above 0, and the
+  note saying why ("difficult terrain and a collapsing floor"). Without it,
+  E is 1 ([Encounter difficulty](#encounter-difficulty)).
+
+The parts:
+
+| Part | Holds |
+|---|---|
+| `prose` | `text`, with an optional `title` |
+| `description` | `text`: player-facing, read aloud or paraphrased |
+| `dm-guide` | `text`: how to run it |
+| `roster` | `creatures`: creature refs, each with a `count` of 1 or more |
+| `spawn-table` | `rows` keyed by difficulty, `low`, `moderate`, or `high`, each at most once: a roster whose counts may be dice (`"1d6+2"`), and, when the table has a `roll`, a `range` on it |
+| `sequence` | Structured: a `trigger`, `stages` (each a `name`, a turn `loop` saying how the DM runs the creatures, and a `transition` to the next, which the last may leave out), and a `victory` condition. Or an `example`: one prose text showing how it might play. Not both |
+| `table` | A `title` and `text` holding one pipe table: a random table, a loot table, or any other |
+| `loot` | `rows` keyed by difficulty, as a spawn table's are, each with `coins` (`dice`, an optional `times`, and a `unit`: `4d6 × 10 GP`), `items` (item or equipment refs, each with an optional `count` of 2 or more), or both |
+| `map` | `map`: a map ref, with an optional `zone` |
+
+Every text in a part is markdown-subset text with `{ref:…}` tokens. Each ref
+object in a part (a roster's creatures, loot's items, a map part's map) may
+add `show` ([Arrangements](content-model.md#arrangements)).
+
+- **Rosters and spawn tables.** A roster's counts are fixed. A spawn table's
+  rows are designed by the author, one per difficulty; the DM chooses one,
+  or rolls for it when the table has a `roll`, one die (`"1d6"`), and each
+  row a `range` of its faces (`{ "min": 1, "max": 2 }`): 1–2 low, 3–5
+  moderate, 6 high. The ranges cover every face once, and a dice count's
+  lowest roll is at least 1 (errors).
+- **Characters aren't roster lines.** A character in an encounter is a
+  `{ref:…}` in its text, since characters have no XP.
+
+An encounter derives its side of difficulty (below). Encounters come only by
+request; they have no gap buckets. Its page renders its parts in order
+(`encounter-page`, [Kit parts](site.md#kit-parts)), then a Difficulty
+section ([Difficulty calculator](site.md#difficulty-calculator)). In the
+Library its facets are XP, `derived.xp`, a span
+([Type registry](site.md#type-registry)) that matches a range filter it
+overlaps, and creature type, `derived.creatureTypes`, read by the
+`creatureType` vocabulary. XP shares its path with a creature's, so one XP
+filter or sort covers both. Its card shows its name, XP, creature types, and
+summary.
+
+### Encounter difficulty
+
+Difficulty compares the party against the encounter. `encounters.ts`
+derives both sides, and no XP is ever written.
+
+- **The encounter's side** is f(Roster) × E: the sum of each creature's XP
+  by its CR ([Creatures](#creatures)) times its count, times E. It reads
+  other entries, so it's a linked derivation
+  ([The ruleset module](#the-ruleset-module)): `multiplier`, E; and `xp`,
+  `{ min, max }`, equal for a roster. A spawn table derives `rows`, each row
+  `{ min, average, max }` from its dice counts' lowest, average, and highest
+  rolls, and `xp` spans the rows, the lowest minimum to the highest maximum.
+  The values aren't rounded. It also derives `creatureTypes`: its
+  creatures' types, each once, in roster order, or a spawn table's rows in
+  difficulty order.
+- **E** is `stats.environment.multiplier`, or 1. A multiplier of 1 is an
+  error, since it changes nothing; any other is a warning in the job summary
+  for the reviewer to confirm, as an `adjust` is
+  ([Inputs and derived values](#inputs-and-derived-values)).
+- **The party's side,** g(Party), is `partyBudget` in `difficulty.ts`, which
+  imports only types, so the site's calculator uses it without the ruleset's
+  tables or checks: the sum of each
+  character's Low, Moderate, and High budgets for their level, from
+  `tables.json`'s `xpBudgetPerCharacter` (SRD 5.2's XP Budget per Character
+  table, levels 1–20). For a party at one level it's the SRD's budget times
+  the party's size.
+- **The result** is `difficultyOf`: XP at or under the Low budget reads
+  `low`; up to Moderate, `moderate`; up to High, `high`; above it,
+  `beyond-high`. For the SRD's examples, a lone bugbear warrior (200 XP) is
+  Low for four level 1 characters, and two druids and nine stirges
+  (1,125 XP) are Moderate for five level 3 characters.
+
+### Modules
+
+A module is an adventure a DM runs across one or more sessions: story order,
+hooks, maps, encounters, characters, and cross-cutting tables. It's an
+arrangement ([Arrangements](content-model.md#arrangements)), a content type
+in `dnd-5e-2024` at `content/dnd-5e-2024/module/<id>.json`, and every module
+is custom. `schemas/module.schema.json` describes it. There's no tier
+between an encounter and a module: a dungeon is a module that uses fewer
+parts. Its `stats` hold:
+
+- **`parts`:** the kit parts, in story order. A module takes the shared
+  parts `prose`, `description`, `dm-guide`, `sequence`, `table`, and `map`
+  ([Encounters](#encounters)), and two of its own, below; rosters, spawn
+  tables, and loot are its encounters'.
+- **`length`:** `one-shot`, `delve`, or `multi-session`.
+- **`levels`:** the party levels it's written for, `{ "min": 2, "max": 4 }`,
+  each 1–20, `min` at most `max` (error). They're authored, since nothing
+  derives them.
+
+| Part | Holds |
+|---|---|
+| `hook` | `text`: a way to draw the party in; and optional `refs`, the entries it brings in, each a ref object to any library entry with an optional `note` and `show` |
+| `arrangement` | `arrangement`: an `encounter/<id>` or `module/<id>` ref, with an optional `show` |
+
+Characters and creatures appear as `{ref:…}` tokens in any part's text, or
+as a hook's refs, such as pregenerated characters with `"show": "card"` and
+a contact as a link; there's no NPC part.
+
+- **Containment.** A module contains encounters and other modules through
+  its `arrangement` parts, in story order, so a five-room dungeon is a small
+  module and can be one chapter of a larger one. An arrangement may be in
+  several modules; none owns it.
+- **No cycles.** A module can't contain itself, directly or through others
+  (error, on each `arrangement` part that leads back, naming the chain:
+  `a module can't contain itself: module/a › module/b › module/a`).
+- **Labels.** A contained arrangement's link is "Contains", and its
+  back-reference on the contained entry's page is "Part of". Every other
+  ref in a module's parts is inventory, "Includes" and "Appears in", as an
+  encounter's are.
+
+Modules come only by request; they have no gap buckets. A module's batch
+may add any content entry it needs as an ordinary library entry, never a
+rule addition ([module guideline](../rulesets/dnd-5e-2024/guidelines/module.md)).
+From the library (`deriveLinked`), a module derives its `contents`, the
+arrangements it contains in story order, each contained module with its own
+(`{ "ref": "module/<id>", "contains": [ … ] }`); and `encounters` and
+`maps`, the counts of the distinct encounters it contains and the distinct
+maps its `map` parts show, its own and its contained arrangements', through
+nested modules. Its page is the `module-page` template, and its card shows
+its name, length, levels, and summary
+([Kit parts](site.md#kit-parts)).
 
 ### Embedded stat blocks
 
@@ -675,6 +1245,32 @@ warnings below on an SRD entry.
 | Class feature | `levels` ascend | error |
 | Subclass | `features` are in level order, by each feature's first level | error |
 | Subclass | Each feature's levels are its class's subclass levels, and each subclass level has a feature | error |
+| Character | Each base score is 8 to 15, and the point costs total 27 or less | error |
+| Character | Class levels total 20 or less, and no class is taken twice | error |
+| Character | The background's increases are +2/+1 or +1/+1/+1, only among its three abilities | error |
+| Character | No placed increase takes a score above 20, or above its feat's `max`; a feat with an Ability Score Improvement's `total` places exactly that many points, among its `from` abilities, and a feat with fixed increases places none | error |
+| Character | With more than one class, each class's primary ability is 13 or more in the final scores (all of them for an "and", one for an "or"), the starting class's included | error |
+| Character | A subclass belongs to its class, and is present exactly when the class's level reaches its first subclass level | error |
+| Character | One feat from the background, its origin feat; a species feat for each `feat` grant of its traits, and a class feat for each `feat` grant of a feature at that class level, of a category the grant allows, every grant filled; a background feat from the character's background, a species feat from its species, and a class's feat from one of its classes at a level it has; each feat's `level` at most the character's, and its `requires` met by the final scores; only a repeatable feat twice | error |
+| Character | Each choice's source is something the character has: its species or a trait of it, its background, a class or subclass, a feature it has at its levels, or a feat | error |
+| Character | Each entry with a `choice` has one `option` named under it, one of its options; a feat grant's `or` is named only to take it; no other entry has an option, and none has two | error |
+| Character | Each source's skills, Expertise, tools, and languages are exactly the counts it gives ([Grants](#grants)), from its lists: the starting class's skills and `start` grants, a later class's `multiclass` grants, the background's tool when it offers a choice and its two languages, and each trait's, feature's (at each of its levels), and feat's grants; no skill is proficient twice, the background's and those given outright included; Expertise only in a skill the character is proficient in, and never in one skill twice | error |
+| Character | Each option is on an option list of one of the character's classes, and each list holds exactly the count its features' `options` grants give at the class's level | error |
+| Character | Each spell is on an always-prepared list the character has, or on a list of one of its casting classes (the spell's `classes`, or the class's `spells`; for prepared spells, its `spell-lists` too) at a level that class's own slots cast, or on a feat's, feature's, or trait's `spells` grant's list; and the spells fit the classes' cantrips and prepared spells at their levels and those grants' picks | error |
+| Character | A feat's `spells` picks come from the class list its `note` names, one of the grant's `from` | error |
+| Character | No more than three equipped items are attuned, and only an item that requires attunement is | error |
+| Character | Equipped armor without training, or a weapon without proficiency, from the starting class's `training` or a later class's `multiclass` training, when every class has `training` | warning |
+| Map | Zone ids are unique within the map | error |
+| Map | No map is within itself, directly or through others; that `within` names a zone of its parent is the ref check's ([References](content-model.md#references)) | error |
+| Encounter | Exactly one part is a `roster` or a `spawn-table` | error |
+| Encounter | A spawn table with a `roll` gives every row a range on its die, and the ranges cover each face once; without one, no row has a range | error |
+| Encounter | A spawn table's dice count can't roll below 1 | error |
+| Encounter | A `table` part's text is one pipe table and nothing else | error |
+| Encounter | `environment.multiplier` isn't 1 | error |
+| Encounter | Any `environment` multiplier | warning |
+| Module | A `table` part's text is one pipe table and nothing else | error |
+| Module | `levels.min` is at most `levels.max` | error |
+| Module | No module contains itself, directly or through others; that each `arrangement` resolves is the ref check's ([References](content-model.md#references)) | error |
 
 Balance isn't checked by CI; it's judged in review
 ([generation.md](generation.md#guidelines)).
@@ -685,12 +1281,14 @@ Two original rulesets in `tests/fixtures/originals/` test the ruleset-generic
 code against rulesets that share nothing with `dnd-5e-2024`. Each is a full
 ruleset module, with rules primitives and a rules page, and a small library
 of official and homebrew content. They aren't in `config/types.json`, so
-they're never on the site. Their registry is their own `types.json`, and
-every type uses the generic template.
+they're never on the library's site. The folder is a library root of its own,
+laid out as the repo is, so it has a site of its own, built and served apart
+([Library root](site.md#library-root)). Its registry is its own
+`config/types.json`, and every type uses the generic template.
 
 ```
 tests/fixtures/originals/
-  types.json                 the fixtures' registry
+  config/types.json          the fixtures' registry
   rulesets/<ruleset>/        ruleset.json, tables.json, phrases.json, types.ts, index.ts, schemas/, rules/
   content/<ruleset>/<type>/  entries
 ```
@@ -710,7 +1308,8 @@ tests/fixtures/originals/
   - `celestial-body`: a star, planet, moon, or asteroid field, with what it
     orbits, its services (trade, refuel, discovery), and its hazards, each
     environmental (testing a station) or a hostile ship. Derived: whether a
-    ship can dock, and the worst hazard. Checks: a star has no services or
+    ship can dock, the worst hazard, and the span of damage its hazards
+    deal (a span facet, [Type registry](site.md#type-registry)). Checks: a star has no services or
     orbit, anything else orbits, and a moon orbits a planet, anything else a
     star (a link check).
 - **Elementals** (`elementals`): a card game whose colors are fire, water,
@@ -723,7 +1322,9 @@ tests/fixtures/originals/
   - `creature`, `invocation` (a one-time effect), and `ward` (a lasting one,
     with optional upkeep). Derived for each: its element, read from the rules
     data, its total cost, and the base elements it beats and is beaten by.
-    Checks: some element blends its colors. A creature's power and toughness
+    Text token: `{cost}`, the card's total cost, in its `text`.
+    Checks: some element blends its colors, and a card's text uses no other
+    token. A creature's power and toughness
     go in steps of 4, and their sum over 8 per chip is a warning.
 
 Tests run in two places:

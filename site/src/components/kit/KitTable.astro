@@ -1,0 +1,16 @@
+---
+// A `table` part (docs/site.md#kit-parts): its pipe table as a table in text renders, its title the
+// table's caption.
+import { escapeMarkdown } from '../../lib/markdown';
+import type { KitContext } from '../../lib/kit';
+import RulesText from '../templates/parts/RulesText.astro';
+
+interface Props {
+  title: string;
+  text: string;
+  kit: KitContext;
+}
+
+const { title, text, kit } = Astro.props;
+---
+<RulesText text={`**${escapeMarkdown(title)}**\n\n${text}`} refs={kit.refs} />

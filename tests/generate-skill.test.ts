@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { read, repo, unresolved } from './repo-names.ts';
 
+interface TypeEntry {
+  gapBuckets?: unknown;
+}
+
 // docs/generation.md#the-generate-skill (The generate skill); issue #64. The skill may name only repo
 // paths, npm scripts, and config/defaults.json keys that exist.
 const SKILL = '.claude/skills/generate/SKILL.md';
@@ -19,9 +23,72 @@ describe(SKILL, () => {
   });
 
   it('names every config/defaults.json key it depends on', () => {
-    for (const key of ['ruleset', 'count', 'tags', 'gapFill.count', 'validateRetries']) {
+    for (const key of ['ruleset', 'count', 'gapFill.count', 'validateRetries']) {
       expect(skill).toContain(`\`defaults.${key}\``);
     }
+  });
+
+  // docs/generation.md#procedures: the skill routes each registered type to exactly one procedure.
+  const routes = (): Map<string, string> => {
+    const table = /^## Procedures\n([\s\S]*?)\n## /m.exec(skill)?.[1] ?? '';
+    const map = new Map<string, string>();
+    for (const row of table.matchAll(/^\| \[([^\]]+)\]\(#[^)]+\) \| (.+) \|$/gm)) {
+      for (const type of row[2]!.matchAll(/`([a-z-]+)`/g)) {
+        expect(map.has(type[1]!), `${type[1]} is routed twice`).toBe(false);
+        map.set(type[1]!, row[1]!);
+      }
+    }
+    return map;
+  };
+
+  it('routes every registered type to exactly one procedure, each with its own section', () => {
+    const map = routes();
+    const registered = Object.values(repo.registry).flatMap(({ types }) => Object.keys(types));
+    expect([...map.keys()].sort()).toEqual([...new Set(registered)].sort());
+    for (const procedure of new Set(map.values())) expect(skill).toMatch(new RegExp(`^### Procedure: ${procedure}$`, 'm'));
+  });
+
+  // The character, map, encounter, and module procedures take requests only, so no type they generate has gap buckets.
+  const BY_REQUEST = ['Characters', 'Maps', 'Encounters', 'Modules'];
+
+  it('routes to the by-request procedures only types without gap buckets', () => {
+    const map = routes();
+    expect(map.get('character')).toBe('Characters');
+    expect(map.get('encounter')).toBe('Encounters');
+    expect(map.get('module')).toBe('Modules');
+    for (const { types } of Object.values(repo.registry)) {
+      for (const [type, entry] of Object.entries(types as Record<string, TypeEntry>)) {
+        if (BY_REQUEST.includes(map.get(type) ?? '')) expect(entry.gapBuckets, type).toBeUndefined();
+      }
+    }
+  });
+
+  // docs/generation.md#procedures "Encounters": the procedure has steps, writes counts, dice, and E, and
+  // writes dependencies before the encounter.
+  it('gives the encounter procedure its steps', () => {
+    const section = /^### Procedure: Encounters\n([\s\S]*?)\n## /m.exec(skill)?.[1] ?? '';
+    expect(section).not.toMatch(/no steps yet/);
+    expect(section).toMatch(/^\d+\. \*\*/m);
+    expect(section).toContain('never XP');
+    expect(section).toContain('xpBudgetPerCharacter');
+    expect(section).toContain('`environment`');
+    expect(section).toContain('Dependencies before the encounter');
+  });
+
+  // docs/generation.md#procedures "Modules": the procedure has steps, writes its dependencies first, each by its
+  // own procedure, adds no rule additions, and never contains a module it's part of.
+  it('gives the module procedure its steps', () => {
+    const section = /^### Procedure: Modules\n([\s\S]*?)\n## /m.exec(skill)?.[1] ?? '';
+    expect(section).not.toMatch(/aren't written yet/);
+    expect(section).toMatch(/^\d+\. \*\*/m);
+    expect(section).toContain('Dependencies before the module');
+    const prose = section.replace(/\s+/g, ' ');
+    for (const procedure of ['Entries', 'Characters', 'Maps', 'Encounters']) expect(prose).toContain(`${procedure} procedure`);
+    expect(prose).toContain('rule addition');
+    expect(section).toContain('`arrangement`');
+    expect(section).toContain('`levels`');
+    expect(section).toContain('`length`');
+    expect(section).toContain('never XP');
   });
 });
 

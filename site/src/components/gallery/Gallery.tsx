@@ -1,20 +1,25 @@
-// The Library's gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery). It loads
-// library.json once, then filters, searches, and sorts in memory, keeping the view in the query
-// string. The logic lives in lib/gallery/; this file is the view.
+// A ruleset's Library gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery). It
+// loads library.json once, then filters, searches, and sorts the ruleset's entries in memory, keeping the view in the query
+// string. Its search box and set export sit in the page header (docs/site.md#page-header): the
+// gallery publishes its view there and takes the header's query. The logic lives in lib/gallery/;
+// this file is the view.
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import registryJson from '../../../../config/types.json' with { type: 'json' };
+import registryJson from '@library/config/types.json' with { type: 'json' };
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
 import { defaultScope, galleryConfig, isScopePath, sortChoices, validSort, type FacetData, type LibraryRecord, type Registry } from '../../lib/gallery/config.ts';
 import { isActive, isDefaultScope, parseQuery, toQuery, type FilterValue, type GalleryState } from '../../lib/gallery/state.ts';
 import { filterTree } from '../../lib/gallery/tree.ts';
-import { computeView, searchIndex } from '../../lib/gallery/view.ts';
+import { computeView } from '../../lib/gallery/view.ts';
+import { rulesetRegistry } from '../../lib/gallery/library-url.ts';
 import FilterIcon from '../../icons/Filter.tsx';
-import SearchIcon from '../../icons/Search.tsx';
 import SortIcon from '../../icons/Sort.tsx';
-import { setTarget } from '../../lib/gallery/selection.ts';
+import { cartKey, pruneCart, setInCart, writeCart } from '../../lib/cart.ts';
+import { onSearchRequest, publishView } from '../../lib/library-view.ts';
+import { useCart } from '../cart/useCart.ts';
+import Button from '../shared/Button.tsx';
+import { DisclosureButton } from '../shared/Disclosure.tsx';
 import Card from './Card.tsx';
 import { FilterTree } from './Filters.tsx';
-import SetActions from './SetActions.tsx';
 import './gallery.css';
 
 export interface GalleryProps {
@@ -28,20 +33,25 @@ export interface GalleryProps {
   initialQuery?: string;
   /** Ref targets' names and grouped types' groups, from the build (docs/site.md#gallery "Filters"). */
   facetData?: FacetData;
+  /** The ruleset whose Library this is; every ruleset's entries when it's left out, as in the style guide. */
+  ruleset?: string;
 }
 
 const registry = registryJson as unknown as Registry;
 
 const resultText = (n: number) => (n === 0 ? 'No entries match.' : n === 1 ? '1 entry' : `${n} entries`);
 
-export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData }: GalleryProps) {
-  const config = useMemo(() => galleryConfig(registry, facetData), [facetData]);
-  const [records, setRecords] = useState<LibraryRecord[] | undefined>(given);
+export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData, ruleset }: GalleryProps) {
+  const own = useMemo(() => rulesetRegistry(registry, ruleset), [ruleset]);
+  const config = useMemo(() => galleryConfig(own, facetData), [own, facetData]);
+  // Every ruleset's records, which the cart reads; the gallery shows only its ruleset's.
+  const [all, setRecords] = useState<LibraryRecord[] | undefined>(given);
+  const records = useMemo(() => all?.filter((r) => Object.hasOwn(own, r.ruleset)), [all, own]);
   const [failed, setFailed] = useState(false);
   const [state, setState] = useState<GalleryState>(() =>
     parseQuery(initialQuery ?? (typeof window === 'undefined' ? '' : window.location.search), config),
   );
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const cart = useCart();
   // The filter menu's container on phones and tablets, closed by default; on desktop it's a sidebar and always shows.
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -53,6 +63,11 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
       .catch(() => setFailed(true));
   }, [indexUrl, given]);
 
+  // An entry the library no longer has drops out of the cart once the library loads.
+  useEffect(() => {
+    if (all && !given) pruneCart(new Set(all.map(cartKey)));
+  }, [all, given]);
+
   // Keep the URL in step with the view, without adding a history entry per keystroke.
   useEffect(() => {
     if (initialQuery !== undefined || typeof window === 'undefined') return;
@@ -60,8 +75,17 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     if (query !== window.location.search) window.history.replaceState(null, '', `${window.location.pathname}${query}${window.location.hash}`);
   }, [state, config, initialQuery]);
 
-  const index = useMemo(() => searchIndex(records ?? []), [records]);
-  const view = useMemo(() => computeView(records ?? [], config, state, index), [records, config, state, index]);
+  const view = useMemo(() => computeView(records ?? [], config, state), [records, config, state]);
+
+  // The header's search drives the query, and the header's set export follows the results.
+  useEffect(
+    () =>
+      onSearchRequest((q) => setState((current) => (current.q === q ? current : { ...current, q }))),
+    [],
+  );
+  useEffect(() => {
+    publishView({ q: state.q, ...(all && { records: all, results: view.results }) });
+  }, [state.q, all, view.results]);
 
   if (failed) return <p class="gallery__status">The library couldn’t be loaded. Try reloading the page.</p>;
   if (!records) return <p class="gallery__status">Loading the library…</p>;
@@ -79,39 +103,25 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
       else next.filters.delete(path);
     });
 
-  const tree = filterTree(config, state, records, index);
+  const tree = filterTree(config, state, records);
+  const inCart = new Set(cart);
   const choices = sortChoices(config, state.filters);
 
   return (
     <div class="gallery">
       <div class="gallery__layout">
         <div class="gallery__menu">
-          <div class="gallery__search" role="search">
-            <label for="gallery-q">
-              <SearchIcon /> Search
-            </label>
-            <input
-              id="gallery-q"
-              type="search"
-              placeholder="Name, tag, or text"
-              value={state.q}
-              onInput={(e) => {
-                const q = (e.currentTarget as HTMLInputElement).value;
-                update((next) => {
-                  next.q = q;
-                });
-              }}
-            />
-          </div>
-          <button
-            type="button"
+          <DisclosureButton
             class="gallery__filters-toggle"
-            aria-expanded={filtersOpen}
-            aria-controls="gallery-filters"
-            onClick={() => setFiltersOpen(!filtersOpen)}
-          >
-            <FilterIcon /> Filters
-          </button>
+            controls="gallery-filters"
+            open={filtersOpen}
+            onToggle={setFiltersOpen}
+            label={
+              <>
+                <FilterIcon /> Filters
+              </>
+            }
+          />
           <section id="gallery-filters" class="gallery__filters" aria-label="Filters" data-open={filtersOpen || undefined}>
             <FilterTree
               nodes={tree}
@@ -120,8 +130,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
               onRange={(path, min, max) => setFilter(path, { kind: 'range', ...(min !== undefined && { min }), ...(max !== undefined && { max }) })}
             />
             {(!isDefaultScope(state.filters) || [...state.filters.keys()].some((path) => !isScopePath(path))) && (
-              <button
-                type="button"
+              <Button
                 class="gallery__clear"
                 onClick={() =>
                   update((next) => {
@@ -130,7 +139,7 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
                 }
               >
                 Clear filters
-              </button>
+              </Button>
             )}
           </section>
         </div>
@@ -177,16 +186,12 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
             <p role="status" class="gallery__count">
               {resultText(view.results.length)}
             </p>
-            {view.byRelevance && <p class="gallery__note">Sorted by relevance while searching.</p>}
-            {selected.size > 0 && (
-              <p class="gallery__selection">
-                {selected.size} selected{' '}
-                <button type="button" onClick={() => setSelected(new Set())}>
-                  Clear selection
-                </button>
+            {cart.length > 0 && (
+              <p class="gallery__cart">
+                {cart.length} in cart{' '}
+                <Button onClick={() => writeCart([])}>Empty cart</Button>
               </p>
             )}
-            <SetActions target={setTarget(records, view.results, selected)} base={base} />
           </div>
           <ul class="gallery__grid">
             {view.results.map((record) => {
@@ -198,13 +203,8 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
                     typeLabel={typeInfo?.label ?? record.type}
                     cardFields={typeInfo?.cardFields ?? []}
                     imageSrc={record.image ? `${base}${record.image}` : undefined}
-                    selected={selected.has(record.url)}
-                    onSelect={(on) => {
-                      const next = new Set(selected);
-                      if (on) next.add(record.url);
-                      else next.delete(record.url);
-                      setSelected(next);
-                    }}
+                    inCart={inCart.has(cartKey(record))}
+                    onCart={(on) => setInCart(cartKey(record), on)}
                   />
                 </li>
               );

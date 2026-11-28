@@ -4,7 +4,7 @@
 
 import { galleryConfig, type FacetData, type LibraryRecord, type Registry } from './gallery/config.ts';
 import { parseQuery } from './gallery/state.ts';
-import { computeView, searchIndex } from './gallery/view.ts';
+import { computeView } from './gallery/view.ts';
 import { fragmentUrl, parsePrintQuery, type PrintQuery } from './print.ts';
 import { currentKey, typeAliases } from './redirects.ts';
 
@@ -34,7 +34,7 @@ export function selectEntries(query: PrintQuery, records: LibraryRecord[], regis
     };
   }
   const gallery = galleryConfig(registry, data);
-  const view = computeView(records, gallery, parseQuery(query.gallery, gallery), searchIndex(records));
+  const view = computeView(records, gallery, parseQuery(query.gallery, gallery));
   return { records: view.results, missing: [] };
 }
 

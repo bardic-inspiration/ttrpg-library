@@ -3,15 +3,19 @@
 // or the generic fallback when the registry names none this site has, then a page type's
 // components (docs/content-model.md#components).
 import { PLACES_COMPONENTS, templateFor, type TemplateProps } from '../../lib/template';
-import registry from '../../../../config/types.json';
+import registry from '@library/config/types.json';
 import BackgroundCard from './BackgroundCard.astro';
+import CharacterProfile from './CharacterProfile.astro';
 import ClassPage from './ClassPage.astro';
 import ConditionCard from './ConditionCard.astro';
 import CreatureStatBlock from './CreatureStatBlock.astro';
+import EncounterPage from './EncounterPage.astro';
 import EquipmentCard from './EquipmentCard.astro';
 import FeatCard from './FeatCard.astro';
 import GenericTemplate from './GenericTemplate.astro';
 import ItemCard from './ItemCard.astro';
+import MapPage from './MapPage.astro';
+import ModulePage from './ModulePage.astro';
 import PageComponents from './parts/PageComponents.astro';
 import SpeciesPage from './SpeciesPage.astro';
 import SpellCard from './SpellCard.astro';
@@ -23,12 +27,16 @@ const { entry, names, paths, components: parts = [], level = 2 } = Astro.props;
 const types = (registry as Record<string, { types: Record<string, { template?: string }> }>)[entry.ruleset]?.types;
 const templates = {
   'background-card': BackgroundCard,
+  'character-profile': CharacterProfile,
   'class-page': ClassPage,
   'condition-card': ConditionCard,
   'creature-stat-block': CreatureStatBlock,
+  'encounter-page': EncounterPage,
   'equipment-card': EquipmentCard,
   'feat-card': FeatCard,
   'item-card': ItemCard,
+  'map-page': MapPage,
+  'module-page': ModulePage,
   'species-page': SpeciesPage,
   'spell-card': SpellCard,
   'subclass-page': SubclassPage,

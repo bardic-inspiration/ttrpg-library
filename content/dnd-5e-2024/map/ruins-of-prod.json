@@ -1,0 +1,49 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "ruins-of-prod",
+  "name": "Ruins of Prod",
+  "summary": "A small abandoned village on a hilltop, overrun by insects and restless dead.",
+  "description": "Prod was emptied by a plague of bugs a generation ago, and nobody moved back. The road to Testmore Keep runs straight through it.",
+  "stats": {
+    "scale": "zone",
+    "zones": [
+      {
+        "id": "hill-path",
+        "name": "Hill Path",
+        "note": "The way in, a switchback track up the hill from the road."
+      },
+      {
+        "id": "market-square",
+        "name": "Market Square",
+        "note": "Empty stalls under a dry well, buzzing with flies."
+      },
+      {
+        "id": "hive-hollow",
+        "name": "Hive Hollow",
+        "note": "Rotting houses packed with wasp paper and beetle tunnels."
+      },
+      {
+        "id": "collapsed-chapel",
+        "name": "Collapsed Chapel",
+        "note": "Only the bell tower still stands."
+      },
+      {
+        "id": "graveyard",
+        "name": "Graveyard",
+        "note": "Toppled stones and freshly turned earth."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

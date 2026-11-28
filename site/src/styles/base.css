@@ -15,10 +15,16 @@
     font-size: var(--text-body);
   }
 
+  /*
+   * Page headings take their size from their level (docs/styling.md#hierarchy-and-standards).
+   * A component's own headings are sized by its component tokens instead.
+   */
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-heading);
     font-weight: var(--font-weight-label);
     line-height: var(--leading-heading);
@@ -28,6 +34,8 @@
   h2 { font-size: var(--text-h2); }
   h3 { font-size: var(--text-h3); }
   h4 { font-size: var(--text-h4); }
+  h5 { font-size: var(--text-h5); }
+  h6 { font-size: var(--text-h6); }
 
   small {
     font-size: var(--text-small);
@@ -41,6 +49,25 @@
 
     &:hover {
       color: var(--color-text);
+    }
+  }
+
+  /*
+   * Underlines (docs/styling.md#hierarchy-and-standards): links in running text stay underlined;
+   * links in headings, navigation, and the site header underline only on hover and focus. The
+   * current page's link keeps a heavier underline at rest, so it isn't marked by color alone.
+   */
+  :is(h1, h2, h3, h4, h5, h6, nav, .site-header) a {
+    text-decoration-line: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration-line: underline;
+    }
+
+    &[aria-current] {
+      text-decoration-line: underline;
+      text-decoration-thickness: var(--border-width-strong);
     }
   }
 

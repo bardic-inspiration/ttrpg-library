@@ -1,6 +1,6 @@
 {
   "name": "ttrpg-library",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "license": "MIT",
@@ -14,7 +14,10 @@
     "import": "tsx scripts/import/cli.ts",
     "srd-coverage": "tsx scripts/srd-coverage/cli.ts",
     "build": "npm run build:index && astro build --root site",
+    "build:preview": "tsx scripts/build-preview/cli.ts",
     "dev": "astro dev --root site",
+    "build:originals": "tsx scripts/with-library/cli.ts tests/fixtures/originals build",
+    "dev:originals": "tsx scripts/with-library/cli.ts tests/fixtures/originals build:index dev",
     "check": "tsc --noEmit && astro check --root site && stylelint \"site/src/**/*.{css,astro}\" && npm run links",
     "links": "node scripts/links/cli.ts",
     "test": "vitest run",
@@ -32,7 +35,6 @@
     "astro": "^7.4.4",
     "html-to-image": "^1.11.13",
     "marked": "^18.1.2",
-    "minisearch": "^7.2.0",
     "postcss": "^8.5.32",
     "preact": "^11.1.1"
   },

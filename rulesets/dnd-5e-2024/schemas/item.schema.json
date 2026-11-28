@@ -8,6 +8,7 @@
   "required": ["category", "rarity", "attunement", "effect"],
   "properties": {
     "category": {
+      "display": "chip",
       "description": "The item's category.",
       "enum": ["armor", "potion", "ring", "rod", "scroll", "staff", "wand", "weapon", "wondrous-item"]
     },
@@ -86,6 +87,7 @@
     },
     "cursed": { "description": "The item is cursed.", "const": true },
     "effect": { "description": "The rules text as printed.", "$ref": "common.schema.json#/$defs/Text" },
+    "modifiers": { "description": "Its effects on a character who has it equipped (docs/rulesets.md#item-modifiers).", "$ref": "common.schema.json#/$defs/ItemModifiers" },
     "statBlocks": { "description": "Stat blocks printed only inside this item, such as a figurine's creature.", "$ref": "common.schema.json#/$defs/StatBlocks" }
   }
 }

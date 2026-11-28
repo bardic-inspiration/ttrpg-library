@@ -4,6 +4,7 @@
 // heading, so nothing is hidden. Its id is the section's anchor, and a link to it, or to
 // anything inside it, opens it and scrolls to it.
 import type { TemplateMode } from '../../../lib/template';
+import Disclosure from '../../shared/Disclosure.astro';
 import Heading from './Heading.astro';
 
 interface Props {
@@ -13,18 +14,20 @@ interface Props {
   /** A primitive's or component's type, for its accent. */
   type?: string;
   class?: string;
+  /** Classes on the heading, such as a stat block's section heading. */
+  headingClass?: string;
 }
 
-const { id, level, mode = 'screen', type, class: className } = Astro.props;
+const { id, level, mode = 'screen', type, class: className, headingClass } = Astro.props;
 ---
 {mode === 'screen' ? (
-  <details class:list={['accordion', className]} id={id} data-type={type}>
-    <summary class="accordion__summary"><Heading level={level}><slot name="title" /></Heading></summary>
+  <Disclosure class={['accordion', className].filter(Boolean).join(' ')} id={id} data-type={type} summaryClass="accordion__summary">
+    <Heading slot="summary" level={level} class={headingClass}><slot name="title" /></Heading>
     <div class="accordion__body"><slot /></div>
-  </details>
+  </Disclosure>
 ) : (
   <section class:list={['accordion', className]} id={id} data-type={type}>
-    <Heading level={level}><slot name="title" /></Heading>
+    <Heading level={level} class={headingClass}><slot name="title" /></Heading>
     <div class="accordion__body"><slot /></div>
   </section>
 )}
@@ -75,48 +78,19 @@ const { id, level, mode = 'screen', type, class: className } = Astro.props;
       border-block-end: 0;
     }
 
-    .accordion__summary {
-      display: flex;
-      align-items: baseline;
-      gap: var(--space-2xs);
-      padding-block: var(--space-2xs);
-      cursor: pointer;
-      list-style: none;
-
-      &::-webkit-details-marker {
-        display: none;
-      }
-
-      /* A chevron that points down when the section is open. */
-      &::before {
-        content: '';
-        flex: none;
-        inline-size: var(--accordion-chevron);
-        block-size: var(--accordion-chevron);
-        border-block-start: var(--border-width-strong) solid currentcolor;
-        border-inline-end: var(--border-width-strong) solid currentcolor;
-        transform: translateY(calc(var(--accordion-chevron) * -0.2)) rotate(45deg);
-        transition: transform var(--duration-quick);
-      }
-    }
-
-    details[open] > .accordion__summary::before {
-      transform: translateY(calc(var(--accordion-chevron) * -0.4)) rotate(135deg);
-    }
-
     /* One column as wide as the section: an `auto` track would grow to a wide table's width. */
     .accordion__body {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-2xs);
-      padding-block-end: var(--space-s);
+      gap: var(--flow-text);
+      padding-block-end: var(--flow-block);
     }
 
     section.accordion {
       border: 0;
 
       & + section.accordion {
-        margin-block-start: var(--space-s);
+        margin-block-start: var(--flow-block);
       }
 
       & > .accordion__body {

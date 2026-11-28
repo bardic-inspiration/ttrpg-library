@@ -129,7 +129,7 @@ describe('labels', () => {
     expect(labels('stats.feat')).toEqual({ forward: 'Grants', back: 'Granted by' });
     expect(labels('stats.tool')).toEqual({ forward: 'Tool proficiency', back: 'Backgrounds' });
     expect(labels('stats.equipment[0].items[3]')).toEqual({ forward: 'Starting equipment', back: 'Starting equipment of' });
-    expect(ruleset.refLabels('feat', 'stats.benefits[0].text')).toEqual({ forward: 'References', back: 'Referenced by' });
+    expect(ruleset.refLabels('feat', 'stats.benefits[0].text')).toEqual({ forward: 'References', back: 'Referenced by', generic: true });
   });
 });
 

@@ -54,6 +54,10 @@ describe('import script (docs/generation.md#imports)', () => {
     const repo = await mkdtemp(join(tmpdir(), 'ttrpg-import-'));
     temps.push(repo);
     await cp(join(PROJECT_ROOT, 'content'), join(repo, 'content'), { recursive: true });
+    // The library's maps name diagrams beside the content (docs/content-model.md#map-diagrams).
+    await cp(join(PROJECT_ROOT, 'assets'), join(repo, 'assets'), { recursive: true }).catch((e: NodeJS.ErrnoException) => {
+      if (e.code !== 'ENOENT') throw e;
+    });
     for (const entry of entries) {
       const dir = join(repo, 'content', entry.ruleset, entry.type);
       await mkdir(dir, { recursive: true });
@@ -63,14 +67,14 @@ describe('import script (docs/generation.md#imports)', () => {
     expect(errors).toEqual([]);
   }, 120_000);
 
-  it('writes the work as source, its author, and the license block, with tags left as given (docs/content-model.md#source-and-author)', () => {
-    const [spell] = done(runImport(request({ issue: 9, tags: { theme: 'forest' } }), library)).entries;
+  it('writes the work as source, its author, and the license block, with no tags (docs/content-model.md#source-and-author)', () => {
+    const [spell] = done(runImport(request({ issue: 9 }), library)).entries;
     expect(spell!.meta).toEqual({
       createdAt: '2026-11-17',
       source: { kind: 'import', issues: [9], license: { id: 'CC-BY-4.0', author: 'A. Author', url: 'https://example.com/hollow-grove' } },
     });
     expect(spell).toMatchObject({ source: 'The Hollow Grove', author: 'A. Author' });
-    expect(spell!.tags).toEqual({ theme: 'forest' });
+    expect(spell).not.toHaveProperty('tags');
     expect(spell!.summary.length).toBeGreaterThanOrEqual(10);
   });
 

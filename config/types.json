@@ -14,7 +14,22 @@
         ],
         "cardFields": ["stats.abilities", "stats.feat"],
         "defaultSort": "name:asc",
-        "defaultFilters": ["stats.abilities", "tags.theme"]
+        "defaultFilters": ["stats.abilities"]
+      },
+      "character": {
+        "label": "Character",
+        "plural": "Characters",
+        "template": "character-profile",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/character.md",
+        "facets": [
+          { "path": "stats.classes.class", "label": "Class", "kind": "enum", "ref": true },
+          { "path": "derived.level", "label": "Level", "kind": "range" },
+          { "path": "stats.species", "label": "Species", "kind": "enum", "ref": true },
+          { "path": "stats.background", "label": "Background", "kind": "enum", "ref": true }
+        ],
+        "cardFields": ["stats.classes.class", "derived.level", "stats.species", "stats.background"],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["stats.classes.class", "derived.level"]
       },
       "class": {
         "label": "Class",
@@ -34,7 +49,7 @@
         ],
         "cardFields": ["stats.primaryAbility.abilities", "stats.hitDie"],
         "defaultSort": "name:asc",
-        "defaultFilters": ["stats.primaryAbility.abilities", "tags.theme"]
+        "defaultFilters": ["stats.primaryAbility.abilities"]
       },
       "condition": {
         "label": "Condition",
@@ -44,7 +59,7 @@
         "facets": [],
         "cardFields": [],
         "defaultSort": "name:asc",
-        "defaultFilters": ["tags.theme"]
+        "defaultFilters": []
       },
       "creature": {
         "label": "Creature",
@@ -75,9 +90,22 @@
         ],
         "cardFields": ["stats.cr", "stats.size", "stats.creatureType"],
         "defaultSort": "stats.cr:asc",
-        "defaultFilters": ["stats.cr", "stats.creatureType", "tags.theme"],
+        "defaultFilters": ["stats.cr", "stats.creatureType"],
         "summaryField": "stats.cr",
         "gapBuckets": [{ "path": "stats.cr", "bins": [[0, 1], [2, 4], [5, 10], [11, 16], [17, 30]] }]
+      },
+      "encounter": {
+        "label": "Encounter",
+        "plural": "Encounters",
+        "template": "encounter-page",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/encounter.md",
+        "facets": [
+          { "path": "derived.xp", "label": "XP", "kind": "range" },
+          { "path": "derived.creatureTypes", "label": "Creature type", "kind": "enum", "vocabulary": "creatureType" }
+        ],
+        "cardFields": ["derived.xp", "derived.creatureTypes"],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["derived.xp", "derived.creatureTypes"]
       },
       "equipment": {
         "label": "Equipment",
@@ -93,7 +121,7 @@
         ],
         "cardFields": ["stats.group", "derived.costGp"],
         "defaultSort": "derived.costGp:asc",
-        "defaultFilters": ["stats.group", "tags.theme"]
+        "defaultFilters": ["stats.group"]
       },
       "feat": {
         "label": "Feat",
@@ -113,7 +141,7 @@
         ],
         "cardFields": ["stats.category", "stats.level"],
         "defaultSort": "stats.category:asc",
-        "defaultFilters": ["stats.category", "tags.theme"],
+        "defaultFilters": ["stats.category"],
         "summaryField": "stats.category",
         "gapBuckets": [{ "path": "stats.category", "enum": ["origin", "general", "fighting-style", "epic-boon"] }]
       },
@@ -137,9 +165,34 @@
         ],
         "cardFields": ["stats.rarity", "stats.category", "stats.attunement.required"],
         "defaultSort": "stats.rarity:asc",
-        "defaultFilters": ["stats.rarity", "stats.category", "tags.theme"],
+        "defaultFilters": ["stats.rarity", "stats.category"],
         "summaryField": "stats.rarity",
         "gapBuckets": [{ "path": "stats.rarity", "enum": ["common", "uncommon", "rare", "very-rare", "legendary"] }]
+      },
+      "map": {
+        "label": "Map",
+        "plural": "Maps",
+        "template": "map-page",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/map.md",
+        "facets": [
+          { "path": "stats.scale", "label": "Scale", "kind": "enum", "format": "title", "order": ["room", "dungeon", "zone", "region", "world"] }
+        ],
+        "cardFields": ["stats.scale"],
+        "defaultSort": "name:asc",
+        "defaultFilters": ["stats.scale"]
+      },
+      "module": {
+        "label": "Module",
+        "plural": "Modules",
+        "template": "module-page",
+        "guideline": "rulesets/dnd-5e-2024/guidelines/module.md",
+        "facets": [
+          { "path": "stats.length", "label": "Length", "kind": "enum", "vocabulary": "moduleLength", "order": ["one-shot", "delve", "multi-session"], "cardOnly": true },
+          { "path": "stats.levels", "label": "Levels", "kind": "range", "cardOnly": true }
+        ],
+        "cardFields": ["stats.length", "stats.levels"],
+        "defaultSort": "name:asc",
+        "defaultFilters": []
       },
       "species": {
         "label": "Species",
@@ -159,7 +212,7 @@
         ],
         "cardFields": ["derived.sizes", "stats.speed"],
         "defaultSort": "name:asc",
-        "defaultFilters": ["derived.sizes", "tags.theme"]
+        "defaultFilters": ["derived.sizes"]
       },
       "spell": {
         "label": "Spell",
@@ -176,7 +229,7 @@
         ],
         "cardFields": ["stats.level", "stats.school", "stats.duration.concentration", "stats.ritual"],
         "defaultSort": "stats.level:asc",
-        "defaultFilters": ["stats.level", "stats.school", "tags.theme"],
+        "defaultFilters": ["stats.level", "stats.school"],
         "summaryField": "stats.level",
         "gapBuckets": [
           { "path": "stats.level", "bins": [[0, 0], [1, 3], [4, 6], [7, 9]] },
@@ -196,7 +249,7 @@
         ],
         "cardFields": ["stats.class"],
         "defaultSort": "stats.class:asc",
-        "defaultFilters": ["stats.class", "tags.theme"]
+        "defaultFilters": ["stats.class"]
       }
     }
   }

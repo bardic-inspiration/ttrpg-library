@@ -4,14 +4,17 @@
 // module and scripts/validate/refs.ts, so nothing here recomputes a rule.
 
 import { copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { thumbnailDiagram } from '../../lib/diagram.ts';
 import { SITE_BASE } from '../../lib/site.ts';
-import { validateLibrary, type ValidationError, type ValidComponent, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
-import { objectRefs, replaceRefTokens, type Link } from '../validate/refs.ts';
-import { loadRegistry, RULESETS_ROOT } from '../validate/schema.ts';
-import { ruleNames } from '../../lib/rules.ts';
-import { plainText } from '../validate/text.ts';
-import { isFlag, refAndTextValues, type Schema, type SchemaSet } from './schema-walk.ts';
+import { validateLibrary, type ValidationError, type ValidEntry, type ValidateOptions } from '../validate/index.ts';
+import { diagramPath } from '../validate/diagram.ts';
+import { MAP_TYPE } from '../validate/library.ts';
+import { entryZones, type Link } from '../validate/refs.ts';
+import { loadRegistry, loadRuleset, RULESETS_ROOT } from '../validate/schema.ts';
+import { cardedPrimitives, ruleKey, rulePaths, ruleNames, type Primitive } from '../../lib/rules.ts';
+import { isFlag, type Schema, type SchemaSet } from './schema-walk.ts';
+import { linkedLibrary, PUBLISHER, type LinkedLibrary, type RulesetModule } from '../../rulesets/module.ts';
 
 /** One facet in config/types.json (docs/site.md#type-registry). */
 export interface Facet {
@@ -26,6 +29,8 @@ export interface Facet {
   ref?: boolean;
   /** Its values are the type's leaf groups (docs/rulesets.md#rules-groups), offered nested and matched by group. */
   groups?: boolean;
+  /** Shown on the type's cards only: the Library offers no filter or sort for it (docs/site.md#type-registry). */
+  cardOnly?: boolean;
 }
 
 export interface TypeConfig {
@@ -48,15 +53,18 @@ export interface LibraryRecord {
   author: string;
   type: string;
   name: string;
+  /** Empty for a ruleset primitive, which has no summary. */
   summary: string;
+  /** The detail page, or a primitive's section on its rules page, under the site base. */
   url: string;
   image: string | null;
+  /** A map's diagram as its card's thumbnail (docs/site.md#gallery "Cards"), checked and rewritten; null for any other type. */
+  diagram: string | null;
   facets: Record<string, unknown>;
-  tags: Record<string, unknown>;
-  createdAt: string;
+  /** Null for a ruleset primitive, which has no `meta`. */
+  createdAt: string | null;
   refs: Link[];
   refBy: Link[];
-  search: string;
 }
 
 export interface BuildResult {
@@ -64,7 +72,10 @@ export interface BuildResult {
   warnings: ValidationError[];
   /** Sorted by ruleset, type, then id, so the output never depends on file order. */
   records: LibraryRecord[];
-  /** Each entry's file under the content root, such as `dnd-5e-2024/creature/cinder-hound.json`, in record order. */
+  /**
+   * Each record's raw file, in record order: an entry's under the content root, such as
+   * `dnd-5e-2024/creature/cinder-hound.json`, and a primitive's as an absolute path in its ruleset's `rules/`.
+   */
   files: string[];
   /** Each entry's export bundle (docs/site.md#index-build step 2), in record order. */
   bundles: ExportBundle[];
@@ -72,7 +83,8 @@ export interface BuildResult {
 
 /** `data/<ruleset>/<type>/<id>.export.json`: the entry and its derived values, as an exporter receives them (docs/export.md#exporter-interface). */
 export interface ExportBundle {
-  entry: ValidEntry['entry'];
+  /** The entry, or a primitive with its ruleset: `ruleset`, `type`, `id`, `name`, and `stats`. */
+  entry: ValidEntry['entry'] | (Primitive & { ruleset: string });
   derived: Record<string, unknown>;
   /** The names of the entries and rules the entry links to, by `<type>/<id>`, for translators that write links as names. */
   names: Record<string, string>;
@@ -82,7 +94,7 @@ export interface BuildOptions extends ValidateOptions {
   registry?: Registry;
 }
 
-/** A ruleset's raw schemas, for the facets and search text that read them. */
+/** A ruleset's raw schemas, for the facets that read them. */
 async function loadSchemas(ruleset: string, rulesetsRoot: string): Promise<{ files: Map<string, Schema> }> {
   const dir = join(rulesetsRoot, ruleset, 'schemas');
   const files = new Map<string, Schema>();
@@ -92,14 +104,28 @@ async function loadSchemas(ruleset: string, rulesetsRoot: string): Promise<{ fil
   return { files };
 }
 
-/** The value at a dotted path such as `stats.abilities.str`, or undefined. */
+/**
+ * The value at a dotted path such as `stats.abilities.str`, or undefined. Through an array of objects
+ * the rest of the path reads each item, `stats.classes.class` giving every class's `class`: nested
+ * arrays flatten, each value once in first-seen order, and undefined when no item has it.
+ */
 function at(value: unknown, path: string): unknown {
-  let current = value;
-  for (const key of path.split('.')) {
-    if (typeof current !== 'object' || current === null || Array.isArray(current)) return undefined;
-    current = (current as Record<string, unknown>)[key];
+  return walk(value, path.split('.'));
+}
+
+function walk(current: unknown, keys: string[]): unknown {
+  if (keys.length === 0) return current;
+  if (Array.isArray(current)) {
+    const values = current.flatMap((item) => {
+      if (typeof item !== 'object' || item === null || Array.isArray(item)) return [];
+      const value = walk(item, keys);
+      return value === undefined ? [] : Array.isArray(value) ? value : [value];
+    });
+    const unique = values.filter((v, i) => values.findIndex((w) => JSON.stringify(w) === JSON.stringify(v)) === i);
+    return unique.length > 0 ? unique : undefined;
   }
-  return current;
+  if (typeof current !== 'object' || current === null) return undefined;
+  return walk((current as Record<string, unknown>)[keys[0]!], keys.slice(1));
 }
 
 /** A ref facet's value as keys: a ref object reads as its `ref`, an array item by item. */
@@ -114,8 +140,8 @@ function refKeys(value: unknown): unknown {
  * is left out, except an omitted optional flag, which reads as `false` (docs/content-model.md#situational-fields).
  * A ref facet holds its refs' keys.
  */
-function facetValues(item: ValidEntry, facets: Facet[], schemas: SchemaSet): Record<string, unknown> {
-  const source = { stats: item.entry.stats, derived: item.derived };
+function facetValues(item: { stats: unknown; derived: Record<string, unknown> }, facets: Facet[], schemas: SchemaSet): Record<string, unknown> {
+  const source = { stats: item.stats, derived: item.derived };
   const out: Record<string, unknown> = {};
   for (const { path, ref } of facets) {
     const value = at(source, path);
@@ -125,42 +151,6 @@ function facetValues(item: ValidEntry, facets: Facet[], schemas: SchemaSet): Rec
   return out;
 }
 
-/** Every `name` string in `stats`, at any depth, in document order: actions, traits, and the like. */
-function names(value: unknown): string[] {
-  if (Array.isArray(value)) return value.flatMap(names);
-  if (typeof value !== 'object' || value === null) return [];
-  return Object.entries(value).flatMap(([key, child]) => (key === 'name' && typeof child === 'string' ? [child] : names(child)));
-}
-
-/** A ruleset text token such as `{dmg:1d4:fire}` (docs/rulesets.md#text-tokens): markup, not words. */
-const TOKEN = /\{[^{}]*\}/g;
-
-/**
- * The docs/site.md#index-build `search` text: the names in `stats` (every ref names its target),
- * then `description` and the rules text, with markup stripped and
- * each `{ref:…}` link read as its display text or its target's name. A ref to one of `own`, the
- * entry's components, is left to that component's part of the text, which starts with its name.
- */
-function searchText(
-  item: Pick<ValidComponent, 'entry' | 'texts'>,
-  schemas: SchemaSet,
-  nameOf: Map<string, string>,
-  own: ReadonlySet<string> = new Set(),
-): string {
-  const refNames = refAndTextValues(item.entry.stats, schemas).flatMap((value) => {
-    if (typeof value === 'string') return [value];
-    const { ref } = value as { ref: string };
-    const name = own.has(ref) ? undefined : nameOf.get(ref);
-    return name ? [name] : [];
-  });
-  // A {ref:…} link reads as its display text or its target's name; other tokens, a malformed
-  // {ref:…} among them, are dropped.
-  const texts = item.texts.map(({ text }) =>
-    plainText(replaceRefTokens(text, (token) => ` ${token.text ?? nameOf.get(token.key) ?? ''} `).replace(TOKEN, ' ')),
-  );
-  return [...names(item.entry.stats), ...refNames, ...texts].join(' ').replace(/\s+/g, ' ').trim();
-}
-
 const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
 /**
@@ -168,72 +158,122 @@ const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
  * whenever validation fails, so a broken library never produces an index.
  */
 export async function buildIndex(root: string, options: BuildOptions = {}): Promise<BuildResult> {
-  const { errors, warnings, entries, components, rules } = await validateLibrary(root, options);
+  const { errors, warnings, entries, components, rules, ruleLinks } = await validateLibrary(root, options);
   if (errors.length > 0) return { errors, warnings, records: [], files: [], bundles: [] };
   const registry = options.registry ?? (await loadRegistry());
   const rulesetsRoot = options.rulesetsRoot ?? RULESETS_ROOT;
+  const assetsRoot = options.assetsRoot ?? dirname(resolve(root));
+  // A map's card shows its diagram, which validation has checked (docs/content-model.md#map-diagrams).
+  const diagramOf = async (entry: ValidEntry['entry']): Promise<string | null> =>
+    entry.type === MAP_TYPE
+      ? thumbnailDiagram(
+          await readFile(join(assetsRoot, diagramPath(entry)), 'utf8'),
+          (entryZones(entry.stats) ?? []).map((zone) => zone.id),
+          `${entry.type}/${entry.id}`,
+        )
+      : null;
 
-  // A {ref:…} link reads as its target's name in search text, whether the target is an entry or a primitive.
+  // The names of the entries and rules an entry links to, for its export bundle.
   const nameOf = new Map([
     ...rules.flatMap((data) => [...ruleNames(data)]),
     ...[...entries, ...components].map(({ entry }) => [`${entry.type}/${entry.id}`, entry.name] as [string, string]),
   ]);
-  // A component has no record of its own; its parent's search text holds it (docs/site.md#index-build).
-  const componentByKey = new Map(components.map((c) => [`${c.entry.type}/${c.entry.id}`, c]));
-  // In the order the parent lists them.
-  const componentsOf = (entry: ValidEntry['entry']): ValidComponent[] =>
-    objectRefs(entry.stats).flatMap(({ ref }) => {
-      const c = componentByKey.get(ref);
-      return c && c.parent === `${entry.type}/${entry.id}` ? [c] : [];
-    });
-  const schemaFiles = new Map<string, { files: Map<string, Schema> }>();
-  const sorted = [...entries].sort(
-    (a, b) => compare(a.entry.ruleset, b.entry.ruleset) || compare(a.entry.type, b.entry.type) || compare(a.entry.id, b.entry.id),
-  );
+  const schemaFiles = new Map<string, Map<string, Schema>>();
+  const schemasFor = async (ruleset: string, type: string): Promise<SchemaSet> => {
+    let files = schemaFiles.get(ruleset);
+    if (!files) schemaFiles.set(ruleset, (files = (await loadSchemas(ruleset, rulesetsRoot)).files));
+    return { root: files.get(`${type}.schema.json`) ?? {}, files };
+  };
+  const namesOf = (refs: Link[]) => Object.fromEntries(refs.flatMap(({ key }) => (nameOf.has(key) ? [[key, nameOf.get(key)!]] : [])));
 
-  const records: LibraryRecord[] = [];
-  for (const item of sorted) {
+  // Facets read the values a derivation that reads other entries adds too (docs/site.md#index-build), such as
+  // an encounter's XP from its creatures, from each ruleset's linked library, made once, as the site makes it.
+  const libraries = new Map<string, LinkedLibrary>();
+  const modules = new Map<string, Promise<RulesetModule | undefined>>();
+  const linkedOf = async (entry: ValidEntry['entry']): Promise<Record<string, unknown>> => {
+    let loading = modules.get(entry.ruleset);
+    if (!loading) modules.set(entry.ruleset, (loading = loadRuleset(entry.ruleset, rulesetsRoot).then((r) => r?.module)));
+    const module = await loading;
+    if (!module?.deriveLinked) return {};
+    let library = libraries.get(entry.ruleset);
+    if (!library) {
+      const own = [...entries, ...components].map((e) => e.entry).filter((e) => e.ruleset === entry.ruleset);
+      libraries.set(entry.ruleset, (library = linkedLibrary(own, rules.find((r) => r.ruleset === entry.ruleset))));
+    }
+    return module.deriveLinked(entry.type, `${entry.type}/${entry.id}`, entry.stats, library);
+  };
+
+  const rows: { record: LibraryRecord; file: string; bundle: ExportBundle }[] = [];
+  for (const item of entries) {
     const { entry } = item;
-    let loaded = schemaFiles.get(entry.ruleset);
-    if (!loaded) schemaFiles.set(entry.ruleset, (loaded = await loadSchemas(entry.ruleset, rulesetsRoot)));
-    const files = loaded.files;
-    const schemasOf = (type: string): SchemaSet => ({ root: files.get(`${type}.schema.json`) ?? {}, files });
-    const schemas = schemasOf(entry.type);
-    const parts = componentsOf(entry);
-    const search = [
-      searchText(item, schemas, nameOf, new Set(parts.map((c) => `${c.entry.type}/${c.entry.id}`))),
-      ...parts.map((c) => `${c.entry.name} ${searchText(c, schemasOf(c.entry.type), nameOf)}`),
-    ].join(' ').replace(/\s+/g, ' ').trim();
+    const derived = { ...item.derived, ...(await linkedOf(entry)) };
     const config = registry[entry.ruleset]?.types[entry.type];
     const meta = entry.meta as { createdAt: string };
-    records.push({
-      id: entry.id,
-      ruleset: entry.ruleset,
-      source: typeof entry.source === 'string' ? entry.source : null,
-      author: entry.author as string,
-      type: entry.type,
-      name: entry.name,
-      summary: entry.summary,
-      url: `${SITE_BASE}${entry.ruleset}/${entry.type}/${entry.id}/`,
-      image: typeof entry.image === 'string' ? entry.image : null,
-      facets: facetValues(item, config?.facets ?? [], schemas),
-      tags: (entry.tags as Record<string, unknown> | undefined) ?? {},
-      createdAt: meta.createdAt,
-      refs: item.refs,
-      refBy: item.refBy,
-      search,
+    rows.push({
+      record: {
+        id: entry.id,
+        ruleset: entry.ruleset,
+        source: typeof entry.source === 'string' ? entry.source : null,
+        author: entry.author as string,
+        type: entry.type,
+        name: entry.name,
+        summary: entry.summary,
+        url: `${SITE_BASE}${entry.ruleset}/${entry.type}/${entry.id}/`,
+        image: typeof entry.image === 'string' ? entry.image : null,
+        diagram: await diagramOf(entry),
+        facets: facetValues({ stats: entry.stats, derived }, config?.facets ?? [], await schemasFor(entry.ruleset, entry.type)),
+        createdAt: meta.createdAt,
+        refs: item.refs,
+        refBy: item.refBy,
+      },
+      file: item.file,
+      bundle: { entry, derived: item.derived, names: namesOf(item.refs) },
     });
   }
+
+  // A rules type that takes extensions has a card for each primitive beside its custom entries (docs/site.md#index-build).
+  for (const data of rules) {
+    const config = registry[data.ruleset];
+    const carded = cardedPrimitives(data, (type) => config?.types[type] !== undefined);
+    if (carded.length === 0) continue;
+    const module = (await loadRuleset(data.ruleset, rulesetsRoot))?.module;
+    const paths = rulePaths(data);
+    for (const primitive of carded) {
+      const key = ruleKey(primitive);
+      const derived = module?.derive(primitive.type, primitive.stats, data) ?? {};
+      const links = ruleLinks.get(key) ?? { refs: [], refBy: [] };
+      rows.push({
+        record: {
+          id: primitive.id,
+          ruleset: data.ruleset,
+          source: null,
+          author: PUBLISHER,
+          type: primitive.type,
+          name: primitive.name,
+          summary: '',
+          url: `${SITE_BASE}${paths.get(key)}`,
+          image: null,
+          diagram: null,
+          facets: facetValues({ stats: primitive.stats, derived }, config!.types[primitive.type]!.facets, await schemasFor(data.ruleset, primitive.type)),
+          createdAt: null,
+          refs: links.refs,
+          refBy: links.refBy,
+        },
+        file: resolve(rulesetsRoot, data.ruleset, 'rules', primitive.type, `${primitive.id}.json`),
+        bundle: { entry: { ruleset: data.ruleset, ...primitive }, derived, names: namesOf(links.refs) },
+      });
+    }
+  }
+
+  rows.sort(
+    (a, b) => compare(a.record.ruleset, b.record.ruleset) || compare(a.record.type, b.record.type) || compare(a.record.id, b.record.id),
+  );
   return {
     errors,
     warnings,
-    records,
-    files: sorted.map((item) => item.file),
-    bundles: sorted.map(({ entry, derived, refs }) => ({
-      entry,
-      derived,
-      names: Object.fromEntries(refs.flatMap(({ key }) => (nameOf.has(key) ? [[key, nameOf.get(key)!]] : []))),
-    })),
+    records: rows.map((row) => row.record),
+    files: rows.map((row) => row.file),
+    bundles: rows.map((row) => row.bundle),
   };
 }
 
@@ -249,7 +289,7 @@ export async function writeIndex(root: string, out: string, result: BuildResult)
   for (const [i, record] of result.records.entries()) {
     const target = join(out, 'data', record.ruleset, record.type, `${record.id}.json`);
     await mkdir(dirname(target), { recursive: true });
-    await copyFile(join(root, result.files[i] ?? ''), target);
+    await copyFile(resolve(root, result.files[i] ?? ''), target);
     await writeFile(join(dirname(target), `${record.id}.export.json`), `${JSON.stringify(result.bundles[i])}\n`);
   }
   await writeFile(join(out, 'library.json'), `${JSON.stringify(result.records)}\n`);

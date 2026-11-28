@@ -1,7 +1,9 @@
 // What every type template shares (docs/site.md#templates): the props it takes, its
 // render modes, and which component the registry's `template` name selects.
 
-import type { Entry } from './library.ts';
+import type { RulesetModule } from '../../../rulesets/module.ts';
+import type { Link } from '../../../scripts/validate/refs.ts';
+import type { Entry, LoadedEntry } from './library.ts';
 
 /** `screen` for gallery detail, `capture` for PNG, `print` for the print view. */
 export type TemplateMode = 'screen' | 'capture' | 'print';
@@ -26,19 +28,35 @@ export interface TemplateProps {
   mode?: TemplateMode;
   /** Heading level of the entry name; section headings sit one below it. Default 2. */
   level?: number;
+  /** The entry's ruleset module, for its text tokens; the library's module for `entry.ruleset` by default. */
+  module?: Pick<RulesetModule, 'renderTokens'>;
+  /** Embedded in another entry's page as a card: the page's own summary and anchors are the outer page's. */
+  embedded?: boolean;
   /** A page type's components, shown after its template (docs/content-model.md#components). */
   components?: { entry: { type: string; id: string; name: string; stats: unknown } }[];
+  /** Refs into the entry, for a template that lists them itself: a map's, by zone (`map-page`). */
+  refBy?: Link[];
+  /** A map's diagram source, when the caller has it to hand, as a test rendering a fixture does; else read from the library. */
+  diagram?: string;
+  /** The entries an arrangement's parts show as cards or thumbnails (`encounter-page`, docs/site.md#kit-parts). */
+  shown?: LoadedEntry[];
+  /** Diagram sources of the maps it shows, by `map/<id>`, when the caller has them; else read from the library. */
+  diagrams?: Map<string, string>;
 }
 
 /** Template names (`config/types.json` `template`) that have their own component; others use `generic`. */
 export const TEMPLATES = [
   'background-card',
+  'character-profile',
   'class-page',
   'condition-card',
   'creature-stat-block',
+  'encounter-page',
   'equipment-card',
   'feat-card',
   'item-card',
+  'map-page',
+  'module-page',
   'species-page',
   'spell-card',
   'subclass-page',

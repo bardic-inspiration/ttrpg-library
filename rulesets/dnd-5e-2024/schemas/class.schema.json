@@ -5,7 +5,7 @@
   "description": "A page type: its features and options are components it lists in order. Stored inputs only; derives the proficiency bonus and spell slots by level, and its Features table rows and spell list from the library. Cross-field rules are checks in checks.ts (docs/rulesets.md#consistency-checks).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["primaryAbility", "hitDie", "savingThrows", "skills", "weapons", "armor", "equipment", "multiclass", "features", "subclassLevels"],
+  "required": ["primaryAbility", "hitDie", "savingThrows", "skills", "weapons", "armor", "equipment", "multiclass", "features", "subclassLevels", "training"],
   "properties": {
     "primaryAbility": {
       "description": "Printed \"Strength or Dexterity\", \"Dexterity and Wisdom\"; `join` is required with two or more abilities, and only then.",
@@ -20,7 +20,7 @@
       "then": { "required": ["join"] },
       "else": { "not": { "required": ["join"] } }
     },
-    "hitDie": { "description": "Printed \"D12 per Barbarian level\".", "enum": ["d6", "d8", "d10", "d12"] },
+    "hitDie": { "description": "Printed \"D12 per Barbarian level\".", "enum": ["d6", "d8", "d10", "d12"], "display": "chip" },
     "savingThrows": {
       "description": "Exactly two abilities, printed \"Strength and Constitution\".",
       "type": "array",
@@ -99,6 +99,26 @@
           "text": { "description": "The intro under the heading.", "$ref": "common.schema.json#/$defs/Text" },
           "options": { "type": "array", "minItems": 1, "items": { "$ref": "common.schema.json#/$defs/ClassOptionRef" } }
         }
+      }
+    },
+    "grants": {
+      "description": "The picks the class gives as data (docs/rulesets.md#grants): `start` as the starting class, beside its `skills`, and `multiclass` as a later class.",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "start": { "$ref": "common.schema.json#/$defs/Grants" },
+        "multiclass": { "$ref": "common.schema.json#/$defs/Grants" }
+      }
+    },
+    "training": {
+      "description": "Its weapon proficiencies and armor training as data (docs/rulesets.md#grants): `start` as the starting class, as `weapons` and `armor` print it, and `multiclass` as a later class, as `multiclass` prints it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start"],
+      "properties": {
+        "start": { "$ref": "common.schema.json#/$defs/Training" },
+        "multiclass": { "$ref": "common.schema.json#/$defs/Training" }
       }
     },
     "spells": {

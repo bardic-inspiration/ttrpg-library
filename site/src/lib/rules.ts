@@ -4,14 +4,17 @@
 
 import { titleCase } from '../../../lib/wording/grammar.ts';
 import type { RefLabels, RulesetDefinition, RulesetModule } from '../../../rulesets/module.ts';
-import { GroupTree, anchorId, byName, extensionPage, ruleKey, type PageBlock, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../../lib/rules.ts';
+import { GroupTree, anchorId, byName, cardedPrimitives, extensionPage, rulePaths, ruleKey, type PageBlock, type Primitive, type RulesData, type RulesGroup, type RulesPage } from '../../../lib/rules.ts';
 import type { Links } from '../../../scripts/validate/refs.ts';
+import { PUBLISHER } from '../../../rulesets/module.ts';
+import registry from '@library/config/types.json' with { type: 'json' };
 import { allComponents, entryNames, linkAll, refPaths, refTargets, rulesetModule, type Entry, type LoadedEntry } from './library.ts';
 import type { RefTarget } from './refs.ts';
 import { sectionId, type TocItem } from './accordion.ts';
 
-const definitions = import.meta.glob<RulesetDefinition>('../../../rulesets/*/ruleset.json', { eager: true, import: 'default' });
-const ruleFiles = import.meta.glob<unknown>('../../../rulesets/*/rules/**/*.json', { eager: true, import: 'default' });
+// The library's rulesets (docs/site.md#library-root).
+const definitions = import.meta.glob<RulesetDefinition>('@library/rulesets/*/ruleset.json', { eager: true, import: 'default' });
+const ruleFiles = import.meta.glob<unknown>('@library/rulesets/*/rules/**/*.json', { eager: true, import: 'default' });
 
 /**
  * One ruleset's rules data from its files, keyed by their path inside
@@ -172,4 +175,33 @@ export function baseLookup(rules: RulesData[]): (key: string) => { name: string;
     }
   }
   return (key) => entries.get(key);
+}
+
+/** A primitive with a gallery card, loaded as its type's template reads an entry, with its section's path. */
+export interface PrimitiveCard {
+  /** The primitive as an official entry with no summary or `meta`: templates read only its ruleset, type, id, name, and stats. */
+  loaded: LoadedEntry;
+  /** Its section on its rules page, under the site base. */
+  path: string;
+}
+
+/**
+ * Every primitive that has a gallery card (docs/site.md#gallery), for the print fragments and the
+ * Library's list without JavaScript.
+ */
+export function primitiveCards(rules: RulesData[]): PrimitiveCard[] {
+  const types = registry as Record<string, { types: Record<string, unknown> }>;
+  return rules.flatMap((data) => {
+    const paths = rulePaths(data);
+    const module = rulesetModule(data.ruleset);
+    return cardedPrimitives(data, (type) => types[data.ruleset]?.types[type] !== undefined).map((p) => ({
+      loaded: {
+        entry: { ruleset: data.ruleset, author: PUBLISHER, type: p.type, id: p.id, name: p.name, summary: '', stats: p.stats } as Entry,
+        derived: module.derive(p.type, p.stats, data),
+        refs: [],
+        refBy: [],
+      },
+      path: paths.get(ruleKey(p))!,
+    }));
+  });
 }

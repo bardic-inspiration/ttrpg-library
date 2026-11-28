@@ -44,11 +44,11 @@ Inline request:
 ```text
 Run the content routine for this repository. Read docs/routines.md on main and follow its "Run order" section exactly, step by step. Work only the content lane: take only `request`, `import`, and `revise` issues, push only `gen/` and `revise/` branches, and never push to main or to this session's assigned branch. If a step fails in a way you can't recover from, stop and report which step and why. End with a short report: PRs opened or updated, issues claimed, questions asked, and steps skipped.
 
-Inline request: type: spell; count: 3; brief: frost-themed utility spells for levels 1 to 3; tags: theme: winter
+Inline request: type: spell; count: 3; brief: frost-themed utility spells for levels 1 to 3
 ```
 
 An inline request takes the content-request fields ([Requests](generation.md#requests)): type, count,
-brief, tags, and ruleset. Type and brief are required; the others default.
+brief, and ruleset. Type and brief are required; the others default.
 
 ## Run order
 

@@ -1,20 +1,19 @@
 ---
-// One primitive's section on its rules page (docs/site.md#rules-pages): an accordion section
-// (docs/site.md#accordion-pages) anchored at its key, its name the heading, holding its rules and
-// its links. A link to the primitive opens this section. A type whose registry template has a
+// One primitive's section on its rules page (docs/site.md#rules-pages): a plain section anchored
+// at its key, its name the heading, holding its rules and its links. A type whose registry template has a
 // body part here renders with it (a condition's effects); a text-only one as paragraphs; any
 // other renders its stats as labeled lines.
 import { anchorId, ruleKey, type Primitive } from '../../../../lib/rules';
 import type { ConditionStats, EquipmentStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
 import { genericLines } from '../../lib/generic';
 import { primitiveTitle, textOnly, type RulesContext } from '../../lib/rules';
-import registry from '../../../../config/types.json';
+import registry from '@library/config/types.json';
 import ConditionEffects from '../templates/parts/ConditionEffects.astro';
 import EquipmentBody from '../templates/parts/EquipmentBody.astro';
-import Accordion from '../templates/parts/Accordion.astro';
 import PropertyList from '../templates/parts/PropertyList.astro';
 import RulesText from '../templates/parts/RulesText.astro';
 import RefLinks from './RefLinks.astro';
+import TextSection from './TextSection.astro';
 
 interface Props {
   ctx: RulesContext;
@@ -31,7 +30,7 @@ const refs = { names: ctx.names, ruleset: ctx.data.ruleset, paths: ctx.paths };
 // A text-only primitive reads as paragraphs, its tag in its heading.
 const onlyText = textOnly(primitive);
 ---
-<Accordion class="rule" id={anchorId(key)} type={primitive.type} level={level}>
+<TextSection class="rule" id={anchorId(key)} type={primitive.type} level={level}>
   <Fragment slot="title">{primitiveTitle(primitive)}</Fragment>
   {template === 'condition-card' ? (
     <ConditionEffects name={primitive.name} stats={primitive.stats as unknown as ConditionStats} refs={refs} />
@@ -43,4 +42,4 @@ const onlyText = textOnly(primitive);
     <PropertyList lines={genericLines(primitive.stats, ctx.names, '', skip)} refs={refs} />
   )}
   <RefLinks ctx={ctx} key={key} />
-</Accordion>
+</TextSection>

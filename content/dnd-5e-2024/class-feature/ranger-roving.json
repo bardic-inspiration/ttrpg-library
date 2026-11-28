@@ -9,7 +9,23 @@
     "levels": [
       6
     ],
-    "text": "Your Speed increases by 10 feet while you aren't wearing Heavy armor. You also have a {ref:glossary/climb-speed} and a {ref:glossary/swim-speed} equal to your Speed."
+    "text": "Your Speed increases by 10 feet while you aren't wearing Heavy armor. You also have a {ref:glossary/climb-speed} and a {ref:glossary/swim-speed} equal to your Speed.",
+    "modifiers": [
+      {
+        "kind": "speed-bonus",
+        "value": 10,
+        "while": [
+          "no-heavy-armor"
+        ]
+      },
+      {
+        "kind": "speed-mode",
+        "modes": [
+          "climb",
+          "swim"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

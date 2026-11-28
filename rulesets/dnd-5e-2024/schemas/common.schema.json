@@ -41,6 +41,536 @@
         "note": { "description": "A qualifier printed in parentheses after the target's name, such as \"level 5 version\".", "type": "string", "minLength": 1 }
       }
     },
+    "MapZoneRef": {
+      "description": "A link to a zone of a map (docs/rulesets.md#maps): the map, and the id of one of its zones. A typed ref: it allows only map keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "zone"],
+      "properties": {
+        "ref": { "description": "The map, as map/<id>.", "type": "string", "pattern": "^map/[a-z0-9]+(-[a-z0-9]+)*$" },
+        "zone": { "description": "The id of one of the map's zones.", "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }
+      }
+    },
+    "MapRef": {
+      "description": "A link to a map, or to one of its zones (docs/content-model.md#references \"A map's zones\"). A typed ref: it allows only map keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/MapZoneRef/properties/ref"
+        },
+        "zone": {
+          "$ref": "#/$defs/MapZoneRef/properties/zone"
+        }
+      }
+    },
+    "Show": {
+      "description": "How the ref shows in its part (docs/content-model.md#arrangements): \"link\" (the default) prints its name linked, \"card\" embeds the target's card, and \"thumbnail\" a small form of it, such as a map's diagram.",
+      "enum": [
+        "link",
+        "card",
+        "thumbnail"
+      ]
+    },
+    "RosterLine": {
+      "description": "One line of a roster: a creature and how many (docs/rulesets.md#encounters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "count"
+      ],
+      "properties": {
+        "ref": {
+          "description": "The creature, as creature/<id>.",
+          "type": "string",
+          "pattern": "^creature/[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "count": {
+          "description": "How many, 1 or more.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "SpawnLine": {
+      "description": "One line of a spawn table row: a creature and how many, as a number or dice (docs/rulesets.md#encounters).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "count"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/RosterLine/properties/ref"
+        },
+        "count": {
+          "description": "How many: 1 or more, or dice with an optional modifier (\"1d6+2\") whose lowest roll is at least 1.",
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "$ref": "#/$defs/DiceCount"
+            }
+          ]
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "DiceCount": {
+      "description": "Dice with an optional flat modifier, such as \"1d6+2\" or \"2d4\".",
+      "type": "string",
+      "pattern": "^[1-9]\\d*d(4|6|8|10|12|20|100)([+-][1-9]\\d*)?$"
+    },
+    "SpawnRow": {
+      "description": "One row of a spawn table: its roster, and its range on the table's die when the table has a `roll`.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creatures"
+      ],
+      "properties": {
+        "range": {
+          "description": "The faces of the table's die that pick this row, from `min` to `max`: { \"min\": 1, \"max\": 2 }.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max"
+          ],
+          "properties": {
+            "min": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "creatures": {
+          "description": "The row's roster.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/SpawnLine"
+          }
+        }
+      }
+    },
+    "LootLine": {
+      "description": "One item of loot and how many.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref"
+      ],
+      "properties": {
+        "ref": {
+          "description": "The item, as item/<id>, or equipment, as equipment/<id>.",
+          "type": "string",
+          "pattern": "^(item|equipment)/[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "count": {
+          "description": "How many, 2 or more; 1 when omitted.",
+          "type": "integer",
+          "minimum": 2
+        },
+        "show": {
+          "$ref": "#/$defs/Show"
+        }
+      }
+    },
+    "LootRow": {
+      "description": "The loot for one difficulty: coins, items, or both.",
+      "type": "object",
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "coins"
+          ]
+        },
+        {
+          "required": [
+            "items"
+          ]
+        }
+      ],
+      "properties": {
+        "coins": {
+          "description": "Coins: dice, an optional multiplier, and a unit. { \"dice\": \"4d6\", \"times\": 10, \"unit\": \"gp\" } reads \"4d6 × 10 GP\".",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dice",
+            "unit"
+          ],
+          "properties": {
+            "dice": {
+              "$ref": "#/$defs/Dice"
+            },
+            "times": {
+              "description": "A multiplier, 2 or more.",
+              "type": "integer",
+              "minimum": 2
+            },
+            "unit": {
+              "description": "The coin.",
+              "enum": [
+                "cp",
+                "sp",
+                "ep",
+                "gp",
+                "pp"
+              ]
+            }
+          }
+        },
+        "items": {
+          "description": "Items, in the order they're listed.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/LootLine"
+          }
+        }
+      }
+    },
+    "Stage": {
+      "description": "One stage of a structured sequence.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "loop"
+      ],
+      "properties": {
+        "name": {
+          "description": "The stage's name: \"The Ambush\".",
+          "type": "string",
+          "minLength": 1
+        },
+        "loop": {
+          "description": "The turn loop: how the DM runs the creatures each round of the stage.",
+          "$ref": "#/$defs/Text"
+        },
+        "transition": {
+          "description": "What moves play to the next stage. The last stage may leave it out, since victory follows.",
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartProse": {
+      "description": "A text section, titled or not.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "prose"
+        },
+        "title": {
+          "description": "The section's heading.",
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartDescription": {
+      "description": "Player-facing text, read aloud or paraphrased.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "description"
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartDmGuide": {
+      "description": "Instructions for running it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "dm-guide"
+        },
+        "text": {
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartRoster": {
+      "description": "Creatures with fixed counts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "creatures"
+      ],
+      "properties": {
+        "part": {
+          "const": "roster"
+        },
+        "creatures": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/RosterLine"
+          }
+        }
+      }
+    },
+    "PartSpawnTable": {
+      "description": "Rosters by difficulty, whose counts may be dice. With `roll`, each row has a range on that die, and the ranges cover its faces once each.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "rows"
+      ],
+      "properties": {
+        "part": {
+          "const": "spawn-table"
+        },
+        "roll": {
+          "description": "One die the DM may roll to pick a row: \"1d6\".",
+          "type": "string",
+          "pattern": "^1d(4|6|8|10|12|20|100)$"
+        },
+        "rows": {
+          "description": "The rows, keyed by difficulty: \"low\", \"moderate\", or \"high\", each at most once. The page lists them in that order.",
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "low": {
+              "$ref": "#/$defs/SpawnRow"
+            },
+            "moderate": {
+              "$ref": "#/$defs/SpawnRow"
+            },
+            "high": {
+              "$ref": "#/$defs/SpawnRow"
+            }
+          }
+        }
+      }
+    },
+    "PartSequence": {
+      "description": "How it plays out: structured (a trigger, stages, and a victory condition), or one prose example.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "trigger",
+            "stages",
+            "victory"
+          ]
+        },
+        {
+          "required": [
+            "example"
+          ]
+        }
+      ],
+      "dependentSchemas": {
+        "example": {
+          "properties": {
+            "trigger": false,
+            "stages": false,
+            "victory": false
+          }
+        }
+      },
+      "properties": {
+        "part": {
+          "const": "sequence"
+        },
+        "trigger": {
+          "description": "What starts it.",
+          "$ref": "#/$defs/Text"
+        },
+        "stages": {
+          "description": "The stages, in order.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Stage"
+          }
+        },
+        "victory": {
+          "description": "How it ends in the party's favor.",
+          "$ref": "#/$defs/Text"
+        },
+        "example": {
+          "description": "How it might play, as one prose text, in place of the structured form.",
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartTable": {
+      "description": "A titled pipe table: a random table, a loot table, or any other.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "title",
+        "text"
+      ],
+      "properties": {
+        "part": {
+          "const": "table"
+        },
+        "title": {
+          "description": "The table's title.",
+          "type": "string",
+          "minLength": 1
+        },
+        "text": {
+          "description": "One pipe table and nothing else (docs/content-model.md#tables-in-text).",
+          "$ref": "#/$defs/Text"
+        }
+      }
+    },
+    "PartLoot": {
+      "description": "Coins and items by difficulty.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "rows"
+      ],
+      "properties": {
+        "part": {
+          "const": "loot"
+        },
+        "rows": {
+          "description": "The loot, keyed by difficulty: \"low\", \"moderate\", or \"high\", each at most once. The page lists them in that order.",
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "low": {
+              "$ref": "#/$defs/LootRow"
+            },
+            "moderate": {
+              "$ref": "#/$defs/LootRow"
+            },
+            "high": {
+              "$ref": "#/$defs/LootRow"
+            }
+          }
+        }
+      }
+    },
+    "PartMap": {
+      "description": "A map, or a zone of one, shown on the page.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "map"
+      ],
+      "properties": {
+        "part": {
+          "const": "map"
+        },
+        "map": {
+          "description": "The map or zone, and how it shows.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ref"
+          ],
+          "properties": {
+            "ref": {
+              "$ref": "#/$defs/MapZoneRef/properties/ref"
+            },
+            "zone": {
+              "$ref": "#/$defs/MapZoneRef/properties/zone"
+            },
+            "show": {
+              "$ref": "#/$defs/Show"
+            }
+          }
+        }
+      }
+    },
+    "PartHook": {
+      "description": "A way to draw the party in: its text, and the entries it brings in, each shown as its `show` says, such as pregenerated characters as cards and a contact as a link.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["part", "text"],
+      "properties": {
+        "part": { "const": "hook" },
+        "text": { "$ref": "#/$defs/Text" },
+        "refs": { "description": "The entries the hook brings in, in order.", "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/ShownRef" } }
+      }
+    },
+    "PartArrangement": {
+      "description": "A contained arrangement, an encounter or a module, in story order (docs/rulesets.md#modules). The contained entry's page lists the module under \"Part of\".",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["part", "arrangement"],
+      "properties": {
+        "part": { "const": "arrangement" },
+        "arrangement": {
+          "description": "The encounter or module, and how it shows.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ref"],
+          "properties": {
+            "ref": { "description": "The arrangement, as encounter/<id> or module/<id>.", "type": "string", "pattern": "^(encounter|module)/[a-z0-9]+(-[a-z0-9]+)*$" },
+            "show": { "$ref": "#/$defs/Show" }
+          }
+        }
+      }
+    },
+    "ShownRef": {
+      "description": "A link to any library entry in a part, with how it shows (docs/content-model.md#arrangements); the ref check resolves it.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The target, as <type>/<id>.", "type": "string", "pattern": "^[a-z]+(-[a-z]+)*/[a-z0-9]+(-[a-z0-9]+)*$" },
+        "note": { "$ref": "#/$defs/Ref/properties/note" },
+        "show": { "$ref": "#/$defs/Show" }
+      }
+    },
     "ConditionRef": {
       "description": "A link to a condition, an SRD primitive or a custom extension (docs/rulesets.md#rules-data). A typed ref: it allows only condition keys. A `note` prints in parentheses after the name: \"Charmed (with Mind Blank)\".",
       "type": "object",
@@ -87,6 +617,33 @@
       "required": ["ref"],
       "properties": {
         "ref": { "description": "The class, as class/<id>.", "type": "string", "pattern": "^class/[a-z0-9]+(-[a-z0-9]+)*$" }
+      }
+    },
+    "SubclassRef": {
+      "description": "A link to a subclass (docs/rulesets.md#subclasses). A typed ref: it allows only subclass keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The subclass, as subclass/<id>.", "type": "string", "pattern": "^subclass/[a-z0-9]+(-[a-z0-9]+)*$" }
+      }
+    },
+    "SpeciesRef": {
+      "description": "A link to a species (docs/rulesets.md#species). A typed ref: it allows only species keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The species, as species/<id>.", "type": "string", "pattern": "^species/[a-z0-9]+(-[a-z0-9]+)*$" }
+      }
+    },
+    "BackgroundRef": {
+      "description": "A link to a background (docs/rulesets.md#backgrounds). A typed ref: it allows only background keys.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref"],
+      "properties": {
+        "ref": { "description": "The background, as background/<id>.", "type": "string", "pattern": "^background/[a-z0-9]+(-[a-z0-9]+)*$" }
       }
     },
     "ClassFeatureRef": {
@@ -240,6 +797,28 @@
         "reactions": { "$ref": "#/$defs/StatBlockItems" }
       }
     },
+    "Modifiers": {"description": "The effects an entry has on a character's derived values, as data (docs/rulesets.md#modifiers).", "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/Modifier"}},
+    "Modifier": {"description": "One effect, by its `kind`.", "oneOf": [{"description": "Raises scores (Primal Champion), or gives `total` points the character's feat choice places (Ability Score Improvement), each up to `max`.", "type": "object", "additionalProperties": false, "required": ["kind", "max"], "properties": {"kind": {"const": "ability-bonus"}, "abilities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Ability"}}, "value": {"type": "integer", "minimum": 1}, "total": {"type": "integer", "minimum": 1}, "from": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Ability"}}, "max": {"type": "integer", "minimum": 1, "maximum": 30}}, "oneOf": [{"required": ["abilities", "value"], "not": {"anyOf": [{"required": ["total"]}, {"required": ["from"]}]}}, {"required": ["total"], "not": {"anyOf": [{"required": ["abilities"]}, {"required": ["value"]}]}}]}, {"description": "An Armor Class formula: `base` plus the modifiers of `abilities`. The highest formula that applies wins, the equipped armor's included.", "type": "object", "additionalProperties": false, "required": ["kind", "base"], "properties": {"kind": {"const": "ac-formula"}, "base": {"type": "integer", "minimum": 0}, "abilities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Ability"}}, "while": {"$ref": "#/$defs/ModifierWhile"}}}, {"description": "Adds to Armor Class.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "ac-bonus"}, "value": {"$ref": "#/$defs/ModifierValue"}, "min": {"description": "The least the value gives, such as 1 for an ability modifier that may be negative.", "type": "integer"}, "byLevel": {"$ref": "#/$defs/ModifierByLevel"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byLevel"]}]}, {"description": "Proficiency in saving throws: some abilities, or `\"all\"`.", "type": "object", "additionalProperties": false, "required": ["kind", "abilities"], "properties": {"kind": {"const": "save-proficiency"}, "abilities": {"anyOf": [{"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Ability"}}, {"const": "all"}]}}}, {"description": "Adds to every saving throw.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "save-bonus"}, "value": {"$ref": "#/$defs/ModifierValue"}, "min": {"description": "The least the value gives, such as 1 for an ability modifier that may be negative.", "type": "integer"}, "byLevel": {"$ref": "#/$defs/ModifierByLevel"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byLevel"]}]}, {"description": "Proficiency in named skills, or Expertise with `expertise`.", "type": "object", "additionalProperties": false, "required": ["kind", "skills"], "properties": {"kind": {"const": "skill-proficiency"}, "skills": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Skill"}}, "expertise": {"const": true}}}, {"description": "Proficiency with named tools, given outright (Hearth Blessing's Cook's Utensils).", "type": "object", "additionalProperties": false, "required": ["kind", "tools"], "properties": {"kind": {"const": "tool-proficiency"}, "tools": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/EquipmentRef"}}}}, {"description": "Languages known outright (Druidic, Thieves' Cant).", "type": "object", "additionalProperties": false, "required": ["kind", "languages"], "properties": {"kind": {"const": "language"}, "languages": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Line"}}}}, {"description": "Adds half the proficiency bonus, rounded down, to each skill the character isn't proficient in (Jack of All Trades).", "type": "object", "additionalProperties": false, "required": ["kind", "proficiency"], "properties": {"kind": {"const": "skill-floor"}, "proficiency": {"const": "half"}}}, {"description": "Adds to Initiative.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "initiative-bonus"}, "value": {"$ref": "#/$defs/ModifierValue"}, "min": {"description": "The least the value gives, such as 1 for an ability modifier that may be negative.", "type": "integer"}, "byLevel": {"$ref": "#/$defs/ModifierByLevel"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byLevel"]}]}, {"description": "Adds to Speed.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "speed-bonus"}, "value": {"$ref": "#/$defs/ModifierValue"}, "min": {"description": "The least the value gives, such as 1 for an ability modifier that may be negative.", "type": "integer"}, "byLevel": {"$ref": "#/$defs/ModifierByLevel"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byLevel"]}]}, {"description": "Other speeds equal to the Speed.", "type": "object", "additionalProperties": false, "required": ["kind", "modes"], "properties": {"kind": {"const": "speed-mode"}, "modes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["climb", "swim", "fly"]}}, "while": {"$ref": "#/$defs/ModifierWhile"}}}, {"description": "Adds Hit Points per level: each character level, or with `per` `\"class\"`, each level of the feature's class.", "type": "object", "additionalProperties": false, "required": ["kind", "value"], "properties": {"kind": {"const": "hp-per-level"}, "value": {"$ref": "#/$defs/ModifierValue"}, "min": {"description": "The least the value gives, such as 1 for an ability modifier that may be negative.", "type": "integer"}, "while": {"$ref": "#/$defs/ModifierWhile"}, "per": {"enum": ["character", "class"]}}}, {"description": "Abilities an attack with the weapons may use in place of Strength, when higher.", "type": "object", "additionalProperties": false, "required": ["kind", "abilities", "weapon"], "properties": {"kind": {"const": "attack-ability"}, "abilities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Ability"}}, "weapon": {"$ref": "#/$defs/ModifierWeapon"}, "while": {"$ref": "#/$defs/ModifierWhile"}}}, {"description": "Adds to the attack rolls of the weapons.", "type": "object", "additionalProperties": false, "required": ["kind", "weapon"], "properties": {"kind": {"const": "attack-bonus"}, "value": {"$ref": "#/$defs/ModifierValue"}, "min": {"description": "The least the value gives, such as 1 for an ability modifier that may be negative.", "type": "integer"}, "byLevel": {"$ref": "#/$defs/ModifierByLevel"}, "while": {"$ref": "#/$defs/ModifierWhile"}, "weapon": {"$ref": "#/$defs/ModifierWeapon"}}, "oneOf": [{"required": ["value"]}, {"required": ["byLevel"]}]}, {"description": "Adds to the damage of the weapons.", "type": "object", "additionalProperties": false, "required": ["kind", "weapon"], "properties": {"kind": {"const": "damage-bonus"}, "value": {"$ref": "#/$defs/ModifierValue"}, "min": {"description": "The least the value gives, such as 1 for an ability modifier that may be negative.", "type": "integer"}, "byLevel": {"$ref": "#/$defs/ModifierByLevel"}, "while": {"$ref": "#/$defs/ModifierWhile"}, "weapon": {"$ref": "#/$defs/ModifierWeapon"}}, "oneOf": [{"required": ["value"]}, {"required": ["byLevel"]}]}, {"description": "A damage die for the weapons, used when larger than the weapon's: a fixed `die` or one by level.", "type": "object", "additionalProperties": false, "required": ["kind", "weapon"], "properties": {"kind": {"const": "damage-die"}, "die": {"$ref": "#/$defs/Dice"}, "byLevel": {"$ref": "#/$defs/ModifierDiceByLevel"}, "weapon": {"$ref": "#/$defs/ModifierWeapon"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["die"]}, {"required": ["byLevel"]}]}]},
+    "ItemModifiers": {"description": "The effects an item has on a character's derived values while it's equipped, and attuned when it requires attunement (docs/rulesets.md#item-modifiers).", "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/ItemModifier"}},
+    "ItemModifier": {"description": "One effect of an item, by its `kind`. `value` is a number, or `byVariant` gives one per variant the character's `equipped` entry names.", "oneOf": [
+      {"description": "Adds to Armor Class; on armor, while it's worn.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "ac-bonus"}, "value": {"type": "integer"}, "byVariant": {"$ref": "#/$defs/ModifierByVariant"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byVariant"]}]},
+      {"description": "Adds to every saving throw.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "save-bonus"}, "value": {"type": "integer"}, "byVariant": {"$ref": "#/$defs/ModifierByVariant"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byVariant"]}]},
+      {"description": "Adds to every ability check: each skill, Passive Perception, and Initiative.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "check-bonus"}, "value": {"type": "integer"}, "byVariant": {"$ref": "#/$defs/ModifierByVariant"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byVariant"]}]},
+      {"description": "Sets a score to a value, unless the score is already higher.", "type": "object", "additionalProperties": false, "required": ["kind", "ability"], "properties": {"kind": {"const": "ability-set"}, "ability": {"$ref": "#/$defs/Ability"}, "value": {"type": "integer", "minimum": 1, "maximum": 30}, "byVariant": {"$ref": "#/$defs/ModifierByVariant"}}, "oneOf": [{"required": ["value"]}, {"required": ["byVariant"]}]},
+      {"description": "Adds to attack rolls: with this weapon, or with `weapon` the equipped weapons it names.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "attack-bonus"}, "value": {"type": "integer"}, "byVariant": {"$ref": "#/$defs/ModifierByVariant"}, "weapon": {"$ref": "#/$defs/ModifierWeapon"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byVariant"]}]},
+      {"description": "Adds to damage rolls: with this weapon, or with `weapon` the equipped weapons it names.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "damage-bonus"}, "value": {"type": "integer"}, "byVariant": {"$ref": "#/$defs/ModifierByVariant"}, "weapon": {"$ref": "#/$defs/ModifierWeapon"}, "while": {"$ref": "#/$defs/ModifierWhile"}}, "oneOf": [{"required": ["value"]}, {"required": ["byVariant"]}]}
+    ]},
+    "ModifierByVariant": {"description": "A value for each variant, keyed as the item names them: { \"+1\": 1, \"+2\": 2, \"+3\": 3 }.", "type": "object", "minProperties": 2, "propertyNames": {"minLength": 1}, "additionalProperties": {"type": "integer"}},
+    "ModifierValue": {"description": "A number, \"proficiency\" for the proficiency bonus, or an ability key for that ability's modifier.", "anyOf": [{"type": "integer"}, {"const": "proficiency"}, {"$ref": "#/$defs/Ability"}]},
+    "ModifierByLevel": {"description": "A value from the level each key names, by the level of the feature's class: { \"2\": 10, \"6\": 15 }.", "type": "object", "minProperties": 1, "propertyNames": {"pattern": "^([1-9]|1[0-9]|20)$"}, "additionalProperties": {"type": "integer"}},
+    "ModifierDiceByLevel": {"description": "A die from the level each key names, by the level of the feature's class: { \"1\": \"1d6\", \"5\": \"1d8\" }.", "type": "object", "minProperties": 1, "propertyNames": {"pattern": "^([1-9]|1[0-9]|20)$"}, "additionalProperties": {"$ref": "#/$defs/Dice"}},
+    "ModifierWhile": {"description": "Conditions that must all hold: no armor, Light, Medium, or Heavy armor, no Heavy armor, no shield.", "type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["unarmored", "armored", "no-heavy-armor", "no-shield"]}},
+    "ModifierWeapon": {"description": "The equipped weapons it applies to: ranged, melee, a melee weapon wielded in one hand with no other weapon, or a monk weapon (Simple Melee, or Martial Melee with the Light property).", "enum": ["ranged", "melee", "one-handed-melee", "monk"]},
+    "Grants": {"description": "The feats, picks, options, spells, and choices an entry gives a character (docs/rulesets.md#grants).", "type": "array", "minItems": 1, "items": {"$ref": "#/$defs/Grant"}},
+    "Grant": {"description": "One grant, by its `kind`. A class feature's is given at each of its levels up to its class's level; `options`, `choice`, and a `spells` grant read the level instead, so they're given once.", "oneOf": [{"description": "One feat of these categories, with this entry as its source; or, when the character's `choices` name `or` under the entry, that option instead.", "type": "object", "additionalProperties": false, "required": ["kind", "categories"], "properties": {"kind": {"const": "feat"}, "categories": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/FeatCategory"}}, "or": {"description": "An option a character can take in place of the feat (Blessed Warrior).", "$ref": "#/$defs/GrantOption"}}}, {"description": "Skill picks under the entry, from `from` or any skill. With `withTools`, tool picks count toward the same total (Skilled).", "type": "object", "additionalProperties": false, "required": ["kind", "count"], "properties": {"kind": {"const": "skills"}, "count": {"type": "integer", "minimum": 1}, "from": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Skill"}}, "withTools": {"const": true}}}, {"description": "Expertise picks under the entry, from `from` or any skill it's proficient in.", "type": "object", "additionalProperties": false, "required": ["kind", "count"], "properties": {"kind": {"const": "expertise"}, "count": {"type": "integer", "minimum": 1}, "from": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/Skill"}}}}, {"description": "Tool picks under the entry, from `from` or any tool.", "type": "object", "additionalProperties": false, "required": ["kind", "count"], "properties": {"kind": {"const": "tools"}, "count": {"type": "integer", "minimum": 1}, "from": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/EquipmentRef"}}}}, {"description": "Language picks under the entry.", "type": "object", "additionalProperties": false, "required": ["kind", "count"], "properties": {"kind": {"const": "languages"}, "count": {"type": "integer", "minimum": 1}}}, {"description": "Options from the class's option list of this name: as many as the class's `column` gives at its level, or `byLevel`.", "type": "object", "additionalProperties": false, "required": ["kind", "list"], "properties": {"kind": {"const": "options"}, "list": {"$ref": "#/$defs/Line"}, "column": {"$ref": "#/$defs/Line"}, "byLevel": {"$ref": "#/$defs/ModifierByLevel"}}, "oneOf": [{"required": ["column"]}, {"required": ["byLevel"]}]}, {"description": "Spells outside the classes' counts: picks, or an always-prepared list `byLevel`, each key's spells from that level on. A feat's picks come from the class spell list its `note` names (one of `from`, when given); a feature's or trait's from any list in `from`, by default the feature's class's.", "type": "object", "additionalProperties": false, "required": ["kind"], "properties": {"kind": {"const": "spells"}, "cantrips": {"description": "Cantrip picks.", "type": "integer", "minimum": 1}, "level1": {"description": "Level 1 spell picks.", "type": "integer", "minimum": 1}, "count": {"description": "Picks that are each a cantrip or a spell of a level the feature's class's own slots cast (Magical Discoveries).", "type": "integer", "minimum": 1}, "levels": {"description": "Picks by spell level: { \"1\": 1, \"2\": 1 } (Spell Mastery).", "type": "object", "minProperties": 1, "propertyNames": {"pattern": "^[1-9]$"}, "additionalProperties": {"type": "integer", "minimum": 1}}, "pickByLevel": {"description": "One pick from each key's class level on, of the spell level it gives: { \"11\": 6, \"13\": 7 } (Mystic Arcanum).", "type": "object", "minProperties": 1, "propertyNames": {"pattern": "^([1-9]|1[0-9]|20)$"}, "additionalProperties": {"type": "integer", "minimum": 1, "maximum": 9}}, "from": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/ClassRef"}}, "byLevel": {"type": "object", "minProperties": 1, "propertyNames": {"pattern": "^([1-9]|1[0-9]|20)$"}, "additionalProperties": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/SpellRef"}}}}, "oneOf": [{"anyOf": [{"required": ["cantrips"]}, {"required": ["level1"]}, {"required": ["count"]}, {"required": ["levels"]}, {"required": ["pickByLevel"]}], "not": {"required": ["byLevel"]}}, {"required": ["byLevel"], "not": {"anyOf": [{"required": ["cantrips"]}, {"required": ["level1"]}, {"required": ["count"]}, {"required": ["levels"]}, {"required": ["pickByLevel"]}, {"required": ["from"]}]}}]}, {"description": "A choice of one option (Elven Lineage's lineages): the grants and modifiers of the one the character's `choices` name under the entry.", "type": "object", "additionalProperties": false, "required": ["kind", "options"], "properties": {"kind": {"const": "choice"}, "options": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/GrantOption"}}}}, {"description": "More class spell lists the feature's class prepares its spells from, beside its own (Magical Secrets); not its cantrips.", "type": "object", "additionalProperties": false, "required": ["kind", "from"], "properties": {"kind": {"const": "spell-lists"}, "from": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/ClassRef"}}}}]},
+    "GrantOption": {"description": "One option of a choice an entry offers, by its `name`: the grants and modifiers the character has when its `choices` name it under the entry.", "type": "object", "additionalProperties": false, "required": ["name"], "properties": {"name": {"$ref": "#/$defs/Line"}, "grants": {"$ref": "#/$defs/Grants"}, "modifiers": {"$ref": "#/$defs/Modifiers"}}, "anyOf": [{"required": ["grants"]}, {"required": ["modifiers"]}]},
+    "FeatCategory": {"description": "A feat's category.", "enum": ["origin", "general", "fighting-style", "epic-boon"]},
+    "Training": {"description": "Weapon proficiencies and armor training as data, for the warning on equipped gear without them: weapon groups, each limited to weapons with any of `properties` when given, and armor groups.", "type": "object", "additionalProperties": false, "minProperties": 1, "properties": {"weapons": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["group"], "properties": {"group": {"enum": ["simple-weapons", "martial-weapons"]}, "properties": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/WeaponPropertyRef"}}}}}, "armor": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["light-armor", "medium-armor", "heavy-armor", "shields"]}}}},
     "StatBlocks": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/StatBlock" } }
   }
 }

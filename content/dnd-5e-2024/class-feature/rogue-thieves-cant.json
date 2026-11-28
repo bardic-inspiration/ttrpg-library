@@ -9,7 +9,21 @@
     "levels": [
       1
     ],
-    "text": "You picked up various languages in the communities where you plied your roguish talents. You know Thieves' Cant and one other language of your choice, which you choose from the language tables in \"Character Creation.\""
+    "text": "You picked up various languages in the communities where you plied your roguish talents. You know Thieves' Cant and one other language of your choice, which you choose from the language tables in \"Character Creation.\"",
+    "modifiers": [
+      {
+        "kind": "language",
+        "languages": [
+          "Thieves' Cant"
+        ]
+      }
+    ],
+    "grants": [
+      {
+        "kind": "languages",
+        "count": 1
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

@@ -1,6 +1,6 @@
 /*
  * Gallery styles (docs/site.md#gallery, docs/styling.md#styling-system): the controls, filter panel, card grid,
- * cards, and set actions. Preact islands can't carry a scoped <style>
+ * and cards. Preact islands can't carry a scoped <style>
  * block, so the gallery's components share this file, imported by
  * Gallery.tsx. Tokens only; knobs live in tokens/components.css.
  */
@@ -10,12 +10,10 @@
     gap: var(--space-m);
   }
 
-  .gallery__status,
-  .gallery__note {
+  .gallery__status {
     color: var(--color-text-muted);
   }
 
-  .gallery__search,
   .gallery__sort {
     display: flex;
     flex-wrap: wrap;
@@ -24,14 +22,9 @@
     font-family: var(--control-font);
   }
 
-  .gallery__search input {
-    flex: 1;
-    min-inline-size: 0;
-  }
-
   /*
    * The filter menu (docs/site.md#gallery "Layout"): a sidebar beside the results on desktop; on
-   * phones and tablets a container under the search, closed until its toggle opens it. The
+   * phones and tablets a container above the results, closed until its toggle opens it. The
    * breakpoint lives in tokens/components.css.
    */
   .gallery__layout {
@@ -47,7 +40,11 @@
     min-inline-size: 0;
   }
 
-  .gallery__filters-toggle {
+  /*
+   * The toggle is a shared disclosure, whose rule sets display in this layer too; nesting it under
+   * the menu outranks that rule whatever order the bundled stylesheets land in.
+   */
+  .gallery__menu > .gallery__filters-toggle {
     display: var(--filters-toggle-display);
     justify-self: start;
     align-items: center;
@@ -82,16 +79,6 @@
     font-weight: var(--font-weight-label);
   }
 
-  /* Set actions (docs/site.md#gallery "Selection"): export the selection or the filtered set. */
-  .set-actions {
-    display: grid;
-    gap: var(--space-3xs);
-  }
-
-  .set-actions__status {
-    color: var(--color-text-muted);
-  }
-
   .gallery__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-width)), 1fr));
@@ -115,17 +102,6 @@
     list-style: none;
   }
 
-  /* The ruleset set (docs/site.md#gallery "Filters"): its own section, above a break line. */
-  .tree--rulesets {
-    padding-block-end: var(--space-2xs);
-    border-block-end: var(--filters-break);
-
-    /* The break line replaces the last ruleset's own divider. */
-    & .tree__node--type:last-child {
-      border-block-end: none;
-    }
-  }
-
   .tree__children,
   .tree__values,
   .tree__panel {
@@ -136,6 +112,12 @@
   .tree__values[hidden],
   .tree__panel[hidden] {
     display: none;
+  }
+
+  /* A chip facet's values (docs/content-model.md#display): chips in a wrapping row. */
+  .tree__chips {
+    display: flex;
+    flex-wrap: wrap;
   }
 
   .tree__node--type {
@@ -158,32 +140,14 @@
     font-weight: var(--font-weight-label);
   }
 
-  .tree__toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2xs);
-    padding: var(--space-3xs);
-    border-color: transparent;
-    background: transparent;
-    font-weight: var(--font-weight-label);
-    text-align: start;
-
-    &[aria-expanded='true'] .tree__chevron {
-      transform: rotate(90deg);
-    }
+  /* A checkable row's chevron, or the slot it keeps for one, leads the row. */
+  .tree__slot {
+    flex: none;
+    inline-size: var(--disclosure-icon-size);
   }
 
   .tree__node[data-active] > .tree__toggle {
     text-decoration: underline;
-  }
-
-  /* A right-pointing triangle, turned down when open. */
-  .tree__chevron {
-    inline-size: 0;
-    block-size: 0;
-    border-block: calc(var(--tree-chevron) / 2) solid transparent;
-    border-inline-start: var(--tree-chevron) solid currentcolor;
-    transition: transform var(--duration-quick);
   }
 
   .tree__count {
@@ -230,6 +194,23 @@
     object-fit: cover;
   }
 
+  /* A map's diagram in the art's frame, colored as on its page (styles/diagram.css). */
+  .card__thumbnail {
+    display: grid;
+    aspect-ratio: var(--art-aspect);
+    padding: var(--space-2xs);
+    background: var(--map-wall-fill);
+
+    & .card__diagram {
+      block-size: 100%;
+    }
+
+    /* Too small to read on a card; the page labels the zones. */
+    & .diagram .label {
+      display: none;
+    }
+  }
+
   .card__body {
     display: grid;
     align-content: start;
@@ -261,10 +242,10 @@
   }
 
   .card__name {
-    font-size: var(--text-h4);
+    font-size: var(--card-title-size);
     overflow-wrap: anywhere;
 
-    & a {
+    & .card-link {
       color: var(--color-text);
       text-decoration-color: var(--accent);
     }
@@ -288,18 +269,6 @@
     padding: 0 var(--space-2xs);
   }
 
-  /*
-   * The source shows in full, whatever its length (docs/site.md#gallery "Cards"): a name longer
-   * than the card's line wraps inside its badge instead of overflowing the card.
-   */
-  .badge--source {
-    max-inline-size: 100%;
-    overflow-wrap: anywhere;
-    color: var(--badge-source-text);
-    border: var(--badge-source-border);
-    border-radius: var(--badge-source-radius);
-  }
-
   .card__fields {
     display: flex;
     flex-wrap: wrap;
@@ -321,14 +290,14 @@
     font-size: var(--text-small);
   }
 
-  .card__select {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-3xs);
-    justify-self: start;
-    font-family: var(--control-font);
+  /*
+   * The source, on a smaller muted line below the summary (docs/site.md#gallery "Cards"). It shows
+   * in full, whatever its length, wrapping instead of overflowing the card.
+   */
+  .card__source {
+    font-family: var(--card-source-font);
     font-size: var(--text-small);
-    color: var(--color-text-muted);
-    cursor: pointer;
+    color: var(--card-source-text);
+    overflow-wrap: anywhere;
   }
 }

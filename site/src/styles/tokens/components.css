@@ -11,6 +11,12 @@
     --header-bg: var(--color-surface);
     --header-border-color: var(--color-border);
     --footer-text-color: var(--color-text-muted);
+    --site-title-size: var(--text-h4);
+    /* The header's search field (docs/site.md#page-header): the width it grows from. */
+    --header-search-width: var(--size-card-min);
+    /* The preview notice above the header (docs/workflow.md#deploy). */
+    --preview-notice-bg: var(--color-bg);
+    --preview-notice-rule: var(--border-width-strong) solid var(--color-accent);
 
     /* Gallery grid and cards. */
     --card-min-width: var(--size-card-min);
@@ -20,6 +26,7 @@
     --card-radius: var(--radius-card);
     --card-padding: var(--space-card);
     --card-shadow: var(--shadow-card);
+    --card-title-size: var(--text-h4);
     --art-aspect: var(--ratio-art);
     --filters-width: var(--size-filters);
     /* Below the desktop breakpoint (below), the filter menu stacks over the results, closed. */
@@ -29,17 +36,46 @@
     --filters-gap: var(--space-s);
     --filter-count-text: var(--color-text-muted);
     --tree-indent: var(--space-s);
-    --tree-chevron: var(--space-2xs);
-    /* The break line under the ruleset set, at the top of the filter menu. */
-    --filters-break: var(--border-width-strong) solid var(--color-border);
 
-    /* Accordion pages: a section's chevron, and the table of contents' column width. */
-    --accordion-chevron: var(--space-2xs);
+    /* Accordion pages: the table of contents' column width. */
     --toc-column-width: var(--size-card-min);
+
+    /* A character profile's skill list: its column width. */
+    --skill-column-width: var(--size-card-min);
+
+    /*
+     * A map's diagram (docs/content-model.md#map-diagrams): its classes' colors, in the diagram's
+     * own units, so a stroke or a label scales with it. The zone a link lands on, or under the
+     * pointer, is tinted with the accent, and its entry in the zone list too.
+     */
+    --map-wall-fill: var(--parchment-400);
+    --map-wall-stroke: var(--ink-600);
+    --map-zone-fill: var(--color-surface);
+    --map-zone-stroke: var(--ink-600);
+    --map-stroke-width: 1.5px;
+    --map-door-stroke: var(--color-accent);
+    --map-door-width: 4px;
+    --map-feature-fill: var(--ink-400);
+    --map-label-fill: var(--color-text);
+    --map-label-size: 11px;
+    --map-zone-target-fill: color-mix(in srgb, var(--accent) 25%, var(--color-surface));
+    --map-zone-target-bg: color-mix(in srgb, var(--accent) 10%, var(--color-surface));
+
+    /* An arrangement's kit parts (docs/site.md#kit-parts): a ref's thumbnail, and boxed read-aloud text. */
+    --kit-thumbnail-size: 4rem;
+    --kit-read-aloud-bg: color-mix(in srgb, var(--accent) 8%, var(--color-surface));
+
+    /* A detail page's summary line, under its title. */
+    --entry-summary-size: var(--text-h4);
 
     /* Stat blocks. */
     --statblock-bg: var(--color-surface);
     --statblock-heading-font: var(--font-heading);
+    /* A component's headings are sized by role, since their level depends on where it nests. */
+    --statblock-title-size: var(--text-h3);
+    --statblock-heading-size: var(--text-h4);
+    /* A section nested in a stat block's section (a class feature under Class Features): a step smaller. */
+    --statblock-subheading-size: var(--text-h5);
     --statblock-label-font: var(--font-heading);
     --statblock-rule-color: var(--accent);
     --statblock-rule-width: var(--border-width-strong);
@@ -65,15 +101,30 @@
     --control-padding-inline: var(--space-2xs);
     --chip-radius: var(--radius-chip);
 
+    /* Shared components (docs/styling.md#shared-components). */
+    --disclosure-chevron: var(--space-2xs);
+    --disclosure-gap: var(--space-2xs);
+    --disclosure-icon-size: var(--icon-size);
+    --button-gap: var(--space-3xs);
+    --button-primary-bg: var(--color-accent);
+    --button-primary-text: var(--color-surface);
+    --button-primary-hover-bg: var(--color-text);
+    --chip-pressed-bg: var(--color-accent);
+    --chip-pressed-text: var(--color-surface);
+    --toggle-track-width: var(--space-l);
+    --toggle-track-height: var(--space-s);
+    --toggle-on-bg: var(--color-accent);
+    --toggle-off-bg: var(--color-control-border);
+    --toggle-thumb-bg: var(--color-surface);
+
     /* Badges. */
     --badge-font: var(--font-ui);
     --badge-border: var(--border-width) solid var(--accent);
     --badge-text: var(--accent);
-    /* The source badge is neutral, so it never reads as a type or a rarity. */
-    --badge-source-border: var(--border-width) solid var(--color-control-border);
-    --badge-source-text: var(--color-text-muted);
-    /* Square-cornered, so a long source that wraps stays inside its border. */
-    --badge-source-radius: var(--control-radius);
+
+    /* A card's source line: smaller and muted, so it never reads as a type or a rarity. */
+    --card-source-font: var(--font-ui);
+    --card-source-text: var(--color-text-muted);
 
     /* The official star in a card's top right corner, and the slot every card keeps for it. */
     --card-star-size: var(--size-icon);

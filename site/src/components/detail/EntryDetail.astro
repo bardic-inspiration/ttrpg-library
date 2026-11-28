@@ -1,22 +1,25 @@
 ---
 // The body of a detail page (docs/site.md#detail-page): art when the entry has it, name,
 // type, and summary; the type template; the description as lore; forward refs and
-// back-refs, an official page's links to homebrew in a Homebrew section after them; tag chips into
-// the Library, filtered; and provenance. The
-// page passes its export controls (an island) in the `export` slot.
+// back-refs (but those into a map's zones, which its template lists), each label's list a disclosure, an official page's links to homebrew in a Homebrew
+// section after them; and provenance.
+// The page passes its export controls (an island) in the `export` slot, and any section of its own,
+// such as an encounter's Difficulty, in the default slot, after the template.
 import type { LoadedEntry } from '../../lib/library';
 import { rulesetModule } from '../../lib/library';
+import { outsideZones } from '../../lib/map';
 import { groupPageRefs, groupRefs, splitHomebrew, type RefTarget } from '../../lib/refs';
 import { isOfficial } from '../../../../rulesets/module';
-import { provenance, sourceChips, tagChips } from '../../lib/detail';
+import { provenance, sourceChips } from '../../lib/detail';
 import { rulesetPublishers } from '../../lib/rules';
 import { renderMarkdown } from '../../lib/markdown';
 import { present } from '../../lib/display';
 import { url } from '../../lib/url';
-import { libraryQuery } from '../../lib/gallery/library-url';
+import { typeLibrary } from '../../lib/gallery/library-url';
 import type { Registry } from '../../lib/gallery/config';
-import registry from '../../../../config/types.json';
+import registry from '@library/config/types.json';
 import ArtFrame from '../templates/parts/ArtFrame.astro';
+import Details from '../shared/Disclosure.astro';
 import EntryTemplate from '../templates/EntryTemplate.astro';
 
 interface Props {
@@ -35,14 +38,14 @@ const typeLabel =
   (registry as Record<string, { types: Record<string, { label: string }> }>)[entry.ruleset]?.types[entry.type]?.label ?? entry.type;
 const module = rulesetModule(entry.ruleset);
 const labelFor = (type: string, path: string) => module.refLabels(type, path);
-// A page type's links are its own and its components' (docs/content-model.md#components).
+// A page type's links are its own and its components' (docs/content-model.md#components). A
+// back-link into one of a map's zones is listed under its zone by the map's template, not again here.
 const links = loaded.components
   ? groupPageRefs(loaded, loaded.components, targets, labelFor)
-  : groupRefs(entry.type, loaded.refs, loaded.refBy, targets, labelFor);
+  : groupRefs(entry.type, loaded.refs, outsideZones(loaded.refBy), targets, labelFor);
 // An SRD page lists its links to homebrew in a Homebrew section of their own, after its SRD links.
 const allGroups = [...links.forward, ...links.back];
 const { official: linkGroups, homebrew: homebrewGroups } = isOfficial(entry) ? splitHomebrew(allGroups) : { official: allGroups, homebrew: [] };
-const chips = tagChips(entry);
 const source = provenance(entry);
 // A slash isn't a break point, so "Antipathy/Sympathy" could set a phone page's width.
 const nameParts = entry.name.split('/');
@@ -57,7 +60,7 @@ const nameParts = entry.name.split('/');
     <div class="entry-detail__intro">
       <h1>{nameParts.map((part, i) => <>{i > 0 && <>/<wbr /></>}{part}</>)}</h1>
       <ul class="entry-detail__badges">
-        <li><a class="entry-detail__type" href={`${url()}${libraryQuery(registry as unknown as Registry, entry.ruleset, entry.type)}`}>{typeLabel}</a></li>
+        <li><a class="entry-detail__type" href={url(typeLibrary(registry as unknown as Registry, entry.ruleset, entry.type))}>{typeLabel}</a></li>
         {sourceChips(entry, rulesetPublishers()[entry.ruleset]).map((chip) => (
           <li class={`entry-detail__chip entry-detail__chip--${chip.kind}`}>{chip.text}</li>
         ))}
@@ -67,7 +70,9 @@ const nameParts = entry.name.split('/');
     </div>
   </header>
 
-  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} mode="screen" level={2} />
+  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} refBy={loaded.refBy} shown={loaded.shown} mode="screen" level={2} />
+
+  <slot />
 
   {present(entry.description) && (
     <section class="entry-detail__lore" aria-labelledby="lore-heading">
@@ -82,42 +87,24 @@ const nameParts = entry.name.split('/');
   ].map(({ id, heading, groups }) => groups.length > 0 && (
     <section aria-labelledby={id}>
       <h2 id={id}>{heading}</h2>
-      <dl class="entry-detail__links">
+      <div class="entry-detail__links">
         {groups.map((group) => (
-          <>
-            <dt>{group.label}</dt>
-            <dd>
+          <Details class="entry-detail__refs" summaryClass="entry-detail__refs-label" open>
+            <Fragment slot="summary">{group.label}</Fragment>
+            <p class="entry-detail__refs-list">
               {group.targets.map((target, i) => (
                 <>{i > 0 && ', '}<a href={url(target.path)}>{target.name}</a></>
               ))}
-            </dd>
-          </>
+            </p>
+          </Details>
         ))}
-      </dl>
+      </div>
     </section>
   ))}
-
-  {chips.length > 0 && (
-    <section aria-labelledby="tags-heading">
-      <h2 id="tags-heading">Tags</h2>
-      <ul class="entry-detail__tags">
-        {chips.map((chip) => (
-          <li><a class="tag-chip" href={url(chip.path)}><span class="tag-chip__key">{chip.key}:</span> {chip.value}</a></li>
-        ))}
-      </ul>
-    </section>
-  )}
 
   <p class="entry-detail__provenance">
     <small>
       Added {source.createdAt}{present(source.updatedAt) && `, revised ${source.updatedAt}`}.
-      {source.issues.length > 0 && (
-        <>
-          {' '}From {source.issues.map((issue, i) => (
-            <>{i > 0 && ', '}<a href={issue.url}>#{issue.number}</a></>
-          ))}.
-        </>
-      )}
       {source.credit && (
         <>
           {' '}Adapted from <a href={source.credit.source}>a work by {source.credit.author}</a>, licensed under{' '}
@@ -134,7 +121,7 @@ const nameParts = entry.name.split('/');
     .entry-detail {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
-      gap: var(--space-l);
+      gap: var(--flow-section);
       max-inline-size: var(--measure);
     }
 
@@ -181,7 +168,7 @@ const nameParts = entry.name.split('/');
     }
 
     .entry-detail__summary {
-      font-size: var(--text-h4);
+      font-size: var(--entry-summary-size);
     }
 
     .lore {
@@ -191,42 +178,23 @@ const nameParts = entry.name.split('/');
       padding-inline-start: var(--space-s);
 
       & > :global(* + *) {
-        margin-block-start: var(--space-2xs);
+        margin-block-start: var(--flow-text);
       }
     }
 
     .entry-detail__links {
       display: grid;
-      grid-template-columns: max-content 1fr;
-      column-gap: var(--space-2xs);
-
-      & dt {
-        font-weight: var(--font-weight-strong);
-      }
-    }
-
-    .entry-detail__tags {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-2xs);
-      padding: 0;
-      list-style: none;
     }
 
-    .tag-chip {
-      display: inline-block;
-      font-family: var(--control-font);
-      font-size: var(--text-small);
-      color: var(--control-text);
-      background: var(--control-bg);
-      border: var(--control-border);
-      border-radius: var(--chip-radius);
-      padding: var(--control-padding-block) var(--control-padding-inline);
-      text-decoration: none;
+    /* The disclosure is rendered by the shared component, outside this file's scope. */
+    .entry-detail__links :global(.entry-detail__refs-label) {
+      font-weight: var(--font-weight-strong);
     }
 
-    .tag-chip__key {
-      color: var(--color-text-muted);
+    /* Under the label's text, past the chevron. */
+    .entry-detail__refs-list {
+      padding-inline-start: calc(var(--disclosure-chevron) + var(--disclosure-gap));
     }
 
     .entry-detail__provenance {

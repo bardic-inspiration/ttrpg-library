@@ -9,6 +9,8 @@ export interface FoundRef {
   path: string;
   /** The ref value, `<type>/<id>`. */
   ref: string;
+  /** The zone of a map it names: a ref object's `zone`, or a token's `#<zone-id>`. */
+  zone?: string;
 }
 
 /** The fields of an entry that linking needs. */
@@ -31,6 +33,8 @@ export interface Link {
   path: string;
   /** The other end, `<type>/<id>`: the target of a forward link, the referrer of a back-link. */
   key: string;
+  /** The zone of the map the ref names, on both ends' lists: the target's zone. */
+  zone?: string;
 }
 
 export interface Links {
@@ -46,10 +50,12 @@ export interface RefIssue {
 export const entryKey = (entry: { type: string; id: string }): string => `${entry.type}/${entry.id}`;
 
 /** The keys a `Ref` object may have (docs/content-model.md#references): `ref`, and an optional `note`. */
-// `count` is a creature gear ref's (docs/rulesets.md#creatures); the schema allows it only there.
-const REF_KEYS = new Set(['ref', 'note', 'count']);
+// `count` is a creature gear ref's (docs/rulesets.md#creatures) or a roster line's, `zone` a map zone ref's
+// (docs/rulesets.md#maps), and `show` a ref's in an arrangement's part (docs/content-model.md#arrangements);
+// the schemas allow each only where it belongs.
+const REF_KEYS = new Set(['ref', 'note', 'count', 'zone', 'show']);
 
-export const isRef = (value: unknown): value is { ref: string; note?: string } =>
+export const isRef = (value: unknown): value is { ref: string; note?: string; zone?: string } =>
   typeof value === 'object' &&
   value !== null &&
   !Array.isArray(value) &&
@@ -63,10 +69,35 @@ export const isRef = (value: unknown): value is { ref: string; note?: string } =
  */
 export const REF_TOKEN = /\{ref:([^{}]*)\}/g;
 
-/** What a `{ref:…}` token must hold: a type and an id, then optionally a space and display text. */
-const REF_KEY = /^[a-z][a-z0-9-]*\/[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/**
+ * What a `{ref:…}` token must hold: a type and an id, optionally `#` and a map's zone id, then
+ * optionally a space and display text.
+ */
+const REF_KEY = /^[a-z][a-z0-9-]*\/[a-z0-9]+(?:-[a-z0-9]+)*(?:#[a-z0-9]+(?:-[a-z0-9]+)*)?$/;
 
-/** A well-formed `{ref:…}` token: its key, `<type>/<id>`, and its display text, if any. */
+/**
+ * The key of one zone of a map, `map/<id>#<zone-id>` (docs/content-model.md#references): a token
+ * names a zone by it, and the site keys a zone's name and anchor by it.
+ */
+export const zoneKey = (key: string, zone: string): string => `${key}#${zone}`;
+
+/** A ref key split at its zone: `map/<id>#<zone-id>` into the map's key and the zone. */
+export function splitZone(key: string): { key: string; zone?: string } {
+  const hash = key.indexOf('#');
+  return hash === -1 ? { key } : { key: key.slice(0, hash), zone: key.slice(hash + 1) };
+}
+
+/** The key a ref object reads by: its `ref`, or its zone's key when it names one. */
+export const refObjectKey = (value: { ref: string; zone?: string }): string => (value.zone === undefined ? value.ref : zoneKey(value.ref, value.zone));
+
+/** An entry's zones, when its stats have them: a map's (docs/rulesets.md#maps). */
+export function entryZones(stats: unknown): { id: string; name: string }[] | undefined {
+  const zones = typeof stats === 'object' && stats !== null ? (stats as { zones?: unknown }).zones : undefined;
+  if (!Array.isArray(zones)) return undefined;
+  return zones.filter((z): z is { id: string; name: string } => typeof z?.id === 'string' && typeof z?.name === 'string');
+}
+
+/** A well-formed `{ref:…}` token: its key, `<type>/<id>` or a zone's `<type>/<id>#<zone-id>`, and its display text, if any. */
 export interface RefToken {
   key: string;
   text?: string;
@@ -113,7 +144,10 @@ export function textRefs(text: string, path: string): { refs: FoundRef[]; malfor
   const malformed: MalformedRef[] = [];
   for (const match of text.matchAll(REF_TOKEN)) {
     const parsed = parseRefToken(match[1] ?? '');
-    if (parsed) refs.push({ path, ref: parsed.key });
+    if (parsed) {
+      const { key, zone } = splitZone(parsed.key);
+      refs.push(zone === undefined ? { path, ref: key } : { path, ref: key, zone });
+    }
     else malformed.push({ path, raw: match[0] });
   }
   return { refs, malformed };
@@ -126,7 +160,7 @@ export function textRefs(text: string, path: string): { refs: FoundRef[]; malfor
  * optional `note`, is a reference.
  */
 export function collectRefs(stats: unknown, path = 'stats', malformed: MalformedRef[] = []): FoundRef[] {
-  if (isRef(stats)) return [{ path, ref: stats.ref }];
+  if (isRef(stats)) return [typeof stats.zone === 'string' ? { path, ref: stats.ref, zone: stats.zone } : { path, ref: stats.ref }];
   if (typeof stats === 'string') {
     const found = textRefs(stats, path);
     malformed.push(...found.malformed);
@@ -157,8 +191,9 @@ export function objectRefs(stats: unknown, path = 'stats'): FoundRef[] {
  * Resolves every ref against the library and computes back-references. A ref
  * fails when no entry of its type has its id (IDs are unique per type,
  * docs/content-model.md#ids-and-names), or when the target is in another ruleset (not allowed). Ruleset
- * primitives and groups are targets like entries (docs/rulesets.md#rules-data). Links are keyed by
- * `<type>/<id>`; only resolved refs become links.
+ * primitives and groups are targets like entries (docs/rulesets.md#rules-data). A ref that names a
+ * zone fails, too, when its target has no such zone: a map's `zones` are its only ones. Links are
+ * keyed by `<type>/<id>`, with the zone beside the key; only resolved refs become links.
  */
 export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; issues: RefIssue[] } {
   const byKey = new Map<string, RefEntry>();
@@ -185,9 +220,9 @@ export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; i
       ...collectRefs(entry.stats, entry.statsPath ?? 'stats', malformed),
     ];
     for (const { path, raw } of malformed) {
-      issues.push({ file: entry.file, message: `${path}: ref token ${raw} is malformed; write {ref:<type>/<id>} or {ref:<type>/<id> <text>}, such as {ref:spell/fireball}` });
+      issues.push({ file: entry.file, message: `${path}: ref token ${raw} is malformed; write {ref:<type>/<id>} or {ref:<type>/<id> <text>}, such as {ref:spell/fireball}, and add #<zone-id> to name a map's zone` });
     }
-    for (const { path, ref } of found) {
+    for (const { path, ref, zone } of found) {
       const slash = ref.indexOf('/');
       const [type, id] = [ref.slice(0, slash), ref.slice(slash + 1)];
       const target = byKey.get(ref);
@@ -196,12 +231,19 @@ export function linkEntries(entries: RefEntry[]): { links: Map<string, Links>; i
       if (!target && other) problem = `no ${type} has id "${id}"; "${id}" is a ${other.type}`;
       else if (!target) problem = `no ${type} has id "${id}"`;
       else if (target.ruleset !== entry.ruleset) problem = `"${id}" is in ${target.ruleset}; refs can't cross rulesets`;
+      // A target that failed its own schema has no stats to read zones from; its schema error stands.
+      else if (zone !== undefined && target.stats !== undefined) {
+        const zones = entryZones(target.stats)?.map((z) => z.id);
+        if (!zones) problem = `${ref} has no zones; only a map's zones can be named`;
+        else if (!zones.includes(zone)) problem = `${ref} has no zone "${zone}"; name one of its zones (${zones.join(', ')})`;
+      }
       if (problem || !target) {
-        issues.push({ file: entry.file, message: `${path}: ref "${ref}" does not resolve: ${problem}` });
+        issues.push({ file: entry.file, message: `${path}: ref "${zone === undefined ? ref : zoneKey(ref, zone)}" does not resolve: ${problem}` });
         continue;
       }
-      linksOf(from).refs.push({ path, key: ref });
-      linksOf(ref).refBy.push({ path, key: from });
+      const at = zone === undefined ? {} : { zone };
+      linksOf(from).refs.push({ path, key: ref, ...at });
+      linksOf(ref).refBy.push({ path, key: from, ...at });
     }
   }
   return { links, issues };

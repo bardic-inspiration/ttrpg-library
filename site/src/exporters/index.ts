@@ -5,12 +5,17 @@ import { json } from './json.ts';
 import { open5e } from './open5e.ts';
 import { png } from './png.ts';
 import { print } from './print.ts';
-import type { ExportScope, Exporter } from './types.ts';
+import { typeKey } from '../lib/type-key.ts';
+import type { EntryKey, ExportScope, Exporter } from './types.ts';
 
 export const modules: Record<string, Exporter> = { json, open5e, png, print };
 
-/** The exporters named by `ids`, in order, optionally only those offering `scope`, and `type` on an entry's page. An unknown id is a build error. */
-export function exportersFor(ids: string[], scope?: ExportScope, type?: string): Exporter[] {
+/** The ruleset and type of the entry whose page shows the controls. */
+export type EntryType = Pick<EntryKey, 'ruleset' | 'type'>;
+
+/** The exporters named by `ids`, in order, optionally only those offering `scope`, and on an entry's page, its type. An unknown id is a build error. */
+export function exportersFor(ids: string[], scope?: ExportScope, entry?: EntryType): Exporter[] {
+  const key = entry && typeKey(entry.ruleset, entry.type);
   return ids
     .map((id) => {
       const exporter = modules[id];
@@ -18,11 +23,11 @@ export function exportersFor(ids: string[], scope?: ExportScope, type?: string):
       return exporter;
     })
     .filter((exporter) => !scope || exporter.scopes.includes(scope))
-    .filter((exporter) => type === undefined || !exporter.types || exporter.types.includes(type));
+    .filter((exporter) => key === undefined || !exporter.types || exporter.types.includes(key));
 }
 
-/** The configured exporters, optionally only those offering `scope`, and `type` on an entry's page. */
-export const configuredExporters = (scope?: ExportScope, type?: string): Exporter[] => exportersFor(config.exporters, scope, type);
+/** The configured exporters, optionally only those offering `scope`, and on an entry's page, its type. */
+export const configuredExporters = (scope?: ExportScope, entry?: EntryType): Exporter[] => exportersFor(config.exporters, scope, entry);
 
 /** What an exporting place shows: at most a Print button and a Download menu (docs/export.md#controls). */
 export interface ExportControlSet {
@@ -42,8 +47,8 @@ export function controlsFor(exporters: Exporter[], { download = true }: { downlo
   };
 }
 
-/** The configured controls for `scope`; an entry's page passes its `type`. */
-export const configuredControls = (scope: ExportScope, options?: { download?: boolean; type?: string }): ExportControlSet =>
-  controlsFor(configuredExporters(scope, options?.type), options);
+/** The configured controls for `scope`; an entry's page passes its `entry`'s ruleset and type. */
+export const configuredControls = (scope: ExportScope, options?: { download?: boolean; entry?: EntryType }): ExportControlSet =>
+  controlsFor(configuredExporters(scope, options?.entry), options);
 
 export type { CaptureRequest, ExportItem, ExportKind, ExportOptions, ExportReport, ExportScope, Exporter } from './types.ts';

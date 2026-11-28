@@ -3,8 +3,10 @@ import { h } from 'preact';
 import { renderToString } from 'preact-render-to-string';
 import { beforeAll, describe, expect, it } from 'vitest';
 import Gallery from '../../../site/src/components/gallery/Gallery.tsx';
-import type { LibraryRecord } from '../../../site/src/lib/gallery/config.ts';
-import { fixtureRecords, whole } from './helpers.ts';
+import { NO_FACET_DATA, type LibraryRecord } from '../../../site/src/lib/gallery/config.ts';
+import { chipFacets, loadSchemas } from '../../../site/src/lib/gallery/facet-data.ts';
+import registry from '../../../config/types.json' with { type: 'json' };
+import { fixtureRecords, record, whole } from './helpers.ts';
 
 let records: LibraryRecord[];
 beforeAll(async () => {
@@ -25,10 +27,10 @@ describe('Gallery', () => {
   it('renders a card per result, with the type badge and card fields, and no art when there is none', () => {
     const html = render({});
     // The three example entries, and the two classes Frost Lance names.
-    expect(html.match(/<article class="card"/g)).toHaveLength(5);
+    expect(html.match(/<article class="card linked-card"/g)).toHaveLength(5);
     expect(html).toContain('data-type="creature"');
     expect(html).toContain('<dt>CR</dt><dd>2</dd>');
-    expect(html).toContain('<dt>Level</dt><dd>Level 1</dd>');
+    expect(html).toContain('<dt>Level</dt><dd>1</dd>');
     expect(html).not.toContain('art-placeholder');
     expect(html).not.toContain('Art placeholder');
     expect(html).not.toContain('card__art');
@@ -46,6 +48,47 @@ describe('Gallery', () => {
     expect(html).not.toContain('Art placeholder');
   });
 
+  it("shows a map's diagram as its card's thumbnail, with its scale", () => {
+    const diagram = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" class="diagram card__diagram" aria-hidden="true" focusable="false"><rect class="zone" x="0" y="0" width="5" height="5" /></svg>';
+    const cistern = record({ id: 'sunken-cistern', type: 'map', name: 'Sunken Cistern', diagram, facets: { 'stats.scale': 'dungeon' } });
+    const html = render({ records: [...records, cistern], initialQuery: '?f.type=map' });
+    expect(html.match(/<article class="card linked-card"/g)).toHaveLength(1);
+    expect(html).toContain(`<div class="card__thumbnail">${diagram}</div>`);
+    expect(html).toContain('<dt>Scale</dt><dd>Dungeon</dd>');
+    expect(html).not.toContain('card__art');
+  });
+
+  it('reads the repo’s chip fields from its schemas (docs/content-model.md#display)', () => {
+    expect(chipFacets(registry as never, loadSchemas())).toEqual({
+      'dnd-5e-2024/class': ['stats.hitDie'],
+      'dnd-5e-2024/creature': ['stats.cr'],
+      'dnd-5e-2024/feat': ['stats.category'],
+      'dnd-5e-2024/item': ['stats.category'],
+      'dnd-5e-2024/spell': ['stats.level', 'stats.school'],
+    });
+  });
+
+  it('shows a chip field on a card as its label and value, a badge, and its filter values as chips', () => {
+    const facetData = { ...NO_FACET_DATA, chips: { 'dnd-5e-2024/spell': ['stats.level', 'stats.school'] } };
+    const html = render({ initialQuery: '?f.type=spell', facetData });
+    expect(html).toContain('<li class="badge">Level: 1</li>');
+    expect(html).not.toContain('Level: Level');
+    expect(html).not.toContain('<dt>Level</dt>');
+    expect(html).not.toContain('<dt>School</dt>');
+    expect(html).toMatch(/<ul class="tree__values tree__chips" id="filter-dnd-5e-2024-spell-stats-school-panel"[^>]*><li><button type="button" class="chip" aria-pressed="false">/);
+    expect(html).not.toContain('<input type="checkbox" id="filter-dnd-5e-2024-spell-stats-school-');
+    // A range facet keeps its min and max inputs, whatever its display.
+    expect(html).toContain('tree__range');
+  });
+
+  it('reads CR as a chip with its label, and keeps its range inputs', () => {
+    const facetData = { ...NO_FACET_DATA, chips: { 'dnd-5e-2024/creature': ['stats.cr'] } };
+    const html = render({ initialQuery: '?f.type=creature', facetData });
+    expect(html).toContain('<li class="badge">CR: 2</li>');
+    expect(html).not.toContain('<dt>CR</dt>');
+    expect(html).toContain('tree__range');
+  });
+
   it('announces the result count in a polite live region', () => {
     expect(render({})).toContain('<p role="status" class="gallery__count">5 entries</p>');
     expect(render({ initialQuery: '?f.type=spell' })).toContain('>1 entry</p>');
@@ -58,7 +101,7 @@ describe('Gallery', () => {
     expect(html).not.toContain('aria-pressed');
     expect(html).toMatch(/<input type="checkbox" id="filter-dnd-5e-2024-spell" checked\/><label for="filter-dnd-5e-2024-spell">Spell <span class="tree__count">1<span class="visually-hidden"> entry<\/span><\/span><\/label>/);
     expect(html).toMatch(/<input type="checkbox" id="filter-dnd-5e-2024-creature"\/>/);
-    expect(html).toMatch(/<button type="button" class="tree__toggle" id="filter-dnd-5e-2024-creature-toggle" aria-expanded="false" aria-controls="filter-dnd-5e-2024-creature-panel" aria-label="Creature filters">/);
+    expect(html).toMatch(/<button type="button" class="disclosure disclosure--icon tree__toggle" id="filter-dnd-5e-2024-creature-toggle" aria-expanded="false" aria-controls="filter-dnd-5e-2024-creature-panel" aria-label="Creature filters"><span class="chevron" aria-hidden="true"><\/span><\/button>/);
     expect(html).toMatch(/<ul class="tree__children" id="filter-dnd-5e-2024-creature-panel" hidden>/);
   });
 
@@ -80,56 +123,110 @@ describe('Gallery', () => {
     expect(html).toContain('<ul class="tree__values" id="filter-dnd-5e-2024-creature-stats-creatureType-panel" aria-labelledby="filter-dnd-5e-2024-creature-stats-creatureType-toggle">');
   });
 
-  it('puts the search above the filter menu, which a toggle opens on phones and tablets', () => {
+  it('opens the filter menu with a toggle on phones and tablets, and leaves search to the page header (docs/site.md#page-header)', () => {
     const html = render({});
-    expect(html).toMatch(/class="gallery__menu"><div class="gallery__search" role="search">.*<button type="button" class="gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters">.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
+    expect(html).not.toContain('role="search"');
+    expect(html).toMatch(/class="gallery__menu"><button type="button" class="disclosure gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters"><span class="chevron" aria-hidden="true"><\/span>.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
     expect(html).not.toContain('data-open');
   });
 
   it('labels every control', () => {
     const html = render({ initialQuery: '?f.stats.cr=1..' });
-    for (const id of ['gallery-q', 'gallery-sort', 'gallery-dir', 'filter-dnd-5e-2024-creature-stats-cr-min', 'filter-dnd-5e-2024-creature-stats-cr-max']) {
+    for (const id of ['gallery-sort', 'gallery-dir', 'filter-dnd-5e-2024-creature-stats-cr-min', 'filter-dnd-5e-2024-creature-stats-cr-max']) {
       expect(html).toContain(`for="${id}"`);
       expect(html).toContain(`id="${id}"`);
     }
-    expect(html).toContain('Select<span class="visually-hidden"> Cinder Hound</span>');
+    expect(html).toContain('In cart<span class="visually-hidden">: Cinder Hound</span>');
   });
 
-  it('offers set actions on the filtered set beside the result count', () => {
+  it('leaves the set export to the page header (docs/site.md#page-header)', () => {
     const html = render({ initialQuery: '?f.type=spell' });
-    expect(html).toMatch(/class="gallery__summary">.*class="set-actions"/);
-    expect(html).toContain('Print<span class="visually-hidden"> 1 entry</span>');
+    expect(html).toContain('class="gallery__summary"');
+    expect(html).not.toContain('set-actions');
   });
 
   it('links each card to its detail page', () => {
     expect(render({})).toContain('href="/ttrpg-library/dnd-5e-2024/creature/cinder-hound/"');
   });
 
-  it('puts the ruleset set in its own list above the other filters (#380)', () => {
+  it('puts Sources, with Official and Homebrew, then Types in the filter tree, with no Ruleset node', () => {
     const html = render({});
-    expect(html).toMatch(/<ul class="tree tree--rulesets">.*Ruleset.*<\/ul><ul class="tree">.*Creature/);
+    const [before, tree = ''] = html.split('<ul class="tree">');
+    expect(before).not.toContain('Creature');
+    expect(tree).toMatch(/Sources.*Official.*Homebrew.*Types.*Creature/);
+    expect(tree).not.toContain('Ruleset');
+    expect(html.match(/<ul class="tree">/g)).toHaveLength(1);
+  });
+
+  it('shows only its own ruleset’s entries, and offers only its types', () => {
+    const stranger = { ...records[0]!, ruleset: 'other', id: 'stranger', name: 'Stranger Card', author: 'publisher' };
+    const html = renderToString(h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records: [...records, stranger], initialQuery: '', ruleset: 'dnd-5e-2024' }));
+    expect(html).not.toContain('Stranger Card');
+    expect(html.match(/<article class="card linked-card"/g)).toHaveLength(2);
   });
 
   it('starts a fresh Library on the official content alone: the two SRD classes, not the homebrew fixtures', () => {
     const html = renderToString(h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records, initialQuery: '' }));
-    expect(html.match(/<article class="card"/g)).toHaveLength(2);
+    expect(html.match(/<article class="card linked-card"/g)).toHaveLength(2);
     expect(html).not.toContain('Cinder Hound');
     expect(html).not.toContain('gallery__clear');
+  });
+
+  describe('SRD equipment and conditions as cards (docs/site.md#gallery "Cards")', () => {
+    let all: LibraryRecord[];
+    beforeAll(async () => {
+      all = await fixtureRecords({ primitives: true });
+    });
+    const card = (html: string, name: string) => html.split('<article').find((part) => part.includes(`>${name}</a>`)) ?? '';
+    const fresh = (initialQuery = '') => renderToString(h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records: all, initialQuery }));
+
+    it('shows on a fresh Library as official content, beside the SRD classes', () => {
+      const html = fresh();
+      const primitives = all.filter((r) => r.createdAt === null).length;
+      expect(html.match(/<article class="card linked-card"/g)).toHaveLength(2 + primitives);
+      expect(html).toContain('>Blinded</a>');
+      expect(html).toContain('>Longsword</a>');
+    });
+
+    it('opens its section on the rules page, with the official star, no summary, and no source line', () => {
+      const blinded = card(fresh('?f.type=condition'), 'Blinded');
+      expect(blinded).toContain('href="/ttrpg-library/dnd-5e-2024/rules/conditions/#condition-blinded"');
+      expect(blinded).toContain('aria-label="Official"');
+      expect(blinded).not.toContain('card__summary');
+      expect(blinded).not.toContain('card__source');
+      expect(blinded).toContain('In cart');
+    });
+
+    it('sits under its type beside its custom entries, sorted with them', () => {
+      const fading = record({ id: 'fading', type: 'condition', name: 'Fading', author: 'bardic-inspiration' });
+      const html = renderToString(
+        h(Gallery, { indexUrl: '/library.json', base: '/ttrpg-library/', records: [...all, fading], initialQuery: whole('?f.type=condition') }),
+      );
+      const names = [...html.matchAll(/<a class="card-link" href="[^"]*">([^<]+)<\/a>/g)].map((m) => m[1]);
+      expect(names).toHaveLength(16);
+      expect(names.indexOf('Fading')).toBe(names.indexOf('Exhaustion') + 1);
+      expect(card(html, 'Fading')).toContain('card__summary');
+    });
+
+    it('takes its type\'s card fields from its stats and derived values', () => {
+      const longsword = card(fresh('?f.type=equipment'), 'Longsword');
+      expect(longsword).toContain('<dt>Cost (GP)</dt><dd>15</dd>');
+    });
   });
 
   describe('where an entry comes from (#379)', () => {
     const official = (r: LibraryRecord): LibraryRecord => ({ ...r, source: 'SRD 5.2', author: 'publisher' });
     const card = (html: string, name: string) => html.split('<article').find((part) => part.includes(`>${name}</a>`)) ?? '';
 
-    it('shows the source first in the badge list, and no source badge for an entry with none', () => {
+    it('shows the source on its own line below the summary, not as a badge, and no line for an entry with none', () => {
       const withSource = records.map((r) => (r.id === 'frost-lance' ? { ...r, source: "Bardic's Compendium of Test Fixtures" } : r));
       const html = render({ records: withSource, initialQuery: '?f.type=spell' });
-      expect(card(html, 'Frost Lance')).toMatch(
-        /<ul class="card__badges"><li class="badge badge--source">Bardic(&#39;|')s Compendium of Test Fixtures<\/li><li class="badge">Spell<\/li>/,
-      );
+      const lance = card(html, 'Frost Lance');
+      expect(lance).toMatch(/<ul class="card__badges"><li class="badge">Spell<\/li>/);
+      expect(lance).toMatch(/<p class="card__summary">[^<]*<\/p><p class="card__source">Bardic(&#39;|')s Compendium of Test Fixtures<\/p>/);
+      expect(html).not.toContain('badge--source');
       const bare = render({ records: records.map((r) => ({ ...r, source: null })), initialQuery: '?f.type=spell' });
-      expect(card(bare, 'Frost Lance')).toMatch(/<ul class="card__badges"><li class="badge">Spell<\/li>/);
-      expect(bare).not.toContain('badge--source');
+      expect(bare).not.toContain('card__source');
     });
 
     it('stars official cards with an accessible name, and reserves the same slot on every other card', () => {

@@ -2,6 +2,7 @@
 // such as Open5e, a disclosure lists each skipped field or link by entry. The status line above
 // it, in the caller's polite status region, says how many.
 import type { ExportReport as Report } from '../../exporters/index.ts';
+import { Details } from '../shared/Disclosure.tsx';
 import './export-report.css';
 
 export interface ExportReportProps {
@@ -23,8 +24,7 @@ export default function ExportReport({ report, names }: ExportReportProps) {
   const byEntry = new Map<string, Report['skipped']>();
   for (const skip of report.skipped) byEntry.set(skip.entry, [...(byEntry.get(skip.entry) ?? []), skip]);
   return (
-    <details class="export-report">
-      <summary>What didn't carry over</summary>
+    <Details class="export-report" summary="What didn't carry over">
       <ul class="export-report__entries">
         {[...byEntry].map(([entry, skips]) => (
           <li key={entry}>
@@ -39,6 +39,6 @@ export default function ExportReport({ report, names }: ExportReportProps) {
           </li>
         ))}
       </ul>
-    </details>
+    </Details>
   );
 }

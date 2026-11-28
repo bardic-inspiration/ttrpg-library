@@ -192,6 +192,7 @@ export interface ItemStats {
   cursed?: true;
   effect: string;
   statBlocks?: StatBlock[];
+  modifiers?: ItemModifier[];
 }
 
 export interface ChallengeRatingRow {
@@ -209,12 +210,16 @@ export interface Tables {
   skills: Record<string, Ability>;
   damageTypes: string[];
   creatureTypes: string[];
+  /** The Ability Score Point Costs table: the budget, and the cost of each base score. */
+  pointBuy: { budget: number; costs: Record<string, number> };
   /** The Character Advancement table's Proficiency Bonus, levels 1–20. */
   proficiencyBonusByLevel: number[];
   /** The Multiclass Spellcaster table: slots per spell level (1 first), levels 1–20. */
   multiclassSpellSlots: number[][];
   /** The Pact Magic slots and their level, levels 1–20, from the Warlock Features table. */
   pactMagic: { slots: number; slotLevel: number }[];
+  /** The XP Budget per Character table: each difficulty's budget, levels 1–20. */
+  xpBudgetPerCharacter: Budget[];
 }
 
 export interface DerivedDamage {
@@ -291,7 +296,89 @@ export interface DerivedEquipment {
   costGp?: number;
 }
 
+/** A modifier's value: a number, the proficiency bonus, or an ability's modifier (docs/rulesets.md#modifiers). */
+export type ModifierValue = number | 'proficiency' | Ability;
+export type ModifierWhile = 'unarmored' | 'armored' | 'no-heavy-armor' | 'no-shield';
+export type ModifierWeapon = 'ranged' | 'melee' | 'one-handed-melee' | 'monk';
+
+/** A value, or one by the level of the feature's class. */
+interface Valued {
+  value?: ModifierValue;
+  min?: number;
+  byLevel?: Record<string, number>;
+  while?: ModifierWhile[];
+}
+
+/** One effect on a character's derived values, as data (common.schema.json `Modifier`). */
+export type Modifier =
+  | { kind: 'ability-bonus'; abilities?: Ability[]; value?: number; total?: number; from?: Ability[]; max: number }
+  | { kind: 'ac-formula'; base: number; abilities?: Ability[]; while?: ModifierWhile[] }
+  | ({ kind: 'ac-bonus' } & Valued)
+  | { kind: 'save-proficiency'; abilities: Ability[] | 'all' }
+  | ({ kind: 'save-bonus' } & Valued)
+  | { kind: 'skill-proficiency'; skills: string[]; expertise?: true }
+  | { kind: 'tool-proficiency'; tools: Ref[] }
+  | { kind: 'language'; languages: string[] }
+  | { kind: 'skill-floor'; proficiency: 'half' }
+  | ({ kind: 'initiative-bonus' } & Valued)
+  | ({ kind: 'speed-bonus' } & Valued)
+  | { kind: 'speed-mode'; modes: ('climb' | 'swim' | 'fly')[]; while?: ModifierWhile[] }
+  | { kind: 'hp-per-level'; value: ModifierValue; min?: number; per?: 'character' | 'class'; while?: ModifierWhile[] }
+  | { kind: 'attack-ability'; abilities: Ability[]; weapon: ModifierWeapon; while?: ModifierWhile[] }
+  | ({ kind: 'attack-bonus'; weapon: ModifierWeapon } & Valued)
+  | ({ kind: 'damage-bonus'; weapon: ModifierWeapon } & Valued)
+  | { kind: 'damage-die'; die?: string; byLevel?: Record<string, string>; weapon: ModifierWeapon; while?: ModifierWhile[] };
+
+/** A value, or one per variant of the item (docs/rulesets.md#item-modifiers). */
+interface ByVariant {
+  value?: number;
+  byVariant?: Record<string, number>;
+}
+
+/** One effect of an equipped item, as data (common.schema.json `ItemModifier`). With no `weapon`, an attack or damage bonus is the weapon item's own. */
+export type ItemModifier =
+  | ({ kind: 'ac-bonus' | 'save-bonus' | 'check-bonus'; while?: ModifierWhile[] } & ByVariant)
+  | ({ kind: 'ability-set'; ability: Ability } & ByVariant)
+  | ({ kind: 'attack-bonus' | 'damage-bonus'; weapon?: ModifierWeapon; while?: ModifierWhile[] } & ByVariant);
+
 export type FeatCategory = 'origin' | 'general' | 'fighting-style' | 'epic-boon';
+
+/** One thing an entry gives a character to pick or have, as data (common.schema.json `Grant`, docs/rulesets.md#grants). */
+export type Grant =
+  | { kind: 'feat'; categories: FeatCategory[]; or?: GrantOption }
+  | { kind: 'skills'; count: number; from?: string[]; withTools?: true }
+  | { kind: 'expertise'; count: number; from?: string[] }
+  | { kind: 'tools'; count: number; from?: Ref[] }
+  | { kind: 'languages'; count: number }
+  | { kind: 'options'; list: string; column?: string; byLevel?: Record<string, number> }
+  | {
+      kind: 'spells';
+      cantrips?: number;
+      level1?: number;
+      /** Picks that are each a cantrip or of a level the feature's class's own slots cast. */
+      count?: number;
+      /** Picks by spell level. */
+      levels?: Record<string, number>;
+      /** One pick from each key's class level on, of the spell level it gives. */
+      pickByLevel?: Record<string, number>;
+      from?: Ref[];
+      byLevel?: Record<string, Ref[]>;
+    }
+  | { kind: 'choice'; options: GrantOption[] }
+  | { kind: 'spell-lists'; from: Ref[] };
+
+/** One option of a choice an entry offers, or a feat grant's `or`: what the character has when its `choices` name it. */
+export interface GrantOption {
+  name: string;
+  grants?: Grant[];
+  modifiers?: Modifier[];
+}
+
+/** Weapon proficiencies and armor training as data (common.schema.json `Training`). */
+export interface Training {
+  weapons?: { group: 'simple-weapons' | 'martial-weapons'; properties?: Ref[] }[];
+  armor?: ('light-armor' | 'medium-armor' | 'heavy-armor' | 'shields')[];
+}
 
 /** feat.schema.json (docs/rulesets.md#feats): titled `benefits` or one `text`. */
 export interface FeatStats {
@@ -301,6 +388,10 @@ export interface FeatStats {
   benefits?: { name: string; text: string }[];
   text?: string;
   repeatable?: string;
+  modifiers?: Modifier[];
+  grants?: Grant[];
+  /** Its ability prerequisite: any one of `abilities` at `min` or more, or all with `join` "and". */
+  requires?: { abilities: Ability[]; min: number; join?: 'and' | 'or' };
 }
 
 export interface DerivedFeat {
@@ -343,6 +434,8 @@ export interface DerivedSpecies {
 /** species-trait.schema.json: one special trait. */
 export interface SpeciesTraitStats {
   text: string;
+  modifiers?: Modifier[];
+  grants?: Grant[];
 }
 
 /** class.schema.json (docs/rulesets.md#classes): a page type whose features and options are components. */
@@ -362,6 +455,9 @@ export interface ClassStats {
   spellcasting?: { ability: Ability; progression: 'full' | 'half' | 'pact'; cantrips?: number[]; prepared: number[] };
   optionLists?: { name: string; text: string; options: Ref[] }[];
   spells?: Ref[];
+  /** Picks as the starting class, beside `skills`, and as a later class. */
+  grants?: { start?: Grant[]; multiclass?: Grant[] };
+  training: { start: Training; multiclass?: Training };
 }
 
 /** A class's derived values from its own stats (docs/rulesets.md#classes), one per level 1–20. */
@@ -400,6 +496,8 @@ export type FeatureLevel = number | { level: number; note: string };
 export interface ClassFeatureStats {
   levels: FeatureLevel[];
   text: string;
+  modifiers?: Modifier[];
+  grants?: Grant[];
 }
 
 /** class-option.schema.json: one option of a class's option list. */
@@ -416,4 +514,246 @@ export interface SubclassStats {
   tagline: string;
   text: string;
   features: Ref[];
+}
+
+/** Increases by ability, as a background or feat places them. */
+export type Increases = Partial<Record<Ability, number>>;
+
+/** character.schema.json (docs/rulesets.md#characters): one build at one level, as refs and choices. */
+export interface CharacterStats {
+  species: Ref;
+  background: Ref;
+  /** In the order taken; the first is the starting class. */
+  classes: { class: Ref; level: number; subclass?: Ref }[];
+  abilities: { base: Record<Ability, number>; background: Increases };
+  feats?: { ref: string; note?: string; source: { ref: string; level?: number }; abilities?: Increases }[];
+  options?: Ref[];
+  choices?: { source: Ref; skills?: string[]; expertise?: string[]; tools?: Ref[]; languages?: string[]; option?: string }[];
+  equipped?: { ref: string; base?: Ref; variant?: string; attuned?: true }[];
+  spells?: Ref[];
+}
+
+/** A character's derived values from its own stats, which the index lifts for its facets. */
+export interface DerivedCharacter {
+  /** The total of its class levels. */
+  level: number;
+  proficiencyBonus: number;
+  /** The point-buy cost of its base scores, or undefined when a score is outside the table. */
+  pointCost?: number;
+}
+
+/** One equipped weapon's attack. */
+export interface CharacterAttack {
+  /** The equipped entry: equipment, or an item. */
+  ref: string;
+  /** The equipment it's an attack with: `ref` itself, or an item's base. */
+  weapon: string;
+  ability: Ability;
+  attackBonus: number;
+  damage: { dice?: string; flat?: number; modifier: number; type: string; display: string };
+  /** The two-handed damage of a Versatile weapon. */
+  versatile?: { dice: string; display: string };
+  range?: { normal: number; long: number };
+  properties: Ref[];
+  mastery: Ref;
+}
+
+/** One class's spellcasting. */
+export interface CharacterSpellcasting {
+  class: string;
+  ability: Ability;
+  saveDc: number;
+  attackBonus: number;
+  /** Cantrips known and spells prepared at the class's level, from its Features table. */
+  cantrips: number;
+  prepared: number;
+}
+
+/** The skill, saving throw, training, tool, and language proficiencies, each with its source. */
+export interface CharacterProficiencies {
+  /** The starting class's saving throws. */
+  /** The starting class's saving throws, then each a modifier gives outright. */
+  saves: { source: string; abilities: Ability[] }[];
+  /** Each skill's proficiency, with the entry it comes from: a pick's source, or a modifier's entry. */
+  skills: { skill: string; source: string }[];
+  expertise: { skill: string; source: string }[];
+  /**
+   * Weapon and armor training as each class prints it: the starting class's Core Traits, and a later
+   * class's "As a Multiclass Character" text.
+   */
+  training: { source: string; weapons?: string; armor?: string; tools?: string; multiclass?: string }[];
+  tools: { source: string; ref: string; note?: string }[];
+  languages: { source: string; language: string }[];
+}
+
+/** A character's derived values from the entries it references (docs/rulesets.md#characters). */
+export interface LinkedCharacter {
+  scores: Record<Ability, number>;
+  abilityMods: Record<Ability, number>;
+  saves: Record<Ability, number>;
+  /** Every skill's bonus, and its proficiency when it has one. */
+  skills: Record<string, { bonus: number; proficiency?: Proficiency }>;
+  passivePerception: number;
+  hp: number;
+  initiative: number;
+  speed: number;
+  /** Climb, Swim, and Fly Speeds a modifier gives, each equal to the Speed. */
+  speeds?: Partial<Record<'climb' | 'swim' | 'fly', number>>;
+  /** Armor Class, with the equipped armor and shield it reads. */
+  ac: { value: number; armor?: string; shield?: string };
+  attacks: CharacterAttack[];
+  spellcasting: CharacterSpellcasting[];
+  /** Slots per spell level (1 first) from the Multiclass Spellcaster table; omitted with no full or half caster level. */
+  spellSlots?: number[];
+  /** Pact Magic slots and their level, from a pact caster's level. */
+  pactSlots?: { slots: number; slotLevel: number };
+  /** Its spells by spell level, cantrips (0) first, each level's in the order `stats.spells` lists them; a level with none is left out. */
+  spells: { level: number; spells: string[] }[];
+  /** The features each class, subclass, and species gives at the character's levels, by source. */
+  features: { source: string; features: { ref: string; level?: number }[] }[];
+  proficiencies: CharacterProficiencies;
+}
+
+/** A link to one zone of a map (`MapZoneRef` in common.schema.json). */
+export interface MapZoneRef {
+  ref: string;
+  /** The id of one of the map's zones. */
+  zone: string;
+}
+
+/** A map's stats (schemas/map.schema.json, docs/rulesets.md#maps). */
+export interface MapStats {
+  scale: 'room' | 'dungeon' | 'zone' | 'region' | 'world';
+  zones: { id: string; name: string; note?: string }[];
+  /** For a child map, the zone of its parent it details. */
+  within?: MapZoneRef;
+}
+
+// Encounters (docs/rulesets.md#encounters), modules (docs/rulesets.md#modules), and the kit parts they're built of
+// (docs/content-model.md#arrangements), mirroring schemas/encounter.schema.json, schemas/module.schema.json, and the
+// `Part…` definitions in common.schema.json. Each type's schema allows its own subset of `Part`.
+
+/** How a ref in a part shows: linked by name (the default), as the target's card, or as a thumbnail. */
+export type Show = 'link' | 'card' | 'thumbnail';
+
+export type Difficulty = 'low' | 'moderate' | 'high';
+
+/** A map, or a zone of one (`MapRef`). */
+export interface MapRef {
+  ref: string;
+  zone?: string;
+}
+
+export interface RosterLine {
+  ref: string;
+  count: number;
+  show?: Show;
+}
+
+/** A spawn table line, whose count may be dice ("1d6+2"). */
+export interface SpawnLine {
+  ref: string;
+  count: number | string;
+  show?: Show;
+}
+
+export interface SpawnRow {
+  range?: { min: number; max: number };
+  creatures: SpawnLine[];
+}
+
+export interface LootRow {
+  coins?: { dice: string; times?: number; unit: 'cp' | 'sp' | 'ep' | 'gp' | 'pp' };
+  items?: { ref: string; count?: number; show?: Show }[];
+}
+
+/** The parts every arrangement type allows. */
+export type SharedPart =
+  | { part: 'prose'; title?: string; text: string }
+  | { part: 'description'; text: string }
+  | { part: 'dm-guide'; text: string }
+  | { part: 'sequence'; trigger?: string; stages?: { name: string; loop: string; transition?: string }[]; victory?: string; example?: string }
+  | { part: 'table'; title: string; text: string }
+  | { part: 'map'; map: MapRef & { show?: Show } };
+
+/** An encounter's parts: the shared ones, and its roster or spawn table and loot. */
+export type EncounterPart =
+  | SharedPart
+  | { part: 'roster'; creatures: RosterLine[] }
+  | { part: 'spawn-table'; roll?: string; rows: Partial<Record<Difficulty, SpawnRow>> }
+  | { part: 'loot'; rows: Partial<Record<Difficulty, LootRow>> };
+
+/** An entry a hook brings in: any library entry, with who or what it is to the hook. */
+export interface HookRef {
+  ref: string;
+  note?: string;
+  show?: Show;
+}
+
+/** A module's parts: the shared ones, and its hooks and the arrangements it contains. */
+export type ModulePart =
+  | SharedPart
+  | { part: 'hook'; text: string; refs?: HookRef[] }
+  | { part: 'arrangement'; arrangement: { ref: string; show?: Show } };
+
+/** Any kit part. */
+export type Part = EncounterPart | ModulePart;
+
+/** E, the environment multiplier: above 0, not 1, and why. */
+export interface Environment {
+  multiplier: number;
+  note: string;
+}
+
+export interface EncounterStats {
+  parts: EncounterPart[];
+  setIn?: MapRef;
+  environment?: Environment;
+}
+
+/** XP budgets, a character's or a party's, by difficulty. */
+export type Budget = Record<Difficulty, number>;
+
+/** What an encounter reads for a party: a difficulty, or above the High budget. */
+export type DifficultyResult = Difficulty | 'beyond-high';
+
+/** A span of XP: a roster's, whose bounds and average are equal, or a spawn table row's from its dice. */
+export interface XpSpan {
+  min: number;
+  average: number;
+  max: number;
+}
+
+/** An encounter's derived difficulty side: f(Roster) × E, for its roster or each spawn table row. */
+export interface DerivedEncounter {
+  /** E; 1 without an authored `environment`. */
+  multiplier: number;
+  /** The roster's XP (`min` and `max` equal), or the span of the spawn table's rows, lowest minimum to highest maximum. */
+  xp: { min: number; max: number };
+  /** A spawn table's XP by row. */
+  rows?: Partial<Record<Difficulty, XpSpan>>;
+  /** Its creatures' types, each once, in roster order (a spawn table's rows in difficulty order). */
+  creatureTypes: string[];
+}
+
+export type ModuleLength = 'one-shot' | 'delve' | 'multi-session';
+
+export interface ModuleStats {
+  parts: ModulePart[];
+  length: ModuleLength;
+  /** The party levels it's written for, authored. */
+  levels: { min: number; max: number };
+}
+
+/** One arrangement a module contains, in story order: a contained module lists its own. */
+export interface ModuleContent {
+  ref: string;
+  contains?: ModuleContent[];
+}
+
+/** A module's derived contents: what it contains, and its distinct encounters and maps, through its contained arrangements. */
+export interface DerivedModule {
+  encounters: number;
+  maps: number;
+  contents: ModuleContent[];
 }

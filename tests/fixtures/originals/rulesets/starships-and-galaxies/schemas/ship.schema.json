@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["size", "systems", "cargo", "fuel", "price"],
   "properties": {
-    "size": { "enum": ["scout", "frigate", "cruiser", "carrier"] },
+    "size": { "enum": ["scout", "frigate", "cruiser", "carrier"], "display": "chip" },
     "systems": { "$ref": "common.schema.json#/$defs/Systems" },
     "cargo": { "description": "Cargo holds, each carrying one trade good.", "type": "integer", "minimum": 0 },
     "fuel": { "description": "Jumps on a full tank.", "type": "integer", "minimum": 1, "maximum": 10 },

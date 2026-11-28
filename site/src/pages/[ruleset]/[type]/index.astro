@@ -1,14 +1,14 @@
 ---
-// A type's old gallery (docs/site.md#redirects): it redirects to the Library with the ruleset
-// and type filters set and the type's default sort. One page per registered type, and one per
+// A type's old gallery (docs/site.md#redirects): it redirects to its ruleset's Library with the
+// ruleset and type filters set and the type's default sort. One page per registered type, and one per
 // former key of a renamed type, which sets the current type.
 import type { GetStaticPaths } from 'astro';
 import Base from '../../../layouts/Base.astro';
 import { formerTypes } from '../../../lib/redirects';
-import { libraryQuery } from '../../../lib/gallery/library-url';
+import { typeLibrary } from '../../../lib/gallery/library-url';
 import type { Registry } from '../../../lib/gallery/config';
 import { url } from '../../../lib/url';
-import registryJson from '../../../../../config/types.json';
+import registryJson from '@library/config/types.json';
 
 export const getStaticPaths = (() => {
   const registry = registryJson as unknown as Registry;
@@ -17,7 +17,7 @@ export const getStaticPaths = (() => {
     props: {
       plural: registry[ruleset]!.types[type]!.plural,
       rulesetLabel: registry[ruleset]!.label,
-      moved: `${url()}${libraryQuery(registry, ruleset, type)}`,
+      moved: url(typeLibrary(registry, ruleset, type)),
     },
   });
   return [
@@ -29,5 +29,5 @@ export const getStaticPaths = (() => {
 const { plural, rulesetLabel, moved } = Astro.props;
 ---
 <Base title={`${plural} · ${rulesetLabel} · TTRPG Content Library`} redirect={moved}>
-  <p>{plural} are in the <a href={moved}>Library</a>.</p>
+  <p>{plural} are in the <a href={moved}>{rulesetLabel} Library</a>.</p>
 </Base>

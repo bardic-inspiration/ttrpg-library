@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { deriveCreature } from '../../../rulesets/dnd-5e-2024/derive.ts';
-import { tables } from '../../../rulesets/dnd-5e-2024/index.ts';
+import { ruleset, tables } from '../../../rulesets/dnd-5e-2024/index.ts';
 import { findTokens, renderTokens } from '../../../rulesets/dnd-5e-2024/tokens.ts';
 import type { CreatureStats } from '../../../rulesets/dnd-5e-2024/types.ts';
 import { cinderHound } from '../../helpers.ts';
@@ -37,6 +37,12 @@ describe('renderTokens (docs/rulesets.md#text-tokens)', () => {
     const d = await derived();
     expect(() => renderTokens('{nope}', d, tables)).toThrow(/unknown token/);
     expect(() => renderTokens('{mod:luck}', d, tables)).toThrow(/unknown ability/);
+  });
+
+  it('is the module\'s renderTokens for a creature, from its derived values (docs/rulesets.md#the-ruleset-module)', async () => {
+    const d = { ...(await derived()) };
+    expect(ruleset.renderTokens?.('creature', 'Bite {atk:str}, {dc:con}.', d)).toBe('Bite +4, DC 12.');
+    expect(ruleset.renderTokens?.('spell', 'A {pb} stays.', {})).toBe('A {pb} stays.');
   });
 });
 

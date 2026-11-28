@@ -1,0 +1,69 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "module",
+  "id": "sunken-cistern-delve",
+  "name": "The Sunken Cistern Delve",
+  "summary": "Five rooms under a mill, ending at a goblin king's flooded court.",
+  "stats": {
+    "length": "delve",
+    "levels": {
+      "min": 2,
+      "max": 3
+    },
+    "parts": [
+      {
+        "part": "prose",
+        "title": "Background",
+        "text": "Goblins have moved into the cistern under {ref:map/harrowfield#millside}, and the mill's wheel has stopped."
+      },
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/sunken-cistern",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/sluice-gate-watch"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/flooded-hall-crossing"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/keepers-cells-rats"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/warren-kings-court",
+          "show": "card"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/overflow-escape"
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        443
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360">
+  <title>Library of Tabletop</title>
+  <rect class="wall" x="0" y="0" width="600" height="360" />
+  <g id="zone-front-hall" class="zone">
+    <rect x="10" y="130" width="100" height="100" />
+    <text class="label" x="60" y="184">Front Hall</text>
+  </g>
+  <g id="zone-the-library" class="zone">
+    <rect x="120" y="10" width="280" height="340" />
+    <text class="label" x="260" y="184">The Library</text>
+  </g>
+  <g id="zone-rules-room" class="zone">
+    <rect x="410" y="10" width="180" height="160" />
+    <text class="label" x="500" y="94">Rules Room</text>
+  </g>
+  <g id="zone-maintainers-office" class="zone">
+    <rect x="410" y="180" width="180" height="100" />
+    <text class="label" x="500" y="234">Maintainer's Office</text>
+  </g>
+  <g id="zone-basement-stair" class="zone">
+    <rect x="410" y="290" width="180" height="60" />
+    <text class="label" x="500" y="324">Basement Stair</text>
+  </g>
+  <rect class="feature" x="30" y="205" width="60" height="12" />
+  <rect class="feature" x="140" y="40" width="240" height="8" />
+  <rect class="feature" x="140" y="80" width="240" height="8" />
+  <rect class="feature" x="140" y="120" width="240" height="8" />
+  <rect class="feature" x="140" y="240" width="240" height="8" />
+  <rect class="feature" x="140" y="280" width="240" height="8" />
+  <rect class="feature" x="140" y="320" width="240" height="8" />
+  <circle class="feature" cx="500" cy="140" r="8" />
+  <rect class="feature" x="540" y="250" width="30" height="15" />
+  <circle class="feature" cx="570" cy="320" r="10" />
+  <line class="door" x1="0" y1="180" x2="10" y2="180" />
+  <line class="door" x1="110" y1="180" x2="120" y2="180" />
+  <line class="door" x1="400" y1="90" x2="410" y2="90" />
+  <line class="door" x1="400" y1="230" x2="410" y2="230" />
+  <line class="door" x1="400" y1="320" x2="410" y2="320" />
+  <line class="door" x1="500" y1="170" x2="500" y2="180" />
+</svg>

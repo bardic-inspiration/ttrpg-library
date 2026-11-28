@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bardic-inspiration.github.io/ttrpg-library/schemas/envelope.schema.json",
   "title": "Entry envelope (docs/content-model.md#entry-envelope)",
-  "description": "Fixed keys, tags, meta, and image for every entry in every ruleset. `stats` is validated by the ruleset's type schema.",
+  "description": "Fixed keys, meta, and image for every entry in every ruleset. `stats` is validated by the ruleset's type schema.",
   "type": "object",
   "additionalProperties": false,
   "required": ["ruleset", "author", "type", "id", "name", "summary", "stats", "meta"],
@@ -16,19 +16,6 @@
     "summary": { "description": "One plain-text line, used on cards, in PR bodies, and in link previews.", "type": "string", "minLength": 10, "maxLength": 160 },
     "description": { "description": "Lore and flavor in the markdown subset; not rules text. Omitted on SRD entries.", "type": "string", "minLength": 1, "markdownSubset": true },
     "stats": { "description": "Rules data, validated by the ruleset's schema for the type. Inputs only, never a derived value.", "type": "object" },
-    "tags": {
-      "description": "Open, flat organization; every key is a gallery filter. Conventional keys: world, campaign, theme, environment. `source` and `author` are envelope fields, not tags.",
-      "type": "object",
-      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$", "not": { "enum": ["source", "author"] } },
-      "additionalProperties": {
-        "anyOf": [
-          { "type": "string" },
-          { "type": "number" },
-          { "type": "boolean" },
-          { "type": "array", "items": { "type": "string" } }
-        ]
-      }
-    },
     "image": { "description": "Path to the entry's art, which must exist. Omitted when there is none.", "type": "string", "pattern": "^assets/images/[a-z0-9-]+/[a-z0-9-]+/[a-z0-9-]+\\.(png|jpg|webp)$" },
     "meta": {
       "description": "Provenance, shown on the detail page.",

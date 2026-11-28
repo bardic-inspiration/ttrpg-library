@@ -1,0 +1,19 @@
+---
+// A `roster` part (docs/site.md#kit-parts): each creature line, its count and its name, then the
+// cards it shows.
+import { refView, type KitContext } from '../../lib/kit';
+import type { RosterLine } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import KitCards from './KitCards.astro';
+import KitRef from './KitRef.astro';
+
+interface Props {
+  creatures: RosterLine[];
+  kit: KitContext;
+}
+
+const { creatures, kit } = Astro.props;
+---
+<ul class="kit-list">
+  {creatures.map((creature) => <li><KitRef view={refView(creature)} kit={kit} /></li>)}
+</ul>
+<KitCards part={{ part: 'roster', creatures }} kit={kit} />

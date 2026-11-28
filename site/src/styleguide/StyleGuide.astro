@@ -23,6 +23,10 @@ import SortIcon from '../icons/Sort';
 import DownloadIcon from '../icons/Download';
 import PrintIcon from '../icons/Print';
 import ExportButtons from '../components/export/ExportButtons';
+import Button from '../components/shared/Button';
+import { Details, DisclosureButton } from '../components/shared/Disclosure';
+import Disclosure from '../components/shared/Disclosure.astro';
+import { Checkbox, Chip, Toggle } from '../components/shared/Controls';
 import { configuredControls } from '../exporters/index';
 import Card from '../components/gallery/Card';
 import { FilterTree } from '../components/gallery/Filters';
@@ -31,7 +35,6 @@ import sampleArt from '../assets/sample-art.svg';
 import { galleryConfig, type Registry } from '../lib/gallery/config';
 import { parseQuery } from '../lib/gallery/state';
 import { filterTree } from '../lib/gallery/tree';
-import { searchIndex } from '../lib/gallery/view';
 import registryJson from '../../../config/types.json';
 import { buildIndex } from '../../../scripts/build-index/index.ts';
 import { PROJECT_ROOT } from '../../../scripts/validate/schema.ts';
@@ -56,6 +59,8 @@ const contentTokens = names(content, /^--(accent|rarity)-/);
 const fontTokens = names(semantic, /^--font-(heading|body|ui)$/);
 const textTokens = names(semantic, /^--text-/);
 const spaceTokens = names(semantic, /^--space-/);
+const flowTokens = names(semantic, /^--flow-/);
+const headingLevels = [1, 2, 3, 4, 5, 6];
 const radiusTokens = names(semantic, /^--radius-/);
 const shadowTokens = names(semantic, /^--shadow-/);
 const durationTokens = names(semantic, /^--duration-/);
@@ -70,19 +75,25 @@ const icons = [
   ['Download', DownloadIcon], ['Print', PrintIcon],
 ] as const;
 
-// Cards, filters, and templates render the example fixtures, which have one entry per type.
-const fixtures = await buildIndex(`${PROJECT_ROOT}/tests/fixtures/library/valid`);
+// Cards, filters, and templates render the example fixtures, which have one entry per type. The
+// index also gives every SRD condition and equipment primitive a card; the cards and filters take one,
+// Blinded, to show a primitive's card.
+const index = await buildIndex(`${PROJECT_ROOT}/tests/fixtures/library/valid`);
+const isEntry = (i: number) => index.records[i]!.createdAt !== null;
+const fixtures = {
+  records: index.records.filter((r, i) => isEntry(i) || (r.type === 'condition' && r.id === 'blinded')),
+  files: index.files.filter((_, i) => isEntry(i)),
+};
 const fixtureEntries = loadLibrary(
   fixtures.files.map((file) => JSON.parse(readFileSync(`${PROJECT_ROOT}/tests/fixtures/library/valid/${file}`, 'utf8')) as Entry),
 );
 const entryNames = namesOf(fixtureEntries);
 const registry = registryJson as unknown as Registry;
 const home = galleryConfig(registry);
-const fixtureIndex = searchIndex(fixtures.records);
 // The filter tree as the Library opens it, and with filters set, which opens the nodes holding them.
 const treeAt = (query: string) => {
   const state = parseQuery(query, home);
-  return { nodes: filterTree(home, state, fixtures.records, fixtureIndex), filters: state.filters };
+  return { nodes: filterTree(home, state, fixtures.records), filters: state.filters };
 };
 const filterStates = [
   { title: 'As the Library opens it', ...treeAt('') },
@@ -139,12 +150,32 @@ const modes = ['screen', 'capture'] as const;
         <li><p class="sg-sample" style={`font-size: var(${name})`}>Cinder Hound</p><code>{name}</code></li>
       ))}
     </ul>
+    <h3>Headings</h3>
+    <p class="measure">A page heading's size comes from its level. Samples, not headings, so this page's outline stays its own.</p>
+    <ul class="sg-list">
+      {headingLevels.map((level) => (
+        <li><p class="sg-heading" style={`font-size: var(--text-h${level})`}>Heading level {level}</p><code>h{level} · --text-h{level}</code></li>
+      ))}
+    </ul>
+    <h3>Links</h3>
+    <ul class="sg-list">
+      <li><p>Rules text keeps its underline: the target has the <a href="#sg-type">Grappled</a> condition.</p><code>running text</code></li>
+      <li><nav aria-label="Sample navigation"><a href="#sg-type">Library</a></nav><code>nav and the site header: underline on hover and focus</code></li>
+      <li><h4><a href="#sg-type">Cinder Hound</a></h4><code>headings and card titles: underline on hover and focus</code></li>
+    </ul>
   </section>
 
   <section class="sg-section" aria-labelledby="sg-scales">
     <h2 id="sg-scales">Spacing, radii, shadows, durations</h2>
     <ul class="sg-list">
       {spaceTokens.map((name) => (
+        <li><span class="sg-bar" style={`inline-size: var(${name})`}></span><code>{name}</code> <small>{resolveToken(palette, name)}</small></li>
+      ))}
+    </ul>
+    <h3>Rhythm</h3>
+    <p class="measure">The gap between siblings: a label and its value, paragraphs, blocks in a section, a page's sections.</p>
+    <ul class="sg-list">
+      {flowTokens.map((name) => (
         <li><span class="sg-bar" style={`inline-size: var(${name})`}></span><code>{name}</code> <small>{resolveToken(palette, name)}</small></li>
       ))}
     </ul>
@@ -173,21 +204,65 @@ const modes = ['screen', 'capture'] as const;
     </table>
   </section>
 
+  <section class="sg-section" aria-labelledby="sg-shared">
+    <h2 id="sg-shared">Shared components</h2>
+    <p class="measure">
+      Every page builds these patterns through the components in <code>site/src/components/shared/</code>, never on its own (docs/styling.md#shared-components).
+    </p>
+    <div class="sg-samples">
+      <h3>Disclosure</h3>
+      <p class="measure">One toggle, its chevron on the left, turning down when open. The filter tree, the Filters menu, accordion sections, and the export report use it.</p>
+      <ul class="sg-list">
+        <li><DisclosureButton id="sg-disclosure-closed" controls="sg-disclosure-closed-panel" open={false} onToggle={noop} label="Closed" /><div id="sg-disclosure-closed-panel" hidden></div><code>button, closed</code></li>
+        <li><DisclosureButton id="sg-disclosure-open" controls="sg-disclosure-open-panel" open onToggle={noop} label="Open" /><div id="sg-disclosure-open-panel">Its panel.</div><code>button, open</code></li>
+        <li><DisclosureButton id="sg-disclosure-icon" controls="sg-disclosure-icon-panel" open={false} onToggle={noop} label="Groups in Evocation" iconOnly /><div id="sg-disclosure-icon-panel" hidden></div><code>icon only, named by its label</code></li>
+        <li><Details summary="A details disclosure">Its panel, inside it.</Details><code>details, in an island</code></li>
+        <li><Disclosure><span slot="summary">An Astro details disclosure</span>Its panel, inside it.</Disclosure><code>details, on an Astro page</code></li>
+      </ul>
+
+      <h3>Buttons</h3>
+      <p class="measure">Primary is a place's one main action, first in its row. Secondary is every other action, after it. Icon is an icon alone, named for a screen reader, at the end of the row or card it acts on.</p>
+      <div class="cluster">
+        <Button variant="primary"><PrintIcon /> Primary</Button>
+        <Button>Secondary</Button>
+        <Button variant="icon" label="Download"><DownloadIcon /></Button>
+        <Button class="sg-focused">Focused</Button>
+        <Button disabled>Disabled</Button>
+      </div>
+
+      <h3>Menu button</h3>
+      <p class="measure">A secondary button that opens a small menu below it, as Download does in the export controls under Samples.</p>
+
+      <h3>Click targets</h3>
+      <p class="measure">The whole card opens its entry, through the card link on its title; every other control on the card sits above that link. The gallery cards under Samples show it.</p>
+
+      <h3>Controls</h3>
+      <p class="measure">A checkbox is one of a list of independent choices, such as filter values. A chip is one value of a small range, shown as the value alone. A toggle is one setting of the view, on or off by itself.</p>
+      <div class="cluster">
+        <span class="checkbox"><Checkbox id="sg-checkbox-off" checked={false} onChange={noop}>Unchecked</Checkbox></span>
+        <span class="checkbox"><Checkbox id="sg-checkbox-on" checked onChange={noop}>Checked</Checkbox></span>
+      </div>
+      <div class="cluster">
+        <Chip pressed={false} onChange={noop}>1st</Chip>
+        <Chip pressed onChange={noop}>2nd</Chip>
+        <Chip pressed={false} onChange={noop}>3rd</Chip>
+      </div>
+      <div class="cluster">
+        <Toggle checked={false} onChange={noop}>Off</Toggle>
+        <Toggle checked onChange={noop}>On</Toggle>
+      </div>
+    </div>
+  </section>
+
   <section class="sg-section" aria-labelledby="sg-samples">
     <h2 id="sg-samples">Samples</h2>
     <div class="sg-samples">
       <p>Body text with a <a href="#sg-samples">link</a> and <span class="sg-muted">muted text</span>.</p>
 
-      <h3>Controls</h3>
+      <h3>Inputs</h3>
       <div class="cluster">
-        <button type="button">Button</button>
-        <button type="button" class="sg-focused">Focused</button>
+        <label>Search <input type="search" placeholder="Name" /></label>
       </div>
-      <div class="cluster">
-        <label>Search <input type="search" placeholder="Name, tag, or text" /></label>
-        <label><input type="checkbox" checked /> Selected</label>
-      </div>
-
       <h3>Export controls</h3>
       <div class="cluster sg-exports">
         <ExportButtons controls={configuredControls('entry')} run={noop} menuId="sg-formats-closed" />
@@ -216,8 +291,8 @@ const modes = ['screen', 'capture'] as const;
               typeLabel={cardInfo(record).label}
               cardFields={cardInfo(record).cardFields}
               imageSrc={i === 0 ? sampleArt.src : undefined}
-              selected={i === 1}
-              onSelect={noop}
+              inCart={i === 1}
+              onCart={noop}
             />
           </li>
         ))}
@@ -341,6 +416,12 @@ const modes = ['screen', 'capture'] as const;
       line-height: var(--leading-heading);
     }
 
+    .sg-heading {
+      font-family: var(--font-heading);
+      font-weight: var(--font-weight-label);
+      line-height: var(--leading-heading);
+    }
+
     .sg-sample--italic {
       font-style: italic;
     }
@@ -380,7 +461,7 @@ const modes = ['screen', 'capture'] as const;
       color: var(--color-text-muted);
     }
 
-    .sg-focused {
+    :global(.sg-focused) {
       outline: var(--focus-ring);
       outline-offset: var(--focus-ring-offset);
     }

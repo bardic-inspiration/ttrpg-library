@@ -1,0 +1,58 @@
+---
+// An encounter's page (registry template `encounter-page`, docs/site.md#templates,
+// docs/site.md#kit-parts): its name and summary, then its kit parts in order, each ref as its `show`
+// says. In print and capture, links read as names, and the description, which the detail page
+// shows itself as lore, follows the parts.
+import type { EncounterStats } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import { present } from '../../lib/display';
+import type { KitContext } from '../../lib/kit';
+import { diagramSource } from '../../lib/map';
+import { renderMarkdown } from '../../lib/markdown';
+import type { TemplateProps } from '../../lib/template';
+import { entryKey } from '../../../../scripts/validate/refs';
+import KitParts from '../kit/KitParts.astro';
+import Heading from './parts/Heading.astro';
+import StatBlock from './parts/StatBlock.astro';
+import StatBlockHeader from './parts/StatBlockHeader.astro';
+
+type Props = TemplateProps;
+
+const { entry, names, paths, shown = [], diagrams, mode = 'screen', level = 2 } = Astro.props;
+const refs = { names, ruleset: entry.ruleset, paths };
+const s = entry.stats as EncounterStats;
+const sub = level + 1;
+const byKey = new Map(shown.map((loaded) => [entryKey(loaded.entry), loaded]));
+const kit: KitContext = {
+  refs,
+  shown: byKey,
+  mode,
+  level: sub,
+  diagram: (key) => diagrams?.get(key) ?? diagramSource(byKey.get(key)!.entry),
+  ...(diagrams && { diagrams }),
+};
+---
+<StatBlock name={entry.name} type="encounter" mode={mode}>
+  <StatBlockHeader name={entry.name} subtitle={entry.summary} level={level} />
+  <KitParts parts={s.parts} kit={kit} />
+  {mode !== 'screen' && present(entry.description) && (
+    <section class="kit-part">
+      <Heading level={sub} class="statblock-heading">Lore</Heading>
+      <div class="encounter-lore" set:html={renderMarkdown(entry.description!, refs)} />
+    </section>
+  )}
+</StatBlock>
+
+<style>
+  @layer components {
+    .encounter-lore {
+      font-style: italic;
+      color: var(--color-text-muted);
+    }
+
+    /* On paper and in a PNG, a link reads as its name (docs/site.md#kit-parts). */
+    :global(.statblock[data-type='encounter']:is([data-mode='print'], [data-mode='capture']) a) {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+</style>

@@ -12,7 +12,17 @@
     "attunement": {
       "required": true
     },
-    "effect": "You gain a +1 bonus to {ref:glossary/armor-class} and saving throws while wearing this ring."
+    "effect": "You gain a +1 bonus to {ref:glossary/armor-class} and saving throws while wearing this ring.",
+    "modifiers": [
+      {
+        "kind": "ac-bonus",
+        "value": 1
+      },
+      {
+        "kind": "save-bonus",
+        "value": 1
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-03",

@@ -1,0 +1,121 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "creature",
+  "id": "dreddit",
+  "name": "Dreddit",
+  "summary": "The cult leader of Testmore Keep, a silver-tongued priest who turns every failure into a sign.",
+  "description": "Dreddit keeps a ledger of everyone who has ever doubted the cult, and reads from it aloud at every rite. Followers who fail are not punished; they are simply written down.",
+  "stats": {
+    "size": [
+      "medium"
+    ],
+    "creatureType": "humanoid",
+    "alignment": "neutral evil",
+    "ac": {
+      "value": 14,
+      "note": "chain shirt"
+    },
+    "hitDice": 13,
+    "speed": {
+      "walk": 30
+    },
+    "abilities": {
+      "str": 10,
+      "dex": 16,
+      "con": 14,
+      "int": 12,
+      "wis": 13,
+      "cha": 16
+    },
+    "saveProficiencies": [
+      "wis",
+      "cha"
+    ],
+    "skills": {
+      "deception": "proficient",
+      "persuasion": "proficient",
+      "religion": "proficient"
+    },
+    "gear": [
+      {
+        "ref": "equipment/chain-shirt"
+      },
+      {
+        "ref": "equipment/holy-symbol"
+      }
+    ],
+    "languages": {
+      "spoken": [
+        "Common",
+        "Abyssal"
+      ]
+    },
+    "cr": 3,
+    "actions": [
+      {
+        "name": "Multiattack",
+        "kind": "other",
+        "text": "Dreddit makes two Ledger Blade attacks."
+      },
+      {
+        "name": "Ledger Blade",
+        "kind": "melee-attack",
+        "ability": "dex",
+        "reach": 5,
+        "damage": [
+          {
+            "dice": "1d8",
+            "ability": "dex",
+            "type": "slashing"
+          },
+          {
+            "dice": "1d6",
+            "type": "necrotic"
+          }
+        ]
+      }
+    ],
+    "spellcasting": {
+      "ability": "cha",
+      "atWill": [
+        {
+          "ref": "spell/thaumaturgy"
+        }
+      ],
+      "perDay": {
+        "1": [
+          {
+            "ref": "spell/hold-person"
+          },
+          {
+            "ref": "spell/darkness"
+          }
+        ],
+        "2": [
+          {
+            "ref": "spell/command"
+          }
+        ]
+      }
+    },
+    "reactions": [
+      {
+        "name": "Written Down",
+        "kind": "other",
+        "text": "When a creature Dreddit can see within 30 feet fails a saving throw, Dreddit names it aloud. Until the end of its next turn, that creature has {ref:glossary/disadvantage} on its next attack roll.",
+        "uses": "3/day"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

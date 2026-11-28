@@ -1,0 +1,197 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "ilsabet-inkwell",
+  "name": "Ilsabet Inkwell",
+  "summary": "A human acolyte and College of Lore Bard who knows a story, a song, or a footnote for every problem.",
+  "description": "Ilsabet copied hymns in a temple scriptorium until she noticed the hymns disagreed with each other, and went looking for the original. Every library she has visited since has had a different answer, and she means to read them all.",
+  "stats": {
+    "species": {
+      "ref": "species/human"
+    },
+    "background": {
+      "ref": "background/acolyte"
+    },
+    "classes": [
+      {
+        "class": {
+          "ref": "class/bard"
+        },
+        "level": 5,
+        "subclass": {
+          "ref": "subclass/college-of-lore"
+        }
+      }
+    ],
+    "abilities": {
+      "base": {
+        "str": 8,
+        "dex": 14,
+        "con": 13,
+        "int": 10,
+        "wis": 12,
+        "cha": 15
+      },
+      "background": {
+        "cha": 2,
+        "wis": 1
+      }
+    },
+    "feats": [
+      {
+        "ref": "feat/magic-initiate",
+        "note": "Cleric",
+        "source": {
+          "ref": "background/acolyte"
+        }
+      },
+      {
+        "ref": "feat/alert",
+        "source": {
+          "ref": "species/human"
+        }
+      },
+      {
+        "ref": "feat/ability-score-improvement",
+        "source": {
+          "ref": "class/bard",
+          "level": 4
+        },
+        "abilities": {
+          "cha": 1,
+          "dex": 1
+        }
+      }
+    ],
+    "choices": [
+      {
+        "source": {
+          "ref": "class/bard"
+        },
+        "skills": [
+          "performance",
+          "persuasion",
+          "deception"
+        ],
+        "tools": [
+          {
+            "ref": "equipment/musical-instrument",
+            "note": "lute"
+          },
+          {
+            "ref": "equipment/musical-instrument",
+            "note": "flute"
+          },
+          {
+            "ref": "equipment/musical-instrument",
+            "note": "viol"
+          }
+        ]
+      },
+      {
+        "source": {
+          "ref": "species-trait/human-skillful"
+        },
+        "skills": [
+          "perception"
+        ]
+      },
+      {
+        "source": {
+          "ref": "class-feature/bard-expertise"
+        },
+        "expertise": [
+          "performance",
+          "persuasion"
+        ]
+      },
+      {
+        "source": {
+          "ref": "class-feature/college-of-lore-bonus-proficiencies"
+        },
+        "skills": [
+          "arcana",
+          "history",
+          "investigation"
+        ]
+      },
+      {
+        "source": {
+          "ref": "background/acolyte"
+        },
+        "languages": [
+          "Elvish",
+          "Dwarvish"
+        ]
+      }
+    ],
+    "equipped": [
+      {
+        "ref": "equipment/leather-armor"
+      },
+      {
+        "ref": "equipment/dagger"
+      },
+      {
+        "ref": "equipment/light-crossbow"
+      }
+    ],
+    "spells": [
+      {
+        "ref": "spell/vicious-mockery"
+      },
+      {
+        "ref": "spell/mage-hand"
+      },
+      {
+        "ref": "spell/minor-illusion"
+      },
+      {
+        "ref": "spell/guidance"
+      },
+      {
+        "ref": "spell/sacred-flame"
+      },
+      {
+        "ref": "spell/bless"
+      },
+      {
+        "ref": "spell/healing-word"
+      },
+      {
+        "ref": "spell/dissonant-whispers"
+      },
+      {
+        "ref": "spell/faerie-fire"
+      },
+      {
+        "ref": "spell/identify"
+      },
+      {
+        "ref": "spell/hold-person"
+      },
+      {
+        "ref": "spell/invisibility"
+      },
+      {
+        "ref": "spell/silence"
+      },
+      {
+        "ref": "spell/hypnotic-pattern"
+      },
+      {
+        "ref": "spell/dispel-magic"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

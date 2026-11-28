@@ -1,0 +1,30 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "bugbear-warrior-alone",
+  "name": "Lone Bugbear",
+  "summary": "A single bugbear lies in wait.",
+  "stats": {
+    "parts": [
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/bugbear-warrior",
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        437
+      ]
+    }
+  }
+}

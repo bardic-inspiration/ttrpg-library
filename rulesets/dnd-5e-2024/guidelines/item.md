@@ -99,6 +99,11 @@ More guidance:
 - **Spells.** `spells[].saveDc` and `spells[].attackBonus` are authored and
   come from this table. Omit them when the item uses the wielder's own save DC
   or spell attack bonus, and say so in `effect`.
+- **Modifiers.** An item with a flat, always-on effect on a character's
+  numbers (Armor Class, saving throws, ability checks, a score, or its own
+  attacks) declares it in `modifiers` as well as in `effect`
+  ([Item modifiers](../../../docs/rulesets.md#item-modifiers)). An effect
+  used in play stays in `effect` only.
 - **Cursed.** A cursed item still has a real benefit, and the curse is a cost
   worth weighing. Set `cursed` and describe the curse in `effect`.
 

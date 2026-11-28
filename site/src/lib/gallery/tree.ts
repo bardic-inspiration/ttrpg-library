@@ -1,11 +1,11 @@
-// The filter tree (docs/site.md#gallery "Filters"): the Ruleset node, with each ruleset's source
-// and author; then type, field, any subfield, and value, built from each type's registry facets.
+// The filter tree (docs/site.md#gallery "Filters"): Sources, with Official and the homebrew
+// sources and authors, then Types, with each type's field, any subfield, and value, built from its
+// registry facets.
 // Pure, so the island only renders it.
 
-import type MiniSearch from 'minisearch';
-import { isOfficial } from '../../../../rulesets/module.ts';
+import { PUBLISHER, isOfficial } from '../../../../rulesets/module.ts';
 import { label } from '../../../../lib/wording/grammar.ts';
-import { AUTHOR, RULESET, SOURCE, TYPE, filterDef, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo } from './config.ts';
+import { AUTHOR, SOURCE, TYPE, filterDef, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo, typeKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, valueAt } from './values.ts';
 import { bounds, chips, hasValues, withoutFilter } from './view.ts';
@@ -23,17 +23,17 @@ export interface ValueNode {
 
 export type TreeNode =
   /**
-   * A checkable value with filters inside it: a type, checked as the type filter and holding its
-   * facets, or a ruleset, checked as the ruleset filter and holding its source and author. `path`
-   * is the filter its checkbox sets.
+   * A checkable value that may hold filters: a type, checked as the type filter and holding its
+   * facets, or Official, checked as the author filter's `"publisher"` and holding none. `path` is
+   * the filter its checkbox sets.
    */
-  | { kind: 'type'; id: string; path: typeof TYPE | typeof RULESET; value: ValueNode; open: boolean; children: TreeNode[] }
-  /** A field two or more facets sit in, such as Immunities, or the Ruleset or Tags node. */
+  | { kind: 'type'; id: string; path: typeof TYPE | typeof AUTHOR; value: ValueNode; open: boolean; children: TreeNode[] }
+  /** A field two or more facets sit in, such as Immunities, or the Sources, Homebrew, or Types node. */
   | { kind: 'field'; id: string; label: string; open: boolean; children: TreeNode[] }
   | { kind: 'enum'; id: string; def: FilterDef; open: boolean; values: ValueNode[] }
   | { kind: 'range'; id: string; def: FilterDef; open: boolean; bounds: { min: number; max: number } | undefined };
 
-/** What the tree reads besides the config: the Library's records, the state, and the search index. */
+/** What the tree reads besides the config: the Library's records and the state. */
 interface Context {
   config: GalleryConfig;
   state: GalleryState;
@@ -192,103 +192,75 @@ function nest(
   return out;
 }
 
-/** The Tags node: every tag key in the Library, or filtered on, each with its values. */
-function tagsNode(ctx: Context, defaults: Set<string>): TreeNode | undefined {
-  const keys = new Set(ctx.records.flatMap((r) => Object.keys(r.tags)));
-  for (const path of ctx.state.filters.keys()) {
-    const key = tagKey(path);
-    if (key !== undefined) keys.add(key);
-  }
-  const children = [...keys]
-    .sort()
-    .map((key) => filterDef(ctx.config, `tags.${key}`))
-    .filter((def): def is FilterDef => def !== undefined)
-    .map((def) => facetNode(ctx, { ...def, label: label(def.label) }, ctx.records, 'tags:', defaults.has(def.path)))
-    .filter((node): node is TreeNode => node !== undefined);
-  return children.length === 0 ? undefined : { kind: 'field', id: 'tags', label: 'Tags', open: isOpen(children), children };
+/** The labels of the tree's sections and of the homebrew group in Sources. */
+export const SOURCES_LABEL = 'Sources';
+export const OFFICIAL_LABEL = 'Official';
+export const HOMEBREW_LABEL = 'Homebrew';
+export const TYPES_LABEL = 'Types';
+
+/**
+ * The Sources node, first and open at the start. Official is a checkbox for the author filter's
+ * `"publisher"`, the ruleset's own material (docs/content-model.md#source-and-author), shown always
+ * since a fresh Library checks it. Homebrew holds the Source and Author filters over the other
+ * entries. Like Official, they add entries, so each counts what checking it adds.
+ */
+function sourcesNode(ctx: Context): TreeNode {
+  const authors = selectedValues(ctx.state.filters.get(AUTHOR));
+  const official: TreeNode = {
+    kind: 'type',
+    id: 'sources/official',
+    path: AUTHOR,
+    value: {
+      key: PUBLISHER,
+      label: OFFICIAL_LABEL,
+      count: ctx.others(AUTHOR).filter(isOfficial).length,
+      selected: authors.includes(PUBLISHER),
+      open: false,
+      children: [],
+    },
+    open: false,
+    children: [],
+  };
+  const homebrew = ctx.records.filter((r) => !isOfficial(r));
+  const filters = [filterDef(ctx.config, SOURCE), filterDef(ctx.config, AUTHOR)]
+    .filter((d): d is FilterDef => d !== undefined)
+    .map((d) => facetNode(ctx, d, homebrew, 'sources/homebrew:', false))
+    .filter((node): node is TreeNode => node !== undefined)
+    .map((node) => (node.kind === 'enum' && node.def.path === AUTHOR ? { ...node, values: node.values.filter((v) => v.key !== PUBLISHER) } : node))
+    .filter((node) => node.kind !== 'enum' || node.values.length > 0);
+  const children: TreeNode[] = [official];
+  if (filters.length > 0) children.push({ kind: 'field', id: 'sources/homebrew', label: HOMEBREW_LABEL, open: isOpen(filters), children: filters });
+  return { kind: 'field', id: 'sources', label: SOURCES_LABEL, open: true, children };
 }
 
 /**
- * A ruleset's sources with its official ones pinned first: a source is official when official
- * content carries it (docs/content-model.md#source-and-author). Each part keeps its order.
+ * The Library's filter tree (docs/site.md#gallery "Filters"): Sources, then Types, holding each
+ * type, a value of the type filter holding its own facets. Each type lists only its own records'
+ * values, with counts of its own records, though a path two types share is one filter. A type
+ * counts its entries among the results. Both sections, and a checked type's registry default
+ * filters, start open, and so does every node with an active filter of its own in it.
  */
-function officialFirst(values: ValueNode[], records: LibraryRecord[]): ValueNode[] {
-  const official = new Set(records.filter(isOfficial).flatMap((r) => enumValues(valueAt(r, SOURCE)).map((v) => v.key)));
-  return [...values.filter((v) => official.has(v.key)), ...values.filter((v) => !official.has(v.key))];
-}
-
-/**
- * The Ruleset node, always first: each ruleset the Library has entries of (or that is checked),
- * as a value of the ruleset filter counted among the results of every other filter, holding its
- * Source and Author filters over its own entries (docs/content-model.md#source-and-author), its
- * official sources first. An author of `"publisher"` reads as the ruleset's publisher.
- */
-function rulesetNode(ctx: Context): TreeNode | undefined {
-  const def = filterDef(ctx.config, RULESET);
-  if (!def) return undefined;
-  const selected = selectedValues(ctx.state.filters.get(RULESET));
-  const present = new Set(ctx.records.map((r) => r.ruleset.toLowerCase()));
-  const counted = ctx.others(RULESET);
-  const children: TreeNode[] = chips(def, ctx.records, counted, ctx.state.filters.get(RULESET))
-    .filter((chip) => present.has(chip.key) || selected.includes(chip.key))
-    .map((chip) => {
-      const ruleset = String(chip.stored);
-      const own = ctx.records.filter((r) => r.ruleset.toLowerCase() === chip.key);
-      const claims = selected.length === 0 || selected.includes(chip.key);
-      const publisher = ctx.config.publishers[ruleset];
-      const inside = [filterDef(ctx.config, SOURCE), filterDef(ctx.config, AUTHOR)]
-        .filter((d): d is FilterDef => d !== undefined)
-        .map((d) => (d.path === AUTHOR && publisher ? { ...d, labels: { ...d.labels, publisher } } : d))
-        .map((d) => facetNode(ctx, d, own, `${RULESET}/${ruleset}:`, false, claims))
-        .filter((node): node is TreeNode => node !== undefined)
-        .map((node) => (node.kind === 'enum' && node.def.path === SOURCE ? { ...node, values: officialFirst(node.values, own) } : node));
-      return {
-        kind: 'type' as const,
-        id: `${RULESET}/${ruleset}`,
-        path: RULESET,
-        value: { key: chip.key, label: displayValue(def, chip.stored), count: chip.count, selected: selected.includes(chip.key), open: false, children: [] },
-        open: isOpen(inside),
-        children: inside,
-      };
-    });
-  if (children.length === 0) return undefined;
-  // The ruleset set's own section, at the top of the menu, always starts open.
-  return { kind: 'field', id: RULESET, label: def.label, open: true, children };
-}
-
-/**
- * The Library's filter tree: the Ruleset node, then the types, each a value of the type filter
- * holding its own facets, then the Tags. Each type lists only its own
- * records' values, with counts of its own records, though a path two types share is one filter
- * (docs/site.md#gallery "Filters"). A type counts its entries among the results. A checked
- * type's registry default filters start open, and so does every node with an active filter of
- * its own in it.
- */
-export function filterTree(config: GalleryConfig, state: GalleryState, records: LibraryRecord[], index: MiniSearch<LibraryRecord>): TreeNode[] {
+export function filterTree(config: GalleryConfig, state: GalleryState, records: LibraryRecord[]): TreeNode[] {
   const cache = new Map<string, LibraryRecord[]>();
   const others = (path: string) => {
     let hit = cache.get(path);
-    if (!hit) cache.set(path, (hit = withoutFilter(config, records, state, index, path)));
+    if (!hit) cache.set(path, (hit = withoutFilter(config, records, state, path)));
     return hit;
   };
   const owners = (path: string) => [...config.types.values()].filter((info) => info.facets.some((f) => f.path === path)).length;
   const ctx: Context = { config, state, records, others, owners };
   const selected = selectedValues(state.filters.get(TYPE));
-  const checked = [...config.types.values()].filter((info) => selected.includes(info.type.toLowerCase()));
-  const tags = tagsNode(ctx, new Set(checked.flatMap((info) => info.defaultFilters)));
   // A type counts its entries among the results, so checking one type leaves the rest at 0.
   const shown = others('');
-  const nodes: TreeNode[] = [];
-  const rulesets = rulesetNode(ctx);
-  if (rulesets) nodes.push(rulesets);
+  const types: TreeNode[] = [];
   for (const info of config.types.values()) {
     const own = ofType(records, info);
-    const key = info.type.toLowerCase();
+    const key = typeKey(info.ruleset, info.type).toLowerCase();
     if (own.length === 0 && !selected.includes(key)) continue;
     const defaults = new Set(selected.includes(key) ? info.defaultFilters : []);
     const claims = selected.length === 0 || selected.includes(key);
     const children = nest(ctx, info.facets, 0, own, `${info.ruleset}/${info.type}:`, defaults, claims);
-    nodes.push({
+    types.push({
       kind: 'type',
       id: `${info.ruleset}/${info.type}`,
       path: TYPE,
@@ -304,5 +276,7 @@ export function filterTree(config: GalleryConfig, state: GalleryState, records: 
       children,
     });
   }
-  return tags ? [...nodes, tags] : nodes;
+  const nodes: TreeNode[] = [sourcesNode(ctx)];
+  if (types.length > 0) nodes.push({ kind: 'field', id: 'types', label: TYPES_LABEL, open: true, children: types });
+  return nodes;
 }

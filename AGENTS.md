@@ -3,13 +3,13 @@
 How work is done in this repo, by agents or humans. [`docs/`](docs/README.md)
 describes *what is built*, including CI, lanes, labels, and repository
 settings. The development tracks' specs, [`spec/tracks/`](spec/tracks/README.md),
-hold the design that isn't built yet. This file covers *how to work*, and defers to them wherever they
+and a version spec while one is open, hold the design that isn't built yet. This file covers *how to work*, and defers to them wherever they
 overlap.
 
 Sessions start with no memory of earlier ones. Decisions, follow-ups, and
-open questions go into the docs, the track specs, issues, and PR descriptions,
-never only into a chat. Because they do, a session can stay small: one issue,
-or one batch of an import stage, per session, and a new session for the next.
+open questions go into the docs, the specs, issues, and PR descriptions,
+never only into a chat. Because they do, a session can stay small: one issue
+per session, and a new session for the next.
 A long session costs more on every turn as its context grows.
 
 ## Lanes
@@ -20,22 +20,23 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
   Routines open these PRs on `gen/` and `revise/` branches, using the
   `generate` and `revise` skills ([`docs/generation.md`](docs/generation.md)). Hand-made
   entries go on `manual/` branches.
-- **Development:** everything else, including the docs and the track specs, on
+- **Development:** everything else, including the docs and the specs, on
   `dev/<short-description>` branches. A dev PR touches content only as a
   deliberate migration; the labeler adds the `migration` label to it.
 
 ## Rules
 
 - **Never push to `main`.** Every change is a PR.
-- **Don't invent behavior.** When the docs or a track spec are silent,
+- **Don't invent behavior.** When the docs or a spec are silent,
   ambiguous, or wrong,
   ask whether a different reasonable choice would change behavior that
   something else depends on.
   - If it wouldn't, decide by the principles in
     [`docs/decisions.md`](docs/decisions.md) and record the choice in the
     PR's "Decisions" section. The owner's merge confirms it.
-  - If it would, stop that item and ask (the user, or on the issue). For track
-    design, the question goes into the track's "Open questions" in
+  - If it would, stop that item and ask (the user, or on the issue). For
+    version or track design, the question goes into the area's or track's
+    "Open questions" in the version spec or
     [`spec/tracks/`](spec/tracks/README.md) through a small PR, before any
     code that depends on it. Carry on with the items that are clear.
 - **Record decisions where they're made.** A PR that makes a decision lists
@@ -43,7 +44,7 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
   [`docs/decisions.md`](docs/decisions.md) in the same PR.
 - **A dev PR that changes behavior updates the docs in the same PR.** It
   describes what now exists in `docs/`, and deletes the part it built from
-  its track spec, so `main` is complete after every merge.
+  its spec, so `main` is complete after every merge.
 - **One issue per PR.** Out-of-scope work becomes an issue, not a `TODO`
   or a drive-by change. An issue that lists several items gets one PR, not
   one per item (see "Tracking work").
@@ -58,6 +59,11 @@ Every PR is in exactly one lane ([Work lanes](docs/workflow.md#work-lanes)):
   repo: code, config, skills, scripts, and the prompts a routine runs.
   Whether a routine is set up, scheduled, or turned on, and other practices
   kept outside the repo, aren't documented or tested here.
+- **The build runs on Linux and Windows.** Every npm script, and every script
+  it runs, works the same in both, so no script uses shell syntax or a
+  Unix-only command: set a variable or touch files from a Node script
+  instead. CI runs only on Linux, so `tests/portable-scripts.test.ts` checks
+  the npm scripts ([Repository layout](docs/architecture.md#repository-layout)).
 - **Never skip, disable, or weaken a test or check to get green.**
 - **Never rewrite pushed history** (no amend, rebase, or force-push). To catch
   up with `main`, merge it in.
@@ -86,7 +92,7 @@ Every content session, routine or not, follows these:
 
 ## Dev workflow
 
-1. **Read** the task and the docs and track spec sections it touches.
+1. **Read** the task and the docs and spec sections it touches.
 2. **Branch** from `main` as `dev/<short-description>`.
 3. **Write tests first** for new behavior, using Vitest suites and fixtures
    in `tests/`. Bug fixes come with a test that fails before the fix.
@@ -96,7 +102,7 @@ Every content session, routine or not, follows these:
    whole library, minus only the types its own fixtures stand in for, so a
    new link in content can't leave its library unresolved.
 4. **Update the docs as you go.** In the same PR, update the `docs/` files
-   that describe what changed, delete the part you built from the track spec,
+   that describe what changed, delete the part you built from its spec,
    and add a row to `docs/decisions.md` for each decision the PR makes (see
    "Rules"). A renamed heading means updating its citations; the link check
    catches any you miss.
@@ -126,7 +132,7 @@ no end of its own. So is the "Spot Fixes" issue when no milestone is open
 ("Dev Queue" below). GitHub's milestone feature isn't used. Content issues
 follow [Requests](docs/generation.md#requests).
 
-A dev issue states what to do, the docs or track spec section it implements,
+A dev issue states what to do, the docs or spec section it implements,
 and how to tell it's done.
 
 Bundle small related dev issues (a few lines each, same area) into one issue
@@ -144,10 +150,20 @@ sub-issue and PR only when it's too large to review alongside the others.
 ### Tracks
 
 A development track is ongoing work outside a version's build, such as
-Integrations (#315) and Images (#316). Its unbuilt design
+Integrations (#315), Images (#316), and Rulesets (#403). Its unbuilt design
 is one file in [`spec/tracks/`](spec/tracks/README.md). An approved design can
 be amended at any time by a small PR to it that the owner merges. A task
 deletes the part it builds, and an open question there stops that part.
+
+### Version spec
+
+A version's unbuilt design is a folder, `spec/v<version>/`, with a README and
+one file per area in build order. Each area becomes a build milestone, in that
+order. It works as a track's file does: an approved design is amended by a
+small PR, a task deletes the part it builds, and an open question stops that
+part. When only its README is left, the version's close-out removes the
+folder, and design still open moves to a track or to the next version's
+"Spec Considerations" issue. No version spec is open now.
 
 ### Testing backlog
 
@@ -174,8 +190,9 @@ nothing. The next milestone review takes up every item in it.
 Milestone issues, in milestone order (or, when no milestone is open, the
 "Spot Fixes" issue below), then track issues, in the order
 [`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
-sub-issues (GitHub's order) are one queue. Work for the next version goes under the "Later" issue
-(#118), outside the queue.
+sub-issues (GitHub's order) are one queue. Work earmarked for a future version goes in that version's
+"Spec Considerations" issue (#370 for v2.0.0), outside the queue; work for
+a version being built is an amendment to its spec.
 
 - **The active queue** is the one open tracking issue labeled `queue`: the
   current milestone, or the "Spot Fixes" issue. It is tied to a version;

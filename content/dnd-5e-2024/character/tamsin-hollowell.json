@@ -1,0 +1,130 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "tamsin-hollowell",
+  "name": "Tamsin Hollowell",
+  "summary": "A halfling acolyte and Hearth Domain Cleric who keeps the party fed, warm, and standing.",
+  "description": "Tamsin tended the common hearth of a roadside shrine where travelers slept for free. When fewer of them came back down the road each season, she went to find out why.",
+  "stats": {
+    "species": {
+      "ref": "species/halfling"
+    },
+    "background": {
+      "ref": "background/acolyte"
+    },
+    "classes": [
+      {
+        "class": {
+          "ref": "class/cleric"
+        },
+        "level": 3,
+        "subclass": {
+          "ref": "subclass/hearth-domain"
+        }
+      }
+    ],
+    "abilities": {
+      "base": {
+        "str": 13,
+        "dex": 12,
+        "con": 14,
+        "int": 8,
+        "wis": 15,
+        "cha": 10
+      },
+      "background": {
+        "wis": 2,
+        "cha": 1
+      }
+    },
+    "feats": [
+      {
+        "ref": "feat/magic-initiate",
+        "note": "Cleric",
+        "source": {
+          "ref": "background/acolyte"
+        }
+      }
+    ],
+    "choices": [
+      {
+        "source": {
+          "ref": "class/cleric"
+        },
+        "skills": [
+          "medicine",
+          "persuasion"
+        ]
+      },
+      {
+        "source": {
+          "ref": "background/acolyte"
+        },
+        "languages": [
+          "Halfling",
+          "Elvish"
+        ]
+      }
+    ],
+    "equipped": [
+      {
+        "ref": "equipment/scale-mail"
+      },
+      {
+        "ref": "equipment/shield"
+      },
+      {
+        "ref": "equipment/mace"
+      }
+    ],
+    "spells": [
+      {
+        "ref": "spell/guidance"
+      },
+      {
+        "ref": "spell/sacred-flame"
+      },
+      {
+        "ref": "spell/thaumaturgy"
+      },
+      {
+        "ref": "spell/light"
+      },
+      {
+        "ref": "spell/spare-the-dying"
+      },
+      {
+        "ref": "spell/healing-word"
+      },
+      {
+        "ref": "spell/cure-wounds"
+      },
+      {
+        "ref": "spell/bless"
+      },
+      {
+        "ref": "spell/guiding-bolt"
+      },
+      {
+        "ref": "spell/shield-of-faith"
+      },
+      {
+        "ref": "spell/aid"
+      },
+      {
+        "ref": "spell/sanctuary"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 ---
 name: generate
-description: Generate new library entries for a content request issue, an import issue, an inline request, or a gap-fill bucket, validate them, and open a content PR. Generic across types and rulesets. Use from a routine run (docs/generation.md#run-order steps 4 to 6) or when asked to fulfil a `request` or `import` issue. Not for revisions; those use the revise skill.
+description: Generate new library entries for a content request issue, an import issue, an inline request, or a gap-fill bucket, validate them, and open a content PR. Generic across types and rulesets, with a procedure per type (character presets have their own). Use from a routine run (docs/generation.md#run-order steps 4 to 6) or when asked to fulfil a `request` or `import` issue. Not for revisions; those use the revise skill.
 ---
 
 # Generate
@@ -22,7 +22,7 @@ One batch, from exactly one of these sources:
 
 - **Issues.** One or more open `request` issues. Read each with its comments.
   A content-request form body has one `### <label>` heading per field
-  (`Type`, `Count`, `Brief`, `Tags`, `Ruleset`); `_No response_` means the
+  (`Type`, `Count`, `Brief`, `Ruleset`); `_No response_` means the
   field was left blank. A free-form `request` issue is read for the same
   fields in its prose ([Requests](../../../docs/generation.md#requests)).
 - **Import issues.** One or more open `import` issues, an import batch
@@ -30,7 +30,7 @@ One batch, from exactly one of these sources:
   field (`Format`, `File`, `Work`, `Author`, `Source URL`, `License`,
   `Ruleset`, `Notes`). An import batch is never mixed with content requests;
   it follows "Import batches" below in place of steps 2 to 4.
-- **Inline request.** Type, count, brief, and tags given directly by a manual
+- **Inline request.** Type, count, brief, and ruleset given directly by a manual
   run, with no issue ([Run order](../../../docs/generation.md#run-order)).
 - **Gap bucket.** A type and a bucket label such as `stats.cr=2..4`, chosen by
   the run ([Run order](../../../docs/generation.md#run-order) step 6, [Gap buckets](../../../docs/generation.md#gap-buckets)), with a count of `defaults.gapFill.count`. The
@@ -45,10 +45,8 @@ One batch, from exactly one of these sources:
 Resolve each request against `config/defaults.json` as
 `scripts/generate/defaults.ts` (`applyDefaults`) does: a blank field takes
 the default (`defaults.ruleset`, `defaults.count`), a request's count is
-taken as given (no batch has a size limit, [Defaults](../../../docs/generation.md#defaults)), and request tags merge over
-`defaults.tags`. A form tag line `key: a, b` is the list `["a", "b"]`; a
-line with no comma is a single string. A `source:` or `author:` line is the
-entries' `source` or `author`, not a tag; without one, custom entries take
+taken as given (no batch has a size limit, [Defaults](../../../docs/generation.md#defaults)). A request that names a
+`source` or `author` sets the entries' own; without one, custom entries take
 `defaults.author`, and the `source` in `config/defaults.json` when it sets one.
 
 A brief that asks for SRD content, by name or by description ("ten SRD
@@ -85,7 +83,7 @@ For the batch's ruleset and each type in it, read:
 From `site/public/library.json`, list every existing `name` and `id` of each
 type in the batch: IDs and names are unique within a type ([IDs and names](../../../docs/content-model.md#ids-and-names)), so a new
 spell may share a name with a creature but not with another spell. Then find existing
-entries that match the brief's theme (by tags, summary, and facets) so the
+entries that match the brief's theme (by name, summary, and facets) so the
 batch doesn't repeat a concept already in the library.
 
 - On a name or ID collision, choose a different name. Never add a numeric
@@ -103,11 +101,31 @@ batch doesn't repeat a concept already in the library.
 
 ## Step 3: Write entries
 
+Write each request's entries by the procedure its type routes to
+([Procedures](../../../docs/generation.md#procedures)). Steps 1, 2, 4, 5,
+and 6 are shared: a batch that mixes types runs them once, and step 3 once
+per request.
+
+## Procedures
+
+| Procedure | Types |
+|---|---|
+| [Entries](#procedure-entries) | `background`, `class`, `condition`, `creature`, `equipment`, `feat`, `item`, `species`, `spell`, `subclass` |
+| [Characters](#procedure-characters) | `character` |
+| [Maps](#procedure-maps) | `map` |
+| [Encounters](#procedure-encounters) | `encounter` |
+| [Modules](#procedure-modules) | `module` |
+
+Every type in `config/types.json` is in exactly one row. A type in none
+can't be generated: ask, as for a type not in the registry (Inputs).
+
+### Procedure: Entries
+
 Write each entry to `content/<ruleset>/<type>/<id>.json`, where `<id>` is the
 slug of the name: lowercase, ASCII-folded, apostrophes dropped, other
 non-alphanumerics collapsed to `-` ("Hunter's Mark" is `hunters-mark`)
 ([IDs and names](../../../docs/content-model.md#ids-and-names)). Write the envelope keys in the [Entry envelope](../../../docs/content-model.md#entry-envelope) order: `ruleset`, `source`,
-`author`, `type`, `id`, `name`, `summary`, `description`, `stats`, `tags`, `meta`.
+`author`, `type`, `id`, `name`, `summary`, `description`, `stats`, `meta`.
 
 - **Inputs only.** Never write a value the ruleset derives ([Inputs and derived values](../../../docs/rulesets.md#inputs-and-derived-values)). In prose,
   write derived numbers as tokens from `rulesets/<ruleset>/tokens.ts`, never
@@ -136,7 +154,7 @@ non-alphanumerics collapsed to `-` ("Hunter's Mark" is `hunters-mark`)
   write a "none" stand-in such as `0`, `false`, `""`, or `[]` ([Situational fields](../../../docs/content-model.md#situational-fields)).
 - Don't add `image`. Art is the Images track's work (#316), not this skill's.
 
-### SRD entries
+#### SRD entries
 
 For an SRD request, transcribe each entry faithfully from SRD 5.2 ([SRD and custom entries](../../../docs/content-model.md#srd-and-custom-entries))
 instead of following the guideline's tone, naming, and balance targets.
@@ -180,7 +198,7 @@ against it before pushing.
   ([Templates](../../../docs/site.md#templates)).
 - Set `source` to `"SRD 5.2"` and `author` to `"publisher"` (step 4).
 
-### Import batches
+#### Import batches
 
 For an import batch, the import script writes the entries; don't write their
 stats by hand. For each issue, in order:
@@ -213,12 +231,334 @@ its issue's skip list, not rewritten.
 
 Never modify, rename, or move an existing entry. This skill only adds files.
 
-## Step 4: Source, author, meta, and tags
+### Procedure: Characters
+
+A character is a preset: one legal build at one level, written as the
+choices that make it ([Characters](../../../docs/rulesets.md#characters)).
+The ruleset derives everything else, and the consistency checks reject a
+build that isn't legal ([Consistency checks](../../../docs/rulesets.md#consistency-checks)).
+
+- **By request only.** Characters have no gap buckets, so a gap bucket
+  never names one. An issue or an inline request does.
+- **Always custom.** The SRD prints no pregenerated characters, so an SRD
+  request for characters can't be fulfilled as written: ask (Inputs). A
+  preset is a custom entry, with the request's `author` (step 4).
+- **No dependencies.** Every ref names an entry already in the library
+  (`site/public/library.json`): the species, background, classes,
+  subclasses, feats, class options, spells, and what's equipped. A brief
+  that needs an entry the library lacks can't be fulfilled as written: ask,
+  suggesting a request for that entry first.
+
+For each character:
+
+1. **Read the build's entries.** Besides the type's schema and guideline
+   (step 1), read the species with its traits, the background, each class
+   with its features, its `spellcasting`, `multiclass`, `grants`, and
+   `training`, each subclass with its features, and each feat it takes,
+   from `content/<ruleset>/<type>/<id>.json`. Read
+   [Grants](../../../docs/rulesets.md#grants) for what each one gives.
+2. **Choose the build.** From the brief, choose the species, the
+   background, and the classes in the order taken, each with its `level`
+   (20 or less in all, no class twice) and its `subclass` exactly when its
+   level reaches the class's first subclass level. With more than one
+   class, plan the scores so every class's primary ability is 13 or more.
+3. **Buy the scores.** Write the six `base` scores, each 8 to 15, spending
+   the 27 points of point buy (`pointBuy` in `rulesets/<ruleset>/tables.json`).
+   Place the background's increases as +2/+1 or +1/+1/+1 among its three
+   abilities, no score above 20.
+4. **Fill what the build gives, exactly.** Each grant is filled to its
+   count, from its list, under the `source` that gives it (the guideline's
+   "Prose style"):
+   - `feats`: the background's origin feat, one per `feat` grant of a trait
+     or of a feature at its class level, each of a category the grant
+     allows and with its `requires` met; a feat's `note` is the choice it's
+     taken with, and its `abilities` the increases it places.
+   - `choices`: the starting class's skills, a later class's `multiclass`
+     picks, the background's tool and two languages, and each trait's,
+     feature's, and feat's skill, Expertise, tool, and language picks. No
+     skill twice, the background's included; Expertise only in a proficient
+     skill. An entry with a `choice` names its `option` (Elven Lineage's
+     "Wood Elf"), and a feature whose feat grant has an `or` names that
+     option only when the build takes it in place of the feat.
+   - `options`: each class's option lists, to the count its `options`
+     grants give at the class's level.
+   - `spells`: each casting class's cantrips and prepared spells, to its
+     counts at its level, from its lists at a spell level its slots cast;
+     each feat's, feature's, and trait's `spells` picks (a chosen option's
+     included); and the always-prepared spells the profile should show.
+   - `equipped`: armor, a shield, and weapons the classes' training covers,
+     and items; at most three attuned, each one that requires attunement.
+5. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json`
+   with its envelope keys in the order the Entries procedure gives, and
+   `stats` holding only these inputs. Never write a value the ruleset derives: the
+   level, scores, modifiers, saves, skill bonuses, Hit Points, Armor Class,
+   attacks, and spellcasting. `summary` and `description` follow the
+   guideline. Names follow step 2 and the guideline's "Naming".
+6. **Fix by choices.** When `npm run validate` reports a character error
+   (step 5), change the build's choices to meet it. Never edit another
+   entry to make a build pass.
+
+In the PR's Entries table, a character's summary field is "—": the type has
+no `summaryField`.
+
+### Procedure: Maps
+
+A map is a placeholder place with named zones, written together with its
+diagram, an SVG the validator checks
+([Maps](../../../docs/rulesets.md#maps),
+[Map diagrams](../../../docs/content-model.md#map-diagrams)). The diagram is
+an original placeholder, not art, so it needs no `ATTRIBUTION.md` credit.
+
+- **By request only.** Maps have no gap buckets, so a gap bucket never names
+  one. An issue or an inline request does.
+- **Always custom.** The SRD prints no maps, so an SRD request for maps
+  can't be fulfilled as written: ask (Inputs). A map is a custom entry, with
+  the request's `author` (step 4).
+- **No dependencies but a parent.** A map references nothing but its
+  parent, by `within`. A child map's parent is a map in the library
+  (`site/public/library.json`) or one the same request writes; a brief that
+  sets a map inside a place the library lacks, and doesn't ask for that
+  place too, can't be fulfilled as written: ask.
+
+For each map, parents before their children:
+
+1. **Lay out the zones.** From the brief and the guideline's "Balance
+   targets", choose the `scale` and the zones: a room map a fight's few
+   zones, a dungeon map one per room, a town map one per district. Give
+   each zone its `name`, what the table calls it, and its `id`, the name's
+   slug, unique within the map. Sketch where each sits and which ones
+   connect, so every zone is reachable from the way in.
+2. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json` with
+   its envelope keys in the order the Entries procedure gives. `stats`
+   holds `scale`, the `zones` in the order the page lists them (the way in
+   first, then as a visitor meets them), each with a `note` where the
+   guideline's "Prose style" has one to say, and, for a child map, `within`:
+   `{ "ref": "map/<parent-id>", "zone": "<zone-id>" }`, naming the parent's
+   zone it details. `summary` and `description` follow the guideline. Don't
+   add `image`: the diagram's path is derived, never stored.
+3. **Draw the diagram.** Write it to `assets/images/<ruleset>/map/<id>.svg`,
+   named by the entry's `id` exactly. The file is plain XML, indented two
+   spaces, as `tests/fixtures/map/sunken-cistern.svg` is:
+   - The root is `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 W H">`,
+     with no `width`, `height`, or other attribute. Use whole numbers, a
+     width of 300 to 800, and a height no more than the width, so the
+     site's 11-unit labels stay legible at the page's width.
+   - First a `<title>` holding the map's name, then a `wall` shape for the
+     outline: a `<rect>` the size of the `viewBox` for a building, a
+     `<polygon>` or `<path>` for a cave or a town's edge.
+   - Each zone in `stats.zones` is exactly one element with
+     `id="zone-<id>"` and `class="zone"`: a `<g>` holding the zone's shape
+     (`<rect>`, `<circle>`, `<ellipse>`, `<polygon>`, or `<path>`) and its
+     label, or the shape alone. Zones don't overlap; leave a gap of a few
+     units between them for walls. No other element has an id starting
+     `zone-`, and no id is on two elements.
+   - A zone's label is a `<text class="label">` holding the zone's name at
+     its shape's center: `x` is the center, since a label is centered on
+     it, and `y` about 4 units below the center, since `y` is its baseline.
+     A name too wide for its shape, at about 6 units a character, is split
+     into `<tspan>` lines, or the zone is drawn larger.
+   - A `door` is a `<line>` across each gap where two zones, or a zone and
+     the outside, connect. A `feature` is a small shape for something a
+     zone's note names, such as a pillar, a well, or an altar.
+   - Only these elements: `<rect>`, `<circle>`, `<ellipse>`, `<line>`,
+     `<polyline>`, `<polygon>`, `<path>`, `<text>`, `<tspan>`, `<g>`, and
+     `<title>`. An element's class, if it has one, is `zone`, `wall`,
+     `door`, `feature`, or `label`. No `style` or color attribute (`fill`,
+     `stroke`, and the like), `href`, `url(…)`, event handler, doctype,
+     CDATA, or `<style>`: the site colors the diagram by its classes.
+4. **Fix by drawing.** When `npm run validate` reports a diagram error
+   (step 5), fix the diagram, or the zones it names, to meet it, keeping
+   the entry's zones and the diagram's `zone-<id>` ids one to one.
+
+In the PR's Entries table, a map's summary field is "—": the type has no
+`summaryField`.
+
+### Procedure: Encounters
+
+An encounter is an arrangement of other entries: its parts, in the order
+the page reads, with one roster or spawn table
+([Encounters](../../../docs/rulesets.md#encounters)). The ruleset derives
+its XP from the creatures and counts; this procedure writes the counts,
+dice, and E, never XP
+([Encounter difficulty](../../../docs/rulesets.md#encounter-difficulty)).
+
+- **By request only.** Encounters have no gap buckets, so a gap bucket never
+  names one. An issue or an inline request does.
+- **Always custom.** The SRD prints no encounters, so an SRD request for
+  encounters can't be fulfilled as written: ask (Inputs). An encounter is a
+  custom entry, with the request's `author` (step 4). The creatures and
+  items it uses may be SRD entries.
+- **Dependencies before the encounter.** Every creature, item, equipment,
+  and map the encounter names is in the library
+  (`site/public/library.json`) or written by the same request, before the
+  encounter: a creature, item, or equipment by the Entries procedure, by
+  its own type's guideline, and a map by the Maps procedure. Prefer an
+  existing entry where one fits the brief. A character in the scene is a
+  `{ref:character/<id>}` in a part's text, never a roster line, and must be
+  in the library: a brief that needs a character the library lacks can't
+  be fulfilled as written: ask, suggesting a request for it first.
+
+For each encounter:
+
+1. **Choose the party.** Design for the party the brief names, its size
+   and levels. Without one, use four characters at the level the brief
+   implies, or at level 1, the calculator's default. Its budgets are each
+   character's Low, Moderate, and High XP for their level, summed, from
+   `xpBudgetPerCharacter` in `rulesets/<ruleset>/tables.json`.
+2. **Pick the creatures.** From the brief, choose the creatures and any
+   items, and write the new ones the library lacks (the dependency rule
+   above). A library creature's XP is its `derived.xp` facet in
+   `site/public/library.json`; a new creature's is the `xp` of its `cr` in
+   the rules tables' `challengeRatings` (`xpWithDamage` at CR 0 when it
+   deals damage).
+3. **Assemble the roster or spawn table.** Exactly one part is either:
+   - a **roster**, for a fixed fight: each creature's ref with a whole
+     `count` of 1 or more, chosen so the sum of XP times count, times E,
+     falls in the band the brief asks for (Moderate if it names none):
+     at or under Low reads Low, up to Moderate reads Moderate, up to High
+     reads High;
+   - or a **spawn table**, for a variable one: one row per difficulty the
+     brief asks for (`low`, `moderate`, and `high` if it names none), each
+     a roster whose counts may be dice: one kind of d4, d6, d8, d10, d12,
+     d20, or d100, with an optional modifier (`"1d4+1"`), the lowest roll at
+     least 1. Choose each row's counts so its average XP, times E, reads as the
+     row's name for the party, and its lowest and highest rolls stay near
+     that band. For a table the DM rolls on, add `roll`, one die
+     (`"1d6"`), and give each row a `range` of its faces, covering every
+     face once, the lowest row first.
+4. **Set E, only when the setting changes the fight.** Add `environment`
+   with a `multiplier` other than 1 and a `note` naming what does it
+   ("difficult terrain and a collapsing floor"), by the guideline's
+   "Balance targets". Leave it out for a neutral setting. Every multiplier
+   is a warning for the PR body (step 6).
+5. **Write the other parts.** By the guideline's "Prose style", and only
+   the parts the brief calls for, in the order the page should read: a
+   `description` (player-facing), a `dm-guide` (how to run it), the roster
+   or spawn table, a `sequence` (a structured `trigger`, `stages` each with
+   its `name`, `loop`, and `transition` but the last, and `victory`; or one
+   prose `example`, not both), `loot` (rows keyed by difficulty as the
+   spawn table's are, each with `coins`, `items`, or both), a `table` (a
+   `title` and one pipe table), `prose`, and a `map` part to show a map on
+   the page. Every text is markdown-subset text with `{ref:…}` tokens
+   (**Text** in the Entries procedure). Add `show` to a ref object only
+   where the page should show it otherwise than its default
+   ([Arrangements](../../../docs/content-model.md#arrangements)).
+6. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json`
+   with its envelope keys in the order the Entries procedure gives.
+   `stats` holds `parts`, `setIn` when the encounter is set in a map
+   (`{ "ref": "map/<id>", "zone": "<zone-id>" }`, the zone optional), and
+   `environment` when step 4 set it. `summary` follows the guideline;
+   `description` is left out, since the parts hold the text. Never write
+   XP, a row's XP, or the creature types: the ruleset derives them.
+7. **Fix by choices.** When `npm run validate` reports an encounter error
+   (step 5), change the parts' counts, dice, ranges, or refs to meet it.
+   Never edit an existing entry to make an encounter pass.
+
+In the PR's Entries table, an encounter's summary field is the party it
+was designed for and the difficulty its roster, or each spawn table row,
+reads ("4 × level 3: Moderate", or "4 × level 1: Low, Moderate, High"),
+since the type has no `summaryField`; review then needs no arithmetic. Its
+Warnings list E with its note, the validator's warning for it.
+
+### Procedure: Modules
+
+A module is an adventure a DM runs across one or more sessions, an
+arrangement of other entries: its parts in story order, its `arrangement`
+parts the encounters and modules it contains
+([Modules](../../../docs/rulesets.md#modules)). It's built from the
+library and from the entries its own request adds, each written by its
+type's procedure. The ruleset derives its contents and counts, and each
+encounter's difficulty; this procedure writes refs, `length`, and
+`levels`, never XP or a count.
+
+- **By request only.** Modules have no gap buckets, so a gap bucket never
+  names one. An issue or an inline request does.
+- **Always custom.** The SRD prints no modules, so an SRD request for
+  modules can't be fulfilled as written: ask (Inputs). A module is a custom
+  entry, with the request's `author` (step 4), as is every entry its
+  request adds. The creatures and items it uses may be SRD entries.
+- **Dependencies before the module.** Every entry the module names is in
+  the library (`site/public/library.json`) or written by the same request,
+  before the module and before the entries that name it. Prefer an
+  existing entry where one fits the brief. Write the new ones in this
+  order, each by its own type's guideline: content entries (a creature,
+  item, equipment, spell, or any other content type, even a class or a
+  species) by the Entries procedure; characters by the Characters
+  procedure, whose refs name entries already in the library; maps by the
+  Maps procedure, parents first; encounters by the Encounters procedure;
+  then contained modules by this one, innermost first. An entry written
+  earlier in the request counts as in the library for the ones after it,
+  so an encounter may name a character the request wrote.
+- **No rule additions.** A module's request never writes a rule addition:
+  a condition, a variant rule, or a type. A brief that needs one the
+  library lacks can't be fulfilled as written: ask, suggesting a sourcebook
+  request for it.
+- **No cycles.** A module never names a module it's part of: the
+  container lists the contained module, never the other way, and no module
+  contains itself, directly or through others.
+
+For each module, innermost first:
+
+1. **Set the frame.** From the brief, choose the `length` (`one-shot` for a
+   single session, `delve` for a short dungeon, `multi-session` for
+   longer) and the `levels` (`{ "min": <n>, "max": <n> }`): the brief's
+   span, or the level it implies, or level 1, `min` equal to `max` for a
+   one-shot or a delve without a span. A contained module's `levels` fall
+   within its container's.
+2. **Outline it.** In story order, list what the module holds: the hooks
+   that draw the party in, the places as maps, the scenes as encounters or
+   contained modules, the characters the party meets or plays, and any
+   table used across scenes, by the guideline's "Prose style". A five-room
+   dungeon is a dungeon map with one zone per room and five encounters,
+   each set in its zone; a multi-session module adds hooks, a town map,
+   and contained modules as chapters. For each item, find a library entry
+   that fits (Step 2's search), or mark it to write.
+3. **Write the dependencies.** Write each entry the outline marks, in the
+   order and by the procedures above. Design each encounter for the brief's
+   party, or four characters at the level the party is at when it plays,
+   within `levels`: `levels.min` for a one-shot or a delve, rising through
+   the span for a longer module. Set each encounter in its map and zone
+   with `setIn`, so the map's page lists it there.
+4. **Write the parts.** By the guideline's "Prose style", in the order the
+   page should read, and only the parts the outline calls for: `prose`
+   (with a `title`, such as "Background"), a `description`
+   (player-facing), `hook` parts (each a `text` and the `refs` it brings
+   in, each a ref object with an optional `note` and `show`: pregenerated
+   characters as `"show": "card"`, a contact as a link), a `dm-guide` (how
+   to run the whole), a `map` part to show each map (`{ "ref": "map/<id>" }`
+   with an optional `zone` and `show`), one `arrangement` part per
+   contained encounter or module (`{ "ref": "encounter/<id>" }` or
+   `{ "ref": "module/<id>" }`, with an optional `show`), in story order,
+   a `table` (a `title` and one pipe table) for a cross-cutting random
+   table, and a `sequence` where the whole module runs in stages. No
+   roster, spawn table, or loot: those are its encounters'. Every text is
+   markdown-subset text with `{ref:…}` tokens (**Text** in the Entries
+   procedure); a character or creature is a token in a part's text or a
+   hook's ref, never a part of its own. Add `show` only where the page
+   should show a ref otherwise than its default
+   ([Arrangements](../../../docs/content-model.md#arrangements)).
+5. **Write the entry.** Write it to `content/<ruleset>/<type>/<id>.json`
+   with its envelope keys in the order the Entries procedure gives.
+   `stats` holds `parts`, `length`, and `levels`. `summary` follows the
+   guideline; `description` is left out, since the parts hold the text.
+   Never write the contents, encounter or map counts, or any XP: the
+   ruleset derives them.
+6. **Fix by choices.** When `npm run validate` reports an error on the
+   module or an entry it adds (step 5), change that entry's choices or
+   refs to meet it, by its own procedure's fix step; a cycle error is fixed
+   by removing the `arrangement` part that leads back. Never edit an
+   existing entry to make a module pass.
+
+In the PR's Entries table, a module's summary field is its length and
+levels ("delve, levels 2–3"), since the type has no `summaryField`; every
+entry its request adds has its own row, by its own procedure's rule. The
+commit is a mixed-type batch's (step 6), counting every new entry.
+
+## Step 4: Source, author, and meta
 
 An import batch skips this step: the import script sets `source` to the
 work's title and `author` to its author, `meta.source.kind` to `"import"`,
-with `meta.source.issues` and `meta.source.license`, and `tags` to
-`defaults.tags`.
+with `meta.source.issues` and `meta.source.license`.
 
 Set on every entry in the batch, including dependencies:
 
@@ -232,8 +572,6 @@ Set on every entry in the batch, including dependencies:
   right after `ruleset`: `"SRD 5.2"` and `"publisher"` on an SRD entry. On a
   custom entry, the resolved request's `author` and its `source` if it has
   one; omit `source` otherwise. A component takes its parent's.
-- `tags`: the resolved request tags (request tags merged over
-  `defaults.tags`), on every entry. Omit `tags` if it would be empty.
 
 ## Step 5: Validate
 
@@ -243,7 +581,7 @@ again, up to `defaults.validateRetries` retries after the first run.
 If it still fails:
 
 - Comment the remaining errors on each issue in the batch, remove
-  `in-progress` from each, delete the batch's entry files, and stop. Don't
+  `in-progress` from each, delete the batch's entry files and diagrams, and stop. Don't
   push and don't open a PR.
 - For a gap-fill run or an inline request there is no issue: report the
   errors in the run's output and stop.
@@ -266,8 +604,8 @@ the dev issue the list describes and leave that item unticked.
    - inline request: `gen/inline-<type>-<YYYYMMDD>`;
    - SRD import stage: `gen/srd-<stage>-<type>-<YYYYMMDD>`, adding `-2`,
      `-3` for more PRs the same day.
-2. Stage only the new files under `content/`, and for an import batch,
-   `ATTRIBUTION.md`. A content PR that changes anything else fails the `lane`
+2. Stage only the new files under `content/`, each map's diagram under
+   `assets/images/`, and for an import batch, `ATTRIBUTION.md`. A content PR that changes anything else fails the `lane`
    check ([Lane rules](../../../docs/workflow.md#lane-rules)).
 3. Commit with the message `Add <n> <type> entries` (a mixed-type batch:
    `Add <n> entries`), where `<n>` counts every new entry, dependencies

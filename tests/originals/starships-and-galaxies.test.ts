@@ -37,10 +37,11 @@ describe('derived values', () => {
     expect(await derived('glowsilk')).toEqual({ resale: 150 });
   });
 
-  it('mark a body dockable when it offers a service, with the worst hazard on the way in', async () => {
-    expect(await derived('grinder')).toEqual({ dockable: false, danger: 'extreme' });
+  it('mark a body dockable when it offers a service, with the worst hazard on the way in and the span of its damage', async () => {
+    expect(await derived('grinder')).toEqual({ dockable: false, danger: 'extreme', damage: { min: 1, max: 4 } });
     expect(await derived('shard')).toEqual({ dockable: true });
     expect(await derived('harrow')).toEqual({ dockable: true, danger: 'routine' });
+    expect(await derived('veil')).toMatchObject({ damage: { min: 3, max: 3 } });
   });
 
   it('read the d100 check table: skill plus system, times 5, plus difficulty', () => {

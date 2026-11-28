@@ -6,7 +6,18 @@
   "id": "elf-keen-senses",
   "name": "Keen Senses",
   "stats": {
-    "text": "You have proficiency in the Insight, Perception, or Survival skill."
+    "text": "You have proficiency in the Insight, Perception, or Survival skill.",
+    "grants": [
+      {
+        "kind": "skills",
+        "count": 1,
+        "from": [
+          "insight",
+          "perception",
+          "survival"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

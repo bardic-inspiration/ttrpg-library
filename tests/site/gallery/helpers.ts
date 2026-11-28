@@ -4,11 +4,15 @@ import { loadRegistry } from '../../../scripts/validate/schema.ts';
 import type { LibraryRecord, Registry } from '../../../site/src/lib/gallery/config.ts';
 import { FIXTURES } from '../../helpers.ts';
 
-/** The example fixtures as library.json records: Cinder Hound, Frost Lance, Wand of Frost Lances. */
-export async function fixtureRecords(): Promise<LibraryRecord[]> {
+/**
+ * The example fixtures as library.json records: Cinder Hound, Frost Lance, Wand of Frost Lances, and
+ * the two classes Frost Lance names. With `primitives`, the SRD condition and equipment primitives'
+ * records too, as the index writes them (docs/site.md#index-build).
+ */
+export async function fixtureRecords({ primitives = false } = {}): Promise<LibraryRecord[]> {
   const { errors, records } = await buildIndex(join(FIXTURES, 'library/valid'));
   if (errors.length > 0) throw new Error(errors.map((e) => e.message).join('\n'));
-  return records;
+  return primitives ? records : records.filter((r) => r.createdAt !== null);
 }
 
 export const registry = (): Promise<Registry> => loadRegistry();
@@ -24,12 +28,11 @@ export function record(overrides: Partial<LibraryRecord> & { id: string }): Libr
     summary: 'A filler summary for tests.',
     url: `/ttrpg-library/dnd-5e-2024/${overrides.type ?? 'creature'}/${overrides.id}/`,
     image: null,
+    diagram: null,
     facets: {},
-    tags: {},
     createdAt: '2026-01-01',
     refs: [],
     refBy: [],
-    search: '',
     ...overrides,
   };
 }

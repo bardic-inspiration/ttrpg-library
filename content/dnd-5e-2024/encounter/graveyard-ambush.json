@@ -1,0 +1,64 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "graveyard-ambush",
+  "name": "Graveyard Ambush",
+  "summary": "Ghouls and walking dead burst from the turned earth of Prod's graveyard.",
+  "stats": {
+    "setIn": {
+      "ref": "map/ruins-of-prod",
+      "zone": "graveyard"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/ruins-of-prod",
+          "zone": "graveyard",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "The fresh graves aren't fresh burials. The earth heaves, and grey hands claw out of every mound at once, while something larger drops from the chapel's bell tower."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The cult seeded the graveyard to stop travelers reaching the keep. The {ref:creature/rotwalker}s shamble forward first; the {ref:creature/ghoul} and the {ref:creature/ghast} wait until someone is {ref:condition/paralyzed}, then drag them toward the Collapsed Chapel. None of them flee."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/ghast",
+            "count": 1,
+            "show": "card"
+          },
+          {
+            "ref": "creature/ghoul",
+            "count": 1
+          },
+          {
+            "ref": "creature/rotwalker",
+            "count": 4
+          }
+        ]
+      },
+      {
+        "part": "sequence",
+        "example": "The rotwalkers rise in a ring around the party. On the second round the ghast drops from the bell tower onto whoever is at the back, and the ghoul follows its stench in."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

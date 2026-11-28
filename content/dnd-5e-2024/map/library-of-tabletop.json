@@ -1,0 +1,48 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "library-of-tabletop",
+  "name": "Library of Tabletop",
+  "summary": "The Library's ground floor: a front hall, the great hall of stacks, the Rules Room, the Maintainer's Office, and the stair down to the Repository.",
+  "description": "Lamplight, dust, and the soft rustle of pages turning by themselves. Every shelf is labeled, every label is cross-referenced, and lately a few of the cross-references point somewhere they should not.",
+  "stats": {
+    "scale": "dungeon",
+    "zones": [
+      {
+        "id": "front-hall",
+        "name": "Front Hall",
+        "note": "The way in, past a circulation desk and a card catalogue whose drawers open and close on their own."
+      },
+      {
+        "id": "the-library",
+        "name": "The Library",
+        "note": "The great hall of stacks, two stories tall, shelved by kind: spells, items, creatures, and every other sort of entry, each with its own label."
+      },
+      {
+        "id": "rules-room",
+        "name": "Rules Room",
+        "note": "A quiet reading room whose walls are hung with the master tables: challenge ratings, budgets, and how every number is reckoned."
+      },
+      {
+        "id": "maintainers-office",
+        "name": "Maintainer's Office",
+        "note": "A cluttered study of half-finished notes, three cold cups of tea, and a slate of tasks with most of them crossed out."
+      },
+      {
+        "id": "basement-stair",
+        "name": "Basement Stair",
+        "note": "A spiral stair behind a locked grille, winding down into the Repository."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

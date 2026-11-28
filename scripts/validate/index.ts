@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { basename, dirname, join, resolve } from 'node:path';
-import { checkComponents, checkImage, checkPath, checkUniqueness, type ComponentListing, type EntryHead, type FileIssue } from './library.ts';
-import { entryKey, linkEntries, objectRefs, REF_TOKEN, type Link, type RefEntry } from './refs.ts';
+import { checkComponents, checkImage, checkMapDiagram, checkPath, MAP_TYPE, checkUniqueness, type ComponentListing, type EntryHead, type FileIssue } from './library.ts';
+import { entryKey, entryZones, linkEntries, objectRefs, REF_TOKEN, type Link, type Links, type RefEntry } from './refs.ts';
 import {
   PROJECT_ROOT,
   RULESETS_ROOT,
@@ -14,7 +14,7 @@ import {
   validateWithText,
   type LoadedRuleset,
 } from './schema.ts';
-import type { RulesData } from '../../lib/rules.ts';
+import { ruleNames, type RulesData } from '../../lib/rules.ts';
 import { groupProblem, loadRules } from './rules.ts';
 import { termMatcher } from '../../lib/text.ts';
 import { isOfficial, PUBLISHER } from '../../rulesets/module.ts';
@@ -72,6 +72,8 @@ export interface ValidationResult {
   components: ValidComponent[];
   /** The rules data of each ruleset that has rules types (docs/rulesets.md#rules-data). */
   rules: RulesData[];
+  /** Forward refs and back-refs of every primitive and group, by `<type>/<id>`. */
+  ruleLinks: Map<string, Links>;
 }
 
 export interface ValidateOptions {
@@ -114,6 +116,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   for (const id of Object.keys(registry)) {
     const ruleset = await loadRuleset(id, rulesetsRoot);
     rulesets.set(id, ruleset);
+    for (const { file, message } of ruleset?.schemaIssues ?? []) error(`rulesets/${id}/schemas/${file}`, message);
     // Every ruleset names its publisher, whose entries are official (docs/rulesets.md#the-ruleset-module).
     const publisher: unknown = ruleset?.module.definition.publisher;
     if (ruleset && (typeof publisher !== 'string' || publisher.trim() === '')) error(`rulesets/${id}/ruleset.json`, 'publisher: missing; name who publishes the ruleset');
@@ -231,6 +234,11 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
       if (official && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file, message: `${issue.path}: ${issue.message}` });
     }
+    // A map's diagram is checked against its zones, so only once its stats pass (docs/content-model.md#map-diagrams).
+    if (entry.type === MAP_TYPE) {
+      const zones = (entryZones(entry.stats) ?? []).map((zone) => zone.id);
+      issues.push(...(await checkMapDiagram({ ...entry, file }, zones, assetsRoot)));
+    }
     if (rulesType) {
       const tree = rules.find((r) => r.ruleset === entry.ruleset)?.groups.get(entry.type);
       const problem = groupProblem(tree, entry);
@@ -262,7 +270,7 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     if (!checkLinks) continue;
     const official = isOfficial(entry);
     const named = (type: string, name: string) => byName.get(`${entry.ruleset}/${type}/${name}`);
-    for (const issue of checkLinks(entry.type, entry.stats, target, named)) {
+    for (const issue of checkLinks(entry.type, entry.stats, target, named, entryKey(entry))) {
       if (official && issue.level === 'warning') continue;
       issues.push({ level: issue.level, file: repoPath(file), message: `${issue.path}: ${issue.message}` });
     }
@@ -292,11 +300,14 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
   const withLinks = entries.map((e) => ({ ...e, ...linksOf(e) }));
   const validComponents = components
     .filter((c) => !badComponents.has(repoPath(c.file)))
-    .map(({ parents: _, ...c }) => {
-      const parent = listedBy.get(entryKey(c.entry))![0]!;
+    .map(({ parents, ...c }) => {
+      const parent = listedBy.get(entryKey(c.entry))!.find((p) => parents.includes(p.type))!;
       return { ...c, ...linksOf(c), parent: entryKey(parent) };
     });
-  return { files, errors: pick('error'), warnings: pick('warning'), entries: withLinks, components: validComponents, rules };
+  const ruleLinks = new Map(
+    rules.flatMap((data) => [...ruleNames(data).keys()]).map((key) => [key, links.get(key) ?? { refs: [], refBy: [] }] as const),
+  );
+  return { files, errors: pick('error'), warnings: pick('warning'), entries: withLinks, components: validComponents, rules, ruleLinks };
 }
 
 /** config/licenses.json (docs/licensing.md#source-allowlist), checked. */

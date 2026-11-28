@@ -1,0 +1,36 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "brannoc-ashguard",
+  "name": "Brannoc Ashguard",
+  "summary": "A dwarf soldier, Fighter and Wizard, who guards the line with steel and a shield spell.",
+  "description": "Brannoc held a pass for three winters before a dying hedge mage pressed a spellbook into his hands. He studies it by campfire, slowly, the way he once learned drill.",
+  "stats": {
+    "species": { "ref": "species/dwarf" },
+    "background": { "ref": "background/soldier" },
+    "classes": [
+      { "class": { "ref": "class/fighter" }, "level": 3, "subclass": { "ref": "subclass/champion" } },
+      { "class": { "ref": "class/wizard" }, "level": 2 }
+    ],
+    "abilities": {
+      "base": { "str": 15, "dex": 10, "con": 14, "int": 13, "wis": 12, "cha": 8 },
+      "background": { "str": 2, "con": 1 }
+    },
+    "feats": [
+      { "ref": "feat/savage-attacker", "source": { "ref": "background/soldier" } },
+      { "ref": "feat/defense", "source": { "ref": "class/fighter", "level": 1 } }
+    ],
+    "choices": [
+      { "source": { "ref": "class/fighter" }, "skills": ["history", "perception"] },
+      { "source": { "ref": "background/soldier" }, "tools": [{ "ref": "equipment/gaming-set", "note": "dice" }], "languages": ["Dwarvish", "Giant"] },
+      { "source": { "ref": "class-feature/wizard-scholar" }, "expertise": ["history"] }
+    ],
+    "equipped": [
+      { "ref": "item/armor-1-2-or-3", "base": { "ref": "equipment/chain-mail" }, "variant": "+1" },
+      { "ref": "equipment/longsword" }
+    ],
+    "spells": [{ "ref": "spell/shield" }, { "ref": "spell/magic-missile" }]
+  },
+  "meta": { "createdAt": "2026-11-26", "source": { "kind": "manual", "issues": [429] } }
+}

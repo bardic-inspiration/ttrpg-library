@@ -1,0 +1,24 @@
+---
+// A `hook` part (docs/site.md#kit-parts): its text, then each entry it brings in as a line, its name
+// linked and its note, then the cards it shows.
+import { refView, type KitContext } from '../../lib/kit';
+import type { HookRef } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import KitCards from './KitCards.astro';
+import KitRef from './KitRef.astro';
+import KitText from './KitText.astro';
+
+interface Props {
+  text: string;
+  refs?: HookRef[];
+  kit: KitContext;
+}
+
+const { text, refs = [], kit } = Astro.props;
+---
+<KitText text={text} kit={kit} />
+{refs.length > 0 && (
+  <ul class="kit-list">
+    {refs.map((ref) => <li><KitRef view={refView(ref)} kit={kit} /></li>)}
+  </ul>
+)}
+<KitCards part={{ part: 'hook', text, refs }} kit={kit} />

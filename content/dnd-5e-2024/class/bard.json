@@ -162,6 +162,51 @@
         21,
         22
       ]
+    },
+    "grants": {
+      "start": [
+        {
+          "kind": "tools",
+          "count": 3,
+          "from": [
+            {
+              "ref": "equipment/musical-instrument"
+            }
+          ]
+        }
+      ],
+      "multiclass": [
+        {
+          "kind": "skills",
+          "count": 1
+        },
+        {
+          "kind": "tools",
+          "count": 1,
+          "from": [
+            {
+              "ref": "equipment/musical-instrument"
+            }
+          ]
+        }
+      ]
+    },
+    "training": {
+      "start": {
+        "weapons": [
+          {
+            "group": "simple-weapons"
+          }
+        ],
+        "armor": [
+          "light-armor"
+        ]
+      },
+      "multiclass": {
+        "armor": [
+          "light-armor"
+        ]
+      }
     }
   },
   "meta": {

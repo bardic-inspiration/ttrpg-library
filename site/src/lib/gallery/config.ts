@@ -5,11 +5,12 @@ import type { Facet, LibraryRecord, Registry } from '../../../../scripts/build-i
 import { PUBLISHER } from '../../../../rulesets/module.ts';
 import type { PhraseBook } from '../../../../lib/wording/book.ts';
 import { phraseBook } from '../phrases.ts';
-import { typeAliases } from '../redirects.ts';
+import { formerTypes } from '../redirects.ts';
+import { typeKey } from '../type-key.ts';
 
 export type { Facet, LibraryRecord, Registry };
 
-/** A filterable path: a registry facet, the `ruleset`, `source`, `author`, or `type` filter, or a `tags.<key>`. */
+/** A filterable path: a registry facet, or the `ruleset`, `source`, `author`, or `type` filter. */
 export interface FilterDef {
   path: string;
   label: string;
@@ -20,12 +21,19 @@ export interface FilterDef {
   order?: string[];
   /** Display labels for stored values, such as type ids to type labels, or a vocabulary's names. */
   labels?: Record<string, string>;
-  /** Former values read as current ones, such as a renamed type's old key (docs/site.md#redirects). */
-  aliases?: Record<string, string>;
+  /**
+   * Values that stand for others: a bare type id for that type in every ruleset, and a renamed
+   * type's old key for its current one (docs/site.md#redirects). Keys and values are case-folded.
+   */
+  aliases?: Record<string, string[]>;
   /** Its values are ref keys, read by their targets' names (in `labels`). */
   ref?: boolean;
   /** Its values are the type's groups, nested; a group matches every leaf group in it. */
   groups?: GroupInfo[];
+  /** Its schema reads it as a chip (docs/content-model.md#display): the value alone on cards, chips in the filters. */
+  display?: 'chip';
+  /** A card field only: no filter or sort offers it (docs/site.md#type-registry). */
+  cardOnly?: boolean;
 }
 
 /** One group a groups facet offers (docs/rulesets.md#rules-groups). */
@@ -47,9 +55,11 @@ export interface FacetData {
   groups: Record<string, GroupInfo[]>;
   /** Ruleset id → its publisher, the name an author of `"publisher"` reads as (docs/content-model.md#source-and-author). */
   publishers: Record<string, string>;
+  /** `<ruleset>/<type>` → its facet paths whose schema declares `"display": "chip"` (docs/content-model.md#display). */
+  chips: Record<string, string[]>;
 }
 
-export const NO_FACET_DATA: FacetData = { names: {}, groups: {}, publishers: {} };
+export const NO_FACET_DATA: FacetData = { names: {}, groups: {}, publishers: {}, chips: {} };
 
 export interface SortKey {
   path: string;
@@ -77,6 +87,9 @@ export interface TypeInfo {
   /** The registry's `defaultSort`, which the redirect from the type's old gallery carries. */
   defaultSort: SortKey;
 }
+
+/** A type's key is also the type filter's value (docs/site.md#gallery). */
+export { typeKey };
 
 /** The pseudo-paths every record has besides its facets (docs/site.md#gallery "Sort"). */
 export const NAME = 'name';
@@ -107,10 +120,11 @@ export function parseSortKey(value: string | undefined): SortKey | undefined {
 
 /**
  * A facet as a filter. A vocabulary's names become its labels (docs/site.md#wording), and so do
- * a ref facet's target names and a groups facet's group labels.
+ * a ref facet's target names and a groups facet's group labels. A chip field's facet carries its display.
  */
 const facetDef = (facet: Facet, ruleset: string, type: string, data: FacetData, books: PhraseBooks): FilterDef => {
-  const { groups: grouped, ...rest } = facet;
+  const { groups: grouped, ...own } = facet;
+  const rest = data.chips[`${ruleset}/${type}`]?.includes(facet.path) ? { ...own, display: 'chip' as const } : own;
   if (grouped) {
     const groups = data.groups[`${ruleset}/${type}`] ?? [];
     return { ...rest, groups, labels: Object.fromEntries(groups.map((g) => [g.id, g.label])) };
@@ -136,12 +150,14 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
   for (const [rulesetId, ruleset] of Object.entries(registry)) {
     rulesetLabels[rulesetId] = ruleset.label;
     for (const [typeId, type] of Object.entries(ruleset.types)) {
-      typeLabels[typeId] = type.label;
-      const facets = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data, books));
+      typeLabels[typeKey(rulesetId, typeId)] = type.label;
+      // A card-only facet is a card field, never a filter or a sort (docs/site.md#type-registry).
+      const defs = type.facets.map((facet) => facetDef(facet, rulesetId, typeId, data, books));
+      const facets = defs.filter((def) => !def.cardOnly);
       const cardFields = ((type.cardFields as string[] | undefined) ?? [])
-        .map((path) => facets.find((facet) => facet.path === path))
+        .map((path) => defs.find((facet) => facet.path === path))
         .filter((facet): facet is FilterDef => facet !== undefined);
-      types.set(`${rulesetId}/${typeId}`, {
+      types.set(typeKey(rulesetId, typeId), {
         ruleset: rulesetId,
         type: typeId,
         label: type.label,
@@ -154,7 +170,7 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
     }
   }
 
-  const aliases = typeAliases(registry);
+  const aliases = typeFilterAliases(registry);
   const rulesetFilter: FilterDef = { path: RULESET, label: 'Ruleset', kind: 'enum', order: Object.keys(rulesetLabels), labels: rulesetLabels };
   const sourceFilter: FilterDef = { path: SOURCE, label: 'Source', kind: 'enum' };
   const authorFilter: FilterDef = { path: AUTHOR, label: 'Author', kind: 'enum' };
@@ -174,20 +190,35 @@ export function galleryConfig(registry: Registry, data: FacetData = NO_FACET_DAT
   };
 }
 
-const TAG_KEY = /^[a-z][a-z0-9-]*$/;
+/**
+ * The type filter's aliases: a bare type id for every ruleset's type of that id, so `f.type=spell`
+ * keeps working, and a former key, bare or qualified, for the current one.
+ */
+function typeFilterAliases(registry: Registry): Record<string, string[]> {
+  const aliases: Record<string, string[]> = {};
+  const add = (from: string, to: string) => {
+    const list = (aliases[from.toLowerCase()] ??= []);
+    if (!list.includes(to.toLowerCase())) list.push(to.toLowerCase());
+  };
+  for (const [ruleset, config] of Object.entries(registry)) for (const type of Object.keys(config.types)) add(type, typeKey(ruleset, type));
+  for (const { ruleset, from, to } of formerTypes(registry)) {
+    add(from, typeKey(ruleset, to));
+    add(typeKey(ruleset, from), typeKey(ruleset, to));
+  }
+  return aliases;
+}
 
-/** A `tags.<key>` path for a valid tag key (docs/content-model.md#tags), or undefined. */
-export const tagKey = (path: string): string | undefined => {
-  const key = path.startsWith('tags.') ? path.slice('tags.'.length) : undefined;
-  return key !== undefined && TAG_KEY.test(key) ? key : undefined;
-};
+/**
+ * The definition a record reads a path by: its own type's facet, so a path two types share
+ * keeps each type's vocabulary, order, and groups, else the Library's filter for the path.
+ */
+export function recordDef(config: GalleryConfig, record: Pick<LibraryRecord, 'ruleset' | 'type'>, path: string): FilterDef | undefined {
+  return config.types.get(typeKey(record.ruleset, record.type))?.facets.find((f) => f.path === path) ?? filterDef(config, path);
+}
 
-/** The definition of a filter path: a known facet, `ruleset`, `source`, `author`, `type`, or any tag key. */
+/** The definition of a filter path: a known facet, `ruleset`, `source`, `author`, or `type`; undefined for any other path. */
 export function filterDef(config: GalleryConfig, path: string): FilterDef | undefined {
-  const known = config.filters.find((f) => f.path === path);
-  if (known) return known;
-  const key = tagKey(path);
-  return key === undefined ? undefined : { path, label: key.replace(/-/g, ' '), kind: 'enum' };
+  return config.filters.find((f) => f.path === path);
 }
 
 /**
@@ -202,7 +233,9 @@ export function typesInScope(config: GalleryConfig, filters: ReadonlyMap<string,
   };
   const allowed = (path: string, value: string) => values(path).length === 0 || values(path).includes(value);
   const byRuleset = values(SOURCE).length === 0 && values(AUTHOR).length === 0;
-  return [...config.types.values()].filter((t) => (!byRuleset || allowed(RULESET, t.ruleset)) && allowed(TYPE, t.type));
+  return [...config.types.values()].filter(
+    (t) => (!byRuleset || allowed(RULESET, t.ruleset)) && allowed(TYPE, typeKey(t.ruleset, t.type).toLowerCase()),
+  );
 }
 
 /** The part of an active filter `typesInScope` reads; the gallery state's filter values fit it. */

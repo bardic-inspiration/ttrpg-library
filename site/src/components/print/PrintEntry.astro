@@ -22,7 +22,7 @@ const { loaded, names, paths, level = 2 } = Astro.props;
 const { entry, derived } = loaded;
 ---
 <article class="print-entry" data-id={entry.id} data-name={entry.name} data-type={entry.type}>
-  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} mode="print" level={level} />
+  <EntryTemplate entry={entry} derived={derived} names={names} paths={paths} components={loaded.components} refBy={loaded.refBy} shown={loaded.shown} mode="print" level={level} />
 </article>
 
 <style>
@@ -32,6 +32,20 @@ const { entry, derived } = loaded;
       --text-small: var(--print-small-size);
       --text-h4: var(--print-section-size);
       --text-h3: var(--print-heading-size);
+      --text-h5: var(--print-font-size);
+      --text-h6: var(--print-font-size);
+
+      /*
+       * A custom property resolves where it's declared, so the component size
+       * tokens declared on :root as text roles (tokens/components.css) keep their
+       * screen sizes here unless they're declared again, against the print roles above.
+       */
+      --site-title-size: var(--text-h4);
+      --card-title-size: var(--text-h4);
+      --entry-summary-size: var(--text-h4);
+      --statblock-title-size: var(--text-h3);
+      --statblock-heading-size: var(--text-h4);
+      --statblock-subheading-size: var(--text-h5);
 
       font-size: var(--text-body);
 
@@ -39,6 +53,11 @@ const { entry, derived } = loaded;
         max-inline-size: none;
         columns: var(--print-columns);
         column-gap: var(--statblock-column-gap);
+      }
+
+      /* A card embedded in an arrangement flows in its columns rather than making its own. */
+      & :global(.statblock .statblock) {
+        columns: auto;
       }
 
       & :global(.statblock-header),

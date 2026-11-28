@@ -1,35 +1,53 @@
 // Filtering, search, sort, and value counts (docs/site.md#gallery). Pure functions
 // over library.json records, so the island stays a thin view.
 
-import MiniSearch from 'minisearch';
-import { NAME, filterDef, isScopePath, tagKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
+import { NAME, isScopePath, recordDef, typeKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
-import { displayValue, enumValues, numberAt, valueAt } from './values.ts';
+import { displayValue, enumValues, isSpan, spanAt, valueAt } from './values.ts';
 
-/** Whether one record passes one filter. A record missing the value never matches. */
-export function matches(record: LibraryRecord, path: string, value: FilterValue): boolean {
+/**
+ * A filter as matched: its values, and for a groups facet the leaf groups each type's groups
+ * stand for, by `<ruleset>/<type>`, since a path two types share keeps each type's groups.
+ */
+export type MatchedValue = FilterValue | { kind: 'enum'; values: string[]; byType: Map<string, string[]> };
+
+/**
+ * Whether one record passes one filter. A record missing the value never matches. A range filter
+ * matches a number in it, or a span that overlaps it.
+ */
+export function matches(record: LibraryRecord, path: string, value: MatchedValue): boolean {
   if (value.kind === 'range') {
-    const n = numberAt(record, path);
-    return n !== undefined && (value.min === undefined || n >= value.min) && (value.max === undefined || n <= value.max);
+    const span = spanAt(record, path);
+    return span !== undefined && (value.min === undefined || span.max >= value.min) && (value.max === undefined || span.min <= value.max);
   }
   const keys = new Set(enumValues(valueAt(record, path)).map((v) => v.key));
-  return value.values.some((v) => keys.has(v));
+  const values = ('byType' in value && value.byType.get(typeKey(record.ruleset, record.type))) || value.values;
+  return values.some((v) => keys.has(v));
 }
 
 /**
  * The filters as matched: a group of a groups facet stands for every leaf group in it
- * (docs/rulesets.md#rules-groups), since entries name only their leaf.
+ * (docs/rulesets.md#rules-groups), since entries name only their leaf, and each type reads
+ * the group by its own groups.
  */
-export function matchedFilters(config: GalleryConfig, filters: Map<string, FilterValue>): Map<string, FilterValue> {
-  const out = new Map<string, FilterValue>();
+export function matchedFilters(config: GalleryConfig, filters: Map<string, FilterValue>): Map<string, MatchedValue> {
+  const out = new Map<string, MatchedValue>();
   for (const [path, value] of filters) {
-    const groups = filterDef(config, path)?.groups;
-    if (!groups || value.kind !== 'enum') {
+    const grouped = [...config.types.values()].flatMap((info) => {
+      const groups = info.facets.find((f) => f.path === path)?.groups;
+      return groups ? [{ key: typeKey(info.ruleset, info.type), groups }] : [];
+    });
+    if (grouped.length === 0 || value.kind !== 'enum') {
       out.set(path, value);
       continue;
     }
-    const leaves = new Map(groups.map((g) => [g.id.toLowerCase(), g.leaves.map((l) => l.toLowerCase())]));
-    out.set(path, { kind: 'enum', values: [...new Set(value.values.flatMap((v) => leaves.get(v) ?? [v]))] });
+    const byType = new Map(
+      grouped.map(({ key, groups }) => {
+        const leaves = new Map(groups.map((g) => [g.id.toLowerCase(), g.leaves.map((l) => l.toLowerCase())]));
+        return [key, [...new Set(value.values.flatMap((v) => leaves.get(v) ?? [v]))]];
+      }),
+    );
+    out.set(path, { kind: 'enum', values: value.values, byType });
   }
   return out;
 }
@@ -40,7 +58,7 @@ export function matchedFilters(config: GalleryConfig, filters: Map<string, Filte
  * one path skips that filter; skipping one of the ruleset set's skips the whole set, so a ruleset,
  * source, or author counts what checking it adds.
  */
-export function applyFilters(records: LibraryRecord[], filters: Map<string, FilterValue>, except?: string): LibraryRecord[] {
+export function applyFilters(records: LibraryRecord[], filters: Map<string, MatchedValue>, except?: string): LibraryRecord[] {
   const active = [...filters].filter(([path, value]) => path !== except && isActive(value));
   const scope = active.filter(([path]) => isScopePath(path));
   const narrowing = active.filter(([path]) => !isScopePath(path));
@@ -49,24 +67,16 @@ export function applyFilters(records: LibraryRecord[], filters: Map<string, Filt
   return records.filter((record) => inScope(record) && narrowing.every(([path, value]) => matches(record, path, value)));
 }
 
-/** The search index (docs/site.md#gallery): name ×3, summary ×2, tag values ×1.5, search text ×1, with prefix and light fuzzy matching. */
-export function searchIndex(records: LibraryRecord[]): MiniSearch<LibraryRecord> {
-  const index = new MiniSearch<LibraryRecord>({
-    idField: 'url',
-    fields: ['name', 'summary', 'tags', 'search'],
-    extractField: (record, field) =>
-      field === 'tags'
-        ? Object.values(record.tags).flatMap((v) => (Array.isArray(v) ? v : [v])).map(String).join(' ')
-        : String((record as unknown as Record<string, unknown>)[field] ?? ''),
-    searchOptions: { boost: { name: 3, summary: 2, tags: 1.5, search: 1 }, prefix: true, fuzzy: 0.2 },
-  });
-  index.addAll(records);
-  return index;
-}
+/** Text folded for matching: lowercase, with accents stripped, so "é" matches "e". */
+const fold = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
-/** Records matching a query, best first. An empty query returns undefined: no search. */
-export function search(index: MiniSearch<LibraryRecord>, q: string): string[] | undefined {
-  return q.trim() === '' ? undefined : index.search(q.trim()).map((result) => String(result.id));
+/**
+ * Records whose name contains the query (docs/site.md#gallery "Search"), ignoring case and
+ * accents. A blank query leaves the records as they are.
+ */
+export function searchNames(records: LibraryRecord[], q: string): LibraryRecord[] {
+  const query = fold(q.trim());
+  return query === '' ? records : records.filter((record) => fold(record.name).includes(query));
 }
 
 const compareText = (a: string, b: string) => a.localeCompare(b, 'en', { sensitivity: 'base' });
@@ -78,12 +88,13 @@ const compareIdentity = (a: LibraryRecord, b: LibraryRecord) =>
   compareCode(a.ruleset, b.ruleset) || compareCode(a.type, b.type) || compareCode(a.id, b.id);
 
 /**
- * The value a record sorts by: the first item of an array, an ordered enum by its declared
- * position, a ref by its target's name.
+ * The value a record sorts by: the first item of an array, a span by its minimum, an ordered enum
+ * by its declared position, a ref by its target's name.
  */
 function sortValue(record: LibraryRecord, key: SortKey, def: FilterDef | undefined): string | number | boolean | undefined {
   let value = valueAt(record, key.path);
   if (Array.isArray(value)) value = value[0];
+  if (isSpan(value)) return value.min;
   if (typeof value === 'string' && def?.ref) return displayValue(def, value);
   if (typeof value === 'string' && def?.order) {
     const i = def.order.indexOf(value);
@@ -94,9 +105,8 @@ function sortValue(record: LibraryRecord, key: SortKey, def: FilterDef | undefin
 
 /** Sorts by one key; entries missing the value go last in either direction, ties by name, then ruleset, type, and id. */
 export function sortRecords(records: LibraryRecord[], key: SortKey, config: GalleryConfig): LibraryRecord[] {
-  const def = filterDef(config, key.path);
   const sign = key.dir === 'asc' ? 1 : -1;
-  const keyed = records.map((record) => ({ record, value: sortValue(record, key, def) }));
+  const keyed = records.map((record) => ({ record, value: sortValue(record, key, recordDef(config, record, key.path)) }));
   return keyed
     .sort((a, b) => {
       if (a.value === undefined || b.value === undefined) {
@@ -115,7 +125,7 @@ export function sortRecords(records: LibraryRecord[], key: SortKey, config: Gall
 
 export interface Chip {
   key: string;
-  /** The stored form, shown as stored (docs/content-model.md#tags). */
+  /** The stored form, shown as stored (docs/site.md#gallery "Filters"). */
   stored: string | number | boolean;
   count: number;
 }
@@ -146,49 +156,27 @@ export function chips(def: FilterDef, scoped: LibraryRecord[], others: LibraryRe
     });
 }
 
-/** The lowest and highest value of a range filter among the records. */
+/** The lowest and highest value of a range filter among the records, a span's minimum and maximum included. */
 export function bounds(path: string, scoped: LibraryRecord[]): { min: number; max: number } | undefined {
-  const values = scoped.map((r) => numberAt(r, path)).filter((n): n is number => n !== undefined);
-  return values.length > 0 ? { min: Math.min(...values), max: Math.max(...values) } : undefined;
+  const spans = scoped.map((r) => spanAt(r, path)).filter((s) => s !== undefined);
+  return spans.length > 0 ? { min: Math.min(...spans.map((s) => s.min)), max: Math.max(...spans.map((s) => s.max)) } : undefined;
 }
 
-/** Whether any record has a value at this path. */
+/** Whether any record has a value at this path, a span included. */
 export const hasValues = (path: string, records: LibraryRecord[]): boolean =>
-  records.some((r) => enumValues(valueAt(r, path)).length > 0);
+  records.some((r) => isSpan(valueAt(r, path)) || enumValues(valueAt(r, path)).length > 0);
 
 export interface GalleryView {
   results: LibraryRecord[];
-  /** Whether results are in relevance order (a query is present) rather than the active sort. */
-  byRelevance: boolean;
 }
 
-/** The records to show for a state: filters, then search; ordered by relevance or the sort. */
-export function computeView(
-  records: LibraryRecord[],
-  config: GalleryConfig,
-  state: GalleryState,
-  index: MiniSearch<LibraryRecord>,
-): GalleryView {
+/** The records to show for a state: filtered, searched by name, and in the active sort. */
+export function computeView(records: LibraryRecord[], config: GalleryConfig, state: GalleryState): GalleryView {
   const filtered = applyFilters(records, matchedFilters(config, state.filters));
-  const hits = search(index, state.q);
-  if (hits === undefined) return { results: sortRecords(filtered, state.sort, config), byRelevance: false };
-  const byUrl = new Map(filtered.map((r) => [r.url, r]));
-  return { results: hits.map((id) => byUrl.get(id)).filter((r): r is LibraryRecord => r !== undefined), byRelevance: true };
+  return { results: sortRecords(searchNames(filtered, state.q), state.sort, config) };
 }
 
 /** Records passing the search and every filter except one, for that filter's value counts. */
-export function withoutFilter(
-  config: GalleryConfig,
-  records: LibraryRecord[],
-  state: GalleryState,
-  index: MiniSearch<LibraryRecord>,
-  path: string,
-): LibraryRecord[] {
-  const filtered = applyFilters(records, matchedFilters(config, state.filters), path);
-  const hits = search(index, state.q);
-  if (hits === undefined) return filtered;
-  const ids = new Set(hits);
-  return filtered.filter((r) => ids.has(r.url));
+export function withoutFilter(config: GalleryConfig, records: LibraryRecord[], state: GalleryState, path: string): LibraryRecord[] {
+  return searchNames(applyFilters(records, matchedFilters(config, state.filters), path), state.q);
 }
-
-export { tagKey };

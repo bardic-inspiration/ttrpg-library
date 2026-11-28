@@ -1,7 +1,7 @@
 ---
 // A group's section on its rules page (docs/site.md#rules-pages): its anchored heading with its
-// note, its opening text, its links, then its members (a leaf group), each an accordion section
-// (docs/site.md#accordion-pages), or the groups nested in it. The group itself stays open. A union group lists its members as links instead.
+// note, its opening text, its links, then its members (a leaf group), each a section of its own, or
+// the groups nested in it. A union group lists its members as links instead.
 import { anchorId, ruleKey, sortMembers, type GroupTree } from '../../../../lib/rules';
 import { renderMarkdown } from '../../lib/markdown';
 import type { RulesContext } from '../../lib/rules';
@@ -42,11 +42,7 @@ const unionMembers = group.union ? tree.allMembers(id, primitives) : [];
 <style>
   @layer components {
     .rule-group > :global(* + *) {
-      margin-block-start: var(--space-s);
-    }
-
-    .rule-group > :global(:is(.accordion, script) + .accordion) {
-      margin-block-start: 0;
+      margin-block-start: var(--flow-block);
     }
 
     .rule-group__note {

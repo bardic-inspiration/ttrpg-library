@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bardic-inspiration.github.io/ttrpg-library/rulesets/dnd-5e-2024/schemas/module.schema.json",
+  "title": "dnd-5e-2024 module stats (docs/rulesets.md#modules)",
+  "description": "An arrangement (docs/content-model.md#arrangements) that contains encounters and other modules: kit parts in story order, its length, and the levels it's written for. A table part's table, the levels' order, and no module containing itself are checks in modules.ts (docs/rulesets.md#consistency-checks).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["parts", "length", "levels"],
+  "properties": {
+    "parts": {
+      "description": "The kit parts, in the order the page renders them; its `arrangement` parts are the encounters and modules it contains, in story order.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Part" }
+    },
+    "length": {
+      "description": "How long it runs: a single session, a short dungeon, or several sessions.",
+      "enum": ["one-shot", "delve", "multi-session"]
+    },
+    "levels": {
+      "description": "The party levels it's written for, authored, since nothing derives them. `min` is at most `max`, a check in modules.ts.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "max": { "type": "integer", "minimum": 1, "maximum": 20 }
+      }
+    }
+  },
+  "$defs": {
+    "Part": {
+      "description": "One kit part, by its `part`. A module allows the shared text, sequence, table, and map parts, and its own hook and arrangement parts; rosters, spawn tables, and loot are its encounters'.",
+      "type": "object",
+      "required": ["part"],
+      "properties": {
+        "part": { "enum": ["prose", "description", "dm-guide", "hook", "sequence", "table", "map", "arrangement"] }
+      },
+      "allOf": [
+        { "if": { "properties": { "part": { "const": "prose" } } }, "then": { "$ref": "common.schema.json#/$defs/PartProse" } },
+        { "if": { "properties": { "part": { "const": "description" } } }, "then": { "$ref": "common.schema.json#/$defs/PartDescription" } },
+        { "if": { "properties": { "part": { "const": "dm-guide" } } }, "then": { "$ref": "common.schema.json#/$defs/PartDmGuide" } },
+        { "if": { "properties": { "part": { "const": "hook" } } }, "then": { "$ref": "common.schema.json#/$defs/PartHook" } },
+        { "if": { "properties": { "part": { "const": "sequence" } } }, "then": { "$ref": "common.schema.json#/$defs/PartSequence" } },
+        { "if": { "properties": { "part": { "const": "table" } } }, "then": { "$ref": "common.schema.json#/$defs/PartTable" } },
+        { "if": { "properties": { "part": { "const": "map" } } }, "then": { "$ref": "common.schema.json#/$defs/PartMap" } },
+        { "if": { "properties": { "part": { "const": "arrangement" } } }, "then": { "$ref": "common.schema.json#/$defs/PartArrangement" } }
+      ]
+    }
+  }
+}

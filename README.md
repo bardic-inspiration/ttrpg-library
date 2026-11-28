@@ -11,8 +11,8 @@ things up and prep sessions, on a phone at the table or a laptop at a desk.
 
 - **Look things up.** Browse, filter, and search entries.
 - **Take entries with you.** Print any entry or rules page, and download most
-  entries as JSON or PNG. Creatures, spells, and magic items also download for
-  Open5e. Classes, subclasses, and species only print.
+  entries as JSON or PNG. Creatures, spells, magic items, and custom
+  conditions and equipment also download for Open5e. Classes, subclasses, and species only print.
 - **Know what's what.** SRD 5.2 entries are reproduced as published, and
   original entries are kept separate.
 
@@ -28,11 +28,15 @@ far:
 - **A redesigned interface** for fast lookup and one-button export.
 - **Import and export with Open5e.**
 
-Two development tracks carry on ([`spec/tracks/`](spec/tracks/README.md)):
+Built on `main` for the next release, v1.2.0: characters, maps, encounters,
+and modules, and a revised interface.
+
+Three development tracks carry on ([`spec/tracks/`](spec/tracks/README.md)):
 
 - **Integrations:** import and export for more open TTRPG formats, for VTTs
   and other sites.
 - **Images:** public domain and openly licensed art on entries.
+- **Rulesets:** a second published ruleset, and a redesigned Rulesets page.
 
 ## Contributing
 

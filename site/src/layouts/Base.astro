@@ -1,6 +1,7 @@
 ---
 // Page shell (docs/site.md#pages-and-navigation, docs/styling.md#styling-system). Loads the fonts and the global styles in
-// cascade-layer order, and wraps every page in the header, main column, and footer.
+// cascade-layer order, and wraps every page in the header, main column, and footer. The header
+// holds the top bar, then search and the set export (docs/site.md#page-header).
 import '@fontsource/alegreya/400.css';
 import '@fontsource/alegreya/400-italic.css';
 import '@fontsource/alegreya/500.css';
@@ -20,12 +21,19 @@ import '../styles/tokens/content.css';
 import '../styles/tokens/print.css';
 import '../styles/base.css';
 import '../styles/layout.css';
+import '../styles/diagram.css';
 import '../styles/utilities.css';
 import '../styles/overrides.css';
+import { isPreview } from '../../../lib/site.ts';
 import Footer from '../components/Footer.astro';
+import PreviewNotice from '../components/PreviewNotice.astro';
 import SiteNav from '../components/SiteNav.astro';
+import HeaderActions from '../components/header/HeaderActions';
 import { redirectScript } from '../lib/redirects';
+import { homeRuleset, libraryPath, pageRuleset } from '../lib/gallery/library-url';
+import type { Registry } from '../lib/gallery/config';
 import { url } from '../lib/url';
+import registryJson from '@library/config/types.json';
 
 interface Props {
   title: string;
@@ -35,9 +43,19 @@ interface Props {
   og?: { title: string; description: string; image?: string; type?: 'website' | 'article' };
   /** A path under the site base this page has moved to, with any query (docs/site.md#redirects): the page sends the reader there, adding its own query and keeping the fragment. */
   redirect?: string;
+  /** The script that sends the reader on, in place of the one `redirect` implies (`/`'s, docs/site.md#redirects). */
+  redirectWith?: string;
 }
 
-const { title, noindex = false, og, redirect } = Astro.props;
+const { title, noindex = false, og, redirect, redirectWith } = Astro.props;
+// Search opens, and the set export follows, the Library of the page's ruleset, or of the home
+// ruleset off every ruleset's pages (docs/site.md#page-header).
+const registry = registryJson as unknown as Registry;
+const here = Astro.url.pathname;
+const ruleset = (here.startsWith(url()) && pageRuleset(registry, here.slice(url().length))) || homeRuleset(registry);
+const library = url(libraryPath(ruleset));
+// A preview build's pages say so and stay out of search indexes (docs/workflow.md#deploy).
+const preview = isPreview();
 const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
 ---
 <!doctype html>
@@ -45,11 +63,11 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {(noindex || redirect) && <meta name="robots" content="noindex" />}
+    {(noindex || redirect || preview) && <meta name="robots" content="noindex" />}
     {redirect && (
       <>
         <link rel="canonical" href={absolute(redirect)} />
-        <script is:inline set:html={redirectScript(redirect)} />
+        <script is:inline set:html={redirectWith ?? redirectScript(redirect)} />
         <meta http-equiv="refresh" content={`0; url=${redirect}`} />
       </>
     )}
@@ -66,10 +84,12 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
     )}
   </head>
   <body>
+    {preview && <PreviewNotice />}
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="site-header__home" href={url()}>TTRPG Content Library</a>
+        <a class="site-header__home" href={url(libraryPath(homeRuleset(registry)))}>TTRPG Content Library</a>
         <SiteNav />
+        <HeaderActions client:load base={url()} search={library} library={here === library} />
       </div>
     </header>
     <main class="site-main">
@@ -85,10 +105,9 @@ const absolute = (path: string) => new URL(path, Astro.site ?? Astro.url).href;
   @layer components {
     .site-header__home {
       font-family: var(--font-heading);
-      font-size: var(--text-h4);
+      font-size: var(--site-title-size);
       font-weight: var(--font-weight-label);
       color: var(--color-text);
-      text-decoration: none;
     }
   }
 </style>

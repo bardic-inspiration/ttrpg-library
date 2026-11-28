@@ -1,0 +1,47 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "source": "Bardic's Compendium of Test Fixtures",
+  "author": "bardic-inspiration",
+  "type": "map",
+  "id": "greencheck-tavern-basement",
+  "name": "Greencheck Tavern Basement",
+  "summary": "The tavern's cellars: barrels, roots, and a nook the keeper forgot was there.",
+  "description": "Cool, low, and lit by a single lantern on a hook. The walls are older than the tavern above them.",
+  "stats": {
+    "scale": "dungeon",
+    "zones": [
+      {
+        "id": "cellar-stairs",
+        "name": "Cellar Stairs",
+        "note": "Steep wooden steps down from the stairwell."
+      },
+      {
+        "id": "ale-cellar",
+        "name": "Ale Cellar",
+        "note": "Racks of barrels, and a drain that gurgles when it rains."
+      },
+      {
+        "id": "root-cellar",
+        "name": "Root Cellar"
+      },
+      {
+        "id": "smugglers-nook",
+        "name": "Smuggler's Nook",
+        "note": "A bricked-up alcove behind the end rack, recently unbricked."
+      }
+    ],
+    "within": {
+      "ref": "map/greencheck-tavern",
+      "zone": "stairwell"
+    }
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        519
+      ]
+    }
+  }
+}

@@ -2,7 +2,8 @@
 
 The index of `docs/` and the conventions every doc follows. The approach was
 decided in #196. These docs describe what is built; design not yet built is in
-the development tracks' specs, [`spec/tracks/`](../spec/tracks/README.md).
+the development tracks' specs, [`spec/tracks/`](../spec/tracks/README.md), and
+in a version spec, `spec/v<version>/`, while one is open.
 What each release changed is in [`CHANGELOG.md`](../CHANGELOG.md), and why in
 [`decisions.md`](decisions.md). The first spec, `SPEC.md`, is kept at the
 `v1.0.0` tag.
@@ -12,7 +13,7 @@ What each release changed is in [`CHANGELOG.md`](../CHANGELOG.md), and why in
 | File | Covers | Read it when |
 |---|---|---|
 | [`architecture.md`](architecture.md) | What the library is, the pipeline, technology, repo layout, npm scripts, and the shared terms | Starting out, or looking for where something lives |
-| [`content-model.md`](content-model.md) | Entries in every ruleset: envelope, IDs, tags, meta, text, tables, images, refs, situational fields, SRD vs custom entries, validation | Writing or validating any entry, or changing what an entry is |
+| [`content-model.md`](content-model.md) | Entries in every ruleset: envelope, IDs, meta, text, tables, images, refs, situational fields, SRD vs custom entries, validation | Writing or validating any entry, or changing what an entry is |
 | [`rulesets.md`](rulesets.md) | The ruleset module, derived values, tokens, and how each type in [`ruleset.json`](../rulesets/dnd-5e-2024/ruleset.json) prints | Working on `rulesets/`, a type's schema, or a stat block's wording |
 | [`generation.md`](generation.md) | Requests, labels, the run order, defaults, the `generate` and `revise` skills, guidelines, routine prompts, gap buckets, SRD import | Changing how routines or skills work |
 | [`site.md`](site.md) | The type registry, index build, pages, gallery, detail page, templates | Working on `site/`, `config/types.json`, or the index builder |
@@ -33,9 +34,9 @@ Each rule is stated once, in the place its reader already looks:
 - **`docs/`**: reference for what is built and live, written for developers
   and dev sessions.
 - **Skills and guidelines**: rules that routines follow. A routine reads only
-  these and `docs/`, never the track specs.
-- **The track specs** ([`spec/tracks/`](../spec/tracks/README.md)): design
-  that isn't built yet.
+  these and `docs/`, never the specs.
+- **The specs** ([`spec/tracks/`](../spec/tracks/README.md), and a version
+  spec, `spec/v<version>/`, while one is open): design that isn't built yet.
 - **Code, schemas, and data files**: the exact rules. A doc explains them and
   links to them; it doesn't restate them. A field's meaning goes in its
   schema's `description` keyword, not in a table in a doc.

@@ -15,12 +15,16 @@ body:
       description: The kind of entry to generate.
       options:
         - background
+        - character
         - class
         - condition
         - creature
+        - encounter
         - equipment
         - feat
         - item
+        - map
+        - module
         - species
         - spell
         - subclass
@@ -41,16 +45,6 @@ body:
       description: Theme, constraints, CR/level/rarity range, anything else.
     validations:
       required: true
-  - type: textarea
-    id: tags
-    attributes:
-      label: Tags
-      description: "One `key: value` per line; separate list values with commas."
-      placeholder: |
-        setting: drowned coast
-        theme: tides, salt
-    validations:
-      required: false
   - type: input
     id: ruleset
     attributes:

@@ -1,0 +1,53 @@
+---
+// The cards a kit part shows after it (docs/site.md#kit-parts): each ref shown as a card embeds
+// its target's type template, one heading level below the part's, in the page's mode.
+import { partCards, type KitContext } from '../../lib/kit';
+import type { Part } from '../../../../rulesets/dnd-5e-2024/types.ts';
+import EntryTemplate from '../templates/EntryTemplate.astro';
+
+interface Props {
+  part: Part;
+  kit: KitContext;
+}
+
+const { part, kit } = Astro.props;
+const cards = partCards(part).flatMap((view) => kit.shown.get(view.entry) ?? []);
+---
+{cards.length > 0 && (
+  <div class="kit-cards">
+    {cards.map((loaded) => (
+      <div class="kit-card">
+        <EntryTemplate
+          entry={loaded.entry}
+          derived={loaded.derived}
+          names={kit.refs.names}
+          paths={kit.refs.paths}
+          components={loaded.components}
+          refBy={loaded.refBy}
+          shown={loaded.shown}
+          diagrams={kit.diagrams}
+          embedded
+          mode={kit.mode}
+          level={kit.level + 1}
+          diagram={loaded.entry.type === 'map' ? kit.diagram(`${loaded.entry.type}/${loaded.entry.id}`) : undefined}
+        />
+      </div>
+    ))}
+  </div>
+)}
+
+<style>
+  @layer components {
+    .kit-cards {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-s);
+    }
+
+    /* A card is its target's own stat block, framed apart from the arrangement around it. */
+    .kit-card :global(.statblock) {
+      max-inline-size: none;
+      border-inline: var(--border-width) solid var(--statblock-rule-color);
+    }
+  }
+</style>

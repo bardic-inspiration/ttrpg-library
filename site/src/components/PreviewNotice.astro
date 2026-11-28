@@ -1,0 +1,44 @@
+---
+// The preview notice (docs/workflow.md#deploy "The preview"): on every page of a preview build, a
+// line naming it the next version, linking to the same path on production. Production may not
+// have the page yet, so the link checks it once the page loads and points to production's Library
+// when it isn't there.
+import { PRODUCTION_BASE, productionPath } from '../../../lib/site.ts';
+
+const href = productionPath(Astro.url.pathname);
+---
+<aside class="preview-notice" aria-label="Preview">
+  <p class="preview-notice__inner">
+    This is a preview of the next version of the library.{' '}
+    <a
+      href={href}
+      data-preview-link={href === PRODUCTION_BASE ? undefined : ''}
+      data-fallback-href={PRODUCTION_BASE}
+      data-fallback-text="Go to the released site’s Library">See this page on the released site</a>.
+  </p>
+</aside>
+
+<script>
+  import { checkPreviewLink } from '../lib/preview';
+
+  const link = document.querySelector<HTMLAnchorElement>('[data-preview-link]');
+  if (link) void checkPreviewLink(link);
+</script>
+
+<style>
+  @layer layout {
+    .preview-notice {
+      padding-inline: var(--page-gutter);
+      padding-block: var(--space-2xs);
+      background: var(--preview-notice-bg);
+      border-block-end: var(--preview-notice-rule);
+      font-family: var(--font-ui);
+      font-size: var(--text-small);
+    }
+
+    .preview-notice__inner {
+      max-inline-size: var(--page-width);
+      margin-inline: auto;
+    }
+  }
+</style>

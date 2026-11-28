@@ -1,0 +1,66 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "the-unraveling-loom",
+  "name": "The Unraveling Loom",
+  "summary": "Chasmweaver and phase spiders have nested in the Wording Loom, among the threads that weave each page's text.",
+  "stats": {
+    "setIn": {
+      "ref": "map/the-repository",
+      "zone": "wording-loom"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/the-repository",
+          "zone": "wording-loom",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "A loom as wide as a house clacks in the dark, its shuttles flying on their own. Threads of every shade run from it up through the ceiling. Some of them are not thread: two vast spiders hang among them, and smaller ones flicker in and out of sight along the warp."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/chasmweaver-spider}s strung their lines among the loom's threads, and the {ref:creature/phase-spider}s blink in and out to bite. Once they are dealt with, the party can follow the threads: each one carries a mark of punctuation to the pages upstairs. One anomaly's source is here; see the Anomaly Ledger."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/chasmweaver-spider",
+            "count": 2
+          },
+          {
+            "ref": "creature/phase-spider",
+            "count": 3
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "moderate": {
+            "items": [
+              {
+                "ref": "item/robe-of-useful-items"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

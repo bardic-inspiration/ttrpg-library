@@ -1,27 +1,39 @@
 ---
-// Mounts the Library's gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery). The
-// island fetches library.json once it runs; without JavaScript, a plain list of every entry links
-// to its detail page instead.
+// Mounts a ruleset's Library gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery).
+// The island fetches library.json once it runs; without JavaScript, a plain list of each of the
+// ruleset's entries links to its detail page instead, and of each primitive with a card to its
+// rules page section.
 import Gallery from './Gallery';
 import { entryPath, loadEntries } from '../../lib/library';
 import { libraryFacetData } from '../../lib/gallery/facet-data';
-import { loadRules } from '../../lib/rules';
+import { loadRules, primitiveCards } from '../../lib/rules';
 import { url } from '../../lib/url';
 
+interface Props {
+  /** The ruleset whose Library this is. */
+  ruleset: string;
+}
+
+const { ruleset } = Astro.props;
 const rules = loadRules();
 const all = loadEntries(rules);
 // Ref targets' names and the groups a groups facet nests (docs/site.md#gallery "Filters").
 const data = libraryFacetData(rules, all);
-const entries = [...all].sort((a, b) => a.entry.name.localeCompare(b.entry.name, 'en', { sensitivity: 'base' }));
+const entries = [
+  ...all.map(({ entry }) => ({ entry, path: entryPath(entry) })),
+  ...primitiveCards(rules).map(({ loaded, path }) => ({ entry: loaded.entry, path })),
+]
+  .filter(({ entry }) => entry.ruleset === ruleset)
+  .sort((a, b) => a.entry.name.localeCompare(b.entry.name, 'en', { sensitivity: 'base' }));
 ---
-<Gallery client:load indexUrl={url('library.json')} base={url()} facetData={data} />
+<Gallery client:load indexUrl={url('library.json')} base={url()} facetData={data} ruleset={ruleset} />
 <noscript>
   {entries.length === 0 ? (
     <p>No entries yet.</p>
   ) : (
     <ul>
-      {entries.map(({ entry }) => (
-        <li><a href={url(entryPath(entry))}>{entry.name}</a>: {entry.summary}</li>
+      {entries.map(({ entry, path }) => (
+        <li><a href={url(path)}>{entry.name}</a>{entry.summary && `: ${entry.summary}`}</li>
       ))}
     </ul>
   )}

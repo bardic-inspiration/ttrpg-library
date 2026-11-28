@@ -2,9 +2,9 @@
 // ruleset module, and links its refs (docs/content-model.md#references, docs/site.md#index-build step 3). Validation
 // has already run in build:index, so entries here are known good.
 
-import { isOfficial, type RulesetModule } from '../../../rulesets/module.ts';
+import { isOfficial, linkedLibrary, type RulesetModule } from '../../../rulesets/module.ts';
 import type { RefTarget } from './refs.ts';
-import { entryKey, linkEntries, objectRefs, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
+import { entryKey, entryZones, linkEntries, objectRefs, zoneKey, type Link, type Links, type RefEntry } from '../../../scripts/validate/refs.ts';
 import { anchorId, ruleKey, rulePaths, typedGroups, type RulesData } from '../../../lib/rules.ts';
 
 export interface Entry {
@@ -20,7 +20,6 @@ export interface Entry {
   summary: string;
   description?: string;
   stats: unknown;
-  tags?: Record<string, unknown>;
   image?: string;
   meta: {
     createdAt: string;
@@ -38,6 +37,8 @@ export interface LoadedEntry {
   refBy: Link[];
   /** A page type's components, in the order its stats list them (docs/content-model.md#components). */
   components?: LoadedComponent[];
+  /** The entries an arrangement's parts embed as cards or thumbnails, loaded (docs/content-model.md#arrangements). */
+  shown?: LoadedEntry[];
 }
 
 /** A component, loaded with its parent and shown only on the parent's page. */
@@ -50,11 +51,13 @@ export interface LoadedComponent {
   parent: Entry;
 }
 
-const files = import.meta.glob<Entry>('../../../content/**/*.json', { eager: true, import: 'default' });
-const modules = import.meta.glob<{ ruleset: RulesetModule }>('../../../rulesets/*/index.ts', { eager: true });
+// The library's entries and ruleset modules (docs/site.md#library-root). A glob key's form depends
+// on where the library sits, so modules are matched by the ruleset folder that ends the key.
+const files = import.meta.glob<Entry>('@library/content/**/*.json', { eager: true, import: 'default' });
+const modules = import.meta.glob<{ ruleset: RulesetModule }>('@library/rulesets/*/index.ts', { eager: true });
 
 export function rulesetModule(id: string): RulesetModule {
-  const module = modules[`../../../rulesets/${id}/index.ts`];
+  const module = Object.entries(modules).find(([key]) => key.endsWith(`/rulesets/${id}/index.ts`))?.[1];
   if (!module) throw new Error(`No ruleset module for "${id}"`);
   return module.ruleset;
 }
@@ -98,12 +101,14 @@ export function loadLibrary(
 ): LoadedEntry[] {
   const links = linkAll(entries, rules);
   // Values that read other entries, such as a class's spell list, join the entry's own (docs/rulesets.md#the-ruleset-module).
+  // Each ruleset's refs resolve once, before any entry derives from them.
   const byRuleset = Map.groupBy(entries, (e) => e.ruleset);
+  const libraries = new Map([...byRuleset].map(([id, group]) => [id, linkedLibrary(group, rules.find((r) => r.ruleset === id))]));
   const derive = (entry: Entry) => {
     const module = moduleFor(entry.ruleset);
     const own = module.derive(entry.type, entry.stats, rules.find((r) => r.ruleset === entry.ruleset));
     if (!module.deriveLinked) return own;
-    return { ...own, ...module.deriveLinked(entry.type, entryKey(entry), entry.stats, byRuleset.get(entry.ruleset) ?? []) };
+    return { ...own, ...module.deriveLinked(entry.type, entryKey(entry), entry.stats, libraries.get(entry.ruleset)!) };
   };
   const load = (entry: Entry) => ({
     entry,
@@ -111,18 +116,43 @@ export function loadLibrary(
     ...(links.get(entryKey(entry)) ?? { refs: [], refBy: [] }),
   });
   // A component is loaded onto the entry that lists it by ref, in that order (docs/content-model.md#components).
-  const isComponent = (entry: Entry) => (moduleFor(entry.ruleset).definition.components ?? []).some((c) => c.type === entry.type);
-  const components = new Map(entries.filter(isComponent).map((entry) => [entryKey(entry), entry]));
-  return entries
+  // Only an entry of a type that may list a component lists it; any other entry's ref to it is a link.
+  const parentsOf = (entry: Entry) => (moduleFor(entry.ruleset).definition.components ?? []).find((c) => c.type === entry.type)?.parents;
+  const components = new Map(entries.filter((entry) => parentsOf(entry)).map((entry) => [entryKey(entry), entry]));
+  const loaded: LoadedEntry[] = entries
     .filter((entry) => !components.has(entryKey(entry)))
     .map((entry) => {
       const listed = [...new Set(objectRefs(entry.stats).map((r) => r.ref))].flatMap((key) => {
         const component = components.get(key);
-        return component ? [{ ...load(component), parent: entry }] : [];
+        return component && parentsOf(component)!.includes(entry.type) ? [{ ...load(component), parent: entry }] : [];
       });
       return listed.length > 0 ? { ...load(entry), components: listed } : load(entry);
     })
     .sort((a, b) => a.entry.name.localeCompare(b.entry.name));
+  // An arrangement loads the entries its parts show as cards or thumbnails, in its own ruleset.
+  const byKey = new Map(loaded.map((l) => [`${l.entry.ruleset}:${entryKey(l.entry)}`, l]));
+  for (const l of loaded) {
+    const shown = shownKeys(l.entry.stats).flatMap((key) => byKey.get(`${l.entry.ruleset}:${key}`) ?? []);
+    if (shown.length > 0) l.shown = shown;
+  }
+  return loaded;
+}
+
+/**
+ * The keys of the entries an arrangement's parts embed (docs/content-model.md#arrangements): each
+ * ref object in `stats.parts` whose `show` is `card` or `thumbnail`, once each.
+ */
+export function shownKeys(stats: unknown): string[] {
+  const found = new Set<string>();
+  const walk = (value: unknown): void => {
+    if (Array.isArray(value)) return value.forEach(walk);
+    if (typeof value !== 'object' || value === null) return;
+    const object = value as Record<string, unknown>;
+    if (typeof object.ref === 'string' && (object.show === 'card' || object.show === 'thumbnail')) found.add(object.ref);
+    Object.values(object).forEach(walk);
+  };
+  walk((stats as { parts?: unknown } | null)?.parts);
+  return [...found];
 }
 
 /** Every component in a loaded library, with its parent. */
@@ -134,7 +164,13 @@ export const componentPath = (component: LoadedComponent): string =>
 
 export const entryPath = (entry: Pick<Entry, 'ruleset' | 'type' | 'id'>): string => `${entry.ruleset}/${entry.type}/${entry.id}/`;
 
-/** `<type>/<id>` → name of an entry, primitive, or group, for rendering refs as names. */
+/** A map's zones as link ends (docs/content-model.md#references): `map/<id>#<zone-id>` → "Map › Zone", at `#zone-<id>` on its page. */
+export const zoneTargets = (all: LoadedEntry[]): { key: string; name: string; path: string; entry: Entry }[] =>
+  all.flatMap(({ entry }) =>
+    (entryZones(entry.stats) ?? []).map((zone) => ({ key: zoneKey(entryKey(entry), zone.id), name: `${entry.name} › ${zone.name}`, path: `${entryPath(entry)}#zone-${zone.id}`, entry })),
+  );
+
+/** `<type>/<id>` → name of an entry, primitive, group, or map zone, for rendering refs as names. */
 export const entryNames = (all: LoadedEntry[], rules: RulesData[] = []): Map<string, string> =>
   new Map([
     ...rules.flatMap((data) => [
@@ -142,6 +178,7 @@ export const entryNames = (all: LoadedEntry[], rules: RulesData[] = []): Map<str
       ...typedGroups(data).map((g) => [ruleKey(g), g.name] as [string, string]),
     ]),
     ...[...all, ...allComponents(all)].map(({ entry }) => [entryKey(entry), entry.name] as [string, string]),
+    ...zoneTargets(all).map(({ key, name }) => [key, name] as [string, string]),
   ]);
 
 /**
@@ -167,5 +204,7 @@ export function refTargets(all: LoadedEntry[], rules: RulesData[] = []): Map<str
       (c) =>
         [entryKey(c.entry), { type: c.entry.type, name: `${c.parent.name} › ${c.entry.name}`, path: componentPath(c), official: isOfficial(c.entry) }] as [string, RefTarget],
     ),
+    // A link to a map's zone reads "Map › Zone", to the zone's anchor on the map's page.
+    ...zoneTargets(all).map(({ key, name, path, entry }) => [key, { type: entry.type, name, path, official: isOfficial(entry) }] as [string, RefTarget]),
   ]);
 }

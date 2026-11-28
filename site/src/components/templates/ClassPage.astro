@@ -1,14 +1,16 @@
 ---
 // The dnd-5e-2024 class page (registry template `class-page`, docs/rulesets.md#classes,
-// docs/site.md#templates), in the SRD's order: the Core Traits lines, "Becoming a <Class> …", the
-// Features table, each class feature as "Level 1: Rage" anchored at `#class-feature-<id>`, the
-// option lists with each option anchored at `#class-option-<id>`, the spell list, then the class's
-// subclasses. On screen it is an accordion page (docs/site.md#accordion-pages): a table of
-// contents, then each section collapsed, except that Class Features and each option list keep
-// their heading and intro open over their features' or options' sections.
+// docs/site.md#templates), in the SRD's order: the Core Traits lines, "Becoming a <Class> as a Level
+// 1 or Multiclass Character", the Features table, each class feature as "Level 1: Rage" anchored at
+// `#class-feature-<id>`, the option lists with each option anchored at `#class-option-<id>`, the
+// spell list, then the class's subclasses. On screen it is an accordion page
+// (docs/site.md#accordion-pages): a structured summary, with the features by level, then each
+// section collapsed, except that Class Features and each option list keep their heading and intro
+// open over their features' or options' sections. On screen the page widens to fit its Features
+// table, so its links don't wrap.
 import { anchorId } from '../../../../lib/rules';
 import type { ClassFeatureStats, ClassOptionStats, ClassStats, DerivedClass, LinkedClass } from '../../../../rulesets/dnd-5e-2024/types.ts';
-import { OPTION_REPEATABLE, classLines, classWords, featureHeading, featuresTable, optionLines, spellListTables } from '../../lib/class';
+import { OPTION_REPEATABLE, classLines, classWords, featureHeading, featuresByLevel, featuresTable, optionLines, spellListTables } from '../../lib/class';
 import { renderInlineMarkdown } from '../../lib/markdown';
 import type { TemplateProps } from '../../lib/template';
 import { url } from '../../lib/url';
@@ -40,7 +42,7 @@ const contents: TocItem[] = [
   {
     id: sectionId(words.classFeatures),
     label: words.classFeatures,
-    children: features.map((f) => ({ id: component(f), label: featureHeading(f.name, f.stats as ClassFeatureStats) })),
+    children: featuresByLevel(features.map((f) => ({ id: component(f), name: f.name, stats: f.stats as ClassFeatureStats }))),
   },
   ...optionLists.map((list) => ({ id: sectionId(list.name), label: list.name, children: list.options.map((o) => ({ id: component(o), label: o.name })) })),
   ...(hasSpellList ? [{ id: sectionId(words.spellList), label: words.spellList }] : []),
@@ -50,24 +52,24 @@ const contents: TocItem[] = [
 <StatBlock name={`${entry.name} class`} type="class" mode={mode}>
   <StatBlockHeader name={entry.name} subtitle="Class" level={level} />
   {mode === 'screen' && <TableOfContents items={contents} />}
-  <Accordion class="class-section" id={sectionId(words.coreTraits)} level={level + 1} mode={mode}>
+  <Accordion class="class-section" id={sectionId(words.coreTraits)} level={level + 1} mode={mode} headingClass="statblock-heading">
     <Fragment slot="title">{words.coreTraits}</Fragment>
     <PropertyList lines={classLines(entry.name, s, names)} refs={refs} />
   </Accordion>
-  <Accordion class="class-section" id={sectionId(words.becoming)} level={level + 1} mode={mode}>
+  <Accordion class="class-section" id={sectionId(words.becoming)} level={level + 1} mode={mode} headingClass="statblock-heading">
     <Fragment slot="title">{words.becoming}</Fragment>
-    <Heading level={level + 2}>{words.levelOne}</Heading>
+    <Heading level={level + 2} class="statblock-heading statblock-heading--nested">{words.levelOne}</Heading>
     <ul>{words.levelOneBullets.map((bullet) => <li>{bullet}</li>)}</ul>
-    <Heading level={level + 2}>{words.multiclass}</Heading>
+    <Heading level={level + 2} class="statblock-heading statblock-heading--nested">{words.multiclass}</Heading>
     <RulesText text={s.multiclass} refs={refs} />
   </Accordion>
   {d.featureRows && <RulesText class="class-table" text={featuresTable(entry.name, s, d)} refs={refs} />}
   <section class="class-section" id={sectionId(words.classFeatures)}>
-    <Heading level={level + 1}>{words.classFeatures}</Heading>
+    <Heading level={level + 1} class="statblock-heading">{words.classFeatures}</Heading>
     <p>{words.featuresIntro}</p>
     <div class="class-section__list">
       {features.map((feature) => (
-        <Accordion class="class-feature" id={component(feature)} type={feature.type} level={level + 2} mode={mode}>
+        <Accordion class="class-feature" id={component(feature)} type={feature.type} level={level + 2} mode={mode} headingClass="statblock-heading statblock-heading--nested">
           <Fragment slot="title">{featureHeading(feature.name, feature.stats as ClassFeatureStats)}</Fragment>
           <RulesText text={(feature.stats as ClassFeatureStats).text} refs={refs} />
         </Accordion>
@@ -76,13 +78,13 @@ const contents: TocItem[] = [
   </section>
   {optionLists.map((list) => (
     <section class="class-section" id={sectionId(list.name)}>
-      <Heading level={level + 1}>{list.name}</Heading>
+      <Heading level={level + 1} class="statblock-heading">{list.name}</Heading>
       <RulesText text={list.text} refs={refs} />
       <div class="class-section__list">
         {list.options.map((option) => {
           const o = option.stats as ClassOptionStats;
           return (
-            <Accordion class="class-option" id={component(option)} type={option.type} level={level + 2} mode={mode}>
+            <Accordion class="class-option" id={component(option)} type={option.type} level={level + 2} mode={mode} headingClass="statblock-heading statblock-heading--nested">
               <Fragment slot="title">{option.name}</Fragment>
               {optionLines(o).map((line) => <p class="class-option__line" set:html={renderInlineMarkdown(line, refs)} />)}
               <RulesText text={o.text} refs={refs} />
@@ -94,14 +96,14 @@ const contents: TocItem[] = [
     </section>
   ))}
   {hasSpellList && (
-    <Accordion class="class-section" id={sectionId(words.spellList)} level={level + 1} mode={mode}>
+    <Accordion class="class-section" id={sectionId(words.spellList)} level={level + 1} mode={mode} headingClass="statblock-heading">
       <Fragment slot="title">{words.spellList}</Fragment>
       <p>{words.spellListIntro}</p>
       {spellListTables(entry.name, d).map((md) => <RulesText class="class-table" text={md} refs={refs} />)}
     </Accordion>
   )}
   {subclasses.length > 0 && (
-    <Accordion class="class-section" id={sectionId(words.subclasses)} level={level + 1} mode={mode}>
+    <Accordion class="class-section" id={sectionId(words.subclasses)} level={level + 1} mode={mode} headingClass="statblock-heading">
       <Fragment slot="title">{words.subclasses}</Fragment>
       <ul>{subclasses.map((key) => <li><a class="ref-link" href={url(`${entry.ruleset}/${key}/`)}>{names.get(key) ?? key}</a></li>)}</ul>
     </Accordion>
@@ -111,7 +113,7 @@ const contents: TocItem[] = [
 <style>
   @layer components {
     section.class-section > :global(* + *) {
-      margin-block-start: var(--space-2xs);
+      margin-block-start: var(--flow-text);
     }
 
     :global(.class-section ul) {
@@ -120,6 +122,21 @@ const contents: TocItem[] = [
 
     .class-option__line {
       font-style: italic;
+    }
+
+    /*
+     * On screen the page is as wide as its Features table needs: never narrower than its column,
+     * and past the detail page's measure up to the main column (`cqi`). Every other part takes no
+     * width of its own (`contain`), so only the table sizes the page, and the rest fills it.
+     */
+    :global(.statblock[data-type='class'][data-mode='screen']) {
+      inline-size: max-content;
+      min-inline-size: 100%;
+      max-inline-size: 100cqi;
+
+      & > :global(:not(.class-table)) {
+        contain: inline-size;
+      }
     }
   }
 </style>

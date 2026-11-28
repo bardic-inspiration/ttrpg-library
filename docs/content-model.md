@@ -15,17 +15,17 @@ Every entry is one JSON file at `content/<ruleset>/<type>/<id>.json`, and the
 path must match the entry's `ruleset`, `type`, and `id`. Every entry, in every
 ruleset, has the same envelope, written in this order: `ruleset`, `source`
 (optional), `author`, `type`, `id`, `name`, `summary`, `description`
-(optional), `stats`, `tags` (optional), and `meta`, plus an optional `image`.
-Unknown top-level keys are rejected.
+(optional), `stats`, and `meta`, plus an optional `image`.
+Unknown top-level keys are rejected, `tags` among them: organization comes
+from typed fields, not free-form tags.
 
-The envelope has four zones:
+The envelope has three zones:
 
 - **`source` and `author`** place the entry within its ruleset
   ([Source and author](#source-and-author)).
 - **`stats`** holds the rules data, validated strictly by the ruleset's schema
   for the type. Unknown keys fail. It holds inputs only, never a value the
   ruleset derives ([rulesets.md](rulesets.md#inputs-and-derived-values)).
-- **`tags`** holds open organization ([Tags](#tags)).
 - **`meta`** holds provenance ([Meta](#meta)).
 
 `ruleset` must name a folder in `rulesets/` and a ruleset in
@@ -51,19 +51,6 @@ with a schema file and a registry entry. Anything else fails as unknown.
   distance of 2 or less), so a reviewer can catch "Frost Lance" beside "Frost
   Lances". It skips a pair when both are SRD entries, since neither name can
   change: "Fireball" and "Fire Bolt" are both canonical.
-
-### Tags
-
-- `tags` is a flat map. Values are a string, number, boolean, or array of
-  strings; nested objects are rejected. Nothing else in `tags` is ever
-  rejected for being unknown.
-- Every tag key becomes a gallery filter, `tags.<key>`, with no configuration.
-- Conventional keys, not enforced: `world`, `campaign`, `theme`,
-  `environment`.
-- `source` and `author` are envelope fields ([Source and author](#source-and-author)),
-  so neither is a tag key; the schema rejects both in `tags`.
-- Filtering compares strings case-insensitively; display keeps the stored
-  case.
 
 ### Source and author
 
@@ -99,7 +86,7 @@ Other rulesets settle their licensing case by case.
 `meta` records when an entry was created and revised, and where it came from:
 the source kind (`routine`, `revise`, `manual`, or `import`), the issues it
 fulfilled, and the gap bucket that produced it ([generation.md](generation.md#gap-buckets)). It shows on the detail page as a provenance line and
-`meta.createdAt` is sortable, but meta isn't a tag.
+`meta.createdAt` is sortable.
 
 An imported entry ([Imports](generation.md#imports)) has
 `meta.source.kind: import` and a `meta.source.license` block: `id`, the
@@ -178,6 +165,47 @@ plain text.
   placeholder; the layout closes up.
 - Committed art must be something we have the rights to publish, credited in
   `ATTRIBUTION.md`.
+- A map's diagram isn't art and isn't `image` ([Map diagrams](#map-diagrams)).
+
+### Map diagrams
+
+A map ([Maps](rulesets.md#maps)) has a diagram: a simple SVG with named
+zones, made with the entry by the `generate` skill. It's an original
+diagram, not art, so the rule against generated art doesn't apply to it,
+and it needs no `ATTRIBUTION.md` credit. Its path is derived from the id,
+`assets/images/<ruleset>/map/<id>.svg`, and never stored. The validator reads
+it as data and checks it, so nothing in it is trusted; every check is an
+error but the size warning.
+
+- **Required:** every map has its diagram, with the image size warning above
+  500 KB and limit of 2 MB.
+- **An `<svg>` root with a `viewBox`,** so the diagram scales to any width.
+- **Allowed elements:** shapes (`<rect>`, `<circle>`, `<ellipse>`,
+  `<line>`, `<polyline>`, `<polygon>`), `<path>`, `<text>` and `<tspan>`,
+  groups (`<g>`), and `<title>`. Any other element fails, `<style>` and
+  `<use>` included.
+- **Rejected:** `<script>`, `<foreignObject>`, `<image>`, event handler
+  attributes (`on…`), an `href` or `url(…)` that points outside the file (a
+  fragment, `#id`, stays inside it), and inline `style` or color attributes
+  (`fill`, `stroke`, `color`, `stop-color`, `flood-color`, `lighting-color`).
+- **Styled by the site:** an element's classes come from a fixed set,
+  `zone`, `wall`, `door`, `feature`, and `label`, and the site's CSS colors
+  them from the palette ([Palette](styling.md#palette)), with the `--map-*`
+  tokens (`site/src/styles/diagram.css`), on the map's page and its card. A
+  `label` is centered on its `x`, with its baseline at its `y`. A class outside the set fails.
+- **Zones:** each zone in `stats.zones` has exactly one element with
+  `id="zone-<id>"`, and no other id starts `zone-`. No id is on two elements.
+- **Readable:** the file is plain XML: elements with quoted attributes, text,
+  comments, an optional `<?xml …?>` declaration, and the five predefined
+  entities and character references. A doctype, CDATA section, processing
+  instruction, or anything else the validator can't read fails, so nothing
+  it skips can reach the page.
+
+The checks are ruleset-independent, in `scripts/validate/diagram.ts`, and run
+for every entry of type `map` once its `stats` pass their schema, since they
+read its zones. The site checks a diagram again before it shows it, on the
+map's page and its card (`lib/diagram.ts`), and the build fails on one that
+doesn't pass.
 
 ### References
 
@@ -189,9 +217,22 @@ never changes and is unique within its type:
   gear, which may add a `count`). It may add a `note`, a qualifier
   printed in parentheses after the name wherever the ref renders:
   `{ "ref": "spell/fireball", "note": "level 5 version" }` reads "Fireball
-  (level 5 version)".
+  (level 5 version)". A ref in an arrangement's part may add `show`
+  ([Arrangements](#arrangements)).
 - **A text token**, `{ref:<type>/<id>}`, valid in any markdown-subset field in
   every ruleset and type. It is the one way text links to another entry.
+
+**A map's zones.** A ref may point into a map ([Maps](rulesets.md#maps)) by
+naming one of its zones: a ref object adds a `zone`,
+`{ "ref": "map/<id>", "zone": "<zone-id>" }`, where its field takes a
+`MapZoneRef` (a map's `within`), and a token adds `#` and the zone id,
+`{ref:map/<id>#<zone-id>}`. Either renders "Map › Zone", "Sunken Cistern ›
+Drowned Shrine", linked to the zone's anchor, `#zone-<id>`, on the map's page.
+A zone the map doesn't have fails like a missing ref, as does a zone named on
+a target that isn't a map:
+`ref "map/sunken-cistern#gatehouse" does not resolve: map/sunken-cistern has no zone "gatehouse"; name one of its zones (…)`.
+Population points into a map, never out of it: a map holds its diagram and
+zones only, and what's set in a zone references it.
 
 The site shows the target's current name, so a rename updates every link. A
 token may instead carry display text after a space, `{ref:<type>/<id> <text>}`,
@@ -200,8 +241,7 @@ Traveler's Clothes}" reads "Traveler's Clothes", linked to the primitive
 "Clothes, Traveler's". A `|` separator, as first designed, would split a table
 cell. Templates compose such links too, for a group's qualifier in a base item
 ("Melee") and a counted item's plural ("Javelins"). A token
-renders as that name linked to the target's detail page, and reads as the name
-in search text. It takes inline markup around it: a spell name is written
+renders as that name linked to the target's detail page. It takes inline markup around it: a spell name is written
 `*{ref:spell/cure-wounds}*`, as SRD text italicizes spell names. Because the
 token renders the name, SRD text keeps its words when a mention becomes a
 link: "becomes a {ref:creature/zombie}" reads "becomes a Zombie". A token
@@ -237,8 +277,10 @@ error, as is a malformed one such as `{ref:zombie}`.
 - The validator and the build compute back-references. Each entry's `refs`
   (forward) and `refBy` (back) are lists of `{ path, key }`: `path` is where
   the ref sits in the referring entry (`stats.spells[0].spell`, or
-  `stats.effect` for a token), and `key` is the other end. Only resolved refs
-  are listed, in document order.
+  `stats.effect` for a token), and `key` is the other end. A link that names a
+  map's zone adds its `zone` on both lists, so a map's back-references group
+  by zone, in the map's zone order. Only resolved refs are listed, in document
+  order.
 - Detail pages show forward links ("Casts: Frost Lance") and back-links ("Cast
   by: Cinder Witch"), each target once per label. The ruleset names each
   relation from the field the ref sits in
@@ -260,13 +302,15 @@ features and a species' traits are components.
 - **Stored like an entry**, at `content/<ruleset>/<type>/<id>.json`, with the
   component envelope (`schemas/component.schema.json`): `ruleset`,
   `author`, `type`, `id`, `name`, `stats`, and `meta`, with `source` when its
-  parent has one, and no `summary`, `description`, `tags`, or `image`. The validator picks the envelope by whether the ruleset lists
+  parent has one, and no `summary`, `description`, or `image`. The validator picks the envelope by whether the ruleset lists
   the type under `components`.
 - **The parent lists its components**, in order, by `{ "ref": … }` objects
   in its `stats`, and a component doesn't name its parent: its parent is the
-  one entry whose stats hold a ref object to it. A `{ref:…}` token is a
-  mention, not a listing. Each component is listed by exactly one entry, of a
-  type that may list it, and only once (errors).
+  one entry of a type that may list it whose stats hold a ref object to it.
+  A `{ref:…}` token is a mention, not a listing, and so is a ref object from
+  any other type, such as a character's to its class's options: a link.
+  Each component is listed by exactly one entry, and only once; one that only
+  other types reference is listed by no parent (errors).
 - **Its id starts with its parent's id and a hyphen**, then the slug of its
   name: `class-feature/barbarian-rage`. Names repeat across parents ("Extra
   Attack"), so a component's name is unique within its parent instead of its
@@ -274,9 +318,9 @@ features and a species' traits are components.
   again at a later level adds the level to the first one's id:
   `barbarian-improved-brutal-strike-17` (error otherwise).
 - **Hidden from the library:** no `library.json` record, gallery card, search
-  result, detail page, raw data file, or print key of its own. Its parent's
-  search text holds its name and text, so a search for a feature finds its
-  class ([site.md](site.md#index-build)).
+  result, detail page, raw data file, or print key of its own
+  ([site.md](site.md#index-build)). Search reads names only, so a search for
+  a feature doesn't find its class ([Gallery](site.md#gallery) "Search").
 - **On its parent's page,** after the parent's template, each component is a
   section with its name as a heading, anchored at `#<type>-<id>`
   ([site.md](site.md#detail-page)).
@@ -288,6 +332,41 @@ features and a species' traits are components.
 - **Its links are its parent page's.** A page's Links list its own links and
   its components', except the links among the page's own parts: the parent's
   list of its components, and a component's link to its parent or a sibling.
+
+### Arrangements
+
+Content is organized by type. An **arrangement** is an entry that puts typed
+entries together for play, rather than a new kind of content: an encounter
+([Encounters](rulesets.md#encounters)) and a module
+([Modules](rulesets.md#modules)) are arrangements. Content never lives
+inside an arrangement; every piece is a standalone entry that a DM may lift
+out and adapt.
+
+| Layer | Holds | Refs mean |
+|---|---|---|
+| **Ruleset** | How things work: derivations, rules data, rules pages | n/a |
+| **Content** | Typed entries: creatures, items, spells, characters… | Rules: "casts", "grants", "requires" |
+| **Arrangements** | Encounters, modules | Inventory: what's included, where it is, how it shows |
+
+- **The kit.** An arrangement's `stats.parts` is an ordered list of kit
+  parts, each `{ "part": "<kind>", … }`, rendered in order, so every
+  arrangement reads alike. The parts are a ruleset's shared definitions,
+  and each arrangement type's schema allows its own subset.
+- **Inventory, not rules.** A ref in a part, a ref object or a `{ref:…}`
+  token in its text, says what's included. Its detail-page label is
+  "Includes", and the target's back-reference reads "Appears in", apart
+  from rules refs.
+- **Each ref object says how it shows:** `"show": "link"` (the default)
+  prints its name linked; `"card"` embeds the target's card; `"thumbnail"`
+  embeds a small form (a map's diagram, an entry's art). How the parts are
+  assembled is the entry's design choice. `show` is a ref key, as `count`
+  and `zone` are, allowed only where a part's schema puts it.
+- **Room to grow.** A ref in a part is an object, so a further key, such as
+  a dependency strength, needs no migration.
+- **Containment is listed by the container only.** An arrangement that
+  holds another lists it; the one held doesn't name its container, and its
+  page shows the container as a back-reference, "Part of" for a module's
+  ([Modules](rulesets.md#modules)).
 
 ### Situational fields
 
@@ -329,6 +408,32 @@ Because the schema holds the rule, it needs no display annotation. Every
 template, including the generic fallback, decides from presence alone, through
 one shared helper ([site.md](site.md#templates)), never by testing a value
 against `0`, `false`, or emptiness.
+
+### Display
+
+A field's schema can say how its value reads on the Library: with
+`"display": "chip"`, it reads as a chip, and a field without the keyword reads
+as text. This is how a value reads, not whether it displays (the rule above
+decides that). The keyword sits in the type's schema beside the field, or in
+a shared definition the field refers to, so it serves any ruleset and a field
+shared through `common.schema.json` carries it once.
+
+- **Cards:** a chip field shows its label and value as a badge,
+  `<label>: <value>` ("Level: 3", "CR: 1/8"), one badge per value of an
+  array. A text field shows its label and value
+  ([Gallery](site.md#gallery) "Cards").
+- **Filters:** an enum facet on a chip field lists its values as chips
+  rather than checkboxes ([Gallery](site.md#gallery) "Filters"), without the
+  label, which the facet's node already shows. A range facet keeps its min
+  and max inputs, which accept fractions and decimals.
+- **Validation:** `display` takes only `chip`, and only on a field a facet
+  could read: a string, number, boolean, or array of strings, by its `type`
+  or the values its `enum` or `const` allows. Anything else fails, naming
+  the schema file and the JSON pointer of the node
+  (`rulesets/<ruleset>/schemas/<type>.schema.json: /properties/size: …`).
+
+`dnd-5e-2024` marks spell level and school, a creature's CR, feat category,
+item category, and a class's Hit Point Die.
 
 ### SRD and custom entries
 
@@ -485,6 +590,8 @@ Checks for every type and ruleset:
 | Blocklist match in any text-bearing field ([licensing.md](licensing.md#blocklist)) | error |
 | Placeholder text in any text-bearing field: `TODO`, `TBD`, `FIXME`, or `XXX` as a whole word in capitals, or "lorem ipsum" in any case | error |
 | `image` path valid and file exists; size limits | error / warning |
+| A map's diagram exists within the size limits and passes the [Map diagrams](#map-diagrams) checks | error / warning |
+| A schema's `display` is `chip`, on a string, number, boolean, or string-array field ([Display](#display)) | error |
 
 Each ruleset adds its own checks ([rulesets.md](rulesets.md#consistency-checks)).
 The validator skips a ruleset's warnings on official content, whose numbers and
@@ -493,7 +600,7 @@ nothing invalid reaches the site.
 
 ## Where the rules live
 
-- `schemas/envelope.schema.json`: the envelope, tags, meta, and image, with a
+- `schemas/envelope.schema.json`: the envelope, meta, and image, with a
   description of each field. `schemas/component.schema.json`: the component
   envelope.
 - `scripts/validate/`: the CLI, the schema stage, the checks for every type,
@@ -510,7 +617,7 @@ nothing invalid reaches the site.
 
 | To add | Touch |
 |---|---|
-| A world, campaign, author, or theme | A tag on entries |
+| A collection or author | The entry's `source` and `author` ([Source and author](#source-and-author)) |
 | A field a schema validates | The type's schema, plus the template if it displays |
 | Art for an entry | Commit the file under `assets/images/` and set `image` |
 | A check for every type | `scripts/validate/`, with a fixture for its error |

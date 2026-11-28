@@ -1,10 +1,14 @@
 // The detail page's export controls (docs/site.md#detail-page, docs/export.md#controls): Print
 // and Download, built from the configured entry-scope exporters. A page type's
-// page has Print only. The controls need JavaScript, so they render only once
+// page has Print only. Beside them, the cart control adds the entry to the print cart or removes
+// it (docs/site.md#detail-page). The controls need JavaScript, so they render only once
 // the island hydrates; without it the page shows none. A failed export is
 // reported in a polite status message, as is what a format left out, listed below it.
 import { useEffect, useState } from 'preact/hooks';
 import { configuredControls, type ExportItem, type ExportReport as Report, type Exporter } from '../../exporters/index.ts';
+import { cartKey, setInCart } from '../../lib/cart.ts';
+import CartToggle from '../cart/CartToggle.tsx';
+import { useCart } from '../cart/useCart.ts';
 import ExportButtons from '../export/ExportButtons.tsx';
 import ExportReport, { reportStatus } from '../export/ExportReport.tsx';
 import './export-controls.css';
@@ -24,6 +28,7 @@ export default function ExportControls({ item, base, page = false, ready: initia
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
   const [report, setReport] = useState<Report | undefined>();
+  const cart = useCart();
   useEffect(() => setReady(true), []);
   if (!ready) return null;
 
@@ -47,10 +52,16 @@ export default function ExportControls({ item, base, page = false, ready: initia
   return (
     <div class="export-controls">
       <ExportButtons
-        controls={configuredControls('entry', { download: !page, type: item.entry.type })}
+        controls={configuredControls('entry', { download: !page, entry: item.entry })}
         run={run}
         disabled={busy}
         menuId={`export-formats-${item.entry.id}`}
+      />
+      <CartToggle
+        id={`cart-${item.entry.type}-${item.entry.id}`}
+        name={item.entry.name}
+        inCart={cart.includes(cartKey(item.entry))}
+        onChange={(on) => setInCart(cartKey(item.entry), on)}
       />
       <p class="export-controls__status" role="status">{status}</p>
       {report && <ExportReport report={report} names={new Map([[`${item.entry.type}/${item.entry.id}`, item.entry.name]])} />}

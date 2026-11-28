@@ -24,7 +24,7 @@ interface Exporter {
   kind: "print" | "download";         // the Print button, or a format in Download's menu
   label: string;                      // "Print", or the format's name: "PNG", "JSON"
   scopes: Array<"entry" | "set">;     // single entry, filtered or selected set, or both
-  types?: string[];                   // the entry types it offers on an entry's page; all when absent
+  types?: string[];                   // the <ruleset>/<type> keys it offers on an entry's page; all when absent
   keysOnly?: boolean;                 // true: it reads only each entry's ruleset, type, and id
   run(items: Array<{ entry: Entry; derived: Derived; names?: Names }>, options: ExportOptions): Promise<ExportReport | void>;
   // a keysOnly exporter's items are Array<{ entry: { ruleset; type; id } }>
@@ -45,8 +45,11 @@ interface ExportReport {
   build error.
 - The detail page and the gallery build their [controls](#controls) from the
   exporters that offer the scope they need (`configuredControls` in the
-  registry); the detail page also passes its entry's type, so an exporter with
-  `types` appears only on those entries' pages. The detail page has its entry,
+  registry); the detail page also passes its entry's ruleset and type, so an
+  exporter with `types` appears only on those entries' pages. Its `types` are
+  `<ruleset>/<type>` keys, as the type filter's are ([site.md](site.md#gallery)),
+  so a type of another ruleset with the same id, such as a fixture ruleset's
+  `creature`, isn't offered it. The detail page has its entry,
   derived values, and the names of the entries and rules it links to at build
   time; a gallery set action fetches them from each entry's export bundle
   ([site.md](site.md#index-build)), so an exporter that reads entries receives
@@ -65,20 +68,21 @@ interface ExportReport {
 
 Every place that exports shows at most two buttons, **Print** and
 **Download** (`components/export/ExportButtons.tsx`). Each acts on its place's
-scope: the entry, or the Library's selection, or its filtered results when
-nothing is selected.
+scope: the entry, or the print cart, or the Library's filtered results when
+the cart is empty ([Gallery](site.md#gallery) "Cart and set actions").
 
-- **Print** runs the `print` exporter.
+- **Print** runs the `print` exporter. It is the place's primary button
+  ([Shared components](styling.md#shared-components)).
 - **Download** opens a small menu of the `download` exporters that offer the
   scope, in config order. Choosing a format closes the menu and downloads the
-  file. The menu is a disclosure: the button carries `aria-expanded`, Escape
-  closes the menu and returns focus to Download, and it closes when focus
-  leaves it. With no format for the scope, there is no Download button.
+  file. It is the shared menu button: the button carries `aria-expanded`,
+  Escape closes the menu and returns focus to Download, and it closes when
+  focus leaves it. With no format for the scope, there is no Download button.
 
 | Where | Print | Download |
 |---|---|---|
 | A card entry's detail page | The print view | PNG, JSON, and Open5e for the types it covers |
-| The Library, for the selection or the filtered results | The print view | JSON, Open5e |
+| The page header, for the cart, or on the Library the filtered results ([Page header](site.md#page-header)) | The print view | JSON, Open5e |
 | A page type's page (class, subclass, species) | The print view | None |
 | A rules page | The browser's print of the page | None |
 
@@ -89,15 +93,15 @@ nothing is selected.
   section open.
 - **A rules page** isn't an entry, so it has no print fragment. Its Print button
   (`components/export/PagePrint.astro`, a small script with no Preact) opens the
-  browser's print dialog for the page, and the accordion opens every section
-  before it prints ([Accordion pages](site.md#accordion-pages)).
+  browser's print dialog for the page, which is text with nothing to open
+  ([Rules pages](site.md#rules-pages)).
 - **The export report.** After a download that left something out, the status
   line says "Downloaded Open5e. 12 things didn't carry over." and a closed
   disclosure, "What didn't carry over" (`components/export/ExportReport.tsx`),
   lists each skip under its entry's name: the field's path, then the reason.
   When nothing in the scope exports, nothing downloads, and the status says
   "Nothing here exports as Open5e." with the same list.
-- Every control needs JavaScript: the detail page's and the Library's render
+- Every control needs JavaScript: the detail page's and the header's render
   once their island hydrates, and a rules page's stays hidden until its script
   runs. None of them print.
 
@@ -113,6 +117,8 @@ computed numbers, so translators read `derived` rather than recomputing.
   `library-<YYYYMMDD>.json`, dated by the reader's clock. If any file fails to
   fetch, nothing downloads.
 - Raw files come from `data/<ruleset>/<type>/<id>.json` under the site base.
+  A primitive with a gallery card downloads its rules file as it's stored
+  ([Index build](site.md#index-build)).
 
 ### PNG
 
@@ -126,6 +132,12 @@ computed numbers, so translators read `derived` rather than recomputing.
   it is inert and outside the accessibility tree. At export,
   `site/src/lib/capture.ts` clones it into an off-screen host, waits for fonts
   and art, captures it, and removes the host; `html-to-image` loads only then.
+- `html-to-image` clones an `<svg>` whole and copies only its root's
+  computed style, and the page's stylesheet doesn't reach the image. So
+  before capture, `inlineDiagramStyles` writes each map diagram shape's
+  computed colors and label font onto the clone, inline, and a map's
+  diagram and a thumbnail capture as they show on screen
+  ([Map diagrams](content-model.md#map-diagrams)).
 - A creature with legendary actions or more than six actions captures at the
   wide width, with the stat block in two columns and no section split across
   them.
@@ -138,14 +150,16 @@ computed numbers, so translators read `derived` rather than recomputing.
   the print dialog ([Print layout](#print-layout)). `ids`
   lists `<type>/<id>` keys and prints them in the given order, ignoring repeats.
   Without `ids`, the query is read as the Library's, with the gallery's own
-  parsing and filtering, so `f.type` narrows by type, and results print in the
+  parsing and filtering, so `f.type` narrows by type (`<ruleset>/<type>`), and results print in the
   gallery's order. The page is given the build's facet data, as the Library's
   island is (`libraryFacetData` in `site/src/lib/gallery/facet-data.ts`), so
   a group filter matches every group in it and a ref facet sorts by its
   targets' names ([site.md](site.md#gallery)).
 - **Print fragments.** The build emits each entry's print fragment at
   `print/<ruleset>/<type>/<id>/`: the template in `print` mode
-  (`components/print/PrintEntry.astro`) as bare markup. The print view
+  (`components/print/PrintEntry.astro`) as bare markup. A primitive with a
+  gallery card ([site.md](site.md#gallery)) has one too, in its type's
+  template, as a custom one of its type prints. The print view
   (`components/print/PrintView.tsx`, logic in `site/src/lib/print.ts` and
   `print-run.ts`) resolves its entries against `library.json`, fetches only
   their fragments, and inserts them. Page weight follows the selection, not the
@@ -186,6 +200,14 @@ one breakpoint between them, `@media print and (width < 6.5in)`:
   property, so the breakpoint is written once, as that `@media` rule.
 - On screen the print view shows the wide layout. The style guide previews
   each layout by setting `data-print-layout` on a preview.
+- `PrintEntry.astro` maps the text roles to the print sizes: body, small, and
+  `h5` and `h6` to the body size, `h4` to the section size, `h3` to the
+  heading size. It also declares again each component size token that
+  `tokens/components.css` builds on a text role (`--statblock-title-size`,
+  `--statblock-heading-size`, `--card-title-size`, …), with the same role. A
+  custom property resolves where it's declared, so without that the token
+  keeps the `:root` screen size. `tests/site/print.test.ts` checks every such
+  token, so a new one needs its line in `PrintEntry.astro`.
 
 ### Translators
 
@@ -236,8 +258,8 @@ entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
 
 - **Types:** creature to `Creature`, spell to `Spell`, item to `MagicItem`,
   condition to `Condition`, and equipment to `Item`, with its weapon and
-  armor summaries. Page types, rules pages, and every other type aren't
-  covered: Download doesn't offer them, and a set export skips and lists them.
+  armor summaries, all in `dnd-5e-2024`. Page types, rules pages, every
+  other type, and every other ruleset's types aren't covered: Download doesn't offer them, and a set export skips and lists them.
 - **The file** is one object of record lists keyed by Open5e endpoint:
   `{ "creatures": […], "spells": […], "magicitems": […], "conditions": […],
   "items": […] }`, with only the lists that have records. Entry scope
@@ -277,12 +299,12 @@ entries to and from records of the [Open5e API](https://api.open5e.com/v2/).
   matches becomes `{dmg:…}`, and a DC becomes `{dc:<ability>}`, except an
   escape DC or an ability check's, which stay `{dc=<n>}`
   ([Text tokens](rulesets.md#text-tokens)).
-- **Not carried:** `summary`, `description`, `tags`, and `image`; a
+- **Not carried:** `summary`, `description`, and `image`; a
   creature's extra sizes, swarm, descriptors, gear, lair, speed and senses
   notes, condition immunity notes, and legendary action uses and intro (so
   its legendary actions don't import); an item whose rarity varies (not
-  exported), its base item, charges, spells, and curse; embedded stat blocks;
-  and any `adjust`. Each is reported where it occurs.
+  exported), its base item, charges, spells, curse, and modifiers; a weapon property's
+  note ("unless mounted"); embedded stat blocks; and any `adjust`. Each is reported where it occurs.
 - **Equipment groups.** Open5e gives an item a category, not a group, so
   import reads a group only from a weapon's or armor's summary or the
   Adventuring Gear category. Other equipment (tools, mounts, vehicles)
@@ -324,4 +346,4 @@ module.
 |---|---|
 | A print density, margin, or breakpoint | `tokens/print.css` ([Print layout](#print-layout)) |
 | An export format | One `download` exporter module, listed in `config/export.json`; it joins Download's menu wherever it offers the scope |
-| A translator | A folder in `site/src/translators/` with its export and import sides, its schema, and fixtures from the target in `tests/fixtures/<target>/`; an exporter that wraps it, with `types`; its round-trip, schema, and field-name tests ([Translators](#translators)) |
+| A translator | A folder in `site/src/translators/` with its export and import sides, its schema, and fixtures from the target in `tests/fixtures/<target>/`; an exporter that wraps it, with `types` as `<ruleset>/<type>` keys; its round-trip, schema, and field-name tests ([Translators](#translators)) |

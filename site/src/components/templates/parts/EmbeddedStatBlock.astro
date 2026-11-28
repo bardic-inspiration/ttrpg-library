@@ -1,7 +1,8 @@
 ---
 // A stat block printed inside a spell or magic item (docs/rulesets.md#embedded-stat-blocks, docs/rulesets.md#embedded-stat-blocks,
 // docs/site.md#templates), such as Summon Dragon's Draconic Spirit. It reuses the creature stat
-// block's parts and sits inside the parent card, one heading level down. Its
+// block's parts and sits inside the parent card, one heading level down: its name reads as a
+// section heading of the parent, and its sections a step smaller. Its
 // lines are authored as printed; only the ability modifiers and saves are
 // derived.
 import type { DerivedStatBlock, StatBlock } from '../../../../../rulesets/dnd-5e-2024/types.ts';
@@ -25,11 +26,11 @@ const core = coreLines(block);
 const details = detailLines(block);
 ---
 <section class="embedded-statblock" aria-label={`${block.name} stat block`}>
-  <StatBlockHeader name={block.name} subtitle={block.typeLine} level={level} />
+  <StatBlockHeader name={block.name} subtitle={block.typeLine} level={level} section />
   {core.length > 0 && <PropertyList lines={core} />}
   <AbilityTable rows={abilityRows(block, derived)} />
   {details.length > 0 && <PropertyList lines={details} />}
-  {itemSections(block).map((section) => <ActionList title={section.title} items={section.items} level={level + 1} refs={refs} />)}
+  {itemSections(block).map((section) => <ActionList title={section.title} items={section.items} level={level + 1} refs={refs} nested />)}
 </section>
 
 <style>

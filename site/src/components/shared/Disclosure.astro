@@ -1,0 +1,20 @@
+---
+// The disclosure for Astro pages (docs/styling.md#shared-components "Disclosure"): a `<details>`
+// whose summary is the toggle, with the shared chevron on its left. The same markup as Details in
+// Disclosure.tsx, written out so Astro pages render it without Preact; the summary's content
+// is the `summary` slot, the panel the default slot.
+import './shared.css';
+
+interface Props {
+  id?: string;
+  class?: string;
+  /** Extra classes on the summary. */
+  summaryClass?: string;
+  'data-type'?: string;
+  /** Whether it starts open. */
+  open?: boolean;
+}
+
+const { id, class: className, summaryClass, 'data-type': type, open } = Astro.props;
+---
+<details class={className} id={id} data-type={type} open={open}><summary class:list={['disclosure', summaryClass]}><span class="chevron" aria-hidden="true"></span><slot name="summary" /></summary><slot /></details>

@@ -95,13 +95,6 @@
       "note": "Its spells are DC 11."
     }
   },
-  "tags": {
-    "theme": "fire",
-    "environment": [
-      "underdark",
-      "mountains"
-    ]
-  },
   "meta": {
     "createdAt": "2026-10-31",
     "source": {

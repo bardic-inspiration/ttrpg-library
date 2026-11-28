@@ -9,7 +9,16 @@
   "stats": {
     "category": "fighting-style",
     "prerequisite": "Fighting Style Feature",
-    "text": "While you're wearing Light, Medium, or Heavy armor, you gain a +1 bonus to {ref:glossary/armor-class}."
+    "text": "While you're wearing Light, Medium, or Heavy armor, you gain a +1 bonus to {ref:glossary/armor-class}.",
+    "modifiers": [
+      {
+        "kind": "ac-bonus",
+        "value": 1,
+        "while": [
+          "armored"
+        ]
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

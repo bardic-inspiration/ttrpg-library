@@ -11,6 +11,7 @@ import type { RulesetDefinition, RulesetModule } from '../../rulesets/module.ts'
 import { buildIndex } from '../../scripts/build-index/index.ts';
 import { validateLibrary } from '../../scripts/validate/index.ts';
 import type { Registry } from '../../site/src/lib/gallery/config.ts';
+import type { RulesetSchemas } from '../../site/src/lib/gallery/facet-data.ts';
 import { loadLibrary, type Entry } from '../../site/src/lib/library.ts';
 import { rulesData } from '../../site/src/lib/rules.ts';
 import type { PhraseBook } from '../../lib/wording/book.ts';
@@ -23,7 +24,7 @@ export type OriginalRuleset = (typeof RULESETS)[number];
 const readJson = async (path: string): Promise<any> => JSON.parse(await readFile(path, 'utf8'));
 
 /** The fixtures' registry, their own config/types.json. */
-export const originalsRegistry = (root = ORIGINALS): Promise<Registry> => readJson(join(root, 'types.json'));
+export const originalsRegistry = (root = ORIGINALS): Promise<Registry> => readJson(join(root, 'config/types.json'));
 
 const options = async (root: string) => ({ rulesetsRoot: join(root, 'rulesets'), registry: await originalsRegistry(root) });
 
@@ -44,6 +45,18 @@ export async function originalModules(root = ORIGINALS): Promise<Map<string, Rul
 
 /** A fixture ruleset's phrase book, or undefined for any other ruleset. */
 export const originalPhrases = (modules: Map<string, RulesetModule>) => (ruleset: string): PhraseBook | undefined => modules.get(ruleset)?.phrases;
+
+/** Each fixture ruleset's schema files, as the gallery's facet data reads them. */
+export async function originalSchemas(root = ORIGINALS): Promise<RulesetSchemas> {
+  const out: RulesetSchemas = {};
+  for (const id of RULESETS) {
+    const dir = join(root, 'rulesets', id, 'schemas');
+    const files = new Map();
+    for (const file of (await readdir(dir)).filter((f) => f.endsWith('.schema.json'))) files.set(file, await readJson(join(dir, file)));
+    out[id] = files;
+  }
+  return out;
+}
 
 /** Each fixture ruleset's rules data, as the site reads it. */
 export async function originalRules(root = ORIGINALS): Promise<RulesData[]> {

@@ -1,0 +1,16 @@
+---
+// A button for Astro pages (docs/styling.md#shared-components "Buttons"): the same markup and
+// variants as Button.tsx, so Astro pages render it without Preact. Its content is the slot.
+import { buttonClass, type ButtonVariant } from './Button';
+import './shared.css';
+
+interface Props {
+  variant?: ButtonVariant;
+  class?: string;
+  /** The accessible name of an icon button. */
+  label?: string;
+}
+
+const { variant = 'secondary', class: extra, label } = Astro.props;
+---
+<button type="button" class={buttonClass(variant, extra)} aria-label={variant === 'icon' ? label : undefined}><slot /></button>

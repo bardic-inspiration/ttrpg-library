@@ -6,7 +6,13 @@
   "id": "dwarf-dwarven-toughness",
   "name": "Dwarven Toughness",
   "stats": {
-    "text": "Your Hit Point maximum increases by 1, and it increases by 1 again whenever you gain a level."
+    "text": "Your Hit Point maximum increases by 1, and it increases by 1 again whenever you gain a level.",
+    "modifiers": [
+      {
+        "kind": "hp-per-level",
+        "value": 1
+      }
+    ]
   },
   "meta": {
     "createdAt": "2026-11-10",

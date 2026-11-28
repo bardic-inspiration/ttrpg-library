@@ -16,7 +16,7 @@ Validation reads it only to confirm a ruleset and type are registered, and it
 never decides whether a field displays; the schema does
 ([content-model.md](content-model.md#situational-fields)).
 
-Per ruleset: a `label`, its display name in the Library's ruleset filter,
+Per ruleset: a `label`, its display name in its Library's heading and title,
 on the Rulesets page, and in the redirects from its old pages. Per type:
 
 | Key | Purpose |
@@ -24,16 +24,26 @@ on the Rulesets page, and in the redirects from its old pages. Per type:
 | `label`, `plural` | Display names |
 | `template` | Card and print component; a missing template falls back to the generic layout |
 | `guideline` | The type's guideline file ([generation.md](generation.md#guidelines)) |
-| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts |
-| `cardFields` | Facets shown on gallery cards |
+| `facets` | The `stats.*` and `derived.*` paths lifted into `library.json` and offered as filters and sorts; a facet with `"cardOnly": true` is lifted for its card alone, offered as neither |
+| `cardFields` | Facets shown on gallery cards; whether one reads as a chip is its schema's ([Display](content-model.md#display)) |
 | `defaultSort` | `<path>:<asc|desc>`: the sort the Library opens on from the type's old gallery URL and its detail page's type link ([Redirects](#redirects)) |
-| `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet and tag stays in the tree, closed |
-| `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, species, class, subclass), which have none |
+| `defaultFilters` | Filter tree nodes that start open when the Library opens with the type checked; every other facet stays in the tree, closed |
+| `summaryField` | The key stat shown in PR bodies and job summaries (CR, rarity, spell level, feat category); omitted for a rules extension type and a request-only content type (background, character, encounter, map, module, species, class, subclass), which have none |
 | `gapBuckets` | How gap fill partitions the type ([generation.md](generation.md#gap-buckets)) |
 | `formerly` | The type's earlier keys, whose URLs redirect ([Redirects](#redirects)) |
 
 A facet's `kind` is `range` (numbers) or `enum` (strings, string arrays,
-booleans); an omitted optional flag reads as `false`. Ordered enums (rarity,
+booleans); an omitted optional flag reads as `false`. A range facet's value
+may be a **span**, stored as `{ "min": …, "max": … }`, for an entry whose
+value runs between two bounds: it matches a range filter it overlaps, sorts
+by its minimum, widens the filter's bounds to its own, and reads as its
+bounds, "75–675", or one number when they're equal. Any type may use one; an
+encounter's `derived.xp` ([Encounter difficulty](rulesets.md#encounter-difficulty)) and a
+module's `stats.levels` ([Modules](rulesets.md#modules)) are spans. A path through an
+array of objects reads the rest of the path in each item: a character's
+`stats.classes.class` is every class it has, nested arrays flatten, each
+value is kept once in first-seen order, and the facet is left out when no
+item has a value. Ordered enums (rarity,
 size) declare `"order": [...]`, so sorting is semantic. A facet's
 `vocabulary` names a phrase book vocabulary ([Wording](#wording)), and each
 value reads by its display name there, the same name its page shows:
@@ -42,12 +52,13 @@ value reads by its display name there, the same name its page shows:
 optional display formatter:
 
 - `cr` reads fractions ("1/8");
-- `spell-level` reads 0 as "Cantrip" and any other level as "Level 3";
+- `spell-level` reads 0 as "Cantrip" and any other level as its number;
 - `title` reads a slug with no vocabulary, such as an equipment group's id,
   in title case ("Hand Tools").
 
-Without either, a value reads as stored, which keeps tag values and free text
-as written.
+Without either, a value reads as stored, which keeps free text as written. A
+format reads the value alone, never the field's label: where a value needs
+naming, the display adds the label once ("Level: 3", "CR: 1/8").
 
 Two flags change what a facet's values are:
 
@@ -56,7 +67,8 @@ Two flags change what a facet's values are:
   reads it by its target's name and sorts by that name, in values and in
   sorted records. A creature's `stats.immunities.conditions`, a spell's
   `stats.classes`, a background's `stats.feat`, a subclass's
-  `stats.class`, and equipment's `stats.weapon.properties` and
+  `stats.class`, a character's `stats.classes.class`, `stats.species`, and
+  `stats.background`, and equipment's `stats.weapon.properties` and
   `stats.weapon.mastery` are ref facets.
 - **`groups`:** the values are the type's leaf groups
   ([Rules groups](rulesets.md#rules-groups)), offered nested as the groups
@@ -72,7 +84,8 @@ Two flags change what a facet's values are:
    with its ruleset module, resolves refs, and computes back-references. It
    never computes a rules value itself.
 2. It writes `site/public/library.json`, the index, and copies each entry's raw
-   JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export. Beside each
+   JSON to `site/public/data/<ruleset>/<type>/<id>.json` for export (another
+   library's own folder for another library; [Library root](#library-root)). Beside each
    copy it writes the entry's export bundle, `<id>.export.json`:
    `{ "entry": …, "derived": …, "names": … }`, as an exporter receives it
    ([export.md](export.md#exporter-interface)). `names` holds the name of each
@@ -82,30 +95,66 @@ Two flags change what a facet's values are:
 
 Each `library.json` record holds the entry's `id`, `ruleset`, `source` (or
 `null`), `author`, `type`, `name`, `summary`, `url` (the detail page under the site base), `image` (the stored
-path, or `null`), `facets`, `tags` (or `{}`), `createdAt`, `refs`, `refBy`, and
-`search`:
-
-- `facets` holds the registry's facet paths in registry order, read from
-  `stats` and the derived values. A facet whose optional value is omitted is
-  left out, except an optional flag, which reads as `false`.
-- `search` holds the names in `stats` plus `description` and rules text with
-  markup stripped. Names are every `name` in `stats` (actions, traits), every
-  ref in `stats` read as its target's name, whatever its field (`RefOrText`
-  or a typed ref, such as a background's feat and equipment), and every plain
-  string at a `RefOrText` field. Rules text is every markdown-subset field,
-  with markdown and ruleset tokens removed and each `{ref:…}` token read as
-  its target's name.
+path, or `null`), `diagram`, `facets`, `createdAt`, `refs`, and `refBy`. `diagram`
+is a map's diagram as its card's thumbnail, or `null` for any other type
+(`thumbnailDiagram` in `lib/diagram.ts`): the build reads it from its derived
+path, checks it ([Map diagrams](content-model.md#map-diagrams)), and leaves out
+its `<title>`, ids, comments, and declaration, so the card can place it
+inline, where the site's CSS colors it. `facets` holds
+the registry's facet paths in registry order, read from `stats` and the
+derived values, the ones a derivation that reads other entries adds
+(`deriveLinked`, [The ruleset module](rulesets.md#the-ruleset-module))
+included: the build makes each ruleset's linked library once, as the site
+does. The export bundle's `derived` is the entry's own. A facet whose optional value is omitted is left out, except
+an optional flag, which reads as `false`.
 
 A component ([content-model.md](content-model.md#components)) has no record,
-raw file, or export bundle. Its parent's `search` adds each component's name
-and the same names and text, in the order the parent lists them, so the
-parent's own refs to its components aren't read a second time.
+raw file, or export bundle.
+
+A primitive of a rules type that takes extensions and is in the registry, such
+as an SRD condition or piece of equipment, has a record too, so it gets a
+gallery card beside its type's custom entries (`cardedPrimitives` in
+`lib/rules.ts`). Its record reads as the ruleset's own: `source` `null`,
+`author` `"publisher"`, `summary` empty, `url` its section on its rules page,
+`image` `null`, and `createdAt` `null`, since a primitive has no `meta`. Its
+facets read its `stats` and its derived values as an extension's do, and its
+`refs` and `refBy` are its links. Its raw copy is its rules file, and its
+export bundle's `entry` is the primitive with its ruleset: `ruleset`, `type`,
+`id`, `name`, and `stats`.
 
 Records are sorted by ruleset, type, then `id`, and the file is written without
 timestamps, so two builds of the same content are byte-identical. The index
 stays lean: full entries and derived values are fetched only for export, from
 the export bundles. `library.json` and `data/` are built in CI and git-ignored,
 so PRs contain only entry files.
+
+### Library root
+
+The site and `build:index` read one library: a folder holding `content/`,
+`rulesets/`, and `config/types.json`. It's the repo itself unless
+`LIBRARY_ROOT` names another folder, relative to the repo root.
+`lib/library-root.ts` resolves it, and `site/astro.config.mjs` maps the
+`@library` import alias to it, which every glob of entries, ruleset modules,
+rules files, and phrase books, and every registry import, goes through. Site
+code that's specific to `dnd-5e-2024` imports that ruleset directly.
+
+Each library has its own folders, so another build never overwrites the
+library's:
+
+| Library | Index and data | Built site |
+|---|---|---|
+| The repo | `site/public/` | `site/dist/` |
+| Any other, by its folder's name | `site/public-<name>/` | `site/dist-<name>/` |
+
+The fixture rulesets ([Fixture rulesets](rulesets.md#fixture-rulesets)) are
+the other library. `npm run build:originals` builds their site into
+`site/dist-originals/`, and `npm run dev:originals` indexes them and serves
+it. Both set `LIBRARY_ROOT` through `scripts/with-library/`, so they work in
+any shell. That site has the same pages as the library's, without the style guide,
+which renders the repo's example fixtures
+([styling.md](styling.md#refinement-workflow)). It's never deployed: the
+`originals` CI job uploads it as an artifact for 7 days
+([CI checks](workflow.md#ci-checks)).
 
 ### Fresh data
 
@@ -120,23 +169,31 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 
 | Route | Content |
 |---|---|
-| `/` | The Library: every entry in one gallery ([Gallery](#gallery)) |
-| `/<ruleset>/`, `/<ruleset>/<type>/` | Redirects to the Library with the matching filter ([Redirects](#redirects)) |
+| `/` | Redirects to the home ruleset's Library ([Redirects](#redirects)) |
+| `/<ruleset>/` | The ruleset's Library: its entries in one gallery ([Gallery](#gallery)) |
+| `/<ruleset>/<type>/` | Redirects to the ruleset's Library with the type checked ([Redirects](#redirects)) |
 | `/<ruleset>/<type>/<id>/` | Detail page |
-| `/rulesets/` | Each ruleset's rules pages and its Extensions page |
+| `/rulesets/` | Each ruleset, linked to its Library, with its rules pages and its Extensions page |
 | `/<ruleset>/rules/<page>/` | A rules page ([Rules pages](#rules-pages)) |
 | `/<ruleset>/rules/extensions/` | The ruleset's Extensions page |
 | `/print/` | Print view for one or many entries ([export.md](export.md#print)) |
 | `/about/` | What the library is, SRD attribution, licenses |
-| `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)) |
+| `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)); only the repo's library has it ([Library root](#library-root)) |
 
 The top bar reads **Library | Rulesets | About | Contribute**
-(`site/src/components/SiteNav.astro`). Contribute links to the repository. The
-current page's link is marked `aria-current="page"`, and Rulesets is marked
-current on every rules page too. The
+(`site/src/components/SiteNav.astro`), then the print cart's count ("Cart: 3";
+[Gallery](#gallery) "Cart and set actions"), shown once its script runs.
+Search and the set export follow it in the header ([Page header](#page-header)).
+Library, and the site name before the top bar, open the home ruleset's Library,
+the registry's first ruleset (`homeRuleset` in
+`site/src/lib/gallery/library-url.ts`): `dnd-5e-2024`'s, the library's only
+one. Contribute links to the repository. The current page's link is marked
+`aria-current="page"`; Library is marked current (`aria-current="true"`) on
+every other ruleset's Library, and Rulesets on every rules page. The
 footer carries the SRD 5.2 attribution statement on every page. The site is
 served under the base `/ttrpg-library/`
-([architecture.md](architecture.md#technology)).
+([architecture.md](architecture.md#technology)); a preview build's pages
+also carry a preview notice above the header ([Deploy](workflow.md#deploy)).
 
 ### Rules pages
 
@@ -168,9 +225,8 @@ Each page in a ruleset's `rules/pages.json` builds at
 - **Its extensions**, at the bottom: the extensions whose primitives would
   sit on this page, by type or by group, in a list with a search box that
   narrows it as you type, each linked to its card.
-- **A Print button** after its title, which prints the page with every
-  section open, and no Download ([Controls](export.md#controls)). The
-  Extensions page has none.
+- **A Print button** after its title, which prints the page, and no Download
+  ([Controls](export.md#controls)). The Extensions page has none.
 
 A ruleset with a rules type that takes extensions also builds an Extensions
 page at `/<ruleset>/rules/extensions/`: one searchable list per such type.
@@ -181,52 +237,73 @@ A link to a primitive or group, from any entry or rules page, renders as its
 name linked to its anchor; refs carry the anchors' paths alongside the names
 (`refPaths` in `site/src/lib/library.ts`).
 
-Each rules page is an accordion page ([Accordion pages](#accordion-pages)):
-its untitled opening prose, then its table of contents (`pageContents` in
+Each rules page renders as text, with nothing to open: its untitled opening
+prose, then its structured summary, the "Contents" list
+([Accordion pages](#accordion-pages); `pageContents` in
 `site/src/lib/rules.ts`), then its sections. Each titled prose section, each
-primitive, and the Extensions list is a section; a prose section's own
-subsections show inside it. A group stays open, its heading, note, text, and
-links over its members' sections and the groups nested in it. A cross-listed
-primitive is a line among the sections, not a section. The contents list each
-titled prose section, each primitive (not a cross-listed one), each group with
-its subgroups nested under it, and Extensions.
+primitive, and the Extensions list is a plain section under its own heading,
+a level below the page's or its group's (`TextSection`), with its body
+under it; a prose section's own subsections show inside it, a level down. A
+group's heading, note, text, and links sit over its members' sections and
+the groups nested in it. A cross-listed primitive is a heading among the
+sections, not a section. Titled top-level prose sections are anchored at
+`section-<slug>` ([Accordion pages](#accordion-pages)). The contents list
+each titled prose section, each primitive (not a cross-listed one), each group
+with its subgroups nested under it, and Extensions.
 
 ### Accordion pages
 
-Rules pages and page types (classes, subclasses, species, and any page type
-whose components render after its template) are long pages laid out as
-accordion sections with a jump-to table of contents
-(`site/src/components/templates/parts/`):
+Page types (classes, subclasses, species, and any page type whose components
+render after its template) are long pages laid out as accordion sections
+(`site/src/components/templates/parts/`). They and rules pages open with a
+structured summary of their sections:
 
-- **A section** (`Accordion`) is a `<details>` that starts collapsed, its
-  heading inside the `<summary>`, which toggles it. Its id is its anchor:
+- **A section** (`Accordion`) is the shared disclosure
+  ([Shared components](styling.md#shared-components)), a `<details>` that
+  starts collapsed, its heading inside the `<summary>`, which toggles it. Its id is its anchor:
   `<type>-<id>` for a primitive, group, or component, and `section-<slug>` for
   any other titled section (`sectionId` in `site/src/lib/accordion.ts`), such
   as "Core Barbarian Traits" at `#section-core-barbarian-traits`.
-- **The table of contents** (`TableOfContents`) is a `nav` labeled
-  "Contents" after the page's opening, a list of links to the sections in
-  page order, with nested sections listed under their heading, in as many
-  columns as fit.
+- **The structured summary** (`TableOfContents`) is a `nav` labeled
+  "Contents" after the page's opening: the page's sections in page order,
+  grouped as the page groups them, in as many columns as fit. A section whose
+  own sections nest nothing reads as one line, its label then a run of links
+  to them: a class's option list ("Metamagic Options: Careful Spell, Distant
+  Spell, …") or a rules page's group over its subgroups. A deeper one lists
+  its lines under its label. A class's and a subclass's features are listed by
+  level, one "Level 1" line per level holding a link to each feature by name
+  ("Level 1: Rage, Unarmored Defense, Weapon Mastery"; `featuresByLevel` in
+  `site/src/lib/class.ts`); the level is a label, linked nowhere. An item
+  with no id (`TocItem` in `site/src/lib/accordion.ts`) is such a label, and
+  one with an `href` links to another page, as a module's contained
+  arrangements do ([Kit parts](#kit-parts)).
 - **A link to a section**, or to anything inside one, opens it and every
   section around it, then scrolls to it: on load, on a new hash, and on a
   click on a link to the hash already showing. This includes every link to a
-  primitive, group, or component, from any page. Without JavaScript, a
+  component, from any page. Without JavaScript, a
   section still opens from its heading.
 - **Printing the page** from the browser opens every section first and closes
   the ones that were closed afterwards.
-- **What stays open.** A page's untitled opening prose, a class's Features
-  table, a species' lines and opening sentence, and a heading that holds
-  sections (a group, a class's Class Features, an option list) with its
-  intro.
+- **What stays open.** A class's Features table, a subclass's intro, a
+  species' lines and opening sentence, and a heading that holds sections (a
+  class's Class Features, an option list) with its intro.
 - **Page types.** A class page's sections are its Core Traits, "Becoming a
-  …", each feature, each option, its spell list, and its subclasses; Class
-  Features and each option list are open headings over theirs, and nest
-  their features or options in the contents. A subclass page's sections are
-  its features, and a species page's its traits. Components that render after
-  a template are one section each.
+  <Class> as a Level 1 or Multiclass Character", each feature, each option,
+  its spell list, and its subclasses; Class Features and each option list are
+  open headings over theirs, and group their features by level or list their
+  options in the summary. A subclass page's sections are its features, by
+  level in the summary, and a species page's its traits. Components that
+  render after a template are one section each.
+- **Class page width.** On screen a class page is as wide as its Features
+  table needs, so the table's links don't wrap: never narrower than the
+  detail page's column, and past the column's measure up to the main column
+  (the main column is a size container, `.site-main__inner` in
+  `layout.css`). Only the table sizes it; its other parts fill that width. On
+  a narrower screen the table scrolls sideways in its own box, as every
+  table does ([Templates](#templates)).
 - **Print and PNG capture** use the same components with `mode` `print` or
   `capture`: each section renders as a plain section with its heading, and
-  there is no table of contents.
+  there is no summary.
 
 ### Redirects
 
@@ -236,108 +313,179 @@ script that sends the reader on with their own query added after the target's,
 so a parameter they brought wins, and the fragment kept
 (`redirectScript` in `site/src/lib/redirects.ts`).
 
-**Old galleries.** The per-ruleset and per-type galleries are gone; their URLs
-redirect to the Library with the matching filter set
-(`site/src/lib/gallery/library-url.ts`):
+**The home URL.** `/` is a redirect page to the home ruleset's Library
+([Pages and navigation](#pages-and-navigation)). Its script (`homeScript` in
+`site/src/lib/gallery/library-url.ts`) reads an old Library link's
+`f.ruleset`: when its first value is a registered ruleset, the reader goes to
+that ruleset's Library instead. The query and fragment come along, so
+`/?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/spell` opens
+`/dnd-5e-2024/?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/spell`, showing the
+whole ruleset, homebrew included, as it did.
 
-- `/<ruleset>/` to `/?f.ruleset=<ruleset>`, which puts the whole ruleset,
-  homebrew included, in the ruleset set (see "Filters" under
-  [Gallery](#gallery)).
-- `/<ruleset>/<type>/` to `/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<type>`,
-  so the view opens as the type's gallery did: its registry `defaultSort`
-  (left out when it is `name:asc`), and its `defaultFilters` open because the
-  page opens with the type checked. A detail page's type link goes to the same view.
+**Old type galleries.** The per-type galleries are gone;
+`/<ruleset>/<type>/` redirects to
+`/<ruleset>/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<ruleset>/<type>`
+(`typeLibrary` in `site/src/lib/gallery/library-url.ts`), so the view opens as
+the type's gallery did: the whole ruleset, its registry `defaultSort` (left out
+when it is `name:asc`), and its `defaultFilters` open because the page opens
+with the type checked. A detail page's type link goes to the same view.
 
 **Renamed types.** The registry lists a type's earlier keys under `formerly`,
 such as `item`'s `["magic-item"]`, and from them:
 
 - **The old pages** are built as redirect pages:
   `/<ruleset>/<old>/<id>/` sends the reader to the same page under the
-  current key, and `/<ruleset>/<old>/` to the Library filtered to the current
-  type.
+  current key, and `/<ruleset>/<old>/` to the ruleset's Library filtered to the
+  current type.
 - **Print and gallery queries** read an old key as the current one: an
   `ids` key such as `magic-item/wand-of-wonder`, and an old value of the
-  `type` filter (`f.type=magic-item`).
+  `type` filter, bare or with its ruleset (`f.type=magic-item`,
+  `f.type=dnd-5e-2024/magic-item`).
 
 Entries, refs, and `library.json` use only current keys; the validator
 rejects an old type like any unknown one. `site/src/lib/redirects.ts` reads
 the registry's former keys for the pages, print, and the gallery.
 
+### Page header
+
+Every page's header holds the top bar ([Pages and navigation](#pages-and-navigation)),
+then search and the set export (`site/src/components/header/HeaderActions.tsx`,
+one Preact island in `layouts/Base.astro`). On narrow screens they wrap below
+the top bar.
+
+- **Search** is a form, labeled "Search", whose field (placeholder "Name")
+  opens a ruleset's Library with the query, `/<ruleset>/?q=<query>`, so it
+  works without JavaScript: on a ruleset's Library, or one of its entries' or
+  rules pages, that ruleset's; on every other page, the home ruleset's
+  (`pageRuleset` in `site/src/lib/gallery/library-url.ts`). The query reads as
+  the Library's search ([Gallery](#gallery) "Search") under the default
+  filters. On a Library it searches the gallery as the reader types instead,
+  keeping the other filters and the sort, and shows the query the Library's
+  URL holds.
+- **The set export** is Print and Download ([Controls](export.md#controls)).
+  On a Library, they act on the cart when it holds anything, and on the
+  filtered results otherwise ([Gallery](#gallery) "Cart and set actions"). On
+  every other page, they act on the cart: Print and Download first load
+  `library.json`, so the cart's entries drop out when the library no longer
+  has them, and are disabled while the cart is empty. Each button's accessible
+  name says what it targets ("Print 3 in cart", "Download 12 entries"). They
+  need JavaScript, so they render once the island hydrates. A detail page's
+  and a rules page's own export controls stay on the page.
+- The gallery and the header talk through window events
+  (`site/src/lib/library-view.ts`): the gallery publishes its query, records,
+  and results as they change, and the header asks it to search.
+
 ### Gallery
 
-**Loading.** The Library at `/` is one Preact island
-(`site/src/components/gallery/`, logic in `site/src/lib/gallery/`). It fetches
-`library.json` once per page load, revalidated ([Fresh data](#fresh-data)), and
-filters it in memory. Without JavaScript, the page shows a plain list of every
-entry by name, linked to its detail page.
+**One Library per ruleset.** Each ruleset's Library, at `/<ruleset>/`, is one
+Preact island (`site/src/components/gallery/`, logic in
+`site/src/lib/gallery/`) over that ruleset's entries alone, so types and
+content never mix between rulesets: its filters, sorts, and types are the
+ruleset's part of the registry (`rulesetRegistry` in
+`site/src/lib/gallery/library-url.ts`). The ruleset stays part of the view's
+filter state (`f.ruleset`, see "Filters"), set by the page and old links
+rather than in the menu. The cart is one across rulesets
+([Cart and set actions](#gallery)).
 
-**Layout.** Search sits on top of the filter menu. On desktop, from a viewport
+**Loading.** The island fetches `library.json` once per page load, revalidated
+([Fresh data](#fresh-data)), and filters it in memory; the cart reads every
+ruleset's records from it. Without JavaScript, the page shows a plain list of
+each of the ruleset's entries by name, linked to its detail page.
+
+**Layout.** Search and the set export sit in the page header
+([Page header](#page-header)). On desktop, from a viewport
 of `64rem`, the menu is a sidebar beside the results and always shows. On
 phones and tablets it stacks above the results in a container closed by
 default, so results show on the first screen; a Filters button
 (`aria-expanded`) opens it. The breakpoint and the columns are tokens in
 `tokens/components.css` ([styling.md](styling.md#tokens)). Sort, the result
-count, and the set actions head the results. The page keeps the scrollbar's
+count, and the cart's count head the results. The page keeps the scrollbar's
 room (`scrollbar-gutter: stable` in `layout.css`) whether or not it scrolls, so
 the menu and results don't shift sideways as filtering makes the page shorter
 or longer than the window.
 
-**Cards.** Each card shows art (only when the entry has it), name, source and
-type badges, `cardFields`, and summary.
+**Cards.** Each card shows art (only when the entry has it), name, type badge,
+`cardFields`, summary, and source. A module's card fields are its length and
+levels, card-only facets ([Type registry](#type-registry)), so the Library
+filters and sorts modules by neither. A map's card shows its diagram in the art's
+place, as a thumbnail from its record's `diagram`: the shapes colored as on
+its page, without the labels, which are too small to read, and hidden from
+assistive technology, since the card's name says what it is. The whole card opens its entry, and its
+cart control sits above that link ([Cart and set actions](#gallery))
+([Shared components](styling.md#shared-components)).
+
+- **SRD equipment and conditions.** Each primitive with a record
+  ([Index build](#index-build)) has a card under its type, filtered, counted,
+  and sorted with the type's custom entries: Condition counts the SRD's 15
+  conditions and the custom ones. The card is official, so it shows on a fresh
+  Library and has the star; it has no summary or source line, and sorting by
+  date added puts it last. It opens the primitive's section on its rules page,
+  since a primitive has no detail page, and refs to it still land there. Print
+  and the cart take it like any other card, and its print fragment is its
+  type's template ([Print](export.md#print)). Without JavaScript, the Library's
+  list links it to that section.
 
 - **Official star.** An official entry's card has a star in the top right
   corner, beside its name ([Source and author](content-model.md#source-and-author)),
   named "Official" for assistive technology and on hover. Every card keeps the
   star's slot, a fixed column beside the name, so a name wraps the same with
   or without the star.
-- **Source badge.** The entry's `source` heads the badge list, before the type,
-  in a neutral, square-cornered badge so it never reads as a type or rarity.
-  It shows in full however long it is; a name longer than the card's line
-  wraps inside its badge. An entry with no source has no source badge.
+- **Source line.** The entry's `source` is a smaller, muted line after the
+  summary, above the cart control, so it never reads as a type or rarity. It shows in
+  full however long it is, wrapping when it's longer than the card's line. An
+  entry with no source has no source line.
 
 A boolean card field (concentration, ritual,
 attunement) reads as a badge labeled with the facet when `true` and is left out
 when `false`. A `rarity`-formatted field reads as a badge carrying
-`data-rarity`. Other fields read as label and value. One column on phones, up
+`data-rarity`. A chip field ([Display](content-model.md#display)) reads as
+`<label>: <value>`, a badge per value: a spell's level reads "Level: 2" or
+"Level: Cantrip", a creature's CR "CR: 1/8". Other fields read as a label
+line and its value ("Level" and "2"). One column on phones, up
 to four on wide screens.
 
 **Filters** are a nested accordion checkbox tree built from the registry
-(`site/src/lib/gallery/tree.ts`) in two sets. The **ruleset set** comes first,
-in its own list, divided from the rest by a break line. It is additive: it
-chooses which entries are in the results at all. The other filters, type, then
-field, then any subfield, then value, such as Creature › Immunities ›
-Conditions › Poisoned, narrow those entries.
+(`site/src/lib/gallery/tree.ts`), in two sections, **Sources**, then
+**Types**, each a top-level node open at the start. Nothing in it groups by
+ruleset, since a Library holds one. Types hold their fields, then any
+subfield, then values, such as Types › Creature › Immunities › Conditions ›
+Poisoned. Sources, with the ruleset filter the page and old links set, are the
+**ruleset set**, which is additive: it chooses which entries are in the
+results at all. The types and their facets narrow those entries. Every filter
+checkbox behaves the same way: it reads checked when its filter holds its
+value, and a click adds or removes that value.
 
-- **Ruleset set.** A Ruleset node, always first and open at the start, even
-  when the library holds one ruleset. Inside it, each ruleset the library has
-  entries of, or that is checked, is a checkbox for the ruleset filter
-  (`f.ruleset`), and a disclosure holding its **Source** and **Author**
-  filters (`f.source`, `f.author`) over its own entries
-  ([Source and author](content-model.md#source-and-author)). An author of
-  `"publisher"` reads as the ruleset's publisher, from `ruleset.json`
-  (`rulesetPublishers` in `site/src/lib/rules.ts`), such as Wizards of the
-  Coast. Source and author list their values like a facet (below), with a
-  ruleset in place of a type, except that a ruleset's official sources, those
-  official content carries, are pinned above its other sources, each part
-  keeping its order: SRD 5.2 comes before a homebrew collection whatever its
-  name.
+- **Sources** ([Source and author](content-model.md#source-and-author)):
+  - **Official** is a checkbox for the author filter's `"publisher"`
+    (`f.author=publisher`): the ruleset's own material, such as the SRD for
+    `dnd-5e-2024`. It has nothing under it and always shows.
+  - **Homebrew** is a group, not a checkbox, holding the **Source** and
+    **Author** filters (`f.source`, `f.author`) over the ruleset's other
+    entries. Each lists its values like a facet (below), with no official
+    source and no `"publisher"`. Homebrew shows when either has a value, and
+    opens around an active filter.
+- **The ruleset set.**
   - **Additive.** An entry is in the results when it matches any checked
-    ruleset, source, or author (`SCOPE_PATHS` in
+    box in Sources, or the ruleset filter (`SCOPE_PATHS` in
     `site/src/lib/gallery/config.ts`, `applyFilters` in `view.ts`): checking
-    Bardic's Compendium of Test Fixtures beside Wizards of the Coast adds the
+    Bardic's Compendium of Test Fixtures beside Official adds the
     collection's entries to the official ones. With nothing in the set
     checked, no entry is.
-  - **Default.** A fresh Library has the author `"publisher"` checked, so it
-    shows only official content: each ruleset's own material, such as the SRD
-    for `dnd-5e-2024`. Clear filters clears the other filters and returns the
+  - **The ruleset filter** (`f.ruleset`) holds the page's ruleset when a link
+    asks for the whole ruleset, homebrew included, as old links and the
+    redirects from type galleries do ([Redirects](#redirects)). It has no box,
+    so Official reads unchecked while it alone shows the official entries.
+  - **Default.** A fresh Library has Official checked, so it shows only
+    official content. Clear filters clears the other filters and returns the
     set to this default; it shows while either differs from a fresh Library.
-  - **Counts.** A ruleset, source, or author counts what checking it adds:
+  - **Counts.** Official, a source, or an author counts what checking it adds:
     its entries under the search and the other filters, whatever else in the
     set is checked.
-- **Types.** Then the types, each a checkbox for the type filter (`f.type`)
-  with its count, the entries of it among the results (so checking one type
-  leaves the others at 0), and a disclosure holding its facets. A type shows when the
-  library has entries of it, or it's checked.
+- **Types** holds the ruleset's types, each a checkbox for the type filter
+  (`f.type`) under its key, `<ruleset>/<type>`, with its label, its count, the
+  entries of it among the results (so checking one type leaves the others at
+  0), and a disclosure holding its facets. A type shows when the Library has
+  entries of it, or it's checked.
 - **Fields.** A type's facets follow in registry order. Facets whose paths
   share a field below `stats` or `derived` sit in a node named for it by the
   wording layer's `label`: `stats.immunities.damage` and
@@ -345,11 +493,9 @@ Conditions › Poisoned, narrow those entries.
   Abilities. A field only one facet sits in adds no node, so `stats.ac.value`
   reads as AC. A facet shows when some entry of its type has a value for it,
   or it's active.
-- **Tags** follow the types as one Tags node, holding every tag key in the
-  library and any tag filtered on. Source and author aren't tags, so they
-  never appear here.
-- **Values.** An enum facet or tag lists its values vertically as checkboxes,
-  each with its count: the entries of its type it matches under the search and
+- **Values.** An enum facet lists its values vertically as checkboxes,
+  or, on a chip field ([Display](content-model.md#display)), as a wrapping
+  row of chips (`aria-pressed`) whose values don't nest, each with its count: the entries of its type it matches under the search and
   every other active filter. Values come in declared order (ordered enums),
   by name (ref facets), or alphabetically, plus any selected value no entry
   has. A groups facet's values nest, each group with its own disclosure. A
@@ -359,8 +505,7 @@ Conditions › Poisoned, narrow those entries.
   change nothing. While an input has focus its text stays as typed; when focus
   leaves, it shows the filter's value (`0.125` reads `1/8` for CR).
 - **Open nodes.** When the tree first shows, from the page's URL, a checked
-  type's registry `defaultFilters` start open, in its node and, for a tag, in
-  Tags, and every node holding an active filter starts open, down to the value
+  type's registry `defaultFilters` start open, in its node, and every node holding an active filter starts open, down to the value
   (`openAtStart` in `tree.ts`). From then on, only a node's own disclosure opens
   or closes it, and only that node: checking or unchecking a type or a value,
   and Clear filters, never opens or closes any node. A node keeps its state while
@@ -372,9 +517,14 @@ Conditions › Poisoned, narrow those entries.
   shared range starts open only under a checked type, or under each type when
   none is checked.
 - Values within a facet combine as OR; facets combine as AND. An entry missing a
-  filter's value never matches it. A path two types share (`stats.level` on
+  filter's value never matches it. Matching compares strings
+  case-insensitively; a value displays in its stored case. A path two types share (`stats.level` on
   spells and feats) is one filter: each type lists its own entries' values, and
-  a value checked under one applies to both.
+  a value checked under one applies to both. Each type still reads the path by
+  its own facet: its vocabulary's labels, its declared order when sorting, and
+  its own groups when matching (`recordDef` in `config.ts`), so Starships &
+  Galaxies' items and celestial bodies, which share `stats.kind`, keep their
+  own kinds.
 - The tree's ref names and groups come from the build: the gallery island
   passes the names of every ref a ref facet holds, and each grouped type's
   groups (`site/src/lib/gallery/facet-data.ts`). A category reads by its
@@ -391,43 +541,69 @@ author is checked, since those add entries from any ruleset. A path two checked 
 choice, labeled as the first of them in registry order labels it. When a
 filter change leaves the chosen sort off the menu, the sort returns to
 `name:asc`. Ordered enums sort by declared order, an array
-facet (size) by its first item. Ties break by name, then ruleset, type, and id,
+facet (size) by its first item, a span by its minimum. Ties break by name, then ruleset, type, and id,
 so the order never depends on `library.json` order. Entries missing the sort
 value go last in either direction. The Library starts on `name:asc`.
 
-**Search.** MiniSearch over `name` (boost 3), `summary` (2), tag values (1.5),
-and `search` (1), with prefix and light fuzzy matching. Search narrows within
-active filters; results order by relevance when there's a query, otherwise by
-the active sort.
+**Search.** A filter on names: an entry matches when its `name` contains the
+query, ignoring case and accents, so "barb" and "BARB" find the Barbarian and
+"naive" finds "Naïve". Nothing else is searched, not the summary, the rules
+text, or a component's name: "Rage" doesn't find the Barbarian. A blank query
+matches everything. Search narrows the results like any other filter, and they
+keep the active sort, so "bandit" by CR descending lists the Bandit Captain
+before the Bandit. There's no search index: the query is matched against the
+records in memory.
 
 **URL state.** Query, sort, and filters live in the query string, so any view
 can be bookmarked or linked:
-`?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8&f.tags.theme=fire`.
+`?q=frost&sort=stats.cr:desc&f.stats.creatureType=dragon,fiend&f.stats.cr=2..8`.
 Ranges use `min..max` (either side may be empty). The ruleset set is
 written only when it differs from the default: a query naming any of
 `f.ruleset`, `f.source`, or `f.author` sets the whole set, so `?f.type=spell`
 shows official spells and `?f.ruleset=dnd-5e-2024&f.type=spell` every spell,
 and `f.ruleset=` with no value is an empty set. Keys and values are
 URL-encoded, so a comma inside a value is `%2C` and a bare comma separates
-values. Enum values are case-folded. The type filter is `f.type`. Unknown
-parameters, filters on paths the Library doesn't have, a sort the filters
+values; a `/` stays as is. Enum values are case-folded. The type filter is
+`f.type`, and its values are `<ruleset>/<type>`, as the data nests a type in
+its ruleset (`f.type=dnd-5e-2024/spell`). A bare type id reads as that type
+in the Library's ruleset, so `?f.type=spell` shows its official spells, and
+the gallery writes it back qualified. Unknown
+parameters, filters on paths the Library doesn't have (such as an old
+`f.tags.theme`), a sort the filters
 don't offer (wherever the filters come in the query), and malformed values are
 ignored; of several sorts, the last one offered applies. The gallery rewrites the URL as the view changes,
 replacing the history entry, in one canonical form: the ruleset, source,
-author, and type filters, then the facets in registry order, then tags by key, with the default sort and ignored parameters left out.
+author, and type filters, then the facets in registry order, with the default sort and ignored parameters left out.
 
-**Selection and set actions.**
+**Cart and set actions.**
 
-- Cards have a checkbox. Selection lives in the page, not the URL. A selected
-  entry that the filters hide stays selected and is counted in "N selected".
-- Beside the result count are Print and Download
-  ([Controls](export.md#controls)); Download's menu offers the set-scope
-  formats, JSON now.
-- An action targets the selection when anything is selected: the selected
-  results in the gallery's order, then selected entries the filters hide, in
-  index order. Otherwise it targets the whole filtered set in the gallery's
-  order. Each button's accessible name says which ("Print 3 selected",
-  "Download 12 entries"), and both are disabled when they'd target nothing.
+- **The print cart** gathers entries to print or download
+  (`site/src/lib/cart.ts`). Each card, and each detail page beside its export
+  controls, has the shared checkbox "In cart"
+  (`components/cart/CartToggle.tsx`), named with the entry's name for
+  assistive technology. Checking it adds the entry to the end of the cart, and
+  unchecking it removes it. The header shows the cart's count, "Cart: 3",
+  after the top bar's links ([Pages and navigation](#pages-and-navigation)).
+- The cart lives in the browser's local storage under `ttrpg-library:cart`,
+  as a list of `<ruleset>/<type>/<id>` keys in the order they were added, so
+  it survives page changes and reloads in that browser, and every open tab
+  follows it. Every read and write is wrapped: with storage blocked or
+  unreadable, the cart lasts only for the page. It isn't in the URL. The
+  cart controls and the count need JavaScript, so they show only once their
+  island or script runs.
+- When the Library loads `library.json`, or the header's Print or Download
+  loads it on another page, entries it no longer has drop out of the cart.
+  A detail page's count can include them until then.
+- The results' summary says "N in cart", with an **Empty cart** button, while
+  the cart holds anything.
+- Print and Download sit in the page header ([Page header](#page-header),
+  [Controls](export.md#controls)); Download's menu offers the set-scope
+  formats.
+- An action targets the cart when it holds anything: its entries in the order
+  they were added, whatever the filters show. Otherwise, on the Library, it
+  targets the whole filtered set in the gallery's order. Each button's accessible name says
+  which ("Print 3 in cart", "Download 12 entries"), and both are disabled
+  when they'd target nothing.
 - An action whose exporter reads entries in full, such as Open5e, first
   fetches the export bundles of its entries. If any fails to load, nothing
   runs, and a polite status region says so. Print and JSON read only the
@@ -435,8 +611,7 @@ author, and type filters, then the facets in registry order, then tags by key, w
   ([Exporter interface](export.md#exporter-interface)).
 
 **Scale.** The index is loaded once and filtered in memory, sized for a few
-thousand entries. Past about 2,000, revisit the index size and prebuilt search
-indexes.
+thousand entries. Past about 2,000, revisit the index size.
 
 ### Detail page
 
@@ -464,34 +639,86 @@ indexes.
 - `description` as lore, visually distinct from rules text.
 - Forward refs and back-refs as links
   ([content-model.md](content-model.md#references)); a page type's include
-  its components' ([content-model.md](content-model.md#components)).
+  its components' ([content-model.md](content-model.md#components)). A
+  back-link into one of a map's zones is listed under that zone by the map's
+  template ([Maps](rulesets.md#maps)), not again here (`outsideZones` in
+  `site/src/lib/map.ts`). Each
+  label's links are a shared disclosure (`Details`,
+  [Shared components](styling.md#shared-components)) that starts open, with
+  the label as its toggle. A target listed under a specific label isn't
+  listed again under the generic "References" or "Referenced by"
+  ([The ruleset module](rulesets.md#the-ruleset-module)).
 - **Homebrew links.** On an official entry's page, links to homebrew entries
   ([Source and author](content-model.md#source-and-author)) are moved out of Links into a
   **Homebrew** section after it, under the same labels: a custom spell that
   names an SRD class is listed there under "Spells", not in the class's
   spell list. A label with links on both sides shows in both sections, and
   a page without homebrew links has no Homebrew section. A homebrew page's
-  links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`; filtering
-  homebrew by volume is #353).
-- The type, linked to the Library filtered to it ([Redirects](#redirects)).
-- Tags as chips; a chip opens the Library filtered to the entry's ruleset,
-  type, and that tag.
-- A provenance line: created and updated dates, and source issues linked to
-  GitHub. An imported entry's line adds "Adapted from a work by <author>",
+  links aren't split (`splitHomebrew` in `site/src/lib/refs.ts`).
+- The type, linked to its ruleset's Library filtered to it ([Redirects](#redirects)).
+- A provenance line: created and updated dates. It doesn't name the entry's
+  source issues: an entry page links nothing on GitHub but the nav's Contribute
+  link. An imported entry's line adds "Adapted from a work by <author>",
   linked to the source, "licensed under <license>", linked to its legal code
   ([Meta](content-model.md#meta)).
 - Export controls below the summary: Print and Download, or Print alone on a
-  page type ([Controls](export.md#controls)). A Preact island renders them once
+  page type ([Controls](export.md#controls)), and the "In cart" checkbox
+  ([Cart and set actions](#gallery)). A Preact island renders them once
   hydrated, since every export needs JavaScript; a failed export shows a
   message in a polite status region.
+- An encounter's page renders its kit parts ([Kit parts](#kit-parts)), then
+  adds a **Difficulty** section after its template
+  ([Difficulty calculator](#difficulty-calculator)). A module's page opens
+  with its structured summary, then renders its kit parts.
 - `<title>` and Open Graph tags (name, summary, and art when present).
+
+### Difficulty calculator
+
+An encounter's page has a Difficulty section after its template
+(`EncounterDifficulty.astro` in `site/src/components/encounter/`, passed in
+the detail page's default slot), comparing the reader's party against the
+encounter ([Encounter difficulty](rulesets.md#encounter-difficulty)). It
+formats the derived values; it computes none of them but the party's budgets,
+through the ruleset's `difficulty.ts`.
+
+- **Without JavaScript,** it shows the encounter's XP ("1,875 XP", or a spawn
+  table's span, "75 to 675 XP") and E ("×1.25 (note)", or "×1" without an
+  `environment`), composed in `site/src/lib/encounter.ts`.
+- **The calculator** (`DifficultyCalculator.tsx`) is a Preact island that
+  renders once it hydrates:
+  - **Your party:** one line per character, "Character N" labeling a level
+    select (1–20) and a Remove button. Add character adds one at the last
+    character's level. The party keeps at least one character, so Remove is
+    disabled on the last. After an add or a remove, focus moves to the new
+    or the next character's level, or the previous one's when the last
+    character is removed.
+  - **Budgets:** the party's Low, Moderate, and High budgets, g(Party).
+  - **For your party,** in a polite live region: a roster's XP and what it
+    reads ("1,125 XP: Moderate"), or a spawn table's rows, low to high, as a
+    table with each row's minimum, average, and maximum XP and what each
+    reads.
+- **XP shows whole,** rounded, with thousands separators; it's compared
+  unrounded, so 112.5 XP reads above a Low budget of 112. Difficulties show
+  by the phrase book's `difficulty` vocabulary: Low, Moderate, High, and
+  Beyond High.
+- **The party** (`site/src/lib/party.ts`) is kept in local storage under
+  `ttrpg-library:party` as a list of levels, wrapped as the cart is
+  ([Gallery](#gallery) "Cart and set actions"): with storage blocked it lasts
+  only for the page. A stored value that isn't a level is dropped, a party
+  with none left falls back to four characters of level 1, and an
+  unreadable one keeps the page's copy. It carries
+  to the next encounter, and follows a change made in another tab.
 
 ### Templates
 
-- One component per type template, `background-card`, `class-page`,
-  `condition-card`, `creature-stat-block`, `equipment-card`, `feat-card`,
-  `item-card`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
-  `stats` as a definition list, and tags. `EntryTemplate` picks the component
+- One component per type template, `background-card`, `character-profile`, `class-page`,
+  `condition-card`, `creature-stat-block`, `encounter-page`, `equipment-card`, `feat-card`,
+  `item-card`, `map-page`, `module-page`, `species-page`, `spell-card`, and `subclass-page`, plus a `generic` fallback that renders the fixed keys,
+  `stats` and then the ruleset's derived values as one definition list. A derived value is labeled as a stored one is, from its key, and
+  listed in the order the ruleset's module returns it. Each text in `stats`
+  renders the ruleset's text tokens through its module's `renderTokens`
+  ([Text tokens](rulesets.md#text-tokens)); a template's `module` prop
+  supplies the module where the library's own isn't the entry's, as in tests. `EntryTemplate` picks the component
   from the registry's `template`, falling back to `generic`. The generic
   lines render a ref as its target's name, linked to its page or rules
   anchor; a rules page renders a primitive's `stats` with the same lines.
@@ -507,7 +734,9 @@ indexes.
   chooses (2 by default; the detail page's own `h1` sits above it), with
   sections one level below.
 - Templates receive the entry and its derived values and render tokens through
-  the ruleset's `tokens.ts`; they never compute rules values.
+  the ruleset's `tokens.ts`; they never compute rules values. A template that
+  lists the entry's back-links itself gets them as `refBy`, as `map-page` does
+  by zone; the detail page, print, and PNG capture pass them.
 - Every template shows a `stats` field by the situational-field rule, through
   one helper (`present` and `whenPresent` in `site/src/lib/display.ts`).
 - Rules text and `description` render through one sanitizing markdown helper
@@ -539,6 +768,80 @@ indexes.
   table's modifiers and saves come from the derived values.
 - Template tests render components with Astro's container API.
 
+### Kit parts
+
+An arrangement's page renders its kit parts
+([Arrangements](content-model.md#arrangements)) in the order its
+`stats.parts` lists them, each by its shared component in
+`site/src/components/kit/`, so every arrangement reads alike. The
+`encounter-page` template is the encounter's name and summary, then its
+parts (`KitParts`). The `module-page` template is the module's name and
+summary, its lines, its structured summary, then its parts (below). Each
+part is a section under its heading, one level below the entry's name:
+Description, Running the Encounter or Running the Module (`dm-guide`),
+Creatures (a roster or spawn table), Sequence, Loot, Map, and Hook; a `prose`
+part under its `title`, or none; a `table` under none, since its title is
+its caption; and an `arrangement` under its contained entry's name.
+Headings and other composed text come from the phrase book's `kit.`
+sentences and its `coin` vocabulary, through `site/src/lib/kit.ts`.
+
+- **Refs.** Each ref object reads as a line: its count and its name linked
+  (`2 × Bandit`, `1d4+1 × Bandit`), or its name alone when it has no count.
+  As its `show` says, `link` is the line alone; `thumbnail` puts the target's
+  small form before the line, a map's diagram (`thumbnailDiagram`, with a
+  named zone's shape marked `data-target`) or an entry's art, or nothing for
+  a target with neither; and `card` embeds the target's type template after
+  the part, one heading level below its heading, once per target in the order
+  the part first lists it. The detail page, print, and PNG capture load the
+  entries an arrangement shows with it (`shown` on a loaded entry, from
+  `shownKeys` in `site/src/lib/library.ts`).
+- **Text parts** (`prose`, `description`, `dm-guide`) render as rules text;
+  a description, read aloud, is set off as boxed text.
+- **Roster:** its lines, then its cards.
+- **Spawn table:** a table of its rows, low to high: when it has a `roll`,
+  the die as the first column's header and each row's range on it ("1–2",
+  or "6"); then the difficulty and the row's creature lines; then its cards.
+- **Sequence:** structured, the trigger, then each stage (its name as a
+  heading, its turn loop, and its transition), then the victory condition,
+  each label an inline heading ("***Trigger.***"); or its example, as one
+  prose text. Every node renders its `{ref:…}` tokens as links.
+- **Table:** its text as a table in text renders, with its `title` as the
+  caption ([Templates](#templates)).
+- **Loot:** its rows, low to high, each its difficulty, then its coins
+  ("3d6 SP", "4d6 × 10 GP") and its item lines; then its cards.
+- **Map:** the map, or its zone, as a line linked to the map's page or the
+  zone's anchor, with its thumbnail or its card as its `show` says. `setIn`
+  alone shows nothing in the template; the detail page lists it under "Set
+  in".
+- **Hook:** its text, then each entry it brings in as a line, its name
+  linked and its note after it in parentheses ("Guard Captain (the party's
+  contact)"); then its cards.
+- **Arrangement:** a contained encounter or module. Shown as a link, its
+  heading is its name linked to its page, after its art as a thumbnail when
+  `show` is `thumbnail` and it has art; shown as a card, it embeds the
+  target's type template, the name at the part's heading level, with the
+  target's own parts and cards below it.
+- **The module page** (`ModulePage.astro`, `site/src/lib/module.ts`):
+  - **Lines:** Length (the phrase book's `moduleLength` vocabulary), Levels
+    ("2–4", or "3" for one level), and the counts it derives, Encounters and
+    Maps ([Modules](rulesets.md#modules)).
+  - **The structured summary** (`TableOfContents`,
+    [Accordion pages](#accordion-pages)) lists its parts in order, each
+    linked to its section: by its heading, a table by its title, and an
+    arrangement by its contained entry's name; a `prose` part without a
+    title isn't listed. Each listed part's section is anchored at
+    `section-<slug>` of its label, `-2`, `-3`… after a label used before
+    (`#section-hook-2`). Under a contained module, the arrangements it
+    contains are listed in story order, through its own, each linked to its
+    page.
+  - **Embedded** as a card in another module, it shows no summary and
+    carries no anchors, which are the outer page's.
+- **Print and capture** follow the page: a card prints as the target's card,
+  in the same mode, and a link reads as its name, in the text's color with no
+  underline. The entry's description, which the detail page shows as lore,
+  follows the parts. A module prints no summary, as an accordion page
+  doesn't, and no anchors.
+
 ### Wording
 
 Every string a reader sees is **stored text**, written in an entry (rules text
@@ -553,7 +856,7 @@ one house style ([SRD and custom entries](content-model.md#srd-and-custom-entrie
   - a **phrase** is composed text as a list of parts: plain text, markdown
     already written (a `Text` field placed in a line), or a link by key with
     optional display text. `toMarkdown` renders it for templates, links as
-    `{ref:…}` tokens; `toPlain` reads it for search and exports.
+    `{ref:…}` tokens; `toPlain` reads it as plain text for subtitles and exports.
   - **grammar:** one `titleCase` (minor words lowercase but first),
     `capitalize`, `label` (a key as a sentence-case label), `list` ("A, B, and
     C", or "or"), `plural` and `counted` ("y" to "ies", else "s", with the
@@ -588,7 +891,6 @@ one house style ([SRD and custom entries](content-model.md#srd-and-custom-entrie
 
 | To add | Touch |
 |---|---|
-| A filter or sort on a tag | Nothing |
 | A filter or sort on a `stats` field | A facet in the registry |
 | A template for a type | A component in `site/src/components/templates/`, named in the registry, and a composer in `site/src/lib/` |
 | Wording for a type | Its sentences and vocabulary in `rulesets/<ruleset>/phrases.json` |

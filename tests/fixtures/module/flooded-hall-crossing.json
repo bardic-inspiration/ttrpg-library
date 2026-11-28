@@ -1,0 +1,38 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "flooded-hall-crossing",
+  "name": "Flooded Hall Crossing",
+  "summary": "Giant frogs lurk under the black water of a drowned hall.",
+  "stats": {
+    "setIn": {
+      "ref": "map/sunken-cistern",
+      "zone": "flooded-hall"
+    },
+    "parts": [
+      {
+        "part": "description",
+        "text": "The hall is flooded to the knee. Something broad and pale slides beneath the surface, then is still."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/giant-frog",
+            "count": 2
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-27",
+    "source": {
+      "kind": "manual",
+      "issues": [
+        443
+      ]
+    }
+  }
+}

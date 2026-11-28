@@ -7,7 +7,7 @@ import ExtensionsPage from '../../../components/rules/ExtensionsPage.astro';
 import { loadEntries } from '../../../lib/library';
 import { loadRules, rulesContext } from '../../../lib/rules';
 import type { Registry } from '../../../lib/gallery/config';
-import registry from '../../../../../config/types.json';
+import registry from '@library/config/types.json';
 
 export const getStaticPaths = (() => {
   const rules = loadRules();

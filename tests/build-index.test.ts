@@ -5,8 +5,7 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildIndex, writeIndex } from '../scripts/build-index/index.ts';
 import { loadRegistry } from '../scripts/validate/schema.ts';
-import { isFlag, refAndTextValues, type Schema } from '../scripts/build-index/schema-walk.ts';
-import { plainText } from '../scripts/validate/text.ts';
+import { displayIssues, isChip, isFlag, type Schema } from '../scripts/build-index/schema-walk.ts';
 import { ruleset } from '../rulesets/dnd-5e-2024/index.ts';
 import { FIXTURES, cinderHound, frostLance, tempLibrary, wandOfFrostLances } from './helpers.ts';
 
@@ -39,11 +38,12 @@ describe('library.json records', () => {
   it('have exactly the docs/site.md#index-build keys, in order', async () => {
     const { errors, records } = await buildIndex(valid);
     expect(errors).toEqual([]);
-    // The three example entries, and the two classes Frost Lance names.
-    expect(records).toHaveLength(5);
+    // The three example entries, and the two classes Frost Lance names, then a card per SRD condition and equipment primitive.
+    expect(records.filter((r) => r.createdAt !== null)).toHaveLength(5);
+    expect(records.length).toBeGreaterThan(5);
     for (const record of records) {
       expect(Object.keys(record)).toEqual([
-        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'facets', 'tags', 'createdAt', 'refs', 'refBy', 'search',
+        'id', 'ruleset', 'source', 'author', 'type', 'name', 'summary', 'url', 'image', 'diagram', 'facets', 'createdAt', 'refs', 'refBy',
       ]);
     }
   });
@@ -59,7 +59,7 @@ describe('library.json records', () => {
       name: 'Cinder Hound',
       url: '/ttrpg-library/dnd-5e-2024/creature/cinder-hound/',
       image: null,
-      tags: { theme: 'fire', environment: ['underdark', 'mountains'] },
+      diagram: null,
       refs: [],
       refBy: [],
     });
@@ -93,6 +93,33 @@ describe('library.json records', () => {
     expect(own.find((r) => r.id === 'cinder-hound')?.facets).toMatchObject({
       'stats.immunities.damage': ['fire'],
       'stats.immunities.conditions': ['condition/poisoned', 'condition/charmed'],
+    });
+  });
+
+  it('read a path through an array of objects as each item’s value at the rest of it (docs/site.md#type-registry)', async () => {
+    const facets = [
+      { path: 'stats.actions.name', label: 'Action', kind: 'enum' },
+      { path: 'stats.actions.damage.type', label: 'Damage', kind: 'enum' },
+      { path: 'stats.traits.recharge', label: 'Recharge', kind: 'enum' },
+    ] as const;
+    const { records } = await buildIndex(valid, {
+      registry: {
+        'dnd-5e-2024': {
+          label: 'x',
+          types: {
+            creature: { label: 'C', plural: 'Cs', template: 't', facets: [...facets] },
+            'item': { label: 'M', plural: 'Ms', template: 't', facets: [] },
+            spell: { label: 'S', plural: 'Ss', template: 't', facets: [] },
+            class: { label: 'Cl', plural: 'Cls', template: 't', facets: [] },
+          },
+        },
+      },
+    });
+    // Nested arrays flatten, each value once in first-seen order, and an item without the value adds
+    // nothing; with no item having it, the facet is left out.
+    expect(records.find((r) => r.id === 'cinder-hound')?.facets).toEqual({
+      'stats.actions.name': ['Bite', 'Ember Breath'],
+      'stats.actions.damage.type': ['piercing', 'fire'],
     });
   });
 
@@ -147,44 +174,51 @@ describe('library.json records', () => {
   });
 });
 
-describe('search text', () => {
-  it('holds action and trait names, description, and rules text, with markup and tokens stripped', async () => {
-    const hound = await cinderHound();
-    hound.description = 'Bred in **forges**, they *smolder*.\n\n- loyal\n- hungry';
-    const lib = await temp([hound]);
-    const { records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
-    const search = records[0]!.search;
-    for (const word of ['Bite', 'Ember Breath', 'Smoldering Hide', 'Bred in forges, they smolder.', 'loyal hungry', 'within 5 feet of it takes']) {
-      expect(search).toContain(word);
-    }
-    expect(search).not.toMatch(/[*{}]/);
-    expect(search).not.toMatch(/\s{2}/);
+describe('ruleset primitives (docs/site.md#index-build)', () => {
+  it('get a record for each primitive of a rules type that takes extensions, and none for the others', async () => {
+    const { records } = await buildIndex(valid);
+    const primitives = records.filter((r) => r.createdAt === null);
+    const types = new Set(primitives.map((r) => r.type));
+    expect([...types].sort()).toEqual(['condition', 'equipment']);
+    expect(primitives.filter((r) => r.type === 'condition')).toHaveLength(15);
   });
 
-  it('names spells, by target name for a ref and as written for plain text', async () => {
-    const hound = await cinderHound();
-    hound.stats.spellcasting = { ability: 'cha', atWill: [{ ref: 'spell/frost-lance' }, 'Light'] };
-    hound.stats.gear = ['Iron Collar'];
-    const lib = await temp([hound, await frostLance()]);
-    const { errors, records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
-    expect(errors).toEqual([]);
-    const search = records.find((r) => r.id === 'cinder-hound')!.search;
-    expect(search).toContain('Frost Lance');
-    expect(search).toContain('Light');
-    expect(search).toContain('Iron Collar');
-    expect(search).not.toContain('spell/frost-lance');
+  it('read as official SRD rules with no summary, opening their section on the rules page', async () => {
+    const { records } = await buildIndex(valid);
+    const blinded = records.find((r) => r.type === 'condition' && r.id === 'blinded')!;
+    expect(blinded).toEqual({
+      id: 'blinded',
+      ruleset: 'dnd-5e-2024',
+      source: null,
+      author: 'publisher',
+      type: 'condition',
+      name: 'Blinded',
+      summary: '',
+      url: '/ttrpg-library/dnd-5e-2024/rules/conditions/#condition-blinded',
+      image: null,
+      diagram: null,
+      facets: {},
+      createdAt: null,
+      refs: expect.any(Array),
+      refBy: expect.any(Array),
+    });
   });
 
-  it('names every ref by its target, whatever its field: a background finds its feat and equipment', async () => {
-    const files = ['feat/magic-initiate.json', 'background/acolyte.json'];
-    const entries = await Promise.all(files.map(async (file) => JSON.parse(await readFile(join(FIXTURES, file), 'utf8'))));
-    const lib = await temp(entries);
-    const { errors, records } = await buildIndex(lib.content, { assetsRoot: lib.repo });
-    expect(errors).toEqual([]);
-    // A FeatRef and EquipmentRefs, none of them RefOrText; the feat's note is a qualifier, not a name.
-    expect(records.find((r) => r.id === 'acolyte')!.search).toBe(
-      "Magic Initiate Calligrapher's Supplies Calligrapher's Supplies Book Holy Symbol Parchment Robe",
-    );
+  it('lift facets from their stats and derived values, as an extension does', async () => {
+    const { records } = await buildIndex(valid);
+    const longsword = records.find((r) => r.type === 'equipment' && r.id === 'longsword')!;
+    expect(longsword.facets).toMatchObject({ 'stats.group': 'martial-melee-weapons', 'derived.costGp': 15, 'stats.weapon.mastery': 'mastery-property/sap' });
+    expect(longsword.url).toMatch(/\/dnd-5e-2024\/rules\/[a-z-]+\/#equipment-longsword$/);
+  });
+
+  it('write a raw copy of the primitive and its export bundle', async () => {
+    const out = await tempDir();
+    await writeIndex(valid, out, await buildIndex(valid));
+    const file = join(ROOT, 'rulesets/dnd-5e-2024/rules/equipment/acid.json');
+    expect(await readFile(join(out, 'data/dnd-5e-2024/equipment/acid.json'), 'utf8')).toBe(await readFile(file, 'utf8'));
+    const primitive = JSON.parse(await readFile(file, 'utf8')) as { type: string; stats: unknown };
+    const bundle = JSON.parse(await readFile(join(out, 'data/dnd-5e-2024/equipment/acid.export.json'), 'utf8')) as Record<string, unknown>;
+    expect(bundle).toEqual({ entry: { ruleset: 'dnd-5e-2024', ...primitive }, derived: expect.objectContaining({ costGp: 25 }), names: expect.any(Object) });
   });
 });
 
@@ -215,7 +249,8 @@ describe('the build', () => {
     const out = await tempDir();
     await writeIndex(valid, out, await buildIndex(valid));
     const library = JSON.parse(await readFile(join(out, 'library.json'), 'utf8')) as { id: string }[];
-    expect(library.map((r) => r.id)).toEqual(['sorcerer', 'wizard', 'cinder-hound', 'wand-of-frost-lances', 'frost-lance']);
+    const entries = library.filter((r) => !['condition', 'equipment'].includes((r as { type?: string }).type ?? ''));
+    expect(entries.map((r) => r.id)).toEqual(['sorcerer', 'wizard', 'cinder-hound', 'wand-of-frost-lances', 'frost-lance']);
     for (const path of ['creature/cinder-hound.json', 'item/wand-of-frost-lances.json', 'spell/frost-lance.json']) {
       expect(await readFile(join(out, 'data/dnd-5e-2024', path), 'utf8')).toBe(await readFile(join(valid, 'dnd-5e-2024', path), 'utf8'));
     }
@@ -242,7 +277,8 @@ describe('the build', () => {
     await writeIndex(valid, out, await buildIndex(valid));
     const lib = await temp([await cinderHound()]);
     await writeIndex(lib.content, out, await buildIndex(lib.content, { assetsRoot: lib.repo }));
-    expect(await readdir(join(out, 'data/dnd-5e-2024'))).toEqual(['creature']);
+    expect(await readdir(join(out, 'data/dnd-5e-2024'))).toEqual(['condition', 'creature', 'equipment']);
+    expect(await readdir(join(out, 'data/dnd-5e-2024/creature'))).toEqual(['cinder-hound.export.json', 'cinder-hound.json']);
   });
 
   it('is byte-identical across two independent builds', async () => {
@@ -255,7 +291,7 @@ describe('the build', () => {
 
 // Content types that come only by request, so they have no gap buckets, and have no key stat for
 // PR bodies (docs/generation.md#gap-buckets, docs/site.md#type-registry).
-const REQUEST_ONLY = ['background', 'class', 'species', 'subclass'];
+const REQUEST_ONLY = ['background', 'character', 'class', 'encounter', 'map', 'module', 'species', 'subclass'];
 
 describe('the type registry', () => {
   it('registers every content type, and every rules type that takes extensions, with the docs/site.md#type-registry keys', async () => {
@@ -272,7 +308,8 @@ describe('the type registry', () => {
       for (const field of config.cardFields as string[]) expect(paths).toContain(field);
       // The default sort is a facet, or a path every record has (docs/site.md#gallery "Sort").
       expect([...paths, 'name', 'createdAt']).toContain(String(config.defaultSort).replace(/:(asc|desc)$/, ''));
-      for (const filter of config.defaultFilters as string[]) if (!filter.startsWith('tags.')) expect(paths).toContain(filter);
+      // Every default filter is one of the type's facets.
+      for (const filter of config.defaultFilters as string[]) expect(paths).toContain(filter);
     }
   });
 
@@ -331,36 +368,45 @@ describe('the type registry', () => {
 });
 
 describe('schema walk', () => {
-  it('finds values at RefOrText fields, through $ref and nested objects', async () => {
-    const stats = { spellcasting: { ability: 'cha', atWill: ['Light'], perDay: { '1': [{ ref: 'spell/x' }] } }, gear: ['Rope'], actions: [{ name: 'Bite' }] };
-    expect(refAndTextValues(stats, await schemaSet('creature'))).toEqual([['Light'], [{ ref: 'spell/x' }], ['Rope']].flat());
-  });
-
-  it('finds every ref, whatever its field, but plain text only at RefOrText fields', async () => {
-    const stats = {
-      feat: { ref: 'feat/magic-initiate', note: 'Cleric' },
-      tool: { ref: 'equipment/calligraphers-supplies' },
-      skills: ['insight'],
-      equipment: [{ items: [{ ref: 'equipment/book', note: 'prayers' }, '20 Arrows'], gp: 8 }, { gp: 50 }],
-    };
-    expect(refAndTextValues(stats, await schemaSet('background'))).toEqual([
-      { ref: 'feat/magic-initiate', note: 'Cleric' },
-      { ref: 'equipment/calligraphers-supplies' },
-      { ref: 'equipment/book', note: 'prayers' },
-    ]);
-  });
-
   it('tells an optional flag from a required boolean', async () => {
     expect(isFlag('cursed', await schemaSet('item'))).toBe(true);
     expect(isFlag('attunement.required', await schemaSet('item'))).toBe(false);
     expect(isFlag('ritual', await schemaSet('spell'))).toBe(false);
   });
-});
 
-describe('plainText', () => {
-  it('strips the markdown subset, keeping words and punctuation', () => {
-    expect(plainText('A **bold** and *italic* word.\n\n- one\n- two\n\n1. three\n\nline  \nbreak')).toBe(
-      'A bold and italic word. one two three line break',
-    );
+  it('reads a chip field beside the field or through its shared definition (docs/content-model.md#display)', async () => {
+    expect(isChip('level', await schemaSet('spell'))).toBe(true);
+    expect(isChip('name', await schemaSet('spell'))).toBe(false);
+    const common: Schema = { $defs: { Size: { enum: ['s', 'm'], display: 'chip' } } };
+    const set = { root: { type: 'object', properties: { size: { $ref: 'common.schema.json#/$defs/Size' } } }, files: new Map([['common.schema.json', common]]) };
+    expect(isChip('size', set)).toBe(true);
+  });
+
+  it('allows display only as "chip", only on a string, number, boolean, or string-array field', () => {
+    const doc: Schema = {
+      type: 'object',
+      $defs: { Kind: { enum: ['a', 'b'] }, Box: { type: 'object' } },
+      properties: {
+        level: { type: 'integer', display: 'chip' },
+        kind: { $ref: '#/$defs/Kind', display: 'chip' },
+        flag: { const: true, display: 'chip' },
+        tags: { type: 'array', items: { $ref: '#/$defs/Kind' }, display: 'chip' },
+        display: { type: 'string' },
+        loud: { type: 'string', display: 'badge' },
+        box: { $ref: '#/$defs/Box', display: 'chip' },
+        boxes: { type: 'array', items: { type: 'object' }, display: 'chip' },
+        nums: { type: 'array', items: { type: 'integer' }, display: 'chip' },
+        maybe: { anyOf: [{ type: 'string' }, { type: 'null' }], display: 'chip' },
+        nested: { type: 'object', properties: { deep: { type: 'object', display: 'chip' } } },
+      },
+    };
+    expect(displayIssues(doc, { root: doc, files: new Map() })).toEqual([
+      '/properties/loud: display must be "chip"',
+      '/properties/box: display "chip" is only for a string, number, boolean, or string-array field',
+      '/properties/boxes: display "chip" is only for a string, number, boolean, or string-array field',
+      '/properties/nums: display "chip" is only for a string, number, boolean, or string-array field',
+      '/properties/maybe: display "chip" is only for a string, number, boolean, or string-array field',
+      '/properties/nested/properties/deep: display "chip" is only for a string, number, boolean, or string-array field',
+    ]);
   });
 });
