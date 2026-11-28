@@ -813,7 +813,7 @@ Decisions made after the v1.2.0 release, in the development tracks.
 
 | Decision | Why | Source |
 |---|---|---|
-| The Library's search heads its filter menu, level with Sort, and filters as the reader types; the header's search only opens the Library with the query on submit, and the header leaves it out on a Library. | The live search belongs to the Library's view, beside the filters it combines with; elsewhere a submit is the only action a search can take | #PR |
-| On phones and tablets, the Library's search sits above the Filters button, outside the closed filter container. | Search stays one tap away, as it was in the header, without opening the menu | #PR |
+| The Library's search heads its filter menu, level with Sort, and filters as the reader types; the header's search only opens the Library with the query on submit, and the header leaves it out on a Library. | The live search belongs to the Library's view, beside the filters it combines with; elsewhere a submit is the only action a search can take | #529 |
+| On phones and tablets, the Library's search sits above the Filters button, outside the closed filter container. | Search stays one tap away, as it was in the header, without opening the menu | #529 |
 | A character's derived languages start with Common, sourced to its background, and a pick of Common isn't listed again. | SRD 5.2 "Character Creation": every character knows Common plus two languages; the origin's two picks are already under the background, and a preset copied to a sheet shouldn't lose Common | #525 |
 | PNG capture writes each diagram shape's computed colors and label font onto the clone before `html-to-image` runs, rather than changing the diagrams or the library. | `html-to-image` clones an `<svg>` whole and copies only its root's computed style, so the class rules that color a diagram never reach the image; the clone is thrown away after capture | #525 |
