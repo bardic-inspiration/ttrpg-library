@@ -825,3 +825,11 @@ Decisions made after the v1.2.0 release, in the development tracks.
 | Decision | Why | Source |
 |---|---|---|
 | The Rulesets page is gone: each ruleset's Library lists its rules pages and Extensions page under a "Rules" subheading, directly below the filter menu, as a plain list of links in the menu's text style, always showing. The top bar drops Rulesets, and Library is marked current on rules pages. `/rulesets/` redirects to the home ruleset's Library. | The owner's design: rules sit beside the filters that navigate the Library, one place per ruleset; P9 keeps the old URL working | #427 |
+
+## v1.3.0
+
+### Working process
+
+| Decision | Why | Source |
+|---|---|---|
+| v1.3.0 is a UX revision of the Library and the site's chrome, with its unbuilt design in `spec/v1.3.0/`. It builds, in order: one type at a time with a flat filter list per type, a one-row header with the cart menu and one Export button and a footer of two links, and a Library whose results scroll in their own container. | v1.2.0's release PR has merged, so new work takes the next minor version; the menu comes first, since the layout lays it out | #532 |
