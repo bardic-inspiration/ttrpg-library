@@ -440,7 +440,13 @@ indexes.
 
 ### Detail page
 
-- Art (only when the entry has it), name, type, and summary.
+- Art (only when the entry has it), name, and summary, with a line of chips
+  under the name: the type, then the entry's source (left out when it has
+  none), its author, and "Official" or "Homebrew"
+  ([Source and author](content-model.md#source-and-author)). An author of
+  `"publisher"` reads as the ruleset's publisher ("SRD 5.2 · Wizards of the
+  Coast · Official"). The source, author, and status chips are neutral, like a
+  card's source badge, and a long one wraps inside its chip.
 - The full stat block or card from the type's template, then a page type's
   components, in its order: each a section with its name as a heading one
   level below the entry's, anchored at `#<type>-<id>`, holding its rules text
