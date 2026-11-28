@@ -1,7 +1,8 @@
 // Filtering, search, sort, and value counts (docs/site.md#gallery). Pure functions
 // over library.json records, so the island stays a thin view.
 
-import { NAME, isScopePath, recordDef, typeKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
+import { HOMEBREW, isOfficial } from '../../../../rulesets/module.ts';
+import { AUTHOR, NAME, isScopePath, recordDef, typeKey, type FilterDef, type GalleryConfig, type LibraryRecord, type SortKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
 import { displayValue, enumValues, isSpan, spanAt, valueAt } from './values.ts';
 
@@ -20,6 +21,8 @@ export function matches(record: LibraryRecord, path: string, value: MatchedValue
     const span = spanAt(record, path);
     return span !== undefined && (value.min === undefined || span.max >= value.min) && (value.max === undefined || span.min <= value.max);
   }
+  // The author filter's "homebrew" stands for every entry that isn't official.
+  if (path === AUTHOR && value.values.includes(HOMEBREW) && !isOfficial(record)) return true;
   const keys = new Set(enumValues(valueAt(record, path)).map((v) => v.key));
   const values = ('byType' in value && value.byType.get(typeKey(record.ruleset, record.type))) || value.values;
   return values.some((v) => keys.has(v));

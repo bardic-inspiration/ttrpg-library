@@ -3,7 +3,7 @@
 // registry facets.
 // Pure, so the island only renders it.
 
-import { PUBLISHER, isOfficial } from '../../../../rulesets/module.ts';
+import { HOMEBREW, PUBLISHER, isOfficial } from '../../../../rulesets/module.ts';
 import { label } from '../../../../lib/wording/grammar.ts';
 import { AUTHOR, SOURCE, TYPE, filterDef, type FilterDef, type GalleryConfig, type LibraryRecord, type TypeInfo, typeKey } from './config.ts';
 import { isActive, type FilterValue, type GalleryState } from './state.ts';
@@ -24,11 +24,12 @@ export interface ValueNode {
 export type TreeNode =
   /**
    * A checkable value that may hold filters: a type, checked as the type filter and holding its
-   * facets, or Official, checked as the author filter's `"publisher"` and holding none. `path` is
-   * the filter its checkbox sets.
+   * facets, Official, checked as the author filter's `"publisher"` and holding none, or Homebrew,
+   * checked as its `"homebrew"` and holding the Source and Author filters. `path` is the filter
+   * its checkbox sets.
    */
   | { kind: 'type'; id: string; path: typeof TYPE | typeof AUTHOR; value: ValueNode; open: boolean; children: TreeNode[] }
-  /** A field two or more facets sit in, such as Immunities, or the Sources, Homebrew, or Types node. */
+  /** A field two or more facets sit in, such as Immunities, or the Sources or Types node. */
   | { kind: 'field'; id: string; label: string; open: boolean; children: TreeNode[] }
   | { kind: 'enum'; id: string; def: FilterDef; open: boolean; values: ValueNode[] }
   | { kind: 'range'; id: string; def: FilterDef; open: boolean; bounds: { min: number; max: number } | undefined };
@@ -105,7 +106,8 @@ function facetNode(ctx: Context, def: FilterDef, records: LibraryRecord[], idPre
   if (!def.groups && active?.kind === 'enum') {
     const here = keysAt(def.path, records);
     const anywhere = keysAt(def.path, ctx.records);
-    own = { kind: 'enum', values: active.values.filter((key) => here.has(key) || !anywhere.has(key)) };
+    // The Homebrew box's own value (`HOMEBREW`) is no author to list.
+    own = { kind: 'enum', values: active.values.filter((key) => here.has(key) || (!anywhere.has(key) && key !== HOMEBREW)) };
   }
   const values = def.groups
     ? groupValues(def, records, others, active)
@@ -201,8 +203,9 @@ export const TYPES_LABEL = 'Types';
 /**
  * The Sources node, first and open at the start. Official is a checkbox for the author filter's
  * `"publisher"`, the ruleset's own material (docs/content-model.md#source-and-author), shown always
- * since a fresh Library checks it. Homebrew holds the Source and Author filters over the other
- * entries. Like Official, they add entries, so each counts what checking it adds.
+ * since a fresh Library checks it. Homebrew is a checkbox for the author filter's `"homebrew"`, every
+ * other entry, and holds the Source and Author filters over those entries. Like Official, they add
+ * entries, so each counts what checking it adds.
  */
 function sourcesNode(ctx: Context): TreeNode {
   const authors = selectedValues(ctx.state.filters.get(AUTHOR));
@@ -229,7 +232,23 @@ function sourcesNode(ctx: Context): TreeNode {
     .map((node) => (node.kind === 'enum' && node.def.path === AUTHOR ? { ...node, values: node.values.filter((v) => v.key !== PUBLISHER) } : node))
     .filter((node) => node.kind !== 'enum' || node.values.length > 0);
   const children: TreeNode[] = [official];
-  if (filters.length > 0) children.push({ kind: 'field', id: 'sources/homebrew', label: HOMEBREW_LABEL, open: isOpen(filters), children: filters });
+  if (filters.length > 0) {
+    children.push({
+      kind: 'type',
+      id: 'sources/homebrew',
+      path: AUTHOR,
+      value: {
+        key: HOMEBREW,
+        label: HOMEBREW_LABEL,
+        count: ctx.others(AUTHOR).filter((r) => !isOfficial(r)).length,
+        selected: authors.includes(HOMEBREW),
+        open: false,
+        children: [],
+      },
+      open: isOpen(filters),
+      children: filters,
+    });
+  }
   return { kind: 'field', id: 'sources', label: SOURCES_LABEL, open: true, children };
 }
 

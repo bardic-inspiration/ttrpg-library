@@ -290,13 +290,25 @@ describe('the ruleset set adds entries (#380)', () => {
       ['bardic-inspiration', 2, false],
       ['someone', 1, false],
     ]);
-    // Homebrew is a group, not a checkbox, and starts closed until a filter in it is active.
-    expect(find(nodes, 'Sources', 'Homebrew')).toMatchObject({ kind: 'field', open: false });
+    // Homebrew is a checkbox for every homebrew entry, and its filters start closed until one is active.
+    expect(find(nodes, 'Sources', 'Homebrew')).toMatchObject({ kind: 'type', path: 'author', open: false, value: { key: 'homebrew', count: 3, selected: false } });
     const checked = filterTree(home, parseQuery('?f.author=publisher,someone', home), records());
     expect(find(checked, 'Sources', 'Homebrew')?.open).toBe(true);
     expect(find(checked, 'Sources', 'Homebrew', 'Author')?.open).toBe(true);
     expect(find(checked, 'Sources', 'Official')?.kind === 'type' && (find(checked, 'Sources', 'Official') as { value: ValueNode }).value.selected).toBe(true);
     expect(ids(home, '?f.author=publisher,someone')).toEqual(['fireball', 'goblin', 'moss-imp']);
+  });
+
+  it('adds every homebrew entry when Homebrew is checked, and lists no author for it', () => {
+    const home = galleryConfig(reg, data);
+    expect(ids(home, '?f.author=publisher,homebrew')).toEqual(['cinder-hound', 'fireball', 'frost-lance', 'goblin', 'moss-imp']);
+    expect(ids(home, '?f.author=homebrew')).toEqual(['cinder-hound', 'frost-lance', 'moss-imp']);
+    expect(ids(home, '?f.author=homebrew&f.type=spell')).toEqual(['frost-lance']);
+    const nodes = filterTree(home, parseQuery('?f.author=homebrew', home), records());
+    const homebrew = find(nodes, 'Sources', 'Homebrew');
+    expect(homebrew?.kind === 'type' && homebrew.value.selected).toBe(true);
+    expect(values(find(nodes, 'Sources', 'Homebrew', 'Author')).map((v) => v.key)).toEqual(['bardic-inspiration', 'someone']);
+    expect(find(nodes, 'Sources', 'Homebrew')?.open).toBe(false);
   });
 
   it('reads each box checked only when its filter holds it', () => {

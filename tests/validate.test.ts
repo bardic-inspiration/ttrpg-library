@@ -335,6 +335,11 @@ describe('situational fields (docs/content-model.md#situational-fields)', () => 
       expect(await messages(named)).toContainEqual('author: "Wizards of the Coast" is the ruleset\'s publisher; write "publisher" for official content');
     });
 
+    it('rejects "homebrew" as author, which the Library\'s Homebrew filter reserves', async () => {
+      const reserved = Object.assign(await cinderHound(), { author: 'homebrew' });
+      expect(await messages(reserved)).toContainEqual('author: "homebrew" is reserved for the Library\'s Homebrew filter; credit a name');
+    });
+
     it('rejects the retired SRD marker', async () => {
       const marked = await cinderHound();
       marked.meta.source.srd = true;

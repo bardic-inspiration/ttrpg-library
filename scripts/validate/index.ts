@@ -17,7 +17,7 @@ import {
 import { ruleNames, type RulesData } from '../../lib/rules.ts';
 import { groupProblem, loadRules } from './rules.ts';
 import { termMatcher } from '../../lib/text.ts';
-import { isOfficial, PUBLISHER } from '../../rulesets/module.ts';
+import { HOMEBREW, isOfficial, PUBLISHER } from '../../rulesets/module.ts';
 import { accepts, checkLicenses, type Licenses } from '../../lib/licenses.ts';
 import { checkBlocklist, checkMarkdown, checkPlaceholders, loadBlocklist, stringsIn } from './text.ts';
 import { listEntryFiles } from './walk.ts';
@@ -208,7 +208,9 @@ export async function validateLibrary(root: string, options: ValidateOptions = {
     if (entry.author === ruleset.module.definition.publisher) {
       error(file, `author: "${entry.author}" is the ruleset's publisher; write "${PUBLISHER}" for official content`);
     }
-    if (license && entry.author !== (entry.meta as { source: { license: { author: string } } }).source.license.author) {
+    // "homebrew" is the author filter's value for all homebrew, so no entry may take it as a name.
+    if (entry.author === HOMEBREW) error(file, `author: "${HOMEBREW}" is reserved for the Library's Homebrew filter; credit a name`);
+    if (license && entry.author !==(entry.meta as { source: { license: { author: string } } }).source.license.author) {
       error(file, `author: an imported entry's author is its license's, "${(entry.meta as { source: { license: { author: string } } }).source.license.author}"`);
     }
     const statsResult = validateWithText(validateStats, entry.stats, 'stats');

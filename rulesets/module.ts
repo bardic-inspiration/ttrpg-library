@@ -68,6 +68,12 @@ export function linkedLibrary(entries: readonly LinkedEntry[], rules?: RulesData
 export const PUBLISHER = 'publisher';
 
 /**
+ * The author filter's value for every homebrew entry, the Sources box beside Official
+ * (docs/site.md#gallery "Filters"). No entry names it as its `author`.
+ */
+export const HOMEBREW = 'homebrew';
+
+/**
  * Whether an entry is official content: written by its ruleset's publisher, as opposed to homebrew
  * (docs/content-model.md#source-and-author). The one place official and homebrew are told apart.
  */

@@ -63,7 +63,8 @@ every entry says where it sits within the ruleset:
 - **`author`**: who wrote the entry. Required. `"publisher"` means the
   ruleset's publisher; anyone else is named as credited
   (`"bardic-inspiration"`). The publisher is never written by name, so the
-  validator fails an `author` equal to the ruleset's `publisher`.
+  validator fails an `author` equal to the ruleset's `publisher`. `"homebrew"`
+  is reserved for the Library's Homebrew filter, so the validator fails it too.
 
 **Official content** is an entry whose `author` is `"publisher"`; every other
 entry is **homebrew**. `isOfficial` in `rulesets/module.ts` is the one place
@@ -583,7 +584,7 @@ Checks for every type and ruleset:
 | File path matches `ruleset`, `type`, `id` | error |
 | ID unique within its type; name unique within its type, ignoring case (a component's within its parent) | error |
 | A component is listed by exactly one parent of an allowed type, its id starts with the parent's, and its `source` and `author` are the parent's | error |
-| `author` isn't the ruleset's `publisher` by name; an import's `author` is its license's | error |
+| `author` isn't the ruleset's `publisher` by name or `"homebrew"`; an import's `author` is its license's | error |
 | Near-duplicate names, unless both entries are official | warning |
 | Every ref resolves and its type matches | error |
 | Text fields use only the markdown subset | error |

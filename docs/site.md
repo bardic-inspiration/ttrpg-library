@@ -474,11 +474,13 @@ value, and a click adds or removes that value.
   - **Official** is a checkbox for the author filter's `"publisher"`
     (`f.author=publisher`): the ruleset's own material, such as the SRD for
     `dnd-5e-2024`. It has nothing under it and always shows.
-  - **Homebrew** is a group, not a checkbox, holding the **Source** and
-    **Author** filters (`f.source`, `f.author`) over the ruleset's other
-    entries. Each lists its values like a facet (below), with no official
-    source and no `"publisher"`. Homebrew shows when either has a value, and
-    opens around an active filter.
+  - **Homebrew** is a checkbox for the author filter's `"homebrew"`
+    (`f.author=homebrew`), which stands for every entry that isn't official, and
+    holds the **Source** and **Author** filters (`f.source`, `f.author`) over
+    those entries. Each lists its values like a facet (below), with no official
+    source, no `"publisher"`, and no `"homebrew"`. Homebrew shows when either has a
+    value, and opens around an active filter. Official keeps the chevron's
+    space Homebrew uses, so the two boxes align.
 - **The ruleset set.**
   - **Additive.** An entry is in the results when it matches any checked
     box in Sources, or the ruleset filter (`SCOPE_PATHS` in
@@ -493,7 +495,7 @@ value, and a click adds or removes that value.
   - **Default.** A fresh Library has Official checked, so it shows only
     official content. Clear filters clears the other filters and returns the
     set to this default; it shows while either differs from a fresh Library.
-  - **Counts.** Official, a source, or an author counts what checking it adds:
+  - **Counts.** Official, Homebrew, a source, or an author counts what checking it adds:
     its entries under the search and the other filters, whatever else in the
     set is checked.
 - **Types** holds the ruleset's types, each a checkbox for the type filter
