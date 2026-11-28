@@ -711,7 +711,9 @@ with the modifiers of the features, feats, and traits it has
   skills and Expertise, weapon and armor training as each class prints it
   (the starting class's Core Traits, a later class's "As a Multiclass
   Character" text), the tools, and the languages, each with those an entry
-  gives outright.
+  gives outright. The languages start with Common, under the background,
+  since every character knows it (SRD 5.2 "Character Creation": Common plus
+  two languages); a pick of Common isn't listed again.
 
 A character's page is a **profile** (`character-profile`), not a play
 sheet: what a DM needs to run the character, or a player needs to copy a
@@ -733,7 +735,9 @@ one, in this order:
 - **Attacks:** a paragraph per equipped weapon, led by its linked name:
   "***Longsword.*** +6 to hit, 1d8 + 3 Slashing damage, or 1d10 + 3
   two-handed; Versatile; Mastery: Sap", with the weapon's range when it has
-  one (a ranged or thrown weapon).
+  one (a ranged or thrown weapon). A negative modifier prints the minus
+  sign, U+2212, as a creature's does ([Creature display forms](#creature-display-forms)):
+  "1d6 − 1".
 - **Spellcasting:** per casting class, its ability, spell save DC, attack
   bonus, and cantrip and prepared counts; its spell slots and Pact Magic
   slots; and its spells by level ("Cantrips", "Level 1", …), linked.

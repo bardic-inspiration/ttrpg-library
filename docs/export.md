@@ -132,6 +132,12 @@ computed numbers, so translators read `derived` rather than recomputing.
   it is inert and outside the accessibility tree. At export,
   `site/src/lib/capture.ts` clones it into an off-screen host, waits for fonts
   and art, captures it, and removes the host; `html-to-image` loads only then.
+- `html-to-image` clones an `<svg>` whole and copies only its root's
+  computed style, and the page's stylesheet doesn't reach the image. So
+  before capture, `inlineDiagramStyles` writes each map diagram shape's
+  computed colors and label font onto the clone, inline, and a map's
+  diagram and a thumbnail capture as they show on screen
+  ([Map diagrams](content-model.md#map-diagrams)).
 - A creature with legendary actions or more than six actions captures at the
   wide width, with the stat block in two columns and no section split across
   them.

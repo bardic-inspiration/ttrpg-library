@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { describe, expect, it } from 'vitest';
 import EntryTemplate from '../../../site/src/components/templates/EntryTemplate.astro';
+import { attackText } from '../../../site/src/lib/character.ts';
 import { entryNames, loadLibrary, refPaths, type Entry, type LoadedEntry } from '../../../site/src/lib/library.ts';
 import { rulesData } from '../../../site/src/lib/rules.ts';
 import definition from '../../../rulesets/dnd-5e-2024/ruleset.json' with { type: 'json' };
@@ -63,13 +64,27 @@ describe('the profile of a multiclass build', async () => {
   it('lists its proficiencies, with a later class’s multiclass text', () => {
     expect(text).toContain('Saving Throws Strength and Constitution Armor Light, Medium, and Heavy armor and Shields Weapons Simple and Martial weapons');
     expect(html).toContain('<dt>Tools</dt><dd><a class="ref-link" href="/dnd-5e-2024/rules/tools/#equipment-gaming-set">Gaming Set</a> (dice)</dd>');
-    expect(html).toContain('<dt>Languages</dt><dd>Dwarvish, Giant</dd>');
+    expect(html).toContain('<dt>Languages</dt><dd>Common, Dwarvish, Giant</dd>');
     expect(html).toContain('<p><em><strong>As a Multiclass Wizard.</strong></em></p>');
   });
 
   it('shows an attack per equipped weapon, linked, with its Versatile damage, properties, and mastery', () => {
     expect(text).toContain('Longsword. +6 to hit, 1d8 + 3 Slashing damage, or 1d10 + 3 two-handed; Versatile; Mastery: Sap');
     expect(html).toContain('<em><strong><a class="ref-link" href="/dnd-5e-2024/rules/weapons/#equipment-longsword">Longsword</a>.</strong></em>');
+  });
+
+  it('prints a negative damage modifier with the minus sign, U+2212 (docs/rulesets.md#creature-display-forms)', () => {
+    const text = attackText({
+      ref: 'equipment/quarterstaff',
+      weapon: 'equipment/quarterstaff',
+      ability: 'str',
+      attackBonus: 2,
+      damage: { dice: '1d6', modifier: -1, type: 'bludgeoning', display: '1d6 - 1' },
+      versatile: { dice: '1d8', display: '1d8 - 1' },
+      properties: [{ ref: 'weapon-property/versatile' }],
+      mastery: { ref: 'mastery-property/topple' },
+    });
+    expect(text).toContain('+2 to hit, 1d6 \u2212 1 Bludgeoning damage, or 1d8 \u2212 1 two-handed');
   });
 
   it('shows the Wizard’s spellcasting, its slots, and its spells by level, linked', () => {
