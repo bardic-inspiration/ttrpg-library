@@ -183,7 +183,7 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 The top bar reads **Library | About | Contribute**
 (`site/src/components/SiteNav.astro`), then the print cart's count ("Cart: 3";
 [Gallery](#gallery) "Cart and set actions"), shown once its script runs.
-Search and the set export follow it in the header ([Page header](#page-header)).
+Search (off a Library) and the set export follow it in the header ([Page header](#page-header)).
 Library, and the site name before the top bar, open the home ruleset's Library,
 the registry's first ruleset (`homeRuleset` in
 `site/src/lib/gallery/library-url.ts`): `dnd-5e-2024`'s, the library's only
@@ -354,19 +354,19 @@ the registry's former keys for the pages, print, and the gallery.
 ### Page header
 
 Every page's header holds the top bar ([Pages and navigation](#pages-and-navigation)),
-then search and the set export (`site/src/components/header/HeaderActions.tsx`,
+then search, except on a Library, and the set export (`site/src/components/header/HeaderActions.tsx`,
 one Preact island in `layouts/Base.astro`). On narrow screens they wrap below
 the top bar.
 
 - **Search** is a form, labeled "Search", whose field (placeholder "Name")
-  opens a ruleset's Library with the query, `/<ruleset>/?q=<query>`, so it
-  works without JavaScript: on a ruleset's Library, or one of its entries' or
-  rules pages, that ruleset's; on every other page, the home ruleset's
-  (`pageRuleset` in `site/src/lib/gallery/library-url.ts`). The query reads as
-  the Library's search ([Gallery](#gallery) "Search") under the default
-  filters. On a Library it searches the gallery as the reader types instead,
-  keeping the other filters and the sort, and shows the query the Library's
-  URL holds.
+  opens a ruleset's Library with the query, `/<ruleset>/?q=<query>`, when the
+  reader submits it, so it works without JavaScript: on one of a ruleset's
+  entries' or rules pages, that ruleset's; on every other page, the home
+  ruleset's (`pageRuleset` in `site/src/lib/gallery/library-url.ts`). The
+  query reads as the Library's search ([Gallery](#gallery) "Search") under the
+  default filters. A Library has its own search, which filters as the reader
+  types ([Gallery](#gallery) "Layout"), so the header leaves this one out
+  there.
 - **The set export** is Print and Download ([Controls](export.md#controls)).
   On a Library, they act on the cart when it holds anything, and on the
   filtered results otherwise ([Gallery](#gallery) "Cart and set actions"). On
@@ -376,9 +376,9 @@ the top bar.
   name says what it targets ("Print 3 in cart", "Download 12 entries"). They
   need JavaScript, so they render once the island hydrates. A detail page's
   and a rules page's own export controls stay on the page.
-- The gallery and the header talk through window events
-  (`site/src/lib/library-view.ts`): the gallery publishes its query, records,
-  and results as they change, and the header asks it to search.
+- The gallery and the header talk through a window event
+  (`site/src/lib/library-view.ts`): the gallery publishes its records and
+  results as they change, and the set export follows them.
 
 ### Gallery
 
@@ -398,15 +398,18 @@ ruleset's records from it. Without JavaScript, the page shows its Rules list (se
 plain list of each of the ruleset's entries by name, linked to its detail
 page.
 
-**Layout.** Search and the set export sit in the page header
+**Layout.** The menu starts with search, a field labeled "Search"
+(placeholder "Name", `role="search"`) that filters the results as the reader
+types, keeping the other filters and the sort, and shows the query the URL
+holds. Below it come the filters. The set export sits in the page header
 ([Page header](#page-header)). On desktop, from a viewport
-of `64rem`, the menu is a sidebar beside the results and always shows. On
-phones and tablets it stacks above the results in a container closed by
-default, so results show on the first screen; a Filters button
-(`aria-expanded`) opens it. Directly below the filter menu, and always
-showing, a **Rules** list links the ruleset's rules pages, in its
-`rules/pages.json` order, then its Extensions page when it has one
-([Rules pages](#rules-pages)); a ruleset with neither has no list. It's a
+of `64rem`, the menu is a sidebar beside the results and always shows. Search heads the sidebar, level with Sort at the head of the results. On
+phones and tablets the menu stacks above the results: search shows, and the
+filters sit in a container closed by default, so results show on the first
+screen; a Filters button (`aria-expanded`) opens it. Directly below the
+filter menu, and always showing, a **Rules** list links the ruleset's rules
+pages, in its `rules/pages.json` order, then its Extensions page when it has
+one ([Rules pages](#rules-pages)); a ruleset with neither has no list. It's a
 plain list of links, with no bullets, under a "Rules" subheading, in the
 filter menu's text style: the menu's font at body size and the text color,
 the subheading in the weight of a type row's label. The breakpoint and the columns are tokens in
