@@ -12,7 +12,7 @@ const ATTRIBUTION =
 
 const PAGES = join(import.meta.dirname, '../../site/src/pages');
 
-async function renderBase(props: Record<string, unknown>, path = '/ttrpg-library/about/'): Promise<string> {
+async function renderBase(props: Record<string, unknown>, path = '/ttrpg-library/about/', page: any = Base): Promise<string> {
   const container = await AstroContainer.create();
   // The layout's icons are Preact components rendered statically; the Preact
   // integration's own server renderer needs the site's Vite plugins.
@@ -24,7 +24,7 @@ async function renderBase(props: Record<string, unknown>, path = '/ttrpg-library
       renderToStaticMarkup: async (Component, props) => ({ html: renderToString(h(Component as any, props as any)) }),
     },
   });
-  return container.renderToString(Base, { props, request: new Request(`https://bardic-inspiration.github.io${path}`) });
+  return container.renderToString(page, { props, request: new Request(`https://bardic-inspiration.github.io${path}`) });
 }
 
 describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', () => {
@@ -47,13 +47,12 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     expect(footer.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ')).toContain(ATTRIBUTION);
   });
 
-  it('the top bar reads Library, Rulesets, About, Contribute', async () => {
+  it('the top bar reads Library, About, Contribute', async () => {
     const html = await renderBase({ title: 'Test' });
     const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
     const links = [...nav.matchAll(/<a href="([^"]*)"[^>]*>([^<]*)<\/a>/g)].map((m) => [m[2], m[1]]);
     expect(links).toEqual([
       ['Library', '/dnd-5e-2024/'],
-      ['Rulesets', '/rulesets/'],
       ['About', '/about/'],
       ['Contribute', 'https://github.com/bardic-inspiration/ttrpg-library'],
     ]);
@@ -72,11 +71,23 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     expect(header).toContain('name="q"');
   });
 
-  it('marks the Library current on a ruleset’s Library, whose gallery search follows there', async () => {
+  it('marks the Library current on a ruleset’s Library, and leaves the header search out there', async () => {
     const html = await renderBase({ title: 'Test' }, '/dnd-5e-2024/');
     const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
     expect(nav).toMatch(/<a href="\/dnd-5e-2024\/" aria-current="page"[^>]*>Library<\/a>/);
-    expect(html).toContain('action="/dnd-5e-2024/"');
+    expect(html).not.toContain('header-search');
+  });
+
+  it('sends the old Rulesets page on to the home ruleset’s Library, which lists its rules pages (docs/site.md#redirects)', async () => {
+    const page = (await import('../../site/src/pages/rulesets.astro')).default;
+    const html = await renderBase({}, '/rulesets/', page);
+    expect(html).toContain('<meta http-equiv="refresh" content="0; url=/dnd-5e-2024/">');
+  });
+
+  it('marks the Library current on a rules page, which a Library lists (docs/site.md#gallery "Layout")', async () => {
+    const html = await renderBase({ title: 'Test' }, '/dnd-5e-2024/rules/glossary/');
+    const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
+    expect(nav).toMatch(/<a href="\/dnd-5e-2024\/" aria-current="true"[^>]*>Library<\/a>/);
   });
 
   it('opens the page’s own ruleset’s Library from search on its entries’ pages', async () => {

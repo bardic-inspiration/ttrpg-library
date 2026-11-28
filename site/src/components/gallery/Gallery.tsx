@@ -1,8 +1,8 @@
 // A ruleset's Library gallery island (docs/site.md#pages-and-navigation, docs/site.md#gallery). It
 // loads library.json once, then filters, searches, and sorts the ruleset's entries in memory, keeping the view in the query
-// string. Its search box and set export sit in the page header (docs/site.md#page-header): the
-// gallery publishes its view there and takes the header's query. The logic lives in lib/gallery/;
-// this file is the view.
+// string. Its search box heads the filter menu; its set export sits in the page header
+// (docs/site.md#page-header), where the gallery publishes its view. The logic lives in
+// lib/gallery/; this file is the view.
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import registryJson from '@library/config/types.json' with { type: 'json' };
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
@@ -12,9 +12,10 @@ import { filterTree } from '../../lib/gallery/tree.ts';
 import { computeView } from '../../lib/gallery/view.ts';
 import { rulesetRegistry } from '../../lib/gallery/library-url.ts';
 import FilterIcon from '../../icons/Filter.tsx';
+import SearchIcon from '../../icons/Search.tsx';
 import SortIcon from '../../icons/Sort.tsx';
 import { cartKey, pruneCart, setInCart, writeCart } from '../../lib/cart.ts';
-import { onSearchRequest, publishView } from '../../lib/library-view.ts';
+import { publishView } from '../../lib/library-view.ts';
 import { useCart } from '../cart/useCart.ts';
 import Button from '../shared/Button.tsx';
 import { DisclosureButton } from '../shared/Disclosure.tsx';
@@ -35,13 +36,20 @@ export interface GalleryProps {
   facetData?: FacetData;
   /** The ruleset whose Library this is; every ruleset's entries when it's left out, as in the style guide. */
   ruleset?: string;
+  /** The ruleset's rules pages, listed under the filter menu (docs/site.md#gallery "Layout"). */
+  rules?: RulesLink[];
+}
+
+export interface RulesLink {
+  title: string;
+  href: string;
 }
 
 const registry = registryJson as unknown as Registry;
 
 const resultText = (n: number) => (n === 0 ? 'No entries match.' : n === 1 ? '1 entry' : `${n} entries`);
 
-export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData, ruleset }: GalleryProps) {
+export default function Gallery({ indexUrl, base, records: given, initialQuery, facetData, ruleset, rules = [] }: GalleryProps) {
   const own = useMemo(() => rulesetRegistry(registry, ruleset), [ruleset]);
   const config = useMemo(() => galleryConfig(own, facetData), [own, facetData]);
   // Every ruleset's records, which the cart reads; the gallery shows only its ruleset's.
@@ -77,15 +85,10 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
 
   const view = useMemo(() => computeView(records ?? [], config, state), [records, config, state]);
 
-  // The header's search drives the query, and the header's set export follows the results.
-  useEffect(
-    () =>
-      onSearchRequest((q) => setState((current) => (current.q === q ? current : { ...current, q }))),
-    [],
-  );
+  // The header's set export follows the results.
   useEffect(() => {
-    publishView({ q: state.q, ...(all && { records: all, results: view.results }) });
-  }, [state.q, all, view.results]);
+    publishView(all ? { records: all, results: view.results } : {});
+  }, [all, view.results]);
 
   if (failed) return <p class="gallery__status">The library couldn’t be loaded. Try reloading the page.</p>;
   if (!records) return <p class="gallery__status">Loading the library…</p>;
@@ -111,6 +114,21 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
     <div class="gallery">
       <div class="gallery__layout">
         <div class="gallery__menu">
+          <div class="gallery__search" role="search">
+            <label for="gallery-q">
+              <SearchIcon /> Search
+            </label>
+            <input
+              id="gallery-q"
+              type="search"
+              placeholder="Name"
+              value={state.q}
+              onInput={(e) => {
+                const q = (e.currentTarget as HTMLInputElement).value;
+                setState((current) => (current.q === q ? current : { ...current, q }));
+              }}
+            />
+          </div>
           <DisclosureButton
             class="gallery__filters-toggle"
             controls="gallery-filters"
@@ -142,6 +160,20 @@ export default function Gallery({ indexUrl, base, records: given, initialQuery, 
               </Button>
             )}
           </section>
+          {rules.length > 0 && (
+            <nav class="gallery__rules" aria-labelledby="gallery-rules">
+              <h2 id="gallery-rules" class="gallery__rules-heading">
+                Rules
+              </h2>
+              <ul class="gallery__rules-list">
+                {rules.map((link) => (
+                  <li key={link.href}>
+                    <a href={link.href}>{link.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
         </div>
 
         <section class="gallery__results" aria-label="Results">

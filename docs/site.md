@@ -17,7 +17,7 @@ never decides whether a field displays; the schema does
 ([content-model.md](content-model.md#situational-fields)).
 
 Per ruleset: a `label`, its display name in its Library's heading and title,
-on the Rulesets page, and in the redirects from its old pages. Per type:
+and in the redirects from its old pages. Per type:
 
 | Key | Purpose |
 |---|---|
@@ -173,23 +173,24 @@ it, so a deploy shows on the next load, and an unchanged file costs only a
 | `/<ruleset>/` | The ruleset's Library: its entries in one gallery ([Gallery](#gallery)) |
 | `/<ruleset>/<type>/` | Redirects to the ruleset's Library with the type checked ([Redirects](#redirects)) |
 | `/<ruleset>/<type>/<id>/` | Detail page |
-| `/rulesets/` | Each ruleset, linked to its Library, with its rules pages and its Extensions page |
+| `/rulesets/` | Redirects to the home ruleset's Library ([Redirects](#redirects)) |
 | `/<ruleset>/rules/<page>/` | A rules page ([Rules pages](#rules-pages)) |
 | `/<ruleset>/rules/extensions/` | The ruleset's Extensions page |
 | `/print/` | Print view for one or many entries ([export.md](export.md#print)) |
 | `/about/` | What the library is, SRD attribution, licenses |
 | `/styleguide/` | The style guide, not linked in navigation ([styling.md](styling.md#refinement-workflow)); only the repo's library has it ([Library root](#library-root)) |
 
-The top bar reads **Library | Rulesets | About | Contribute**
+The top bar reads **Library | About | Contribute**
 (`site/src/components/SiteNav.astro`), then the print cart's count ("Cart: 3";
 [Gallery](#gallery) "Cart and set actions"), shown once its script runs.
-Search and the set export follow it in the header ([Page header](#page-header)).
+Search (off a Library) and the set export follow it in the header ([Page header](#page-header)).
 Library, and the site name before the top bar, open the home ruleset's Library,
 the registry's first ruleset (`homeRuleset` in
 `site/src/lib/gallery/library-url.ts`): `dnd-5e-2024`'s, the library's only
 one. Contribute links to the repository. The current page's link is marked
 `aria-current="page"`; Library is marked current (`aria-current="true"`) on
-every other ruleset's Library, and Rulesets on every rules page. The
+every other ruleset's Library and on every rules page, which a Library lists
+([Gallery](#gallery) "Layout"). The
 footer carries the SRD 5.2 attribution statement on every page. The site is
 served under the base `/ttrpg-library/`
 ([architecture.md](architecture.md#technology)); a preview build's pages
@@ -230,8 +231,8 @@ Each page in a ruleset's `rules/pages.json` builds at
 
 A ruleset with a rules type that takes extensions also builds an Extensions
 page at `/<ruleset>/rules/extensions/`: one searchable list per such type.
-The Rulesets page (`/rulesets/`) lists each ruleset's rules pages in
-`pages.json` order, then its Extensions page when it has one.
+A ruleset's Library lists its rules pages in `pages.json` order, then its
+Extensions page when it has one ([Gallery](#gallery) "Layout").
 
 A link to a primitive or group, from any entry or rules page, renders as its
 name linked to its anchor; refs carry the anchors' paths alongside the names
@@ -322,6 +323,10 @@ that ruleset's Library instead. The query and fragment come along, so
 `/dnd-5e-2024/?f.ruleset=dnd-5e-2024&f.type=dnd-5e-2024/spell`, showing the
 whole ruleset, homebrew included, as it did.
 
+**The old Rulesets page.** `/rulesets/` is a redirect page to the home
+ruleset's Library, whose menu lists the ruleset's rules pages
+([Gallery](#gallery) "Layout").
+
 **Old type galleries.** The per-type galleries are gone;
 `/<ruleset>/<type>/` redirects to
 `/<ruleset>/?sort=<defaultSort>&f.ruleset=<ruleset>&f.type=<ruleset>/<type>`
@@ -349,19 +354,19 @@ the registry's former keys for the pages, print, and the gallery.
 ### Page header
 
 Every page's header holds the top bar ([Pages and navigation](#pages-and-navigation)),
-then search and the set export (`site/src/components/header/HeaderActions.tsx`,
+then search, except on a Library, and the set export (`site/src/components/header/HeaderActions.tsx`,
 one Preact island in `layouts/Base.astro`). On narrow screens they wrap below
 the top bar.
 
 - **Search** is a form, labeled "Search", whose field (placeholder "Name")
-  opens a ruleset's Library with the query, `/<ruleset>/?q=<query>`, so it
-  works without JavaScript: on a ruleset's Library, or one of its entries' or
-  rules pages, that ruleset's; on every other page, the home ruleset's
-  (`pageRuleset` in `site/src/lib/gallery/library-url.ts`). The query reads as
-  the Library's search ([Gallery](#gallery) "Search") under the default
-  filters. On a Library it searches the gallery as the reader types instead,
-  keeping the other filters and the sort, and shows the query the Library's
-  URL holds.
+  opens a ruleset's Library with the query, `/<ruleset>/?q=<query>`, when the
+  reader submits it, so it works without JavaScript: on one of a ruleset's
+  entries' or rules pages, that ruleset's; on every other page, the home
+  ruleset's (`pageRuleset` in `site/src/lib/gallery/library-url.ts`). The
+  query reads as the Library's search ([Gallery](#gallery) "Search") under the
+  default filters. A Library has its own search, which filters as the reader
+  types ([Gallery](#gallery) "Layout"), so the header leaves this one out
+  there.
 - **The set export** is Print and Download ([Controls](export.md#controls)).
   On a Library, they act on the cart when it holds anything, and on the
   filtered results otherwise ([Gallery](#gallery) "Cart and set actions"). On
@@ -371,9 +376,9 @@ the top bar.
   name says what it targets ("Print 3 in cart", "Download 12 entries"). They
   need JavaScript, so they render once the island hydrates. A detail page's
   and a rules page's own export controls stay on the page.
-- The gallery and the header talk through window events
-  (`site/src/lib/library-view.ts`): the gallery publishes its query, records,
-  and results as they change, and the header asks it to search.
+- The gallery and the header talk through a window event
+  (`site/src/lib/library-view.ts`): the gallery publishes its records and
+  results as they change, and the set export follows them.
 
 ### Gallery
 
@@ -389,15 +394,25 @@ rather than in the menu. The cart is one across rulesets
 
 **Loading.** The island fetches `library.json` once per page load, revalidated
 ([Fresh data](#fresh-data)), and filters it in memory; the cart reads every
-ruleset's records from it. Without JavaScript, the page shows a plain list of
-each of the ruleset's entries by name, linked to its detail page.
+ruleset's records from it. Without JavaScript, the page shows its Rules list (see "Layout") and a
+plain list of each of the ruleset's entries by name, linked to its detail
+page.
 
-**Layout.** Search and the set export sit in the page header
+**Layout.** The menu starts with search, a field labeled "Search"
+(placeholder "Name", `role="search"`) that filters the results as the reader
+types, keeping the other filters and the sort, and shows the query the URL
+holds. Below it come the filters. The set export sits in the page header
 ([Page header](#page-header)). On desktop, from a viewport
-of `64rem`, the menu is a sidebar beside the results and always shows. On
-phones and tablets it stacks above the results in a container closed by
-default, so results show on the first screen; a Filters button
-(`aria-expanded`) opens it. The breakpoint and the columns are tokens in
+of `64rem`, the menu is a sidebar beside the results and always shows. Search heads the sidebar, level with Sort at the head of the results. On
+phones and tablets the menu stacks above the results: search shows, and the
+filters sit in a container closed by default, so results show on the first
+screen; a Filters button (`aria-expanded`) opens it. Directly below the
+filter menu, and always showing, a **Rules** list links the ruleset's rules
+pages, in its `rules/pages.json` order, then its Extensions page when it has
+one ([Rules pages](#rules-pages)); a ruleset with neither has no list. It's a
+plain list of links, with no bullets, under a "Rules" subheading, in the
+filter menu's text style: the menu's font at body size and the text color,
+the subheading in the weight of a type row's label. The breakpoint and the columns are tokens in
 `tokens/components.css` ([styling.md](styling.md#tokens)). Sort, the result
 count, and the cart's count head the results. The page keeps the scrollbar's
 room (`scrollbar-gutter: stable` in `layout.css`) whether or not it scrolls, so
@@ -617,7 +632,13 @@ thousand entries. Past about 2,000, revisit the index size.
 
 ### Detail page
 
-- Art (only when the entry has it), name, type, and summary.
+- Art (only when the entry has it), name, and summary, with a line of chips
+  under the name: the type, then the entry's source (left out when it has
+  none), its author, and "Official" or "Homebrew"
+  ([Source and author](content-model.md#source-and-author)). An author of
+  `"publisher"` reads as the ruleset's publisher ("SRD 5.2 · Wizards of the
+  Coast · Official"). The source, author, and status chips are neutral, like a
+  card's source badge, and a long one wraps inside its chip.
 - The full stat block or card from the type's template, then a page type's
   components, in its order: each a section with its name as a heading one
   level below the entry's, anchored at `#<type>-<id>`, holding its rules text

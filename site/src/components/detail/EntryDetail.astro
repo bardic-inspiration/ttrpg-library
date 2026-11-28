@@ -10,7 +10,8 @@ import { rulesetModule } from '../../lib/library';
 import { outsideZones } from '../../lib/map';
 import { groupPageRefs, groupRefs, splitHomebrew, type RefTarget } from '../../lib/refs';
 import { isOfficial } from '../../../../rulesets/module';
-import { provenance } from '../../lib/detail';
+import { provenance, sourceChips } from '../../lib/detail';
+import { rulesetPublishers } from '../../lib/rules';
 import { renderMarkdown } from '../../lib/markdown';
 import { present } from '../../lib/display';
 import { url } from '../../lib/url';
@@ -58,7 +59,12 @@ const nameParts = entry.name.split('/');
     )}
     <div class="entry-detail__intro">
       <h1>{nameParts.map((part, i) => <>{i > 0 && <>/<wbr /></>}{part}</>)}</h1>
-      <p><a class="entry-detail__type" href={url(typeLibrary(registry as unknown as Registry, entry.ruleset, entry.type))}>{typeLabel}</a></p>
+      <ul class="entry-detail__badges">
+        <li><a class="entry-detail__type" href={url(typeLibrary(registry as unknown as Registry, entry.ruleset, entry.type))}>{typeLabel}</a></li>
+        {sourceChips(entry, rulesetPublishers()[entry.ruleset]).map((chip) => (
+          <li class={`entry-detail__chip entry-detail__chip--${chip.kind}`}>{chip.text}</li>
+        ))}
+      </ul>
       <p class="entry-detail__summary">{entry.summary}</p>
       <slot name="export" />
     </div>
@@ -131,7 +137,17 @@ const nameParts = entry.name.split('/');
       gap: var(--space-2xs);
     }
 
-    .entry-detail__type {
+    .entry-detail__badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3xs);
+      padding: 0;
+      list-style: none;
+    }
+
+    .entry-detail__type,
+    .entry-detail__chip {
+      display: inline-block;
       font-family: var(--badge-font);
       font-size: var(--text-small);
       font-weight: var(--font-weight-label);
@@ -140,6 +156,15 @@ const nameParts = entry.name.split('/');
       border-radius: var(--chip-radius);
       padding: 0 var(--space-2xs);
       text-decoration: none;
+    }
+
+    /* Neutral, like a card's source badge, so these never read as the type; a long name wraps inside its chip. */
+    .entry-detail__chip {
+      max-inline-size: 100%;
+      overflow-wrap: anywhere;
+      color: var(--badge-source-text);
+      border: var(--badge-source-border);
+      border-radius: var(--badge-source-radius);
     }
 
     .entry-detail__summary {

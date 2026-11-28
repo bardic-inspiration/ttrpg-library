@@ -14,6 +14,19 @@
     color: var(--color-text-muted);
   }
 
+  /* Search heads the filter menu, level with Sort at the head of the results. */
+  .gallery__search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-family: var(--control-font);
+
+    & input {
+      flex: 1;
+      min-inline-size: 0;
+    }
+  }
+
   .gallery__sort {
     display: flex;
     flex-wrap: wrap;
@@ -59,6 +72,35 @@
     &:not([data-open]) {
       display: var(--filters-closed-display);
     }
+  }
+
+  /*
+   * The ruleset's rules pages, below the filter menu and always showing: a plain list of links in
+   * the menu's text style, under a heading styled as a type row's label (docs/site.md#gallery "Layout").
+   */
+  .gallery__rules {
+    display: grid;
+    gap: var(--space-3xs);
+    font-family: var(--control-font);
+
+    & a {
+      color: var(--color-text);
+    }
+  }
+
+  .gallery__rules-heading {
+    font-family: var(--control-font);
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-label);
+    line-height: inherit;
+  }
+
+  .gallery__rules-list {
+    display: grid;
+    gap: var(--space-3xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
   .gallery__results {

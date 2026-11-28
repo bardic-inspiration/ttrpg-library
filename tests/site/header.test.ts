@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
-// The page header's search and set export (docs/site.md#page-header): on every page, search opens
-// the Library with the query, and on the Library it searches the gallery as the reader types.
+// The page header's search and set export (docs/site.md#page-header): off the Library, search
+// opens the Library with the query when submitted; on the Library, the gallery's own search, which
+// heads its filter menu, filters as the reader types.
 // Print and Download act on the cart, or on the Library's filtered results while it's empty,
 // and their accessible names say which.
 import { h, render } from 'preact';
@@ -31,7 +32,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const search = () => root.querySelector<HTMLInputElement>('#site-q')!;
+const search = () => root.querySelector<HTMLInputElement>('#gallery-q')!;
 const actions = () => root.querySelector('.set-actions')?.textContent ?? '';
 const button = (text: string) => [...root.querySelectorAll('button')].find((b) => b.textContent?.startsWith(text))!;
 const type = async (input: HTMLInputElement, value: string) => {
@@ -57,30 +58,31 @@ describe('the header search', () => {
     expect(submit.defaultPrevented).toBe(false);
   });
 
-  it('searches the gallery as the reader types on the Library, without leaving the page', async () => {
-    await act(() =>
-      render(
-        h('div', null, h(HeaderActions, { base: BASE, library: true }), h(Gallery, { indexUrl: '', base: BASE, records, initialQuery: whole('') })),
-        root,
-      ),
+  it('leaves search out on the Library, whose gallery has its own', () => {
+    expect(renderToString(h(HeaderActions, { base: BASE, library: true }))).not.toContain('header-search');
+  });
+});
+
+describe('the Library search', () => {
+  const library = (query: string) =>
+    render(
+      h('div', null, h(HeaderActions, { base: BASE, library: true }), h(Gallery, { indexUrl: '', base: BASE, records, initialQuery: whole(query) })),
+      root,
     );
+
+  it('filters the gallery as the reader types, and the set export follows', async () => {
+    await act(() => library(''));
     const before = root.querySelectorAll('.gallery__grid > li').length;
     await type(search(), 'cinder');
     const names = [...root.querySelectorAll('.gallery__grid article h3, .gallery__grid article h2')].map((n) => n.textContent);
     expect(root.querySelectorAll('.gallery__grid > li').length).toBeLessThan(before);
     expect(names.join(' ')).toMatch(/Cinder Hound/);
-    const submit = new Event('submit', { cancelable: true });
-    root.querySelector('form')!.dispatchEvent(submit);
-    expect(submit.defaultPrevented).toBe(true);
+    expect(actions()).toContain('Print 1 entry');
+    expect(root.querySelectorAll('[role="search"]')).toHaveLength(1);
   });
 
-  it('shows the Library’s query from its URL', async () => {
-    await act(() =>
-      render(
-        h('div', null, h(HeaderActions, { base: BASE, library: true }), h(Gallery, { indexUrl: '', base: BASE, records, initialQuery: whole('?q=frost') })),
-        root,
-      ),
-    );
+  it('shows the query from the Library’s URL', async () => {
+    await act(() => library('?q=frost'));
     expect(search().value).toBe('frost');
   });
 });

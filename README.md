@@ -36,7 +36,7 @@ Three development tracks carry on ([`spec/tracks/`](spec/tracks/README.md)):
 - **Integrations:** import and export for more open TTRPG formats, for VTTs
   and other sites.
 - **Images:** public domain and openly licensed art on entries.
-- **Rulesets:** a second published ruleset, and a redesigned Rulesets page.
+- **Rulesets:** a second published ruleset.
 
 ## Contributing
 

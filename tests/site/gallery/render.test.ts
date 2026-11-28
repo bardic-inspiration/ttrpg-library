@@ -24,6 +24,20 @@ describe('Gallery', () => {
     expect(render({ records: undefined })).toContain('Loading the library');
   });
 
+  it('lists the ruleset’s rules pages under a Rules heading after the filter menu (docs/site.md#gallery "Layout")', () => {
+    const rules = [
+      { title: 'Glossary', href: '/ttrpg-library/dnd-5e-2024/rules/glossary/' },
+      { title: 'Extensions', href: '/ttrpg-library/dnd-5e-2024/rules/extensions/' },
+    ];
+    const html = render({ rules });
+    const menu = html.slice(html.indexOf('<div class="gallery__menu"'), html.indexOf('<section class="gallery__results"'));
+    expect(menu.indexOf('id="gallery-filters"')).toBeLessThan(menu.indexOf('class="gallery__rules"'));
+    expect(menu).toMatch(/<nav class="gallery__rules" aria-labelledby="gallery-rules"><h2 id="gallery-rules" class="gallery__rules-heading">Rules<\/h2>/);
+    const links = [...menu.matchAll(/<li><a href="([^"]*)">([^<]*)<\/a><\/li>/g)].map((m) => [m[2], m[1]]);
+    expect(links).toEqual(rules.map((r) => [r.title, r.href]));
+    expect(render({})).not.toContain('gallery__rules');
+  });
+
   it('renders a card per result, with the type badge and card fields, and no art when there is none', () => {
     const html = render({});
     // The three example entries, and the two classes Frost Lance names.
@@ -123,16 +137,15 @@ describe('Gallery', () => {
     expect(html).toContain('<ul class="tree__values" id="filter-dnd-5e-2024-creature-stats-creatureType-panel" aria-labelledby="filter-dnd-5e-2024-creature-stats-creatureType-toggle">');
   });
 
-  it('opens the filter menu with a toggle on phones and tablets, and leaves search to the page header (docs/site.md#page-header)', () => {
-    const html = render({});
-    expect(html).not.toContain('role="search"');
-    expect(html).toMatch(/class="gallery__menu"><button type="button" class="disclosure gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters"><span class="chevron" aria-hidden="true"><\/span>.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
+  it('heads the filter menu with search, then a toggle that opens the menu on phones and tablets', () => {
+    const html = render({ initialQuery: '?q=frost' });
+    expect(html).toMatch(/class="gallery__menu"><div class="gallery__search" role="search"><label for="gallery-q">.*Search<\/label><input id="gallery-q" type="search" placeholder="Name" value="frost"\/><\/div><button type="button" class="disclosure gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters"><span class="chevron" aria-hidden="true"><\/span>.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
     expect(html).not.toContain('data-open');
   });
 
   it('labels every control', () => {
     const html = render({ initialQuery: '?f.stats.cr=1..' });
-    for (const id of ['gallery-sort', 'gallery-dir', 'filter-dnd-5e-2024-creature-stats-cr-min', 'filter-dnd-5e-2024-creature-stats-cr-max']) {
+    for (const id of ['gallery-q', 'gallery-sort', 'gallery-dir', 'filter-dnd-5e-2024-creature-stats-cr-min', 'filter-dnd-5e-2024-creature-stats-cr-max']) {
       expect(html).toContain(`for="${id}"`);
       expect(html).toContain(`id="${id}"`);
     }

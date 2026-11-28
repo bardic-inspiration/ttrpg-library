@@ -3,7 +3,27 @@
 
 import licenses from '../../../config/licenses.json' with { type: 'json' };
 import type { Licenses } from '../../../lib/licenses.ts';
+import { isOfficial } from '../../../rulesets/module.ts';
 import type { Entry } from './library.ts';
+
+export interface SourceChip {
+  kind: 'source' | 'author' | 'status';
+  text: string;
+}
+
+/**
+ * The chips after the type on a detail page (docs/site.md#detail-page): the source if it has one,
+ * the author (an author of `"publisher"` reads as the ruleset's publisher), and whether the entry
+ * is official or homebrew.
+ */
+export function sourceChips(entry: Entry, publisher: string | undefined): SourceChip[] {
+  const official = isOfficial(entry);
+  return [
+    ...(entry.source ? [{ kind: 'source' as const, text: entry.source }] : []),
+    { kind: 'author', text: official ? (publisher ?? entry.author) : entry.author },
+    { kind: 'status', text: official ? 'Official' : 'Homebrew' },
+  ];
+}
 
 export interface Provenance {
   createdAt: string;

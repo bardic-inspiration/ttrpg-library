@@ -231,7 +231,7 @@ Target: WCAG 2.2 AA.
 - **Automated check.** `npm run a11y` runs axe-core through Playwright on the
   built site and fails on any
   serious or critical violation. It serves `site/dist` under the site base and
-  checks each ruleset's Library, the Rulesets page, and the About page.
+  checks each ruleset's Library and the About page.
   From `library.json` it adds the first record's ruleset's Library filtered to its type
   and its first facet value, the first detail page of each type that has an
   entry, and the print view of those entries, checked once loaded (with
