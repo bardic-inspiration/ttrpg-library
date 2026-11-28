@@ -61,6 +61,26 @@ Detail pages lose their own Print and Download (`ExportButtons` there), and
 keep their "In cart" checkbox. Rules pages lose their Print
 (`PagePrint.astro`) and have no export: they're for reference on the web.
 
+### PNG for the cart
+
+PNG becomes a cart format, one image per entry
+([PNG](../../docs/export.md#png)):
+
+- **Capture fragments.** The build emits each card entry's capture source at
+  `capture/<ruleset>/<type>/<id>/`, as it emits print fragments
+  ([Print](../../docs/export.md#print) "Print fragments"): the markup
+  `CaptureSource.astro` puts on a detail page now, which the detail page no
+  longer carries. At export, `capture.ts` fetches only the cart's fragments
+  and captures each in turn, as it captures one now.
+- **Files.** One entry downloads as `<id>.png`. Several download as one zip,
+  `library-<YYYYMMDD>.png.zip`, holding `<type>-<id>.png` per entry, in cart
+  order.
+- **Scope.** PNG is in Export's menu while the cart holds a card entry. A page
+  type (class, subclass, species) has no capture source, so it's skipped and
+  listed in the export report ([Controls](../../docs/export.md#controls)). If
+  a fragment fails to load or a capture fails, nothing downloads, and the
+  status says which entry.
+
 ### The cart
 
 The count "Cart: N" becomes a cart icon with the number beside it, directly
@@ -98,6 +118,8 @@ keep working.
 - `creature/lich`'s page: the header shows the cart and Export; the page has
   no Print or Download of its own; Export acts on the cart, and is disabled
   while it's empty.
+- `spell/fireball` alone in the cart: PNG downloads `fireball.png`. With
+  `creature/lich` added, PNG downloads one zip of two images.
 - `spell/fireball` and `spell/bless` in the cart: removing Fireball in the
   cart menu marks it removed but keeps it listed; closing the menu drops it,
   and its card's "In cart" unchecks.
@@ -108,7 +130,8 @@ keep working.
 ## Migration
 
 - Removes `SiteNav.astro`, `about.astro`, and `PagePrint.astro`, and the
-  detail page's export controls.
+  detail page's export controls and capture source; the build emits capture
+  fragments instead.
 - `README.md` gains the Attribution section.
 - [SRD attribution](../../docs/licensing.md#srd-attribution) and
   [New rulesets](../../docs/licensing.md#new-rulesets) are updated for the
@@ -121,18 +144,13 @@ keep working.
 - Export is the only export control on any page, with Print and the download
   formats in its menu, and acts on the cart alone; tests cover it on the
   Library, a detail page, and a rules page.
+- PNG exports the cart as one image, or a zip of one image per entry, with
+  tests for one entry, several, a page type skipped, and a failed capture.
 - The cart menu removes, clears, closes, and refreshes on close as above, with
   tests.
 - The footer is two links, `/about/` redirects, and the link check passes.
 - Docs: [Pages and navigation](../../docs/site.md#pages-and-navigation),
   [Page header](../../docs/site.md#page-header),
-  [Controls](../../docs/export.md#controls), and
+  [Controls](../../docs/export.md#controls), [PNG](../../docs/export.md#png), and
   [SRD attribution](../../docs/licensing.md#srd-attribution).
 - Screenshots at 390, 820, and 1440px.
-
-## Open questions
-
-- **PNG capture.** Today only a detail page offers PNG, captured from the
-  entry rendered on that page. With Export acting on the cart, whether PNG is
-  dropped, or offered for the cart, captured from each entry's print
-  fragment, one image per entry.
