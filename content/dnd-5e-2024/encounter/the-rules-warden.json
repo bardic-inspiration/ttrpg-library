@@ -1,0 +1,67 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "the-rules-warden",
+  "name": "The Rules Warden",
+  "summary": "A shield guardian bars the Rules Room's master tables until the party proves it knows what it is looking for.",
+  "stats": {
+    "setIn": {
+      "ref": "map/library-of-tabletop",
+      "zone": "rules-room"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/library-of-tabletop",
+          "zone": "rules-room",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "The reading room is silent but for the scratch of a quill that writes on its own. The walls are hung with great framed tables, and in the center of the room a hulking guardian of iron and stone turns its head toward you."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/shield-guardian} answers to the Maintainer's amulet, which the Maintainer has misplaced. It lets anyone read the tables, but attacks anyone who touches them. A creature that states one rule from the tables correctly and asks to compare it may take one framed table down for a minute; a wrong statement starts the fight. Three successful comparisons, or destroying the guardian, open the room for the rest of the adventure. The tables are the standard every anomaly is measured against."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/shield-guardian",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "part": "table",
+        "title": "The Master Tables",
+        "text": "| Table | What it rules |\n|---|---|\n| Challenge and Experience | Each creature's XP by its challenge rating |\n| Budgets per Character | How much danger a party of each level can face |\n| Character Creation | Point buy, origins, and that every character knows Common and two more languages |\n| The House Style | How every number and sign is printed, including the true minus sign for negatives |\n| The Kinds of Entries | Every type the Library may hold and where each is shelved |\n| Maps and Diagrams | A map's diagram carries no colors of its own; the Library colors every wall, room, and label when it shows or prints one |"
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "moderate": {
+            "items": [
+              {
+                "ref": "item/truthful-candle"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

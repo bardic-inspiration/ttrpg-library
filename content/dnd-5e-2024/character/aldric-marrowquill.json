@@ -1,0 +1,183 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "character",
+  "id": "aldric-marrowquill",
+  "name": "Aldric Marrowquill",
+  "summary": "An elf sage and Chronicler Wizard who reads every page twice and remembers both readings.",
+  "description": "Aldric spent a century as an under-librarian and has read more of the Library's shelves than anyone but the Maintainer. He was the first to notice that a spell he had read a hundred times had a different page number this week.",
+  "stats": {
+    "species": {
+      "ref": "species/elf"
+    },
+    "background": {
+      "ref": "background/sage"
+    },
+    "classes": [
+      {
+        "class": {
+          "ref": "class/wizard"
+        },
+        "level": 6,
+        "subclass": {
+          "ref": "subclass/chronicler"
+        }
+      }
+    ],
+    "abilities": {
+      "base": {
+        "str": 8,
+        "dex": 14,
+        "con": 14,
+        "int": 15,
+        "wis": 12,
+        "cha": 8
+      },
+      "background": {
+        "int": 2,
+        "con": 1
+      }
+    },
+    "feats": [
+      {
+        "ref": "feat/magic-initiate",
+        "note": "Wizard",
+        "source": {
+          "ref": "background/sage"
+        }
+      },
+      {
+        "ref": "feat/ability-score-improvement",
+        "source": {
+          "ref": "class/wizard",
+          "level": 4
+        },
+        "abilities": {
+          "int": 1,
+          "dex": 1
+        }
+      }
+    ],
+    "choices": [
+      {
+        "source": {
+          "ref": "class/wizard"
+        },
+        "skills": [
+          "investigation",
+          "religion"
+        ]
+      },
+      {
+        "source": {
+          "ref": "species-trait/elf-elven-lineage"
+        },
+        "option": "High Elf"
+      },
+      {
+        "source": {
+          "ref": "species-trait/elf-keen-senses"
+        },
+        "skills": [
+          "perception"
+        ]
+      },
+      {
+        "source": {
+          "ref": "class-feature/wizard-scholar"
+        },
+        "expertise": [
+          "arcana"
+        ]
+      },
+      {
+        "source": {
+          "ref": "background/sage"
+        },
+        "languages": [
+          "Draconic",
+          "Dwarvish"
+        ]
+      }
+    ],
+    "equipped": [
+      {
+        "ref": "equipment/quarterstaff"
+      },
+      {
+        "ref": "equipment/dagger"
+      }
+    ],
+    "spells": [
+      {
+        "ref": "spell/fire-bolt"
+      },
+      {
+        "ref": "spell/mage-hand"
+      },
+      {
+        "ref": "spell/light"
+      },
+      {
+        "ref": "spell/prestidigitation"
+      },
+      {
+        "ref": "spell/message"
+      },
+      {
+        "ref": "spell/mending"
+      },
+      {
+        "ref": "spell/ray-of-frost"
+      },
+      {
+        "ref": "spell/detect-magic"
+      },
+      {
+        "ref": "spell/find-familiar"
+      },
+      {
+        "ref": "spell/magic-missile"
+      },
+      {
+        "ref": "spell/shield"
+      },
+      {
+        "ref": "spell/mage-armor"
+      },
+      {
+        "ref": "spell/identify"
+      },
+      {
+        "ref": "spell/misty-step"
+      },
+      {
+        "ref": "spell/detect-thoughts"
+      },
+      {
+        "ref": "spell/web"
+      },
+      {
+        "ref": "spell/scorching-ray"
+      },
+      {
+        "ref": "spell/counterspell"
+      },
+      {
+        "ref": "spell/fireball"
+      },
+      {
+        "ref": "spell/dispel-magic"
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

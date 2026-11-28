@@ -1,0 +1,66 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "the-schema-forge",
+  "name": "The Schema Forge",
+  "summary": "A flesh golem stoking the forge and the animated armor it pressed fight among the molds every entry is cast in.",
+  "stats": {
+    "setIn": {
+      "ref": "map/the-repository",
+      "zone": "schema-forge"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/the-repository",
+          "zone": "schema-forge",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "Heat rolls out of a vault lined with iron molds, each stamped with the name of a kind of entry. A huge stitched figure works the bellows, and five suits of armor stand in a row beside the anvil, fresh from the molds and still smoking."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/flesh-golem} was set to press new entries and never told to stop. It attacks anything that isn't an entry, and orders the {ref:creature/animated-armor} to do the same. Fire makes it hesitate; the forge's coals are close at hand. Every mold here is sound: an entry pressed in one fits the gate upstairs exactly. The party can test a visitor card in the hero mold to prove that the card's shape is right and the fault lies further in."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/flesh-golem",
+            "count": 1
+          },
+          {
+            "ref": "creature/animated-armor",
+            "count": 5
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "moderate": {
+            "items": [
+              {
+                "ref": "item/mithral-armor"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

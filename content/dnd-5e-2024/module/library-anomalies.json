@@ -1,0 +1,190 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "module",
+  "id": "library-anomalies",
+  "name": "Library Anomalies",
+  "summary": "Adventurers delve into the archive under a wizard's magical library to find and correct the flaws that are corrupting its records.",
+  "stats": {
+    "length": "multi-session",
+    "levels": {
+      "min": 5,
+      "max": 7
+    },
+    "parts": [
+      {
+        "part": "prose",
+        "title": "Background",
+        "text": "The Library of Tabletop holds every spell, item, creature, and character its keeper has ever catalogued, each one an entry shelved by kind. Its keeper, the Maintainer, is a brilliant and absent-minded {ref:creature/archmage} who built the Library's organizing system and has since forgotten half of how it works. That system lives in the Repository, the archive under the Library: a gate, the stacks where entries are filed, the forge that shapes them, the engine that reckons their numbers, the loom that weaves their words, and the presses that print every page upstairs.\n\nLately, some of the Library's records have gone subtly wrong. Nothing has burned or vanished; the errors are small, the kind only a careful reader notices. But the Maintainer has noticed, and can't find where they come from."
+      },
+      {
+        "part": "description",
+        "text": "The Library's front doors swing open before you knock. Inside, lamplight falls across a hall of shelves that climb out of sight, and somewhere above, pages turn by themselves. A note pinned to the circulation desk reads, in a hurried hand: *Gone to the Office. Something is wrong with the records. Please come through. Mind the catalogue.*"
+      },
+      {
+        "part": "hook",
+        "text": "The Maintainer sent for the adventurers by name: each has a reason to know the Library, and between them they have the skills to read, fight, and repair their way through the Repository. Choose presets at the level the party starts at, or use the players' own characters.",
+        "refs": [
+          {
+            "ref": "character/hroda-stonestack",
+            "show": "card"
+          },
+          {
+            "ref": "character/ilsabet-inkwell",
+            "show": "card"
+          },
+          {
+            "ref": "character/seren-lampwright",
+            "show": "card"
+          },
+          {
+            "ref": "character/aldric-marrowquill",
+            "show": "card"
+          },
+          {
+            "ref": "character/thessaly-vane",
+            "show": "card"
+          },
+          {
+            "ref": "character/brannock-greythorn",
+            "show": "card"
+          }
+        ]
+      },
+      {
+        "part": "hook",
+        "text": "A scholar the party knows comes back from the Library shaken: the entry she copied out last week no longer matches the one on the shelf, and the Maintainer is offering a reward to anyone who can explain why.",
+        "refs": [
+          {
+            "ref": "creature/archmage",
+            "note": "the Maintainer"
+          }
+        ]
+      },
+      {
+        "part": "dm-guide",
+        "text": "The module runs in three chapters for three or four characters, rising from level 5 to level 7.\n\n1. **The Library** (level 5): the party crosses the ground floor, meets the Maintainer in the Office, and earns the Rules Room's master tables.\n2. **The Upper Vaults** (level 6): the party passes the Validation Gate and explores the Content Stacks, Schema Forge, Registry Vault, and Ruleset Engine.\n3. **The Deep Vaults** (level 7): the party crosses the Index Hall to the Wording Loom, Diagram Gallery, Test Chambers, and Press Hall.\n\nThe party gains a level at the end of each of the first two chapters. The encounters are built for four characters; for three, remove one creature from each roster, or roll the low row of a spawn table.\n\nThe heart of the module is cross-referencing. Every anomaly has three faces: a **symptom** in the Library upstairs, a **standard** posted in the Rules Room, and a **source** in one of the Repository's vaults. The Anomaly Ledger below lists them. A symptom is spotted with a Wisdom (Perception) or Intelligence (Investigation) check; matching it to its standard takes the Rules Room's tables; correcting its source takes the check the ledger gives, once that vault's guardians are dealt with. Several things in the Library look wrong and aren't; those are the ledger's red herrings, and a party that \"corrects\" one breaks something the Test Chambers will catch.\n\nThe party succeeds when it has corrected every anomaly in the ledger, passed the Test Chambers, reset the master press, and reported back to the Maintainer. A party that reports fewer corrections is thanked and paid for the ones it made; the rest are still waiting in the Repository."
+      },
+      {
+        "part": "table",
+        "title": "Anomaly Ledger",
+        "text": "| Anomaly | Symptom upstairs | Standard in the Rules Room | Source in the Repository | Correction |\n|---|---|---|---|---|\n| The Short Dash | A hero's record prints a weak strike's damage with a short dash, as {ref:character/aldric-marrowquill}'s quarterstaff does (1d6 - 1), where every creature's record prints the true minus sign (1d6 − 1) | The House Style: negatives and subtractions print the true minus sign | {ref:map/the-repository#wording-loom}: the shuttle that weaves heroes' attacks skips the minus thread | Re-thread the shuttle through the minus heddle: DC 15 Dexterity (Sleight of Hand) or Intelligence (Arcana) |\n| The Forgotten Tongue | Every hero's record and visitor card lists the languages the hero chose, and those given outright, such as a rogue's {ref:class-feature/rogue-thieves-cant}, but never Common | Character Creation: every character knows Common plus two languages | {ref:map/the-repository#ruleset-engine}: the language gear has no tooth for Common | Cut the missing tooth into the gear: DC 15 Intelligence (History), or a DC 13 check with {ref:equipment/smiths-tools} or {ref:equipment/tinkers-tools} |\n| The Blackened Plate | An engraved plate pulled from the presses shows every map as a solid black slab, and every room thumbnail as a black square, though the same maps are clear on the shelves and the slates | Maps and Diagrams: a diagram carries no colors; the Library colors each wall, room, and label | {ref:map/the-repository#press-hall}: the engraving press copies the colors of a diagram's frame but not of the lines inside it | Ink each line's color onto the plate before it's pressed: DC 16 Intelligence (Investigation) to see why, then DC 15 Dexterity with {ref:equipment/calligraphers-supplies} or {ref:equipment/painters-supplies} |\n| Red herring | {ref:character/brannock-greythorn}'s record shows a {ref:glossary/speed} of 50 feet, with a {ref:glossary/climb-speed} and a {ref:glossary/swim-speed} to match | The Kinds of Entries: speeds add up from species and features | None: {ref:class-feature/ranger-roving} and {ref:class-feature/trailblazer-swift-foot} both add to it | Leave it |\n| Red herring | {ref:character/seren-lampwright}'s record adds her Charisma to every {ref:glossary/saving-throw} | Budgets and the class tables | None: that's her {ref:class-feature/paladin-aura-of-protection} | Leave it |\n| Red herring | {ref:character/ilsabet-inkwell}'s record reads Choose 3 Musical Instruments before naming the three she chose | The House Style: a class's training prints as the class words it | None: the class's own words come first, then her picks | Leave it |\n| Red herring | A room on a map's page names the same scene twice, once as set there and once as appearing there | Maps and Diagrams | None: one says where the scene happens, the other that the scene shows the room | Leave it |\n| Red herring | The Validation Gate passes an entry that is wrong in sense | The Kinds of Entries | None: the gate checks shape, never sense | Leave it |"
+      },
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/library-of-tabletop",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/the-restless-catalogue"
+        }
+      },
+      {
+        "part": "prose",
+        "title": "The Maintainer's Office",
+        "text": "The Maintainer is in the Office, surrounded by notes, and is delighted to see anyone at all. They explain the problem badly and at length: records are coming out wrong, they can't say which or why, and the Repository below is not a safe place for a wizard who keeps forgetting where the stairs are. They hand over the key to the Basement Stair and ask the party to compare what they find against the Rules Room's master tables first. They've misplaced the amulet that commands the room's guardian, and they're quite sure it's somewhere in the Office."
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/misshelved-stacks"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/the-rules-warden"
+        }
+      },
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/the-repository",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "table",
+        "title": "Repository Finds",
+        "text": "| d8 | Find | Kind |\n|---|---|---|\n| 1 | A folder that snaps shut on the fingers of whoever opens it (DC 13 Dexterity save or 2d6 Bludgeoning damage) | Trap |\n| 2 | A pouch of 3d6 × 10 GP left by a long-gone under-librarian | Treasure |\n| 3 | A tripwire of unwound thread that rings the Validation Gate's bell | Trap |\n| 4 | A misprinted page from the presses, showing one hero's record as the shelves upstairs show it | Clue |\n| 5 | A {ref:item/spell-scroll} of a level 1 spell, filed in the wrong drawer | Treasure |\n| 6 | A loose gear tooth that cuts whoever steps on it (DC 12 Dexterity save or 1d10 Slashing damage) | Trap |\n| 7 | The Maintainer's old notebook, open to a page of the Rules Room's standards | Clue |\n| 8 | An engraved plate of a map from the presses, solid black from edge to edge | Clue |"
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/the-validation-gate"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/the-misfiled"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/the-schema-forge"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/forbidden-words"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/the-reckoning-gears"
+        }
+      },
+      {
+        "part": "prose",
+        "title": "The Index Hall",
+        "text": "Between the upper and the deep vaults lies the Index Hall, a domed room around one enormous catalogue that names every entry and every link between them. Nothing guards it. Here the party can check any entry against everything that refers to it: a character's sheet against the hero mold, a creature's record against its kin. The catalogue answers any question about what links to what, which makes it the best place to confirm a symptom before going after its source. The party rests here between chapters, and gains its second level."
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/the-unraveling-loom"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/lines-on-slate"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/trial-by-proof"
+        }
+      },
+      {
+        "part": "arrangement",
+        "arrangement": {
+          "ref": "encounter/the-last-press"
+        }
+      },
+      {
+        "part": "prose",
+        "title": "Back to the Maintainer",
+        "text": "With the presses reset, the corrected pages rise through the ceiling to the shelves above. The Maintainer reads each correction twice, laughs at one, and writes every one of them on the slate of tasks, crossed out. They pay the party 500 GP for each anomaly corrected, and offer each adventurer a reader's card: the right to borrow any one entry from the Library, once."
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}

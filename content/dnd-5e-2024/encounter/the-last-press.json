@@ -1,0 +1,74 @@
+{
+  "ruleset": "dnd-5e-2024",
+  "author": "bardic-inspiration",
+  "type": "encounter",
+  "id": "the-last-press",
+  "name": "The Last Press",
+  "summary": "A stone golem and a swarm of flying blades guard the Press Hall, where the Library's pages are printed.",
+  "stats": {
+    "setIn": {
+      "ref": "map/the-repository",
+      "zone": "press-hall"
+    },
+    "parts": [
+      {
+        "part": "map",
+        "map": {
+          "ref": "map/the-repository",
+          "zone": "press-hall",
+          "show": "thumbnail"
+        }
+      },
+      {
+        "part": "description",
+        "text": "The last vault is full of presses, each as tall as a tree, printing pages that rise through slots in the ceiling. A stone giant of a figure stands at the master press, and a cloud of blades orbits it like moths around a lamp."
+      },
+      {
+        "part": "dm-guide",
+        "text": "The {ref:creature/stone-golem} feeds the master press and guards it against everything, the party included. The {ref:creature/animated-flying-sword}s are the press's trimming blades. Once the golem falls, the party can stop the presses and reset the master press, which reprints every page upstairs with whatever corrections the party has made. One anomaly's source is here; see the Anomaly Ledger."
+      },
+      {
+        "part": "roster",
+        "creatures": [
+          {
+            "ref": "creature/stone-golem",
+            "count": 1
+          },
+          {
+            "ref": "creature/animated-flying-sword",
+            "count": 6
+          }
+        ]
+      },
+      {
+        "part": "loot",
+        "rows": {
+          "high": {
+            "coins": {
+              "dice": "4d6",
+              "times": 100,
+              "unit": "gp"
+            },
+            "items": [
+              {
+                "ref": "item/pearl-of-power"
+              },
+              {
+                "ref": "item/wand-of-magic-missiles"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "meta": {
+    "createdAt": "2026-11-28",
+    "source": {
+      "kind": "routine",
+      "issues": [
+        524
+      ]
+    }
+  }
+}
