@@ -387,10 +387,12 @@ export function deriveCharacterLinked(stats: CharacterStats, library: LinkedLibr
       ...chosen.flatMap((c) => (c.tools ?? []).map((t) => ({ source: c.source.ref, ref: t.ref, ...(t.note && { note: t.note }) }))),
       ...ofKind('tool-proficiency').flatMap((c) => c.modifier.tools.map((t) => ({ source: c.source, ref: t.ref, ...(t.note && { note: t.note }) }))),
     ],
+    // Common first, from the origin (SRD 5.2 "Character Creation": Common plus two languages), and only there.
     languages: [
+      { source: stats.background.ref, language: 'Common' },
       ...chosen.flatMap((c) => (c.languages ?? []).map((language) => ({ source: c.source.ref, language }))),
       ...ofKind('language').flatMap((c) => c.modifier.languages.map((language) => ({ source: c.source, language }))),
-    ],
+    ].filter((l, i) => i === 0 || l.language !== 'Common'),
   };
 
   return {

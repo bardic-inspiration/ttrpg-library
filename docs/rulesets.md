@@ -711,7 +711,9 @@ with the modifiers of the features, feats, and traits it has
   skills and Expertise, weapon and armor training as each class prints it
   (the starting class's Core Traits, a later class's "As a Multiclass
   Character" text), the tools, and the languages, each with those an entry
-  gives outright.
+  gives outright. The languages start with Common, under the background,
+  since every character knows it (SRD 5.2 "Character Creation": Common plus
+  two languages); a pick of Common isn't listed again.
 
 A character's page is a **profile** (`character-profile`), not a play
 sheet: what a DM needs to run the character, or a player needs to copy a

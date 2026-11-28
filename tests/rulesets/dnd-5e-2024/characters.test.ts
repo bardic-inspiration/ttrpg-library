@@ -476,6 +476,16 @@ describe('grant forms in derivations (docs/rulesets.md#grants)', () => {
     expect((await derivedOf('sister-maelis', elf('Drow'))).speed).toBe(30);
   });
 
+  it('know Common, from the origin, before every language picked or given', async () => {
+    const d = await derivedOf('sister-maelis', () => undefined);
+    expect(d.proficiencies.languages[0]).toEqual({ source: 'background/acolyte', language: 'Common' });
+    expect(d.proficiencies.languages.filter((l) => l.language === 'Common')).toHaveLength(1);
+    const picked = await derivedOf('sister-maelis', (s) => s.choices.push({ source: { ref: 'background/acolyte' }, languages: ['Common'] }));
+    expect(picked.proficiencies.languages.filter((l) => l.language === 'Common')).toEqual([{ source: 'background/acolyte', language: 'Common' }]);
+    const rogue = await derivedOf('sister-maelis', (s) => (s.classes = [{ class: { ref: 'class/rogue' }, level: 1 }]));
+    expect(rogue.proficiencies.languages.map((l) => l.language)[0]).toBe('Common');
+  });
+
   it('give the skills, tools, and languages an entry gives outright', async () => {
     const hearth = await derivedOf('sister-maelis', (s) => (s.classes[0].subclass = { ref: 'subclass/hearth-domain' }));
     expect(hearth.proficiencies.tools).toContainEqual({ source: 'class-feature/hearth-domain-hearth-blessing', ref: 'equipment/cooks-utensils' });
