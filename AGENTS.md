@@ -163,7 +163,8 @@ order. It works as a track's file does: an approved design is amended by a
 small PR, a task deletes the part it builds, and an open question stops that
 part. When only its README is left, the version's close-out removes the
 folder, and design still open moves to a track or to the next version's
-"Spec Considerations" issue. No version spec is open now.
+"Spec Considerations" issue. The open version spec is
+[`spec/v1.3.0/`](spec/v1.3.0/README.md).
 
 ### Testing backlog
 
@@ -191,7 +192,7 @@ Milestone issues, in milestone order (or, when no milestone is open, the
 "Spot Fixes" issue below), then track issues, in the order
 [`spec/tracks/`](spec/tracks/README.md#tracks) lists them, and their
 sub-issues (GitHub's order) are one queue. Work earmarked for a future version goes in that version's
-"Spec Considerations" issue (#370 for v2.0.0), outside the queue; work for
+"Spec Considerations" issue (#532 for v1.3.0, #370 for v2.0.0), outside the queue; work for
 a version being built is an amendment to its spec.
 
 - **The active queue** is the one open tracking issue labeled `queue`: the
