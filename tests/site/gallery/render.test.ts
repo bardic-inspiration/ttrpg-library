@@ -123,16 +123,15 @@ describe('Gallery', () => {
     expect(html).toContain('<ul class="tree__values" id="filter-dnd-5e-2024-creature-stats-creatureType-panel" aria-labelledby="filter-dnd-5e-2024-creature-stats-creatureType-toggle">');
   });
 
-  it('opens the filter menu with a toggle on phones and tablets, and leaves search to the page header (docs/site.md#page-header)', () => {
-    const html = render({});
-    expect(html).not.toContain('role="search"');
-    expect(html).toMatch(/class="gallery__menu"><button type="button" class="disclosure gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters"><span class="chevron" aria-hidden="true"><\/span>.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
+  it('heads the filter menu with search, then a toggle that opens the menu on phones and tablets', () => {
+    const html = render({ initialQuery: '?q=frost' });
+    expect(html).toMatch(/class="gallery__menu"><div class="gallery__search" role="search"><label for="gallery-q">.*Search<\/label><input id="gallery-q" type="search" placeholder="Name" value="frost"\/><\/div><button type="button" class="disclosure gallery__filters-toggle" aria-expanded="false" aria-controls="gallery-filters"><span class="chevron" aria-hidden="true"><\/span>.*<section id="gallery-filters" class="gallery__filters" aria-label="Filters">/);
     expect(html).not.toContain('data-open');
   });
 
   it('labels every control', () => {
     const html = render({ initialQuery: '?f.stats.cr=1..' });
-    for (const id of ['gallery-sort', 'gallery-dir', 'filter-dnd-5e-2024-creature-stats-cr-min', 'filter-dnd-5e-2024-creature-stats-cr-max']) {
+    for (const id of ['gallery-q', 'gallery-sort', 'gallery-dir', 'filter-dnd-5e-2024-creature-stats-cr-min', 'filter-dnd-5e-2024-creature-stats-cr-max']) {
       expect(html).toContain(`for="${id}"`);
       expect(html).toContain(`id="${id}"`);
     }

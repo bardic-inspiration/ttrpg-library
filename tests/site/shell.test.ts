@@ -72,11 +72,11 @@ describe('site shell (docs/site.md#pages-and-navigation, docs/licensing.md)', ()
     expect(header).toContain('name="q"');
   });
 
-  it('marks the Library current on a ruleset’s Library, whose gallery search follows there', async () => {
+  it('marks the Library current on a ruleset’s Library, and leaves the header search out there', async () => {
     const html = await renderBase({ title: 'Test' }, '/dnd-5e-2024/');
     const nav = html.slice(html.indexOf('<nav'), html.indexOf('</nav>'));
     expect(nav).toMatch(/<a href="\/dnd-5e-2024\/" aria-current="page"[^>]*>Library<\/a>/);
-    expect(html).toContain('action="/dnd-5e-2024/"');
+    expect(html).not.toContain('header-search');
   });
 
   it('opens the page’s own ruleset’s Library from search on its entries’ pages', async () => {
