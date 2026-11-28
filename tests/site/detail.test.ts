@@ -70,6 +70,27 @@ describe('detail page (docs/site.md#detail-page)', () => {
     expect(html).toContain('class="entry-detail__type" href="/dnd-5e-2024/?sort=stats.cr:asc&amp;f.ruleset=dnd-5e-2024&amp;f.type=dnd-5e-2024/creature"');
   });
 
+  it('shows source, author, and official or homebrew chips after the type (docs/site.md#detail-page)', async () => {
+    const chips = (html: string) =>
+      [...html.matchAll(/<li class="entry-detail__chip[^"]*"[^>]*>([\s\S]*?)<\/li>/g)].map((m) => textOf(m[1] ?? '').trim());
+    // An SRD page: the author "publisher" reads as the ruleset's publisher.
+    expect(chips(await render('sorcerer'))).toEqual(['SRD 5.2', 'Wizards of the Coast', 'Official']);
+    // Homebrew without a source has no source chip.
+    expect(chips(await render('cinder-hound'))).toEqual(['bardic-inspiration', 'Homebrew']);
+    // The type chip stays first, in the same line.
+    const html = await render('sorcerer');
+    const line = html.slice(html.indexOf('entry-detail__type'), html.indexOf('entry-detail__summary'));
+    expect(line.indexOf('entry-detail__type')).toBeLessThan(line.indexOf('SRD 5.2'));
+    // A homebrew entry in a source shows it.
+    const loaded = lib.byId('cinder-hound');
+    const container = await AstroContainer.create();
+    const sourced = await container.renderToString(EntryDetail, {
+      props: { loaded: { ...loaded, entry: { ...loaded.entry, source: 'Bardic\'s Compendium of Test Fixtures' } }, names: lib.names, targets: lib.targets },
+    });
+    expect(chips(sourced)).toEqual(['Bardic\'s Compendium of Test Fixtures', 'bardic-inspiration', 'Homebrew']);
+  });
+
+
   // The Contribute link in the site nav is the site's only GitHub link (docs/site.md#detail-page).
   it('shows provenance without its source issues, and links nothing on GitHub', async () => {
     const { meta } = lib.byId('cinder-hound').entry;
