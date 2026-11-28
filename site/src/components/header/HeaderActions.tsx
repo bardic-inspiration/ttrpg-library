@@ -1,14 +1,14 @@
-// The page header's search and set export (docs/site.md#page-header), on every page. Search is a
-// form that opens a ruleset's Library with the query (`?q=`), so it works without JavaScript; on
-// that Library it searches the gallery as the reader types instead. Print and Download act on the
-// print cart, or, on the Library, on the filtered results while the cart is empty. They need
-// JavaScript, so they render only once the island hydrates.
+// The page header's search and set export (docs/site.md#page-header). Search is a form that opens
+// a ruleset's Library with the query (`?q=`) when the reader submits it, so it works without
+// JavaScript; the Library has its own search beside its filters, so the header leaves it out
+// there. Print and Download act on the print cart, or, on the Library, on the filtered results
+// while the cart is empty. They need JavaScript, so they render only once the island hydrates.
 import { useEffect, useState } from 'preact/hooks';
 import { fetchFresh } from '../../lib/fetch-fresh.ts';
 import { cartKey, pruneCart } from '../../lib/cart.ts';
 import type { LibraryRecord } from '../../lib/gallery/config.ts';
 import { cartTarget, setTarget, type SetTarget, type TargetEntry } from '../../lib/gallery/selection.ts';
-import { currentView, onViewChange, requestSearch, type LibraryView } from '../../lib/library-view.ts';
+import { currentView, onViewChange, type LibraryView } from '../../lib/library-view.ts';
 import SearchIcon from '../../icons/Search.tsx';
 import { useCart } from '../cart/useCart.ts';
 import SetActions from '../export/SetActions.tsx';
@@ -19,7 +19,7 @@ export interface HeaderActionsProps {
   base: string;
   /** The Library search opens: the page's ruleset's, or the home ruleset's. Defaults to `base`. */
   search?: string;
-  /** The page is that Library, whose gallery the search and the set export follow. */
+  /** The page is that Library: the header leaves out search, and the set export follows the gallery. */
   library?: boolean;
   /** Renders before hydration; for tests. */
   ready?: boolean;
@@ -40,19 +40,14 @@ async function libraryCart(base: string, keys: TargetEntry[]): Promise<TargetEnt
 export default function HeaderActions({ base, search = base, library = false, ready: initial = false }: HeaderActionsProps) {
   const [ready, setReady] = useState(initial);
   const [view, setView] = useState<LibraryView | undefined>(() => (library ? currentView() : undefined));
-  const [q, setQ] = useState(view?.q ?? '');
   const cart = useCart();
 
   useEffect(() => {
     setReady(true);
     if (!library) return;
-    const follow = (next: LibraryView) => {
-      setView(next);
-      setQ(next.q);
-    };
     const now = currentView();
-    if (now) follow(now);
-    return onViewChange(follow);
+    if (now) setView(now);
+    return onViewChange(setView);
   }, [library]);
 
   let target: SetTarget;
@@ -62,31 +57,14 @@ export default function HeaderActions({ base, search = base, library = false, re
 
   return (
     <div class="header-actions">
-      <form
-        class="header-search"
-        role="search"
-        action={search}
-        method="get"
-        onSubmit={(e) => {
-          if (library) e.preventDefault();
-        }}
-      >
-        <label for="site-q">
-          <SearchIcon /> Search
-        </label>
-        <input
-          id="site-q"
-          name="q"
-          type="search"
-          placeholder="Name"
-          value={q}
-          onInput={(e) => {
-            const next = (e.currentTarget as HTMLInputElement).value;
-            setQ(next);
-            if (library) requestSearch(next);
-          }}
-        />
-      </form>
+      {!library && (
+        <form class="header-search" role="search" action={search} method="get">
+          <label for="site-q">
+            <SearchIcon /> Search
+          </label>
+          <input id="site-q" name="q" type="search" placeholder="Name" />
+        </form>
+      )}
       {ready && <SetActions target={target} base={base} resolve={library ? undefined : (keys) => libraryCart(base, keys)} />}
     </div>
   );
