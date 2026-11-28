@@ -733,7 +733,9 @@ one, in this order:
 - **Attacks:** a paragraph per equipped weapon, led by its linked name:
   "***Longsword.*** +6 to hit, 1d8 + 3 Slashing damage, or 1d10 + 3
   two-handed; Versatile; Mastery: Sap", with the weapon's range when it has
-  one (a ranged or thrown weapon).
+  one (a ranged or thrown weapon). A negative modifier prints the minus
+  sign, U+2212, as a creature's does ([Creature display forms](#creature-display-forms)):
+  "1d6 − 1".
 - **Spellcasting:** per casting class, its ability, spell save DC, attack
   bonus, and cantrip and prepared counts; its spell slots and Pact Magic
   slots; and its spells by level ("Cantrips", "Level 1", …), linked.
